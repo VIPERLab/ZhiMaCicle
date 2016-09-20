@@ -21,6 +21,12 @@
 @property (nonatomic, copy) NSString *onepwd;
 @property (nonatomic, copy) NSString *twopwd;
 
+@property (nonatomic, weak) UIButton *identifyingButton;
+
+
+//定时相关
+@property (nonatomic, assign) int countDown;
+@property (nonatomic, weak) dispatch_source_t timer;
 
 @end
 
@@ -31,7 +37,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addAllViews];
-
+    self.countDown = 60;
     [self setCustomTitle:@"重置密码"];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
@@ -42,7 +48,9 @@
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.backgroundColor = [UIColor colorFormHexRGB:@"efeff4"];
     [self.view addSubview:self.tableView];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[LGPhoneUpTableViewCell class] forCellReuseIdentifier:ResetPasswordCellReusedID];
     
     
@@ -70,23 +78,35 @@
     return 1;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     LGPhoneUpTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ResetPasswordCellReusedID forIndexPath:indexPath];
     
     cell.titleLabel.text = self.item1[indexPath.row];
     if (indexPath.row == 0) {
-        cell.Texf.placeholder = @"请输入旧密码";
+        cell.Texf.placeholder = @"请输入账号";
         cell.Texf.tag = 101;
     }
     else if(indexPath.row == 1){
-        cell.Texf.placeholder = @"请输入新密码";
+        cell.Texf.placeholder = @"请输入密码";
         cell.Texf.tag = 102;
     }
     else if(indexPath.row == 2){
-        cell.Texf.placeholder = @"请再次输入新密码";
+        cell.Texf.placeholder = @"请再次输入密码";
         cell.Texf.tag = 103;
+    } else if (indexPath.row == 3) {
+        cell.Texf.placeholder = @"请输入验证码";
+        
+        if (!self.identifyingButton) {
+            UIButton *identifyingButton  =[[UIButton alloc] initWithFrame:CGRectMake(ScreenWidth - 100, 0, 100, 45)];
+            [identifyingButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+            [identifyingButton setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+            identifyingButton.titleLabel.font = [UIFont systemFontOfSize:12];
+            [identifyingButton addTarget:self action:@selector(buttonDidClick) forControlEvents:UIControlEventTouchUpInside];
+            self.identifyingButton = identifyingButton;
+            [cell addSubview:identifyingButton];
+        }
+        
     }
     return cell;
 }
@@ -98,6 +118,54 @@
     }
     return 0;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 45;
+}
+
+//获取验证码
+- (void)buttonDidClick {
+    //获取验证码
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    self.timer = timer;
+    dispatch_time_t start = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
+    uint64_t interval = (uint64_t)(1.0 * NSEC_PER_SEC);
+    dispatch_source_set_timer(timer, start, interval, 0);
+    dispatch_source_set_event_handler(timer, ^{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //回调或者说是通知主线程刷新，
+            [self.identifyingButton setTitle:[NSString stringWithFormat:@"(%zd)秒后重新获取",self.countDown] forState:UIControlStateNormal];
+            [self.identifyingButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            self.identifyingButton.backgroundColor = [UIColor lightGrayColor];
+            self.identifyingButton.userInteractionEnabled = NO;
+            self.countDown--;
+            if (self.countDown < 0) {
+                [self.identifyingButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+                [self.identifyingButton setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+                self.identifyingButton.backgroundColor = [UIColor whiteColor];
+                self.identifyingButton.userInteractionEnabled = YES;
+                dispatch_cancel(timer);
+            }
+        });
+        
+        
+        
+    });
+    dispatch_resume(timer);
+    
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    if (self.timer) {
+        dispatch_cancel(self.timer);
+    }
+    
+}
+
+
 
 
 //确定修改密码
@@ -113,24 +181,24 @@
     self.oldPwd = titleF.text;
     self.onepwd = onepwd.text;
     self.twopwd = twopwd.text;
-//    if (![self.onepwd isEqualToString:self.twopwd]) {
-//        [LCProgressHUD showText:@"输入的新密码不一致"];
-//
-//        return;
-//    }
-//    
-//    [LGNetWorking resetPassword:USERINFO.sessionId phone:USERINFO.phoneNumber oldPass:self.oldPwd newPass:self.onepwd reNewpass:self.twopwd block:^(ResponseData *responseData) {
-//        if (responseData.code == 0) {
-//            [LCProgressHUD showText:@"修改成功"];
-//            YiUserInfo *userInfo = [YiUserInfo defaultUserInfo];
-//            userInfo.password = self.twopwd;
-//            [userInfo persist];
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                [self.navigationController popToRootViewControllerAnimated:YES];
-//            });
-//        }
-//    }];
-
+    //    if (![self.onepwd isEqualToString:self.twopwd]) {
+    //        [LCProgressHUD showText:@"输入的新密码不一致"];
+    //
+    //        return;
+    //    }
+    //
+    //    [LGNetWorking resetPassword:USERINFO.sessionId phone:USERINFO.phoneNumber oldPass:self.oldPwd newPass:self.onepwd reNewpass:self.twopwd block:^(ResponseData *responseData) {
+    //        if (responseData.code == 0) {
+    //            [LCProgressHUD showText:@"修改成功"];
+    //            YiUserInfo *userInfo = [YiUserInfo defaultUserInfo];
+    //            userInfo.password = self.twopwd;
+    //            [userInfo persist];
+    //            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    //                [self.navigationController popToRootViewControllerAnimated:YES];
+    //            });
+    //        }
+    //    }];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -141,7 +209,7 @@
 #pragma mark - lazyLoad
 - (NSArray *)item1 {
     if (!_item1) {
-        _item1 = @[@"旧密码",@"新密码",@"确认密码"];
+        _item1 = @[@"账号",@"新密码",@"确认密码",@"验证码"];
     }
     return _item1;
 }
