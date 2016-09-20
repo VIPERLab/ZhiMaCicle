@@ -1,0 +1,6 @@
+framework module Pods_ZhiMaBaoBao {
+  umbrella header "Pods-ZhiMaBaoBao-umbrella.h"
+
+  export *
+  module * { export * }
+}
