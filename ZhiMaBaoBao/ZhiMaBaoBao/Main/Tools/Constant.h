@@ -41,6 +41,9 @@
 //充值Appkey
 #define RECHAPPKEY @"yihezhai20152016"
 
+// ----  AES加密秘钥
+#define APP_PUBLIC_PASSWORD     @"yihezhai16816888"
+
 //正式网络环境
 #define DFAPIURL @"http://app.zhima11.com:8080"
 #define DFAPIURLTEST @"http://wx.zhima11.com"
