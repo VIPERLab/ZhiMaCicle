@@ -47,7 +47,7 @@
     _userName = [UILabel new];
     [self addSubview:_userName];
     _userName.textColor = [UIColor blackColor];
-    _userName.font = [UIFont systemFontOfSize:17];
+    _userName.font = [UIFont systemFontOfSize:16];
     _userName.textAlignment = NSTextAlignmentLeft;
     
     _subTitle = [UILabel new];
@@ -82,13 +82,13 @@
         CGFloat userY = (CGRectGetHeight(self.frame) - userH) * 0.5;
         _userIcon.frame = CGRectMake(userX, userY, userW, userH);
         
-        CGFloat nameW = [_userName.text sizeWithFont:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(ScreenWidth - 90 - 25, 15)].width;
-        _userName.frame = CGRectMake(CGRectGetMaxX(_userIcon.frame) + userX, CGRectGetMinY(_userIcon.frame) + 5, nameW, 30);
+        CGFloat nameW = [_userName.text sizeWithFont:[UIFont systemFontOfSize:16] maxSize:CGSizeMake(ScreenWidth - 90 - 25, 15)].width;
+        _userName.frame = CGRectMake(CGRectGetMaxX(_userIcon.frame) + userX, CGRectGetMinY(_userIcon.frame), nameW, 30);
         
         CGFloat sexX = CGRectGetMaxX(_userName.frame) + 10;
         CGFloat sexW = 15;
         CGFloat sexH = sexW;
-        CGFloat sexY = (CGRectGetHeight(_userName.frame) - sexH) * 0.5 + userY + 5;
+        CGFloat sexY = (CGRectGetHeight(_userName.frame) - sexH) * 0.5 + userY;
         _sexImage.frame = CGRectMake(sexX, sexY, sexW, sexH);
         
         

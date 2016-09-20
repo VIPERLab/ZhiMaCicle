@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15A2301" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LGPhoneHeaderCell" rowHeight="200" id="KGk-i7-Jjw" customClass="LGPhoneHeaderCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="199"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bI9-hS-UaO">
+                        <rect key="frame" x="120" y="25" width="80" height="80"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="80" id="1cZ-J2-OMB"/>
+                            <constraint firstAttribute="width" constant="80" id="KWl-kX-qFr"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eS0-G0-WAN">
+                        <rect key="frame" x="72" y="126" width="177" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="177" id="8XH-ih-Pwg"/>
+                            <constraint firstAttribute="height" constant="21" id="lbQ-d8-e2k"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="bI9-hS-UaO" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="5L3-dV-dad"/>
+                    <constraint firstItem="eS0-G0-WAN" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="Phk-Zp-TMw"/>
+                    <constraint firstItem="eS0-G0-WAN" firstAttribute="top" secondItem="bI9-hS-UaO" secondAttribute="bottom" constant="21" id="Xu0-I4-UOv"/>
+                    <constraint firstItem="bI9-hS-UaO" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="25" id="v1f-T5-g2h"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="avtar" destination="bI9-hS-UaO" id="0BJ-c1-1ip"/>
+                <outlet property="name" destination="eS0-G0-WAN" id="MoX-qE-dqY"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import "LGGuideController.h"
 
 @interface AppDelegate ()
 
@@ -18,13 +19,32 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    MainViewController *mainVC = [[MainViewController alloc] init];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpMainController) name:LOGIN_SUCCESS object:nil];
+    
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
-    self.window.rootViewController = mainVC;
     [self.window makeKeyAndVisible];
+    UserInfo *userInfo = [UserInfo read];
+    //用户第一次登录
+    if (!userInfo.hasLogin || userInfo == nil) {
+        LGGuideController *vc = [[LGGuideController alloc] init];
+        UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
+        self.window.rootViewController = guideVC;
+    }else{
+        //已经登录过，直接跳转到主界面
+        MainViewController *mainVC = [[MainViewController alloc] init];
+        self.window.rootViewController = mainVC;
+    }
     
     return YES;
+}
+
+- (void)jumpMainController{
+    //已经登录过，直接跳转到主界面
+    MainViewController *mainVC = [[MainViewController alloc] init];
+    self.window.rootViewController = mainVC;
+
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

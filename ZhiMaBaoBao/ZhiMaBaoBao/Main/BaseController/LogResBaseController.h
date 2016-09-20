@@ -10,4 +10,15 @@
 
 @interface LogResBaseController : UIViewController
 
+//设置导航栏右侧按钮
+- (void)setNavRightButton:(NSString *)title;
+
+//导航栏右侧按钮点击方法
+- (void)navRightBtnAction;
+
+//设置标题
+- (void)setNavTitle:(NSString *)title;
+
+//隐藏返回按钮
+- (void)hiddenBackBtn;
 @end

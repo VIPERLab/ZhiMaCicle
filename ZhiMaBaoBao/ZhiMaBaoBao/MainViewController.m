@@ -12,7 +12,11 @@
 #import "CallViewController.h"
 #import "TimeLineController.h"
 #import "PersonalCenterController.h"
+
 #import "BaseViewController.h"
+
+#import "LGGuideController.h"
+
 
 @interface MainViewController ()
 
