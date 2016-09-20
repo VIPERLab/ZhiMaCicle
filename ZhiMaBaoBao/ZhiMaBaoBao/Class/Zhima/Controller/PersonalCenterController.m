@@ -9,9 +9,10 @@
 #import "PersonalCenterController.h"
 #import "KXPersonalCenterCell.h"
 
-#import "KXSettingController.h"
-#import "LGFeedBackViewController.h"
+#import "KXSettingController.h"        //设置
+#import "LGFeedBackViewController.h"   //意见反馈
 #import "MyAccountViewController.h"    //我的账户
+#import "KXPersonalMessageSettingController.h" //个人信息设置
 
 
 #define PersonalCellHeight 45
@@ -108,6 +109,9 @@
     
     if (indexPath.section == 0) {
         //个人信息
+        KXPersonalMessageSettingController *setting = [[KXPersonalMessageSettingController alloc] init];
+        setting.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:setting animated:YES];
     }
     
     if (indexPath.section == 1 && indexPath.row == 0) {
