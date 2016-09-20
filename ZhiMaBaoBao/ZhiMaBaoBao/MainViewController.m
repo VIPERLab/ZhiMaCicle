@@ -12,10 +12,9 @@
 #import "CallViewController.h"
 #import "TimeLineController.h"
 #import "PersonalCenterController.h"
-
 #import "BaseViewController.h"
-
 #import "LGGuideController.h"
+#import "BaseNavigationController.h"
 
 
 @interface MainViewController ()
@@ -40,7 +39,7 @@
 - (void)addChildVc:(BaseViewController *)childVc title:(NSString *)title image:(NSString *)image selectedImage:(NSString *)selectedImage
 {   
     // 设置子控制器的文字(可以设置tabBar和navigationBar的文字)
-    [childVc setCustomTitle:title];
+//    [childVc setCustomTitle:title];
     
     // 设置子控制器的tabBarItem图片
     childVc.tabBarItem.image = [[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -54,7 +53,7 @@
     //    childVc.view.backgroundColor = RandomColor; // 这句代码会自动加载主页，消息，发现，我四个控制器的view，但是view要在我们用的时候去提前加载
     
     // 为子控制器包装导航控制器
-    UINavigationController *navigationVc = [[UINavigationController alloc] initWithRootViewController:childVc];
+    BaseNavigationController *navigationVc = [[BaseNavigationController alloc] initWithRootViewController:childVc];
     // 添加子控制器
     [self addChildViewController:navigationVc];
 }

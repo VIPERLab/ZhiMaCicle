@@ -67,37 +67,17 @@
             
             //状态码为重新登录
             if (data.code == 14) {
-                
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"shouldLogin" object:nil];
-
                 return ;
             }
-            
-            //没有更多数据
-            if (data.code == 23 || data.code == 29) {
-                SuccessfulBlock(data);
-                return;
-            }
-            
-            //状态码不为0
-//            if (data.code != 0) {
-//                ErrorData *error = [ErrorData mj_objectWithKeyValues:responseObject];
-//                FailureBlock(error);
-//                return ;
-//            }
-            
             //成功访问
             SuccessfulBlock(data);
-            
+        }else{
+            //responObject为Nil
+            ErrorData *error = [ErrorData mj_objectWithKeyValues:responseObject];
+            FailureBlock(error);
+            return ;
         }
-        
-        //responObject为Nil
-        ErrorData *error = [ErrorData mj_objectWithKeyValues:responseObject];
-        FailureBlock(error);
-        return ;
-        
-        
-        
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -108,7 +88,6 @@
             FailureBlock(errorData);
         }
     }];
-
 }
 
 

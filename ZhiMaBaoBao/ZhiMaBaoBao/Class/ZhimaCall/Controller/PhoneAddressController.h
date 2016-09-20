@@ -7,7 +7,7 @@
 //  手机通讯录
 
 
-@interface PhoneAddressController : UITableViewController
+@interface PhoneAddressController : BaseViewController
 
 //标记为添加手机通讯录好友
 @property (nonatomic, assign) BOOL isAddPhoneFriend;

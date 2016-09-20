@@ -50,7 +50,7 @@
 #import "LGNetWorking.h"
 #import "UserInfo.h"
 #import "UIView+x.h"
-
+#import "BaseViewController.h"
 
 
 //通知宏定义

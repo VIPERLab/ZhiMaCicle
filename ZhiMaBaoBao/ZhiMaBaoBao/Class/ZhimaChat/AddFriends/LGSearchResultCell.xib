@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15A2301" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="53" id="KGk-i7-Jjw" customClass="LGSearchResultCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="53"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="52"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XBQ-Q5-TQx">
+                        <rect key="frame" x="16" y="8" width="37" height="37"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="37" id="cFK-xT-L5b"/>
+                            <constraint firstAttribute="height" constant="37" id="zVE-9L-Esr"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zmw-yV-stF">
+                        <rect key="frame" x="66" y="15" width="246" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="246" id="b58-aK-ssy"/>
+                            <constraint firstAttribute="height" constant="21" id="vXt-Dj-Ejc"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyT-wQ-uMW">
+                        <rect key="frame" x="237" y="15" width="22" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="22" id="6WU-WZ-y9u"/>
+                            <constraint firstAttribute="height" constant="22" id="Lhg-K1-F7M"/>
+                        </constraints>
+                        <state key="normal" image="矩形-8.png"/>
+                        <state key="selected" image="选中-2.png"/>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="XBQ-Q5-TQx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="IGX-vp-KaI"/>
+                    <constraint firstItem="zmw-yV-stF" firstAttribute="leading" secondItem="XBQ-Q5-TQx" secondAttribute="trailing" constant="13" id="L9Y-et-yTc"/>
+                    <constraint firstAttribute="trailing" secondItem="pyT-wQ-uMW" secondAttribute="trailing" constant="61" id="SAw-Db-9M2"/>
+                    <constraint firstItem="zmw-yV-stF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="Ygc-DE-cz6"/>
+                    <constraint firstItem="pyT-wQ-uMW" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="pMd-gs-Idz"/>
+                    <constraint firstItem="XBQ-Q5-TQx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="sRV-Ld-J9s"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="avtar" destination="XBQ-Q5-TQx" id="KOm-mz-kLr"/>
+                <outlet property="name" destination="zmw-yV-stF" id="dyN-SK-nfe"/>
+                <outlet property="selectBtn" destination="pyT-wQ-uMW" id="dtf-7b-Cc7"/>
+            </connections>
+            <point key="canvasLocation" x="369" y="313.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="矩形-8.png" width="24" height="24"/>
+        <image name="选中-2.png" width="24" height="24"/>
+    </resources>
+</document>

@@ -85,7 +85,7 @@
     
     //头像
     UIImageView *avtar = [[UIImageView alloc] initWithFrame:CGRectMake((DEVICEWITH - 90)/2, 39, 90, 90)];
-    avtar.image = [UIImage imageNamed:@"形状-1@3x"];
+    avtar.image = [UIImage imageNamed:@"call_avtar"];
     [self.view addSubview:avtar];
     
     //姓名
@@ -146,13 +146,13 @@
     
     //挂断
     UIButton *cancel = [[UIButton alloc] init];
-    [cancel setImage:[UIImage imageNamed:@"接通中_挂断"] forState:UIControlStateNormal];
+    [cancel setImage:[UIImage imageNamed:@"handlUp"] forState:UIControlStateNormal];
     [cancel addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancel];
     
     
     //电话接通中的三个控件
-    UIImageView *smallAvtar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"联系人-拷贝"]];
+    UIImageView *smallAvtar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"call_contacts"]];
     [self.view addSubview:smallAvtar];
     self.smallAvtar = smallAvtar;
     
@@ -168,7 +168,7 @@
     [self.point startAnimating];
 
     
-    UIImageView *phoneIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"手机"]];
+    UIImageView *phoneIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"phone_icon"]];
     [self.view addSubview:phoneIcon];
     self.phoneIcon = phoneIcon;
     

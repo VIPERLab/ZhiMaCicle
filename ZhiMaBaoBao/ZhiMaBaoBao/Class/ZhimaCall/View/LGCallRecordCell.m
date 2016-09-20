@@ -53,7 +53,7 @@
             self.phoneNum.text = model.to_phone;
         }
         self.distruct.text = model.to_phone;
-        self.flagImage.image = [UIImage imageNamed:@"椭圆-3.png"];
+        self.flagImage.image = [UIImage imageNamed:@"call_record"];
     }
 }
 

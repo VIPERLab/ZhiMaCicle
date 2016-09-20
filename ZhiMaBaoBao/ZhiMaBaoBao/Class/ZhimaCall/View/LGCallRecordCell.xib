@@ -31,7 +31,7 @@
                             <constraint firstAttribute="width" constant="1" id="Wg6-T9-tvw"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KsG-T4-vyJ">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="call_record" translatesAutoresizingMaskIntoConstraints="NO" id="KsG-T4-vyJ">
                         <rect key="frame" x="60" y="27" width="9" height="9"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="9" id="MpN-7p-ad2"/>
@@ -64,7 +64,7 @@
                             <constraint firstAttribute="height" constant="22" id="fHt-5r-MmI"/>
                             <constraint firstAttribute="width" constant="21" id="t5t-AQ-7H4"/>
                         </constraints>
-                        <state key="normal" image="组-10.png"/>
+                        <state key="normal" image="call_info"/>
                         <connections>
                             <action selector="infoAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="9aH-p4-PzU"/>
                         </connections>
@@ -97,6 +97,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="组-10.png" width="21" height="21"/>
+        <image name="call_info" width="21" height="21"/>
+        <image name="call_record" width="8" height="8"/>
     </resources>
 </document>

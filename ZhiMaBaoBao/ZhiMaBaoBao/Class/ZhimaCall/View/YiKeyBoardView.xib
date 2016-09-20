@@ -212,7 +212,7 @@
                 <outlet property="btn1" destination="dEM-X6-5iB" id="Ffk-Lf-qky"/>
                 <outlet property="button0" destination="6H5-mt-r4v" id="ZmN-0I-IN5"/>
             </connections>
-            <point key="canvasLocation" x="339" y="310"/>
+            <point key="canvasLocation" x="215" y="334"/>
         </view>
     </objects>
     <resources>

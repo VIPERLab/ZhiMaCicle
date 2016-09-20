@@ -24,6 +24,7 @@
     dispatch_once(&onceToken, ^{
         
         hud = [[LCProgressHUD alloc] initWithView:[UIApplication sharedApplication].keyWindow];
+        hud.bezelView.color = RGB(100, 100, 100);
         hud.contentColor = WHITECOLOR;
     });
     return hud;
@@ -88,7 +89,7 @@
     hud.label.font = [UIFont boldSystemFontOfSize:TEXT_SIZE];
     [hud setRemoveFromSuperViewOnHide:YES];
     [hud setMinSize:CGSizeMake(BGVIEW_WIDTH, BGVIEW_WIDTH)];
-    hud.mode = MBProgressHUDModeIndeterminate;
+    hud.mode = MBProgressHUDModeText;
     [view addSubview:hud];
     
 }
@@ -100,10 +101,11 @@
     hud.label.text = text;
     hud.label.font = [UIFont boldSystemFontOfSize:TEXT_SIZE];
     [hud setMinSize:CGSizeZero];
-    [hud setMode:MBProgressHUDModeText];
+    [hud setMode:MBProgressHUDModeCustomView];
     [hud setRemoveFromSuperViewOnHide:YES];
     [[UIApplication sharedApplication].keyWindow addSubview:hud];
-    [hud hideAnimated:YES afterDelay:1.0f];
+    [hud hideAnimated:YES afterDelay:1.3f];
+    
 }
 
 + (void)showInfoText:(NSString *)text {
