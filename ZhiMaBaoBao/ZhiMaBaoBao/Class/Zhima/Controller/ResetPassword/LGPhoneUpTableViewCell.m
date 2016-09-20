@@ -43,7 +43,7 @@
     CGFloat titleWidth = [self.titleLabel.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(100, 15)].width;
     self.titleLabel.frame = CGRectMake(20, 0, titleWidth, CGRectGetHeight(self.frame));
     
-    _Texf.frame = CGRectMake(CGRectGetMaxX(self.titleLabel.frame) + 10, 0, CGRectGetWidth(self.frame) - CGRectGetMaxX(self.titleLabel.frame) - 10, CGRectGetHeight(self.frame));
+    _Texf.frame = CGRectMake(100, 0, CGRectGetWidth(self.frame) - CGRectGetMaxX(self.titleLabel.frame) - 10, CGRectGetHeight(self.frame));
     
     _bottomLineView.frame = CGRectMake(20, CGRectGetHeight(self.frame) - 0.5, ScreenWidth - 20, 0.5);
 }

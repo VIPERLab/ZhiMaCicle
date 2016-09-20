@@ -100,7 +100,7 @@
             NSLog(@"用户取消登陆");
         }]];
         [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){
-//            [self exit];
+            [self exit];
         }]];
         [self presentViewController:alertController animated:YES completion:nil];
         
@@ -119,22 +119,19 @@
         //版本公告
         KXWebViewController *aboutUs = [[KXWebViewController alloc] init];
         aboutUs.navTitleName = @"版本公告";
-        aboutUs.htmlURL = @"https://www.baidu.com";
-//        aboutUs.htmlURL = [NSString stringWithFormat:@"%@/web/getNoticeListBytype.do?sessionId=%@&openfireaccount=%@&type=2",DFAPIURL,USERINFO.sessionId,USERINFO.openfireAccount];
+        aboutUs.htmlURL = [NSString stringWithFormat:@"%@/web/getNoticeListBytype.do?sessionId=%@&openfireaccount=%@&type=2",DFAPIURL,USERINFO.sessionId,USERINFO.openfireaccount];
         [self.navigationController pushViewController:aboutUs animated:YES];
     } else if (indexPath.section == 0 && indexPath.row == 5) {
         //关于我们
         KXWebViewController *aboutUs = [[KXWebViewController alloc] init];
         aboutUs.navTitleName = @"关于我们";
-        aboutUs.htmlURL = @"https://www.baidu.com";
-//        aboutUs.htmlURL = [NSString stringWithFormat:@"%@/company_info.html?%f",DFAPIURL,interval];
+        aboutUs.htmlURL = [NSString stringWithFormat:@"%@/company_info.html?%f",DFAPIURL,interval];
         [self.navigationController pushViewController:aboutUs animated:YES];
     } else if (indexPath.section == 0 && indexPath.row == 6) {
         //联系我们
         KXWebViewController *aboutUs = [[KXWebViewController alloc] init];
         aboutUs.navTitleName = @"联系我们";
-        aboutUs.htmlURL = @"https://www.baidu.com";
-//        aboutUs.htmlURL = [NSString stringWithFormat:@"%@/contact_us.html?%f",DFAPIURL,interval];
+        aboutUs.htmlURL = [NSString stringWithFormat:@"%@/contact_us.html?%f",DFAPIURL,interval];
         [self.navigationController pushViewController:aboutUs animated:YES];
     } else if (indexPath.section == 0 && indexPath.row == 0) {
         //新消息提醒
@@ -152,11 +149,39 @@
 
 
 
+- (void)exit {
+//    YiUserInfo * userInfo = [YiUserInfo defaultUserInfo];
+//    if (userInfo) {
+//        userInfo.enableAutoLogin = NO;
+//        [userInfo persist];
+//        [[YiIMSDK defaultCore] disconnect:nil];
+//    }
+    
+    [LGNetWorking logout:USERINFO.sessionId block:^(ResponseData *responseData) {
+        if (responseData) {
+            if (responseData.code == 0) {
+                [LCProgressHUD showSuccessText:responseData.msg];
+            }else{
+                [LCProgressHUD showInfoText:responseData.msg];
+            }
+        }
+    }];
+    
+    //成功退出
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOGOUT_SUCCESS object:nil];
+    
+    //跳转到登录页面
+    [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
+    
+}
+
+
+
 #pragma mark - lazyLoad
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
-        [_dataArray addObject:@[@"新消息提醒",@"隐私设置",@"黑名单",@"重置密码",@"版本公告",@"关于我们",@"联系我们"]];
+        [_dataArray addObject:@[@"新消息提醒",@"隐私设置",@"黑名单",@"修改密码",@"版本公告",@"关于我们",@"联系我们"]];
         [_dataArray addObject:@[@"退出"]];
     }
     return _dataArray;

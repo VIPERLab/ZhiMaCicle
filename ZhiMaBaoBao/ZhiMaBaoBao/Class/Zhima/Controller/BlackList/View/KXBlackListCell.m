@@ -52,9 +52,9 @@
 - (void)setModel:(KXBlackListModel *)model {
     _model = model;
     
-//    [self.iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head_photo]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//        self.iconView.image = image;
-//    }];
+    [self.iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head_photo]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        self.iconView.image = image;
+    }];
     
     NSString *name = [NSString string];
     if (![model.friend_nick isEqualToString:@""]) {
@@ -70,7 +70,7 @@
 - (void)layoutSubviews {
     
     CGFloat iconX = 10;
-    CGFloat iconW = 45;
+    CGFloat iconW = 40;
     CGFloat iconH = iconW;
     CGFloat iconY = (CGRectGetHeight(self.frame) - iconH )* 0.5;
     self.iconView.frame = CGRectMake(iconX, iconY, iconW, iconH);

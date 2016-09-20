@@ -15,6 +15,8 @@
 //用户本地资料
 #define USERINFO        [UserInfo read]
 
+
+
 //颜色宏定义
 #define RGB(a,b,c)      [UIColor colorWithRed:a/255.0 green:b/255.0 blue:c/255.0 alpha:1]
 #define WHITECOLOR      RGB(255,255,255)
@@ -36,8 +38,12 @@
 #define SCLACEH     DEVICEHIGHT/(667.0)
 #define SCLACEW     DEVICEWITH/(375.0)
 
+//充值Appkey
+#define RECHAPPKEY @"yihezhai20152016"
+
 //正式网络环境
 #define DFAPIURL @"http://app.zhima11.com:8080"
+#define DFAPIURLTEST @"http://wx.zhima11.com"
 
 //常用头文件
 #import "AFNetworking.h"
@@ -51,10 +57,10 @@
 #import "UserInfo.h"
 #import "UIView+x.h"
 
+#import "UIImageView+WebCache.h"
 
+//通知头文件
+#import "KNotificationManager.h"
 
-//通知宏定义
-//登录成功，跳转到主控制器
-#define LOGIN_SUCCESS @"login_success"
 
 #endif /* Constant_h */
