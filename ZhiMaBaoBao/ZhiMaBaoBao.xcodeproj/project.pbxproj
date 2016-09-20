@@ -73,8 +73,22 @@
 		04EA7AD81D910FA8005E5425 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7AD71D910FA8005E5425 /* AssetsLibrary.framework */; };
 		04EA7ADC1D911058005E5425 /* KXPersonalMessageSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7ADB1D911058005E5425 /* KXPersonalMessageSettingController.m */; };
 		04EA7AE11D9112AC005E5425 /* PersonalSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7AE01D9112AC005E5425 /* PersonalSettingCell.m */; };
+		04EA7AE71D911FD2005E5425 /* BaiduMapAPI_Base.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7AE31D911FD2005E5425 /* BaiduMapAPI_Base.framework */; };
+		04EA7AE81D911FD2005E5425 /* BaiduMapAPI_Location.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7AE41D911FD2005E5425 /* BaiduMapAPI_Location.framework */; };
+		04EA7AEA1D911FD2005E5425 /* BaiduMapAPI_Search.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7AE61D911FD2005E5425 /* BaiduMapAPI_Search.framework */; };
+		04EA7AEC1D9120B4005E5425 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7AEB1D9120B4005E5425 /* MessageUI.framework */; };
+		04EA7AED1D9120BC005E5425 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A811D910308005E5425 /* QuartzCore.framework */; };
+		04EA7AEE1D9120C6005E5425 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A7D1D9102F9005E5425 /* CoreGraphics.framework */; };
+		04EA7AEF1D9120CD005E5425 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A831D91030E005E5425 /* CoreTelephony.framework */; };
+		04EA7AF11D9120D8005E5425 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7AF01D9120D8005E5425 /* Security.framework */; };
+		04EA7AF31D9120E1005E5425 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7AF21D9120E1005E5425 /* OpenGLES.framework */; };
+		04EA7AF51D9120E9005E5425 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7AF41D9120E9005E5425 /* CoreLocation.framework */; };
+		04EA7AF61D912103005E5425 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A851D910316005E5425 /* SystemConfiguration.framework */; };
+		04EA7AF71D91210A005E5425 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A7B1D9102F0005E5425 /* UIKit.framework */; };
+		04EA7AF81D912110005E5425 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A791D9102E9005E5425 /* Foundation.framework */; };
+		04EA7AFA1D91214D005E5425 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7AF91D91214D005E5425 /* libsqlite3.0.tbd */; };
 		310B83251D8E7B0100A0F408 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83241D8E7B0100A0F408 /* main.m */; };
-		310B83281D8E7B0100A0F408 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83271D8E7B0100A0F408 /* AppDelegate.m */; };
+		310B83281D8E7B0100A0F408 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 310B83271D8E7B0100A0F408 /* AppDelegate.mm */; };
 		310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 310B832C1D8E7B0100A0F408 /* Main.storyboard */; };
 		310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 310B832F1D8E7B0100A0F408 /* Assets.xcassets */; };
 		310B83331D8E7B0100A0F408 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 310B83311D8E7B0100A0F408 /* LaunchScreen.storyboard */; };
@@ -275,10 +289,18 @@
 		04EA7ADB1D911058005E5425 /* KXPersonalMessageSettingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPersonalMessageSettingController.m; sourceTree = "<group>"; };
 		04EA7ADF1D9112AC005E5425 /* PersonalSettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalSettingCell.h; sourceTree = "<group>"; };
 		04EA7AE01D9112AC005E5425 /* PersonalSettingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalSettingCell.m; sourceTree = "<group>"; };
+		04EA7AE31D911FD2005E5425 /* BaiduMapAPI_Base.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Base.framework; sourceTree = "<group>"; };
+		04EA7AE41D911FD2005E5425 /* BaiduMapAPI_Location.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Location.framework; sourceTree = "<group>"; };
+		04EA7AE61D911FD2005E5425 /* BaiduMapAPI_Search.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Search.framework; sourceTree = "<group>"; };
+		04EA7AEB1D9120B4005E5425 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		04EA7AF01D9120D8005E5425 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		04EA7AF21D9120E1005E5425 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		04EA7AF41D9120E9005E5425 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		04EA7AF91D91214D005E5425 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		310B83201D8E7B0100A0F408 /* ZhiMaBaoBao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZhiMaBaoBao.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		310B83241D8E7B0100A0F408 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		310B83261D8E7B0100A0F408 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		310B83271D8E7B0100A0F408 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		310B83271D8E7B0100A0F408 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		310B832D1D8E7B0100A0F408 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		310B832F1D8E7B0100A0F408 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		310B83321D8E7B0100A0F408 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -386,6 +408,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04EA7AFA1D91214D005E5425 /* libsqlite3.0.tbd in Frameworks */,
+				04EA7AF81D912110005E5425 /* Foundation.framework in Frameworks */,
+				04EA7AF71D91210A005E5425 /* UIKit.framework in Frameworks */,
+				04EA7AF61D912103005E5425 /* SystemConfiguration.framework in Frameworks */,
+				04EA7AF51D9120E9005E5425 /* CoreLocation.framework in Frameworks */,
+				04EA7AF31D9120E1005E5425 /* OpenGLES.framework in Frameworks */,
+				04EA7AF11D9120D8005E5425 /* Security.framework in Frameworks */,
+				04EA7AEF1D9120CD005E5425 /* CoreTelephony.framework in Frameworks */,
+				04EA7AEE1D9120C6005E5425 /* CoreGraphics.framework in Frameworks */,
+				04EA7AED1D9120BC005E5425 /* QuartzCore.framework in Frameworks */,
+				04EA7AEC1D9120B4005E5425 /* MessageUI.framework in Frameworks */,
 				04EA7AD81D910FA8005E5425 /* AssetsLibrary.framework in Frameworks */,
 				04EA7A6F1D90EBB3005E5425 /* AFNetworking.framework in Frameworks */,
 				04EA7A701D90EBB3005E5425 /* CocoaAsyncSocket.framework in Frameworks */,
@@ -393,11 +426,14 @@
 				04EA7A721D90EBB3005E5425 /* Masonry.framework in Frameworks */,
 				04EA7A731D90EBB3005E5425 /* MBProgressHUD.framework in Frameworks */,
 				04EA7A741D90EBB3005E5425 /* MJExtension.framework in Frameworks */,
+				04EA7AEA1D911FD2005E5425 /* BaiduMapAPI_Search.framework in Frameworks */,
 				04EA7A751D90EBB3005E5425 /* MJRefresh.framework in Frameworks */,
 				04EA7A761D90EBB3005E5425 /* NJKWebViewProgress.framework in Frameworks */,
 				04EA7A771D90EBB3005E5425 /* RegexKitLite.framework in Frameworks */,
 				04EA7A781D90EBB3005E5425 /* SDWebImage.framework in Frameworks */,
+				04EA7AE71D911FD2005E5425 /* BaiduMapAPI_Base.framework in Frameworks */,
 				31B7C7B31D8FFCBE00F1883A /* LYVoIP.a in Frameworks */,
+				04EA7AE81D911FD2005E5425 /* BaiduMapAPI_Location.framework in Frameworks */,
 				9D4903A7551EC331016D9D3A /* Pods_ZhiMaBaoBao.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -822,6 +858,16 @@
 			name = Cell;
 			sourceTree = "<group>";
 		};
+		04EA7AE21D911FD2005E5425 /* BDSDK */ = {
+			isa = PBXGroup;
+			children = (
+				04EA7AE31D911FD2005E5425 /* BaiduMapAPI_Base.framework */,
+				04EA7AE41D911FD2005E5425 /* BaiduMapAPI_Location.framework */,
+				04EA7AE61D911FD2005E5425 /* BaiduMapAPI_Search.framework */,
+			);
+			path = BDSDK;
+			sourceTree = "<group>";
+		};
 		310B83171D8E7B0100A0F408 = {
 			isa = PBXGroup;
 			children = (
@@ -850,7 +896,7 @@
 				31B7C6CB1D8E89D700F1883A /* Class */,
 				31B7C6CC1D8E89DE00F1883A /* Main */,
 				310B83261D8E7B0100A0F408 /* AppDelegate.h */,
-				310B83271D8E7B0100A0F408 /* AppDelegate.m */,
+				310B83271D8E7B0100A0F408 /* AppDelegate.mm */,
 				31B7C6FC1D8E91F000F1883A /* MainViewController.h */,
 				31B7C6FD1D8E91F000F1883A /* MainViewController.m */,
 				310B832C1D8E7B0100A0F408 /* Main.storyboard */,
@@ -1204,6 +1250,7 @@
 		31B7C7A51D8FE91A00F1883A /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				04EA7AE21D911FD2005E5425 /* BDSDK */,
 				04EA7A991D910F89005E5425 /* DNImagePicker */,
 				04EA7A891D91079A005E5425 /* AliPay */,
 				31B7C7AD1D8FFCBE00F1883A /* LYVoIP */,
@@ -1258,6 +1305,11 @@
 		F8838AFF61B5D250B9C12805 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				04EA7AF91D91214D005E5425 /* libsqlite3.0.tbd */,
+				04EA7AF41D9120E9005E5425 /* CoreLocation.framework */,
+				04EA7AF21D9120E1005E5425 /* OpenGLES.framework */,
+				04EA7AF01D9120D8005E5425 /* Security.framework */,
+				04EA7AEB1D9120B4005E5425 /* MessageUI.framework */,
 				04EA7AD71D910FA8005E5425 /* AssetsLibrary.framework */,
 				04EA7A871D91031D005E5425 /* libz.tbd */,
 				04EA7A851D910316005E5425 /* SystemConfiguration.framework */,
@@ -1555,7 +1607,7 @@
 				04EA7A8F1D9107C0005E5425 /* APAuthV2Info.m in Sources */,
 				04EA79A11D8FD589005E5425 /* KXSettingCell.m in Sources */,
 				04EA79E71D90E9F7005E5425 /* ChangeMoneyCell.m in Sources */,
-				310B83281D8E7B0100A0F408 /* AppDelegate.m in Sources */,
+				310B83281D8E7B0100A0F408 /* AppDelegate.mm in Sources */,
 				31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */,
 				31B7C7211D8E96A100F1883A /* FriendsController.m in Sources */,
 				31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */,
@@ -1724,6 +1776,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
+					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/BDSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZhiMaBaoBao/Zhimabaobao.pch;
@@ -1752,6 +1805,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
+					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/BDSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZhiMaBaoBao/Zhimabaobao.pch;
