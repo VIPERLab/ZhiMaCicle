@@ -10,6 +10,7 @@
 //#import "YiUserInfo.h"
 //#import "YiIMSDK.h"
 #import "UIImage+YiExtension.h"
+#import "SDWebImageManager.h"
 
 #import "SecurityUtil.h"
 #import "GTMBase64.h"
@@ -47,28 +48,31 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     
-    UIImageView *userIcon = [[UIImageView alloc] initWithFrame:CGRectMake(20, 30, 80, 80)];
+    UIImageView *userIcon = [[UIImageView alloc] initWithFrame:CGRectMake(20, 30 + 64, 80, 80)];
     self.userIcon = userIcon;
+    [userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
     [self.view addSubview:userIcon];
     
     UILabel *nameLabel = [[UILabel alloc] init];
-    nameLabel.frame = CGRectMake(CGRectGetMaxX(userIcon.frame) + 10, CGRectGetMinX(userIcon.frame) + 10, 300, 20);
+    nameLabel.frame = CGRectMake(CGRectGetMaxX(userIcon.frame) + 10, CGRectGetMinY(userIcon.frame) + 10, 300, 20);
     nameLabel.font = [UIFont systemFontOfSize:15];
     self.nameLabel = nameLabel;
+    self.nameLabel.text = USERINFO.username;
     [self.view addSubview:nameLabel];
     
     
     UILabel *signLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(userIcon.frame) + 10, CGRectGetMaxY(nameLabel.frame) + 5, 300, 20)];
     signLabel.font = [UIFont systemFontOfSize:14];
-    signLabel.textColor = [UIColor lightGrayColor];
+    signLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
     self.signLabel = signLabel;
+    self.signLabel.text = USERINFO.location;
     [self.view addSubview:signLabel];
     
     
     CGFloat imageW = [UIScreen mainScreen].bounds.size.width / 2;
     CGFloat imageH = imageW;
     CGFloat imageX = self.view.boundsCenter.x - imageW * 0.5;
-    CGFloat imageY = 150;
+    CGFloat imageY = 150 + 64;
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     self.imageView = imageView;
     [self.view addSubview:imageView];
@@ -157,8 +161,11 @@
     // 高清的二维码
     
 //    NSString * avatarPath = [YiXmppVCard getAvatarPathByJid:[userInfo getJid]];
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    [manager downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]] options:0 progress:0 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        self.imageView.image = [[self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:120] iconImageWithIcon:image];
+    }];
     
-    self.imageView.image = [[self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:120] iconImageWithIcon:[UIImage imageNamed:@"userIcon"]];
 }
 
 - (UIImage *)creatNonInterpolatedUIImageFormCIImage:(CIImage *)image withSize:(CGFloat)size

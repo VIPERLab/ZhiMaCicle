@@ -59,7 +59,7 @@
 
 - (void)setImageName:(NSString *)imageName {
     _imageName = imageName;
-    [_userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,imageName]] placeholderImage:[UIImage imageNamed:@"userIcon"]];
+    [_userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,imageName]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
 }
 
 - (void)setName:(NSString *)name {

@@ -1,0 +1,506 @@
+//
+//  NewDiscoverController.m
+//  YiIM_iOS
+//
+//  Created by mac on 16/8/22.
+//  Copyright © 2016年 ikantech. All rights reserved.
+//
+
+#import "NewDiscoverController.h"
+#import "NewDiscoverNormalCell.h" //普通样式cell视图
+#import "NewDiscoverHeaderView.h"  //头部样式cell视图
+#import "KXCurrentLocationModel.h"
+
+
+#import "DiscoverCurrentLocationController.h" //所在位置
+#import "ChooseWhoCanSeeController.h" //选择可见范围
+
+//图片
+#import "NewDiscoverPhotoPickerView.h"
+
+#import "LGNetWorking.h"  //请求工具类
+
+#import <CoreLocation/CoreLocation.h>  //定位FrameWork
+
+//相册相关头文件
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "DNImagePickerController.h"
+#import "DNAsset.h"
+#import "NSURL+DNIMagePickerUrlEqual.h"
+
+// --- 重用ID
+#define NewDiscoverTableViewNormalCellReuserdID @"NewDiscoverTableViewNormalCellReuserdID"
+#define NewDiscoverTableViewHeaderCellReuserdID @"NewDiscoverTableViewHeaderCellReuserdID"
+
+@interface NewDiscoverController () <UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,CLLocationManagerDelegate>
+
+@property (nonatomic, weak) UITableView *tableView;
+
+@property (nonatomic, weak) UITextView *textView;   //文本输入框
+
+@property (nonatomic, weak) UIButton *currentSelectedButton; //当前选择的按钮
+
+@property (nonatomic, weak) NewDiscoverHeaderView *headerView;
+
+
+@property (nonatomic, assign) int headerCellHight;
+
+@property (nonatomic, strong) NSMutableArray *imagesArray;
+
+//上传图片队列
+@property (nonatomic, assign) int imageCount;
+
+
+// -----  选择位置回调
+@property (nonatomic, copy) NSString *locationTips;
+@property (nonatomic, assign) BOOL isSelected;
+
+// ------ 可见范围
+@property (nonatomic, copy) NSString *privateClass; //公开程度  1.所有人公开 2.自己可见 3.朋友可见
+
+//定位功能类
+@property (nonatomic,strong) CLLocationManager *manager;
+@property (nonatomic,strong) CLGeocoder *geocoder;
+
+@end
+
+
+
+
+@implementation NewDiscoverController {
+    NSString *_content;   //说收内容
+    NSString *_imgs;
+    ALAssetsLibrary* assetLibrary;//照片的生命周期跟它有关，所以弄成全局变量在这里初始化
+}
+
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    
+    //全局变量
+    assetLibrary = [[ALAssetsLibrary alloc]init];
+    self.locationTips = @"所在位置";
+    self.headerCellHight = 230;
+    _imageCount = 0;
+    _privateClass = @"1";
+    [self setupNav];
+    [self setupView];
+    [self setCustomTitle:@""];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+- (void)setupNav {
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发布" style:UIBarButtonItemStylePlain target:self action:@selector(ReleaseButtonDidClick)];
+    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+}
+
+- (void)setupView {
+    
+    //图片点击通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClick:) name:K_NewDiscoverPhotoPickerNotifcation object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClickButton:) name:K_NewDiscoverPhotoClickNotifcation object:nil];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    //设置头部
+    NewDiscoverHeaderView *headerView = [[NewDiscoverHeaderView alloc] init];
+    self.textView = headerView.textView;
+    [self.view addSubview:headerView];
+    self.headerView = headerView;
+    headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 230);
+
+    
+    
+    //设置TableView
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    self.tableView = tableView;
+    tableView.separatorStyle = UITableViewCellSelectionStyleNone;
+    [self.view addSubview:tableView];
+    
+    self.tableView.frame = CGRectMake(0, CGRectGetMaxY(headerView.frame), [UIScreen mainScreen].bounds.size.width, CGRectGetHeight(self.view.frame) - 230 );
+    
+    
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    
+    [tableView registerClass:[NewDiscoverNormalCell class] forCellReuseIdentifier:NewDiscoverTableViewNormalCellReuserdID];
+    
+    
+    
+}
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NewDiscoverNormalCell *cell = [tableView dequeueReusableCellWithIdentifier:NewDiscoverTableViewNormalCellReuserdID forIndexPath:indexPath];
+    
+    if (indexPath.section == 0) {
+        cell.tipsName = self.locationTips;
+        [cell setIconViewWithImageName:@"NewDiscover_Loaction" Status:UIControlStateNormal];
+        [cell setIconViewWithImageName:@"NewDiscover_Loaction_Selected" Status:UIControlStateSelected];
+        cell.isSelected = self.isSelected;
+        
+    } else if (indexPath.section == 1) {
+        cell.tipsName = @"可见范围";
+        cell.subTitleName = @"公开";
+        [cell setIconViewWithImageName:@"NewDiscover_Earth" Status:UIControlStateNormal];
+    }
+    
+    return cell;
+}
+
+#pragma mark - TableVieCellDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 54;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.5;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.5;
+}
+
+#pragma mark - Cell的点击事件
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    __weak typeof(self) weakSelf = self;
+    __block NSIndexPath *index = indexPath;
+    if (indexPath.section == 0) { //更新用户位置
+        DiscoverCurrentLocationController *location = [[DiscoverCurrentLocationController alloc] init];
+        location.complitedBlock = ^(KXCurrentLocationModel *model) {
+            
+            if ([model.address isEqualToString:@""] && [model.city isEqualToString:@""]) {
+                if ([model.name isEqualToString:@"不显示位置"]) {
+                    weakSelf.locationTips = @"所在位置";
+                    self.isSelected = NO;
+                } else {
+                    weakSelf.locationTips = model.name;
+                    self.isSelected = YES;
+                }
+            } else {
+                weakSelf.locationTips = [NSString stringWithFormat:@"%@ · %@",model.city,model.name];
+                self.isSelected = YES;
+            }
+            
+            
+            [weakSelf.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationFade];
+        };
+        
+        [self.navigationController pushViewController:location animated:YES];
+        return;
+        
+    } else if (indexPath.section == 1) { //跳转至可见范围
+        ChooseWhoCanSeeController *vc = [[ChooseWhoCanSeeController alloc] init];
+        __block NewDiscoverNormalCell *cell = [weakSelf.tableView cellForRowAtIndexPath:index];
+        
+        if ([cell.subTitleName isEqualToString:@"公开"]) {
+            vc.isPrivate = NO;
+        } else vc.isPrivate = YES;
+        
+        
+        vc.returnBlock = ^(BOOL PrivateClass) {
+            if (PrivateClass) {
+                weakSelf.privateClass = @"3";
+                cell.subTitleName = @"朋友可见";
+            } else {
+                weakSelf.privateClass = @"1";
+                cell.subTitleName = @"公开";
+            }
+        };
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+
+
+#pragma mark - 发布按钮的点击事件
+- (void)ReleaseButtonDidClick {
+    [self.textView resignFirstResponder];
+    if (!self.textView.text.length && !_imagesArray.count) {
+        [LCProgressHUD showText:@"说说内容或图片不能为空"];
+        return;
+    }
+    
+    [self upLoadImageCount:0 andImageArray:_imagesArray];
+}
+
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self resignFirstResponder];
+    [self.textView resignFirstResponder];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self resignFirstResponder];
+    [self.textView resignFirstResponder];
+}
+
+
+
+
+
+
+
+#pragma mark - 图片通知
+- (void)photoViewDidClick:(NSNotification *)notification {
+    [self.textView resignFirstResponder];
+    NSString *buttionIndex = notification.userInfo[@"buttonIndex"];
+    UIButton *currentButton = notification.userInfo[@"currentSelectedButton"];
+    
+    self.currentSelectedButton = currentButton;
+    
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = NO;
+    
+    
+    
+    if ([buttionIndex isEqualToString:@"0"]) {  //拍照
+        
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self.navigationController presentViewController:picker animated:YES completion:nil];
+        return;
+        
+    } else if ([buttionIndex isEqualToString:@"1"]) {
+        
+        
+    } else {
+        return;
+    }
+    
+    
+    
+    int limitNum = 9 - self.imagesArray.count;
+    
+//    如果是更换图片，则只能选择1张
+    if (self.currentSelectedButton.tag < self.imagesArray.count) {
+        limitNum = 1;
+    }
+    
+    DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
+    imagePicker.imagePickerDelegate = self;
+    imagePicker.kDNImageFlowMaxSeletedNumber = limitNum;
+    imagePicker.filterType = DNImagePickerFilterTypePhotos;
+    [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
+//点击回调通知
+- (void)photoViewDidClickButton:(NSNotification *)notifacation {
+    [self.textView resignFirstResponder];
+}
+
+
+#pragma mark - imagePickerDelegate
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+// ----   调整图片角度
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    UIImage *image = info[@"UIImagePickerControllerOriginalImage"];
+    UIImageOrientation imageOrientation=image.imageOrientation;
+    if(imageOrientation!=UIImageOrientationUp) {
+        // 原始图片可以根据照相时的角度来显示，但UIImage无法判定，于是出现获取的图片会向左转９０度的现象。
+        // 以下为调整图片角度的部分
+        UIGraphicsBeginImageContext(image.size);
+        [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        // 调整图片角度完毕
+    }
+    NSData *data = UIImageJPEGRepresentation(image, 0.5);
+    image = [UIImage imageWithData:data];
+    
+    if (self.currentSelectedButton.tag < self.imagesArray.count) {
+        //如果是重选图片
+        [self.imagesArray replaceObjectAtIndex:self.currentSelectedButton.tag withObject:image];
+    } else {
+        
+        [self.imagesArray addObject:image];
+    }
+    [self.currentSelectedButton setImage:image forState:UIControlStateNormal];
+    [self upDataView];
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark - SGMAlbumViewControllerDelegate
+- (void)dnImagePickerController:(DNImagePickerController *)imagePickerController sendImages:(NSArray *)imageAssets isFullImage:(BOOL)fullImage {
+    
+    ALAssetsLibrary *lib = [ALAssetsLibrary new];
+    
+    if (self.currentSelectedButton.tag < self.imagesArray.count) {
+        //如果是更换图片  --- 解析图片
+        for (NSInteger index = 0; index < imageAssets.count; index++) {
+            DNAsset *dnasset = imageAssets[index];
+            [lib assetForURL:dnasset.url resultBlock:^(ALAsset *asset) {
+                UIImage *image;
+                if (fullImage) {
+                    image = [UIImage imageWithCGImage:asset.thumbnail];
+                } else {
+                    image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
+                }
+                [self.currentSelectedButton setImage:image forState:UIControlStateNormal];
+                [self.imagesArray replaceObjectAtIndex:self.currentSelectedButton.tag withObject:image];
+                return ;
+            } failureBlock:^(NSError *error) {
+                
+            }];
+            return;
+        }
+    }
+    
+    //不是更换图片  ---  解析图片
+    for (NSInteger index = 0; index < imageAssets.count; index++) {
+        DNAsset *dnasset = imageAssets[index];
+        [lib assetForURL:dnasset.url resultBlock:^(ALAsset *asset) {
+            
+            UIImage *image;
+            
+            if (fullImage) {
+                image = [UIImage imageWithCGImage:asset.thumbnail];
+            } else {
+                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
+            }
+            
+            if (self.imagesArray.count > 8) {
+                return ;
+            }
+            
+            [self.imagesArray addObject:image];
+            [self upDataView];
+
+            
+        } failureBlock:^(NSError *error) {
+            
+        }];
+    }
+    
+}
+
+
+- (void)dnImagePickerControllerDidCancel:(DNImagePickerController *)imagePicker {
+    [imagePicker dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark - 上传图片
+- (void)upLoadImageCount:(int )imageCount andImageArray:(NSArray *)array {
+    if (imageCount >= array.count || imageCount > 8) {
+        [self releaseDidClick];
+        return;
+    }
+    UIImage *image = array[imageCount];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.3);
+    [LCProgressHUD showLoadingText:@"正在上传图片"];
+    
+    [LGNetWorking uploadPhoto:USERINFO.sessionId image:imageData fileName:@"quan" andFuctionName:@"quan" block:^(ResponseData *obj) {
+        [LCProgressHUD hide];
+        if (obj.code == 0) {
+            //上传成功 ，保存图片路径
+            if ([_imgs isEqualToString:@""] || _imgs == nil) {  //如果没有图片则直接赋值
+                _imgs = obj.data;
+            } else {                                            //如果有图片则拼接起来
+                _imgs = [_imgs stringByAppendingString:[NSString stringWithFormat:@",%@",obj.data]];
+            }
+            
+            //递归回调
+            self.imageCount++;
+            [self upLoadImageCount:self.imageCount andImageArray:_imagesArray];
+            
+        }else{
+            [LCProgressHUD showFailureText:obj.msg];
+
+        }
+        
+        
+    }];
+}
+
+- (void)releaseDidClick {
+    NSString *locationStr = [NSString string];
+    if ([self.locationTips isEqualToString:@"所在位置"]) {
+        locationStr = @"";
+    } else {
+        locationStr = self.locationTips;
+    }
+    [LGNetWorking AddNewDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andContent_type:@"1" andContent:self.textView.text andLink:@"" andType:_privateClass andCurrent_location:locationStr andImgs:_imgs block:^(ResponseData *responseData) {
+        
+        if (responseData.code != 0) {
+            return;
+        }
+        
+        self.block();
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+}
+
+//更新UI
+- (void)upDataView {
+    CGFloat buttonWidth = ([UIScreen mainScreen].bounds.size.width - 50) / 4;
+    if (self.imagesArray.count >= 4 && self.imagesArray.count < 8) {
+        self.headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 230 + buttonWidth + 5);
+    } else if (self.imagesArray.count >= 8){
+        self.headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 230 + buttonWidth * 2 + 10);
+    } else {
+        self.headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 230);
+    }
+    
+    [self.headerView setContentWithImageArray:self.imagesArray];
+    
+    self.tableView.frame = CGRectMake(0, CGRectGetMaxY(self.headerView.frame), [UIScreen mainScreen].bounds.size.width, CGRectGetHeight(self.view.frame) - CGRectGetMaxY(self.headerView.frame));
+    
+    
+}
+
+
+#pragma mark - lazyLoad
+
+
+- (NSMutableArray *)imagesArray {
+    if (!_imagesArray) {
+        _imagesArray = [NSMutableArray array];
+    }
+    return _imagesArray;
+}
+
+
+- (CLLocationManager *)manager {
+    if (!_manager) {
+        _manager = [[CLLocationManager alloc] init];
+        _manager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+        _manager.delegate = self;
+    }
+    return _manager;
+}
+
+- (CLGeocoder *)geocoder {
+    if (!_geocoder) {
+        _geocoder = [[CLGeocoder alloc]init];
+    }
+    return _geocoder;
+}
+@end
