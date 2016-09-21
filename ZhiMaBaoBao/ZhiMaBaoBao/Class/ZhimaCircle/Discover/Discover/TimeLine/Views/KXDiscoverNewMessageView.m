@@ -104,7 +104,7 @@
 // -------   展示消息提示框
 - (void)showNewMessageViewWith:(NSString *)iconURL andNewMessageCount:(int)count {
     
-    [_unReadIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,iconURL]] placeholderImage:[UIImage imageNamed:@"Discover_Photo_PlaceHolder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [_unReadIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,iconURL]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         _unReadIcon.image = image;
     }];
     

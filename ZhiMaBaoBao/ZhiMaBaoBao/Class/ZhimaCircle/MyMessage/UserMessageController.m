@@ -40,7 +40,6 @@
     self.pageNumber = 1;
     self.lastFccid = @"0";
     
-    [self setupNav];
     [self setupView];
 }
 
@@ -54,11 +53,11 @@
     [self setupRefreashFooter];
 }
 
+
 - (void)loadData {  //请求消息列表
     [LGNetWorking getUnReadMessageWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount block:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             [LCProgressHUD showText:@"请检查网络"];
-
             return ;
         }
         _isShowAllMessage = YES;
@@ -72,29 +71,24 @@
             } else {
                 model.cellHight = 80;
             }
-            
         }
         
         self.lastFccid = responseData.data[@"last_fccid"];
         self.dataArray = [dataArray mutableCopy];
-        USERINFO.unReadCount = 0;
+        UserInfo *info = [UserInfo read];
+        info.unReadCount = 0;
+        [info save];
         [self.tableView reloadData];
         
     }];
     
 }
 
-- (void)setupNav {
-    [self setCustomTitle:@"消息"];
-//    [self setCustomRightBarBUtton:@"清空"];
-
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
-    self.edgesForExtendedLayout = UIRectEdgeTop;
-}
 
 - (void)setupView {
-    UITableView *tableView=  [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64 ) style:UITableViewStylePlain];
+    [self setCustomTitle:@"消息"];
+    
+    UITableView *tableView=  [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView = tableView;
     [self.view addSubview:tableView];
     
@@ -154,10 +148,6 @@
     }];
     
     [self.tableView.mj_footer beginRefreshing];
-    
-    
-    
-    
 }
 
 - (void)loadMoreData {
@@ -206,6 +196,16 @@
     }];
 }
 
+
+- (void)backAction {
+    [self.dataArray removeAllObjects];
+    self.dataArray = nil;
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)dealloc {
+    NSLog(@"消失了");
+}
 
 
 #pragma mark - LazyLoad

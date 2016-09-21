@@ -116,6 +116,19 @@
     return 70;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    for (ChooserWhoCanSeeCellModel *model in self.dataArray) {
+        if (model == self.dataArray[indexPath.row]) {
+            model.isSelected = YES;
+        } else {
+            model.isSelected = NO;
+        }
+    }
+    [tableView reloadData];
+    
+}
+
 
 
 #pragma mark - 确定按钮点击事件
@@ -130,14 +143,12 @@
             } else if (index == 1) {    //选择了私有项
                 self.returnBlock(YES);
             }
-            
-            
             [self.navigationController popViewControllerAnimated:YES];
             return;
         }
-        [LCProgressHUD showFailureText:@"请选择其中一项"];
-        
     }
+    
+    [LCProgressHUD showFailureText:@"请选择其中一项"];
     
 }
 

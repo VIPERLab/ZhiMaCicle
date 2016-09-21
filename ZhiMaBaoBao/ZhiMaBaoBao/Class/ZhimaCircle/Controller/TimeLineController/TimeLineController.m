@@ -10,6 +10,8 @@
 #import "ZhiMaCicleCell.h"
 #import "SDTimeLineTableViewController.h"
 
+#define ZhiMaCicleCellReusedID @"ZhiMaCicleCellReusedID"
+
 @interface TimeLineController () <UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, strong) NSArray *iconArray;
@@ -53,7 +55,7 @@
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    [_tableView registerClass:[ZhiMaCicleCell class] forCellReuseIdentifier:@"CircleCell"];
+    [_tableView registerClass:[ZhiMaCicleCell class] forCellReuseIdentifier:ZhiMaCicleCellReusedID];
     
 }
 
@@ -69,7 +71,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *titleArr = self.titleArray[indexPath.section];
     NSArray *iconArr = self.iconArray[indexPath.section];
-    ZhiMaCicleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CircleCell" forIndexPath:indexPath];
+    ZhiMaCicleCell *cell = [tableView dequeueReusableCellWithIdentifier:ZhiMaCicleCellReusedID forIndexPath:indexPath];
     cell.title = titleArr[indexPath.row];
     cell.imageName = iconArr[indexPath.row];
     cell.unReadCount = 0;

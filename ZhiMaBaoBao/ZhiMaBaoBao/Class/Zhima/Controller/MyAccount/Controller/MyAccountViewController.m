@@ -41,7 +41,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self request];
+    
+    if (self.model.ID.length == 0) {
+        [self request];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,15 +65,7 @@
     headerView.backgroundColor = [UIColor colorFormHexRGB:@"fd696a"];
     [headerView setButtonWithArray:@[@"MyAccount_Tick",@"MyAccount_Money",@"MyAccount_CreadCar"] andSubTitleArray:@[@"付款",@"零钱",@"银行卡"] andSubTitleColor:[UIColor whiteColor]];
     [self.view addSubview:headerView];
-    
-//    MyAccountHeaderView *headerView2 = [[MyAccountHeaderView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headerView.frame) + 20, [UIScreen mainScreen].bounds.size.width, 120)];
-//    self.headerView2 = headerView2;
-//    headerView2.delegate = self;
-//    headerView2.backgroundColor = [UIColor whiteColor];
-//    [headerView2 setButtonWithArray:@[@"MyAccount_CardCharge",@"MyAccount_MoneyCharge",@""] andSubTitleArray:@[@"话费卡充值",@"现金充值",@""] andSubTitleColor:[UIColor lightGrayColor]];
-    
-    
-    
+
     
     UIView *headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headerView.frame) + 30, [UIScreen mainScreen].bounds.size.width, 100)];
     headerView2.backgroundColor = [UIColor whiteColor];

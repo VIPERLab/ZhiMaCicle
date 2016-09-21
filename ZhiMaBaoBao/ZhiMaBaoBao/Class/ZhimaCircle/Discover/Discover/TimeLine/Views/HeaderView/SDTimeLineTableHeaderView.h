@@ -15,8 +15,6 @@
 @optional
 - (void)SDTimeLineTableHeaderViewHeaderViewDidClick:(SDTimeLineTableHeaderView *)headerView;
 - (void)SDTimeLineTableHeaderViewBackGroundViewDidClick:(SDTimeLineTableHeaderView *)header andBackGround:(UIButton *)backGround;
-- (void)SDTimeLineTableHeaderViewTipsViewDidClick:(SDTimeLineTableHeaderView *)header;
-
 @end
 
 @interface SDTimeLineTableHeaderView : UIView

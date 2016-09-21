@@ -55,12 +55,12 @@
 - (void)setupView {
     
     if ([USERINFO.openfireaccount isEqualToString:self.openFirAccount]) {
-//        [self setCustomRightBarBUtton:@"消息"];
+        [self setupRightBarButton];
 
     }
     
     [self setCustomTitle:@"相册"];
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64) style:UITableViewStyleGrouped];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     self.tableView = tableView;
     [self.view addSubview:tableView];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -83,6 +83,10 @@
     headerView.frame = CGRectMake(0, 0, 0, 260);
     self.tableView.tableHeaderView = headerView;
     
+}
+
+- (void)setupRightBarButton {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"消息" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonAction)];
 }
 
 

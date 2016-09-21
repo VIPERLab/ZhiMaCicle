@@ -10,8 +10,6 @@
 
 #import "UIView+SDAutoLayout.h"
 #import "UIButton+WebCache.h"
-#import "UIImageView+WebCache.h"
-#import "UIColor+My.h"
 
 @implementation SDTimeLineTableHeaderView
 
@@ -85,10 +83,7 @@
     .rightSpaceToView(self,15)
     .heightIs(15);
     
-    
-    
-    
-    }
+}
 
 
 - (void)setUserName:(NSString *)userName {
@@ -100,15 +95,8 @@
 }
 
 - (void)setBJImage:(NSString *)BJImage {
-    //利用SDWebImage下载图片
-    
     _BJImage = BJImage;
-    
-    [_backgroundImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,BJImage]] forState:UIControlStateNormal completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        [_backgroundImageView setBackgroundImage:image forState:UIControlStateNormal];
-    }];
-    
-    
+    [_backgroundImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,BJImage]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
 }
 
 - (void)backGroundImageViewDidClick:(UIButton *)sender {
@@ -118,14 +106,8 @@
 }
 
 - (void)setUserImage:(NSString *)userImage {
-    //利用SDWebImage下载图片
     _userImage = userImage;
-    
-    [_iconView.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,userImage]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        [_iconView setImage:image forState:UIControlStateNormal];
-    }];
-    
-    
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,userImage]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
 }
 
 - (void)setSignName:(NSString *)signName {

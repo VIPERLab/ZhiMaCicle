@@ -45,10 +45,10 @@
 
 //                    ------ 发布朋友圈通知 --------
 // ---- 唤起ImagePicker通知
-#define KNewDiscoverPhotoPickerNotifcation @"KNewDiscoverPhotoPickerNotifcation"
+#define K_NewDiscoverPhotoPickerNotifcation @"KNewDiscoverPhotoPickerNotifcation"
 
 // ---- 取消响应通知
-#define KNewDiscoverPhotoClickNotifcation @"KNewDiscoverPhotoClickNotifcation"
+#define K_NewDiscoverPhotoClickNotifcation @"KNewDiscoverPhotoClickNotifcation"
 
 
 

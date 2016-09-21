@@ -9,8 +9,7 @@
 #import "NewDiscoverPhotoPickerView.h"
 #import "SDAutoLayout.h"
 #import "LCProgressHUD.h"
-#define KNewDiscoverPhotoPickerNotifcation @"KNewDiscoverPhotoPickerNotifcation"
-#define KNewDiscoverPhotoClickNotifcation @"KNewDiscoverPhotoClickNotifcation"
+
 @interface NewDiscoverPhotoPickerView () <UIActionSheetDelegate>
 
 @property (nonatomic, weak) UIButton *currentSelectedButton;
@@ -56,7 +55,7 @@
 #pragma mark - 图片的点击事件
 - (void)addPhotoButtonDidClick:(UIButton *)sender {
     self.currentSelectedButton = sender;
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNewDiscoverPhotoClickNotifcation object:nil userInfo:@{@"CurrentSelectedButton" : sender
+    [[NSNotificationCenter defaultCenter] postNotificationName:K_NewDiscoverPhotoClickNotifcation object:nil userInfo:@{@"CurrentSelectedButton" : sender
                                                                                                                         }];
     //判断是打开图片还是选择图片
     if (sender.imageView.image) {
@@ -76,7 +75,7 @@
     NSLog(@"%zd",buttonIndex);
     
 //    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNewDiscoverPhotoPickerNotifcation object:self userInfo:@{   @"buttonIndex":[NSString stringWithFormat:@"%zd",buttonIndex],
+    [[NSNotificationCenter defaultCenter] postNotificationName:K_NewDiscoverPhotoPickerNotifcation object:self userInfo:@{   @"buttonIndex":[NSString stringWithFormat:@"%zd",buttonIndex],
                       @"currentSelectedButton" : self.currentSelectedButton,
                       @"PhotoPickerViewController" : self
                   }];

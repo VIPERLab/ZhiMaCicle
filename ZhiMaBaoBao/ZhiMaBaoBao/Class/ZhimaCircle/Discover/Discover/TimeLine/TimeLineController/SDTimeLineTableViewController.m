@@ -39,6 +39,8 @@
 #import "LGNetWorking.h" //请求工具类
 //#import "YiUserInfo.h"
 
+// 复制功能View
+#import "KXCopyView.h"
 
 // -----  新消息提示View
 #import "KXDiscoverNewMessageView.h"
@@ -88,7 +90,7 @@
     CGFloat _lastScrollViewOffsetY;
     CGFloat _totalKeybordHeight;
     SDTimeLineRefreshHeader * _refreshHeader;
-    UIImageView *_copyView;
+    KXCopyView *_copyView;
 }
 
 
@@ -97,44 +99,9 @@
     [self setCustomTitle:@"朋友圈"];
     self.pageNumber = 0;
     
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    self.tableView = tableView;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
-    self.tableView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.tableView];
+    [self setupView];
     
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Discover_AddDiscover"] style:UIBarButtonItemStyleDone target:self action:@selector(rightBarButtonItemAction:)];
-    self.navigationItem.rightBarButtonItem = rightBarButton;
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.edgesForExtendedLayout = UIRectEdgeTop;
-    
-    //设置头部
-    SDTimeLineTableHeaderView *headerView = [SDTimeLineTableHeaderView new];
-    headerView.delegate = self;
-    self.headerView = headerView;
-    
-    self.headerView.signName = USERINFO.signature;
-    self.headerView.BJImage = USERINFO.backgroundImg;
-    self.headerView.userImage = USERINFO.head_photo;
-    self.headerView.userName = USERINFO.username;
-    self.headerView.sessionID = USERINFO.sessionId;
-    self.headerView.openFirAccount = USERINFO.openfireaccount;
-    headerView.frame = CGRectMake(0, 0, 0, 260); //260
-    self.tableView.tableHeaderView = headerView;
-    
-    
-    [self.tableView registerClass:[SDTimeLineCell class] forCellReuseIdentifier:kTimeLineTableViewCellId];
-    
-    
-    
-    
-    //成为富文本的观察者 - 点击别人的名字
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KUserNameLabelNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(longPressContentLabel:) name:KDiscoverLongPressContentNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLongPressContentLabel:) name:KDiscoverDisLongPressContentNotificaion object:nil];
+    [self notification];
     
 }
 
@@ -161,13 +128,59 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+
+
+
+
+#pragma mark - 初始化view
+- (void)setupView {
+    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    self.tableView = tableView;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.tableView];
+    
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Discover_AddDiscover"] style:UIBarButtonItemStyleDone target:self action:@selector(rightBarButtonItemAction:)];
+    self.navigationItem.rightBarButtonItem = rightBarButton;
+    
+//    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.edgesForExtendedLayout = UIRectEdgeTop;
+    
+    //设置头部
+    SDTimeLineTableHeaderView *headerView = [SDTimeLineTableHeaderView new];
+    headerView.delegate = self;
+    self.headerView = headerView;
+    
+    self.headerView.signName = USERINFO.signature;
+    self.headerView.BJImage = USERINFO.backgroundImg;
+    self.headerView.userImage = USERINFO.head_photo;
+    self.headerView.userName = USERINFO.username;
+    self.headerView.sessionID = USERINFO.sessionId;
+    self.headerView.openFirAccount = USERINFO.openfireaccount;
+    headerView.frame = CGRectMake(0, 0, 0, 260); //260
+    self.tableView.tableHeaderView = headerView;
+    
+    
+    [self.tableView registerClass:[SDTimeLineCell class] forCellReuseIdentifier:kTimeLineTableViewCellId];
+}
+
+#pragma mark - 注册通知
+- (void)notification {
+    //成为富文本的观察者 - 点击别人的名字
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KUserNameLabelNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(longPressContentLabel:) name:KDiscoverLongPressContentNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLongPressContentLabel:) name:KDiscoverDisLongPressContentNotificaion object:nil];
+}
+
+
 #pragma mark - 设置下拉和上啦刷新控件
 - (void)setupKeyBoardAndRefreshHeader {
     
     __weak typeof(self) weakSelf = self;
     
     //下拉刷新
-    
     if (!self.tableView.mj_header) {
         self.tableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
             //加载未读消息数
@@ -321,14 +334,15 @@
 - (NSArray *)setupModelDataWithJson:(ResponseData *)responseData andUpDataLastFcID:(BOOL)isUpdata {
     
     NSMutableArray *modelArray = [SDTimeLineCellModel mj_objectArrayWithKeyValuesArray:responseData.data];
-    
+    UserInfo *info = [UserInfo read];
     for (SDTimeLineCellModel *cellModel in modelArray) {
         
         //保存第一条（最新一条的朋友圈ID）
         if (!USERINFO.lastFcID.length || isUpdata) {
-            USERINFO.lastFcID = cellModel.ID;
+            info.lastFcID = cellModel.ID;
+            [info save];
             isUpdata = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"KUpDataHeaderPhotoNotification" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataHeaderPhotoNotification object:nil];
         }
         
         //转换数组类型
@@ -436,19 +450,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.chatKeyBoard keyboardDownForComment];
-    
-//    SDTimeLineCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    SDTimeLineCellModel *model = cell.model;
-//    
-//    UserInfoManager *userInfo = [UserInfoManager shareInstance];
-//    
-//    
-//    DiscoverDetailController *DiscoverDetail = [[DiscoverDetailController alloc] init];
-//    DiscoverDetail.sessionId = userInfo.sessionId;
-//    DiscoverDetail.ID = model.ID;
-//    [self.navigationController pushViewController:DiscoverDetail animated:YES];
-    
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -699,11 +700,12 @@
 }
 
 // -----    点击了背景
-//- (void)SDTimeLineTableHeaderViewBackGroundViewDidClick:(SDTimeLineTableHeaderView *)header andBackGround:(UIButton *)backGround {
+- (void)SDTimeLineTableHeaderViewBackGroundViewDidClick:(SDTimeLineTableHeaderView *)header andBackGround:(UIButton *)backGround {
 
-//    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"相机" otherButtonTitles:@"相册", nil];
-//    [sheet showInView:self.view];
-//}
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"相机" otherButtonTitles:@"相册", nil];
+    sheet.tag = 100;
+    [sheet showInView:self.view];
+}
 
 
 // ------   点击了新消息提示框
@@ -780,71 +782,22 @@
 #pragma mark - 长按内容文本回调
 - (void)longPressContentLabel:(NSNotification *)notification {
     UIView *contentLabel = notification.userInfo[@"contentLabel"];
-    if ([contentLabel isKindOfClass:[UILabel class]]) {
-        contentLabel = (UILabel *)contentLabel;
-    } else if ([contentLabel isKindOfClass:[UIImageView class]]){
-        contentLabel = (UIImageView *)contentLabel;
-    }
-    CGRect contentFrame = [contentLabel convertRect:contentLabel.frame toView:self.view];
-    
-    if (_copyView) {
-        [UIView animateWithDuration:0.3 animations:^{
-            _copyView.alpha = 0;
-            _copyView = nil;
-            _contentLabel.backgroundColor = [UIColor whiteColor];
-        }];
-    }
-    
     self.contentLabel = contentLabel;
-    CGFloat copyWidth = 125;
-    CGFloat copyHeight = 50;
+    if (!_copyView) {
+        _copyView = [[KXCopyView alloc] initWithControler:contentLabel andLocation:KXCopyViewLoaction_up];
+        _copyView.titleArray = @[@"复制"];
+        [_copyView setImage:[UIImage imageNamed:@"Discovre_Copy"] andInsets:UIEdgeInsetsMake(30, 40, 30, 40)];
+        [self.view addSubview:_copyView];
+    }
     
-    _copyView = [[UIImageView alloc] init];
-    [self.view addSubview:_copyView];
-    _copyView.userInteractionEnabled = YES;
-    UIEdgeInsets insets = UIEdgeInsetsMake(20, 50, 40, 50);
-    _copyView.image = [[UIImage imageNamed:@"Discovre_Copy"] resizableImageWithCapInsets:insets resizingMode:UIImageResizingModeTile];
-    
-    
-    UIButton *copyLabel = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, copyWidth * 0.5, copyHeight - 10)];
-    copyLabel.titleLabel.textColor = [UIColor whiteColor];
-    copyLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
-    copyLabel.titleLabel.font = [UIFont systemFontOfSize:14];
-    [copyLabel setTitle:@"复制" forState:UIControlStateNormal];
-    [copyLabel addTarget:self action:@selector(copyLabelDidClick) forControlEvents:UIControlEventTouchUpInside];
-    [_copyView addSubview:copyLabel];
-    
-    
-//    UIButton *collectionLabel = [[UIButton alloc] initWithFrame:CGRectMake(copyWidth * 0.5, 0, copyWidth * 0.5, copyHeight - 10)];
-//    collectionLabel.titleLabel.textColor = [UIColor whiteColor];
-//    collectionLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
-//    collectionLabel.titleLabel.font = [UIFont systemFontOfSize:14];
-//    [collectionLabel setTitle:@"收藏" forState:UIControlStateNormal];
-//    [collectionLabel addTarget:self action:@selector(collectionLabelDidClick) forControlEvents:UIControlEventTouchUpInside];
-//    [_copyView addSubview:collectionLabel];
-//    
-//    if ([contentLabel isKindOfClass:[UIImageView class]]) {
-    _copyView.frame = CGRectMake(CGRectGetMinX(contentFrame) , CGRectGetMinY(contentFrame) - copyHeight - 40, copyWidth * 0.5, copyHeight);
-//        copyLabel.hidden = YES;
-//        collectionLabel.frame = CGRectMake(0, 0, copyWidth * 0.5, copyHeight - 10);
-//    } else if ([contentLabel isKindOfClass:[UILabel class]] || [contentLabel isKindOfClass:[UIView class]]) {
-//        CGFloat copyX = CGRectGetMinX(contentFrame);
-//        CGFloat copyY = CGRectGetMinY(contentFrame) - copyHeight - 40;
-//        _copyView.frame = CGRectMake(copyX, copyY, copyWidth, copyHeight);
-//        
-//    }
+    [_copyView showAnimation];
     
     contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"c7c7c5"];
 
 }
 
 - (void)didLongPressContentLabel:(NSNotification *)nofiticaiton {
-    if (_copyView) {
-        [UIView animateWithDuration:0.3 animations:^{
-            _copyView.alpha = 0;
-            _copyView = nil;
-        }];
-    }
+    
     self.contentLabel.backgroundColor = [UIColor whiteColor];
 }
 
@@ -852,13 +805,6 @@
 
 // ----  复制点击事件
 - (void)copyLabelDidClick {
-    if (_copyView) {
-        [UIView animateWithDuration:0.3 animations:^{
-            _copyView.alpha = 0;
-            _copyView = nil;
-            _contentLabel.backgroundColor = [UIColor whiteColor];
-        }];
-    }
     
     UIPasteboard *pboard = [UIPasteboard generalPasteboard];
     pboard.string = self.contentLabel.text;
@@ -866,13 +812,6 @@
 
 // ----  收藏点击事件
 - (void)collectionLabelDidClick {
-    if (_copyView) {
-        [UIView animateWithDuration:0.3 animations:^{
-            _copyView.alpha = 0;
-            _copyView = nil;
-            _contentLabel.backgroundColor = [UIColor whiteColor];
-        }];
-    }
     
     
 }
@@ -880,11 +819,9 @@
 #pragma mark - userInterFace
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (_copyView) {
-        [UIView animateWithDuration:0.3 animations:^{
-            _copyView.alpha = 0;
-            _copyView = nil;
-            _contentLabel.backgroundColor = [UIColor whiteColor];
-        }];
+        [_copyView endAnimation];
+        _copyView = nil;
+        _contentLabel.backgroundColor = [UIColor whiteColor];
     }
     [self.chatKeyBoard keyboardDownForComment];
 }
@@ -893,10 +830,9 @@
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (_copyView) {
-        [UIView animateWithDuration:0.3 animations:^{
-            _copyView.alpha = 0;
-            _copyView = nil;
-        }];
+        [_copyView endAnimation];
+        _copyView = nil;
+        _contentLabel.backgroundColor = [UIColor whiteColor];
     }
 }
 
@@ -916,20 +852,22 @@
             [self presentViewController:vc animated:YES completion:nil];
         }
         return;
+    } else if (actionSheet.tag == 100) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        switch (buttonIndex) {
+            case 0:
+                picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                break;
+            case 1:
+                picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                break;
+            default:
+                return;
+                break;
+        }
+        [self.navigationController presentViewController:picker animated:YES completion:nil];
     }
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    switch (buttonIndex) {
-        case 0:
-            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-            break;
-        case 1:
-            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            break;
-        default:
-            return;
-            break;
-    }
-    [self.navigationController presentViewController:picker animated:YES completion:nil];
+    
 }
 
 #pragma mark - imagePicker回调
@@ -940,13 +878,15 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
     UIImage *image = info[@"UIImagePickerControllerOriginalImage"];
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.3);
+    NSData *imageData = UIImageJPEGRepresentation(image, 1);
     [LGNetWorking uploadPhoto:USERINFO.sessionId image:imageData fileName:@"backgroundImg" andFuctionName:@"backgroundImg" block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             return ;
         }
-        
+        UserInfo *info = [UserInfo read];
+        info.backgroundImg = responseData.data;
+        [info save];
         [self.headerView.backgroundImageView setImage:image forState:UIControlStateNormal];
         
     }];

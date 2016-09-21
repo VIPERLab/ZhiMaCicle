@@ -55,6 +55,9 @@
 @property (nonatomic, copy) NSString *locationTips;
 @property (nonatomic, assign) BOOL isSelected;
 
+// ------ 可见范围
+@property (nonatomic, copy) NSString *privateClass; //公开程度  1.所有人公开 2.自己可见 3.朋友可见
+
 //定位功能类
 @property (nonatomic,strong) CLLocationManager *manager;
 @property (nonatomic,strong) CLGeocoder *geocoder;
@@ -67,7 +70,6 @@
 @implementation NewDiscoverController {
     NSString *_content;   //说收内容
     NSString *_imgs;
-    NSString *_privateClass;  //公开程度  1.所有人公开 2.自己可见 3.朋友可见
     ALAssetsLibrary* assetLibrary;//照片的生命周期跟它有关，所以弄成全局变量在这里初始化
 }
 
@@ -101,9 +103,9 @@
 - (void)setupView {
     
     //图片点击通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClick:) name:KNewDiscoverPhotoPickerNotifcation object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClick:) name:K_NewDiscoverPhotoPickerNotifcation object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClickButton:) name:KNewDiscoverPhotoClickNotifcation object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClickButton:) name:K_NewDiscoverPhotoClickNotifcation object:nil];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -112,7 +114,7 @@
     self.textView = headerView.textView;
     [self.view addSubview:headerView];
     self.headerView = headerView;
-    headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 230);
+    headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 230);
 
     
     
@@ -122,7 +124,7 @@
     tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     [self.view addSubview:tableView];
     
-    self.tableView.frame = CGRectMake(0, 230, [UIScreen mainScreen].bounds.size.width, CGRectGetHeight(self.view.frame) - 230 );
+    self.tableView.frame = CGRectMake(0, CGRectGetMaxY(headerView.frame), [UIScreen mainScreen].bounds.size.width, CGRectGetHeight(self.view.frame) - 230 );
     
     
     tableView.delegate = self;
@@ -178,9 +180,9 @@
 
 #pragma mark - Cell的点击事件
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    __weak typeof(self) weakSelf = self;
+    __block NSIndexPath *index = indexPath;
     if (indexPath.section == 0) { //更新用户位置
-        __block NSIndexPath *index = indexPath;
-        __weak typeof(self) weakSelf = self;
         DiscoverCurrentLocationController *location = [[DiscoverCurrentLocationController alloc] init];
         location.complitedBlock = ^(KXCurrentLocationModel *model) {
             
@@ -206,7 +208,8 @@
         
     } else if (indexPath.section == 1) { //跳转至可见范围
         ChooseWhoCanSeeController *vc = [[ChooseWhoCanSeeController alloc] init];
-        NewDiscoverNormalCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        __block NewDiscoverNormalCell *cell = [weakSelf.tableView cellForRowAtIndexPath:index];
+        
         if ([cell.subTitleName isEqualToString:@"公开"]) {
             vc.isPrivate = NO;
         } else vc.isPrivate = YES;
@@ -214,13 +217,12 @@
         
         vc.returnBlock = ^(BOOL PrivateClass) {
             if (PrivateClass) {
-                _privateClass = @"3";
+                weakSelf.privateClass = @"3";
                 cell.subTitleName = @"朋友可见";
             } else {
-                _privateClass= @"1";
+                weakSelf.privateClass = @"1";
                 cell.subTitleName = @"公开";
             }
-            
         };
         
         [self.navigationController pushViewController:vc animated:YES];

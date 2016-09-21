@@ -122,7 +122,7 @@
         
 //        UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewDidClick:)];
 //        [imageView addGestureRecognizer:gesture];
-        [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.img_url]] placeholderImage:[UIImage imageNamed:@"Discover_Photo_PlaceHolder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.img_url]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             imageView.image = image;
         }];
         

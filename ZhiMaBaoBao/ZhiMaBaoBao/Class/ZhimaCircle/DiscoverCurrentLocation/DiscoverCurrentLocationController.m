@@ -46,7 +46,7 @@
 }
 
 - (void)setupView {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
     
@@ -90,11 +90,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KXCurrentLocationCell *cell = [tableView dequeueReusableCellWithIdentifier:KXCurrentLocationCellReusedID forIndexPath:indexPath];
-    
-    
     KXCurrentLocationModel *model = self.dataArray[indexPath.row];
     cell.model = model;
-    
     return cell;
 }
 

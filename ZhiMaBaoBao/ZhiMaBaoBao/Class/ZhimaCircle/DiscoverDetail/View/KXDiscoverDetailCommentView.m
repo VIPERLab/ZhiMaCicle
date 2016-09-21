@@ -169,7 +169,7 @@
         }
         
         SDTimeLineCellLikeItemModel *model = self.likeItemArray[index];
-        [button sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.userPhoto]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"Discover_Photo_PlaceHolder"]];
+        [button sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.userPhoto]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
         
         lastButton = button;
     }
