@@ -31,7 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self setCustomRightItems];
     [self setupView];
     
     
@@ -39,11 +39,12 @@
 
 - (void)setupView {
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-    [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.backgroundColor = BGCOLOR;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.backgroundColor = [UIColor colorFormHexRGB:@"efeff4"];
+    [self.view addSubview:_tableView];
     
     [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:PersonalCenterCellReusedId];
     [_tableView registerClass:[KXPersonalCenterCell class] forCellReuseIdentifier:@"PersonalCenterCell"];

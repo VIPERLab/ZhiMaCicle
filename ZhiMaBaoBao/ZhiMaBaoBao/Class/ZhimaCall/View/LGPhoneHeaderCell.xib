@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="199"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bI9-hS-UaO">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="call_default_Avtar" translatesAutoresizingMaskIntoConstraints="NO" id="bI9-hS-UaO">
                         <rect key="frame" x="120" y="25" width="80" height="80"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="80" id="1cZ-J2-OMB"/>
@@ -45,4 +45,7 @@
             </connections>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="call_default_Avtar" width="67" height="67"/>
+    </resources>
 </document>

@@ -22,7 +22,8 @@
 #import <AddressBookUI/ABPersonViewController.h>
 
 
-@interface PhoneAddressController ()<LGQueryCellDelegate>
+@interface PhoneAddressController ()<LGQueryCellDelegate,UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *contactsArr;  //筛选结果数组
 @property (nonatomic,strong) NSMutableArray *nameAry;   //排序后的联系人数组
 @property (nonatomic,strong) NSMutableArray *sectionAry;    //按姓名首字母分组个数
@@ -99,10 +100,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     self.tableView.sectionIndexColor = RGB(54, 54, 54);
     self.tableView.sectionIndexBackgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.tableView];
     
-//    [self setCustomTitle:@"手机联系人"];
+    [self setCustomTitle:@"手机联系人"];
 
     //获取手机通讯录
     [self getContacts];
@@ -111,7 +116,7 @@
         
         [self clearAllData];
         
-//        [self setCustomTitle:@"添加手机联系人"];
+        [self setCustomTitle:@"添加手机联系人"];
         //获取联系人是否开通芝麻数据
         [self requestData];
     }
@@ -137,7 +142,7 @@
 }
 
 - (void)requestData{
-    [LCProgressHUD showLoadingText:@"正在加载..."];
+//    [LCProgressHUD showLoadingText:@"正在加载..."];
     if (self.contactsArr) {
         [self.contactsArr removeAllObjects];
     }
@@ -481,7 +486,7 @@
         if (contact.avtar) {
             cell.avtar.image = [UIImage imageWithData:contact.avtar];
         }else{
-            cell.avtar.image = [UIImage imageNamed:@"defaultContact@3x"];
+            cell.avtar.image = [UIImage imageNamed:@"defaultContact"];
         }
         
         cell.name.text = contact.name;

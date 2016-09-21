@@ -34,7 +34,6 @@ typedef NS_ENUM(NSInteger, LCProgressHUDStatus) {
 + (void)showStatus:(LCProgressHUDStatus)status text:(NSString *)text;
 
 
-
 #pragma mark - 建议使用的方法
 
 + (void)show:(UIView *)view;

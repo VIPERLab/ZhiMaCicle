@@ -10,6 +10,9 @@
 
 @interface BaseViewController : UIViewController
 
+//设置标题
 - (void)setCustomTitle:(NSString *)title;
 
+//添加右侧items
+- (void)setCustomRightItems;
 @end

@@ -61,6 +61,7 @@
 #import "UIView+x.h"
 
 #import "UIImageView+WebCache.h"
+#import "BaseViewController.h"
 
 //通知头文件
 #import "KNotificationManager.h"

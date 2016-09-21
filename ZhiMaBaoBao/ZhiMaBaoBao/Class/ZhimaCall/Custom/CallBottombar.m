@@ -50,12 +50,16 @@
 
 //拨号
 - (void)callButtonClick{
-    
+    if ([self.delegate respondsToSelector:@selector(callPhone)]) {
+        [self.delegate callPhone];
+    }
 }
 
 //取消
 - (void)cancelBtnClick{
-    
+    if ([self.delegate respondsToSelector:@selector(cancelCallPhone)]) {
+        [self.delegate cancelCallPhone];
+    }
 }
 
 - (void)show{

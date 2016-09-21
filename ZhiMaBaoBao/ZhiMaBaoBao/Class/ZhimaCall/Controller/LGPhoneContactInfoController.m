@@ -30,7 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
-//    [self setCustomTitle:@"联系人详情"];
+    [self setCustomTitle:@"联系人详情"];
     [self addSubViews];
     //判断联系人手机号是否开通芝麻好友
     [self requestData];
@@ -85,7 +85,7 @@
                 cell.avtar.image = [UIImage imageWithData:self.contact.avtar];
             }
             else{
-                cell.avtar.image = [UIImage imageNamed:@"defaultContact@3x"];
+                cell.avtar.image = [UIImage imageNamed:@"defaultContact@"];
             }
             cell.name.text = self.contact.name;
             return cell;

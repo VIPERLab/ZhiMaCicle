@@ -9,7 +9,7 @@
 #import "PhoneContact.h"
 
 
-@interface LGPhoneContactInfoController : UIViewController
+@interface LGPhoneContactInfoController : BaseViewController
 @property (nonatomic, strong) PhoneContact *contact;
 
 @end

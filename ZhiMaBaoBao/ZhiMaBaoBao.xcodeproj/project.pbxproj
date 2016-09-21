@@ -344,6 +344,27 @@
 		310B83491D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83481D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m */; };
 		316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957461D90D3DE00140126 /* KXPersonalCenterCell.m */; };
 		3169574A1D90D48C00140126 /* TimeLineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957491D90D48C00140126 /* TimeLineController.m */; };
+		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
+		316957561D90E63100140126 /* LGAddFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957541D90E63100140126 /* LGAddFriendCell.m */; };
+		316957571D90E63100140126 /* LGAddFriendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 316957551D90E63100140126 /* LGAddFriendCell.xib */; };
+		3169575A1D90E67700140126 /* LGSearchResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957591D90E67700140126 /* LGSearchResultController.m */; };
+		3169575D1D90E68300140126 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169575C1D90E68300140126 /* AddFriendViewController.m */; };
+		316957641D90E72800140126 /* LGSearchResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957621D90E72800140126 /* LGSearchResultCell.m */; };
+		316957651D90E72800140126 /* LGSearchResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 316957631D90E72800140126 /* LGSearchResultCell.xib */; };
+		316957681D90E91700140126 /* LGSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957671D90E91700140126 /* LGSearchController.m */; };
+		3169577C1D91199100140126 /* dtmf-#.aif in Resources */ = {isa = PBXBuildFile; fileRef = 3169576F1D91199100140126 /* dtmf-#.aif */; };
+		3169577D1D91199100140126 /* dtmf-0.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957701D91199100140126 /* dtmf-0.aif */; };
+		3169577E1D91199100140126 /* dtmf-1.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957711D91199100140126 /* dtmf-1.aif */; };
+		3169577F1D91199100140126 /* dtmf-2.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957721D91199100140126 /* dtmf-2.aif */; };
+		316957801D91199100140126 /* dtmf-3.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957731D91199100140126 /* dtmf-3.aif */; };
+		316957811D91199100140126 /* dtmf-4.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957741D91199100140126 /* dtmf-4.aif */; };
+		316957821D91199100140126 /* dtmf-5.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957751D91199100140126 /* dtmf-5.aif */; };
+		316957831D91199100140126 /* dtmf-6.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957761D91199100140126 /* dtmf-6.aif */; };
+		316957841D91199100140126 /* dtmf-7.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957771D91199100140126 /* dtmf-7.aif */; };
+		316957851D91199100140126 /* dtmf-8.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957781D91199100140126 /* dtmf-8.aif */; };
+		316957861D91199100140126 /* dtmf-9.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957791D91199100140126 /* dtmf-9.aif */; };
+		316957871D91199100140126 /* dtmf-s.aif in Resources */ = {isa = PBXBuildFile; fileRef = 3169577A1D91199100140126 /* dtmf-s.aif */; };
+		316957881D91199100140126 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3169577B1D91199100140126 /* ring.mp3 */; };
 		31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C6FD1D8E91F000F1883A /* MainViewController.m */; };
 		31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7021D8E96A100F1883A /* PersonalCenterController.m */; };
 		31B7C71E1D8E96A100F1883A /* CallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7081D8E96A100F1883A /* CallViewController.m */; };
@@ -1078,6 +1099,33 @@
 		316957461D90D3DE00140126 /* KXPersonalCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPersonalCenterCell.m; sourceTree = "<group>"; };
 		316957481D90D48C00140126 /* TimeLineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLineController.h; sourceTree = "<group>"; };
 		316957491D90D48C00140126 /* TimeLineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeLineController.m; sourceTree = "<group>"; };
+		3169574B1D90E24A00140126 /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
+		3169574C1D90E24A00140126 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
+		316957531D90E63100140126 /* LGAddFriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGAddFriendCell.h; sourceTree = "<group>"; };
+		316957541D90E63100140126 /* LGAddFriendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGAddFriendCell.m; sourceTree = "<group>"; };
+		316957551D90E63100140126 /* LGAddFriendCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LGAddFriendCell.xib; sourceTree = "<group>"; };
+		316957581D90E67700140126 /* LGSearchResultController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGSearchResultController.h; sourceTree = "<group>"; };
+		316957591D90E67700140126 /* LGSearchResultController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSearchResultController.m; sourceTree = "<group>"; };
+		3169575B1D90E68300140126 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
+		3169575C1D90E68300140126 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
+		316957611D90E72800140126 /* LGSearchResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGSearchResultCell.h; sourceTree = "<group>"; };
+		316957621D90E72800140126 /* LGSearchResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSearchResultCell.m; sourceTree = "<group>"; };
+		316957631D90E72800140126 /* LGSearchResultCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LGSearchResultCell.xib; sourceTree = "<group>"; };
+		316957661D90E91700140126 /* LGSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGSearchController.h; sourceTree = "<group>"; };
+		316957671D90E91700140126 /* LGSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSearchController.m; sourceTree = "<group>"; };
+		3169576F1D91199100140126 /* dtmf-#.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-#.aif"; sourceTree = "<group>"; };
+		316957701D91199100140126 /* dtmf-0.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-0.aif"; sourceTree = "<group>"; };
+		316957711D91199100140126 /* dtmf-1.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-1.aif"; sourceTree = "<group>"; };
+		316957721D91199100140126 /* dtmf-2.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-2.aif"; sourceTree = "<group>"; };
+		316957731D91199100140126 /* dtmf-3.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-3.aif"; sourceTree = "<group>"; };
+		316957741D91199100140126 /* dtmf-4.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-4.aif"; sourceTree = "<group>"; };
+		316957751D91199100140126 /* dtmf-5.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-5.aif"; sourceTree = "<group>"; };
+		316957761D91199100140126 /* dtmf-6.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-6.aif"; sourceTree = "<group>"; };
+		316957771D91199100140126 /* dtmf-7.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-7.aif"; sourceTree = "<group>"; };
+		316957781D91199100140126 /* dtmf-8.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-8.aif"; sourceTree = "<group>"; };
+		316957791D91199100140126 /* dtmf-9.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-9.aif"; sourceTree = "<group>"; };
+		3169577A1D91199100140126 /* dtmf-s.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-s.aif"; sourceTree = "<group>"; };
+		3169577B1D91199100140126 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
 		31B7C6FC1D8E91F000F1883A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		31B7C6FD1D8E91F000F1883A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		31B7C7011D8E96A100F1883A /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
@@ -2545,6 +2593,7 @@
 		310B83231D8E7B0100A0F408 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3169576C1D91195100140126 /* Sounds */,
 				310B83241D8E7B0100A0F408 /* main.m */,
 				31B7C7261D8F816A00F1883A /* Zhimabaobao.pch */,
 			);
@@ -2569,6 +2618,61 @@
 			path = ZhiMaBaoBaoUITests;
 			sourceTree = "<group>";
 		};
+		316957511D90E5C900140126 /* AddFriends(添加好友) */ = {
+			isa = PBXGroup;
+			children = (
+				316957521D90E5F000140126 /* Cell */,
+				316957581D90E67700140126 /* LGSearchResultController.h */,
+				316957591D90E67700140126 /* LGSearchResultController.m */,
+				3169575B1D90E68300140126 /* AddFriendViewController.h */,
+				3169575C1D90E68300140126 /* AddFriendViewController.m */,
+				316957661D90E91700140126 /* LGSearchController.h */,
+				316957671D90E91700140126 /* LGSearchController.m */,
+			);
+			name = "AddFriends(添加好友)";
+			path = AddFriends;
+			sourceTree = "<group>";
+		};
+		316957521D90E5F000140126 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				316957611D90E72800140126 /* LGSearchResultCell.h */,
+				316957621D90E72800140126 /* LGSearchResultCell.m */,
+				316957631D90E72800140126 /* LGSearchResultCell.xib */,
+				316957531D90E63100140126 /* LGAddFriendCell.h */,
+				316957541D90E63100140126 /* LGAddFriendCell.m */,
+				316957551D90E63100140126 /* LGAddFriendCell.xib */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		3169576C1D91195100140126 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				3169576F1D91199100140126 /* dtmf-#.aif */,
+				316957701D91199100140126 /* dtmf-0.aif */,
+				316957711D91199100140126 /* dtmf-1.aif */,
+				316957721D91199100140126 /* dtmf-2.aif */,
+				316957731D91199100140126 /* dtmf-3.aif */,
+				316957741D91199100140126 /* dtmf-4.aif */,
+				316957751D91199100140126 /* dtmf-5.aif */,
+				316957761D91199100140126 /* dtmf-6.aif */,
+				316957771D91199100140126 /* dtmf-7.aif */,
+				316957781D91199100140126 /* dtmf-8.aif */,
+				316957791D91199100140126 /* dtmf-9.aif */,
+				3169577A1D91199100140126 /* dtmf-s.aif */,
+				3169577B1D91199100140126 /* ring.mp3 */,
+			);
+			name = Sounds;
+			sourceTree = "<group>";
+		};
+		316957891D911A3F00140126 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Controls;
+			sourceTree = "<group>";
+		};
 		31B7C6CB1D8E89D700F1883A /* Class */ = {
 			isa = PBXGroup;
 			children = (
@@ -2586,6 +2690,7 @@
 			isa = PBXGroup;
 			children = (
 				04EA79B51D90DBE7005E5425 /* KNotification */,
+				316957891D911A3F00140126 /* Controls */,
 				04EA79691D8F8F26005E5425 /* Categray */,
 				31B7C7221D8E96BD00F1883A /* BaseController */,
 				31B7C7231D8E96BD00F1883A /* Tools */,
@@ -2704,6 +2809,7 @@
 		31B7C70B1D8E96A100F1883A /* ZhimaChat(芝麻聊) */ = {
 			isa = PBXGroup;
 			children = (
+				316957511D90E5C900140126 /* AddFriends(添加好友) */,
 				31B7C70C1D8E96A100F1883A /* Controller */,
 				31B7C70F1D8E96A100F1883A /* Model */,
 				31B7C7101D8E96A100F1883A /* View */,
@@ -2810,6 +2916,8 @@
 				31B7C7281D8F845000F1883A /* LogResBaseController.h */,
 				04EA79921D8FC76A005E5425 /* BaseViewController.h */,
 				04EA79931D8FC76A005E5425 /* BaseViewController.m */,
+				3169574B1D90E24A00140126 /* BaseNavigationController.h */,
+				3169574C1D90E24A00140126 /* BaseNavigationController.m */,
 			);
 			path = BaseController;
 			sourceTree = "<group>";
@@ -3046,6 +3154,7 @@
 					310B831F1D8E7B0100A0F408 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = C74GJQS7VJ;
+						DevelopmentTeam = T5TN3E6VN3;
 					};
 					310B83381D8E7B0100A0F408 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -3087,10 +3196,16 @@
 				31B7C7B81D90031D00F1883A /* YiKeyBoardView.xib in Resources */,
 				31B7C76F1D8FBC8000F1883A /* hud_error.png in Resources */,
 				31B7C75F1D8FB33E00F1883A /* LGRessetPassController.xib in Resources */,
+				316957811D91199100140126 /* dtmf-4.aif in Resources */,
 				31B7C79D1D8FE71F00F1883A /* LGCallRecordCell.xib in Resources */,
 				31B7C7A41D8FE71F00F1883A /* PhoneContactCell.xib in Resources */,
+				316957871D91199100140126 /* dtmf-s.aif in Resources */,
+				316957841D91199100140126 /* dtmf-7.aif in Resources */,
 				31B7C7721D8FBC8000F1883A /* hud_info@2x.png in Resources */,
+				316957831D91199100140126 /* dtmf-6.aif in Resources */,
 				31B7C7711D8FBC8000F1883A /* hud_info.png in Resources */,
+				3169577F1D91199100140126 /* dtmf-2.aif in Resources */,
+				3169577C1D91199100140126 /* dtmf-#.aif in Resources */,
 				31B7C7A11D8FE71F00F1883A /* LGPhoneNumberCell.xib in Resources */,
 				310B83331D8E7B0100A0F408 /* LaunchScreen.storyboard in Resources */,
 				04EA7AC91D910F89005E5425 /* DNImagePicker.strings in Resources */,
@@ -3098,10 +3213,20 @@
 				04EA7ACE1D910F89005E5425 /* imageResources.xcassets in Resources */,
 				310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */,
 				04EA7AC71D910F89005E5425 /* DNImagePickerController.strings in Resources */,
+				316957851D91199100140126 /* dtmf-8.aif in Resources */,
+				3169577D1D91199100140126 /* dtmf-0.aif in Resources */,
+				316957651D90E72800140126 /* LGSearchResultCell.xib in Resources */,
+				316957861D91199100140126 /* dtmf-9.aif in Resources */,
+				310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */,
+				316957821D91199100140126 /* dtmf-5.aif in Resources */,
 				31B7C79F1D8FE71F00F1883A /* LGPhoneHeaderCell.xib in Resources */,
+				3169577E1D91199100140126 /* dtmf-1.aif in Resources */,
 				310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */,
+				316957571D90E63100140126 /* LGAddFriendCell.xib in Resources */,
 				04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */,
+				316957801D91199100140126 /* dtmf-3.aif in Resources */,
 				31B7C7731D8FBC8000F1883A /* hud_success.png in Resources */,
+				316957881D91199100140126 /* ring.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3250,6 +3375,9 @@
 				04EA7D641D912872005E5425 /* ZXAddressBookAUResultParser.m in Sources */,
 				04EA7E1E1D912872005E5425 /* ZXQRCodeFormatInformation.m in Sources */,
 				04EA79E81D90E9F7005E5425 /* MyAccountHeaderView.m in Sources */,
+				316957681D90E91700140126 /* LGSearchController.m in Sources */,
+				316957561D90E63100140126 /* LGAddFriendCell.m in Sources */,
+				3169575A1D90E67700140126 /* LGSearchResultController.m in Sources */,
 				31B7C75C1D8FB33E00F1883A /* LGLoginController.m in Sources */,
 				31B7C75D1D8FB33E00F1883A /* LGRegisterController.m in Sources */,
 				04EA7D9C1D912872005E5425 /* ZXHybridBinarizer.m in Sources */,
@@ -3365,6 +3493,7 @@
 				04EA7D691D912872005E5425 /* ZXCalendarParsedResult.m in Sources */,
 				04EA7DF21D912872005E5425 /* ZXMultiFormatOneDReader.m in Sources */,
 				04EA7DC41D912872005E5425 /* ZXMaxiCodeReader.m in Sources */,
+				3169575D1D90E68300140126 /* AddFriendViewController.m in Sources */,
 				04EA798B1D8FBCF3005E5425 /* KXBlackListModel.m in Sources */,
 				04EA7B5D1D91282E005E5425 /* LBXAlertAction.m in Sources */,
 				04EA79DF1D90E9F7005E5425 /* KXCrashChargeCell.m in Sources */,
@@ -3413,6 +3542,7 @@
 				04EA7D6C1D912872005E5425 /* ZXEmailDoCoMoResultParser.m in Sources */,
 				04EA7E2F1D912872005E5425 /* ZXQRCodeReader.m in Sources */,
 				04EA7DE01D912872005E5425 /* ZXRSSDataCharacter.m in Sources */,
+				316957641D90E72800140126 /* LGSearchResultCell.m in Sources */,
 				04EA79721D8F8F49005E5425 /* UIColor+My.m in Sources */,
 				31B7C7B71D90031D00F1883A /* YiKeyBoardView.m in Sources */,
 				31B7C7BC1D900A6F00F1883A /* CallBottombar.m in Sources */,
@@ -3494,6 +3624,7 @@
 				04EA7DD91D912872005E5425 /* ZXRSSExpandedGeneralAppIdDecoder.m in Sources */,
 				04EA7DA91D912872005E5425 /* ZXPlanarYUVLuminanceSource.m in Sources */,
 				04EA7B281D912692005E5425 /* UIImage+YiExtension.m in Sources */,
+				3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */,
 				310B83251D8E7B0100A0F408 /* main.m in Sources */,
 				04EA7E111D912872005E5425 /* ZXPDF417ErrorCorrection.m in Sources */,
 				04EA7B661D91282E005E5425 /* LBXScanWrapper.m in Sources */,
@@ -3591,6 +3722,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3636,6 +3768,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

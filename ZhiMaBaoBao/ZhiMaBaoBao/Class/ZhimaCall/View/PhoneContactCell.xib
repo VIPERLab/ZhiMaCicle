@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GAf-he-XZk">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultContact" translatesAutoresizingMaskIntoConstraints="NO" id="GAf-he-XZk">
                         <rect key="frame" x="14" y="8" width="35" height="35"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="35" id="h6q-c2-SOJ"/>
@@ -59,4 +59,7 @@
             <point key="canvasLocation" x="404" y="280"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="defaultContact" width="66" height="66"/>
+    </resources>
 </document>

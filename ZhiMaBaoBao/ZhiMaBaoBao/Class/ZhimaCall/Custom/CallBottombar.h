@@ -8,11 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol CallBarDelegate <NSObject>
+
+//取消拨打电话
+- (void)cancelCallPhone;
+//拨打电话
+- (void)callPhone;
+
+@end
+
 @interface CallBottombar : UIWindow
 
-//+ (void)shareInstance;
-+ (void)show;
-+ (void)dismiss;
+@property (nonatomic, assign) id<CallBarDelegate> delegate;
 
 + (instancetype)shareinstance;
 - (void)show;
