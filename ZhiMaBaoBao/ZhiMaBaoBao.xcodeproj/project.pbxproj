@@ -30,6 +30,27 @@
 		310B83331D8E7B0100A0F408 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 310B83311D8E7B0100A0F408 /* LaunchScreen.storyboard */; };
 		310B833E1D8E7B0100A0F408 /* ZhiMaBaoBaoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B833D1D8E7B0100A0F408 /* ZhiMaBaoBaoTests.m */; };
 		310B83491D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83481D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m */; };
+		311CEF281D91639700BBB1F9 /* PlaySounds.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF271D91639700BBB1F9 /* PlaySounds.m */; };
+		311CEF2B1D91653C00BBB1F9 /* CallSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF2A1D91653C00BBB1F9 /* CallSettingController.m */; };
+		311CEF2F1D92185D00BBB1F9 /* ChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF2E1D92185D00BBB1F9 /* ChatController.m */; };
+		311CEF5A1D92192300BBB1F9 /* NSString+Emoji.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF331D92192300BBB1F9 /* NSString+Emoji.m */; };
+		311CEF5B1D92192300BBB1F9 /* ChatKeyBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF351D92192300BBB1F9 /* ChatKeyBoard.m */; };
+		311CEF5C1D92192300BBB1F9 /* ChatToolBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF391D92192300BBB1F9 /* ChatToolBarItem.m */; };
+		311CEF5D1D92192300BBB1F9 /* FaceThemeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF3B1D92192300BBB1F9 /* FaceThemeModel.m */; };
+		311CEF5E1D92192300BBB1F9 /* MoreItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF3D1D92192300BBB1F9 /* MoreItem.m */; };
+		311CEF5F1D92192300BBB1F9 /* emotion.plist in Resources */ = {isa = PBXBuildFile; fileRef = 311CEF3F1D92192300BBB1F9 /* emotion.plist */; };
+		311CEF601D92192300BBB1F9 /* face.plist in Resources */ = {isa = PBXBuildFile; fileRef = 311CEF401D92192300BBB1F9 /* face.plist */; };
+		311CEF611D92192300BBB1F9 /* systemEmoji.plist in Resources */ = {isa = PBXBuildFile; fileRef = 311CEF411D92192300BBB1F9 /* systemEmoji.plist */; };
+		311CEF621D92192300BBB1F9 /* FaceButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF451D92192300BBB1F9 /* FaceButton.m */; };
+		311CEF631D92192300BBB1F9 /* FacePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF471D92192300BBB1F9 /* FacePageView.m */; };
+		311CEF641D92192300BBB1F9 /* FacePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF491D92192300BBB1F9 /* FacePanel.m */; };
+		311CEF651D92192300BBB1F9 /* FaceThemeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF4B1D92192300BBB1F9 /* FaceThemeView.m */; };
+		311CEF661D92192300BBB1F9 /* PanelBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF4D1D92192300BBB1F9 /* PanelBottomView.m */; };
+		311CEF671D92192300BBB1F9 /* MorePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF501D92192300BBB1F9 /* MorePanel.m */; };
+		311CEF681D92192300BBB1F9 /* ChatToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF531D92192300BBB1F9 /* ChatToolBar.m */; };
+		311CEF691D92192300BBB1F9 /* OfficialAccountToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF551D92192300BBB1F9 /* OfficialAccountToolbar.m */; };
+		311CEF6A1D92192300BBB1F9 /* RFRecordButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF571D92192300BBB1F9 /* RFRecordButton.m */; };
+		311CEF6B1D92192300BBB1F9 /* RFTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF591D92192300BBB1F9 /* RFTextView.m */; };
 		316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957461D90D3DE00140126 /* KXPersonalCenterCell.m */; };
 		3169574A1D90D48C00140126 /* TimeLineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957491D90D48C00140126 /* TimeLineController.m */; };
 		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
@@ -165,6 +186,46 @@
 		310B83441D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZhiMaBaoBaoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		310B83481D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZhiMaBaoBaoUITests.m; sourceTree = "<group>"; };
 		310B834A1D8E7B0100A0F408 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		311CEF261D91639700BBB1F9 /* PlaySounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaySounds.h; sourceTree = "<group>"; };
+		311CEF271D91639700BBB1F9 /* PlaySounds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaySounds.m; sourceTree = "<group>"; };
+		311CEF291D91653C00BBB1F9 /* CallSettingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallSettingController.h; sourceTree = "<group>"; };
+		311CEF2A1D91653C00BBB1F9 /* CallSettingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallSettingController.m; sourceTree = "<group>"; };
+		311CEF2D1D92185D00BBB1F9 /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatController.h; sourceTree = "<group>"; };
+		311CEF2E1D92185D00BBB1F9 /* ChatController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatController.m; sourceTree = "<group>"; };
+		311CEF321D92192300BBB1F9 /* NSString+Emoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Emoji.h"; sourceTree = "<group>"; };
+		311CEF331D92192300BBB1F9 /* NSString+Emoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Emoji.m"; sourceTree = "<group>"; };
+		311CEF341D92192300BBB1F9 /* ChatKeyBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatKeyBoard.h; sourceTree = "<group>"; };
+		311CEF351D92192300BBB1F9 /* ChatKeyBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatKeyBoard.m; sourceTree = "<group>"; };
+		311CEF361D92192300BBB1F9 /* ChatKeyBoardMacroDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatKeyBoardMacroDefine.h; sourceTree = "<group>"; };
+		311CEF381D92192300BBB1F9 /* ChatToolBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatToolBarItem.h; sourceTree = "<group>"; };
+		311CEF391D92192300BBB1F9 /* ChatToolBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatToolBarItem.m; sourceTree = "<group>"; };
+		311CEF3A1D92192300BBB1F9 /* FaceThemeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceThemeModel.h; sourceTree = "<group>"; };
+		311CEF3B1D92192300BBB1F9 /* FaceThemeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaceThemeModel.m; sourceTree = "<group>"; };
+		311CEF3C1D92192300BBB1F9 /* MoreItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreItem.h; sourceTree = "<group>"; };
+		311CEF3D1D92192300BBB1F9 /* MoreItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreItem.m; sourceTree = "<group>"; };
+		311CEF3F1D92192300BBB1F9 /* emotion.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = emotion.plist; sourceTree = "<group>"; };
+		311CEF401D92192300BBB1F9 /* face.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = face.plist; sourceTree = "<group>"; };
+		311CEF411D92192300BBB1F9 /* systemEmoji.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = systemEmoji.plist; sourceTree = "<group>"; };
+		311CEF441D92192300BBB1F9 /* FaceButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceButton.h; sourceTree = "<group>"; };
+		311CEF451D92192300BBB1F9 /* FaceButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaceButton.m; sourceTree = "<group>"; };
+		311CEF461D92192300BBB1F9 /* FacePageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacePageView.h; sourceTree = "<group>"; };
+		311CEF471D92192300BBB1F9 /* FacePageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacePageView.m; sourceTree = "<group>"; };
+		311CEF481D92192300BBB1F9 /* FacePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacePanel.h; sourceTree = "<group>"; };
+		311CEF491D92192300BBB1F9 /* FacePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacePanel.m; sourceTree = "<group>"; };
+		311CEF4A1D92192300BBB1F9 /* FaceThemeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceThemeView.h; sourceTree = "<group>"; };
+		311CEF4B1D92192300BBB1F9 /* FaceThemeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaceThemeView.m; sourceTree = "<group>"; };
+		311CEF4C1D92192300BBB1F9 /* PanelBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanelBottomView.h; sourceTree = "<group>"; };
+		311CEF4D1D92192300BBB1F9 /* PanelBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanelBottomView.m; sourceTree = "<group>"; };
+		311CEF4F1D92192300BBB1F9 /* MorePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MorePanel.h; sourceTree = "<group>"; };
+		311CEF501D92192300BBB1F9 /* MorePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MorePanel.m; sourceTree = "<group>"; };
+		311CEF521D92192300BBB1F9 /* ChatToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatToolBar.h; sourceTree = "<group>"; };
+		311CEF531D92192300BBB1F9 /* ChatToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatToolBar.m; sourceTree = "<group>"; };
+		311CEF541D92192300BBB1F9 /* OfficialAccountToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfficialAccountToolbar.h; sourceTree = "<group>"; };
+		311CEF551D92192300BBB1F9 /* OfficialAccountToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfficialAccountToolbar.m; sourceTree = "<group>"; };
+		311CEF561D92192300BBB1F9 /* RFRecordButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFRecordButton.h; sourceTree = "<group>"; };
+		311CEF571D92192300BBB1F9 /* RFRecordButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFRecordButton.m; sourceTree = "<group>"; };
+		311CEF581D92192300BBB1F9 /* RFTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFTextView.h; sourceTree = "<group>"; };
+		311CEF591D92192300BBB1F9 /* RFTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFTextView.m; sourceTree = "<group>"; };
 		316957451D90D3DE00140126 /* KXPersonalCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPersonalCenterCell.h; sourceTree = "<group>"; };
 		316957461D90D3DE00140126 /* KXPersonalCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPersonalCenterCell.m; sourceTree = "<group>"; };
 		316957481D90D48C00140126 /* TimeLineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLineController.h; sourceTree = "<group>"; };
@@ -539,6 +600,121 @@
 			path = ZhiMaBaoBaoUITests;
 			sourceTree = "<group>";
 		};
+		311CEF251D91637A00BBB1F9 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF261D91639700BBB1F9 /* PlaySounds.h */,
+				311CEF271D91639700BBB1F9 /* PlaySounds.m */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
+		311CEF2C1D92182400BBB1F9 /* Chat(聊天) */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF2D1D92185D00BBB1F9 /* ChatController.h */,
+				311CEF2E1D92185D00BBB1F9 /* ChatController.m */,
+			);
+			name = "Chat(聊天)";
+			sourceTree = "<group>";
+		};
+		311CEF301D92192300BBB1F9 /* KeyBoard */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF311D92192300BBB1F9 /* Cagegory */,
+				311CEF341D92192300BBB1F9 /* ChatKeyBoard.h */,
+				311CEF351D92192300BBB1F9 /* ChatKeyBoard.m */,
+				311CEF361D92192300BBB1F9 /* ChatKeyBoardMacroDefine.h */,
+				311CEF371D92192300BBB1F9 /* Models */,
+				311CEF3E1D92192300BBB1F9 /* plist */,
+				311CEF421D92192300BBB1F9 /* Views */,
+			);
+			path = KeyBoard;
+			sourceTree = "<group>";
+		};
+		311CEF311D92192300BBB1F9 /* Cagegory */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF321D92192300BBB1F9 /* NSString+Emoji.h */,
+				311CEF331D92192300BBB1F9 /* NSString+Emoji.m */,
+			);
+			path = Cagegory;
+			sourceTree = "<group>";
+		};
+		311CEF371D92192300BBB1F9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF381D92192300BBB1F9 /* ChatToolBarItem.h */,
+				311CEF391D92192300BBB1F9 /* ChatToolBarItem.m */,
+				311CEF3A1D92192300BBB1F9 /* FaceThemeModel.h */,
+				311CEF3B1D92192300BBB1F9 /* FaceThemeModel.m */,
+				311CEF3C1D92192300BBB1F9 /* MoreItem.h */,
+				311CEF3D1D92192300BBB1F9 /* MoreItem.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		311CEF3E1D92192300BBB1F9 /* plist */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF3F1D92192300BBB1F9 /* emotion.plist */,
+				311CEF401D92192300BBB1F9 /* face.plist */,
+				311CEF411D92192300BBB1F9 /* systemEmoji.plist */,
+			);
+			path = plist;
+			sourceTree = "<group>";
+		};
+		311CEF421D92192300BBB1F9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF431D92192300BBB1F9 /* FacePanel */,
+				311CEF4E1D92192300BBB1F9 /* MorePanel */,
+				311CEF511D92192300BBB1F9 /* ToolBarPanel */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		311CEF431D92192300BBB1F9 /* FacePanel */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF441D92192300BBB1F9 /* FaceButton.h */,
+				311CEF451D92192300BBB1F9 /* FaceButton.m */,
+				311CEF461D92192300BBB1F9 /* FacePageView.h */,
+				311CEF471D92192300BBB1F9 /* FacePageView.m */,
+				311CEF481D92192300BBB1F9 /* FacePanel.h */,
+				311CEF491D92192300BBB1F9 /* FacePanel.m */,
+				311CEF4A1D92192300BBB1F9 /* FaceThemeView.h */,
+				311CEF4B1D92192300BBB1F9 /* FaceThemeView.m */,
+				311CEF4C1D92192300BBB1F9 /* PanelBottomView.h */,
+				311CEF4D1D92192300BBB1F9 /* PanelBottomView.m */,
+			);
+			path = FacePanel;
+			sourceTree = "<group>";
+		};
+		311CEF4E1D92192300BBB1F9 /* MorePanel */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF4F1D92192300BBB1F9 /* MorePanel.h */,
+				311CEF501D92192300BBB1F9 /* MorePanel.m */,
+			);
+			path = MorePanel;
+			sourceTree = "<group>";
+		};
+		311CEF511D92192300BBB1F9 /* ToolBarPanel */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF521D92192300BBB1F9 /* ChatToolBar.h */,
+				311CEF531D92192300BBB1F9 /* ChatToolBar.m */,
+				311CEF541D92192300BBB1F9 /* OfficialAccountToolbar.h */,
+				311CEF551D92192300BBB1F9 /* OfficialAccountToolbar.m */,
+				311CEF561D92192300BBB1F9 /* RFRecordButton.h */,
+				311CEF571D92192300BBB1F9 /* RFRecordButton.m */,
+				311CEF581D92192300BBB1F9 /* RFTextView.h */,
+				311CEF591D92192300BBB1F9 /* RFTextView.m */,
+			);
+			path = ToolBarPanel;
+			sourceTree = "<group>";
+		};
 		316957511D90E5C900140126 /* AddFriends(添加好友) */ = {
 			isa = PBXGroup;
 			children = (
@@ -660,6 +836,7 @@
 		31B7C7051D8E96A100F1883A /* ZhimaCall(芝麻通) */ = {
 			isa = PBXGroup;
 			children = (
+				311CEF251D91637A00BBB1F9 /* Tools */,
 				31B7C7B91D900A3B00F1883A /* Custom(自定义控件) */,
 				31B7C7061D8E96A100F1883A /* Controller */,
 				31B7C7091D8E96A100F1883A /* Model */,
@@ -680,6 +857,8 @@
 				31B7C77C1D8FE69E00F1883A /* LGPhoneContactInfoController.m */,
 				31B7C7791D8FE69E00F1883A /* LGCallingController.h */,
 				31B7C77A1D8FE69E00F1883A /* LGCallingController.m */,
+				311CEF291D91653C00BBB1F9 /* CallSettingController.h */,
+				311CEF2A1D91653C00BBB1F9 /* CallSettingController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -723,6 +902,7 @@
 		31B7C70B1D8E96A100F1883A /* ZhimaChat(芝麻聊) */ = {
 			isa = PBXGroup;
 			children = (
+				311CEF2C1D92182400BBB1F9 /* Chat(聊天) */,
 				316957511D90E5C900140126 /* AddFriends(添加好友) */,
 				31B7C70C1D8E96A100F1883A /* Controller */,
 				31B7C70F1D8E96A100F1883A /* Model */,
@@ -840,7 +1020,6 @@
 			isa = PBXGroup;
 			children = (
 				31B7C7A51D8FE91A00F1883A /* Libs */,
-				31B7C7651D8FBC8000F1883A /* LCProgressHUD */,
 				31B7C7441D8FB0D900F1883A /* HttpTools */,
 				31B7C7241D8F7DB100F1883A /* Constant.h */,
 				31B7C7761D8FC3C500F1883A /* UserInfo.h */,
@@ -889,7 +1068,8 @@
 				31B7C76D1D8FBC8000F1883A /* LCProgressHUD.h */,
 				31B7C76E1D8FBC8000F1883A /* LCProgressHUD.m */,
 			);
-			path = LCProgressHUD;
+			name = LCProgressHUD;
+			path = ../LCProgressHUD;
 			sourceTree = "<group>";
 		};
 		31B7C7661D8FBC8000F1883A /* HUDImage */ = {
@@ -908,6 +1088,8 @@
 		31B7C7A51D8FE91A00F1883A /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				311CEF301D92192300BBB1F9 /* KeyBoard */,
+				31B7C7651D8FBC8000F1883A /* LCProgressHUD */,
 				31B7C7AD1D8FFCBE00F1883A /* LYVoIP */,
 				31B7C7A61D8FE91A00F1883A /* pinyin */,
 			);
@@ -1072,8 +1254,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				311CEF611D92192300BBB1F9 /* systemEmoji.plist in Resources */,
 				31B7C7701D8FBC8000F1883A /* hud_error@2x.png in Resources */,
 				31B7C7B81D90031D00F1883A /* YiKeyBoardView.xib in Resources */,
+				311CEF601D92192300BBB1F9 /* face.plist in Resources */,
+				311CEF5F1D92192300BBB1F9 /* emotion.plist in Resources */,
 				31B7C76F1D8FBC8000F1883A /* hud_error.png in Resources */,
 				31B7C75F1D8FB33E00F1883A /* LGRessetPassController.xib in Resources */,
 				316957811D91199100140126 /* dtmf-4.aif in Resources */,
@@ -1180,32 +1365,44 @@
 				04EA797A1D8FBA0C005E5425 /* KXWebViewController.m in Sources */,
 				04EA79A51D8FDAF9005E5425 /* PersonalSettingController.m in Sources */,
 				31B7C7611D8FB33E00F1883A /* LGSetPasswordController.m in Sources */,
+				311CEF281D91639700BBB1F9 /* PlaySounds.m in Sources */,
 				31B7C74C1D8FB0D900F1883A /* LGNetWorking.m in Sources */,
+				311CEF2B1D91653C00BBB1F9 /* CallSettingController.m in Sources */,
 				31B7C75B1D8FB33E00F1883A /* LGGuideController.m in Sources */,
+				311CEF5A1D92192300BBB1F9 /* NSString+Emoji.m in Sources */,
 				31B7C7811D8FE69E00F1883A /* PhoneAddressController.m in Sources */,
+				311CEF681D92192300BBB1F9 /* ChatToolBar.m in Sources */,
 				316957681D90E91700140126 /* LGSearchController.m in Sources */,
 				316957561D90E63100140126 /* LGAddFriendCell.m in Sources */,
 				3169575A1D90E67700140126 /* LGSearchResultController.m in Sources */,
+				311CEF631D92192300BBB1F9 /* FacePageView.m in Sources */,
+				311CEF2F1D92185D00BBB1F9 /* ChatController.m in Sources */,
 				31B7C75C1D8FB33E00F1883A /* LGLoginController.m in Sources */,
 				31B7C75D1D8FB33E00F1883A /* LGRegisterController.m in Sources */,
 				31B7C7A01D8FE71F00F1883A /* LGPhoneNumberCell.m in Sources */,
 				31B7C79E1D8FE71F00F1883A /* LGPhoneHeaderCell.m in Sources */,
+				311CEF661D92192300BBB1F9 /* PanelBottomView.m in Sources */,
 				31B7C72A1D8F845000F1883A /* LogResBaseController.m in Sources */,
 				3169574A1D90D48C00140126 /* TimeLineController.m in Sources */,
 				31B7C7AC1D8FEC3700F1883A /* UIView+x.m in Sources */,
 				31B7C74D1D8FB0D900F1883A /* ResponseData.m in Sources */,
+				311CEF6A1D92192300BBB1F9 /* RFRecordButton.m in Sources */,
 				31B7C7601D8FB33E00F1883A /* LGSetNickNameController.m in Sources */,
 				31B7C7A91D8FE91A00F1883A /* pinyin.c in Sources */,
 				31B7C78D1D8FE71100F1883A /* PhoneContact.m in Sources */,
 				31B7C78B1D8FE71100F1883A /* LGQueryModel.m in Sources */,
 				31B7C78A1D8FE71100F1883A /* LGCallRecordModel.m in Sources */,
+				311CEF5C1D92192300BBB1F9 /* ChatToolBarItem.m in Sources */,
 				31B7C7A21D8FE71F00F1883A /* LGQueryCell.m in Sources */,
+				311CEF691D92192300BBB1F9 /* OfficialAccountToolbar.m in Sources */,
 				31B7C7801D8FE69E00F1883A /* LGPhoneContactInfoController.m in Sources */,
 				31B7C71E1D8E96A100F1883A /* CallViewController.m in Sources */,
+				311CEF671D92192300BBB1F9 /* MorePanel.m in Sources */,
 				04EA798C1D8FBCF3005E5425 /* KXBlackListCell.m in Sources */,
 				04EA798A1D8FBCF3005E5425 /* LGBlackListViewController.m in Sources */,
 				3169575D1D90E68300140126 /* AddFriendViewController.m in Sources */,
 				04EA798B1D8FBCF3005E5425 /* KXBlackListModel.m in Sources */,
+				311CEF5E1D92192300BBB1F9 /* MoreItem.m in Sources */,
 				04EA79721D8F8F49005E5425 /* UIColor+My.m in Sources */,
 				04EA799D1D8FD56C005E5425 /* NewMessageSettingController.m in Sources */,
 				04EA79761D8FB95B005E5425 /* KXSettingController.m in Sources */,
@@ -1217,6 +1414,7 @@
 				31B7C7BC1D900A6F00F1883A /* CallBottombar.m in Sources */,
 				31B7C7751D8FBC8000F1883A /* LCProgressHUD.m in Sources */,
 				04EA79701D8F8F49005E5425 /* NSString+FontSize.m in Sources */,
+				311CEF6B1D92192300BBB1F9 /* RFTextView.m in Sources */,
 				04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */,
 				31B7C7781D8FC3C500F1883A /* UserInfo.m in Sources */,
 				31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */,
@@ -1229,10 +1427,15 @@
 				31B7C79C1D8FE71F00F1883A /* LGCallRecordCell.m in Sources */,
 				31B7C7A31D8FE71F00F1883A /* PhoneContactCell.m in Sources */,
 				31B7C78C1D8FE71100F1883A /* LGQueryResModel.m in Sources */,
+				311CEF5B1D92192300BBB1F9 /* ChatKeyBoard.m in Sources */,
 				31B7C77F1D8FE69E00F1883A /* LGCallingController.m in Sources */,
+				311CEF641D92192300BBB1F9 /* FacePanel.m in Sources */,
 				3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */,
 				310B83251D8E7B0100A0F408 /* main.m in Sources */,
 				04EA79941D8FC76A005E5425 /* BaseViewController.m in Sources */,
+				311CEF5D1D92192300BBB1F9 /* FaceThemeModel.m in Sources */,
+				311CEF651D92192300BBB1F9 /* FaceThemeView.m in Sources */,
+				311CEF621D92192300BBB1F9 /* FaceButton.m in Sources */,
 				31B7C74B1D8FB0D900F1883A /* HttpTool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

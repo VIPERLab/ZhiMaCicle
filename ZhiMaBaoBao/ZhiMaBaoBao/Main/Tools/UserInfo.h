@@ -58,6 +58,14 @@
  /** sessionId*/
 @property (nonatomic, copy) NSString *sessionId;
 
+ /** 键盘振动*/
+@property (nonatomic, assign, getter=isKeyboardShake) BOOL keyboardShake;
+
+ /** 键盘按键音*/
+@property (nonatomic, assign, getter=isKeyboardVoice) BOOL keyboardVoice;
+
+
+
 
 + (instancetype)shareInstance;
 

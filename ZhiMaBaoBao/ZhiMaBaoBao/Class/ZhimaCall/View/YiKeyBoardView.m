@@ -9,7 +9,7 @@
 #import "YiKeyBoardView.h"
 //#import "Utility.h"
 #import <AudioToolbox/AudioServices.h>
-//#import "PlaySounds.h"
+#import "PlaySounds.h"
 #import <AVFoundation/AVFoundation.h>
 
 @interface YiKeyBoardView()<UITextFieldDelegate>
@@ -105,13 +105,13 @@
     }
     self.numberTextField.text = [self.numberTextField.text stringByAppendingString:num];
     
+
     
-    /*
-    if ([[Utility shareInstance].u_keyboardShake isEqualToString:@"0"])
+    if (USERINFO.isKeyboardShake)
     {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
-    if ([[Utility shareInstance].u_keyboardVoice isEqualToString:@"0"])
+    if (USERINFO.isKeyboardVoice)
     {
         if ([num isEqualToString:@"0"]){
             [PlaySounds playSoundsWithSoundName:@"dtmf-0.aif"];
@@ -151,7 +151,6 @@
             [PlaySounds playSoundsWithSoundName:@"dtmf-1.aif"];
         }
     }
-     */
     
 }
 
