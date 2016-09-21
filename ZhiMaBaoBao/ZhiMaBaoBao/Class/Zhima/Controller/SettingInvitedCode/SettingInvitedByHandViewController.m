@@ -73,6 +73,11 @@
 
 
 - (void)commitButtonDidClick {
+    [self.textField resignFirstResponder];
+    if ([self.textField.text isEqualToString:@""]) {
+        [LCProgressHUD showFailureText:@"请输入邀请码"];
+        return;
+    }
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer.timeoutInterval = 15.f;

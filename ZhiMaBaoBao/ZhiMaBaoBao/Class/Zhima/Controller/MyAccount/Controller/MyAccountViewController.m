@@ -189,6 +189,7 @@
 
 #pragma mark - 请求
 - (void)request {
+    [LCProgressHUD showLoadingText:@"正在查询账户"];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer.timeoutInterval = 30.f;
     manager.responseSerializer.acceptableContentTypes = nil;//[NSSet setWithObject:@"text/plain"];
@@ -208,7 +209,7 @@
     
     [manager POST:[NSString stringWithFormat:@"%@/Api/Index/getuser",DFAPIURLTEST] parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"%@",responseObject);
-        
+        [LCProgressHUD hide];
         if ([responseObject[@"code"] integerValue] == 8888) {
             
             MyAccountModel *accountModel = [MyAccountModel mj_objectWithKeyValues:responseObject[@"data"]];
@@ -216,7 +217,6 @@
             
             self.headerView.moneyLabel.text = [NSString stringWithFormat:@"￥%@",accountModel.amount];
             
-            NSLog(@"成功");
             return ;
         }
         

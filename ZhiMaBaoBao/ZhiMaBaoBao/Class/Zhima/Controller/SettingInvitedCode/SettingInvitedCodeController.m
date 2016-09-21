@@ -37,7 +37,12 @@
     
     [self setCustomTitle:@"扫一扫"];
 //    [self setCustomRightBarBUtton:@"设置邀请码"];
+    [self setupNav];
     [self setupView];
+}
+
+- (void)setupNav {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"设置邀请码" style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonDidClick)];
 }
 
 - (void)setupView {
@@ -52,6 +57,12 @@
     //设置扫码后需要扫码图像
     self.isNeedScanImage = YES;
     
+}
+
+- (void)rightButtonDidClick {
+    SettingInvitedByHandViewController *setting = [[SettingInvitedByHandViewController alloc] init];
+    setting.invitedCode = @"";
+    [self.navigationController pushViewController:setting animated:YES];
 }
 
 

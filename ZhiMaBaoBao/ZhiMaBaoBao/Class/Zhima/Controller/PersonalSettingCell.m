@@ -72,7 +72,7 @@
 - (void)setImageName:(NSString *)imageName {
     _imageName = imageName;
     self.showImage = YES;
-    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,imageName]] placeholderImage:[UIImage imageNamed:@"userIcon"]];
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,imageName]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
 }
 
 

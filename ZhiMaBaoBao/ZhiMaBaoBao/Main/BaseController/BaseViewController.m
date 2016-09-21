@@ -14,13 +14,17 @@
 
 @end
 
-@implementation BaseViewController
+@implementation BaseViewController {
+    BOOL isEneryForeground;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = BGCOLOR;
     self.navigationController.navigationBar.tintColor = THEMECOLOR;
     
+    // 进去前台通知
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteryForground) name:KEnteryForeground_Notification object:nil];
 }
 
 
@@ -74,6 +78,15 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+
+// 进入前台通知
+- (void)enteryForground {
+//    ForegroundManager *manager = [ForegroundManager shareManager];
+//    if (manager.is_Entry_Foreground) {
+//        NSLog(@"进入前台通知 !!!!");
+//        manager.entry_Foreground = NO;
+//    }
+}
 
 // 清除子类未消除的通知
 - (void)dealloc {

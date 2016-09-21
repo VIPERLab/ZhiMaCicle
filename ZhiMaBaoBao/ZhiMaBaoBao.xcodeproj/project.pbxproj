@@ -335,6 +335,10 @@
 		04EA7E311D912872005E5425 /* ZXMultiFormatReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7D501D912872005E5425 /* ZXMultiFormatReader.m */; };
 		04EA7E321D912872005E5425 /* ZXMultiFormatWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7D521D912872005E5425 /* ZXMultiFormatWriter.m */; };
 		04EA7E331D912872005E5425 /* UIImageView+CornerRadius.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7D561D912872005E5425 /* UIImageView+CornerRadius.m */; };
+		04F5760C1D922125002A6471 /* ChangeUerNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F5760B1D922125002A6471 /* ChangeUerNameController.m */; };
+		04F576101D922533002A6471 /* ModifySignController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F5760F1D922533002A6471 /* ModifySignController.m */; };
+		04F5761E1D927553002A6471 /* TimeLineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F5761B1D927553002A6471 /* TimeLineController.m */; };
+		04F5761F1D927553002A6471 /* ZhiMaCicleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F5761D1D927553002A6471 /* ZhiMaCicleCell.m */; };
 		310B83251D8E7B0100A0F408 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83241D8E7B0100A0F408 /* main.m */; };
 		310B83281D8E7B0100A0F408 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 310B83271D8E7B0100A0F408 /* AppDelegate.mm */; };
 		310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 310B832C1D8E7B0100A0F408 /* Main.storyboard */; };
@@ -343,7 +347,6 @@
 		310B833E1D8E7B0100A0F408 /* ZhiMaBaoBaoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B833D1D8E7B0100A0F408 /* ZhiMaBaoBaoTests.m */; };
 		310B83491D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83481D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m */; };
 		316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957461D90D3DE00140126 /* KXPersonalCenterCell.m */; };
-		3169574A1D90D48C00140126 /* TimeLineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957491D90D48C00140126 /* TimeLineController.m */; };
 		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
 		316957561D90E63100140126 /* LGAddFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957541D90E63100140126 /* LGAddFriendCell.m */; };
 		316957571D90E63100140126 /* LGAddFriendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 316957551D90E63100140126 /* LGAddFriendCell.xib */; };
@@ -1081,6 +1084,14 @@
 		04EA7D521D912872005E5425 /* ZXMultiFormatWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiFormatWriter.m; sourceTree = "<group>"; };
 		04EA7D551D912872005E5425 /* UIImageView+CornerRadius.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+CornerRadius.h"; sourceTree = "<group>"; };
 		04EA7D561D912872005E5425 /* UIImageView+CornerRadius.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+CornerRadius.m"; sourceTree = "<group>"; };
+		04F5760A1D922125002A6471 /* ChangeUerNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeUerNameController.h; sourceTree = "<group>"; };
+		04F5760B1D922125002A6471 /* ChangeUerNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeUerNameController.m; sourceTree = "<group>"; };
+		04F5760E1D922533002A6471 /* ModifySignController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifySignController.h; sourceTree = "<group>"; };
+		04F5760F1D922533002A6471 /* ModifySignController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModifySignController.m; sourceTree = "<group>"; };
+		04F5761A1D927553002A6471 /* TimeLineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLineController.h; sourceTree = "<group>"; };
+		04F5761B1D927553002A6471 /* TimeLineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeLineController.m; sourceTree = "<group>"; };
+		04F5761C1D927553002A6471 /* ZhiMaCicleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaCicleCell.h; sourceTree = "<group>"; };
+		04F5761D1D927553002A6471 /* ZhiMaCicleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCicleCell.m; sourceTree = "<group>"; };
 		310B83201D8E7B0100A0F408 /* ZhiMaBaoBao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZhiMaBaoBao.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		310B83241D8E7B0100A0F408 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		310B83261D8E7B0100A0F408 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1097,8 +1108,6 @@
 		310B834A1D8E7B0100A0F408 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		316957451D90D3DE00140126 /* KXPersonalCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPersonalCenterCell.h; sourceTree = "<group>"; };
 		316957461D90D3DE00140126 /* KXPersonalCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPersonalCenterCell.m; sourceTree = "<group>"; };
-		316957481D90D48C00140126 /* TimeLineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLineController.h; sourceTree = "<group>"; };
-		316957491D90D48C00140126 /* TimeLineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeLineController.m; sourceTree = "<group>"; };
 		3169574B1D90E24A00140126 /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
 		3169574C1D90E24A00140126 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
 		316957531D90E63100140126 /* LGAddFriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGAddFriendCell.h; sourceTree = "<group>"; };
@@ -2549,6 +2558,43 @@
 			path = CornerRadiusCategory;
 			sourceTree = "<group>";
 		};
+		04F576091D9220FA002A6471 /* ChangeName(修改用户名) */ = {
+			isa = PBXGroup;
+			children = (
+				04F5760A1D922125002A6471 /* ChangeUerNameController.h */,
+				04F5760B1D922125002A6471 /* ChangeUerNameController.m */,
+			);
+			name = "ChangeName(修改用户名)";
+			sourceTree = "<group>";
+		};
+		04F5760D1D9224F2002A6471 /* ModifySign(个性签名) */ = {
+			isa = PBXGroup;
+			children = (
+				04F5760E1D922533002A6471 /* ModifySignController.h */,
+				04F5760F1D922533002A6471 /* ModifySignController.m */,
+			);
+			name = "ModifySign(个性签名)";
+			sourceTree = "<group>";
+		};
+		04F576191D927553002A6471 /* TimeLineController */ = {
+			isa = PBXGroup;
+			children = (
+				04F576201D927559002A6471 /* Cell */,
+				04F5761A1D927553002A6471 /* TimeLineController.h */,
+				04F5761B1D927553002A6471 /* TimeLineController.m */,
+			);
+			path = TimeLineController;
+			sourceTree = "<group>";
+		};
+		04F576201D927559002A6471 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				04F5761C1D927553002A6471 /* ZhiMaCicleCell.h */,
+				04F5761D1D927553002A6471 /* ZhiMaCicleCell.m */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
 		310B83171D8E7B0100A0F408 = {
 			isa = PBXGroup;
 			children = (
@@ -2712,6 +2758,8 @@
 		31B7C7001D8E96A100F1883A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				04F5760D1D9224F2002A6471 /* ModifySign(个性签名) */,
+				04F576091D9220FA002A6471 /* ChangeName(修改用户名) */,
 				04EA7B1F1D912652005E5425 /* SettingInvitedCode(设置邀请码) */,
 				04EA7B1B1D9125F2005E5425 /* MyQRCodeID(我的二维码) */,
 				04EA7B0C1D9125C5005E5425 /* Location(地区选择) */,
@@ -2845,8 +2893,6 @@
 			isa = PBXGroup;
 			children = (
 				31B7C7121D8E96A100F1883A /* Controller */,
-				31B7C7151D8E96A100F1883A /* Model */,
-				31B7C7161D8E96A100F1883A /* View */,
 			);
 			name = "ZhimaCircle(芝麻圈)";
 			path = ZhimaCircle;
@@ -2855,24 +2901,9 @@
 		31B7C7121D8E96A100F1883A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				316957481D90D48C00140126 /* TimeLineController.h */,
-				316957491D90D48C00140126 /* TimeLineController.m */,
+				04F576191D927553002A6471 /* TimeLineController */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		31B7C7151D8E96A100F1883A /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		31B7C7161D8E96A100F1883A /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		31B7C7171D8E96A100F1883A /* ZhimaFriend(芝麻友) */ = {
@@ -3358,6 +3389,7 @@
 				04EA7E2C1D912872005E5425 /* ZXMultiDetector.m in Sources */,
 				04EA7D861D912872005E5425 /* ZXWifiResultParser.m in Sources */,
 				04EA7D5A1D912872005E5425 /* ZXAztecCode.m in Sources */,
+				04F5760C1D922125002A6471 /* ChangeUerNameController.m in Sources */,
 				04EA7B681D91282E005E5425 /* ZXingWrapper.m in Sources */,
 				04EA79DE1D90E9F7005E5425 /* CrashChargeController.m in Sources */,
 				04EA7DEA1D912872005E5425 /* ZXCode93Reader.m in Sources */,
@@ -3402,7 +3434,6 @@
 				31B7C72A1D8F845000F1883A /* LogResBaseController.m in Sources */,
 				04EA7AC31D910F89005E5425 /* DNAlbumTableViewController.m in Sources */,
 				04EA7B1E1D912615005E5425 /* KXQRCodeController.m in Sources */,
-				3169574A1D90D48C00140126 /* TimeLineController.m in Sources */,
 				04EA7D5D1D912872005E5425 /* ZXAztecSimpleToken.m in Sources */,
 				04EA7DB51D912872005E5425 /* ZXDataMatrixC40Encoder.m in Sources */,
 				04EA7DDD1D912872005E5425 /* ZXRSSExpandedRow.m in Sources */,
@@ -3415,6 +3446,7 @@
 				04EA7B5C1D91282E005E5425 /* UIAlertView+LBXAlertAction.m in Sources */,
 				04EA7E051D912872005E5425 /* ZXPDF417CodewordDecoder.m in Sources */,
 				31B7C74D1D8FB0D900F1883A /* ResponseData.m in Sources */,
+				04F576101D922533002A6471 /* ModifySignController.m in Sources */,
 				04EA79BB1D90E8C2005E5425 /* LGFeedBackViewController.m in Sources */,
 				31B7C7601D8FB33E00F1883A /* LGSetNickNameController.m in Sources */,
 				04EA79E51D90E9F7005E5425 /* TelephoneBillViewController.m in Sources */,
@@ -3571,6 +3603,7 @@
 				04EA7DD71D912872005E5425 /* ZXRSSExpandedDecodedObject.m in Sources */,
 				04EA7E1A1D912872005E5425 /* ZXQRCodeDecodedBitStreamParser.m in Sources */,
 				31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */,
+				04F5761E1D927553002A6471 /* TimeLineController.m in Sources */,
 				04EA7A8F1D9107C0005E5425 /* APAuthV2Info.m in Sources */,
 				04EA7E301D912872005E5425 /* ZXQRCodeWriter.m in Sources */,
 				04EA7D791D912872005E5425 /* ZXSMSTOMMSTOResultParser.m in Sources */,
@@ -3631,6 +3664,7 @@
 				04EA7DBB1D912872005E5425 /* ZXDataMatrixSymbolInfo.m in Sources */,
 				04EA7D771D912872005E5425 /* ZXSMSMMSResultParser.m in Sources */,
 				04EA7DB71D912872005E5425 /* ZXDataMatrixEdifactEncoder.m in Sources */,
+				04F5761F1D927553002A6471 /* ZhiMaCicleCell.m in Sources */,
 				04EA7D611D912872005E5425 /* ZXAztecReader.m in Sources */,
 				04EA79941D8FC76A005E5425 /* BaseViewController.m in Sources */,
 				04EA7DA51D912872005E5425 /* ZXEncodeHints.m in Sources */,

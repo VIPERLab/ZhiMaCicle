@@ -38,6 +38,10 @@
         self.window.rootViewController = mainVC;
     }
     
+    
+    //注册更新用户未读消息通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUserUnReadMessageCountAndUnReadCircle:) name:K_UpdataUnReadNotification object:nil];
+    
     return YES;
 }
 
@@ -66,12 +70,92 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
+
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
+    
+    //计算是否超过设置邀请码的有效期
+    if (USERINFO.sessionId && ![USERINFO.create_time isEqualToString:@""] && USERINFO.create_time!= nil) {
+        //登录过的用户且有注册时间的才需要计算失效时间
+        NSLog(@"%@",USERINFO.create_time);
+        
+        // 格式化时间
+        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+        formatter.timeZone = [NSTimeZone timeZoneWithName:@"shanghai"];
+        [formatter setDateStyle:NSDateFormatterMediumStyle];
+        [formatter setTimeStyle:NSDateFormatterShortStyle];
+        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        
+        NSDate* date = [formatter dateFromString:USERINFO.create_time];
+        
+        //失效时间
+        CGFloat time = 3600 * 24 * 15;
+        CGFloat timeSp = [date timeIntervalSince1970] + time;
+        
+        //当前时间
+        NSTimeInterval interval = [[NSDate date] timeIntervalSince1970];
+        
+        
+        UserInfo *info = [UserInfo read];
+        
+        //判断是否失效
+        if (interval > timeSp) {
+            info.passingBy = 0;
+        } else {
+            info.passingBy = 1;
+        }
+        [info save];
+        
+        
+    }
+    
+    //通知更新未读消息数
+    [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
+    
 }
+
+#pragma mark - 请求未读消息数
+- (void)getUserUnReadMessageCountAndUnReadCircle:(NSNotification *)notification {
+    //请求未读消息
+    if (USERINFO.sessionId) {
+        //如果用户登录了，才让他去请求最新发朋友圈的用户
+        if (!USERINFO.lastFcID.length) {
+            UserInfo *info = [UserInfo read];
+            info.lastFcID = @"0";
+            [info save];
+        }
+        
+        [LGNetWorking ApplicationWakeUpAtBackgroundWithSessionId:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andLastMessageID:USERINFO.lastFcID block:^(ResponseData *responseData) {
+            
+            if (responseData.code != 0) {
+                return ;
+            }
+            
+            UserInfo *info = [UserInfo read];
+            
+            NSString *circleheadphoto = responseData.data[@"circleheadphoto"];
+            if (circleheadphoto.length) {
+                info.isShowHeader = YES;
+                [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataHeaderPhotoNotification object:nil userInfo:@{@"headerPhoto":responseData.data[@"circleheadphoto"]}];
+            }
+            
+            int unReadCount = [responseData.data[@"count"] intValue];
+            if (unReadCount) {
+                info.unReadCount = unReadCount;
+                [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataUnReadCountNotification object:nil userInfo:@{@"count":responseData.data[@"count"],@"headphoto":responseData.data[@"headphoto"]}];
+            }
+            [info save];
+        }];
+    }
+}
+
+
+
+
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
