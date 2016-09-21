@@ -4,7 +4,7 @@
 //
 //  Created by liugang on 16/9/19.
 //  Copyright © 2016年 liugang. All rights reserved.
-//  存数用户数据
+//  用户数据本地存储
 
 #import "UserInfo.h"
 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>from</key>
+		<string>15171225855</string>
+		<key>to</key>
+		<string>222</string>
+		<key>time</key>
+		<string>2016-09-21 10:00</string>
+		<key>body</key>
+		<string>你好。</string>
+	</dict>
+	<dict>
+		<key>from</key>
+		<string>111</string>
+		<key>to</key>
+		<string>15171225855</string>
+		<key>time</key>
+		<string>2016-09-21 10:00</string>
+		<key>body</key>
+		<string>你好，iphone7用着感觉怎么样。</string>
+	</dict>
+	<dict>
+		<key>from</key>
+		<string>15171225855</string>
+		<key>to</key>
+		<string>222</string>
+		<key>time</key>
+		<string>2016-09-21 10:00</string>
+		<key>body</key>
+		<string>我能说呵呵吗。呵呵和呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵</string>
+	</dict>
+	<dict>
+		<key>from</key>
+		<string>111</string>
+		<key>to</key>
+		<string>15171225855</string>
+		<key>time</key>
+		<string>2016-09-21 10:00</string>
+		<key>body</key>
+		<string>呵呵，呵呵是什么鬼 啦啦啦啦啦啦啦啦啦啦啦了啦啦啦啦啦啦啦啦啦啦</string>
+	</dict>
+</array>
+</plist>

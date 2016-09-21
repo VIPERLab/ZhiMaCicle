@@ -8,7 +8,12 @@
 
 #import "PersonalCenterController.h"
 #import "KXPersonalCenterCell.h"
-#import "KXSettingController.h"
+
+#import "KXSettingController.h"        //设置
+#import "LGFeedBackViewController.h"   //意见反馈
+#import "MyAccountViewController.h"    //我的账户
+#import "KXPersonalMessageSettingController.h" //个人信息设置
+
 
 #define PersonalCellHeight 45
 #define PersonalCenterCellReusedId @"PersonalCenterCellReusedId"
@@ -29,6 +34,7 @@
     [self setCustomRightItems];
     [self setupView];
     
+    
 }
 
 - (void)setupView {
@@ -37,6 +43,7 @@
     _tableView.dataSource = self;
     _tableView.backgroundColor = BGCOLOR;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.backgroundColor = [UIColor colorFormHexRGB:@"efeff4"];
     [self.view addSubview:_tableView];
     
     [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:PersonalCenterCellReusedId];
@@ -59,9 +66,10 @@
     
     if (indexPath.section == 0) {
         KXPersonalCenterCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PersonalCenterCell" forIndexPath:indexPath];
-        cell.name = @"kit";
-        cell.imageName = @"userIcon";
-        cell.subName = @"我就是我";
+        cell.name = USERINFO.username;
+        cell.imageName = USERINFO.head_photo;
+        cell.subName = USERINFO.signature;
+        cell.Sex = USERINFO.sex;
         return cell;
     }
     
@@ -72,7 +80,7 @@
         Normalcell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
         UIView *bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(20, PersonalCellHeight - 0.5, ScreenWidth - 10, 0.5)];
-        bottomLineView.backgroundColor = [UIColor colorFormHexRGB:@"e1e1e1"];
+        bottomLineView.backgroundColor = [UIColor colorFormHexRGB:@"dcdcdc"];
         [Normalcell addSubview:bottomLineView];
         return Normalcell;
     }
@@ -102,14 +110,25 @@
     
     if (indexPath.section == 0) {
         //个人信息
+        KXPersonalMessageSettingController *setting = [[KXPersonalMessageSettingController alloc] init];
+        setting.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:setting animated:YES];
     }
     
     if (indexPath.section == 1 && indexPath.row == 0) {
         //我的相册
     } else if (indexPath.section == 1 && indexPath.row == 1) {
         //我的账户
+        MyAccountViewController *MeAccVC = [[MyAccountViewController alloc]init];
+        MeAccVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:MeAccVC animated:YES];
+        
     } else if (indexPath.section == 1 && indexPath.row == 2) {
         //意见反馈
+        LGFeedBackViewController *feedBack = [[LGFeedBackViewController alloc] init];
+        feedBack.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:feedBack animated:YES];
+        
     } else if (indexPath.section == 1 && indexPath.row == 3) {
         //设置中心
         KXSettingController *setting = [[KXSettingController alloc] init];

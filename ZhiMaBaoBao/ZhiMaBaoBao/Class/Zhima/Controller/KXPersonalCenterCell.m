@@ -41,7 +41,6 @@
     [self addSubview:_userIcon];
     
     _sexImage = [UIImageView new];
-    _sexImage.image = [UIImage imageNamed:@"Male"];
     [self addSubview:_sexImage];
     
     _userName = [UILabel new];
@@ -52,7 +51,7 @@
     
     _subTitle = [UILabel new];
     [self addSubview:_subTitle];
-    _subTitle.textColor = [UIColor lightGrayColor];
+    _subTitle.textColor = [UIColor colorFormHexRGB:@"888888"];
     _subTitle.font = [UIFont systemFontOfSize:14];
     _subTitle.textAlignment = NSTextAlignmentLeft;
     
@@ -60,7 +59,7 @@
 
 - (void)setImageName:(NSString *)imageName {
     _imageName = imageName;
-    _userIcon.image = [UIImage imageNamed:imageName];
+    [_userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,imageName]] placeholderImage:[UIImage imageNamed:@"userIcon"]];
 }
 
 - (void)setName:(NSString *)name {
@@ -71,6 +70,15 @@
 - (void)setSubName:(NSString *)subName {
     _subName = subName;
     _subTitle.text = subName;
+}
+
+- (void)setSex:(NSString *)Sex {
+    _Sex = Sex;
+    if ([Sex isEqualToString:@"男"]) {
+        _sexImage.image = [UIImage imageNamed:@"Male"];
+    } else {
+        _sexImage.image = [UIImage imageNamed:@"Female"];
+    }
 }
 
 

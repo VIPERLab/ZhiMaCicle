@@ -28,8 +28,7 @@
     self.view.backgroundColor = BGCOLOR;
     [self addAllViews];
     [self setCustomTitle:@"黑名单"];
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
+//    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -43,37 +42,42 @@
         [self.dataArray removeAllObjects];
     }
     
-//    NSString *url = [NSString stringWithFormat:@"%@/moblie/getfriendByuserId_type.do",DFAPIURL];
-//    NSString *sessionId = USERINFO.sessionId;
-//    NSString *openfireaccount = USERINFO.openfireAccount;
-//    
-//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-//    manager.requestSerializer.timeoutInterval = 30.f;
-//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
-//    
-//    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//    params[@"sessionId"] = sessionId;
-//    params[@"openfireaccount"] = openfireaccount;
-//    params[@"friend_type"] = @"3";
-//    [manager GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        
-//        NSArray *dataArray = [KXBlackListModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"]];
-//        
-//        for (KXBlackListModel *model in dataArray) {
-//            if (model.friend_type == 3) {
-//                [self.dataArray addObject:model];
-//            }
-//        }
-//        [self.tableView reloadData];
-//        
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        
-//    }];
+    NSString *url = [NSString stringWithFormat:@"%@/moblie/getfriendByuserId_type.do",DFAPIURL];
+    NSString *sessionId = USERINFO.sessionId;
+    NSString *openfireaccount = USERINFO.openfireaccount;
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.requestSerializer.timeoutInterval = 30.f;
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = sessionId;
+    params[@"openfireaccount"] = openfireaccount;
+    params[@"friend_type"] = @"3";
+    [manager POST:url parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        ResponseData *data = [ResponseData mj_objectWithKeyValues:responseObject];
+        if (data.code != 0) {
+            return ;
+        }
+        
+        NSArray *dataArray = [KXBlackListModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"]];
+        
+        for (KXBlackListModel *model in dataArray) {
+            if (model.friend_type == 3) {
+                [self.dataArray addObject:model];
+            }
+        }
+        [self.tableView reloadData];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 
 - (void)addAllViews
 {
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICEWITH, DEVICEHIGHT - 64) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = 53;
@@ -84,15 +88,13 @@
     [self.tableView registerClass:[KXBlackListCell class] forCellReuseIdentifier:KXBlackListTableCellReusedID];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    return self.dataArray.count;
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.dataArray.count;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KXBlackListCell *cell = [tableView dequeueReusableCellWithIdentifier:KXBlackListTableCellReusedID forIndexPath:indexPath];
@@ -110,7 +112,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 10;
+        return 30;
     }
     return 0;
 }
