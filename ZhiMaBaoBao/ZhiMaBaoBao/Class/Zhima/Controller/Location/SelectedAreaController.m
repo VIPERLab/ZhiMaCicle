@@ -50,7 +50,7 @@
 //    _vcard = [[YiXmppVCard alloc] init];
 //    [_vcard load:[userInfo getJid] forceIntenet:NO success:nil failed:nil];
     
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64) style:UITableViewStyleGrouped];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     self.tableView = tableView;
     [self.view addSubview:tableView];
 //    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
