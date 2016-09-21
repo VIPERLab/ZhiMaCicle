@@ -232,7 +232,7 @@ NSString *const kDiscoverDetailOperationButtonClickedNotification = @"DiscoverDe
     
     [self.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head_photo]] placeholderImage:[UIImage imageNamed:@"userIcon"]];
         
-    if ([USERINFO.openfireAccount isEqualToString:model.openfireaccount]) {
+    if ([USERINFO.openfireaccount isEqualToString:model.openfireaccount]) {
         _deleteButton.hidden = NO;
     } else  _deleteButton.hidden = YES;
     
@@ -241,7 +241,7 @@ NSString *const kDiscoverDetailOperationButtonClickedNotification = @"DiscoverDe
     self.timeLabel.text = model.create_time;
     
     for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
-        if ([likeModel.userId isEqualToString:USERINFO.openfireAccount]) {
+        if ([likeModel.userId isEqualToString:USERINFO.openfireaccount]) {
             _operationMenu.isLike = YES;
         } else {
             _operationMenu.isLike = NO;

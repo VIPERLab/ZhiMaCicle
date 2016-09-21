@@ -37,7 +37,7 @@
 #import "ChatKeyBoard.h" //键盘工具条
 #import "FaceSourceManager.h"  
 #import "LGNetWorking.h" //请求工具类
-#import "YiUserInfo.h"
+//#import "YiUserInfo.h"
 
 
 // -----  新消息提示View
@@ -47,8 +47,8 @@
 
 
 
-@interface SDTimeLineTableViewController () <SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,KXDiscoverNewMessageViewDelegate>
-
+@interface SDTimeLineTableViewController () <SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,KXDiscoverNewMessageViewDelegate,UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) SDTimeLineTableHeaderView *headerView;  //头部视图
 
 // -----  回复别人的评论
@@ -96,9 +96,14 @@
     [super viewDidLoad];
     [self setCustomTitle:@"朋友圈"];
     self.pageNumber = 0;
+    
+    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView = tableView;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     self.tableView.backgroundColor = [UIColor whiteColor];
-    
+    [self.view addSubview:self.tableView];
     
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Discover_AddDiscover"] style:UIBarButtonItemStyleDone target:self action:@selector(rightBarButtonItemAction:)];
     self.navigationItem.rightBarButtonItem = rightBarButton;
@@ -114,9 +119,9 @@
     self.headerView.signName = USERINFO.signature;
     self.headerView.BJImage = USERINFO.backgroundImg;
     self.headerView.userImage = USERINFO.head_photo;
-    self.headerView.userName = USERINFO.userName;
+    self.headerView.userName = USERINFO.username;
     self.headerView.sessionID = USERINFO.sessionId;
-    self.headerView.openFirAccount = USERINFO.openfireAccount;
+    self.headerView.openFirAccount = USERINFO.openfireaccount;
     headerView.frame = CGRectMake(0, 0, 0, 260); //260
     self.tableView.tableHeaderView = headerView;
     
@@ -172,7 +177,7 @@
             NSString *pageNumber = [NSString stringWithFormat:@"%zd",weakSelf.pageNumber];
             
             NSString *sectionID = USERINFO.sessionId;
-            NSString *openfireaccount = USERINFO.openfireAccount;
+            NSString *openfireaccount = USERINFO.openfireaccount;
             
             [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:openfireaccount andPageCount:pageNumber block:^(ResponseData *responseData) {
                 
@@ -207,7 +212,7 @@
             NSString *pageNumber = [NSString stringWithFormat:@"%zd",self.pageNumber];
             
             NSString *sectionID = USERINFO.sessionId;
-            NSString *openfireaccount = USERINFO.openfireAccount;
+            NSString *openfireaccount = USERINFO.openfireaccount;
             
             
             [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:openfireaccount andPageCount:pageNumber block:^(ResponseData *responseData) {
@@ -245,7 +250,7 @@
         if (!USERINFO.lastFcID.length) {
             USERINFO.lastFcID = @"0";
         }
-        [LGNetWorking ApplicationWakeUpAtBackgroundWithSessionId:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireAccount andLastMessageID:USERINFO.lastFcID block:^(ResponseData *responseData) {
+        [LGNetWorking ApplicationWakeUpAtBackgroundWithSessionId:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andLastMessageID:USERINFO.lastFcID block:^(ResponseData *responseData) {
             
             if (responseData.code != 0) {
                 return ;
@@ -367,7 +372,7 @@
                     
                     //判断是否点赞了
                     if (!cellModel.liked) {
-                        if ([likeModel.userId isEqualToString:USERINFO.openfireAccount]) {
+                        if ([likeModel.userId isEqualToString:USERINFO.openfireaccount]) {
                             cellModel.liked = YES;
                         } else {
                             cellModel.liked = NO;
@@ -525,14 +530,14 @@
     
     if (!model.isLiked) {  //未赞
         SDTimeLineCellLikeItemModel *likeModel = [SDTimeLineCellLikeItemModel new];
-        likeModel.userName = USERINFO.userName;
-        likeModel.userId = USERINFO.openfireAccount;
+        likeModel.userName = USERINFO.username;
+        likeModel.userId = USERINFO.openfireaccount;
         [temp addObject:likeModel];
         model.liked = YES;
     } else {               //已赞
         SDTimeLineCellLikeItemModel *tempLikeModel = nil;
         for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
-            if ([likeModel.userId isEqualToString:USERINFO.openfireAccount]) {
+            if ([likeModel.userId isEqualToString:USERINFO.openfireaccount]) {
                 tempLikeModel = likeModel;
                 break;
             }
@@ -548,7 +553,7 @@
 #pragma mark - 回复别人的评论
 - (void)DidClickCommentOtherButton:(SDTimeLineCell *)cell andCommentItem:(SDTimeLineCellCommentItemModel *)commentModel andCommentView:(UIView *)commentView {
     
-    if ([commentModel.openfireaccount isEqualToString:USERINFO.openfireAccount]) {
+    if ([commentModel.openfireaccount isEqualToString:USERINFO.openfireaccount]) {
         //删除自己的评论
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         self.tempCommentItemModel = commentModel;
@@ -615,8 +620,8 @@
         
         if (self.isReplayingComment) {
             //回复别人评论
-            commentItemModel.friend_nick = USERINFO.userName;
-            commentItemModel.openfireaccount = USERINFO.openfireAccount;
+            commentItemModel.friend_nick = USERINFO.username;
+            commentItemModel.openfireaccount = USERINFO.openfireaccount;
             commentItemModel.ID = responseData.data;
             commentItemModel.reply_friend_nick = self.commentToUser;
             commentItemModel.reply_openfireaccount = self.currentCommenterOpenFirAccount;
@@ -627,11 +632,11 @@
         } else {
             //自己评论
             NSString *ID = [NSString stringWithFormat:@"%@",responseData.data];
-            commentItemModel.friend_nick = USERINFO.userName;
+            commentItemModel.friend_nick = USERINFO.username;
             commentItemModel.comment = comment;
             commentItemModel.ID = ID;
             commentItemModel.type = NO;
-            commentItemModel.openfireaccount = USERINFO.openfireAccount;
+            commentItemModel.openfireaccount = USERINFO.openfireaccount;
         }
         
         [temp addObject:commentItemModel];
@@ -725,7 +730,7 @@
 - (void)didLongPressUserIconWithCell:(SDTimeLineCell *)cell {
     SDTimeLineCellModel *model = cell.model;
     self.complainModel = model;
-    if ([model.openfireaccount isEqualToString:USERINFO.openfireAccount]) {
+    if ([model.openfireaccount isEqualToString:USERINFO.openfireaccount]) {
         //如果是自己发的朋友圈，则不处理
         return;
     }
@@ -751,7 +756,7 @@
 #pragma mark - 删除自己的评论
 - (void)deleteMyComment:(SDTimeLineCellCommentItemModel *)commentModel andDiscoverCellIndex:(NSIndexPath *)indexPath {
     __block NSIndexPath *index = indexPath;
-    [LGNetWorking DeletedMyCommentWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireAccount andFcid:commentModel.ID block:^(ResponseData *responseData) {
+    [LGNetWorking DeletedMyCommentWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andFcid:commentModel.ID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0 || responseData == nil) {
             [LCProgressHUD showText:@"删除失败"];
@@ -952,7 +957,6 @@
 
 #pragma mark - backAction
 - (void)backAction {
-    self.block();
     [self.navigationController popViewControllerAnimated:YES];
 }
 

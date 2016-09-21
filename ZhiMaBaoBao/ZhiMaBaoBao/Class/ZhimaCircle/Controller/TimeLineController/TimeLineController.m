@@ -8,6 +8,7 @@
 
 #import "TimeLineController.h"
 #import "ZhiMaCicleCell.h"
+#import "SDTimeLineTableViewController.h"
 
 @interface TimeLineController () <UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSArray *titleArray;
@@ -98,6 +99,9 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0 && indexPath.row == 0) {
         //朋友圈
+        SDTimeLineTableViewController *timeLine = [[SDTimeLineTableViewController alloc] init];
+        timeLine.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:timeLine animated:YES];
         
     } else if (indexPath.section == 1 && indexPath.row == 0 ) {
         //扫一扫

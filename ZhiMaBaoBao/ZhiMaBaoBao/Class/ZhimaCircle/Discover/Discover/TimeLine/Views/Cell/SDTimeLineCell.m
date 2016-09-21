@@ -39,7 +39,6 @@
 #import "UIImageView+WebCache.h"
 #import "UIButton+WebCache.h"
 
-#import "LEETheme.h"
 #import "NSString+FontSize.h"
 
 const CGFloat contentLabelFontSize = 14;

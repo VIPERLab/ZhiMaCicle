@@ -7,12 +7,13 @@
 //
 
 
-#import "SDBaseTableViewController.h"
+//#import "SDBaseTableViewController.h"
 #import "BaseTableViewController.h"
+#import "BaseViewController.h"
 
 typedef void(^complitedBlock)();
 
-@interface SDTimeLineTableViewController : BaseTableViewController
+@interface SDTimeLineTableViewController : BaseViewController
 
 // -----  未读消息
 @property (nonatomic, copy) NSString *headPhoto;

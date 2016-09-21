@@ -6,7 +6,6 @@
 //  Copyright © 2016年 ikantech. All rights reserved.
 //
 
-#import "SDBaseTableViewController.h"
 #import "BaseViewController.h"
 
 @interface PesonalDiscoverController : BaseViewController

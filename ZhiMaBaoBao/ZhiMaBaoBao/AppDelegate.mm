@@ -15,8 +15,9 @@
 
 @end
 
-@implementation AppDelegate
-
+@implementation AppDelegate {
+    BMKMapManager* _mapManager;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
@@ -36,6 +37,14 @@
         //已经登录过，直接跳转到主界面
         MainViewController *mainVC = [[MainViewController alloc] init];
         self.window.rootViewController = mainVC;
+    }
+    
+    //初始化百度地图
+    // 要使用百度地图，请先启动BaiduMapManager
+    _mapManager = [[BMKMapManager alloc]init];
+    BOOL ret = [_mapManager start:@"xVhVg8ZUIC3DFSh4ECZqwhk7VWMHZb9n" generalDelegate:self];
+    if (!ret) {
+        NSLog(@"manager start failed!");
     }
     
     
@@ -150,6 +159,27 @@
 }
 
 
+#pragma mark - 百度地图回调
+#pragma mark - 百度地图回调
+- (void)onGetNetworkState:(int)iError
+{
+    if (0 == iError) {
+        NSLog(@"联网成功");
+    }
+    else{
+        NSLog(@"onGetNetworkState %d",iError);
+    }
+}
+
+- (void)onGetPermissionState:(int)iError
+{
+    if (0 == iError) {
+        NSLog(@"授权成功");
+    }
+    else {
+        NSLog(@"onGetPermissionState %d",iError);
+    }
+}
 
 
 

@@ -17,7 +17,7 @@
 #import "UserMessageController.h" //个人消息
 #import "DiscoverDetailController.h"  //朋友圈详情
 #import "NewDiscoverController.h"  //发布新的说说
-#import "YiUserInfoViewController.h" //详情
+//#import "YiUserInfoViewController.h" //详情
 
 @interface PesonalDiscoverController () <UITableViewDelegate,UITableViewDataSource,SDTimeLineTableHeaderViewDelegate,PersonalDiscoverCellDelegate,DiscoverDetailControllerDelegate>
 
@@ -54,8 +54,8 @@
 
 - (void)setupView {
     
-    if ([USERINFO.openfireAccount isEqualToString:self.openFirAccount]) {
-        [self setCustomRightBarBUtton:@"消息"];
+    if ([USERINFO.openfireaccount isEqualToString:self.openFirAccount]) {
+//        [self setCustomRightBarBUtton:@"消息"];
 
     }
     
@@ -149,7 +149,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PersonalDiscoverCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if ([cell.openFirAccount isEqualToString:USERINFO.openfireAccount] && indexPath.section == 0 && indexPath.row == 0) {
+    if ([cell.openFirAccount isEqualToString:USERINFO.openfireaccount] && indexPath.section == 0 && indexPath.row == 0) {
         return;
     }
 
@@ -245,9 +245,9 @@
 
 #pragma mark - headerViewClick
 - (void)SDTimeLineTableHeaderViewHeaderViewDidClick:(SDTimeLineTableHeaderView *)headerView {
-    YiUserInfoViewController *info = [[YiUserInfoViewController alloc] init];
-    info.jid = [NSString stringWithFormat:@"%@@localhost",self.openFirAccount];
-    [self.navigationController pushViewController:info animated:YES];
+//    YiUserInfoViewController *info = [[YiUserInfoViewController alloc] init];
+//    info.jid = [NSString stringWithFormat:@"%@@localhost",self.openFirAccount];
+//    [self.navigationController pushViewController:info animated:YES];
 }
 
 

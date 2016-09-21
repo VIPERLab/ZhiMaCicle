@@ -7,10 +7,10 @@
 //  设置朋友圈权限
 
 #import "SetupCircleLimitController.h"
-#import "FriendInfo.h"
+//#import "FriendInfo.h"
 
 @interface SetupCircleLimitController ()
-@property (nonatomic, strong) FriendInfo *friendInfo;   //存放好友信息数据
+//@property (nonatomic, strong) FriendInfo *friendInfo;   //存放好友信息数据
 @property (nonatomic, strong) UISwitch *switch1;
 @property (nonatomic, strong) UISwitch *switch2;
 
@@ -32,9 +32,9 @@
     [LGNetWorking getFriendInfo:USERINFO.sessionId openfire:self.model.openfireaccount block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             
-            self.friendInfo = [FriendInfo mj_objectWithKeyValues:responseData.data];
-            [self.switch1 setOn:self.friendInfo.notread_my_cricles];
-            [self.switch2 setOn:self.friendInfo.notread_his_cricles];
+//            self.friendInfo = [FriendInfo mj_objectWithKeyValues:responseData.data];
+//            [self.switch1 setOn:self.friendInfo.notread_my_cricles];
+//            [self.switch2 setOn:self.friendInfo.notread_his_cricles];
             
             }else{
             [LCProgressHUD showText:responseData.msg];
@@ -48,7 +48,7 @@
     self.view.backgroundColor = BGCOLOR;
     //顶栏
     UIView *topBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 64)];
-    topBar.backgroundColor = RGBA(245, 245, 245, 1);
+    topBar.backgroundColor = RGB(245, 245, 245);
     [self.view addSubview:topBar];
     
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake((DEVICEWITH - 200)/2, (44 - 30)/2 + 20, 200, 30)];
@@ -112,28 +112,28 @@
 }
 //不让他看我的朋友圈
 - (void)notLookMyCircle:(UISwitch *)sender{
-    NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:value openfireAccount:self.friendInfo.openfireaccount block:^(ResponseData *responseData) {
-        if (responseData.code == 0) {
-            
-        }else{
-            [LCProgressHUD showText:responseData.msg];
-            
-        }
-    }];
+//    NSInteger value = sender.on;
+//    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:value openfireAccount:self.friendInfo.openfireaccount block:^(ResponseData *responseData) {
+//        if (responseData.code == 0) {
+//            
+//        }else{
+//            [LCProgressHUD showText:responseData.msg];
+//            
+//        }
+//    }];
 
 }
 
 //不看他的朋友圈
 - (void)notLookHisCircle:(UISwitch *)sender{
-    NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:value openfireAccount:self.friendInfo.openfireaccount block:^(ResponseData *responseData) {
-        if (responseData.code == 0) {
-            
-        }else{
-            [LCProgressHUD showText:responseData.msg];
-        }
-    }];
+//    NSInteger value = sender.on;
+//    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:value openfireAccount:self.friendInfo.openfireaccount block:^(ResponseData *responseData) {
+//        if (responseData.code == 0) {
+//            
+//        }else{
+//            [LCProgressHUD showText:responseData.msg];
+//        }
+//    }];
 }
 
 - (void)closeAction{

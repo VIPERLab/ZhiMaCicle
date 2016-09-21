@@ -55,7 +55,7 @@
 }
 
 - (void)loadData {  //请求消息列表
-    [LGNetWorking getUnReadMessageWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireAccount block:^(ResponseData *responseData) {
+    [LGNetWorking getUnReadMessageWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount block:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             [LCProgressHUD showText:@"请检查网络"];
 
@@ -86,7 +86,7 @@
 
 - (void)setupNav {
     [self setCustomTitle:@"消息"];
-    [self setCustomRightBarBUtton:@"清空"];
+//    [self setCustomRightBarBUtton:@"清空"];
 
     self.automaticallyAdjustsScrollViewInsets = NO;
     
@@ -161,7 +161,7 @@
 }
 
 - (void)loadMoreData {
-    [LGNetWorking LoadUserMessageListWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireAccount andLastFccid:self.lastFccid andPageCount:[NSString stringWithFormat:@"%zd",self.pageNumber] block:^(ResponseData *responseData) {
+    [LGNetWorking LoadUserMessageListWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andLastFccid:self.lastFccid andPageCount:[NSString stringWithFormat:@"%zd",self.pageNumber] block:^(ResponseData *responseData) {
         if (responseData == nil || responseData.data == nil || !responseData.data) {
             NSLog(@"数据请求失败");
             return ;
@@ -194,11 +194,11 @@
 
 #pragma mark - 清空按钮
 - (void)rightBarButtonAction {
-    [LGNetWorking ClearMessageListWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireAccount block:^(ResponseData *responseData) {
+    [LGNetWorking ClearMessageListWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
-            return ;
             NSLog(@"请求失败");
+            return ;
         }
         
         [self.navigationController popViewControllerAnimated:YES];
