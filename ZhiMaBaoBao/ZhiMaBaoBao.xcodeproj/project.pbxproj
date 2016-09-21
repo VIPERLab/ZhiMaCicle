@@ -3154,7 +3154,6 @@
 					310B831F1D8E7B0100A0F408 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = C74GJQS7VJ;
-						DevelopmentTeam = T5TN3E6VN3;
 					};
 					310B83381D8E7B0100A0F408 = {
 						CreatedOnToolsVersion = 7.3.1;
