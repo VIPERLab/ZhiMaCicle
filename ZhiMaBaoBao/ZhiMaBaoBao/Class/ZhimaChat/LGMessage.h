@@ -6,6 +6,12 @@
 //  Copyright © 2016年 liugang. All rights reserved.
 //
 
+typedef NS_OPTIONS(NSUInteger, MessageType) {
+    MessageTypeText    = 0,   //文本消息
+    MessageTypeImage,         //图片
+    MessageTypeAudio          //语音
+};
+
 #import <Foundation/Foundation.h>
 
 #define MSG_MAX_WIDTH   DEVICEWITH - 2 * MSG_AVTAR_SIZE - 7 * MSG_MARGIN   //消息最大宽度
@@ -19,6 +25,9 @@
 #define MSG_TIME_FONT [UIFont systemFontOfSize:12]  //时间字体
 
 @interface LGMessage : NSObject
+
+ /** 消息类型*/
+@property (nonatomic, assign) MessageType msgType;
 
  /** 消息发送者*/
 @property (nonatomic, copy) NSString *from;

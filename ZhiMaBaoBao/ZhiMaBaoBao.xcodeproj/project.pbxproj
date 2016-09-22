@@ -437,6 +437,18 @@
 		311CEF7C1D92219200BBB1F9 /* FakeData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 311CEF7B1D92219200BBB1F9 /* FakeData.plist */; };
 		311CEF801D92246A00BBB1F9 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF7F1D92246A00BBB1F9 /* MessageCell.m */; };
 		311CEF841D92252000BBB1F9 /* LGMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF831D92252000BBB1F9 /* LGMessage.m */; };
+		311CEFA91D937BE700BBB1F9 /* AmrPlayerReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF8E1D937BE700BBB1F9 /* AmrPlayerReader.m */; };
+		311CEFAA1D937BE700BBB1F9 /* MLAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF901D937BE700BBB1F9 /* MLAudioPlayer.m */; };
+		311CEFAB1D937BE700BBB1F9 /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEF9B1D937BE700BBB1F9 /* libopencore-amrnb.a */; };
+		311CEFAC1D937BE700BBB1F9 /* libopencore-amrwb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEF9C1D937BE700BBB1F9 /* libopencore-amrwb.a */; };
+		311CEFAD1D937BE700BBB1F9 /* AmrRecordWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF9E1D937BE700BBB1F9 /* AmrRecordWriter.m */; };
+		311CEFAE1D937BE700BBB1F9 /* CafRecordWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFA01D937BE700BBB1F9 /* CafRecordWriter.m */; };
+		311CEFAF1D937BE700BBB1F9 /* MLAudioMeterObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFA21D937BE700BBB1F9 /* MLAudioMeterObserver.m */; };
+		311CEFB01D937BE700BBB1F9 /* MLAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFA41D937BE700BBB1F9 /* MLAudioRecorder.m */; };
+		311CEFB11D937BE700BBB1F9 /* lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEFA61D937BE700BBB1F9 /* lame.framework */; };
+		311CEFB21D937BE700BBB1F9 /* Mp3RecordWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFA81D937BE700BBB1F9 /* Mp3RecordWriter.m */; };
+		311CEFB51D938EF200BBB1F9 /* RecordingHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFB41D938EF200BBB1F9 /* RecordingHUD.m */; };
+		311CEFB81D93D98700BBB1F9 /* BuddleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFB71D93D98700BBB1F9 /* BuddleView.m */; };
 		316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957461D90D3DE00140126 /* KXPersonalCenterCell.m */; };
 		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
 		316957561D90E63100140126 /* LGAddFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957541D90E63100140126 /* LGAddFriendCell.m */; };
@@ -1368,6 +1380,31 @@
 		311CEF7F1D92246A00BBB1F9 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
 		311CEF821D92252000BBB1F9 /* LGMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGMessage.h; sourceTree = "<group>"; };
 		311CEF831D92252000BBB1F9 /* LGMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGMessage.m; sourceTree = "<group>"; };
+		311CEF8D1D937BE700BBB1F9 /* AmrPlayerReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmrPlayerReader.h; sourceTree = "<group>"; };
+		311CEF8E1D937BE700BBB1F9 /* AmrPlayerReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmrPlayerReader.m; sourceTree = "<group>"; };
+		311CEF8F1D937BE700BBB1F9 /* MLAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLAudioPlayer.h; sourceTree = "<group>"; };
+		311CEF901D937BE700BBB1F9 /* MLAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLAudioPlayer.m; sourceTree = "<group>"; };
+		311CEF951D937BE700BBB1F9 /* interf_dec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_dec.h; sourceTree = "<group>"; };
+		311CEF961D937BE700BBB1F9 /* interf_enc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_enc.h; sourceTree = "<group>"; };
+		311CEF981D937BE700BBB1F9 /* dec_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dec_if.h; sourceTree = "<group>"; };
+		311CEF991D937BE700BBB1F9 /* if_rom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = if_rom.h; sourceTree = "<group>"; };
+		311CEF9B1D937BE700BBB1F9 /* libopencore-amrnb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopencore-amrnb.a"; sourceTree = "<group>"; };
+		311CEF9C1D937BE700BBB1F9 /* libopencore-amrwb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopencore-amrwb.a"; sourceTree = "<group>"; };
+		311CEF9D1D937BE700BBB1F9 /* AmrRecordWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmrRecordWriter.h; sourceTree = "<group>"; };
+		311CEF9E1D937BE700BBB1F9 /* AmrRecordWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmrRecordWriter.m; sourceTree = "<group>"; };
+		311CEF9F1D937BE700BBB1F9 /* CafRecordWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CafRecordWriter.h; sourceTree = "<group>"; };
+		311CEFA01D937BE700BBB1F9 /* CafRecordWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CafRecordWriter.m; sourceTree = "<group>"; };
+		311CEFA11D937BE700BBB1F9 /* MLAudioMeterObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLAudioMeterObserver.h; sourceTree = "<group>"; };
+		311CEFA21D937BE700BBB1F9 /* MLAudioMeterObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLAudioMeterObserver.m; sourceTree = "<group>"; };
+		311CEFA31D937BE700BBB1F9 /* MLAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLAudioRecorder.h; sourceTree = "<group>"; };
+		311CEFA41D937BE700BBB1F9 /* MLAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLAudioRecorder.m; sourceTree = "<group>"; };
+		311CEFA61D937BE700BBB1F9 /* lame.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = lame.framework; sourceTree = "<group>"; };
+		311CEFA71D937BE700BBB1F9 /* Mp3RecordWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mp3RecordWriter.h; sourceTree = "<group>"; };
+		311CEFA81D937BE700BBB1F9 /* Mp3RecordWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mp3RecordWriter.m; sourceTree = "<group>"; };
+		311CEFB31D938EF200BBB1F9 /* RecordingHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingHUD.h; sourceTree = "<group>"; };
+		311CEFB41D938EF200BBB1F9 /* RecordingHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingHUD.m; sourceTree = "<group>"; };
+		311CEFB61D93D98700BBB1F9 /* BuddleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuddleView.h; sourceTree = "<group>"; };
+		311CEFB71D93D98700BBB1F9 /* BuddleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuddleView.m; sourceTree = "<group>"; };
 		316957451D90D3DE00140126 /* KXPersonalCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPersonalCenterCell.h; sourceTree = "<group>"; };
 		316957461D90D3DE00140126 /* KXPersonalCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPersonalCenterCell.m; sourceTree = "<group>"; };
 		3169574B1D90E24A00140126 /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
@@ -1489,10 +1526,12 @@
 				04EA7AF81D912110005E5425 /* Foundation.framework in Frameworks */,
 				04EA7AF71D91210A005E5425 /* UIKit.framework in Frameworks */,
 				04EA7AF61D912103005E5425 /* SystemConfiguration.framework in Frameworks */,
+				311CEFB11D937BE700BBB1F9 /* lame.framework in Frameworks */,
 				04EA7AF51D9120E9005E5425 /* CoreLocation.framework in Frameworks */,
 				04EA7AF31D9120E1005E5425 /* OpenGLES.framework in Frameworks */,
 				04EA7AED1D9120BC005E5425 /* QuartzCore.framework in Frameworks */,
 				04EA7AD81D910FA8005E5425 /* AssetsLibrary.framework in Frameworks */,
+				311CEFAB1D937BE700BBB1F9 /* libopencore-amrnb.a in Frameworks */,
 				04EA7A6F1D90EBB3005E5425 /* AFNetworking.framework in Frameworks */,
 				04EA7A701D90EBB3005E5425 /* CocoaAsyncSocket.framework in Frameworks */,
 				04EA7A711D90EBB3005E5425 /* FMDB.framework in Frameworks */,
@@ -1504,6 +1543,7 @@
 				04EA7A751D90EBB3005E5425 /* MJRefresh.framework in Frameworks */,
 				04EA7A761D90EBB3005E5425 /* NJKWebViewProgress.framework in Frameworks */,
 				04EA7A771D90EBB3005E5425 /* RegexKitLite.framework in Frameworks */,
+				311CEFAC1D937BE700BBB1F9 /* libopencore-amrwb.a in Frameworks */,
 				04EA7A781D90EBB3005E5425 /* SDWebImage.framework in Frameworks */,
 				04EA7AE71D911FD2005E5425 /* BaiduMapAPI_Base.framework in Frameworks */,
 				31B7C7B31D8FFCBE00F1883A /* LYVoIP.a in Frameworks */,
@@ -3504,6 +3544,7 @@
 		311CEF2C1D92182400BBB1F9 /* Chat(聊天) */ = {
 			isa = PBXGroup;
 			children = (
+				311CEF8B1D937A4E00BBB1F9 /* Tools */,
 				311CEF811D9224EE00BBB1F9 /* Model */,
 				311CEF7D1D92244B00BBB1F9 /* View */,
 				311CEF2D1D92185D00BBB1F9 /* ChatController.h */,
@@ -3518,6 +3559,8 @@
 			children = (
 				311CEF7E1D92246A00BBB1F9 /* MessageCell.h */,
 				311CEF7F1D92246A00BBB1F9 /* MessageCell.m */,
+				311CEFB61D93D98700BBB1F9 /* BuddleView.h */,
+				311CEFB71D93D98700BBB1F9 /* BuddleView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -3529,6 +3572,100 @@
 				311CEF831D92252000BBB1F9 /* LGMessage.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		311CEF8B1D937A4E00BBB1F9 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF8C1D937BE700BBB1F9 /* MLAudioPlayer */,
+				311CEF911D937BE700BBB1F9 /* MLAudioRecorder */,
+				311CEFB31D938EF200BBB1F9 /* RecordingHUD.h */,
+				311CEFB41D938EF200BBB1F9 /* RecordingHUD.m */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
+		311CEF8C1D937BE700BBB1F9 /* MLAudioPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF8D1D937BE700BBB1F9 /* AmrPlayerReader.h */,
+				311CEF8E1D937BE700BBB1F9 /* AmrPlayerReader.m */,
+				311CEF8F1D937BE700BBB1F9 /* MLAudioPlayer.h */,
+				311CEF901D937BE700BBB1F9 /* MLAudioPlayer.m */,
+			);
+			path = MLAudioPlayer;
+			sourceTree = "<group>";
+		};
+		311CEF911D937BE700BBB1F9 /* MLAudioRecorder */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF921D937BE700BBB1F9 /* amr_en_de */,
+				311CEF9D1D937BE700BBB1F9 /* AmrRecordWriter.h */,
+				311CEF9E1D937BE700BBB1F9 /* AmrRecordWriter.m */,
+				311CEF9F1D937BE700BBB1F9 /* CafRecordWriter.h */,
+				311CEFA01D937BE700BBB1F9 /* CafRecordWriter.m */,
+				311CEFA11D937BE700BBB1F9 /* MLAudioMeterObserver.h */,
+				311CEFA21D937BE700BBB1F9 /* MLAudioMeterObserver.m */,
+				311CEFA31D937BE700BBB1F9 /* MLAudioRecorder.h */,
+				311CEFA41D937BE700BBB1F9 /* MLAudioRecorder.m */,
+				311CEFA51D937BE700BBB1F9 /* mp3_en_de */,
+				311CEFA71D937BE700BBB1F9 /* Mp3RecordWriter.h */,
+				311CEFA81D937BE700BBB1F9 /* Mp3RecordWriter.m */,
+			);
+			path = MLAudioRecorder;
+			sourceTree = "<group>";
+		};
+		311CEF921D937BE700BBB1F9 /* amr_en_de */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF931D937BE700BBB1F9 /* include */,
+				311CEF9A1D937BE700BBB1F9 /* lib */,
+			);
+			path = amr_en_de;
+			sourceTree = "<group>";
+		};
+		311CEF931D937BE700BBB1F9 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF941D937BE700BBB1F9 /* opencore-amrnb */,
+				311CEF971D937BE700BBB1F9 /* opencore-amrwb */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		311CEF941D937BE700BBB1F9 /* opencore-amrnb */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF951D937BE700BBB1F9 /* interf_dec.h */,
+				311CEF961D937BE700BBB1F9 /* interf_enc.h */,
+			);
+			path = "opencore-amrnb";
+			sourceTree = "<group>";
+		};
+		311CEF971D937BE700BBB1F9 /* opencore-amrwb */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF981D937BE700BBB1F9 /* dec_if.h */,
+				311CEF991D937BE700BBB1F9 /* if_rom.h */,
+			);
+			path = "opencore-amrwb";
+			sourceTree = "<group>";
+		};
+		311CEF9A1D937BE700BBB1F9 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				311CEF9B1D937BE700BBB1F9 /* libopencore-amrnb.a */,
+				311CEF9C1D937BE700BBB1F9 /* libopencore-amrwb.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		311CEFA51D937BE700BBB1F9 /* mp3_en_de */ = {
+			isa = PBXGroup;
+			children = (
+				311CEFA61D937BE700BBB1F9 /* lame.framework */,
+			);
+			path = mp3_en_de;
 			sourceTree = "<group>";
 		};
 		316957511D90E5C900140126 /* AddFriends(添加好友) */ = {
@@ -4219,6 +4356,7 @@
 				04F57AEB1D9280BD002A6471 /* KXCurrentLocationCell.m in Sources */,
 				04F57AB31D9280BD002A6471 /* SDTimeLineCell.m in Sources */,
 				04EA797A1D8FBA0C005E5425 /* KXWebViewController.m in Sources */,
+				311CEFB81D93D98700BBB1F9 /* BuddleView.m in Sources */,
 				04EA7D901D912872005E5425 /* ZXReedSolomonEncoder.m in Sources */,
 				04EA7AD51D910F89005E5425 /* DNUnAuthorizedTipsView.m in Sources */,
 				04EA7D931D912872005E5425 /* ZXBitSource.m in Sources */,
@@ -4258,6 +4396,7 @@
 				04EA7D5F1D912872005E5425 /* ZXAztecToken.m in Sources */,
 				04EA7DC71D912872005E5425 /* ZXAbstractExpandedDecoder.m in Sources */,
 				04EA7E1B1D912872005E5425 /* ZXQRCodeDecoder.m in Sources */,
+				311CEFAF1D937BE700BBB1F9 /* MLAudioMeterObserver.m in Sources */,
 				04EA7D6E1D912872005E5425 /* ZXExpandedProductResultParser.m in Sources */,
 				31B7C75B1D8FB33E00F1883A /* LGGuideController.m in Sources */,
 				31B7C7811D8FE69E00F1883A /* PhoneAddressController.m in Sources */,
@@ -4364,6 +4503,7 @@
 				04EA7D751D912872005E5425 /* ZXProductResultParser.m in Sources */,
 				04EA7E331D912872005E5425 /* UIImageView+CornerRadius.m in Sources */,
 				31B7C7A91D8FE91A00F1883A /* pinyin.c in Sources */,
+				311CEFAA1D937BE700BBB1F9 /* MLAudioPlayer.m in Sources */,
 				04F57AA91D9280BD002A6471 /* SDBaseRefreshView.m in Sources */,
 				04EA7AD61D910F89005E5425 /* JKPromptView.m in Sources */,
 				04EA7DB61D912872005E5425 /* ZXDataMatrixDefaultPlacement.m in Sources */,
@@ -4398,6 +4538,7 @@
 				04EA7DD61D912872005E5425 /* ZXRSSExpandedDecodedNumeric.m in Sources */,
 				04EA7DE11D912872005E5425 /* ZXRSSFinderPattern.m in Sources */,
 				04EA79E21D90E9F7005E5425 /* KXMoneyDetailController.m in Sources */,
+				311CEFAD1D937BE700BBB1F9 /* AmrRecordWriter.m in Sources */,
 				04EA7DEC1D912872005E5425 /* ZXEAN13Writer.m in Sources */,
 				04F57B381D9283DB002A6471 /* FaceSourceManager.m in Sources */,
 				04EA7DEF1D912872005E5425 /* ZXEANManufacturerOrgSupport.m in Sources */,
@@ -4453,6 +4594,7 @@
 				04EA7E231D912872005E5425 /* ZXQRCodeDetector.m in Sources */,
 				04EA7DED1D912872005E5425 /* ZXEAN8Reader.m in Sources */,
 				04F57B831D9283FE002A6471 /* README.md in Sources */,
+				311CEFAE1D937BE700BBB1F9 /* CafRecordWriter.m in Sources */,
 				04F57AF71D9280BD002A6471 /* PersonalDiscoverCellModel.m in Sources */,
 				04EA7DE91D912872005E5425 /* ZXCode39Writer.m in Sources */,
 				04EA79721D8F8F49005E5425 /* UIColor+My.m in Sources */,
@@ -4495,6 +4637,7 @@
 				04EA7E061D912872005E5425 /* ZXPDF417DecodedBitStreamParser.m in Sources */,
 				04EA7B641D91282E005E5425 /* LBXScanViewController.m in Sources */,
 				04EA7E2E1D912872005E5425 /* ZXQRCodeMultiReader.m in Sources */,
+				311CEFB21D937BE700BBB1F9 /* Mp3RecordWriter.m in Sources */,
 				04EA7DE41D912872005E5425 /* ZXCodaBarReader.m in Sources */,
 				04EA79E11D90E9F7005E5425 /* KXMoneyDetailCell.m in Sources */,
 				04EA7DCC1D912872005E5425 /* ZXAI013x0x1xDecoder.m in Sources */,
@@ -4546,6 +4689,7 @@
 				04F57AEF1D9280BD002A6471 /* DiscoverDetailHeaderView.m in Sources */,
 				04EA7DA71D912872005E5425 /* ZXInvertedLuminanceSource.m in Sources */,
 				04EA7D9B1D912872005E5425 /* ZXGridSampler.m in Sources */,
+				311CEFB51D938EF200BBB1F9 /* RecordingHUD.m in Sources */,
 				04EA7DE61D912872005E5425 /* ZXCode128Reader.m in Sources */,
 				04EA79A11D8FD589005E5425 /* KXSettingCell.m in Sources */,
 				04EA7DF11D912872005E5425 /* ZXITFWriter.m in Sources */,
@@ -4553,6 +4697,7 @@
 				310B83281D8E7B0100A0F408 /* AppDelegate.mm in Sources */,
 				31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */,
 				04EA7D9A1D912872005E5425 /* ZXGlobalHistogramBinarizer.m in Sources */,
+				311CEFA91D937BE700BBB1F9 /* AmrPlayerReader.m in Sources */,
 				04EA7D821D912872005E5425 /* ZXVEventResultParser.m in Sources */,
 				04EA7E161D912872005E5425 /* ZXPDF417Writer.m in Sources */,
 				04EA7E0C1D912872005E5425 /* ZXPDF417DetectorResult.m in Sources */,
@@ -4599,6 +4744,7 @@
 				04EA7B5F1D91282E005E5425 /* LBXScanNative.m in Sources */,
 				04F57AF91D9280BD002A6471 /* PesonalDiscoverController.m in Sources */,
 				04EA7DD91D912872005E5425 /* ZXRSSExpandedGeneralAppIdDecoder.m in Sources */,
+				311CEFB01D937BE700BBB1F9 /* MLAudioRecorder.m in Sources */,
 				04EA7DA91D912872005E5425 /* ZXPlanarYUVLuminanceSource.m in Sources */,
 				04EA7B281D912692005E5425 /* UIImage+YiExtension.m in Sources */,
 				3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */,
@@ -4783,6 +4929,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/BDSDK",
+					"$(PROJECT_DIR)/ZhiMaBaoBao/Class/ZhimaChat/MLAudioRecorder/mp3_en_de",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZhiMaBaoBao/Zhimabaobao.pch;
@@ -4794,6 +4941,7 @@
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/LYVoIP",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/WXPay",
+					"$(PROJECT_DIR)/ZhiMaBaoBao/Class/ZhimaChat/MLAudioRecorder/amr_en_de/lib",
 				);
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
@@ -4817,6 +4965,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/BDSDK",
+					"$(PROJECT_DIR)/ZhiMaBaoBao/Class/ZhimaChat/MLAudioRecorder/mp3_en_de",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZhiMaBaoBao/Zhimabaobao.pch;
@@ -4828,6 +4977,7 @@
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/LYVoIP",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/WXPay",
+					"$(PROJECT_DIR)/ZhiMaBaoBao/Class/ZhimaChat/MLAudioRecorder/amr_en_de/lib",
 				);
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;

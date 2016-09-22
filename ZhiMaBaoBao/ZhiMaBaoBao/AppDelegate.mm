@@ -47,12 +47,16 @@
         NSLog(@"manager start failed!");
     }
     
-    
     //注册更新用户未读消息通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUserUnReadMessageCountAndUnReadCircle:) name:K_UpdataUnReadNotification object:nil];
+
+    
+
     
     return YES;
 }
+
+
 
 - (void)jumpMainController{
     //已经登录过，直接跳转到主界面

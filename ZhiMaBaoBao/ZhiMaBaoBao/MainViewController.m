@@ -33,6 +33,10 @@
     [self addChildVc:[[CallViewController alloc] init] title:@"芝麻通" image:@"lgtabbar_3" selectedImage:@"lgtabbar_3_select"];
     [self addChildVc:[[TimeLineController alloc] init] title:@"芝麻圈" image:@"lgtabbar_4" selectedImage:@"lgtabbar_4_select"];
     [self addChildVc:[[PersonalCenterController alloc] init] title:@"芝麻" image:@"lgtabbar_5" selectedImage:@"lgtabbar_5_select"];
+    
+    //添加异常捕获
+    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
+
 }
 
 //添加子控制器
@@ -59,6 +63,11 @@
 }
 
 
-
+void UncaughtExceptionHandler(NSException *exception) {
+    NSArray *arr = [exception callStackSymbols];    //得到当前调用栈信息
+    NSString *reason = [exception reason];          //非常重要，就是崩溃的原因
+    NSString *name = [exception name];              //异常类型
+    NSLog(@"异常类型 : %@ \n 崩溃原因 : %@ \n 当前调用栈信息 : %@", name, reason, arr);
+}
 
 @end
