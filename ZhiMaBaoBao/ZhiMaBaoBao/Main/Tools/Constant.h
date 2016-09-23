@@ -63,6 +63,9 @@
 #import "UIImageView+WebCache.h"
 #import "BaseViewController.h"
 
+//FMDB管理头文件
+#import "FMDBManager.h"
+
 
 //通知头文件
 #import "KNotificationManager.h"

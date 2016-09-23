@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "LGGuideController.h"
+#import "FMDBManager.h"
 #import <AlipaySDK/AlipaySDK.h>
 
 @interface AppDelegate ()
@@ -51,7 +52,16 @@
     //注册更新用户未读消息通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUserUnReadMessageCountAndUnReadCircle:) name:K_UpdataUnReadNotification object:nil];
     
+    //创建数据库表
+    [self creatMySQL];
+    
     return YES;
+}
+
+//创建数据库表
+- (void)creatMySQL {
+    [FMDBManager creatTableWithTableType:ZhiMa_Circle_Table];
+    [FMDBManager creatTableWithTableType:ZhiMa_Circle_Comment_Table];
 }
 
 - (void)jumpMainController{
@@ -81,7 +91,6 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    
     
     //计算是否超过设置邀请码的有效期
     if (USERINFO.sessionId && ![USERINFO.create_time isEqualToString:@""] && USERINFO.create_time!= nil) {
