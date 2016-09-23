@@ -7,6 +7,7 @@
 //  会话列表
 
 #import "ConversationController.h"
+#import "ChatController.h"
 
 @interface ConversationController ()
 
@@ -17,8 +18,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setCustomRightItems];
-    
-    
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    ChatController *vc = [[ChatController alloc] init];
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

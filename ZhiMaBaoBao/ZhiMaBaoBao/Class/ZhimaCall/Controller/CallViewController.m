@@ -19,6 +19,7 @@
 #import "LGCallingController.h"
 #import "PhoneContact.h"
 #import "LGPhoneContactInfoController.h"
+#import "CallSettingController.h"
 #import <AddressBookUI/ABPeoplePickerNavigationController.h>
 #import <AddressBook/ABPerson.h>
 #import <AddressBookUI/ABPersonViewController.h>
@@ -371,9 +372,17 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
 }
 
 
+
 //跳转到通讯录
 - (void)jumpToAddress{
     PhoneAddressController *vc = [[PhoneAddressController alloc] init];
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+//跳转到拨号设置
+- (void)KeyBoardView:(YiKeyBoardView *)keyboardView settingBtn:(UIButton *)settingBtn{
+    CallSettingController *vc = [[CallSettingController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }

@@ -4,7 +4,7 @@
 //
 //  Created by liugang on 16/9/19.
 //  Copyright © 2016年 liugang. All rights reserved.
-//
+//  用户数据本地存储
 
 #import <Foundation/Foundation.h>
 
@@ -57,6 +57,13 @@
 
  /** sessionId*/
 @property (nonatomic, copy) NSString *sessionId;
+
+ /** 键盘振动*/
+@property (nonatomic, assign, getter=isKeyboardShake) BOOL keyboardShake;
+
+ /** 键盘按键音*/
+@property (nonatomic, assign, getter=isKeyboardVoice) BOOL keyboardVoice;
+
 
 /**
  *  位置信息
