@@ -854,6 +854,7 @@
         return;
     } else if (actionSheet.tag == 100) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
         switch (buttonIndex) {
             case 0:
                 picker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -879,6 +880,7 @@
     
     UIImage *image = info[@"UIImagePickerControllerOriginalImage"];
     NSData *imageData = UIImageJPEGRepresentation(image, 1);
+    
     [LGNetWorking uploadPhoto:USERINFO.sessionId image:imageData fileName:@"backgroundImg" andFuctionName:@"backgroundImg" block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
