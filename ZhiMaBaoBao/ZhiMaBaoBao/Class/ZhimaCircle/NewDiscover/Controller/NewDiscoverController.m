@@ -453,6 +453,23 @@
             return;
         }
         
+        //插入自己发布的朋友圈
+        UserInfo *info = [UserInfo read];
+        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
+        NSString *fcid = [NSString stringWithFormat:@"%zd",[responseData.data integerValue]];
+        NSString *optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Table];
+        [queue inDatabase:^(FMDatabase *db) {
+            
+            BOOL success = [db executeUpdate:optionStr,info.username,fcid,info.openfireaccount,self.textView.text,locationStr,@"刚刚",info.head_photo];
+            if (success) {
+                NSLog(@"插入朋友圈成功");
+            } else {
+                NSLog(@"插入朋友圈失败");
+            }
+            
+        }];
+        
+        
         self.block();
         [self.navigationController popViewControllerAnimated:YES];
     }];

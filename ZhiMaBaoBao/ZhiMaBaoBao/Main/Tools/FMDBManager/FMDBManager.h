@@ -13,8 +13,9 @@
 typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
 
 typedef enum : NSUInteger {
-    ZhiMa_Circle_Table,   // 朋友圈的表
-    ZhiMa_Circle_Comment_Table   //朋友圈评论的表
+    ZhiMa_Circle_Table,             //朋友圈内容的表
+    ZhiMa_Circle_Comment_Table,     //朋友圈评论的表
+    ZhiMa_Circle_Pic_Table          //朋友圈图片的表
 } ZhiMaSqliteTableType;
 
 @interface FMDBManager : NSObject
@@ -31,7 +32,7 @@ typedef enum : NSUInteger {
 - (NSString *)InsertDataInTable:(ZhiMaSqliteTableType)type;
 
 // 查表
-- (NSString *)CheckTable:(ZhiMaSqliteTableType)type withOption:(NSString *)option;
+- (NSString *)SearchTable:(ZhiMaSqliteTableType)type withOption:(NSString *)option;
 
 // 改表
 - (NSString *)alterTable:(ZhiMaSqliteTableType)type withOpton1:(NSString *)option1 andOption2:(NSString *)option2;

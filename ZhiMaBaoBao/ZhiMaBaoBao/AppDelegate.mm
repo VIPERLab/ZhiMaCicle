@@ -60,8 +60,9 @@
 
 //创建数据库表
 - (void)creatMySQL {
-    [FMDBManager creatTableWithTableType:ZhiMa_Circle_Table];
-    [FMDBManager creatTableWithTableType:ZhiMa_Circle_Comment_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Comment_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Pic_Table];
 }
 
 - (void)jumpMainController{

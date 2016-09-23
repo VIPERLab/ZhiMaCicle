@@ -363,19 +363,12 @@
 		04F57AEB1D9280BD002A6471 /* KXCurrentLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A7C1D9280BD002A6471 /* KXCurrentLocationCell.m */; };
 		04F57AEC1D9280BD002A6471 /* DiscoverCurrentLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A7E1D9280BD002A6471 /* DiscoverCurrentLocationController.m */; };
 		04F57AED1D9280BD002A6471 /* KXCurrentLocationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A811D9280BD002A6471 /* KXCurrentLocationModel.m */; };
-		04F57AEE1D9280BD002A6471 /* DiscoverDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A841D9280BD002A6471 /* DiscoverDetailController.m */; };
-		04F57AEF1D9280BD002A6471 /* DiscoverDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A871D9280BD002A6471 /* DiscoverDetailHeaderView.m */; };
-		04F57AF01D9280BD002A6471 /* KXCommentListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A891D9280BD002A6471 /* KXCommentListView.m */; };
-		04F57AF11D9280BD002A6471 /* KXDiscoverDetailCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A8B1D9280BD002A6471 /* KXDiscoverDetailCommentView.m */; };
 		04F57AF61D9280BD002A6471 /* PersonalDiscoverCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A9B1D9280BD002A6471 /* PersonalDiscoverCell.m */; };
 		04F57AF71D9280BD002A6471 /* PersonalDiscoverCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A9E1D9280BD002A6471 /* PersonalDiscoverCellModel.m */; };
 		04F57AF81D9280BD002A6471 /* PersonalDiscoverPhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57AA01D9280BD002A6471 /* PersonalDiscoverPhotoModel.m */; };
 		04F57AF91D9280BD002A6471 /* PesonalDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57AA21D9280BD002A6471 /* PesonalDiscoverController.m */; };
 		04F57AFE1D928154002A6471 /* ComplainSubViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57AFB1D928154002A6471 /* ComplainSubViewController.m */; };
 		04F57AFF1D928154002A6471 /* ComplainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57AFD1D928154002A6471 /* ComplainViewController.m */; };
-		04F57B071D9281CE002A6471 /* UserMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57B021D9281CE002A6471 /* UserMessageCell.m */; };
-		04F57B081D9281CE002A6471 /* UserMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57B041D9281CE002A6471 /* UserMessageController.m */; };
-		04F57B091D9281CE002A6471 /* UserMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57B061D9281CE002A6471 /* UserMessageModel.m */; };
 		04F862051D94DB0100DCC6FE /* NearByPeopleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862041D94DB0100DCC6FE /* NearByPeopleController.m */; };
 		04F862121D94DB3000DCC6FE /* NewDiscoverNormalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862091D94DB3000DCC6FE /* NewDiscoverNormalCell.m */; };
 		04F862131D94DB3000DCC6FE /* NewDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8620C1D94DB3000DCC6FE /* NewDiscoverController.m */; };
@@ -424,6 +417,13 @@
 		04F862A01D94FC8900DCC6FE /* UITableView+SDAutoTableViewCellHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8629D1D94FC8900DCC6FE /* UITableView+SDAutoTableViewCellHeight.m */; };
 		04F862A11D94FC8900DCC6FE /* UIView+SDAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8629F1D94FC8900DCC6FE /* UIView+SDAutoLayout.m */; };
 		04F862A71D95037000DCC6FE /* FMDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862A51D95037000DCC6FE /* FMDBManager.m */; };
+		04F862C11D95545000DCC6FE /* DiscoverDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862B91D95545000DCC6FE /* DiscoverDetailController.m */; };
+		04F862C21D95545000DCC6FE /* DiscoverDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862BC1D95545000DCC6FE /* DiscoverDetailHeaderView.m */; };
+		04F862C31D95545000DCC6FE /* KXCommentListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862BE1D95545000DCC6FE /* KXCommentListView.m */; };
+		04F862C41D95545000DCC6FE /* KXDiscoverDetailCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862C01D95545000DCC6FE /* KXDiscoverDetailCommentView.m */; };
+		04F862CC1D9554AA00DCC6FE /* UserMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862C71D9554AA00DCC6FE /* UserMessageCell.m */; };
+		04F862CD1D9554AA00DCC6FE /* UserMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862C91D9554AA00DCC6FE /* UserMessageController.m */; };
+		04F862CE1D9554AA00DCC6FE /* UserMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */; };
 		310B83251D8E7B0100A0F408 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83241D8E7B0100A0F408 /* main.m */; };
 		310B83281D8E7B0100A0F408 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 310B83271D8E7B0100A0F408 /* AppDelegate.mm */; };
 		310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 310B832C1D8E7B0100A0F408 /* Main.storyboard */; };
@@ -1231,14 +1231,6 @@
 		04F57A7E1D9280BD002A6471 /* DiscoverCurrentLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverCurrentLocationController.m; sourceTree = "<group>"; };
 		04F57A801D9280BD002A6471 /* KXCurrentLocationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXCurrentLocationModel.h; sourceTree = "<group>"; };
 		04F57A811D9280BD002A6471 /* KXCurrentLocationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXCurrentLocationModel.m; sourceTree = "<group>"; };
-		04F57A831D9280BD002A6471 /* DiscoverDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverDetailController.h; sourceTree = "<group>"; };
-		04F57A841D9280BD002A6471 /* DiscoverDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverDetailController.m; sourceTree = "<group>"; };
-		04F57A861D9280BD002A6471 /* DiscoverDetailHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverDetailHeaderView.h; sourceTree = "<group>"; };
-		04F57A871D9280BD002A6471 /* DiscoverDetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverDetailHeaderView.m; sourceTree = "<group>"; };
-		04F57A881D9280BD002A6471 /* KXCommentListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXCommentListView.h; sourceTree = "<group>"; };
-		04F57A891D9280BD002A6471 /* KXCommentListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXCommentListView.m; sourceTree = "<group>"; };
-		04F57A8A1D9280BD002A6471 /* KXDiscoverDetailCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXDiscoverDetailCommentView.h; sourceTree = "<group>"; };
-		04F57A8B1D9280BD002A6471 /* KXDiscoverDetailCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXDiscoverDetailCommentView.m; sourceTree = "<group>"; };
 		04F57A9A1D9280BD002A6471 /* PersonalDiscoverCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalDiscoverCell.h; sourceTree = "<group>"; };
 		04F57A9B1D9280BD002A6471 /* PersonalDiscoverCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalDiscoverCell.m; sourceTree = "<group>"; };
 		04F57A9D1D9280BD002A6471 /* PersonalDiscoverCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalDiscoverCellModel.h; sourceTree = "<group>"; };
@@ -1251,12 +1243,6 @@
 		04F57AFB1D928154002A6471 /* ComplainSubViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComplainSubViewController.m; sourceTree = "<group>"; };
 		04F57AFC1D928154002A6471 /* ComplainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComplainViewController.h; sourceTree = "<group>"; };
 		04F57AFD1D928154002A6471 /* ComplainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComplainViewController.m; sourceTree = "<group>"; };
-		04F57B011D9281CE002A6471 /* UserMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMessageCell.h; sourceTree = "<group>"; };
-		04F57B021D9281CE002A6471 /* UserMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageCell.m; sourceTree = "<group>"; };
-		04F57B031D9281CE002A6471 /* UserMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMessageController.h; sourceTree = "<group>"; };
-		04F57B041D9281CE002A6471 /* UserMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageController.m; sourceTree = "<group>"; };
-		04F57B051D9281CE002A6471 /* UserMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMessageModel.h; sourceTree = "<group>"; };
-		04F57B061D9281CE002A6471 /* UserMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageModel.m; sourceTree = "<group>"; };
 		04F862031D94DB0100DCC6FE /* NearByPeopleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearByPeopleController.h; sourceTree = "<group>"; };
 		04F862041D94DB0100DCC6FE /* NearByPeopleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearByPeopleController.m; sourceTree = "<group>"; };
 		04F862081D94DB3000DCC6FE /* NewDiscoverNormalCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDiscoverNormalCell.h; sourceTree = "<group>"; };
@@ -1349,6 +1335,20 @@
 		04F862A41D95037000DCC6FE /* FMDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDBManager.h; sourceTree = "<group>"; };
 		04F862A51D95037000DCC6FE /* FMDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDBManager.m; sourceTree = "<group>"; };
 		04F862A61D95037000DCC6FE /* FMDBManagerHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDBManagerHeader.h; sourceTree = "<group>"; };
+		04F862B81D95545000DCC6FE /* DiscoverDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverDetailController.h; sourceTree = "<group>"; };
+		04F862B91D95545000DCC6FE /* DiscoverDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverDetailController.m; sourceTree = "<group>"; };
+		04F862BB1D95545000DCC6FE /* DiscoverDetailHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverDetailHeaderView.h; sourceTree = "<group>"; };
+		04F862BC1D95545000DCC6FE /* DiscoverDetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverDetailHeaderView.m; sourceTree = "<group>"; };
+		04F862BD1D95545000DCC6FE /* KXCommentListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXCommentListView.h; sourceTree = "<group>"; };
+		04F862BE1D95545000DCC6FE /* KXCommentListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXCommentListView.m; sourceTree = "<group>"; };
+		04F862BF1D95545000DCC6FE /* KXDiscoverDetailCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXDiscoverDetailCommentView.h; sourceTree = "<group>"; };
+		04F862C01D95545000DCC6FE /* KXDiscoverDetailCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXDiscoverDetailCommentView.m; sourceTree = "<group>"; };
+		04F862C61D9554AA00DCC6FE /* UserMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMessageCell.h; sourceTree = "<group>"; };
+		04F862C71D9554AA00DCC6FE /* UserMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageCell.m; sourceTree = "<group>"; };
+		04F862C81D9554AA00DCC6FE /* UserMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMessageController.h; sourceTree = "<group>"; };
+		04F862C91D9554AA00DCC6FE /* UserMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageController.m; sourceTree = "<group>"; };
+		04F862CA1D9554AA00DCC6FE /* UserMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMessageModel.h; sourceTree = "<group>"; };
+		04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageModel.m; sourceTree = "<group>"; };
 		310B83201D8E7B0100A0F408 /* ZhiMaBaoBao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZhiMaBaoBao.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		310B83241D8E7B0100A0F408 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		310B83261D8E7B0100A0F408 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -2850,15 +2850,15 @@
 		04F579C31D9280BD002A6471 /* ZhimaCircle(芝麻圈) */ = {
 			isa = PBXGroup;
 			children = (
+				04F862C51D9554AA00DCC6FE /* MyMessage */,
 				04F8621C1D94FB1E00DCC6FE /* ScranQRCode(扫一扫) */,
 				04F862021D94DA4D00DCC6FE /* NearByPeople(附近的人) */,
 				04F579CE1D9280BD002A6471 /* Controller(根控制器) */,
-				04F57B001D9281CE002A6471 /* MyMessage(个人消息) */,
 				04F579C41D9280BD002A6471 /* ChooseWhoCanSee(可看范围) */,
 				04F579CB1D9280BD002A6471 /* ComplainController(投诉) */,
 				04F579D41D9280BD002A6471 /* Discover(朋友圈) */,
 				04F57A791D9280BD002A6471 /* DiscoverCurrentLocation(当前位置) */,
-				04F57A821D9280BD002A6471 /* DiscoverDetail(朋友圈详情) */,
+				04F862B71D95545000DCC6FE /* DiscoverDetail(朋友圈详情) */,
 				04F862061D94DB3000DCC6FE /* NewDiscover(发布新的朋友圈) */,
 				04F57A981D9280BD002A6471 /* PersonalDiscover(个人朋友圈) */,
 			);
@@ -3099,30 +3099,6 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		04F57A821D9280BD002A6471 /* DiscoverDetail(朋友圈详情) */ = {
-			isa = PBXGroup;
-			children = (
-				04F57A831D9280BD002A6471 /* DiscoverDetailController.h */,
-				04F57A841D9280BD002A6471 /* DiscoverDetailController.m */,
-				04F57A851D9280BD002A6471 /* View */,
-			);
-			name = "DiscoverDetail(朋友圈详情)";
-			path = DiscoverDetail;
-			sourceTree = "<group>";
-		};
-		04F57A851D9280BD002A6471 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				04F57A861D9280BD002A6471 /* DiscoverDetailHeaderView.h */,
-				04F57A871D9280BD002A6471 /* DiscoverDetailHeaderView.m */,
-				04F57A881D9280BD002A6471 /* KXCommentListView.h */,
-				04F57A891D9280BD002A6471 /* KXCommentListView.m */,
-				04F57A8A1D9280BD002A6471 /* KXDiscoverDetailCommentView.h */,
-				04F57A8B1D9280BD002A6471 /* KXDiscoverDetailCommentView.m */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		04F57A981D9280BD002A6471 /* PersonalDiscover(个人朋友圈) */ = {
 			isa = PBXGroup;
 			children = (
@@ -3153,20 +3129,6 @@
 				04F57AA01D9280BD002A6471 /* PersonalDiscoverPhotoModel.m */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		04F57B001D9281CE002A6471 /* MyMessage(个人消息) */ = {
-			isa = PBXGroup;
-			children = (
-				04F57B011D9281CE002A6471 /* UserMessageCell.h */,
-				04F57B021D9281CE002A6471 /* UserMessageCell.m */,
-				04F57B031D9281CE002A6471 /* UserMessageController.h */,
-				04F57B041D9281CE002A6471 /* UserMessageController.m */,
-				04F57B051D9281CE002A6471 /* UserMessageModel.h */,
-				04F57B061D9281CE002A6471 /* UserMessageModel.m */,
-			);
-			name = "MyMessage(个人消息)";
-			path = MyMessage;
 			sourceTree = "<group>";
 		};
 		04F57B871D92841F002A6471 /* NewMessage(新消息提示框) */ = {
@@ -3473,6 +3435,43 @@
 				04F862A61D95037000DCC6FE /* FMDBManagerHeader.h */,
 			);
 			path = FMDBManager;
+			sourceTree = "<group>";
+		};
+		04F862B71D95545000DCC6FE /* DiscoverDetail(朋友圈详情) */ = {
+			isa = PBXGroup;
+			children = (
+				04F862B81D95545000DCC6FE /* DiscoverDetailController.h */,
+				04F862B91D95545000DCC6FE /* DiscoverDetailController.m */,
+				04F862BA1D95545000DCC6FE /* View */,
+			);
+			name = "DiscoverDetail(朋友圈详情)";
+			path = DiscoverDetail;
+			sourceTree = "<group>";
+		};
+		04F862BA1D95545000DCC6FE /* View */ = {
+			isa = PBXGroup;
+			children = (
+				04F862BB1D95545000DCC6FE /* DiscoverDetailHeaderView.h */,
+				04F862BC1D95545000DCC6FE /* DiscoverDetailHeaderView.m */,
+				04F862BD1D95545000DCC6FE /* KXCommentListView.h */,
+				04F862BE1D95545000DCC6FE /* KXCommentListView.m */,
+				04F862BF1D95545000DCC6FE /* KXDiscoverDetailCommentView.h */,
+				04F862C01D95545000DCC6FE /* KXDiscoverDetailCommentView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		04F862C51D9554AA00DCC6FE /* MyMessage */ = {
+			isa = PBXGroup;
+			children = (
+				04F862C61D9554AA00DCC6FE /* UserMessageCell.h */,
+				04F862C71D9554AA00DCC6FE /* UserMessageCell.m */,
+				04F862C81D9554AA00DCC6FE /* UserMessageController.h */,
+				04F862C91D9554AA00DCC6FE /* UserMessageController.m */,
+				04F862CA1D9554AA00DCC6FE /* UserMessageModel.h */,
+				04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */,
+			);
+			path = MyMessage;
 			sourceTree = "<group>";
 		};
 		310B83171D8E7B0100A0F408 = {
@@ -4260,6 +4259,7 @@
 				04EA7E221D912872005E5425 /* ZXQRCodeAlignmentPatternFinder.m in Sources */,
 				04EA7ACB1D910F89005E5425 /* UIColor+Hex.m in Sources */,
 				04EA7D811D912872005E5425 /* ZXVCardResultParser.m in Sources */,
+				04F862CC1D9554AA00DCC6FE /* UserMessageCell.m in Sources */,
 				04EA7E261D912872005E5425 /* ZXQRCodeFinderPatternInfo.m in Sources */,
 				04EA7D6D1D912872005E5425 /* ZXExpandedProductParsedResult.m in Sources */,
 				04EA7D781D912872005E5425 /* ZXSMSParsedResult.m in Sources */,
@@ -4291,7 +4291,6 @@
 				311CEF281D91639700BBB1F9 /* PlaySounds.m in Sources */,
 				311CEF2B1D91653C00BBB1F9 /* CallSettingController.m in Sources */,
 				04EA7D5E1D912872005E5425 /* ZXAztecState.m in Sources */,
-				04F57B091D9281CE002A6471 /* UserMessageModel.m in Sources */,
 				04EA7DB01D912872005E5425 /* ZXDataMatrixDecoder.m in Sources */,
 				04EA7E131D912872005E5425 /* ZXPDF417Common.m in Sources */,
 				04EA79E01D90E9F7005E5425 /* KXMoneyController.m in Sources */,
@@ -4305,17 +4304,16 @@
 				04F862A01D94FC8900DCC6FE /* UITableView+SDAutoTableViewCellHeight.m in Sources */,
 				04EA79E91D90E9F7005E5425 /* TelephoneBillCell.m in Sources */,
 				04F862871D94FC7900DCC6FE /* NSString+Emoji.m in Sources */,
-				04F57B071D9281CE002A6471 /* UserMessageCell.m in Sources */,
 				04EA7DFB1D912872005E5425 /* ZXUPCEANReader.m in Sources */,
 				04F862181D94DE7100DCC6FE /* NearByPeopleCell.m in Sources */,
 				04F57AEC1D9280BD002A6471 /* DiscoverCurrentLocationController.m in Sources */,
 				04F862121D94DB3000DCC6FE /* NewDiscoverNormalCell.m in Sources */,
 				04EA7ACA1D910F89005E5425 /* NSURL+DNIMagePickerUrlEqual.m in Sources */,
-				04F57AEE1D9280BD002A6471 /* DiscoverDetailController.m in Sources */,
 				04EA7DDB1D912872005E5425 /* ZXRSSExpandedPair.m in Sources */,
 				04F57AB81D9280BD002A6471 /* SDWeiXinPhotoContainerView.m in Sources */,
 				04EA79E31D90E9F7005E5425 /* KXMoneyDetailModel.m in Sources */,
 				04EA7D651D912872005E5425 /* ZXAddressBookDoCoMoResultParser.m in Sources */,
+				04F862CE1D9554AA00DCC6FE /* UserMessageModel.m in Sources */,
 				04EA79DC1D90E9F7005E5425 /* ChangeMoenySubController.m in Sources */,
 				04EA7DB21D912872005E5425 /* ZXDataMatrixDetector.m in Sources */,
 				04EA7D5F1D912872005E5425 /* ZXAztecToken.m in Sources */,
@@ -4344,6 +4342,7 @@
 				04EA7E321D912872005E5425 /* ZXMultiFormatWriter.m in Sources */,
 				04EA7D8D1D912872005E5425 /* ZXGenericGF.m in Sources */,
 				04F57AA71D9280BD002A6471 /* TimeLineController.m in Sources */,
+				04F862C31D95545000DCC6FE /* KXCommentListView.m in Sources */,
 				04EA7DA61D912872005E5425 /* ZXErrors.m in Sources */,
 				04EA7D9D1D912872005E5425 /* ZXIntArray.m in Sources */,
 				04EA7DC01D912872005E5425 /* ZXDataMatrixWriter.m in Sources */,
@@ -4367,7 +4366,6 @@
 				04EA7D9C1D912872005E5425 /* ZXHybridBinarizer.m in Sources */,
 				31B7C7A01D8FE71F00F1883A /* LGPhoneNumberCell.m in Sources */,
 				311CEF801D92246A00BBB1F9 /* MessageCell.m in Sources */,
-				04F57AF11D9280BD002A6471 /* KXDiscoverDetailCommentView.m in Sources */,
 				04F57AFE1D928154002A6471 /* ComplainSubViewController.m in Sources */,
 				04EA7ACF1D910F89005E5425 /* DNAssetsViewCell.m in Sources */,
 				04F57AB71D9280BD002A6471 /* SDTimeLineCellOperationMenu.m in Sources */,
@@ -4434,7 +4432,6 @@
 				04EA7B361D9126BE005E5425 /* NSData+AES.m in Sources */,
 				04EA7DC31D912872005E5425 /* ZXMaxiCodeDecoder.m in Sources */,
 				04EA7DCF1D912872005E5425 /* ZXAI01decoder.m in Sources */,
-				04F57B081D9281CE002A6471 /* UserMessageController.m in Sources */,
 				31B7C78D1D8FE71100F1883A /* PhoneContact.m in Sources */,
 				04EA7E2A1D912872005E5425 /* ZXQRCodeMaskUtil.m in Sources */,
 				31B7C78B1D8FE71100F1883A /* LGQueryModel.m in Sources */,
@@ -4484,6 +4481,7 @@
 				04EA7D6B1D912872005E5425 /* ZXEmailAddressResultParser.m in Sources */,
 				04EA7DE21D912872005E5425 /* ZXRSSPair.m in Sources */,
 				04EA7ACC1D910F89005E5425 /* UIView+DNImagePicker.m in Sources */,
+				04F862C11D95545000DCC6FE /* DiscoverDetailController.m in Sources */,
 				04EA7AD11D910F89005E5425 /* DNBrowserCell.m in Sources */,
 				311CEF701D921F6100BBB1F9 /* CallViewController.m in Sources */,
 				04EA7B251D912652005E5425 /* SettingInvitedCodeController.m in Sources */,
@@ -4536,6 +4534,7 @@
 				04EA7AC61D910F89005E5425 /* DNImagePickerController.m in Sources */,
 				04EA7D7A1D912872005E5425 /* ZXSMTPResultParser.m in Sources */,
 				04EA7DAE1D912872005E5425 /* ZXDataMatrixDataBlock.m in Sources */,
+				04F862CD1D9554AA00DCC6FE /* UserMessageController.m in Sources */,
 				04EA7DF41D912872005E5425 /* ZXOneDimensionalCodeWriter.m in Sources */,
 				04EA7DDC1D912872005E5425 /* ZXRSSExpandedReader.m in Sources */,
 				31B7C75E1D8FB33E00F1883A /* LGRessetPassController.m in Sources */,
@@ -4560,7 +4559,6 @@
 				04EA7DE01D912872005E5425 /* ZXRSSDataCharacter.m in Sources */,
 				316957641D90E72800140126 /* LGSearchResultCell.m in Sources */,
 				04EA79721D8F8F49005E5425 /* UIColor+My.m in Sources */,
-				04F57AF01D9280BD002A6471 /* KXCommentListView.m in Sources */,
 				31B7C7B71D90031D00F1883A /* YiKeyBoardView.m in Sources */,
 				31B7C7BC1D900A6F00F1883A /* CallBottombar.m in Sources */,
 				31B7C7751D8FBC8000F1883A /* LCProgressHUD.m in Sources */,
@@ -4600,7 +4598,6 @@
 				04EA7E301D912872005E5425 /* ZXQRCodeWriter.m in Sources */,
 				04EA7D791D912872005E5425 /* ZXSMSTOMMSTOResultParser.m in Sources */,
 				04EA7DF31D912872005E5425 /* ZXMultiFormatUPCEANReader.m in Sources */,
-				04F57AEF1D9280BD002A6471 /* DiscoverDetailHeaderView.m in Sources */,
 				04EA7DA71D912872005E5425 /* ZXInvertedLuminanceSource.m in Sources */,
 				04EA7D9B1D912872005E5425 /* ZXGridSampler.m in Sources */,
 				04EA7DE61D912872005E5425 /* ZXCode128Reader.m in Sources */,
@@ -4662,6 +4659,7 @@
 				04F8624E1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.m in Sources */,
 				04EA7E111D912872005E5425 /* ZXPDF417ErrorCorrection.m in Sources */,
 				04EA7B661D91282E005E5425 /* LBXScanWrapper.m in Sources */,
+				04F862C41D95545000DCC6FE /* KXDiscoverDetailCommentView.m in Sources */,
 				04F862561D94FC6D00DCC6FE /* MLLabel.m in Sources */,
 				04EA7D801D912872005E5425 /* ZXURLTOResultParser.m in Sources */,
 				04EA7DBB1D912872005E5425 /* ZXDataMatrixSymbolInfo.m in Sources */,
@@ -4670,6 +4668,7 @@
 				04EA7D611D912872005E5425 /* ZXAztecReader.m in Sources */,
 				04EA79941D8FC76A005E5425 /* BaseViewController.m in Sources */,
 				04EA7DA51D912872005E5425 /* ZXEncodeHints.m in Sources */,
+				04F862C21D95545000DCC6FE /* DiscoverDetailHeaderView.m in Sources */,
 				04EA7DFE1D912872005E5425 /* ZXModulusGF.m in Sources */,
 				04F862881D94FC7900DCC6FE /* ChatKeyBoard.m in Sources */,
 				04F862971D94FC7900DCC6FE /* OfficialAccountToolbar.m in Sources */,

@@ -15,6 +15,7 @@
 @implementation FMDBManager {
     FMDatabaseQueue *circle_DB;
     FMDatabaseQueue *circle_Comment_DB;
+    FMDatabaseQueue *circle_Pic_DB;
 }
 
 + (instancetype)shareManager {
@@ -36,15 +37,19 @@
             return circle_DB;
         case ZhiMa_Circle_Comment_Table:
             return circle_Comment_DB;
+        case ZhiMa_Circle_Pic_Table:
+            return circle_Pic_DB;
+            
         default:
             NSLog(@"无效参数");
+            return nil;
             break;
     }
 }
 
 #pragma mark - 建表
 - (void)creatTableWithTableType:(ZhiMaSqliteTableType)type {
-    NSLog(@"表的路径 %@",ZhiMaSqlitePath);
+    
     // 1.通过路径创建数据库
     NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject;
     switch (type) {
@@ -54,10 +59,13 @@
         case ZhiMa_Circle_Comment_Table:
             path = [path stringByAppendingPathComponent:@"ZhiMa_Circle_Comment.sqlite"];
             break;
+        case ZhiMa_Circle_Pic_Table:
+            path = [path stringByAppendingPathComponent:@"ZhiMa_Circle_Pic.sqlite"];
+            break;
         default:
             break;
     }
-    
+    NSLog(@"表的路径 %@",path);
     FMDatabaseQueue *db_Queue = [FMDatabaseQueue databaseQueueWithPath:path];
     
     [db_Queue inDatabase:^(FMDatabase *db) {
@@ -77,6 +85,12 @@
                     tableField = Circle_CommentField;
                     tableName = ZhiMaCicleComment_Table_Name;
                     circle_Comment_DB = db_Queue;
+                    break;
+                }
+                case ZhiMa_Circle_Pic_Table: {      //如果创建的是朋友圈图片表
+                    tableName = ZhiMaCirclePic_Table_Name;
+                    tableField = CirCle_PicField;
+                    circle_Pic_DB = db_Queue;
                     break;
                 }
                 default:{
@@ -106,20 +120,22 @@
 #pragma mark - 插表
 - (NSString *)InsertDataInTable:(ZhiMaSqliteTableType)type {
     
-    FMDatabaseQueue *db_Queue;
     NSString *tableName = [NSString string];  //表名
     NSString *fieldName;                      //字段名
     switch (type) {
         case ZhiMa_Circle_Table: {
-            db_Queue = circle_DB;
             tableName = ZhiMaCicle_Talbe_Name;
             fieldName = CircleFiels_Name;
             break;
         }
         case ZhiMa_Circle_Comment_Table: {
-            db_Queue = circle_Comment_DB;
             tableName = ZhiMaCicleComment_Table_Name;
             fieldName = Circle_CommentFields_Name;
+            break;
+        }
+        case ZhiMa_Circle_Pic_Table: {      //如果创建的是朋友圈图片表
+            tableName = ZhiMaCirclePic_Table_Name;
+            fieldName = CirCle_PicFields_Name;
             break;
         }
         default: {
@@ -138,22 +154,24 @@
 
 
 #pragma mark - 查表
-- (NSString *)CheckTable:(ZhiMaSqliteTableType)type withOption:(NSString *)option {
-    
-    FMDatabaseQueue *db_Queue;
+- (NSString *)SearchTable:(ZhiMaSqliteTableType)type withOption:(NSString *)option {
+
     NSString *tableName = [NSString string];  //表名
     NSString *fieldName;                      //字段名
     switch (type) {
         case ZhiMa_Circle_Table: {
-            db_Queue = circle_DB;
             tableName = ZhiMaCicle_Talbe_Name;
             fieldName = CircleFiels_Name;
             break;
         }
         case ZhiMa_Circle_Comment_Table: {
-            db_Queue = circle_Comment_DB;
             tableName = ZhiMaCicleComment_Table_Name;
             fieldName = Circle_CommentFields_Name;
+            break;
+        }
+        case ZhiMa_Circle_Pic_Table: {
+            tableName = ZhiMaCirclePic_Table_Name;
+            fieldName = CirCle_PicFields_Name;
             break;
         }
         default: {
@@ -165,7 +183,7 @@
     
     NSString *operationString = @"SELECT ";
     operationString = [operationString stringByAppendingString:fieldName];
-    operationString = [operationString stringByAppendingString:[NSString stringWithFormat:@" FROM %@ %@;",tableName,option]];
+    operationString = [operationString stringByAppendingString:[NSString stringWithFormat:@" FROM %@ WHERE %@;",tableName,option]];
     
     return operationString;
 }
@@ -182,6 +200,10 @@
         }
         case ZhiMa_Circle_Comment_Table: {
             tableName = ZhiMaCicleComment_Table_Name;
+            break;
+        }
+        case ZhiMa_Circle_Pic_Table: {
+            tableName = ZhiMaCirclePic_Table_Name;
             break;
         }
         default: {
@@ -207,6 +229,10 @@
         }
         case ZhiMa_Circle_Comment_Table: {
             tableName = ZhiMaCicleComment_Table_Name;
+            break;
+        }
+        case ZhiMa_Circle_Pic_Table: {
+            tableName = ZhiMaCirclePic_Table_Name;
             break;
         }
         default: {
