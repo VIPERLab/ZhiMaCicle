@@ -15,7 +15,7 @@
 #import "BaseViewController.h"
 #import "LGGuideController.h"
 #import "BaseNavigationController.h"
-
+#import "SocketManager.h"
 
 @interface MainViewController ()
 
@@ -36,7 +36,10 @@
     
     //添加异常捕获
     NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
-
+    
+    //连接socket
+    SocketManager *manager = [SocketManager shareInstance];
+    [manager connect];
 }
 
 //添加子控制器

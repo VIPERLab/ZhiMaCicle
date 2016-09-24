@@ -14,5 +14,6 @@ pod 'Masonry', '~> 1.0.1'
 pod 'RegexKitLite', '~> 4.0'
 pod 'SDWebImage', '~> 3.8.1’
 pod 'AliPay'
+pod 'RealReachability'
 
 end

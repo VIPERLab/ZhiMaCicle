@@ -449,6 +449,8 @@
 		311CEFB21D937BE700BBB1F9 /* Mp3RecordWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFA81D937BE700BBB1F9 /* Mp3RecordWriter.m */; };
 		311CEFB51D938EF200BBB1F9 /* RecordingHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFB41D938EF200BBB1F9 /* RecordingHUD.m */; };
 		311CEFB81D93D98700BBB1F9 /* BuddleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFB71D93D98700BBB1F9 /* BuddleView.m */; };
+		311CEFBB1D93F55000BBB1F9 /* SocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFBA1D93F55000BBB1F9 /* SocketManager.m */; };
+		311CEFBD1D94D9C000BBB1F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */; };
 		316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957461D90D3DE00140126 /* KXPersonalCenterCell.m */; };
 		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
 		316957561D90E63100140126 /* LGAddFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957541D90E63100140126 /* LGAddFriendCell.m */; };
@@ -1405,6 +1407,9 @@
 		311CEFB41D938EF200BBB1F9 /* RecordingHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingHUD.m; sourceTree = "<group>"; };
 		311CEFB61D93D98700BBB1F9 /* BuddleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuddleView.h; sourceTree = "<group>"; };
 		311CEFB71D93D98700BBB1F9 /* BuddleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuddleView.m; sourceTree = "<group>"; };
+		311CEFB91D93F55000BBB1F9 /* SocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketManager.h; path = HttpTools/SocketManager.h; sourceTree = "<group>"; };
+		311CEFBA1D93F55000BBB1F9 /* SocketManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SocketManager.m; path = HttpTools/SocketManager.m; sourceTree = "<group>"; };
+		311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		316957451D90D3DE00140126 /* KXPersonalCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPersonalCenterCell.h; sourceTree = "<group>"; };
 		316957461D90D3DE00140126 /* KXPersonalCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPersonalCenterCell.m; sourceTree = "<group>"; };
 		3169574B1D90E24A00140126 /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
@@ -1517,6 +1522,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				311CEFBD1D94D9C000BBB1F9 /* CFNetwork.framework in Frameworks */,
 				04EA7AF11D9120D8005E5425 /* Security.framework in Frameworks */,
 				04F578891D927C76002A6471 /* libsqlite3.tbd in Frameworks */,
 				04EA7AEF1D9120CD005E5425 /* CoreTelephony.framework in Frameworks */,
@@ -3954,6 +3960,8 @@
 				31B7C7241D8F7DB100F1883A /* Constant.h */,
 				31B7C7761D8FC3C500F1883A /* UserInfo.h */,
 				31B7C7771D8FC3C500F1883A /* UserInfo.m */,
+				311CEFB91D93F55000BBB1F9 /* SocketManager.h */,
+				311CEFBA1D93F55000BBB1F9 /* SocketManager.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -4083,6 +4091,7 @@
 		F8838AFF61B5D250B9C12805 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */,
 				04F578881D927C76002A6471 /* libsqlite3.tbd */,
 				04EA7AF91D91214D005E5425 /* libsqlite3.0.tbd */,
 				04EA7AF41D9120E9005E5425 /* CoreLocation.framework */,
@@ -4296,7 +4305,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		819B31C6B685388A18C609E2 /* [CP] Embed Pods Frameworks */ = {
@@ -4545,6 +4554,7 @@
 				04EA7E011D912872005E5425 /* ZXPDF417BarcodeMetadata.m in Sources */,
 				04EA7D881D912872005E5425 /* ZXCGImageLuminanceSource.m in Sources */,
 				04EA7B651D91282E005E5425 /* LBXScanViewStyle.m in Sources */,
+				311CEFBB1D93F55000BBB1F9 /* SocketManager.m in Sources */,
 				04EA7E201D912872005E5425 /* ZXQRCodeVersion.m in Sources */,
 				04EA79B41D90DB2B005E5425 /* UIView+x.m in Sources */,
 				04EA7E0E1D912872005E5425 /* ZXPDF417BarcodeMatrix.m in Sources */,

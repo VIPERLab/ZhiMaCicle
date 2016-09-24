@@ -82,20 +82,26 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 //初始化录音
 - (void)initAudioRecorder{
+#warning 以后拼接用户uid
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    //获取当前时间字符串
+    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd-hh-mm-ss-SSS";
+    NSString *currentTime = [dateFormatter stringFromDate:[NSDate date]];
+    
     
     CafRecordWriter *writer = [[CafRecordWriter alloc]init];
-    writer.filePath = [path stringByAppendingPathComponent:@"record.caf"];
+    writer.filePath = [path stringByAppendingPathComponent:@"record1.caf"];
     self.cafWriter = writer;
     
     AmrRecordWriter *amrWriter = [[AmrRecordWriter alloc]init];
-    amrWriter.filePath = [path stringByAppendingPathComponent:@"record.amr"];
+    amrWriter.filePath = [path stringByAppendingPathComponent:@"record1.amr"];
     amrWriter.maxSecondCount = 60;
     amrWriter.maxFileSize = 1024*256;
     self.amrWriter = amrWriter;
     
     Mp3RecordWriter *mp3Writer = [[Mp3RecordWriter alloc]init];
-    mp3Writer.filePath = [path stringByAppendingPathComponent:@"record.mp3"];
+    mp3Writer.filePath = [path stringByAppendingPathComponent:@"record1.mp3"];
     mp3Writer.maxSecondCount = 60;
     mp3Writer.maxFileSize = 1024*256;
     self.mp3Writer = mp3Writer;

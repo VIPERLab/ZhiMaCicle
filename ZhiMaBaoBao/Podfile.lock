@@ -30,6 +30,11 @@ PODS:
     - NJKWebViewProgress/ProgressView (= 0.2.3)
   - NJKWebViewProgress/Core (0.2.3)
   - NJKWebViewProgress/ProgressView (0.2.3)
+  - RealReachability (1.1.8):
+    - RealReachability/Connection (= 1.1.8)
+    - RealReachability/Ping (= 1.1.8)
+  - RealReachability/Connection (1.1.8)
+  - RealReachability/Ping (1.1.8)
   - RegexKitLite (4.0)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -45,6 +50,7 @@ DEPENDENCIES:
   - MJExtension (~> 3.0.13)
   - MJRefresh (~> 3.1.12)
   - NJKWebViewProgress (~> 0.2.3)
+  - RealReachability
   - RegexKitLite (~> 4.0)
   - SDWebImage (~> 3.8.1)
 
@@ -58,9 +64,10 @@ SPEC CHECKSUMS:
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
   NJKWebViewProgress: f481fd424cb5ecc27eacae11b5397db92fba9a4d
+  RealReachability: e6c8a2bbffa316006e8c282efc1ee2567d61a920
   RegexKitLite: c0e4c12e6e7de0769f3a3ed679f0f61604170661
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
 
-PODFILE CHECKSUM: 46141f1a9ef969f2d9edf6ed7088f2aec4a13487
+PODFILE CHECKSUM: 92a26dff78c61dcdcd6268e19623e9abfaaeb383
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.0.1
