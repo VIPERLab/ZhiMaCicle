@@ -410,7 +410,7 @@
         }];
         NSString *operationStr;
         if (isExist) {
-            NSLog(@"存在这条朋友圈数据，更新是时间");
+            NSLog(@"存在这条朋友圈数据，更新时间");
             NSString *option1 = [NSString stringWithFormat:@"create_time = '%@'",cellModel.create_time];
             NSString *option2 = [NSString stringWithFormat:@"fcid = %@",cellModel.ID];
             operationStr = [FMDBShareManager alterTable:ZhiMa_Circle_Table withOpton1:option1 andOption2:option2];
