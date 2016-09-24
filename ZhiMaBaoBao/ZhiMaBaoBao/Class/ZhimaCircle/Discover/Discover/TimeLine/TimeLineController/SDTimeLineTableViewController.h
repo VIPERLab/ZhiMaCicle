@@ -22,7 +22,4 @@ typedef void(^complitedBlock)();
 // -----  未读朋友圈的头像
 @property (nonatomic, copy) NSString *circleheadphoto;
 
-// -----  回调
-@property (nonatomic, copy) complitedBlock block;
-
 @end

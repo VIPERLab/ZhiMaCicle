@@ -41,6 +41,8 @@
 // -- 长按点击
 - (void)didLongPressUserIconWithCell:(SDTimeLineCell *)cell;
 
+- (void)didClickComplainButton:(SDTimeLineCell *)cell;
+
 @end
 
 @class SDTimeLineCellModel;

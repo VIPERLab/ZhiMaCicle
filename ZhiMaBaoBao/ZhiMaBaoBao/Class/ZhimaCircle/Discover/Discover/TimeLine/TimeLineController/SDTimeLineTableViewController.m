@@ -97,21 +97,14 @@
     [super viewDidLoad];
     [self setCustomTitle:@"朋友圈"];
     self.pageNumber = 0;
-    
+    [self setupNav];
     [self setupView];
-    
     [self notification];
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated {
     [self getDataFromSQL];
-    
 }
 
 
 - (void)viewDidAppear:(BOOL)animated {
-    // -------  设置富文本键盘
     [self setupKeyBoard];
 }
 
@@ -128,7 +121,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
+- (void)setupNav {
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Discover_AddDiscover"] style:UIBarButtonItemStyleDone target:self action:@selector(rightBarButtonItemAction:)];
+    self.navigationItem.rightBarButtonItem = rightBarButton;
+}
 
 
 
@@ -141,12 +137,6 @@
     self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
-    
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Discover_AddDiscover"] style:UIBarButtonItemStyleDone target:self action:@selector(rightBarButtonItemAction:)];
-    self.navigationItem.rightBarButtonItem = rightBarButton;
-    
-//    self.automaticallyAdjustsScrollViewInsets = NO;
-//    self.edgesForExtendedLayout = UIRectEdgeTop;
     
     //设置头部
     SDTimeLineTableHeaderView *headerView = [SDTimeLineTableHeaderView new];
@@ -162,7 +152,6 @@
     headerView.frame = CGRectMake(0, 0, 0, 260); //260
     self.tableView.tableHeaderView = headerView;
     
-    
     [self.tableView registerClass:[SDTimeLineCell class] forCellReuseIdentifier:kTimeLineTableViewCellId];
 }
 
@@ -170,6 +159,8 @@
 - (void)notification {
     //成为富文本的观察者 - 点击别人的名字
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KUserNameLabelNotification object:nil];
+    
+    // 长按文字、图片回调
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(longPressContentLabel:) name:KDiscoverLongPressContentNotification object:nil];
     
     //接收未读消息通知
@@ -609,10 +600,11 @@
     [self DiscoverLikeOrComment:[self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath] andComment:text];
 }
 
-#pragma mark - 点赞或者评论
+#pragma mark - 点赞或者评论网络请求
 - (void)DiscoverLikeOrComment:(SDTimeLineCell *)cell andComment:(NSString *)comment {
     
     SDTimeLineCellModel *model = cell.model;
+    _currentEditingIndexthPath = [self.tableView indexPathForCell:cell];
     
     [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.ID andComment:comment andOpenFirAccount:_currentCommenterOpenFirAccount block:^(ResponseData *responseData) {
         
@@ -649,7 +641,6 @@
         //循环结束之后，把筛选剩下的评论数赋值回去
         commentListArray = [copyArray mutableCopy];
         
-        
         for (SDTimeLineCellCommentItemModel *model in commentListArray) {
             if (!model.friend_nick) {
                 model.friend_nick = @"未命名";
@@ -659,7 +650,6 @@
         //得到最新的Model
         model.likeItemsArray = [likeItemsArray mutableCopy];
         model.commentList = [commentListArray mutableCopy];
-        
         
         FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
         FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
@@ -797,6 +787,11 @@
     personal.sessionID = info.sessionId;
     personal.openFirAccount = model.openfireaccount;
     [self.navigationController pushViewController:personal animated:YES];
+}
+
+// ----      点击了投诉按钮
+- (void)didClickComplainButton:(SDTimeLineCell *)cell {
+    [self didLongPressUserIconWithCell:cell];
 }
 
 // -----    长按头像
@@ -990,11 +985,6 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-#pragma mark - backAction
-- (void)backAction {
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
 
 #pragma mark - lazyLoad

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */; };
 		04EA79701D8F8F49005E5425 /* NSString+FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */; };
 		04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796D1D8F8F49005E5425 /* NSString+MD5.m */; };
@@ -527,6 +528,8 @@
 
 /* Begin PBXFileReference section */
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
+		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
 		04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZhiMaImage.xcassets; sourceTree = "<group>"; };
 		04EA796A1D8F8F49005E5425 /* NSString+FontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontSize.h"; sourceTree = "<group>"; };
 		04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontSize.m"; sourceTree = "<group>"; };
@@ -1548,6 +1551,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */ = {
+			isa = PBXGroup;
+			children = (
+				0485937C1D9674B800DB3FCD /* ChangeSexController.h */,
+				0485937D1D9674B800DB3FCD /* ChangeSexController.m */,
+			);
+			name = "ChangeSex(修改性别)";
+			path = ChangeSex;
+			sourceTree = "<group>";
+		};
 		04EA79631D8F85E8005E5425 /* PersonalCenter(用户中心) */ = {
 			isa = PBXGroup;
 			children = (
@@ -3679,6 +3692,7 @@
 		31B7C7001D8E96A100F1883A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */,
 				04F5760D1D9224F2002A6471 /* ModifySign(个性签名) */,
 				04F576091D9220FA002A6471 /* ChangeName(修改用户名) */,
 				04EA7B1F1D912652005E5425 /* SettingInvitedCode(设置邀请码) */,
@@ -4621,6 +4635,7 @@
 				31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */,
 				04EA7DA31D912872005E5425 /* ZXDecodeHints.m in Sources */,
 				04EA7DE51D912872005E5425 /* ZXCodaBarWriter.m in Sources */,
+				0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */,
 				311CEF711D921F6100BBB1F9 /* LGCallingController.m in Sources */,
 				04F57AB11D9280BD002A6471 /* SDTimeLineCellModel.m in Sources */,
 				04EA7DB11D912872005E5425 /* ZXDataMatrixVersion.m in Sources */,

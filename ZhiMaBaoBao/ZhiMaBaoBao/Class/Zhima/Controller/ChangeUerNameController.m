@@ -28,24 +28,25 @@
 }
 
 - (void)setupNav {
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveButtonDidClick)];
 }
 
 - (void)setupView {
     
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake( 0 , 64 + 20, ScreenWidth, 40)];
+    view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:view];
+    
+    
     UITextField *textField = [[UITextField alloc] init];
-    [self.view addSubview:textField];
-    textField.borderStyle = UITextBorderStyleRoundedRect;
-    textField.frame = CGRectMake( 10 , 64 + 20, ScreenWidth - 20, 30);
+    textField.frame = CGRectMake( 10 , 0, ScreenWidth - 20 , 40);
     textField.text = USERINFO.username;
     textField.placeholder = @"请输入你的昵称";
+    textField.backgroundColor = [UIColor whiteColor];
+    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [view addSubview:textField];
     self.textField = textField;
-    
-    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(textField.frame) + 3 , ScreenWidth - 20, 30)];
-    [self.view addSubview:tipsLabel];
-    tipsLabel.text = @"好的名字可以让你的朋友更容易记住你";
-    tipsLabel.font = [UIFont systemFontOfSize:13];
     
 }
 
@@ -64,6 +65,10 @@
         [self.navigationController popViewControllerAnimated:YES];
         
     }];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [self.textField becomeFirstResponder];
 }
 
 @end

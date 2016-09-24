@@ -52,6 +52,9 @@
     //注册更新用户未读消息通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUserUnReadMessageCountAndUnReadCircle:) name:K_UpdataUnReadNotification object:nil];
     
+    //接收用户退出通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
+    
     //创建数据库表
     [self creatMySQL];
     
@@ -169,7 +172,13 @@
 }
 
 
-#pragma mark - 百度地图回调
+#pragma mark - 用户退出通知
+- (void)userLogOut {
+    LGGuideController *vc = [[LGGuideController alloc] init];
+    UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
+    self.window.rootViewController = guideVC;
+}
+
 #pragma mark - 百度地图回调
 - (void)onGetNetworkState:(int)iError
 {

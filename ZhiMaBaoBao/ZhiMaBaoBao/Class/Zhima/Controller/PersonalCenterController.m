@@ -38,6 +38,11 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [_tableView reloadData];
+}
+
+
 - (void)setupView {
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     _tableView.delegate = self;

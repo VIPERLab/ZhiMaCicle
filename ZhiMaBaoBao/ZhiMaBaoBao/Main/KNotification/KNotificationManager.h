@@ -31,7 +31,10 @@
 
 
 //                    ------ 朋友圈消息通知 --------
-// ----  点击了点赞人的名字的通知  富文本通知
+/**
+ *  点击了点赞人的名字的通知  富文本通知
+ *  info @{openFirAccount : 点击点赞人的openFirAccount}
+ */
 #define KUserNameLabelNotification @"KUserNameLabelNotification"
 
 // ---- 评论别人的通知

@@ -150,28 +150,29 @@
 
 
 - (void)exit {
-//    YiUserInfo * userInfo = [YiUserInfo defaultUserInfo];
-//    if (userInfo) {
-//        userInfo.enableAutoLogin = NO;
-//        [userInfo persist];
-//        [[YiIMSDK defaultCore] disconnect:nil];
-//    }
-    
     [LGNetWorking logout:USERINFO.sessionId block:^(ResponseData *responseData) {
         if (responseData) {
             if (responseData.code == 0) {
                 [LCProgressHUD showSuccessText:responseData.msg];
+                
+                UserInfo *info = [UserInfo read];
+                info.hasLogin = NO;
+                [info save];
+                
+                
+                //成功退出
+                [[NSNotificationCenter defaultCenter] postNotificationName:LOGOUT_SUCCESS object:nil];
+                
+                //跳转到登录页面
+                [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
+                
             }else{
                 [LCProgressHUD showInfoText:responseData.msg];
             }
         }
     }];
     
-    //成功退出
-    [[NSNotificationCenter defaultCenter] postNotificationName:LOGOUT_SUCCESS object:nil];
     
-    //跳转到登录页面
-    [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
     
 }
 
