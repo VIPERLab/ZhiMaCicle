@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */; };
 		04EA79701D8F8F49005E5425 /* NSString+FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */; };
 		04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796D1D8F8F49005E5425 /* NSString+MD5.m */; };
@@ -525,6 +526,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZhiMaImage.xcassets; sourceTree = "<group>"; };
 		04EA796A1D8F8F49005E5425 /* NSString+FontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontSize.h"; sourceTree = "<group>"; };
 		04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontSize.m"; sourceTree = "<group>"; };
@@ -1496,6 +1498,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */,
 				04EA7AF11D9120D8005E5425 /* Security.framework in Frameworks */,
 				04F578891D927C76002A6471 /* libsqlite3.tbd in Frameworks */,
 				04EA7AEF1D9120CD005E5425 /* CoreTelephony.framework in Frameworks */,
@@ -3998,6 +4001,7 @@
 		F8838AFF61B5D250B9C12805 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0485935F1D9656A700DB3FCD /* CoreFoundation.framework */,
 				04F578881D927C76002A6471 /* libsqlite3.tbd */,
 				04EA7AF91D91214D005E5425 /* libsqlite3.0.tbd */,
 				04EA7AF41D9120E9005E5425 /* CoreLocation.framework */,

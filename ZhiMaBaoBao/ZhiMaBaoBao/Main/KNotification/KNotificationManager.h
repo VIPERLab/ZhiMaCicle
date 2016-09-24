@@ -15,7 +15,7 @@
 
 //                    ------ 朋友圈未读消息通知 --------
 /**
- *  通知 更新未读消息
+ *  通知appDelegate更新未读消息
  */
 #define K_UpdataUnReadNotification @"UpdataUnReadNotification"
 /**

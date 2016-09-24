@@ -104,6 +104,8 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         //朋友圈
         SDTimeLineTableViewController *timeLine = [[SDTimeLineTableViewController alloc] init];
+        timeLine.unReadCount = _unReadCount;
+        timeLine.circleheadphoto = _circleheadphoto;
         timeLine.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:timeLine animated:YES];
         
@@ -158,9 +160,11 @@
 #pragma mark - 未读消息
 - (void)unReadCount:(NSNotification *)notification {
     int unReadCount = [notification.userInfo[@"count"] intValue];
-    _unReadCount = unReadCount;
     NSString *headphoto = notification.userInfo[@"headphoto"];
+    
+    _unReadCount = unReadCount;
     _unReadHeadphoto = headphoto;
+    
     [_tableView reloadData];
     NSLog(@"未读消息数:%zd  ----- 未读消息头像 %@",unReadCount,headphoto);
 }

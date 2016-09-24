@@ -15,7 +15,8 @@ typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
 typedef enum : NSUInteger {
     ZhiMa_Circle_Table,             //朋友圈内容的表
     ZhiMa_Circle_Comment_Table,     //朋友圈评论的表
-    ZhiMa_Circle_Pic_Table          //朋友圈图片的表
+    ZhiMa_Circle_Pic_Table,         //朋友圈图片的表
+    ZhiMa_Circle_Like_Table         //朋友圈点赞的表
 } ZhiMaSqliteTableType;
 
 @interface FMDBManager : NSObject
@@ -39,5 +40,17 @@ typedef enum : NSUInteger {
 
 // 删表
 - (NSString *)deletedTableData:(ZhiMaSqliteTableType)type withOption:(NSString *)option;
+
+
+
+#pragma mark - 朋友圈存、取操作
+// 把数据存放到数据库
+- (void)saveCircleDataWithDataArray:(NSArray *)dataArray;
+
+// 获取朋友圈所有消息
+- (NSArray *)getCirCleDataInArray;
+
+// 根据某条朋友圈的id 去删除其对应的数据
+- (void)deleteCircleDataWithCircleID:(NSString *)circleID;
 
 @end

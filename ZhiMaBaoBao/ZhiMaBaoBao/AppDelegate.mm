@@ -63,6 +63,7 @@
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Comment_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Pic_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Like_Table];
 }
 
 - (void)jumpMainController{
@@ -153,16 +154,15 @@
             UserInfo *info = [UserInfo read];
             
             NSString *circleheadphoto = responseData.data[@"circleheadphoto"];
-            if (circleheadphoto.length) {
-                info.isShowHeader = YES;
-                [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataHeaderPhotoNotification object:nil userInfo:@{@"headerPhoto":responseData.data[@"circleheadphoto"]}];
+            if (!circleheadphoto.length) {
+                circleheadphoto = @"";
             }
             
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataHeaderPhotoNotification object:nil userInfo:@{@"headerPhoto":circleheadphoto}];
+            
             int unReadCount = [responseData.data[@"count"] intValue];
-            if (unReadCount) {
                 info.unReadCount = unReadCount;
                 [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataUnReadCountNotification object:nil userInfo:@{@"count":responseData.data[@"count"],@"headphoto":responseData.data[@"headphoto"]}];
-            }
             [info save];
         }];
     }

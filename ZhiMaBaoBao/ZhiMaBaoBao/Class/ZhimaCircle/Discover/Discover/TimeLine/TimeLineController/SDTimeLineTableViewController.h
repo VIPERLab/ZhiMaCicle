@@ -19,6 +19,9 @@ typedef void(^complitedBlock)();
 @property (nonatomic, copy) NSString *headPhoto;
 @property (nonatomic, assign) int unReadCount;
 
+// -----  未读朋友圈的头像
+@property (nonatomic, copy) NSString *circleheadphoto;
+
 // -----  回调
 @property (nonatomic, copy) complitedBlock block;
 

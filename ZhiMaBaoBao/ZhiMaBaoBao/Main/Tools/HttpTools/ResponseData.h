@@ -18,6 +18,8 @@
 @property (nonatomic, copy) id data;
  /** 服务器返回消息*/
 @property (nonatomic, copy) NSString *msg;
+
+@property (nonatomic, copy) id data_temp;
 @end
 
 

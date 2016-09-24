@@ -362,44 +362,7 @@
             [self.delegate DiscoverDetailControllerDeletedButtonDidClick:self.indexPath];
         }
         
-        
-        //删除朋友圈数据库该条记录
-        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
-        NSString *operation = [FMDBShareManager deletedTableData:ZhiMa_Circle_Table withOption:[NSString stringWithFormat:@"fcid = %@",self.model.ID]];
-        [queue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:operation];
-            if (success) {
-                NSLog(@"删除成功");
-            } else {
-                NSLog(@"删除失败");
-            }
-        }];
-        
-        //删除评论数据库该条记录
-        FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
-        NSString *commentQueueOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",self.model.ID]];
-        [commentQueue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:commentQueueOpeartion];
-            if (success) {
-                NSLog(@"删除成功");
-            } else {
-                NSLog(@"删除失败");
-            }
-        }];
-        
-        //删除图片数据库该条记录
-        FMDatabaseQueue *picQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
-        NSString *picOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",self.model.ID]];
-        [picQueue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:picOpeartion];
-            if (success) {
-                NSLog(@"删除成功");
-            } else {
-                NSLog(@"删除失败");
-            }
-        }];
-        
-        
+        [FMDBShareManager deleteCircleDataWithCircleID:self.model.ID];
         
         [self.navigationController popViewControllerAnimated:YES];
         
