@@ -29,7 +29,7 @@
 //请求好友朋友圈权限状态
 - (void)requestData{
     //调用本地好友信息接口
-    [LGNetWorking getFriendInfo:USERINFO.sessionId openfire:self.model.openfireaccount block:^(ResponseData *responseData) {
+    [LGNetWorking getFriendInfo:USERINFO.sessionId openfire:self.model.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             
 //            self.friendInfo = [FriendInfo mj_objectWithKeyValues:responseData.data];

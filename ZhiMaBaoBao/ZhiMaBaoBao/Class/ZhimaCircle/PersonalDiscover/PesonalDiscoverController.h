@@ -10,7 +10,7 @@
 
 @interface PesonalDiscoverController : BaseViewController
 
-@property (nonatomic, copy) NSString *openFirAccount;
+@property (nonatomic, copy) NSString *userID;
 @property (nonatomic, copy) NSString *sessionID;
 
 @end

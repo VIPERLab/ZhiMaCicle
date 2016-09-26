@@ -54,7 +54,7 @@
 
 // -----  回复别人的评论
 @property (nonatomic, copy) NSString *commentToUser;  //回复人的名字
-@property (nonatomic, copy) NSString *currentCommenterOpenFirAccount;   //回复人的id
+@property (nonatomic, copy) NSString *currentCommenterUserID;   //回复人的id
 @property (nonatomic, assign) BOOL isReplayingComment;
 @property (nonatomic, strong) NSIndexPath *currentEditingIndexthPath;
 
@@ -344,7 +344,7 @@
         
         //保存第一条（最新一条的朋友圈ID）
         if (!USERINFO.lastFcID.length || isUpdata) {
-            info.lastFcID = cellModel.ID;
+            info.lastFcID = cellModel.circle_ID;
             [info save];
             isUpdata = NO;
             [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
@@ -386,7 +386,7 @@
                     }
                     
                     likeModel.userName = model.friend_nick;
-                    likeModel.userId = model.openfireaccount;
+                    likeModel.userId = model.userId;
                     [likeItemsArray addObject:likeModel];
                     
                     //判断是否点赞了
@@ -515,7 +515,7 @@
 {
     self.isReplayingComment = NO;
     self.currentEditingIndexthPath = [self.tableView indexPathForCell:cell];
-    self.currentCommenterOpenFirAccount = @"";
+    self.currentCommenterUserID = @"";
     self.commentToUser = @"";
     self.chatKeyBoard.placeHolder = @"请输入消息";
     
@@ -563,7 +563,7 @@
 #pragma mark - 回复别人的评论
 - (void)DidClickCommentOtherButton:(SDTimeLineCell *)cell andCommentItem:(SDTimeLineCellCommentItemModel *)commentModel andCommentView:(UIView *)commentView {
     
-    if ([commentModel.openfireaccount isEqualToString:USERINFO.userID]) {
+    if ([commentModel.userId isEqualToString:USERINFO.userID]) {
         //删除自己的评论
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         self.tempCommentItemModel = commentModel;
@@ -577,7 +577,7 @@
     
     self.isReplayingComment = YES;
     self.currentEditingIndexthPath = [self.tableView indexPathForCell:cell];
-    self.currentCommenterOpenFirAccount = commentModel.openfireaccount;
+    self.currentCommenterUserID = commentModel.userId;
     self.commentToUser = commentModel.friend_nick;
     self.chatKeyBoard.placeHolder = [NSString stringWithFormat:@"回复%@:",commentModel.friend_nick];
     
@@ -592,8 +592,6 @@
     }
 }
 
-
-
 #pragma mark - 发送评论信息
 - (void)chatKeyBoardSendText:(NSString *)text {
     [self DiscoverLikeOrComment:[self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath] andComment:text];
@@ -605,10 +603,14 @@
     SDTimeLineCellModel *model = cell.model;
     _currentEditingIndexthPath = [self.tableView indexPathForCell:cell];
     
-    [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.ID andComment:comment andOpenFirAccount:_currentCommenterOpenFirAccount block:^(ResponseData *responseData) {
+    if ([_currentCommenterUserID isEqualToString:@""]) {
+        _currentCommenterUserID = @"0";
+    }
+    
+    [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.circle_ID andComment:comment andReply_userId:_currentCommenterUserID block:^(ResponseData *responseData) {
         
-        if (responseData.data == nil || !responseData.data) {
-            NSLog(@"数据请求失败");
+        if (responseData.code != 0) {
+            [LCProgressHUD showFailureText:responseData.msg];
             [self.chatKeyBoard keyboardDownForComment];
             return;
         }
@@ -631,7 +633,7 @@
                 }
                 
                 likeModel.userName = model.friend_nick;
-                likeModel.userId = model.openfireaccount;
+                likeModel.userId = model.userId;
                 [likeItemsArray addObject:likeModel];
                 
             }
@@ -654,7 +656,7 @@
         FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
         
         //删除这条朋友圈ID 的所有点赞和评论信息
-        NSString *commentDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",model.ID]];
+        NSString *commentDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",model.circle_ID]];
         [commentQueue inDatabase:^(FMDatabase *db) {
             BOOL success = [db executeUpdate:commentDelOpeartion];
             if (success) {
@@ -664,7 +666,7 @@
             }
         }];
         
-        NSString *likeDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",model.ID]];
+        NSString *likeDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",model.circle_ID]];
         [likeQueue inDatabase:^(FMDatabase *db) {
             BOOL success = [db executeUpdate:likeDelOpeartion];
             if (success) {
@@ -680,7 +682,7 @@
             NSString *operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Comment_Table];
             
             [commentQueue inDatabase:^(FMDatabase *db) {
-                BOOL success = [db executeUpdate:operationStr,commentItemModel.friend_nick,commentItemModel.ID,commentItemModel.comment,commentItemModel.reply_friend_nick,commentItemModel.reply_openfireaccount,commentItemModel.head_photo,commentItemModel.create_time,model.ID,commentItemModel.openfireaccount];
+                BOOL success = [db executeUpdate:operationStr,commentItemModel.friend_nick,commentItemModel.ID,commentItemModel.comment,commentItemModel.reply_friend_nick,commentItemModel.reply_id,commentItemModel.head_photo,commentItemModel.create_time,model.circle_ID,commentItemModel.userId];
                 if (success) {                    
                     NSLog(@"插入评论成功");
                 } else {
@@ -693,7 +695,7 @@
         for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
             NSString *operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Like_Table];
             [likeQueue inDatabase:^(FMDatabase *db) {
-                BOOL success = [db executeUpdate:operationStr,likeModel.userName,likeModel.userId,@"",model.ID];
+                BOOL success = [db executeUpdate:operationStr,likeModel.userName,likeModel.userId,@"",model.circle_ID];
                 if (success) {
                     NSLog(@"插入点赞成功");
                 } else {
@@ -703,7 +705,7 @@
         }
         
         [self.tableView reloadRowsAtIndexPaths:@[_currentEditingIndexthPath] withRowAnimation:UITableViewRowAnimationNone];
-        self.currentCommenterOpenFirAccount = @"";
+        self.currentCommenterUserID = @"";
         [self.chatKeyBoard keyboardDownForComment];
     }];
     
@@ -752,7 +754,7 @@
 - (void)SDTimeLineTableHeaderViewHeaderViewDidClick:(SDTimeLineTableHeaderView *)headerView {
     PesonalDiscoverController *personal = [[PesonalDiscoverController alloc] init];
     personal.sessionID = headerView.sessionID;
-    personal.openFirAccount = headerView.openFirAccount;
+    personal.userID = headerView.openFirAccount;
     [self.navigationController pushViewController:personal animated:YES];
 }
 
@@ -783,7 +785,7 @@
     SDTimeLineCellModel *model = cell.model;
     PesonalDiscoverController *personal = [[PesonalDiscoverController alloc] init];
     personal.sessionID = info.sessionId;
-    personal.openFirAccount = model.openfireaccount;
+    personal.userID = model.userId;
     [self.navigationController pushViewController:personal animated:YES];
 }
 
@@ -796,7 +798,7 @@
 - (void)didLongPressUserIconWithCell:(SDTimeLineCell *)cell {
     SDTimeLineCellModel *model = cell.model;
     self.complainModel = model;
-    if ([model.openfireaccount isEqualToString:USERINFO.userID]) {
+    if ([model.userId isEqualToString:USERINFO.userID]) {
         //如果是自己发的朋友圈，则不处理
         return;
     }
@@ -813,7 +815,7 @@
 - (void)UserNameLabelDidClick:(NSNotification *)notification {
     NSLog(@"%@",notification.userInfo);
     PesonalDiscoverController *personal = [[PesonalDiscoverController alloc] init];
-    personal.openFirAccount = notification.userInfo[@"openFirAccount"];
+    personal.userID = notification.userInfo[@"openFirAccount"];
     personal.sessionID = USERINFO.sessionId;
     [self.navigationController pushViewController:personal animated:YES];
 }
@@ -834,7 +836,7 @@
         
         //删除对应的评论
         FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
-        NSString *opeartionStr = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@ and fcid = %@",cellModel.ID, commentModel.ID]];
+        NSString *opeartionStr = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@ and fcid = %@",cellModel.circle_ID, commentModel.ID]];
         [queue inDatabase:^(FMDatabase *db) {
             
             BOOL success = [db executeUpdate:opeartionStr];
