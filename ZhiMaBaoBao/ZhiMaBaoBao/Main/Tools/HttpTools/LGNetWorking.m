@@ -674,10 +674,10 @@
 }
 
 //从后台唤醒的时候，加载是否有未读消息
-+ (void)ApplicationWakeUpAtBackgroundWithSessionId:(NSString *)sessionId andUserID:(NSString *)openFirAccount andLastMessageID:(NSString *)fcID block:(SuccessfulBlock)block{
++ (void)ApplicationWakeUpAtBackgroundWithSessionId:(NSString *)sessionId andUserID:(NSString *)userID andLastMessageID:(NSString *)fcID block:(SuccessfulBlock)block{
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;
-    params[@"openfireaccount"] = openFirAccount;
+    params[@"userId"] = userID;
     params[@"fcid"] = fcID;
     params[@"appSystem"] = @"ios";
     
