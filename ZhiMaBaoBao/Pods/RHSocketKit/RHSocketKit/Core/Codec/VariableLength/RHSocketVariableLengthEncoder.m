@@ -16,7 +16,7 @@
 {
     if (self = [super init]) {
         _maxFrameSize = 65536;
-        _countOfLengthByte = 2;
+        _countOfLengthByte = 4;
         _reverseOfLengthByte = NO;
     }
     return self;
@@ -36,7 +36,7 @@
     }//
     
     //可变长度编码，数据块的前两个字节为后续完整数据块的长度
-    NSUInteger dataLen = data.length;
+    NSUInteger dataLen = data.length + 4;
     NSMutableData *sendData = [[NSMutableData alloc] init];
     
     //将数据长度转换为长度字节，写入到数据块中。这里根据head占的字节个数转换data长度，默认为2个字节

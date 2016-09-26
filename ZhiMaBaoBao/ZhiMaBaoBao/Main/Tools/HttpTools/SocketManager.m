@@ -26,9 +26,20 @@ static SocketManager *manager = nil;
     dispatch_once(&onceToken, ^{
         if (!manager) {
             manager = [[SocketManager alloc] init];
+            
+
         }
     });
     return manager;
+}
+
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        //socket收到数据监听
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectSocketServiceState:) name:kNotificationSocketServiceState object:nil];
+    }
+    return self;
 }
 
 
