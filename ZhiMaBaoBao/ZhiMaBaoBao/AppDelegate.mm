@@ -129,10 +129,13 @@
 
 //创建数据库表
 - (void)creatMySQL {
+    // 朋友圈相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Comment_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Pic_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Like_Table];
+    // 聊天相关表
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_ConverseTable];
 }
 
 - (void)jumpMainController{

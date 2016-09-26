@@ -54,4 +54,12 @@ typedef enum : NSUInteger {
 // 根据某条朋友圈的id 去删除其对应的数据
 - (void)deleteCircleDataWithCircleID:(NSString *)circleID;
 
+
+#pragma mark - 聊天相关
+// 获取会话列表
+- (NSArray *)getChatConverseDataInArray;
+
+// 保存会话列表数据
+- (void)saveConverseListDataWithDataArray:(NSArray *)dataArray;
+
 @end

@@ -23,6 +23,7 @@
 #define ZhiMaCicleComment_Table_Name @"Circle_Comment "
 #define ZhiMaCirclePic_Table_Name @"Circle_Pic "
 #define ZhiMaCircleLike_Table_Name @"Circle_Like "
+#define ZhiMaChatConvence_Table_Name @"ChatConverse "
 
 //  创建朋友圈table字段
 #define CircleField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, circle_ID TEXT NOT NULL, userID TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL)"
@@ -50,7 +51,9 @@
 #define CirCle_LikeFields_Name @"userName, userId, userPhoto, circle_ID"
 
 
-#define Chat_ConverseField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, )"
+// 创建 聊天会话列table 字段
+#define Chat_ConverseField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT NOT NULL, converseType TEXT NOT NULL, converseId TEXT NOT NULL, unReadCount TEXT NOT NULL, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL)"
+#define Chat_ConverseFields_Name @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent"
 
 
 

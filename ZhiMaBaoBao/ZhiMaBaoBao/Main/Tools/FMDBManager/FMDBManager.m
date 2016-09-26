@@ -7,16 +7,22 @@
 //
 
 #import "FMDBManager.h"
-#import "SDTimeLineCellModel.h"
 #import <objc/runtime.h>
 #import "FMDBManagerHeader.h"
 
+#import "SDTimeLineCellModel.h"
+#import "ConverseModel.h"
 
 @implementation FMDBManager {
+    // 朋友圈相关的表
     FMDatabaseQueue *circle_DB;
     FMDatabaseQueue *circle_Comment_DB;
     FMDatabaseQueue *circle_Pic_DB;
     FMDatabaseQueue *circle_Like_Db;
+    
+    // 聊天相关的表
+    FMDatabaseQueue *chat_Converse_DB;
+    
 }
 
 + (instancetype)shareManager {
@@ -42,6 +48,8 @@
             return circle_Pic_DB;
         case ZhiMa_Circle_Like_Table:
             return circle_Like_Db;
+        case ZhiMa_Chat_ConverseTable:
+            return chat_Converse_DB;
         default:
             NSLog(@"无效参数");
             return nil;
@@ -101,6 +109,12 @@
                     circle_Like_Db = db_Queue;
                     break;
                 }
+                case ZhiMa_Chat_ConverseTable: {    //会话表
+                    tableName = ZhiMaChatConvence_Table_Name;
+                    tableField = Chat_ConverseField;
+                    chat_Converse_DB = db_Queue;
+                    break;
+                }
                 default:{
                     NSLog(@"无效参数");
                     break;
@@ -151,6 +165,11 @@
             fieldName = CirCle_LikeFields_Name;
             break;
         }
+        case ZhiMa_Chat_ConverseTable: {
+            tableName = ZhiMaChatConvence_Table_Name;
+            fieldName = Chat_ConverseFields_Name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -192,6 +211,11 @@
             fieldName = CirCle_LikeFields_Name;
             break;
         }
+        case ZhiMa_Chat_ConverseTable: {
+            tableName = ZhiMaChatConvence_Table_Name;
+            fieldName = Chat_ConverseFields_Name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -228,6 +252,10 @@
             tableName = ZhiMaCircleLike_Table_Name;
             break;
         }
+        case ZhiMa_Chat_ConverseTable: {
+            tableName = ZhiMaChatConvence_Table_Name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -260,6 +288,9 @@
         case ZhiMa_Circle_Like_Table: {
             tableName = ZhiMaCircleLike_Table_Name;
             break;
+        }
+        case ZhiMa_Chat_ConverseTable: {
+            tableName = ZhiMaChatConvence_Table_Name;
         }
         default: {
             NSLog(@"无效参数");
@@ -389,6 +420,7 @@
 
 
 #pragma mark - 获取数据源方法
+//                              ----------   朋友圈相关
 // 存所有朋友圈信息
 - (void)saveCircleDataWithDataArray:(NSArray *)dataArray {
     //插入数据
@@ -661,5 +693,72 @@
 }
 
 
+//                              -----------   聊天相关
+- (void)saveConverseListDataWithDataArray:(NSArray *)dataArray {
+    for (ConverseModel *converseModel in dataArray) {
+        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_ConverseTable];
+        NSLog(@"开始查朋友圈表");
+        __block BOOL isExist = NO;
+        [queue inDatabase:^(FMDatabase *db) {
+            NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_ConverseTable withOption:[NSString stringWithFormat:@"converseId = %@",converseModel.converseId]];
+            FMResultSet *result = [db executeQuery:searchOptionStr];
+            while ([result next]) {
+                NSLog(@"查表成功");
+                isExist = YES;
+            }
+        }];
+        
+        NSString *operationStr;
+        if (isExist) {
+            NSLog(@"存在这条会话数据，更新数据");
+            NSString *option1 = [NSString stringWithFormat:@"time = '%@', converseType = '%@', converseId = '%@', unReadCount = '%@', topChat = '%@', disturb = '%@', converseName = '%@', converseHead_photo = '%@', converseContent = '%@'",converseModel.time,converseModel.converseType,converseModel.converseId,converseModel.unReadCount,@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+            NSString *option2 = [NSString stringWithFormat:@"converseId = %@",converseModel.converseId];
+            operationStr = [FMDBShareManager alterTable:ZhiMa_Chat_ConverseTable withOpton1:option1 andOption2:option2];
+        } else {
+            NSLog(@"不存在这条会话数据，需要插入");
+            operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_ConverseTable];
+        }
+        
+        [queue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:operationStr,converseModel.time,converseModel.converseType,converseModel.converseId,converseModel.unReadCount,@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+            if (success) {
+                NSLog(@"插入会话成功");
+            } else {
+                NSLog(@"插入会话失败");
+            }
+        }];
+        
+        
+    }
+}
+
+
+// 获取会话列表
+- (NSArray *)getChatConverseDataInArray {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_ConverseTable];
+    NSMutableArray *dataArray = [NSMutableArray array];
+    NSLog(@"开始查朋友圈表");
+    [queue inDatabase:^(FMDatabase *db) {
+        
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_ConverseTable withOption:@"converseId > 0 order by converseId desc"];
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        
+        while ([result next]) {
+            NSLog(@"查表成功");
+            ConverseModel *model = [[ConverseModel alloc] init];
+            model.unReadCount = [result stringForColumn:@"unReadCount"];
+            model.converseName = [result stringForColumn:@"converseName"];
+            model.lastConverse = [result stringForColumn:@"lastConverse"];
+            model.converseHead_photo = [result stringForColumn:@"converseHead_photo"];
+            model.converseId = [result stringForColumn:@"converseId"];
+            model.converseType = [result stringForColumn:@"converseType"];
+            model.time = [result stringForColumn:@"time"];
+            model.topChat = [result intForColumn:@"topChat"];
+            model.disturb = [result intForColumn:@"disturb"];
+            [dataArray addObject:model];
+        }
+    }];
+    return dataArray;
+}
 
 @end

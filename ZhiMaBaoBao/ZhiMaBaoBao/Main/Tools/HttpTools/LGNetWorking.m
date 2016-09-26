@@ -548,13 +548,13 @@
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionID;
-    params[@"openfireaccount"] = openfirAccount;
+    params[@"userId"] = openfirAccount;
     params[@"fcid"] = fcid;
     
     [HttpTool POST:@"/moblie/delete_circles.do" params:params success:^(ResponseData *json) {
         block(json);
     } failure:^(ErrorData *error) {
-    
+        
         
     }];
 }
