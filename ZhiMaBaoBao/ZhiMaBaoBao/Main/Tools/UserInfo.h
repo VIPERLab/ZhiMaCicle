@@ -13,8 +13,13 @@
  /** 用户已经登录过app*/
 @property (nonatomic, assign) BOOL hasLogin;
 
- /** 即时聊天帐号*/
+ /** 即时聊天帐号  ---   弃用*/
 @property (nonatomic, copy) NSString *openfireaccount;
+
+/**
+ *  用户ID
+ */
+@property (nonatomic, copy) NSString *userID;
 
  /** 手机号*/
 @property (nonatomic, copy) NSString *uphone;
@@ -63,6 +68,8 @@
 
  /** 键盘按键音*/
 @property (nonatomic, assign, getter=isKeyboardVoice) BOOL keyboardVoice;
+
+
 
 
 /**
