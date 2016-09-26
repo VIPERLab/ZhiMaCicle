@@ -12,6 +12,12 @@
 
 MJCodingImplementation
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
+    return @{
+             @"userID" : @"id"
+             };
+}
+
 + (instancetype)shareInstance{
     static UserInfo *userInfo = nil;
     static dispatch_once_t onceToken;

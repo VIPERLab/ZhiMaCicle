@@ -55,7 +55,7 @@
 
 
 - (void)loadData {  //请求消息列表
-    [LGNetWorking getUnReadMessageWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount block:^(ResponseData *responseData) {
+    [LGNetWorking getUnReadMessageWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID block:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             [LCProgressHUD showText:@"请检查网络"];
             return ;
@@ -151,7 +151,7 @@
 }
 
 - (void)loadMoreData {
-    [LGNetWorking LoadUserMessageListWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andLastFccid:self.lastFccid andPageCount:[NSString stringWithFormat:@"%zd",self.pageNumber] block:^(ResponseData *responseData) {
+    [LGNetWorking LoadUserMessageListWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andLastFccid:self.lastFccid andPageCount:[NSString stringWithFormat:@"%zd",self.pageNumber] block:^(ResponseData *responseData) {
         if (responseData == nil || responseData.data == nil || !responseData.data) {
             NSLog(@"数据请求失败");
             return ;
@@ -184,7 +184,7 @@
 
 #pragma mark - 清空按钮
 - (void)rightBarButtonAction {
-    [LGNetWorking ClearMessageListWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount block:^(ResponseData *responseData) {
+    [LGNetWorking ClearMessageListWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             NSLog(@"请求失败");

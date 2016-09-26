@@ -188,7 +188,7 @@
     UIView *commentView = notification.userInfo[@"commentView"];
     SDTimeLineCellCommentItemModel *commentModel = notification.userInfo[@"commentModel"];
     
-    if ([commentModel.openfireaccount isEqualToString:USERINFO.openfireaccount]) {
+    if ([commentModel.openfireaccount isEqualToString:USERINFO.userID]) {
         //删除自己的评论
         self.tempCommentItemModel = commentModel;
         
@@ -228,7 +228,7 @@
 #pragma mark - 删除自己的评论
 - (void)deleteMyComment:(SDTimeLineCellCommentItemModel *)commentModel andDiscoverCellIndex:(NSIndexPath *)indexPath {
     
-    [LGNetWorking DeletedMyCommentWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andFcid:commentModel.ID block:^(ResponseData *responseData) {
+    [LGNetWorking DeletedMyCommentWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFcid:commentModel.ID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0 || responseData == nil) {
             [LCProgressHUD showFailureText:@"删除评论失败"];
@@ -351,7 +351,7 @@
 
 #pragma mark - 删除请求
 - (void)DeleteMyDiscover {
-    [LGNetWorking DeletedMyDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andFcid:self.ID block:^(ResponseData *responseData) {
+    [LGNetWorking DeletedMyDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFcid:self.ID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             NSLog(@"请求失败");

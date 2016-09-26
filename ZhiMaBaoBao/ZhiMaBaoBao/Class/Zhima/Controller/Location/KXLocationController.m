@@ -234,7 +234,7 @@
 #pragma mark - 网络请求
 //保存地区信息
 - (void)saveLocation:(NSString *)location {
-    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andFunctionName:@"area" andChangeValue:location block:^(ResponseData *responseData) {
+    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"area" andChangeValue:location block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             return ;

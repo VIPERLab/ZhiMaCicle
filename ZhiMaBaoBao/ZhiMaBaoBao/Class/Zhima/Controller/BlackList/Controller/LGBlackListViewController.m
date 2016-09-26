@@ -44,7 +44,7 @@
     
     NSString *url = [NSString stringWithFormat:@"%@/moblie/getfriendByuserId_type.do",DFAPIURL];
     NSString *sessionId = USERINFO.sessionId;
-    NSString *openfireaccount = USERINFO.openfireaccount;
+    NSString *userID = USERINFO.userID;
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer.timeoutInterval = 30.f;
@@ -52,7 +52,7 @@
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;
-    params[@"openfireaccount"] = openfireaccount;
+    params[@"openfireaccount"] = userID;
     params[@"friend_type"] = @"3";
     [manager POST:url parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         

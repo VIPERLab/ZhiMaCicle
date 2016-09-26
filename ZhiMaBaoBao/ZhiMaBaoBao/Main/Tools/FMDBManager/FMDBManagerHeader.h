@@ -20,16 +20,16 @@
 #define ZhiMaCircleLike_Table_Name @"Circle_Like "
 
 //  创建朋友圈table字段
-#define CircleField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, fcid TEXT NOT NULL, openfireaccount TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL)"
+#define CircleField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, circle_ID TEXT NOT NULL, userID TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL)"
 // 取朋友圈table的字段名
-#define CircleFiels_Name @"friend_nick, fcid, openfireaccount, content, current_location, create_time, head_photo"
+#define CircleFiels_Name @"friend_nick, circle_ID, userID, content, current_location, create_time, head_photo"
 
 
 
 // 创建 --- 评论字段
-#define Circle_CommentField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, fcid TEXT NOT NULL, comment TEXT NOT NULL, reply_friend_nick TEXT NOT NULL, reply_openfireaccount TEXT NOT NULL, head_photo TEXT NOT NULL, create_time TEXT NOT NULL, circle_ID TEXT NOT NULL, openfireaccount TEXT NOT NULL)"
+#define Circle_CommentField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, fcid TEXT NOT NULL, comment TEXT NOT NULL, reply_friend_nick TEXT NOT NULL, reply_openfireaccount TEXT NOT NULL, head_photo TEXT NOT NULL, create_time TEXT NOT NULL, circle_ID TEXT NOT NULL, userID TEXT NOT NULL)"
 // 取 ----  评论字段 -- 名
-#define Circle_CommentFields_Name @"friend_nick, fcid, comment, reply_friend_nick, reply_openfireaccount, head_photo, create_time, circle_ID, openfireaccount"
+#define Circle_CommentFields_Name @"friend_nick, fcid, comment, reply_friend_nick, reply_openfireaccount, head_photo, create_time, circle_ID, userID"
 
 
 

@@ -15,8 +15,13 @@
  /** uid*/
 @property (nonatomic, copy) NSString *uid;
 
- /** 即时聊天帐号*/
-@property (nonatomic, copy) NSString *openfireaccount;
+ /** 即时聊天帐号 -- 废弃入口,更换为userID*/
+//@property (nonatomic, copy) NSString *openfireaccount;
+
+/**
+ *  用户ID --- 唯一标识
+ */
+@property (nonatomic, copy) NSString *userID;
 
  /** 手机号*/
 @property (nonatomic, copy) NSString *uphone;
