@@ -418,7 +418,7 @@
         return;
     }
     UIImage *image = array[imageCount];
-    NSData *imageData = UIImageJPEGRepresentation(image, 1);
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.3);
     [LCProgressHUD showLoadingText:@"正在上传图片"];
     
     [LGNetWorking uploadPhoto:USERINFO.sessionId image:imageData fileName:@"quan" andFuctionName:@"quan" block:^(ResponseData *obj) {
