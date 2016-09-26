@@ -125,7 +125,7 @@
         //我的相册
         PesonalDiscoverController *VC = [[PesonalDiscoverController alloc] init];
         VC.sessionID = USERINFO.sessionId;
-        VC.openFirAccount = USERINFO.openfireaccount;
+        VC.openFirAccount = USERINFO.userID;
         VC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:VC animated:YES];
         

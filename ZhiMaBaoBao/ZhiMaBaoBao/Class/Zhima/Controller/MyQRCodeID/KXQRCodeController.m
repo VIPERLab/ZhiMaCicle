@@ -122,7 +122,7 @@
     // 3.给过滤器添加数据(正则表达式/账号和密码)
     // NSString *dataString = userInfo.username;
     
-    NSString *jid = [USERINFO.openfireaccount stringByAppendingString:@"@localHost"];
+    NSString *jid = [USERINFO.userID stringByAppendingString:@"@localHost"];
     
 //    NSString *urlString = @"http://www.baidu.com";
     NSString *params = [NSString stringWithFormat:@"sessionId=%@&invite_code=%@&jid=%@",USERINFO.sessionId,USERINFO.invite_code,jid];

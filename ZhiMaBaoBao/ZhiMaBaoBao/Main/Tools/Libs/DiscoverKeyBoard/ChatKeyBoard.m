@@ -22,7 +22,7 @@
 
 #import "OfficialAccountToolbar.h"
 
-
+#import "RecordingHUD.h"
 #import "NSString+Emoji.h"
 
 @interface ChatKeyBoard () <ChatToolBarDelegate, FacePanelDelegate, MorePannelDelegate>
@@ -365,30 +365,37 @@
     if ([self.delegate respondsToSelector:@selector(chatKeyBoardDidStartRecording:)]) {
         [self.delegate chatKeyBoardDidStartRecording:self];
     }
+    [RecordingHUD show];
 }
 - (void)chatToolBarDidCancelRecording:(ChatToolBar *)toolBar
 {
     if ([self.delegate respondsToSelector:@selector(chatKeyBoardDidCancelRecording:)]) {
         [self.delegate chatKeyBoardDidCancelRecording:self];
     }
+    [RecordingHUD dismiss];
 }
 - (void)chatToolBarDidFinishRecoding:(ChatToolBar *)toolBar
 {
     if ([self.delegate respondsToSelector:@selector(chatKeyBoardDidFinishRecoding:)]) {
         [self.delegate chatKeyBoardDidFinishRecoding:self];
     }
+    [RecordingHUD dismiss];
+
 }
 - (void)chatToolBarWillCancelRecoding:(ChatToolBar *)toolBar
 {
     if ([self.delegate respondsToSelector:@selector(chatKeyBoardWillCancelRecoding:)]) {
         [self.delegate chatKeyBoardWillCancelRecoding:self];
     }
+    [RecordingHUD updateStatues:RecordHUDStatusCancel value:0];
+
 }
 - (void)chatToolBarContineRecording:(ChatToolBar *)toolBar
 {
     if ([self.delegate respondsToSelector:@selector(chatKeyBoardContineRecording:)]) {
         [self.delegate chatKeyBoardContineRecording:self];
     }
+    [RecordingHUD updateStatues:RecordHUDStatusContinue value:0];
 }
 
 - (void)chatToolBarTextViewDidBeginEditing:(UITextView *)textView

@@ -54,7 +54,7 @@
 
 - (void)setupView {
     
-    if ([USERINFO.openfireaccount isEqualToString:self.openFirAccount]) {
+    if ([USERINFO.userID isEqualToString:self.openFirAccount]) {
         [self setupRightBarButton];
 
     }
@@ -149,7 +149,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PersonalDiscoverCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if ([cell.openFirAccount isEqualToString:USERINFO.openfireaccount] && indexPath.section == 0 && indexPath.row == 0) {
+    if ([cell.openFirAccount isEqualToString:USERINFO.userID] && indexPath.section == 0 && indexPath.row == 0) {
         return;
     }
 

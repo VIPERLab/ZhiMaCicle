@@ -56,7 +56,7 @@
 
 - (void)saveButtonDidClick {
     
-    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andFunctionName:@"signature" andChangeValue:self.textView.text block:^(ResponseData *responseData) {
+    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"signature" andChangeValue:self.textView.text block:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:@"请检查网络"];
             return ;

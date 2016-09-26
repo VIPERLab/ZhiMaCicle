@@ -148,7 +148,7 @@
     self.headerView.userImage = USERINFO.head_photo;
     self.headerView.userName = USERINFO.username;
     self.headerView.sessionID = USERINFO.sessionId;
-    self.headerView.openFirAccount = USERINFO.openfireaccount;
+    self.headerView.openFirAccount = USERINFO.userID;
     headerView.frame = CGRectMake(0, 0, 0, 260); //260
     self.tableView.tableHeaderView = headerView;
     
@@ -182,8 +182,8 @@
             weakSelf.pageNumber = 1;
             NSString *pageNumber = [NSString stringWithFormat:@"%zd",weakSelf.pageNumber];
             NSString *sectionID = USERINFO.sessionId;
-            NSString *openfireaccount = USERINFO.openfireaccount;
-            [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:openfireaccount andPageCount:pageNumber block:^(ResponseData *responseData) {
+            NSString *userID = USERINFO.userID;
+            [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
                 
                 if (responseData == nil || responseData.data == nil) {
                     return ;
@@ -228,10 +228,9 @@
             NSString *pageNumber = [NSString stringWithFormat:@"%zd",self.pageNumber];
             
             NSString *sectionID = USERINFO.sessionId;
-            NSString *openfireaccount = USERINFO.openfireaccount;
+            NSString *userID = USERINFO.userID;
             
-            
-            [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:openfireaccount andPageCount:pageNumber block:^(ResponseData *responseData) {
+            [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
                 
                 
                 if (responseData == nil) {
@@ -392,7 +391,7 @@
                     
                     //判断是否点赞了
                     if (!cellModel.liked) {
-                        if ([likeModel.userId isEqualToString:USERINFO.openfireaccount]) {
+                        if ([likeModel.userId isEqualToString:USERINFO.userID]) {
                             cellModel.liked = YES;
                         } else {
                             cellModel.liked = NO;
@@ -542,13 +541,13 @@
     if (!model.isLiked) {  //未赞
         SDTimeLineCellLikeItemModel *likeModel = [SDTimeLineCellLikeItemModel new];
         likeModel.userName = USERINFO.username;
-        likeModel.userId = USERINFO.openfireaccount;
+        likeModel.userId = USERINFO.userID;
         [temp addObject:likeModel];
         model.liked = YES;
     } else {               //已赞
         SDTimeLineCellLikeItemModel *tempLikeModel = nil;
         for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
-            if ([likeModel.userId isEqualToString:USERINFO.openfireaccount]) {
+            if ([likeModel.userId isEqualToString:USERINFO.userID]) {
                 tempLikeModel = likeModel;
                 break;
             }
@@ -564,7 +563,7 @@
 #pragma mark - 回复别人的评论
 - (void)DidClickCommentOtherButton:(SDTimeLineCell *)cell andCommentItem:(SDTimeLineCellCommentItemModel *)commentModel andCommentView:(UIView *)commentView {
     
-    if ([commentModel.openfireaccount isEqualToString:USERINFO.openfireaccount]) {
+    if ([commentModel.openfireaccount isEqualToString:USERINFO.userID]) {
         //删除自己的评论
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         self.tempCommentItemModel = commentModel;
@@ -694,7 +693,7 @@
         for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
             NSString *operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Like_Table];
             [likeQueue inDatabase:^(FMDatabase *db) {
-                BOOL success = [db executeUpdate:operationStr,likeModel.userName,likeModel.userId,likeModel.userPhoto,model.ID];
+                BOOL success = [db executeUpdate:operationStr,likeModel.userName,likeModel.userId,@"",model.ID];
                 if (success) {
                     NSLog(@"插入点赞成功");
                 } else {
@@ -715,7 +714,6 @@
 - (void)adjustTableViewToFitKeyboard:(UIView *)targetView;
 {
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-//    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath];
     //获取cell 相对于window 的frame
     CGRect rect = [targetView.superview convertRect:targetView.frame toView:window];
     NSLog(@"cell.Frame = %@",NSStringFromCGRect(rect));
@@ -798,7 +796,7 @@
 - (void)didLongPressUserIconWithCell:(SDTimeLineCell *)cell {
     SDTimeLineCellModel *model = cell.model;
     self.complainModel = model;
-    if ([model.openfireaccount isEqualToString:USERINFO.openfireaccount]) {
+    if ([model.openfireaccount isEqualToString:USERINFO.userID]) {
         //如果是自己发的朋友圈，则不处理
         return;
     }
@@ -824,7 +822,7 @@
 #pragma mark - 删除自己的评论
 - (void)deleteMyComment:(SDTimeLineCellCommentItemModel *)commentModel andDiscoverCellIndex:(NSIndexPath *)indexPath {
     __block NSIndexPath *index = indexPath;
-    [LGNetWorking DeletedMyCommentWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andFcid:commentModel.ID block:^(ResponseData *responseData) {
+    [LGNetWorking DeletedMyCommentWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFcid:commentModel.ID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0 || responseData == nil) {
             [LCProgressHUD showText:@"删除失败"];

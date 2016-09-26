@@ -92,6 +92,9 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/MJRefresh/MJRefresh.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Masonry/Masonry.framework"
   install_framework "$BUILT_PRODUCTS_DIR/NJKWebViewProgress/NJKWebViewProgress.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/ProtocolBuffers/ProtocolBuffers.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/RHSocketKit/RHSocketKit.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/RealReachability/RealReachability.framework"
   install_framework "$BUILT_PRODUCTS_DIR/RegexKitLite/RegexKitLite.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SDWebImage/SDWebImage.framework"
 fi
@@ -104,6 +107,9 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/MJRefresh/MJRefresh.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Masonry/Masonry.framework"
   install_framework "$BUILT_PRODUCTS_DIR/NJKWebViewProgress/NJKWebViewProgress.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/ProtocolBuffers/ProtocolBuffers.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/RHSocketKit/RHSocketKit.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/RealReachability/RealReachability.framework"
   install_framework "$BUILT_PRODUCTS_DIR/RegexKitLite/RegexKitLite.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SDWebImage/SDWebImage.framework"
 fi

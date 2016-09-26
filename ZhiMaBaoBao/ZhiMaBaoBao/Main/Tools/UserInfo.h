@@ -7,17 +7,19 @@
 //  用户数据本地存储
 
 #import <Foundation/Foundation.h>
-
 @interface UserInfo : NSObject<NSCoding>
 
  /** 用户已经登录过app*/
 @property (nonatomic, assign) BOOL hasLogin;
 
- /** 即时聊天帐号  ---   弃用*/
-@property (nonatomic, copy) NSString *openfireaccount;
+ /** uid*/
+@property (nonatomic, copy) NSString *uid;
+
+ /** 即时聊天帐号 -- 废弃入口,更换为userID*/
+//@property (nonatomic, copy) NSString *openfireaccount;
 
 /**
- *  用户ID
+ *  用户ID --- 唯一标识
  */
 @property (nonatomic, copy) NSString *userID;
 
@@ -68,8 +70,6 @@
 
  /** 键盘按键音*/
 @property (nonatomic, assign, getter=isKeyboardVoice) BOOL keyboardVoice;
-
-
 
 
 /**

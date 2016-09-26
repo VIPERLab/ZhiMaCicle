@@ -14,7 +14,7 @@ MJCodingImplementation
 
 + (NSDictionary *)mj_replacedKeyFromPropertyName {
     return @{
-             @"userID" : @"uid"
+             @"userID" : @"id"
              };
 }
 

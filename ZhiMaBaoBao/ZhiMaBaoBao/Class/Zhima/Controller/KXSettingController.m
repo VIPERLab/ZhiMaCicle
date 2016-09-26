@@ -119,7 +119,7 @@
         //版本公告
         KXWebViewController *aboutUs = [[KXWebViewController alloc] init];
         aboutUs.navTitleName = @"版本公告";
-        aboutUs.htmlURL = [NSString stringWithFormat:@"%@/web/getNoticeListBytype.do?sessionId=%@&openfireaccount=%@&type=2",DFAPIURL,USERINFO.sessionId,USERINFO.openfireaccount];
+        aboutUs.htmlURL = [NSString stringWithFormat:@"%@/web/getNoticeListBytype.do?sessionId=%@&openfireaccount=%@&type=2",DFAPIURL,USERINFO.sessionId,USERINFO.userID];
         [self.navigationController pushViewController:aboutUs animated:YES];
     } else if (indexPath.section == 0 && indexPath.row == 5) {
         //关于我们

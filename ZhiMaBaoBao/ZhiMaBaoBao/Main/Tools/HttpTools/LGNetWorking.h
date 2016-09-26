@@ -235,7 +235,7 @@
 + (void)queryPhoneBook:(NSString *)sessionId openfire:(NSString *)openfire flag:(NSString *)action phonedata:(NSString *)jsonData block:(SuccessfulBlock)block;
 
 //从后台唤醒的时候，加载是否有未读消息
-+ (void)ApplicationWakeUpAtBackgroundWithSessionId:(NSString *)sessionId andOpenFirAccount:(NSString *)openFirAccount andLastMessageID:(NSString *)fcID block:(SuccessfulBlock)block;
++ (void)ApplicationWakeUpAtBackgroundWithSessionId:(NSString *)sessionId andUserID:(NSString *)userID andLastMessageID:(NSString *)fcID block:(SuccessfulBlock)block;
 
 //删除自己的评论
 + (void)DeletedMyCommentWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andFcid:(NSString *)fcid block:(SuccessfulBlock)block;

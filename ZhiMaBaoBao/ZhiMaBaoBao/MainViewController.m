@@ -15,7 +15,10 @@
 #import "BaseViewController.h"
 #import "LGGuideController.h"
 #import "BaseNavigationController.h"
+#import "SocketManager.h"
 
+#import "RHSocketService.h"
+//#import "RHSocketUtils.h"
 
 @interface MainViewController ()
 
@@ -33,7 +36,30 @@
     [self addChildVc:[[CallViewController alloc] init] title:@"芝麻通" image:@"lgtabbar_3" selectedImage:@"lgtabbar_3_select"];
     [self addChildVc:[[TimeLineController alloc] init] title:@"芝麻圈" image:@"lgtabbar_4" selectedImage:@"lgtabbar_4_select"];
     [self addChildVc:[[PersonalCenterController alloc] init] title:@"芝麻" image:@"lgtabbar_5" selectedImage:@"lgtabbar_5_select"];
+    
+    //连接socket服务器
+    [[SocketManager shareInstance] connect];
+    
+    //添加异常捕获
+    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
+    
+    //socket收到数据监听
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectSocketPacketResponse:) name:kNotificationSocketPacketResponse object:nil];
 }
+
+#pragma mark - socket 代理方法
+//收到socket数据
+- (void)detectSocketPacketResponse:(NSNotification *)notif
+{
+    NSLog(@"detectSocketPacketResponse: %@", notif);
+    
+    //这里结果，记得观察打印的内容
+    NSDictionary *userInfo = notif.userInfo;
+    RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
+    NSLog(@"detectSocketPacketResponse data: %@", [rsp object]);
+    NSLog(@"detectSocketPacketResponse string: %@", [rsp stringWithPacket]);
+}
+
 
 //添加子控制器
 - (void)addChildVc:(BaseViewController *)childVc title:(NSString *)title image:(NSString *)image selectedImage:(NSString *)selectedImage
@@ -59,6 +85,17 @@
 }
 
 
+- (void)dealloc{
+    
+    //移除所有通知
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
+void UncaughtExceptionHandler(NSException *exception) {
+    NSArray *arr = [exception callStackSymbols];    //得到当前调用栈信息
+    NSString *reason = [exception reason];          //非常重要，就是崩溃的原因
+    NSString *name = [exception name];              //异常类型
+    NSLog(@"异常类型 : %@ \n 崩溃原因 : %@ \n 当前调用栈信息 : %@", name, reason, arr);
+}
 
 @end

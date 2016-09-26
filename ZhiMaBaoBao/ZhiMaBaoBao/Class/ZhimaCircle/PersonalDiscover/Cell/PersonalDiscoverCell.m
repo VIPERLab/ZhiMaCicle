@@ -135,7 +135,7 @@ typedef enum : NSUInteger {
     _personalIndexPath = personalIndexPath;
     if (personalIndexPath.section == 0 && personalIndexPath.row == 0) {
 //        self.countLabel.hidden = YES;
-        if ([self.openFirAccount isEqualToString:USERINFO.openfireaccount]) {
+        if ([self.openFirAccount isEqualToString:USERINFO.userID]) {
             self.photoButton.userInteractionEnabled = YES;
             [self.photoButton addTarget:self action:@selector(photoButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
         } else {

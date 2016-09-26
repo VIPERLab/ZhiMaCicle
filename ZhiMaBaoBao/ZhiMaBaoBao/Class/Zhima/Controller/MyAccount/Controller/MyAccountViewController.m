@@ -193,13 +193,13 @@
     manager.securityPolicy.validatesDomainName = NO;//是否验证域名
 
     
-    NSString *sign = [NSString stringWithFormat:@"openfireaccount=%@&apikey=%@",USERINFO.openfireaccount,RECHAPPKEY];
+    NSString *sign = [NSString stringWithFormat:@"openfireaccount=%@&apikey=%@",USERINFO.userID,RECHAPPKEY];
     NSString *md5Sign = [NSString md5:sign];
     
     md5Sign = [md5Sign uppercaseString];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"openfireaccount"] = USERINFO.openfireaccount;
+    params[@"openfireaccount"] = USERINFO.userID;
     params[@"sign"] = md5Sign;
     
     [manager POST:[NSString stringWithFormat:@"%@/Api/Index/getuser",DFAPIURLTEST] parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

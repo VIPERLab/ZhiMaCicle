@@ -112,11 +112,11 @@
     manager.securityPolicy.allowInvalidCertificates = YES;//忽略https证书
     manager.securityPolicy.validatesDomainName = NO;//是否验证域名
     //[NSSet setWithObjects:@"text/html",@"application/json",nil];
-    NSString *sign = [NSString stringWithFormat:@"openfireaccount=%@&apikey=%@",USERINFO.openfireaccount,RECHAPPKEY];
+    NSString *sign = [NSString stringWithFormat:@"openfireaccount=%@&apikey=%@",USERINFO.userID,RECHAPPKEY];
     NSString *md5Sign = [NSString md5:sign];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    param[@"openfireaccount"] = USERINFO.openfireaccount;
+    param[@"openfireaccount"] = USERINFO.userID;
     param[@"sign"] = [md5Sign uppercaseString];
     
     [manager POST:@"http://120.76.239.173/Api/Index/chkwx" parameters:param progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -167,12 +167,12 @@
     manager.securityPolicy.allowInvalidCertificates = YES;//忽略https证书
     manager.securityPolicy.validatesDomainName = NO;//是否验证域名
     
-    NSString *sign = [NSString stringWithFormat:@"money=%@&openfireaccount=%@&apikey=%@",self.textField.text,USERINFO.openfireaccount,RECHAPPKEY];
+    NSString *sign = [NSString stringWithFormat:@"money=%@&openfireaccount=%@&apikey=%@",self.textField.text,USERINFO.userID,RECHAPPKEY];
     NSString *md5Sign = [NSString md5:sign];
     md5Sign = [md5Sign uppercaseString];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    param[@"openfireaccount"] = USERINFO.openfireaccount;
+    param[@"openfireaccount"] = USERINFO.userID;
     param[@"money"] = self.textField.text;
     param[@"sign"] = md5Sign;
     

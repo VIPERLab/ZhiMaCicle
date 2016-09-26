@@ -7,11 +7,12 @@
 //
 
 #import "MessageCell.h"
+#import "BuddleView.h"
 
 @interface MessageCell ()
 @property (nonatomic, strong) UILabel *timeLabel;       //时间
 @property (nonatomic, strong) UIImageView *avtar;       //头像
-@property (nonatomic, strong) UIImageView *bulldeView;  //消息容器
+@property (nonatomic, strong) BuddleView *bulldeView;  //消息容器
 @property (nonatomic, strong) UILabel *msgLabel;        //消息文本label
 @end
 
@@ -43,7 +44,7 @@
     self.avtar = avtar;
     
     //消息容器试图
-    UIImageView *bulldeView = [[UIImageView alloc] init];
+    BuddleView *bulldeView = [[BuddleView alloc] init];
     [self.contentView addSubview:bulldeView];
     self.bulldeView = bulldeView;
     
@@ -58,10 +59,31 @@
 
 - (void)setMessage:(LGMessage *)message{
     _message = message;
+    self.bulldeView.message = message;
     
     self.avtar.image = [UIImage imageNamed:@"defaultContact"];
-    self.msgLabel.text = message.body;
-    self.timeLabel.text = message.time;
+
+    //设置消息背景
+    if (message.isUser) {
+        self.bulldeView.image = [UIImage imageNamed:@"chat_bg_sender"];
+
+    }else{
+        self.bulldeView.image = [UIImage imageNamed:@"chat_bg_reciever"];
+    }
+    
+    //文本消息
+    if (message.msgType == MessageTypeText) {
+        self.msgLabel.text = message.body;
+        self.timeLabel.text = message.time;
+    }
+    //语音消息
+    else if (message.msgType == MessageTypeAudio){
+        
+    }
+    //图片消息
+    else if (message.msgType == MessageTypeImage){
+        
+    }
 }
 
 - (void)layoutSubviews{
@@ -71,13 +93,11 @@
     //用户自己
     if (_message.isUser) {
         self.avtar.frame = CGRectMake(DEVICEWITH - MSG_AVTAR_SIZE - MSG_MARGIN, MSG_PADDING , MSG_AVTAR_SIZE, MSG_AVTAR_SIZE);
-        self.bulldeView.image = [UIImage imageNamed:@"chat_bg_sender"];
         self.bulldeView.frame = CGRectMake(DEVICEWITH - MSG_AVTAR_SIZE - MSG_MARGIN - _message.textWH.width - 3 * MSG_MARGIN, MSG_PADDING, _message.textWH.width + 3 * MSG_MARGIN, _message.buddleHeight);
         self.msgLabel.frame = CGRectMake(MSG_MARGIN, MSG_MARGIN, _message.textWH.width, _message.textWH.height);
 
     }else{
         self.avtar.frame = CGRectMake(MSG_MARGIN, MSG_PADDING , MSG_AVTAR_SIZE, MSG_AVTAR_SIZE);
-        self.bulldeView.image = [UIImage imageNamed:@"chat_bg_reciever"];
         self.bulldeView.frame = CGRectMake(MSG_AVTAR_SIZE + MSG_MARGIN , MSG_PADDING, _message.textWH.width + 3 * MSG_MARGIN, _message.buddleHeight);
         self.msgLabel.frame = CGRectMake(MSG_MARGIN * 2, MSG_MARGIN, _message.textWH.width, _message.textWH.height);
 

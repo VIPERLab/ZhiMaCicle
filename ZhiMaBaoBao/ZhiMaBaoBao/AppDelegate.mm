@@ -11,7 +11,7 @@
 #import "LGGuideController.h"
 #import "FMDBManager.h"
 #import <AlipaySDK/AlipaySDK.h>
-
+#import "RealReachability.h"
 @interface AppDelegate ()
 
 @end
@@ -48,9 +48,47 @@
         NSLog(@"manager start failed!");
     }
     
-    
     //注册更新用户未读消息通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUserUnReadMessageCountAndUnReadCircle:) name:K_UpdataUnReadNotification object:nil];
+
+    //网络环境监听
+    [GLobalRealReachability startNotifier];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(networkChanged:)
+                                                 name:kRealReachabilityChangedNotification
+                                               object:nil];
+    
+    
+    //即时判断网络环境 -- 实现该方法
+    /*
+     [GLobalRealReachability reachabilityWithBlock:^(ReachabilityStatus status) {
+     switch (status)
+     {
+     case RealStatusNotReachable:
+     {
+     [[[UIAlertView alloc] initWithTitle:@"RealReachability" message:@"Nothing to do! offlineMode" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil] show];
+     break;
+     }
+     
+     case RealStatusViaWiFi:
+     {
+     [[[UIAlertView alloc] initWithTitle:@"RealReachability" message:@"Do what you want! free!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil] show];
+     break;
+     }
+     
+     case RealStatusViaWWAN:
+     {
+     [[[UIAlertView alloc] initWithTitle:@"RealReachability" message:@"Take care of your money! You are in charge!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil] show];
+     
+     break;
+     }
+     
+     default:
+     break;
+     }
+     }];
+
+     */
     
     //接收用户退出通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
@@ -60,6 +98,34 @@
     
     return YES;
 }
+
+//网络环境改变
+- (void)networkChanged:(NSNotification *)notification
+{
+    RealReachability *reachability = (RealReachability *)notification.object;
+    //当前网络状态
+    ReachabilityStatus status = [reachability currentReachabilityStatus];
+    //上一网络状态
+    ReachabilityStatus previousStatus = [reachability previousReachabilityStatus];
+    NSLog(@"networkChanged, currentStatus:%@, previousStatus:%@", @(status), @(previousStatus));
+    //网络连接不可用
+    if (status == RealStatusNotReachable)
+    {
+        
+    }
+    //wifi
+    if (status == RealStatusViaWiFi)
+    {
+        
+    }
+    //蜂窝数据
+    if (status == RealStatusViaWWAN)
+    {
+        
+    }
+    
+}
+
 
 //创建数据库表
 - (void)creatMySQL {
@@ -148,7 +214,7 @@
             [info save];
         }
         
-        [LGNetWorking ApplicationWakeUpAtBackgroundWithSessionId:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andLastMessageID:USERINFO.lastFcID block:^(ResponseData *responseData) {
+        [LGNetWorking ApplicationWakeUpAtBackgroundWithSessionId:USERINFO.sessionId andUserID:USERINFO.userID andLastMessageID:USERINFO.lastFcID block:^(ResponseData *responseData) {
             
             if (responseData.code != 0) {
                 return ;

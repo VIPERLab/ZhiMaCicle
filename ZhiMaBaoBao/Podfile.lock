@@ -15,9 +15,13 @@ PODS:
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - AliPay (2.1.2)
-  - CocoaAsyncSocket (7.5.0):
-    - CocoaAsyncSocket/GCD (= 7.5.0)
-  - CocoaAsyncSocket/GCD (7.5.0)
+  - CocoaAsyncSocket (7.4.3):
+    - CocoaAsyncSocket/All (= 7.4.3)
+  - CocoaAsyncSocket/All (7.4.3):
+    - CocoaAsyncSocket/GCD
+    - CocoaAsyncSocket/RunLoop
+  - CocoaAsyncSocket/GCD (7.4.3)
+  - CocoaAsyncSocket/RunLoop (7.4.3)
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
@@ -30,7 +34,21 @@ PODS:
     - NJKWebViewProgress/ProgressView (= 0.2.3)
   - NJKWebViewProgress/Core (0.2.3)
   - NJKWebViewProgress/ProgressView (0.2.3)
+  - ProtocolBuffers (1.9.9.2)
+  - RealReachability (1.1.8):
+    - RealReachability/Connection (= 1.1.8)
+    - RealReachability/Ping (= 1.1.8)
+  - RealReachability/Connection (1.1.8)
+  - RealReachability/Ping (1.1.8)
   - RegexKitLite (4.0)
+  - RHSocketKit (2.2.0):
+    - RHSocketKit/Core (= 2.2.0)
+    - RHSocketKit/Extend (= 2.2.0)
+  - RHSocketKit/Core (2.2.0):
+    - CocoaAsyncSocket (~> 7.4.3)
+    - ProtocolBuffers (~> 1.9.9.2)
+  - RHSocketKit/Extend (2.2.0):
+    - RHSocketKit/Core
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
@@ -38,29 +56,33 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 3.1.0)
   - AliPay
-  - CocoaAsyncSocket (~> 7.5.0)
   - FMDB (~> 2.6.2)
   - Masonry (~> 1.0.1)
   - MBProgressHUD (~> 1.0.0)
   - MJExtension (~> 3.0.13)
   - MJRefresh (~> 3.1.12)
   - NJKWebViewProgress (~> 0.2.3)
+  - RealReachability
   - RegexKitLite (~> 4.0)
+  - RHSocketKit
   - SDWebImage (~> 3.8.1)
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   AliPay: 2bd35a4e486d2a8c035043023cd846e886bb21d1
-  CocoaAsyncSocket: 3baeb1ddd969f81cf9fca81053ae49ef2d1cbbfa
+  CocoaAsyncSocket: a18c75dca4b08723628a0bacca6e94803d90be91
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
   NJKWebViewProgress: f481fd424cb5ecc27eacae11b5397db92fba9a4d
+  ProtocolBuffers: 7111461618460961e6b7469177ec45ee551b4f0e
+  RealReachability: e6c8a2bbffa316006e8c282efc1ee2567d61a920
   RegexKitLite: c0e4c12e6e7de0769f3a3ed679f0f61604170661
+  RHSocketKit: d5eaf9c5be2d6a5f1be9aebbd48d652ccd5d2d8c
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
 
-PODFILE CHECKSUM: 46141f1a9ef969f2d9edf6ed7088f2aec4a13487
+PODFILE CHECKSUM: 8db702822bb90464dc8f220a7e06b969cab6a9a4
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.0.1
