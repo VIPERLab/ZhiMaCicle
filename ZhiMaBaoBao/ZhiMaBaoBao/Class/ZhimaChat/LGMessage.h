@@ -7,7 +7,7 @@
 //
 
 typedef NS_OPTIONS(NSUInteger, MessageType) {
-    MessageTypeText    = 0,   //文本消息
+    MessageTypeText  = 0,   //文本消息
     MessageTypeImage,         //图片
     MessageTypeAudio          //语音
 };
@@ -26,20 +26,28 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
 
 @interface LGMessage : NSObject
 
+ /** 消息id*/
+@property (nonatomic, copy) NSString *msgid;
  /** 消息类型*/
-@property (nonatomic, assign) MessageType msgType;
+@property (nonatomic, assign) MessageType type;
+ /** 消息发送者id*/
+@property (nonatomic, copy) NSString *fromUid;
+ /** 是否为群聊*/
+@property (nonatomic, assign) BOOL isGroup;
 
- /** 消息发送者*/
-@property (nonatomic, copy) NSString *from;
-
- /** 消息接收者*/
-@property (nonatomic, copy) NSString *to;
+ /** 消息接收者id(如果是群则是群id) */
+@property (nonatomic, copy) NSString *toUidOrGroupId;
 
  /** 消息发送时间*/
 @property (nonatomic, copy) NSString *time;
 
  /** 消息内容*/
-@property (nonatomic, copy) NSString *body;
+@property (nonatomic, copy) NSString *text;
+ /** 签名*/
+@property (nonatomic, copy) NSString *sign;
+
+
+
 
  /** 单元格高度*/
 @property (nonatomic, assign) CGFloat cellHeight;

@@ -20,7 +20,7 @@
 #import "RHSocketService.h"
 //#import "RHSocketUtils.h"
 
-@interface MainViewController ()
+@interface MainViewController ()<SocketManagerDelegate>
 
 @end
 
@@ -39,25 +39,15 @@
     
     //连接socket服务器
     [[SocketManager shareInstance] connect];
+    [SocketManager shareInstance].delegate = self;
     
     //添加异常捕获
     NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
-    
-    //socket收到数据监听
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectSocketPacketResponse:) name:kNotificationSocketPacketResponse object:nil];
 }
 
-#pragma mark - socket 代理方法
-//收到socket数据
-- (void)detectSocketPacketResponse:(NSNotification *)notif
-{
-    NSLog(@"detectSocketPacketResponse: %@", notif);
-    
-    //这里结果，记得观察打印的内容
-    NSDictionary *userInfo = notif.userInfo;
-    RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
-    NSLog(@"detectSocketPacketResponse data: %@", [rsp object]);
-    NSLog(@"detectSocketPacketResponse string: %@", [rsp stringWithPacket]);
+#pragma mark - socket接收到消息 
+- (void)recievedMessage:(LGMessage *)message{
+    NSLog(@"message : %@",message);
 }
 
 
