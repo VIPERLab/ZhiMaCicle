@@ -72,16 +72,16 @@
     }
     
     //文本消息
-    if (message.msgType == MessageTypeText) {
-        self.msgLabel.text = message.body;
+    if (message.type == MessageTypeText) {
+        self.msgLabel.text = message.text;
         self.timeLabel.text = message.time;
     }
     //语音消息
-    else if (message.msgType == MessageTypeAudio){
+    else if (message.type == MessageTypeAudio){
         
     }
     //图片消息
-    else if (message.msgType == MessageTypeImage){
+    else if (message.type == MessageTypeImage){
         
     }
 }

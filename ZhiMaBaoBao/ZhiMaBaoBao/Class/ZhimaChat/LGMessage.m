@@ -12,18 +12,18 @@
 
 //判断消息是否未用户自己发送
 - (BOOL)isUser{
-    if ([self.from isEqualToString:USERINFO.uphone]) {
-        return YES;
-    }
+//    if ([self.from isEqualToString:USERINFO.uphone]) {
+//        return YES;
+//    }
     return NO;
 }
 
 //计算消息内容高度
-- (void)setBody:(NSString *)body{
-    _body = body;
+- (void)setText:(NSString *)text{
+    _text = text;
     
     //文本size
-    CGSize size = [body sizeWithFont:MSG_FONT maxSize:CGSizeMake(MSG_MAX_WIDTH, MAXFLOAT)];
+    CGSize size = [text sizeWithFont:MSG_FONT maxSize:CGSizeMake(MSG_MAX_WIDTH, MAXFLOAT)];
     self.textWH = size;
     
     //如果文本高度加上边距小余最小高度，则返回最小高度加上边距
