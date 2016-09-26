@@ -17,6 +17,9 @@
 #import "BaseNavigationController.h"
 #import "SocketManager.h"
 
+#import "RHSocketService.h"
+//#import "RHSocketUtils.h"
+
 @interface MainViewController ()
 
 @end
@@ -34,13 +37,29 @@
     [self addChildVc:[[TimeLineController alloc] init] title:@"芝麻圈" image:@"lgtabbar_4" selectedImage:@"lgtabbar_4_select"];
     [self addChildVc:[[PersonalCenterController alloc] init] title:@"芝麻" image:@"lgtabbar_5" selectedImage:@"lgtabbar_5_select"];
     
+    //连接socket服务器
+    [[SocketManager shareInstance] connect];
+    
     //添加异常捕获
     NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
     
-    //连接socket
-    SocketManager *manager = [SocketManager shareInstance];
-    [manager connect];
+    //socket收到数据监听
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectSocketPacketResponse:) name:kNotificationSocketPacketResponse object:nil];
 }
+
+#pragma mark - socket 代理方法
+//收到socket数据
+- (void)detectSocketPacketResponse:(NSNotification *)notif
+{
+    NSLog(@"detectSocketPacketResponse: %@", notif);
+    
+    //这里结果，记得观察打印的内容
+    NSDictionary *userInfo = notif.userInfo;
+    RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
+    NSLog(@"detectSocketPacketResponse data: %@", [rsp object]);
+    NSLog(@"detectSocketPacketResponse string: %@", [rsp stringWithPacket]);
+}
+
 
 //添加子控制器
 - (void)addChildVc:(BaseViewController *)childVc title:(NSString *)title image:(NSString *)image selectedImage:(NSString *)selectedImage
@@ -65,6 +84,12 @@
     [self addChildViewController:navigationVc];
 }
 
+
+- (void)dealloc{
+    
+    //移除所有通知
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 void UncaughtExceptionHandler(NSException *exception) {
     NSArray *arr = [exception callStackSymbols];    //得到当前调用栈信息

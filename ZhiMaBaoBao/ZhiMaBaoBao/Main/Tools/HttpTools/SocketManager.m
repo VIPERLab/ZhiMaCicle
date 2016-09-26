@@ -8,10 +8,12 @@
 
 #import "SocketManager.h"
 
-@interface SocketManager ()<GCDAsyncSocketDelegate>{
-    dispatch_source_t timer; //定时器，发送心跳包
-}
-@property (nonatomic, strong) NSTimer *connectTimer;    //定时器，发送心跳包
+#import "RHSocketService.h"
+#import "RHSocketVariableLengthEncoder.h"
+#import "RHSocketVariableLengthDecoder.h"
+#import "RHSocketUtils.h"
+
+@interface SocketManager ()
 
 @end
 
@@ -32,101 +34,79 @@ static SocketManager *manager = nil;
 
 //连接服务器
 - (void)connect{
-    self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
     
-    // 在连接前先进行手动断开
-//    [self disconnect];
+    //每次连接socket之前，先关闭socket
+    [[RHSocketService sharedInstance] stopService];
     
-    // 确保断开后再连，如果对一个正处于连接状态的socket进行连接，会出现崩溃  -- 将userData设置为SocketOfflineByServer 在自动断开的情况下实现重连
-    self.socket.userData = SocketOfflineByServer;
+    RHSocketConnectParam *connectParam = [[RHSocketConnectParam alloc] init];
+    connectParam.host = HOST;
+    connectParam.port = PORT;
     
-    NSError *error = nil;
-    if (![self.socket connectToHost:HOST onPort:9093 withTimeout:3 error:&error]) {
-        NSLog(@"socket连接错误 error : %@",error);
-    }
+    //设置心跳定时器间隔15秒
+    connectParam.heartbeatInterval = 15;
+    
+    //设置短线后是否自动重连
+    connectParam.autoReconnect = YES;
+    
+    //变长编解码。包体＝包头（包体的长度）＋包体数据
+    RHSocketVariableLengthEncoder *encoder = [[RHSocketVariableLengthEncoder alloc] init];
+    RHSocketVariableLengthDecoder *decoder = [[RHSocketVariableLengthDecoder alloc] init];
+    
+    [RHSocketService sharedInstance].encoder = encoder;
+    [RHSocketService sharedInstance].decoder = decoder;
+    
+    //设置心跳包，这里的object数据，和服务端约定好
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = [@"Heartbeat" dataUsingEncoding:NSUTF8StringEncoding];
+    [RHSocketService sharedInstance].heartbeat = req;
+    
+    [[RHSocketService sharedInstance] startServiceWithConnectParam:connectParam];
 }
 
-/**
- *  手动断开socket
- */
+
+//手动断开socket
 -(void)disconnect{
-    
-    self.socket.userData = SocketOfflineByUser;// 声明是由用户主动切断
-    
-    //关闭定时器
-    if (timer) {
-        dispatch_source_cancel(timer);
-    }
-    
-    [self.socket disconnect];
+    [[RHSocketService sharedInstance] stopService];
 }
 
-#pragma mark - AsyncSocketDelegate
-
-
-//建立连接   每隔3s向服务器发送心跳包 在longConnectToSocket方法中进行长连接需要向服务器发送的讯息
-- (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port{
-    NSLog(@"socket 连接成功");
-    //创建一个timer放到队列
-    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-    //设置timer的开始时间，时间间隔，精确度
-    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 3.0 * NSEC_PER_SEC, 0.1 * NSEC_PER_SEC);
-    //设置timer执行的事件
-    __weak typeof(self) weakSelf = self;
-    dispatch_source_set_event_handler(timer, ^{
-        [weakSelf longConnectToSocket];
-    });
-    //激活timer
-    dispatch_resume(timer);
-}
-
-//失去连接
--(void)socketDidDisconnect:(GCDAsyncSocket *)sock
+#pragma mark - socket 代理方法
+//socket服务器连接状态
+- (void)detectSocketServiceState:(NSNotification *)notif
 {
-    //关闭定时器
-    if (timer) {
-        dispatch_source_cancel(timer);
-    }
+    //NSDictionary *userInfo = @{@"host":host, @"port":@(port), @"isRunning":@(_isRunning)};
+    //对应的连接ip和状态数据。_isRunning为YES是连接成功。
+    //没有心跳超时后会自动断开。
+    NSLog(@"detectSocketServiceState: %@", notif);
     
-    NSLog(@"sorry the connect is failure %@",sock.userData);
-    if (sock.userData == SocketOfflineByServer) {
-        // 服务器掉线，重连
-        [self connect];
-    }
-    else if (sock.userData == SocketOfflineByUser) {
-        // 如果由用户断开，不进行重连
-        return;
-    }
-    
-}
-
-//将要失去连接
-- (void)socket:(GCDAsyncSocket *)sock willDisconnectWithError:(NSError *)err{
-    
-}
-
-
-//接受消息进度
-- (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
-    NSLog(@"stream length %lu",(unsigned long)partialLength);
-}
-
-//收到消息
--(void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
-{
-    // 对得到的data值进行解析与转换即可
-
-    
-    [self.socket readDataWithTimeout:5 tag:0];
-}
-
-
-//长连接 - 发送心跳包
-- (void)longConnectToSocket{
-
-
-    //在长连接中读取数据
-    [self.socket readDataWithTimeout:5 tag:0];
+    id state = notif.object;
+    if (state && [state boolValue]) {
+        //连接成功后，发送数据包
+        RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+        req.object = [@"变长编码器和解码器测试数据包1" dataUsingEncoding:NSUTF8StringEncoding];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+        
+        req = [[RHSocketPacketRequest alloc] init];
+        req.object = [@"变长编码器和解码器测试数据包20" dataUsingEncoding:NSUTF8StringEncoding];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+        
+        req = [[RHSocketPacketRequest alloc] init];
+        req.object = [@"变长编码器和解码器测试数据包300" dataUsingEncoding:NSUTF8StringEncoding];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+        
+        //2016-03-30 11:28:21.217 RHSocketVariableLengthCodecDemo[31043:3057289] timeout: -1.000000, sendData: <002be58f 98e995bf e7bc96e7 a081e599 a8e5928c e8a7a3e7 a081e599 a8e6b58b e8af95e6 95b0e68d aee58c85 31>
+        //2016-03-30 11:28:21.217 RHSocketVariableLengthCodecDemo[31043:3057289] timeout: -1.000000, sendData: <002ce58f 98e995bf e7bc96e7 a081e599 a8e5928c e8a7a3e7 a081e599 a8e6b58b e8af95e6 95b0e68d aee58c85 3230>
+        //2016-03-30 11:28:21.217 RHSocketVariableLengthCodecDemo[31043:3057289] timeout: -1.000000, sendData: <002de58f 98e995bf e7bc96e7 a081e599 a8e5928c e8a7a3e7 a081e599 a8e6b58b e8af95e6 95b0e68d aee58c85 333030>
+        //观察发送的数据，其实就是把获取object的长度当做［包头］，然后再接上［包体］，发送就ok了
+        //3个包的长度分别是，002b，002c，002d，都在sendData的最前面两个字节［包头］
+        //后面就是包体，前面都是一样的，就是1，20，300的数据的区别
+        
+        //解码<002be58f 98e995bf e7bc96e7 a081e599 a8e5928c e8a7a3e7 a081e599 a8e6b58b e8af95e6 95b0e68d aee58c85 31>
+        //例如得到上面这数据值后，先读区包头的长度字节，为002b。将002b转为10进制就是43，然后读区后续的43个字节，就是包体的内容。
+        //这样一个包就解码完成了。
+        
+    } else {
+        //
+    }//if
 }
 
 

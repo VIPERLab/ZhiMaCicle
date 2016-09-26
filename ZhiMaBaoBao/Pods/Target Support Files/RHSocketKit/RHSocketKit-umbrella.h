@@ -1,0 +1,37 @@
+#import <UIKit/UIKit.h>
+
+#import "RHSocketConfig.h"
+#import "RHSocketByteBuf.h"
+#import "RHSocketChannel+Heartbeat.h"
+#import "RHSocketChannel.h"
+#import "RHSocketChannelDefault.h"
+#import "RHSocketConnection.h"
+#import "RHSocketConnectionDelegate.h"
+#import "RHSocketConnectParam.h"
+#import "RHSocketCodecProtocol.h"
+#import "RHSocketException.h"
+#import "RHSocketPacket.h"
+#import "RHSocketPacketContext.h"
+#import "RHSocketUtils.h"
+#import "RHSocketDelimiterDecoder.h"
+#import "RHSocketDelimiterEncoder.h"
+#import "RHBaseMessage.pb.h"
+#import "RHProtobufVarint32LengthDecoder.h"
+#import "RHProtobufVarint32LengthEncoder.h"
+#import "RHSocketUtils+Protobuf.h"
+#import "RHSocketVariableLengthDecoder.h"
+#import "RHSocketVariableLengthEncoder.h"
+#import "RHSocketService.h"
+#import "RHSocketBase64Decoder.h"
+#import "RHSocketBase64Encoder.h"
+#import "RHSocketProtobufDecoder.h"
+#import "RHSocketProtobufEncoder.h"
+#import "NSDictionary+RHSocket.h"
+#import "RHSocketJSONSerializationDecoder.h"
+#import "RHSocketJSONSerializationEncoder.h"
+#import "RHSocketStringDecoder.h"
+#import "RHSocketStringEncoder.h"
+
+FOUNDATION_EXPORT double RHSocketKitVersionNumber;
+FOUNDATION_EXPORT const unsigned char RHSocketKitVersionString[];
+
