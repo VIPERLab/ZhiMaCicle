@@ -48,8 +48,7 @@
 #define kTimeLineTableViewCellId @"SDTimeLineCell"
 
 
-
-@interface SDTimeLineTableViewController () <SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,KXDiscoverNewMessageViewDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface SDTimeLineTableViewController () <SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,KXDiscoverNewMessageViewDelegate,UITableViewDelegate,UITableViewDataSource,KXCopyViewDelegate>
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) SDTimeLineTableHeaderView *headerView;  //头部视图
 
@@ -98,20 +97,14 @@
     [super viewDidLoad];
     [self setCustomTitle:@"朋友圈"];
     self.pageNumber = 0;
-    
+    [self setupNav];
     [self setupView];
-    
     [self notification];
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [self setupKeyBoardAndRefreshHeader];
+    [self getDataFromSQL];
 }
 
 
 - (void)viewDidAppear:(BOOL)animated {
-    // -------  设置富文本键盘
     [self setupKeyBoard];
 }
 
@@ -128,7 +121,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
+- (void)setupNav {
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Discover_AddDiscover"] style:UIBarButtonItemStyleDone target:self action:@selector(rightBarButtonItemAction:)];
+    self.navigationItem.rightBarButtonItem = rightBarButton;
+}
 
 
 
@@ -141,12 +137,6 @@
     self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
-    
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Discover_AddDiscover"] style:UIBarButtonItemStyleDone target:self action:@selector(rightBarButtonItemAction:)];
-    self.navigationItem.rightBarButtonItem = rightBarButton;
-    
-//    self.automaticallyAdjustsScrollViewInsets = NO;
-//    self.edgesForExtendedLayout = UIRectEdgeTop;
     
     //设置头部
     SDTimeLineTableHeaderView *headerView = [SDTimeLineTableHeaderView new];
@@ -162,7 +152,6 @@
     headerView.frame = CGRectMake(0, 0, 0, 260); //260
     self.tableView.tableHeaderView = headerView;
     
-    
     [self.tableView registerClass:[SDTimeLineCell class] forCellReuseIdentifier:kTimeLineTableViewCellId];
 }
 
@@ -170,8 +159,12 @@
 - (void)notification {
     //成为富文本的观察者 - 点击别人的名字
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KUserNameLabelNotification object:nil];
+    
+    // 长按文字、图片回调
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(longPressContentLabel:) name:KDiscoverLongPressContentNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLongPressContentLabel:) name:KDiscoverDisLongPressContentNotificaion object:nil];
+    
+    //接收未读消息通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(upLoadUnReadMessage:) name:K_UpDataUnReadCountNotification object:nil];
 }
 
 
@@ -184,14 +177,12 @@
     if (!self.tableView.mj_header) {
         self.tableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
             //加载未读消息数
-            [weakSelf upLoadUnReadMessage];
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
             //下拉页数置1
             weakSelf.pageNumber = 1;
             NSString *pageNumber = [NSString stringWithFormat:@"%zd",weakSelf.pageNumber];
-            
             NSString *sectionID = USERINFO.sessionId;
             NSString *openfireaccount = USERINFO.openfireaccount;
-            
             [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:openfireaccount andPageCount:pageNumber block:^(ResponseData *responseData) {
                 
                 if (responseData == nil || responseData.data == nil) {
@@ -201,22 +192,34 @@
                     [self.tableView.mj_header endRefreshing];
                     return;
                 }
-                
                 [self.tableView.mj_header endRefreshing];
-                NSArray *dataArray = [weakSelf setupModelDataWithJson:responseData andUpDataLastFcID:YES];
-                if (dataArray.count) {
-                    [weakSelf.dataArray removeAllObjects];
-                    [weakSelf.dataArray addObjectsFromArray:dataArray];
-                    [weakSelf.tableView reloadDataWithExistedHeightCache];
+                
+                [weakSelf.dataArray removeAllObjects];
+                
+                NSArray *delCircleIDArray = [NSString mj_objectArrayWithKeyValuesArray:responseData.data_temp[@"dataList"]];
+                
+                for (NSString *circleID in delCircleIDArray) {
+                    [FMDBShareManager deleteCircleDataWithCircleID:circleID];
                 }
                 
-                [weakSelf.tableView reloadData];
+                NSArray *dataArray = [weakSelf setupModelDataWithJson:responseData andUpDataLastFcID:YES];
+                
+                //存数据到朋友圈表
+                [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+                
+                self.dataArray = [dataArray mutableCopy];
+                [self.tableView reloadDataWithExistedHeightCache];
+                [self.tableView reloadData];
+                
             }];
 
         }];
-        [self.tableView.mj_header beginRefreshing];
+        //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
+        if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
+            [self.tableView.mj_header beginRefreshing];
+        }
+        
     }
-    
     
     //上啦刷新
     if (!self.tableView.mj_footer) {
@@ -234,17 +237,20 @@
                 if (responseData == nil) {
                     return;
                 }
-                NSArray *array = [self setupModelDataWithJson:responseData andUpDataLastFcID:YES];
-                if (array.count) {
-                    [self.dataArray addObjectsFromArray:array];
+                
+                NSArray *dataArray = [self setupModelDataWithJson:responseData andUpDataLastFcID:YES];
+                if (dataArray.count) {
+                    [self.dataArray addObjectsFromArray:dataArray];
                     self.pageNumber++;
                 } else {
-                    
                     self.tableView.mj_footer.state = MJRefreshStateNoMoreData;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                     return;
                     
                 }
+                
+                //存数据到朋友圈表
+                [FMDBShareManager saveCircleDataWithDataArray:dataArray];
                 
                 [self.tableView.mj_footer endRefreshing];
                 [self.tableView reloadData];
@@ -256,30 +262,30 @@
 }
 
 #pragma mark - 加载未读消息数
-- (void)upLoadUnReadMessage {
+- (void)upLoadUnReadMessage:(NSNotification *)notification {
     //进入前台的时候请求未读消息
-    if (USERINFO.sessionId) {
-        //如果用户登录了，才让他去请求最新发朋友圈的用户
-        if (!USERINFO.lastFcID.length) {
-            USERINFO.lastFcID = @"0";
-        }
-        [LGNetWorking ApplicationWakeUpAtBackgroundWithSessionId:USERINFO.sessionId andOpenFirAccount:USERINFO.openfireaccount andLastMessageID:USERINFO.lastFcID block:^(ResponseData *responseData) {
-            
-            if (responseData.code != 0) {
-                return ;
-            }
-            
-            NSString *headphoto = responseData.data[@"headphoto"];
-            
-            int unReadCount = [responseData.data[@"count"] intValue];
-            // -------  是否显示新消息提示
-            if (![headphoto isEqualToString:@""] && unReadCount) {
-                self.headPhoto = headphoto;
-                self.unReadCount = unReadCount;
-            }
-        }];
+    int unReadCount = [notification.userInfo[@"count"] intValue];
+    NSString *headphoto = notification.userInfo[@"headphoto"];
+    if (![headphoto isEqualToString:@""] && unReadCount) {
+        self.headPhoto = headphoto;
+        self.unReadCount = unReadCount;
     }
 }
+
+
+#pragma mark - 从数据库取出数据
+- (void)getDataFromSQL {
+    [self.dataArray removeAllObjects];
+    
+    // 获取所有朋友圈的数据
+    self.dataArray = [[FMDBShareManager getCirCleDataInArray] mutableCopy];
+    
+    [self setupKeyBoardAndRefreshHeader];
+    [self.tableView reloadDataWithExistedHeightCache];
+    [self.tableView reloadData];
+}
+
+
 
 
 #pragma mark - 设置键盘
@@ -342,7 +348,7 @@
             info.lastFcID = cellModel.ID;
             [info save];
             isUpdata = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataHeaderPhotoNotification object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
         }
         
         //转换数组类型
@@ -425,6 +431,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SDTimeLineCellModel *model = self.dataArray[indexPath.row];
+    
     SDTimeLineCell *cell = [tableView dequeueReusableCellWithIdentifier:kTimeLineTableViewCellId];
     cell.indexPath = indexPath;
     __weak typeof(self) weakSelf = self;
@@ -440,11 +448,13 @@
     }
     
     //缓存行高
-    [cell useCellFrameCacheWithIndexPath:indexPath tableView:tableView];
+    
     
 #warning 下一步优化：如果tableView快速滑动，则不加载图片,以及离屏渲染优化
-    SDTimeLineCellModel *model = self.dataArray[indexPath.row];
+    
     cell.model = model;
+    
+    [cell useCellFrameCacheWithIndexPath:indexPath tableView:tableView];
     return cell;
 }
 
@@ -590,10 +600,11 @@
     [self DiscoverLikeOrComment:[self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath] andComment:text];
 }
 
-
+#pragma mark - 点赞或者评论网络请求
 - (void)DiscoverLikeOrComment:(SDTimeLineCell *)cell andComment:(NSString *)comment {
     
     SDTimeLineCellModel *model = cell.model;
+    _currentEditingIndexthPath = [self.tableView indexPathForCell:cell];
     
     [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.ID andComment:comment andOpenFirAccount:_currentCommenterOpenFirAccount block:^(ResponseData *responseData) {
         
@@ -603,46 +614,94 @@
             return;
         }
         
-        if ([comment isEqualToString:@""]) {  //没有评论就是点赞
-            NSIndexPath *index = [self.tableView indexPathForCell:cell];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationNone];
-            });
-            return;
-        }
-        
-        //如果有评论就是评论
-        SDTimeLineCellModel *model = self.dataArray[_currentEditingIndexthPath.row];
-        NSMutableArray *temp = [NSMutableArray new];
-        
-        temp = [model.commentList mutableCopy];
-        
-        SDTimeLineCellCommentItemModel *commentItemModel = [SDTimeLineCellCommentItemModel new];
-        
-        if (self.isReplayingComment) {
-            //回复别人评论
-            commentItemModel.friend_nick = USERINFO.username;
-            commentItemModel.openfireaccount = USERINFO.openfireaccount;
-            commentItemModel.ID = responseData.data;
-            commentItemModel.reply_friend_nick = self.commentToUser;
-            commentItemModel.reply_openfireaccount = self.currentCommenterOpenFirAccount;
-            commentItemModel.type = NO;
-            commentItemModel.comment = comment;
+        NSArray *commentListArray = [SDTimeLineCellCommentItemModel mj_objectArrayWithKeyValuesArray:responseData.data_temp];
+        NSMutableArray *likeItemsArray = [NSMutableArray array];
+        NSInteger count = commentListArray.count -1;
+        NSMutableArray *copyArray = [commentListArray mutableCopy];
+        for (NSInteger index = count; index >= 0; index--) {
             
-            self.isReplayingComment = NO;
-        } else {
-            //自己评论
-            NSString *ID = [NSString stringWithFormat:@"%@",responseData.data];
-            commentItemModel.friend_nick = USERINFO.username;
-            commentItemModel.comment = comment;
-            commentItemModel.ID = ID;
-            commentItemModel.type = NO;
-            commentItemModel.openfireaccount = USERINFO.openfireaccount;
+            //获取原始数据Model
+            SDTimeLineCellCommentItemModel *model = commentListArray[index];
+            if (model.type) {
+                //如果是点赞，则把MODEL移出拷贝数组，放到like数组
+                [copyArray removeObjectAtIndex:index];
+                
+                SDTimeLineCellLikeItemModel *likeModel = [[SDTimeLineCellLikeItemModel alloc] init];
+                if (!model.friend_nick) {
+                    model.friend_nick = @"未命名";
+                }
+                
+                likeModel.userName = model.friend_nick;
+                likeModel.userId = model.openfireaccount;
+                [likeItemsArray addObject:likeModel];
+                
+            }
         }
         
-        [temp addObject:commentItemModel];
+        //循环结束之后，把筛选剩下的评论数赋值回去
+        commentListArray = [copyArray mutableCopy];
         
-        model.commentList = [temp mutableCopy];
+        for (SDTimeLineCellCommentItemModel *model in commentListArray) {
+            if (!model.friend_nick) {
+                model.friend_nick = @"未命名";
+            }
+        }
+        
+        //得到最新的Model
+        model.likeItemsArray = [likeItemsArray mutableCopy];
+        model.commentList = [commentListArray mutableCopy];
+        
+        FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
+        FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
+        
+        //删除这条朋友圈ID 的所有点赞和评论信息
+        NSString *commentDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",model.ID]];
+        [commentQueue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:commentDelOpeartion];
+            if (success) {
+                NSLog(@"删除评论成功");
+            } else {
+                NSLog(@"删除评论失败");
+            }
+        }];
+        
+        NSString *likeDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",model.ID]];
+        [likeQueue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:likeDelOpeartion];
+            if (success) {
+                NSLog(@"删除点赞成功");
+            } else {
+                NSLog(@"删除点赞失败");
+            }
+        }];
+        
+        
+        for (SDTimeLineCellCommentItemModel *commentItemModel in model.commentList) {
+            //把这条评论插入评论数据库
+            NSString *operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Comment_Table];
+            
+            [commentQueue inDatabase:^(FMDatabase *db) {
+                BOOL success = [db executeUpdate:operationStr,commentItemModel.friend_nick,commentItemModel.ID,commentItemModel.comment,commentItemModel.reply_friend_nick,commentItemModel.reply_openfireaccount,commentItemModel.head_photo,commentItemModel.create_time,model.ID,commentItemModel.openfireaccount];
+                if (success) {                    
+                    NSLog(@"插入评论成功");
+                } else {
+                    NSLog(@"插入评论失败");
+                }
+            }];
+        }
+        
+        
+        for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
+            NSString *operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Like_Table];
+            [likeQueue inDatabase:^(FMDatabase *db) {
+                BOOL success = [db executeUpdate:operationStr,likeModel.userName,likeModel.userId,likeModel.userPhoto,model.ID];
+                if (success) {
+                    NSLog(@"插入点赞成功");
+                } else {
+                    NSLog(@"插入点赞失败");
+                }
+            }];
+        }
         
         [self.tableView reloadRowsAtIndexPaths:@[_currentEditingIndexthPath] withRowAnimation:UITableViewRowAnimationNone];
         self.currentCommenterOpenFirAccount = @"";
@@ -722,10 +781,17 @@
 
 // ----      点击别人的头像
 - (void)didClickUserIconInCell:(SDTimeLineCell *)cell {
+    UserInfo *info = [UserInfo read];
+    SDTimeLineCellModel *model = cell.model;
     PesonalDiscoverController *personal = [[PesonalDiscoverController alloc] init];
-    personal.sessionID = USERINFO.sessionId;
-    personal.openFirAccount = cell.model.openfireaccount;
+    personal.sessionID = info.sessionId;
+    personal.openFirAccount = model.openfireaccount;
     [self.navigationController pushViewController:personal animated:YES];
+}
+
+// ----      点击了投诉按钮
+- (void)didClickComplainButton:(SDTimeLineCell *)cell {
+    [self didLongPressUserIconWithCell:cell];
 }
 
 // -----    长按头像
@@ -765,8 +831,25 @@
             return ;
         }
         [LCProgressHUD showText:@"删除成功"];
-
+        
         SDTimeLineCellModel *cellModel = self.dataArray[index.row];
+        
+        //删除对应的评论
+        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
+        NSString *opeartionStr = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@ and fcid = %@",cellModel.ID, commentModel.ID]];
+        [queue inDatabase:^(FMDatabase *db) {
+            
+            BOOL success = [db executeUpdate:opeartionStr];
+            if (success) {
+                NSLog(@"删除成功");
+            } else {
+                NSLog(@"删除失败");
+            }
+            
+        }];
+        
+        
+        
         for (SDTimeLineCellCommentItemModel *model in cellModel.commentList) {
             if ([model.ID isEqualToString:commentModel.ID]) {
                 [cellModel.commentList removeObject:model];
@@ -784,7 +867,9 @@
     UIView *contentLabel = notification.userInfo[@"contentLabel"];
     self.contentLabel = contentLabel;
     if (!_copyView) {
-        _copyView = [[KXCopyView alloc] initWithControler:contentLabel andLocation:KXCopyViewLoaction_up];
+        CGRect controlFrame = [contentLabel convertRect:contentLabel.frame toView:[UIApplication sharedApplication].keyWindow];
+        _copyView = [[KXCopyView alloc] initWithFrame:CGRectMake(controlFrame.origin.x, controlFrame.origin.y - 80, 50, 40)];
+        _copyView.delegate = self;
         _copyView.titleArray = @[@"复制"];
         [_copyView setImage:[UIImage imageNamed:@"Discovre_Copy"] andInsets:UIEdgeInsetsMake(30, 40, 30, 40)];
         [self.view addSubview:_copyView];
@@ -796,45 +881,48 @@
 
 }
 
-- (void)didLongPressContentLabel:(NSNotification *)nofiticaiton {
+#pragma mark - copyView回调
+- (void)KXCopyViewDidClickWithIndex:(NSInteger)index {
+    if (index == 0) {
+        // 点击了复制
+        UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+        pboard.string = self.contentLabel.text;
+    } else if (index == 1) {
+        //点击了收藏
+        
+    }
     
-    self.contentLabel.backgroundColor = [UIColor whiteColor];
+    [UIView animateWithDuration:0.3 animations:^{
+        _copyView.alpha = 0.0;
+        _copyView = nil;
+        _contentLabel.backgroundColor = [UIColor whiteColor];
+    }];
+    
 }
 
-
-
-// ----  复制点击事件
-- (void)copyLabelDidClick {
-    
-    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
-    pboard.string = self.contentLabel.text;
-}
-
-// ----  收藏点击事件
-- (void)collectionLabelDidClick {
-    
-    
-}
 
 #pragma mark - userInterFace
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (_copyView) {
-        [_copyView endAnimation];
-        _copyView = nil;
-        _contentLabel.backgroundColor = [UIColor whiteColor];
+        [UIView animateWithDuration:0.3 animations:^{
+            _copyView.alpha = 0.0;
+            _copyView = nil;
+            _contentLabel.backgroundColor = [UIColor whiteColor];
+        }];
     }
     [self.chatKeyBoard keyboardDownForComment];
 }
 
-
-
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (_copyView) {
-        [_copyView endAnimation];
-        _copyView = nil;
-        _contentLabel.backgroundColor = [UIColor whiteColor];
+        [UIView animateWithDuration:0.3 animations:^{
+            _copyView.alpha = 0.0;
+            _copyView = nil;
+            _contentLabel.backgroundColor = [UIColor whiteColor];
+        }];
     }
 }
+
 
 
 
@@ -853,7 +941,9 @@
         }
         return;
     } else if (actionSheet.tag == 100) {
+        //打开图片相册
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
         switch (buttonIndex) {
             case 0:
                 picker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -879,6 +969,7 @@
     
     UIImage *image = info[@"UIImagePickerControllerOriginalImage"];
     NSData *imageData = UIImageJPEGRepresentation(image, 1);
+    
     [LGNetWorking uploadPhoto:USERINFO.sessionId image:imageData fileName:@"backgroundImg" andFuctionName:@"backgroundImg" block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
@@ -894,11 +985,6 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-#pragma mark - backAction
-- (void)backAction {
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
 
 #pragma mark - lazyLoad

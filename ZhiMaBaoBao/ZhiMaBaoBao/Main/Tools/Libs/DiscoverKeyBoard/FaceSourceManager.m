@@ -19,7 +19,7 @@
 {
     NSMutableArray *subjectArray = [NSMutableArray array];
     
-    NSArray *sources = @[@"face"];//, @"systemEmoji",@"emotion",@"systemEmoji",@"face",@"systemEmoji",@"emotion",@"emotion",@"face",@"face",@"emotion",@"face", @"emotion",@"face", @"emotion"];
+    NSArray *sources = @[@"systemEmoji",@"face"];//, @"systemEmoji",@"emotion",@"systemEmoji",@"face",@"systemEmoji",@"emotion",@"emotion",@"face",@"face",@"emotion",@"face", @"emotion",@"face", @"emotion"];
     
     for (int i = 0; i < sources.count; ++i)
     {

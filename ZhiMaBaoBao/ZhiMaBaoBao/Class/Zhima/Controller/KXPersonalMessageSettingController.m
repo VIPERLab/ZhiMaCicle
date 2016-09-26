@@ -14,6 +14,7 @@
 #import "SettingInvitedCodeController.h"
 #import "ChangeUerNameController.h"
 #import "ModifySignController.h"
+#import "ChangeSexController.h"
 
 #define KXPersonalSettingCellReusedID @"KXPersonalSettingCellReusedID"
 
@@ -43,6 +44,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    _subTitleArray = @[@[@"编辑",USERINFO.username],@[USERINFO.sex,@"深圳 南山区",USERINFO.signature],@[@"",@""]];
     [_tableView reloadData];
 }
 
@@ -68,10 +70,10 @@
                 return 2;
             }
 #warning 这里要记得设置为1
-            return 2;
+            return 1;
         }
 #warning 这里要记得设置为1
-        return 2;
+        return 1;
     }
     return titleArray.count;
 }
@@ -126,8 +128,9 @@
         
     } else if (indexPath.section == 1 && indexPath.row == 0) {
         // -----    修改性别
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"是否要修改性别" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        [alertView show];
+        ChangeSexController *sex = [[ChangeSexController alloc] init];
+        sex.selectedSex = USERINFO.sex;
+        [self.navigationController pushViewController:sex animated:YES];
         
     } else if (indexPath.section == 1 && indexPath.row == 1) {
         // -----    修改地区
@@ -232,16 +235,6 @@
 }
 
 
-// ---  修改性别
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        //取消
-        return;
-    } else if (buttonIndex == 1) {
-        //确定
-    }
-}
-
 - (void)changeSex {
     
 }
@@ -257,13 +250,6 @@
     return _titleArray;
 }
 
-- (NSArray *)subTitleArray {
-    if (!_subTitleArray) {
-//        _subTitleArray = @[@[@"",USERINFO.username],@[USERINFO.sex,USERINFO.location,USERINFO.signature],@[@"",@""]];
-        _subTitleArray = @[@[@"编辑",@"kit"],@[@"男",@"深圳 南山",@"我就是我"],@[@"",@""]];
-    }
-    return _subTitleArray;
-}
 
 
 

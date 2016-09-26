@@ -66,6 +66,7 @@
 
 - (void)setUnReadImage:(NSString *)unReadImage {
     if ([unReadImage isEqualToString:@""] || unReadImage == nil) {
+        _unReadCircleImage.hidden = YES;
         return;
     }
     _unReadCircleImage.hidden = NO;
@@ -75,6 +76,7 @@
 
 - (void)setUnReadCount:(int)unReadCount {
     if (unReadCount == 0) {
+        _unReadCountLabel.hidden = YES;
         return;
     }
     _unReadCountLabel.hidden = NO;

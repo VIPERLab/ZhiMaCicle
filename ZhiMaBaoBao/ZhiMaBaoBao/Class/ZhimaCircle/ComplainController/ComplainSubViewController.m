@@ -36,7 +36,7 @@
     
     CGFloat imageW = 100;
     CGFloat imageH = imageW;
-    CGFloat imageY = 30;
+    CGFloat imageY = 30 + 64;
     CGFloat imageX = ([UIScreen mainScreen].bounds.size.width - imageW) * 0.5;
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     imageView.image = [UIImage imageNamed:@"ComplainSuccess_TickIcon"];

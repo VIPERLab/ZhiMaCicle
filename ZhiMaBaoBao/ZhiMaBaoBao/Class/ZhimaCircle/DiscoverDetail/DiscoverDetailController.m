@@ -362,6 +362,8 @@
             [self.delegate DiscoverDetailControllerDeletedButtonDidClick:self.indexPath];
         }
         
+        [FMDBShareManager deleteCircleDataWithCircleID:self.model.ID];
+        
         [self.navigationController popViewControllerAnimated:YES];
         
     }];

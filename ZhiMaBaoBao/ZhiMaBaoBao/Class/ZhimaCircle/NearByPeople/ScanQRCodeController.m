@@ -1,49 +1,27 @@
 //
-//  SettingInvitedCodeController.m
-//  YiIM_iOS
+//  ScanQRCodeController.m
+//  ZhiMaBaoBao
 //
-//  Created by mac on 16/9/19.
-//  Copyright © 2016年 ikantech. All rights reserved.
+//  Created by mac on 16/9/23.
+//  Copyright © 2016年 liugang. All rights reserved.
 //
 
-#import "SettingInvitedCodeController.h"
-#import "SettingInvitedByHandViewController.h"
-
-//#import "MyQRViewController.h"
+#import "ScanQRCodeController.h"
 #import "LBXScanResult.h"
 #import "LBXScanWrapper.h"
 #import "LBXScanVideoZoomView.h"
-//#import "YiXmppVCard.h"
-//#import "YiIMSDK.h"
-//#import "YiUserInfoViewController.h"
 
 #import "KXCodingManager.h"
 
-
-@interface SettingInvitedCodeController () <UIAlertViewDelegate>
-//{
-//    YiXmppVCard *_vcard;
-//}
+@interface ScanQRCodeController () <UIAlertViewDelegate>
 @property (nonatomic, strong) LBXScanVideoZoomView *zoomView;
 @end
 
-@implementation SettingInvitedCodeController
+@implementation ScanQRCodeController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
-    [self setCustomTitle:@"扫一扫"];
-//    [self setCustomRightBarBUtton:@"设置邀请码"];
-    [self setupNav];
-    [self setupView];
-}
-
-- (void)setupNav {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"设置邀请码" style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonDidClick)];
-}
-
-- (void)setupView {
     [self setCustomTitle:@"二维码扫描"];
     
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
@@ -56,13 +34,6 @@
     self.isNeedScanImage = YES;
     
 }
-
-- (void)rightButtonDidClick {
-    SettingInvitedByHandViewController *setting = [[SettingInvitedByHandViewController alloc] init];
-    setting.invitedCode = @"";
-    [self.navigationController pushViewController:setting animated:YES];
-}
-
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -77,6 +48,7 @@
     else
         _topTitle.hidden = YES;
 }
+
 
 //绘制扫描区域
 - (void)drawTitle
@@ -272,20 +244,14 @@
 
 - (void)showNextVCWithScanResult:(LBXScanResult*)strResult {
     
-    //    NSString *str;
-    
-    
     NSString *str = strResult.strScanned;
-    
     NSRange range = [str rangeOfString:@".do?"];
-    NSLog(@"jid的范围 = %@",NSStringFromRange(range));
     if (range.length == 0) {
         UIAlertView * alertView = [[UIAlertView alloc] initWithTitle: @"警告" message: [NSString stringWithFormat: @"%@:%@", @"无法解析的二维码", str] delegate: nil cancelButtonTitle: @"确定" otherButtonTitles: nil];
         alertView.delegate = self;
         [alertView show];
         return;
     }
-    
     //需要解码内容
     NSString *subString = [str substringFromIndex:range.location + 4];
     
@@ -295,25 +261,44 @@
     NSLog(@"AES解密之后的内容: %@",AESDecodingStr);
     
     //做处理
-    NSRange jidRange = [AESDecodingStr rangeOfString:@"invite_code="];
-    NSString *invitedCode = [AESDecodingStr substringFromIndex:jidRange.location + 12];
-    NSRange invitedRange = [invitedCode rangeOfString:@"&"];
-    invitedCode = [invitedCode substringToIndex:invitedRange.location];
-    NSLog(@"%@",invitedCode);
+    NSRange jidRange = [AESDecodingStr rangeOfString:@"jid="];
+    NSString *jid = [AESDecodingStr substringFromIndex:jidRange.location + 4];
     
-    SettingInvitedByHandViewController *setting = [[SettingInvitedByHandViewController alloc] init];
-    setting.invitedCode = invitedCode;
-    [self.navigationController pushViewController:setting animated:YES];
+    NSLog(@"jid = %@",jid);
+    
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:str]]) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    }
+    
+//    YiXmppVCard * vcard = [[YiXmppVCard alloc] init];
+//
+//    if (![subString isEqualToString:@""]) {
+//        [vcard load:jid forceIntenet:YES success:^{
+//            if ([vcard exist]) {
+//                _vcard = vcard;
+//                [self performSegueWithIdentifier:@"YiUserinfo" sender:nil];
+//            }
+//        } failed:^{
+//            _vcard = nil;
+//            
+//            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:str]]) {
+//                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+//            }
+//            else {
+//                UIAlertView * alertView = [[UIAlertView alloc] initWithTitle: @"警告" message: [NSString stringWithFormat: @"%@:%@", @"无法解析的二维码", str] delegate: nil cancelButtonTitle: @"确定" otherButtonTitles: nil];
+//                [alertView show];
+//            }
+//        }];
+//    }
+    
+    
     
     
 }
-
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-
 
 
 #pragma mark -底部功能项
@@ -344,6 +329,7 @@
 }
 
 
+
 #pragma mark -底部功能项
 
 
@@ -353,12 +339,6 @@
 //    [self.navigationController pushViewController:vc animated:YES];
 }
 
-
-- (void)rightBarButtonAction {
-    SettingInvitedByHandViewController *setting = [[SettingInvitedByHandViewController alloc] init];
-    setting.invitedCode = @"";
-    [self.navigationController pushViewController:setting animated:YES];
-}
 
 
 

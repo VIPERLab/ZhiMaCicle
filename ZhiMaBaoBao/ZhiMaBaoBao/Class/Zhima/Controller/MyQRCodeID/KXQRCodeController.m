@@ -48,7 +48,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     
-    UIImageView *userIcon = [[UIImageView alloc] initWithFrame:CGRectMake(20, 30 + 64, 80, 80)];
+    UIImageView *userIcon = [[UIImageView alloc] initWithFrame:CGRectMake(20, 30 + 64, 40, 40)];
     self.userIcon = userIcon;
     [userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
     [self.view addSubview:userIcon];

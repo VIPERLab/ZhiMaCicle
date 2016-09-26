@@ -41,11 +41,10 @@
     [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:ComplainCellReusedID];
     
     
-    
     CGFloat buttonW = 100;
     CGFloat buttonH = 30;
     CGFloat buttonX = ([UIScreen mainScreen].bounds.size.width - buttonW) * 0.5;
-    CGFloat buttonY = [UIScreen mainScreen].bounds.size.height - buttonH - 20 - 64;
+    CGFloat buttonY = [UIScreen mainScreen].bounds.size.height - buttonH - 20;
     
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(buttonX, buttonY, buttonW, buttonH)];
     

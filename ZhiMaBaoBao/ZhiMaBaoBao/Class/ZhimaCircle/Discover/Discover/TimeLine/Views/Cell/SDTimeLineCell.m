@@ -57,7 +57,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 
 {
     
-    UILabel *_nameLable;
+    UIButton *_nameLable;
     UILabel *_contentLabel;
     SDWeiXinPhotoContainerView *_picContainerView;
     UILabel *_timeLabel;
@@ -68,13 +68,13 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     SDTimeLineCellCommentView *_commentView;
     SDTimeLineCellOperationMenu *_operationMenu;
     UIImageView *_copyView;
+    UIButton *_complainButton;
 }
 
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        
         [self setup];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -96,9 +96,11 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     [_iconView addGestureRecognizer:longPressGresture];
     
     
-    _nameLable = [UILabel new];
-    _nameLable.font = [UIFont systemFontOfSize:16];
-    _nameLable.textColor = [UIColor colorFormHexRGB:@"576b95"];
+    _nameLable = [UIButton new];
+    _nameLable.titleLabel.font = [UIFont systemFontOfSize:16];
+    [_nameLable setTitleColor:[UIColor colorFormHexRGB:@"576b95"] forState:UIControlStateNormal];
+    [_nameLable addTarget:self action:@selector(userNameDidClick) forControlEvents:UIControlEventTouchUpInside];
+    
     
     _contentLabel = [UILabel new];
     _contentLabel.font = [UIFont systemFontOfSize:contentLabelFontSize];
@@ -129,6 +131,11 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     _timeLabel.textColor = [UIColor colorFormHexRGB:@"737373"];
     _timeLabel.font = [UIFont systemFontOfSize:12];
     
+    _complainButton = [UIButton new];
+    [_complainButton setTitle:@"投诉" forState:UIControlStateNormal];
+    [_complainButton setTitleColor:[UIColor colorFormHexRGB:@"576b95"] forState:UIControlStateNormal];
+    _complainButton.titleLabel.font = [UIFont systemFontOfSize:11];
+    [_complainButton addTarget:self action:@selector(complainButtonDidClick) forControlEvents:UIControlEventTouchUpInside];
     
     _operationMenu = [SDTimeLineCellOperationMenu new];
     __weak typeof(self) weakSelf = self;
@@ -153,7 +160,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     [self addSubview:_bottomLineView];
     
     
-    NSArray *views = @[_iconView, _nameLable, _contentLabel, _moreButton, _picContainerView, _timeLabel,_areaLabel, _operationButton, _operationMenu, _commentView];
+    NSArray *views = @[_iconView, _nameLable, _contentLabel, _moreButton, _picContainerView, _timeLabel,_complainButton,_areaLabel, _operationButton, _operationMenu, _commentView];
     
     [self.contentView sd_addSubviews:views];
     
@@ -170,7 +177,6 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     .leftSpaceToView(_iconView, margin)
     .topEqualToView(_iconView)
     .heightIs(18);
-    [_nameLable setSingleLineAutoResizeWithMaxWidth:300]; //设置名字最大长度
     
     _contentLabel.sd_layout
     .leftEqualToView(_nameLable)
@@ -192,6 +198,12 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     .topSpaceToView(_picContainerView, margin * 0.5)
     .heightIs(15);
     [_timeLabel setSingleLineAutoResizeWithMaxWidth:200];
+    
+    _complainButton.sd_layout
+    .leftSpaceToView(_timeLabel,10)
+    .topEqualToView(_timeLabel)
+    .bottomEqualToView(_timeLabel)
+    .widthIs(25);
     
     _operationButton.sd_layout
     .rightSpaceToView(contentView, margin)
@@ -244,7 +256,13 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
         model.shouldShowMoreButton = YES;
     }
     
-    _nameLable.text = model.friend_nick;
+    
+    //设置名字的长度
+    [_nameLable setTitle:model.friend_nick forState:UIControlStateNormal];
+    CGFloat nameW = [model.friend_nick sizeWithFont:[UIFont systemFontOfSize:16] maxSize:CGSizeMake(MAXFLOAT, 20)].width;
+    _nameLable.sd_layout.widthIs(nameW);
+    
+    
     _contentLabel.text = model.content;
     _areaLabel.text = model.current_location;
     _picContainerView.picPathStringsArray = model.imglist;
@@ -331,7 +349,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 }
 
 
-#pragma mark - 长按文本
+#pragma mark - 长按文本、图片
 - (void)longPressContentLabel:(UIGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
             
@@ -351,20 +369,19 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     }
 }
 
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverDisLongPressContentNotificaion object:nil];
-}
-
-
-
-
-- (void)postOperationButtonClickedNotification
-{
+- (void)postOperationButtonClickedNotification {
     [[NSNotificationCenter defaultCenter] postNotificationName:kSDTimeLineCellOperationButtonClickedNotification object:_operationButton];
 }
 
 - (void)layoutSubviews {
     _bottomLineView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - 0.5, CGRectGetWidth(self.frame), 0.5);
+}
+
+#pragma mark - 点击了发朋友圈人的名字
+- (void)userNameDidClick {
+    if ([self.delegate respondsToSelector:@selector(didClickUserIconInCell:)]) {
+        [self.delegate didClickUserIconInCell:self];
+    }
 }
 
 #pragma mark - 用户头像的点击事件
@@ -380,6 +397,13 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
         if ([self.delegate respondsToSelector:@selector(didLongPressUserIconWithCell:)]) {
             [self.delegate didLongPressUserIconWithCell:self];
         }
+    }
+}
+
+#pragma mark - 投诉按钮
+- (void)complainButtonDidClick {
+    if ([self.delegate respondsToSelector:@selector(didClickComplainButton:)]) {
+        [self.delegate didClickComplainButton:self];
     }
 }
 

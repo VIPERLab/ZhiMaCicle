@@ -69,10 +69,6 @@
     tableView.backgroundColor = [UIColor whiteColor];
     
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
-    self.edgesForExtendedLayout = UIRectEdgeTop;
-    
     [tableView registerClass:[PersonalDiscoverCell class] forCellReuseIdentifier:PersonalDiscoverTableViewCellReusedID];
     
     

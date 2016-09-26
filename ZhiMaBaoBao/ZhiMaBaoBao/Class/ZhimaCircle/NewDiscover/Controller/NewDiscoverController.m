@@ -28,6 +28,8 @@
 #import "DNAsset.h"
 #import "NSURL+DNIMagePickerUrlEqual.h"
 
+#import "SDTimeLineCellModel.h"
+
 // --- 重用ID
 #define NewDiscoverTableViewNormalCellReuserdID @"NewDiscoverTableViewNormalCellReuserdID"
 #define NewDiscoverTableViewHeaderCellReuserdID @"NewDiscoverTableViewHeaderCellReuserdID"
@@ -49,6 +51,7 @@
 
 //上传图片队列
 @property (nonatomic, assign) int imageCount;
+@property (nonatomic, strong) NSMutableArray *imageItemsArray;
 
 
 // -----  选择位置回调
@@ -383,7 +386,8 @@
             if (fullImage) {
                 image = [UIImage imageWithCGImage:asset.thumbnail];
             } else {
-                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
+//                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
+                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationUp];
             }
             
             if (self.imagesArray.count > 8) {
@@ -427,6 +431,12 @@
                 _imgs = [_imgs stringByAppendingString:[NSString stringWithFormat:@",%@",obj.data]];
             }
             
+            
+            SDTimeLineCellPicItemModel *picModel = [[SDTimeLineCellPicItemModel alloc] init];
+            
+            picModel.img_url = obj.data;
+            picModel.bigimg_url = obj.data_temp;
+            [self.imageItemsArray addObject:picModel];
             //递归回调
             self.imageCount++;
             [self upLoadImageCount:self.imageCount andImageArray:_imagesArray];
@@ -451,6 +461,41 @@
         
         if (responseData.code != 0) {
             return;
+        }
+        
+        //插入自己发布的朋友圈
+        UserInfo *info = [UserInfo read];
+        
+        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
+        NSString *fcid = [NSString stringWithFormat:@"%zd",[responseData.data integerValue]];
+        NSString *optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Table];
+        [queue inDatabase:^(FMDatabase *db) {
+            
+            BOOL success = [db executeUpdate:optionStr,info.username,fcid,info.openfireaccount,self.textView.text,locationStr,@"刚刚",info.head_photo];
+            if (success) {
+                NSLog(@"插入朋友圈成功");
+            } else {
+                NSLog(@"插入朋友圈失败");
+            }
+        }];
+        
+        //插入图片
+        for (SDTimeLineCellPicItemModel *picModel in self.imageItemsArray) {
+            FMDatabaseQueue *picQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Pic_Table];
+            NSString *operationStr = [NSString string];
+            
+            operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Pic_Table];
+            [picQueue inDatabase:^(FMDatabase *db) {
+                
+                BOOL success = [db executeUpdate:operationStr,picModel.img_url,picModel.bigimg_url,fcid];
+                if (success) {
+                    NSLog(@"插入图片成功");
+                } else {
+                    NSLog(@"插入图片失败");
+                }
+                
+            }];
+            
         }
         
         self.block();
@@ -502,5 +547,12 @@
         _geocoder = [[CLGeocoder alloc]init];
     }
     return _geocoder;
+}
+
+- (NSMutableArray *)imageItemsArray {
+    if (!_imageItemsArray) {
+        _imageItemsArray = [NSMutableArray  array];
+    }
+    return _imageItemsArray;
 }
 @end

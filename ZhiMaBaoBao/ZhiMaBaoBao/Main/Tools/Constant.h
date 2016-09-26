@@ -44,6 +44,9 @@
 // ----  AES加密秘钥
 #define APP_PUBLIC_PASSWORD     @"yihezhai16816888"
 
+//本地测试环境
+//#define DFAPIURL @"http://192.168.1.243:8088"
+
 //正式网络环境
 #define DFAPIURL @"http://app.zhima11.com:8080"
 #define DFAPIURLTEST @"http://wx.zhima11.com"
@@ -62,6 +65,9 @@
 
 #import "UIImageView+WebCache.h"
 #import "BaseViewController.h"
+
+//FMDB管理头文件
+#import "FMDBManager.h"
 
 
 //通知头文件

@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "LGGuideController.h"
+#import "FMDBManager.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "RealReachability.h"
 @interface AppDelegate ()
@@ -89,6 +90,12 @@
 
      */
     
+    //接收用户退出通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
+    
+    //创建数据库表
+    [self creatMySQL];
+    
     return YES;
 }
 
@@ -120,6 +127,14 @@
 }
 
 
+//创建数据库表
+- (void)creatMySQL {
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Comment_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Pic_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Like_Table];
+}
+
 - (void)jumpMainController{
     //已经登录过，直接跳转到主界面
     MainViewController *mainVC = [[MainViewController alloc] init];
@@ -147,7 +162,6 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    
     
     //计算是否超过设置邀请码的有效期
     if (USERINFO.sessionId && ![USERINFO.create_time isEqualToString:@""] && USERINFO.create_time!= nil) {
@@ -209,23 +223,28 @@
             UserInfo *info = [UserInfo read];
             
             NSString *circleheadphoto = responseData.data[@"circleheadphoto"];
-            if (circleheadphoto.length) {
-                info.isShowHeader = YES;
-                [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataHeaderPhotoNotification object:nil userInfo:@{@"headerPhoto":responseData.data[@"circleheadphoto"]}];
+            if (!circleheadphoto.length) {
+                circleheadphoto = @"";
             }
             
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataHeaderPhotoNotification object:nil userInfo:@{@"headerPhoto":circleheadphoto}];
+            
             int unReadCount = [responseData.data[@"count"] intValue];
-            if (unReadCount) {
                 info.unReadCount = unReadCount;
                 [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataUnReadCountNotification object:nil userInfo:@{@"count":responseData.data[@"count"],@"headphoto":responseData.data[@"headphoto"]}];
-            }
             [info save];
         }];
     }
 }
 
 
-#pragma mark - 百度地图回调
+#pragma mark - 用户退出通知
+- (void)userLogOut {
+    LGGuideController *vc = [[LGGuideController alloc] init];
+    UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
+    self.window.rootViewController = guideVC;
+}
+
 #pragma mark - 百度地图回调
 - (void)onGetNetworkState:(int)iError
 {

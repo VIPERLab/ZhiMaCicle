@@ -13,6 +13,7 @@
 #import "LGFeedBackViewController.h"   //意见反馈
 #import "MyAccountViewController.h"    //我的账户
 #import "KXPersonalMessageSettingController.h" //个人信息设置
+#import "PesonalDiscoverController.h"
 
 
 #define PersonalCellHeight 45
@@ -36,6 +37,11 @@
     
     
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [_tableView reloadData];
+}
+
 
 - (void)setupView {
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
@@ -117,6 +123,12 @@
     
     if (indexPath.section == 1 && indexPath.row == 0) {
         //我的相册
+        PesonalDiscoverController *VC = [[PesonalDiscoverController alloc] init];
+        VC.sessionID = USERINFO.sessionId;
+        VC.openFirAccount = USERINFO.openfireaccount;
+        VC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:VC animated:YES];
+        
     } else if (indexPath.section == 1 && indexPath.row == 1) {
         //我的账户
         MyAccountViewController *MeAccVC = [[MyAccountViewController alloc]init];
