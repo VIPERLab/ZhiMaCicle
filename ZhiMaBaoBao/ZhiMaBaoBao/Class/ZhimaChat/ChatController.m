@@ -223,9 +223,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 //发送文本
 - (void)chatKeyBoardSendText:(NSString *)text{
     LGMessage *message = [[LGMessage alloc] init];
-    message.body = text;
-    message.from = @"15171225855";
-    message.to = @"111";
+//    message.body = text;
+//    message.from = @"15171225855";
+//    message.to = @"111";
     [self.messages addObject:message];
     
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];

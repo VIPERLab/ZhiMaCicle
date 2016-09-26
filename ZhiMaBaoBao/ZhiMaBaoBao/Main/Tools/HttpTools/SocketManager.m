@@ -7,11 +7,11 @@
 //
 
 #import "SocketManager.h"
-
 #import "RHSocketService.h"
 #import "RHSocketVariableLengthEncoder.h"
 #import "RHSocketVariableLengthDecoder.h"
 #import "RHSocketUtils.h"
+#import "NSString+MD5.h"
 
 @interface SocketManager ()
 
@@ -26,8 +26,6 @@ static SocketManager *manager = nil;
     dispatch_once(&onceToken, ^{
         if (!manager) {
             manager = [[SocketManager alloc] init];
-            
-
         }
     });
     return manager;
@@ -36,8 +34,9 @@ static SocketManager *manager = nil;
 - (instancetype)init{
     self = [super init];
     if (self) {
-        //socket收到数据监听
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectSocketServiceState:) name:kNotificationSocketServiceState object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectSocketPacketResponse:) name:kNotificationSocketPacketResponse object:nil];
     }
     return self;
 }
@@ -68,7 +67,7 @@ static SocketManager *manager = nil;
     
     //设置心跳包，这里的object数据，和服务端约定好
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = [@"Heartbeat" dataUsingEncoding:NSUTF8StringEncoding];
+    req.object = [self generateRequest:RequestTypeHeart uid:10 message:nil];
     [RHSocketService sharedInstance].heartbeat = req;
     
     [[RHSocketService sharedInstance] startServiceWithConnectParam:connectParam];
@@ -80,8 +79,18 @@ static SocketManager *manager = nil;
     [[RHSocketService sharedInstance] stopService];
 }
 
+//发送消息
+- (void)sendMessage:(LGMessage *)message{
+    //根据消息模型生成固定格式数据包
+    NSData *data = [self generateRequest:RequestTypeMessage uid:10 message:message];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+
 #pragma mark - socket 代理方法
-//socket服务器连接状态
+//socket服务器连接状态回调
 - (void)detectSocketServiceState:(NSNotification *)notif
 {
     //NSDictionary *userInfo = @{@"host":host, @"port":@(port), @"isRunning":@(_isRunning)};
@@ -89,36 +98,101 @@ static SocketManager *manager = nil;
     //没有心跳超时后会自动断开。
     NSLog(@"detectSocketServiceState: %@", notif);
     
+    //连接成功 发送登录消息
     id state = notif.object;
     if (state && [state boolValue]) {
-        //连接成功后，发送数据包
+        //生成登录消息数据包
+        NSData *loginData = [self generateRequest:RequestTypeLogin uid:10 message:nil];
         RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-        req.object = [@"变长编码器和解码器测试数据包1" dataUsingEncoding:NSUTF8StringEncoding];
+        req.object = loginData;
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-        
-        req = [[RHSocketPacketRequest alloc] init];
-        req.object = [@"变长编码器和解码器测试数据包20" dataUsingEncoding:NSUTF8StringEncoding];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-        
-        req = [[RHSocketPacketRequest alloc] init];
-        req.object = [@"变长编码器和解码器测试数据包300" dataUsingEncoding:NSUTF8StringEncoding];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-        
-        //2016-03-30 11:28:21.217 RHSocketVariableLengthCodecDemo[31043:3057289] timeout: -1.000000, sendData: <002be58f 98e995bf e7bc96e7 a081e599 a8e5928c e8a7a3e7 a081e599 a8e6b58b e8af95e6 95b0e68d aee58c85 31>
-        //2016-03-30 11:28:21.217 RHSocketVariableLengthCodecDemo[31043:3057289] timeout: -1.000000, sendData: <002ce58f 98e995bf e7bc96e7 a081e599 a8e5928c e8a7a3e7 a081e599 a8e6b58b e8af95e6 95b0e68d aee58c85 3230>
-        //2016-03-30 11:28:21.217 RHSocketVariableLengthCodecDemo[31043:3057289] timeout: -1.000000, sendData: <002de58f 98e995bf e7bc96e7 a081e599 a8e5928c e8a7a3e7 a081e599 a8e6b58b e8af95e6 95b0e68d aee58c85 333030>
-        //观察发送的数据，其实就是把获取object的长度当做［包头］，然后再接上［包体］，发送就ok了
-        //3个包的长度分别是，002b，002c，002d，都在sendData的最前面两个字节［包头］
-        //后面就是包体，前面都是一样的，就是1，20，300的数据的区别
-        
-        //解码<002be58f 98e995bf e7bc96e7 a081e599 a8e5928c e8a7a3e7 a081e599 a8e6b58b e8af95e6 95b0e68d aee58c85 31>
-        //例如得到上面这数据值后，先读区包头的长度字节，为002b。将002b转为10进制就是43，然后读区后续的43个字节，就是包体的内容。
-        //这样一个包就解码完成了。
-        
+
     } else {
         //
     }//if
 }
 
+//收到socket数据回调
+- (void)detectSocketPacketResponse:(NSNotification *)notif
+{
+    //解析消息模型
+    NSDictionary *userInfo = notif.userInfo;
+    RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
+    LGMessage *message = [LGMessage mj_setKeyValues:rsp.object];
+
+    if ([self.delegate respondsToSelector:@selector(recievedMessage:)]) {
+        [self.delegate recievedMessage:message];
+    }
+    NSLog(@"detectSocketPacketResponse data: %@", [rsp object]);
+}
+
+//根据消息请求类型- 按照固定格式生成数据请求包
+- (NSData *)generateRequest:(RequestType)type uid:(NSInteger)uid message:(LGMessage *)message{
+    
+    NSMutableDictionary *request = [NSMutableDictionary dictionary];
+    //data字段里面的数据
+    NSMutableDictionary *dataDic = [NSMutableDictionary dictionary];
+    
+    NSString *sign = nil;
+    
+    switch (type) {
+        case RequestTypeLogin:{     //登录类型
+            //拼接控制器和方法名
+            request[@"controller_name"] = @"LoginController";
+            request[@"method_name"] = @"bind_uid";
+            
+            //生成签名
+            NSString *str = [NSString stringWithFormat:@"controller_name=LoginController&method_name=bind_uid&uid=%d&%@",uid,APIKEY];
+            sign = [[str md5Encrypt] uppercaseString];
+            //生成data
+            dataDic[@"uid"] = @(uid);
+            dataDic[@"sign"] = sign;
+
+        }
+            break;
+            
+        case RequestTypeHeart:{     //心跳包类型
+            //拼接控制器和方法名
+            request[@"controller_name"] = @"HeartbeatController";
+            request[@"method_name"] = @"check";
+            dataDic[@"uid"] = @(uid);
+            
+        }
+            
+            break;
+            
+        case RequestTypeMessage:{      //消息类型
+            //拼接控制器和方法名
+            request[@"controller_name"] = @"MessageController";
+            request[@"method_name"] = @"send";
+            //生成签名
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=send&fromUid=%@&isGroup=%d&msgid=%@&text=%@&toUidOrGroupId=%@&type=%d&%@",message.fromUid,message.isGroup,message.msgid,message.text,message.toUidOrGroupId,message.type,APIKEY];
+            sign = [[str md5Encrypt] uppercaseString];
+            //拼接消息
+            dataDic[@"msgid"] = message.msgid;
+            dataDic[@"type"] = @(message.type);
+            dataDic[@"isGroup"] = @(message.isGroup);
+            dataDic[@"fromUid"] = message.fromUid;
+            dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
+            dataDic[@"text"] = message.text;
+            dataDic[@"sign"] = sign;
+            
+        }
+            
+            break;
+            
+        default:
+            break;
+    }
+    //拼接完整的request包
+    request[@"data"] = dataDic;
+    //请求包转换成json字符串
+    return [[request mj_JSONString] dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end
