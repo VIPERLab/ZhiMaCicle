@@ -18,6 +18,11 @@
     return NO;
 }
 
+
+//- (NSString *)fromUid{
+//    USERINFO.userID
+//}
+
 //计算消息内容高度
 - (void)setText:(NSString *)text{
     _text = text;
