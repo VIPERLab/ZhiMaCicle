@@ -32,10 +32,15 @@
     [self saveDataToSqlist:self.dataArray];
     [self getDataFormSqlist];
     
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage) name:kRecieveNewMessage object:nil];
 }
 
 #pragma mark - 从数据库加载会话列表
 - (void)getDataFormSqlist {
+    //先清空会话数组
+    [self.dataArray removeAllObjects];
+    
     NSArray *dataArray = [FMDBShareManager getChatConverseDataInArray];
     self.dataArray = [dataArray mutableCopy];
     [_tableView reloadData];
@@ -54,6 +59,11 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [_tableView registerClass:[ConverseCell class] forCellReuseIdentifier:ConverseCellReusedID];
+}
+
+//收到新消息-从数据库加载最新数据刷新列表
+- (void)recievedNewMessage{
+    [self getDataFormSqlist];
 }
 
 
@@ -104,7 +114,7 @@
             model.disturb = YES;
             model.unReadCount = @"99";
             model.converseId = @"123123";
-            model.converseType = @"0";
+            model.converseType = 0;
             [_dataArray addObject:model];
         }
     }

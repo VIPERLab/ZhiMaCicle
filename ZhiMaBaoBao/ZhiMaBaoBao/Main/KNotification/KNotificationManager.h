@@ -68,4 +68,9 @@
 #define Show_Login @"shouldLogin"
 
 
+//                    ------ 消息通知 --------
+//收到新消息
+#define kRecieveNewMessage @"kRecieveNewMessage"
+
+
 #endif /* KNotificationManager_h */

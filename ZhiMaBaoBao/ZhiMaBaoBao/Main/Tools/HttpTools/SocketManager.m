@@ -69,7 +69,7 @@ static SocketManager *manager = nil;
     
     //设置心跳包，这里的object数据，和服务端约定好
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = [self generateRequest:RequestTypeHeart uid:11 message:nil];
+    req.object = [self generateRequest:RequestTypeHeart uid:USERINFO.userID message:nil];
     [RHSocketService sharedInstance].heartbeat = req;
     
     [[RHSocketService sharedInstance] startServiceWithConnectParam:connectParam];
@@ -83,8 +83,11 @@ static SocketManager *manager = nil;
 
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
+    //插入消息数据库
+    
+    
     //根据消息模型生成固定格式数据包
-    NSData *data = [self generateRequest:RequestTypeMessage uid:11 message:message];
+    NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:message];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
@@ -104,7 +107,7 @@ static SocketManager *manager = nil;
     id state = notif.object;
     if (state && [state boolValue]) {
         //生成登录消息数据包
-        NSData *loginData = [self generateRequest:RequestTypeLogin uid:10 message:nil];
+        NSData *loginData = [self generateRequest:RequestTypeLogin uid:USERINFO.userID message:nil];
         RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
         req.object = loginData;
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
@@ -138,7 +141,7 @@ static SocketManager *manager = nil;
             
             //创建一个会话
             conversation.time = message.msgtime;
-            conversation.converseType = [NSString stringWithFormat:@"%d",message.isGroup];
+            conversation.converseType = message.isGroup;
             conversation.converseId = message.fromUid;
             conversation.unReadCount = @"1";
             conversation.topChat = NO;
@@ -174,10 +177,12 @@ static SocketManager *manager = nil;
         }
         
         //将消息插入数据库，并更新会话列表
-        [FMDBShareManager saveMessage:message toConverseID:conversation];
+        BOOL success = [FMDBShareManager saveMessage:message toConverseID:conversation];
         
-        if ([self.delegate respondsToSelector:@selector(recievedMessage:)]) {
-            [self.delegate recievedMessage:message];
+        if (success) {
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo[@"message"] = message;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:userInfo];
         }
         
     }
@@ -265,7 +270,7 @@ static SocketManager *manager = nil;
 }
 
 //根据消息操作类型- 按照固定格式生成数据请求包 （不需要uid时直接传0，不需要message直接传nil）
-- (NSData *)generateRequest:(RequestType)type uid:(NSInteger)uid message:(LGMessage *)message{
+- (NSData *)generateRequest:(RequestType)type uid:(NSString *)uid message:(LGMessage *)message{
     
     NSMutableDictionary *request = [NSMutableDictionary dictionary];
     //data字段里面的数据
@@ -280,10 +285,10 @@ static SocketManager *manager = nil;
             request[@"method_name"] = @"bind_uid";
             
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=LoginController&method_name=bind_uid&uid=%d&%@",uid,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=LoginController&method_name=bind_uid&uid=%@&%@",uid,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //生成data
-            dataDic[@"uid"] = @(uid);
+            dataDic[@"uid"] = uid;
             dataDic[@"sign"] = sign;
 
         }
@@ -293,7 +298,7 @@ static SocketManager *manager = nil;
             //拼接控制器和方法名
             request[@"controller_name"] = @"HeartbeatController";
             request[@"method_name"] = @"check";
-            dataDic[@"uid"] = @(uid);
+            dataDic[@"uid"] = uid;
             
         }
             
