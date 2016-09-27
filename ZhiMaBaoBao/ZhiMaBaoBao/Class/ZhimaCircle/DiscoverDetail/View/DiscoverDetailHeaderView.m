@@ -232,7 +232,7 @@ NSString *const kDiscoverDetailOperationButtonClickedNotification = @"DiscoverDe
     
     [self.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head_photo]] placeholderImage:[UIImage imageNamed:@"userIcon"]];
         
-    if ([USERINFO.userID isEqualToString:model.openfireaccount]) {
+    if ([USERINFO.userID isEqualToString:model.userId]) {
         _deleteButton.hidden = NO;
     } else  _deleteButton.hidden = YES;
     

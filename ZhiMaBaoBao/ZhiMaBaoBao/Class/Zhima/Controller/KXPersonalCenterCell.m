@@ -91,7 +91,7 @@
         _userIcon.frame = CGRectMake(userX, userY, userW, userH);
         
         CGFloat nameW = [_userName.text sizeWithFont:[UIFont systemFontOfSize:16] maxSize:CGSizeMake(ScreenWidth - 90 - 25, 15)].width;
-        _userName.frame = CGRectMake(CGRectGetMaxX(_userIcon.frame) + userX, CGRectGetMinY(_userIcon.frame), nameW, 30);
+        _userName.frame = CGRectMake(CGRectGetMaxX(_userIcon.frame) + userX, CGRectGetMinY(_userIcon.frame) + 5, nameW, 30);
         
         CGFloat sexX = CGRectGetMaxX(_userName.frame) + 10;
         CGFloat sexW = 15;
@@ -103,7 +103,7 @@
         CGFloat subX = CGRectGetMinX(_userName.frame);
         CGFloat subH = 30;
         CGFloat subW = ScreenWidth - CGRectGetMinX(_userIcon.frame) - 20;
-        CGFloat subY = CGRectGetMaxY(_userIcon.frame) - subH;
+        CGFloat subY = CGRectGetMaxY(_userName.frame);
         _subTitle.frame = CGRectMake(subX, subY, subW, subH);
         
         hasSubView = NO;

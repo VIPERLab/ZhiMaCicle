@@ -131,7 +131,6 @@
 //登录
 - (void)loginAction{
     [self.view endEditing:YES];
-
     [LCProgressHUD showLoadingText:LODINGTEXT];
     [LGNetWorking loginWithPhone:self.phoneField.text password:self.passField.text success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
@@ -142,8 +141,11 @@
             if ([userInfo.location isEqualToString:@""] || userInfo.location == nil) {
                 userInfo.location = @"";
             }
+            
             [userInfo save];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
+            
         }else{
             [LCProgressHUD showFailureText:responseData.msg];
         }

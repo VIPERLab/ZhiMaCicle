@@ -143,18 +143,7 @@
         }
         [self saveLocation:self.currentLoaction];
     }
-    
-//    if (indexPath.section == 1) {
-//        if (!self.selectedLoaction.length) {
-//            [LCProgressHUD showFailureText:@"请选择地区"];
-//            return;
-//        }
-//        _provinceName = self.provinceModel.region_name;
-//        _areaName = self.areaModel.region_name;
-//        
-//        [self saveLocation:self.selectedLoaction];
-//    }
-    
+
     if (indexPath.section == 1) {
         //跳转到下一级页面
         KXLocationModel *model = self.datasArray[indexPath.row];
@@ -239,11 +228,10 @@
         if (responseData.code != 0) {
             return ;
         }
-//        _vcard.country = @"中国";
-//        _vcard.province = _provinceName;
-//        _vcard.address = _areaName;
-//        [_vcard store:nil failed:nil];
-        USERINFO.location = [_provinceName stringByAppendingString:_areaName];
+        
+        UserInfo *info = [UserInfo read];
+        info.location = [_provinceName stringByAppendingString:_areaName];
+        [info save];
         [LCProgressHUD showSuccessText:@"修改成功"];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.navigationController popViewControllerAnimated:YES];

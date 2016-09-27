@@ -54,7 +54,7 @@
 
 - (void)setupView {
     
-    if ([USERINFO.userID isEqualToString:self.openFirAccount]) {
+    if ([USERINFO.userID isEqualToString:self.userID]) {
         [self setupRightBarButton];
 
     }
@@ -103,7 +103,7 @@
     PersonalDiscoverPhotoModel *photoModel = model.imglist[indexPath.row];
     
     PersonalDiscoverCell *cell = [tableView dequeueReusableCellWithIdentifier:PersonalDiscoverTableViewCellReusedID forIndexPath:indexPath];
-    cell.openFirAccount = self.openFirAccount;
+    cell.openFirAccount = self.userID;
     cell.model = photoModel;
     cell.personalIndexPath = indexPath;
     cell.delegate = self;
@@ -167,7 +167,7 @@
 - (void)loadRequest {
     
     
-    [LGNetWorking loadPersonalDiscoverDetailWithSessionID:self.sessionID andTargetOpenFirAccount:self.openFirAccount andPageNumber:[NSString stringWithFormat:@"%zd",self.pageNumber] block:^(ResponseData *responseData) {
+    [LGNetWorking loadPersonalDiscoverDetailWithSessionID:self.sessionID andTargetOpenFirAccount:self.userID andPageNumber:[NSString stringWithFormat:@"%zd",self.pageNumber] block:^(ResponseData *responseData) {
         [self.tableView.mj_footer endRefreshing];
         if (responseData == nil || responseData.data == nil || !responseData) {
             NSLog(@"网络请求失败");
@@ -201,7 +201,7 @@
             self.headerView.signName = responseData.data[@"signature"];
         }
         
-        self.headerView.openFirAccount = self.openFirAccount;
+        self.headerView.openFirAccount = self.userID;
         
         
         NSMutableArray *dataArray = [PersonalDiscoverCellModel mj_objectArrayWithKeyValuesArray:responseData.data[@"albumsDate"]];

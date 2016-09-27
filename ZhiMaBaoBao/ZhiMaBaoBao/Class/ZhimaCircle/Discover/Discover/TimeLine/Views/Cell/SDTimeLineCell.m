@@ -249,8 +249,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     [_commentView setupWithLikeItemsArray:model.likeItemsArray commentItemsArray:model.commentList];
     
     [_iconView sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head_photo]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
-    
-//    CGSize size = [model.content sizeWithAttributes: @{NSFontAttributeName: [UIFont systemFontOfSize:15]}];
+
     CGFloat labelHight = [model.content sizeWithFont:[UIFont systemFontOfSize:14] maxSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 100, MAXFLOAT)].height;
     if (labelHight > 45) {
         model.shouldShowMoreButton = YES;

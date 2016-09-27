@@ -13,10 +13,15 @@
 @interface SDTimeLineCellModel : NSObject
 
 @property (nonatomic, copy) NSString *head_photo;     //用户头像
+
 @property (nonatomic, copy) NSString *friend_nick;  //用户名
-@property (nonatomic, copy) NSString *openfireaccount; //当前用户的聊天账号
+
+@property (nonatomic, copy) NSString *userId; //当前用户的聊天账号
+
 @property (nonatomic, copy) NSString *content;   //朋友圈内容
-@property (nonatomic, copy) NSString *ID;  //朋友圈ID
+
+@property (nonatomic, copy) NSString *circle_ID;  //朋友圈ID
+
 @property (nonatomic, copy) NSString *current_location; //地区信息
 
 @property (nonatomic, strong) NSArray <SDTimeLineCellPicItemModel *> *imglist;  //朋友圈图片存放数组
@@ -54,10 +59,10 @@
 @property (nonatomic, copy) NSString *comment;  //评论
 
 @property (nonatomic, copy) NSString *friend_nick; //第一个用户
-@property (nonatomic, copy) NSString *openfireaccount;  //第一个用户id
+@property (nonatomic, copy) NSString *userId;      //第一个用户的id
 
 @property (nonatomic, copy) NSString *reply_friend_nick; //第二个用户
-@property (nonatomic, copy) NSString *reply_openfireaccount;  //第二个用户id
+@property (nonatomic, copy) NSString *reply_id;          //第二个用户的id
 
 @property (nonatomic, assign) BOOL type; // 1是点赞  0是评论
 

@@ -52,7 +52,8 @@
     cell.textLabel.text = title;
     
     if ([title isEqualToString:self.selectedSex]) {
-        cell.selected = YES;
+        //打钩
+        
     }
     
     return cell;

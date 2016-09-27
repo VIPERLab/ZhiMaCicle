@@ -12,6 +12,8 @@
 #import "FMDBManager.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "RealReachability.h"
+#import "SocketManager.h"
+
 @interface AppDelegate ()
 
 @end
@@ -48,54 +50,9 @@
         NSLog(@"manager start failed!");
     }
     
-    //注册更新用户未读消息通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUserUnReadMessageCountAndUnReadCircle:) name:K_UpdataUnReadNotification object:nil];
-
-    //网络环境监听
-    [GLobalRealReachability startNotifier];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(networkChanged:)
-                                                 name:kRealReachabilityChangedNotification
-                                               object:nil];
-    
-    
-    //即时判断网络环境 -- 实现该方法
-    /*
-     [GLobalRealReachability reachabilityWithBlock:^(ReachabilityStatus status) {
-     switch (status)
-     {
-     case RealStatusNotReachable:
-     {
-     [[[UIAlertView alloc] initWithTitle:@"RealReachability" message:@"Nothing to do! offlineMode" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil] show];
-     break;
-     }
-     
-     case RealStatusViaWiFi:
-     {
-     [[[UIAlertView alloc] initWithTitle:@"RealReachability" message:@"Do what you want! free!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil] show];
-     break;
-     }
-     
-     case RealStatusViaWWAN:
-     {
-     [[[UIAlertView alloc] initWithTitle:@"RealReachability" message:@"Take care of your money! You are in charge!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil] show];
-     
-     break;
-     }
-     
-     default:
-     break;
-     }
-     }];
-
-     */
-    
-    //接收用户退出通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
-    
     //创建数据库表
     [self creatMySQL];
-    
+    [self notification];
     return YES;
 }
 
@@ -129,10 +86,33 @@
 
 //创建数据库表
 - (void)creatMySQL {
+    // 朋友圈相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Comment_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Pic_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Like_Table];
+    
+    // 聊天相关表
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_Converse_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_Message_Table];
+    
+    //用户相关的表
+    [FMDBShareManager creatTableWithTableType:ZhiMa_User_Message_Table];
+}
+
+// 注册通知
+- (void)notification {
+    //注册更新用户未读消息通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUserUnReadMessageCountAndUnReadCircle:) name:K_UpdataUnReadNotification object:nil];
+    
+    //网络环境监听
+    [GLobalRealReachability startNotifier];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(networkChanged:)
+                                                 name:kRealReachabilityChangedNotification
+                                               object:nil];
+    //接收用户退出通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
 }
 
 - (void)jumpMainController{
@@ -240,6 +220,8 @@
 
 #pragma mark - 用户退出通知
 - (void)userLogOut {
+    [[SocketManager shareInstance] disconnect];
+    
     LGGuideController *vc = [[LGGuideController alloc] init];
     UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = guideVC;
