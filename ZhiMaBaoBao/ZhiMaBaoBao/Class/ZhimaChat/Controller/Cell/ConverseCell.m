@@ -37,7 +37,7 @@
 }
 
 - (void)setupView {
-    
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
     _iconView = [UIImageView new];
     _iconView.layer.cornerRadius = 10;
     [self addSubview:_iconView];
@@ -125,6 +125,8 @@
             _unReadCountLabel.height = _unReadCountLabel.width;
         }
         _bottomLineView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - 0.5, CGRectGetWidth(self.frame), 0.5);
+        
+        hasSubViews = NO;
         
     }
 }

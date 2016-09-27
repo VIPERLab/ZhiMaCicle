@@ -119,8 +119,8 @@ static SocketManager *manager = nil;
     NSDictionary *userInfo = notif.userInfo;
     RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
     LGMessage *message = [LGMessage mj_setKeyValues:rsp.object];
-
-    if ([self.delegate respondsToSelector:@selector(recievedMessage:)]) {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(recievedMessage:)]) {
         [self.delegate recievedMessage:message];
     }
     NSLog(@"detectSocketPacketResponse data: %@", [rsp object]);
