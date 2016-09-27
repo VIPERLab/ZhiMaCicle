@@ -136,6 +136,7 @@
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Like_Table];
     // 聊天相关表
     [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_ConverseTable];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_MessageTable];
 }
 
 - (void)jumpMainController{

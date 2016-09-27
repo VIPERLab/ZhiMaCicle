@@ -29,8 +29,9 @@
     [self setCustomRightItems];
     
     [self setupView];
+    [self saveDataToSqlist:self.dataArray];
     [self getDataFormSqlist];
-//    [self saveDataToSqlist:self.dataArray];
+    
 }
 
 #pragma mark - 从数据库加载会话列表
@@ -93,7 +94,7 @@
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
-        for (NSInteger index = 0; index < 5; index ++) {
+        for (NSInteger index = 0; index < 1; index ++) {
             ConverseModel *model = [[ConverseModel alloc] init];
             model.converseName = @"芝麻IT部";
             model.lastConverse = @"你在干嘛?";

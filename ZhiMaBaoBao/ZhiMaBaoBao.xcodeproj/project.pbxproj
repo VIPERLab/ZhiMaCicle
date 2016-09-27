@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
-		04CBF4FE1D99136C00CBB609 /* ConverseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF4FD1D99136C00CBB609 /* ConverseModel.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
+		04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5051D99427B00CBB609 /* ConverseModel.m */; };
 		04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */; };
 		04EA79701D8F8F49005E5425 /* NSString+FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */; };
 		04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796D1D8F8F49005E5425 /* NSString+MD5.m */; };
@@ -546,10 +546,10 @@
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
-		04CBF4FC1D99136C00CBB609 /* ConverseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseModel.h; sourceTree = "<group>"; };
-		04CBF4FD1D99136C00CBB609 /* ConverseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseModel.m; sourceTree = "<group>"; };
 		04CBF5001D99228200CBB609 /* ConverseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseCell.h; sourceTree = "<group>"; };
 		04CBF5011D99228200CBB609 /* ConverseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseCell.m; sourceTree = "<group>"; };
+		04CBF5041D99427B00CBB609 /* ConverseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseModel.h; sourceTree = "<group>"; };
+		04CBF5051D99427B00CBB609 /* ConverseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseModel.m; sourceTree = "<group>"; };
 		04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZhiMaImage.xcassets; sourceTree = "<group>"; };
 		04EA796A1D8F8F49005E5425 /* NSString+FontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontSize.h"; sourceTree = "<group>"; };
 		04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontSize.m"; sourceTree = "<group>"; };
@@ -1613,16 +1613,6 @@
 			path = ChangeSex;
 			sourceTree = "<group>";
 		};
-		04CBF4FB1D99134700CBB609 /* ConverseModel(会话模型) */ = {
-			isa = PBXGroup;
-			children = (
-				04CBF4FC1D99136C00CBB609 /* ConverseModel.h */,
-				04CBF4FD1D99136C00CBB609 /* ConverseModel.m */,
-			);
-			name = "ConverseModel(会话模型)";
-			path = ConverseModel;
-			sourceTree = "<group>";
-		};
 		04CBF4FF1D99226700CBB609 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -1630,6 +1620,15 @@
 				04CBF5011D99228200CBB609 /* ConverseCell.m */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		04CBF5031D99427B00CBB609 /* ConverseModel */ = {
+			isa = PBXGroup;
+			children = (
+				04CBF5041D99427B00CBB609 /* ConverseModel.h */,
+				04CBF5051D99427B00CBB609 /* ConverseModel.m */,
+			);
+			path = ConverseModel;
 			sourceTree = "<group>";
 		};
 		04EA79631D8F85E8005E5425 /* PersonalCenter(用户中心) */ = {
@@ -3965,7 +3964,7 @@
 			children = (
 				311CEF2C1D92182400BBB1F9 /* Chat(聊天) */,
 				316957511D90E5C900140126 /* AddFriends(添加好友) */,
-				31B7C70C1D8E96A100F1883A /* Controller */,
+				31B7C70C1D8E96A100F1883A /* Controller(会话列表) */,
 				31B7C70F1D8E96A100F1883A /* Model */,
 				31B7C7101D8E96A100F1883A /* View */,
 			);
@@ -3973,20 +3972,21 @@
 			path = ZhimaChat;
 			sourceTree = "<group>";
 		};
-		31B7C70C1D8E96A100F1883A /* Controller */ = {
+		31B7C70C1D8E96A100F1883A /* Controller(会话列表) */ = {
 			isa = PBXGroup;
 			children = (
+				04CBF5031D99427B00CBB609 /* ConverseModel */,
 				04CBF4FF1D99226700CBB609 /* Cell */,
 				31B7C70D1D8E96A100F1883A /* ConversationController.h */,
 				31B7C70E1D8E96A100F1883A /* ConversationController.m */,
 			);
+			name = "Controller(会话列表)";
 			path = Controller;
 			sourceTree = "<group>";
 		};
 		31B7C70F1D8E96A100F1883A /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				04CBF4FB1D99134700CBB609 /* ConverseModel(会话模型) */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -4466,7 +4466,6 @@
 				04F57AB31D9280BD002A6471 /* SDTimeLineCell.m in Sources */,
 				04EA797A1D8FBA0C005E5425 /* KXWebViewController.m in Sources */,
 				311CEFB81D93D98700BBB1F9 /* BuddleView.m in Sources */,
-				04CBF4FE1D99136C00CBB609 /* ConverseModel.m in Sources */,
 				04EA7D901D912872005E5425 /* ZXReedSolomonEncoder.m in Sources */,
 				04F862521D94FC6D00DCC6FE /* MLTextAttachment.m in Sources */,
 				04EA7AD51D910F89005E5425 /* DNUnAuthorizedTipsView.m in Sources */,
@@ -4722,6 +4721,7 @@
 				04F862501D94FC6D00DCC6FE /* NSString+MLLabel.m in Sources */,
 				04EA7DBE1D912872005E5425 /* ZXDataMatrixX12Encoder.m in Sources */,
 				04EA79761D8FB95B005E5425 /* KXSettingController.m in Sources */,
+				04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */,
 				04F8625A1D94FC6D00DCC6FE /* TTTAttributedLabel.m in Sources */,
 				04EA7D621D912872005E5425 /* ZXAztecWriter.m in Sources */,
 				04F862991D94FC7900DCC6FE /* RFTextView.m in Sources */,
