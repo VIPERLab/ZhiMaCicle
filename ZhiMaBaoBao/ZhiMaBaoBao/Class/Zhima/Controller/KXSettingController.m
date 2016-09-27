@@ -15,6 +15,8 @@
 #import "NewMessageSettingController.h" //新消息提醒
 #import "PersonalSettingController.h" //隐私设置
 
+#import "SocketManager.h"
+
 #define KXUserSettingCellReusedID @"KXUserSettingCellReusedID"
 #define cellHeight 45
 
@@ -159,7 +161,7 @@
                 info.hasLogin = NO;
                 [info save];
                 
-                
+                [[SocketManager shareInstance] disconnect];
                 //成功退出
                 [[NSNotificationCenter defaultCenter] postNotificationName:LOGOUT_SUCCESS object:nil];
                 

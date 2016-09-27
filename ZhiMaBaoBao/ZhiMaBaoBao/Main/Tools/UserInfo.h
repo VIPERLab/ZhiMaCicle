@@ -12,9 +12,6 @@
  /** 用户已经登录过app*/
 @property (nonatomic, assign) BOOL hasLogin;
 
- /** uid*/
-@property (nonatomic, copy) NSString *uid;
-
  /** 即时聊天帐号 -- 废弃入口,更换为userID*/
 //@property (nonatomic, copy) NSString *openfireaccount;
 

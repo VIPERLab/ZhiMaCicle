@@ -12,6 +12,7 @@
 #import "RHSocketVariableLengthDecoder.h"
 #import "RHSocketUtils.h"
 #import "NSString+MD5.h"
+#import "NSData+Replace.h"
 
 @interface SocketManager ()
 
@@ -53,7 +54,7 @@ static SocketManager *manager = nil;
     connectParam.port = PORT;
     
     //设置心跳定时器间隔15秒
-    connectParam.heartbeatInterval = 15;
+    connectParam.heartbeatInterval = 5;
     
     //设置短线后是否自动重连
     connectParam.autoReconnect = YES;
@@ -67,7 +68,7 @@ static SocketManager *manager = nil;
     
     //设置心跳包，这里的object数据，和服务端约定好
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = [self generateRequest:RequestTypeHeart uid:10 message:nil];
+    req.object = [self generateRequest:RequestTypeHeart uid:11 message:nil];
     [RHSocketService sharedInstance].heartbeat = req;
     
     [[RHSocketService sharedInstance] startServiceWithConnectParam:connectParam];
@@ -82,7 +83,7 @@ static SocketManager *manager = nil;
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
     //根据消息模型生成固定格式数据包
-    NSData *data = [self generateRequest:RequestTypeMessage uid:10 message:message];
+    NSData *data = [self generateRequest:RequestTypeMessage uid:11 message:message];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
@@ -112,21 +113,135 @@ static SocketManager *manager = nil;
     }//if
 }
 
+
 //收到socket数据回调
 - (void)detectSocketPacketResponse:(NSNotification *)notif
 {
     //解析消息模型
     NSDictionary *userInfo = notif.userInfo;
     RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
-    LGMessage *message = [LGMessage mj_setKeyValues:rsp.object];
+    NSData *data = [[rsp dataWithPacket] replaceNoUtf8];
+    NSDictionary *responceData = [data mj_JSONObject];
+
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(recievedMessage:)]) {
-        [self.delegate recievedMessage:message];
+    if ([rsp dataWithPacket].length) {
+        
+        LGMessage *message = [[LGMessage alloc] init];
+        message = [message mj_setKeyValues:responceData[@"data"]];
+        
+        //解析消息指令类型
+        NSString *actType = responceData[@"acttype"];
+        if ([actType isEqualToString:@"normal"]) {      //普通消息
+            message.actType = ActTypeNormal;
+        }
+        else if ([actType isEqualToString:@"addfriend"]){   //好友请求
+            message.actType = ActTypeAddfriend;
+        }
+        else if ([actType isEqualToString:@"updatefriend"]){   //更新好友数据
+            message.actType = ActTypeUpdatefriend;
+        }
+        else if ([actType isEqualToString:@"updategroupnum"]){   //更新群用户数
+            message.actType = ActTypeUpdategroupnum;
+        }
+        else if ([actType isEqualToString:@"deluserfromgroup"]){   //从群组中删除用户
+            message.actType = ActTypeDeluserfromgroup;
+        }
+        else if ([actType isEqualToString:@"renamegroup"]){   //好友请求
+            message.actType = ActTypeRenamegroup;
+        }
+        else if ([actType isEqualToString:@"undomsg"]){   //好友请求
+            message.actType = ActTypeUndomsg;
+        }
+        
+        
+        if ([self.delegate respondsToSelector:@selector(recievedMessage:)]) {
+            [self.delegate recievedMessage:message];
+        }
     }
-    NSLog(@"detectSocketPacketResponse data: %@", [rsp object]);
 }
 
-//根据消息请求类型- 按照固定格式生成数据请求包
+#pragma mark - 封装消息操作指令
+//撤销消息 
+- (void)undoMessage:(LGMessage *)message{
+    NSData *data = [self generateRequest:RequestTypeUndo uid:0 message:message];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//建群
+- (void)createGtoup:(NSString *)groupId uids:(NSString *)uids{
+    NSData *data = [self generateGroupActType:GroupActTypeCreate groupId:groupId uids:uids];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//邀请用户到群
+- (void)addUserToGroup:(NSString *)groupId uids:(NSString *)uids{
+    NSData *data = [self generateGroupActType:GroupActTypeAddUser groupId:groupId uids:uids];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//从群组删除用户
+- (void)delUserFromGroup:(NSString *)groupId uids:(NSString *)uids{
+    NSData *data = [self generateGroupActType:GroupActTypeDelUser groupId:groupId uids:uids];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//退出群
+- (void)delGroup:(NSString *)groupId uid:(NSString *)uid{
+    NSData *data = [self generateGroupActType:GroupActTypeDelGroup groupId:groupId uids:uid];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//群重命名
+- (void)renameGroup:(NSString *)groupId name:(NSString *)name{
+    NSData *data = [self generateGroupActType:GroupActTypeReName groupId:groupId uids:name];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//添加好友
+- (void)addFriend:(NSString *)friendId{
+    NSData *data = [self generateFriendActType:FriendActTypeAdd friendId:friendId];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//删除好友
+- (void)delFriend:(NSString *)friendId{
+    NSData *data = [self generateFriendActType:FriendActTypeDel friendId:friendId];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//加入黑名单
+- (void)dragToBlack:(NSString *)friendId{
+    NSData *data = [self generateFriendActType:FriendActTypeBlack friendId:friendId];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//用户修改资料
+- (void)updateProfile{
+    NSData *data = [self generateFriendActType:FriendActTypeUpdate friendId:0];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//根据消息操作类型- 按照固定格式生成数据请求包 （不需要uid时直接传0，不需要message直接传nil）
 - (NSData *)generateRequest:(RequestType)type uid:(NSInteger)uid message:(LGMessage *)message{
     
     NSMutableDictionary *request = [NSMutableDictionary dictionary];
@@ -181,6 +296,22 @@ static SocketManager *manager = nil;
             
             break;
             
+        case RequestTypeUndo:{      //撤销消息
+            //拼接控制器和方法名
+            request[@"controller_name"] = @"MessageController";
+            request[@"method_name"] = @"undo";
+            //生成签名
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=undo&fromUid=%@&isGroup=%d&msgid=%@&toUidOrGroupId=%@&type=%d&%@",message.fromUid,message.isGroup,message.msgid,message.toUidOrGroupId,message.type,APIKEY];
+            sign = [[str md5Encrypt] uppercaseString];
+            //拼接消息
+            dataDic[@"msgid"] = message.msgid;
+            dataDic[@"type"] = @(message.type);
+            dataDic[@"isGroup"] = @(message.isGroup);
+            dataDic[@"fromUid"] = message.fromUid;
+            dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
+        }
+            break;
+            
         default:
             break;
     }
@@ -190,6 +321,126 @@ static SocketManager *manager = nil;
     return [[request mj_JSONString] dataUsingEncoding:NSUTF8StringEncoding];
 }
 
+//生成群操作相关的消息数据请求包
+- (NSData *)generateGroupActType:(GroupActType)type groupId:(NSString *)groupId uids:(NSString *)uids{
+    
+    NSMutableDictionary *request = [NSMutableDictionary dictionary];
+    //data字段里面的数据
+    NSMutableDictionary *dataDic = [NSMutableDictionary dictionary];
+    
+    NSString *controllerName = @"UserController";
+    NSString *methodName = nil;
+    
+    switch (type) {
+            
+        case GroupActTypeCreate:{       //建群
+            methodName = @"addUserToGroup";
+        }
+            
+            break;
+        case GroupActTypeAddUser:{      //邀请用户到群
+            methodName = @"addUserToGroup";
+        }
+            
+            break;
+        case GroupActTypeDelUser:{      //从群组删除用户
+            methodName = @"delUserFromGroup";
+        }
+            
+            break;
+        case GroupActTypeDelGroup:{     //删除群组
+            methodName = @"delGroup";
+        }
+            
+            break;
+        case GroupActTypeReName:{       //群重命名
+            methodName = @"renameGroup";
+            
+        }
+            
+            break;
+        default:
+            break;
+    }
+    
+    //拼接控制器和方法名
+    request[@"controller_name"] = controllerName;
+    request[@"method_name"] = methodName;
+    NSString *str = nil;
+    
+    //拼接消息 (如果是群重命名 dataDic拼接"groupname" ，其他拼接"uids"）
+    if (type == GroupActTypeReName) {
+        dataDic[@"groupname"] = uids;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&groupname=%@&%@",controllerName,methodName,groupId,uids,APIKEY];
+    }else{
+        dataDic[@"uids"]= uids;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&uids=%@&%@",controllerName,methodName,groupId,uids,APIKEY];
+    }
+    //生成签名
+    NSString *sign = [[str md5Encrypt] uppercaseString];
+    dataDic[@"groupid"] = groupId;
+    dataDic[@"sign"] = sign;
+    //拼接完整的request包
+    request[@"data"] = dataDic;
+    //请求包转换成json字符串
+    return [[request mj_JSONString] dataUsingEncoding:NSUTF8StringEncoding];
+
+}
+
+//生成好友操作相关的消息数据包
+- (NSData *)generateFriendActType:(FriendActType)type friendId:(NSString *)friendId{
+    NSMutableDictionary *request = [NSMutableDictionary dictionary];
+    //data字段里面的数据
+    NSMutableDictionary *dataDic = [NSMutableDictionary dictionary];
+    
+    NSString *controllerName = @"UserController";
+    NSString *methodName = nil;
+
+    switch (type) {
+        case FriendActTypeAdd:{     //添加好友
+            methodName = @"addFriend";
+        }
+            
+            break;
+        case FriendActTypeDel:{     //删除好友
+            methodName = @"delFriend";
+        }
+            
+            break;
+        case FriendActTypeBlack:{   //加入黑名单
+            methodName = @"backlist";
+        }
+            
+            break;
+        case FriendActTypeUpdate:{  //好友资料更新
+            methodName = @"update";
+        }
+            
+            break;
+            
+        default:
+            break;
+    }
+    
+    //拼接控制器和方法名
+    request[@"controller_name"] = controllerName;
+    request[@"method_name"] = methodName;
+    //生成签名
+    NSString *str = nil;
+    if (type == FriendActTypeUpdate) {
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&uid=%@&%@",controllerName,methodName,USERINFO.userID,APIKEY];
+    }else{
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&uid=%@&%@",controllerName,methodName,friendId,USERINFO.userID,APIKEY];
+        dataDic[@"frienduid"] = friendId;
+    }
+    NSString *sign = [[str md5Encrypt] uppercaseString];
+    dataDic[@"uid"] = USERINFO.userID;
+    dataDic[@"sign"] = sign;
+    //拼接完整的request包
+    request[@"data"] = dataDic;
+    //请求包转换成json字符串
+    return [[request mj_JSONString] dataUsingEncoding:NSUTF8StringEncoding];
+}
 
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];

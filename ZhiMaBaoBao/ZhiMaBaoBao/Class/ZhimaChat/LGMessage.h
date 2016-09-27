@@ -6,6 +6,18 @@
 //  Copyright © 2016年 liugang. All rights reserved.
 //
 
+//消息指令类型
+typedef NS_OPTIONS(NSUInteger, ActType) {
+    ActTypeNormal  = 0,         //普通消息
+    ActTypeAddfriend,           //好友请求
+    ActTypeUpdatefriend,        //更新好友数据
+    ActTypeUpdategroupnum,      //更新群用户数
+    ActTypeDeluserfromgroup,    //从群组删除用户
+    ActTypeRenamegroup,         //修改群名片，所有群成员都会同步修改
+    ActTypeUndomsg              //撤销消息，收到消息的用户都将删除消息
+};
+
+//普通消息类型
 typedef NS_OPTIONS(NSUInteger, MessageType) {
     MessageTypeText  = 0,   //文本消息
     MessageTypeImage,         //图片
@@ -26,6 +38,8 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
 
 @interface LGMessage : NSObject
 
+ /** 指令类型*/
+@property (nonatomic, assign) ActType actType;
  /** 消息id*/
 @property (nonatomic, copy) NSString *msgid;
  /** 消息类型*/
