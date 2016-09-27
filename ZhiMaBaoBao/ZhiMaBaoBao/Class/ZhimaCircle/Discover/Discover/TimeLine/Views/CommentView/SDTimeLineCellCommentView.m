@@ -31,6 +31,7 @@
 #import "SDTimeLineCellModel.h"
 #import "MLLinkLabel.h"
 #import "UIColor+My.h"
+#import "KXCodingManager.h"
 
 @interface SDTimeLineCellCommentView () <MLLinkLabelDelegate>
 
@@ -133,6 +134,8 @@
             
             if ([label isKindOfClass:[MLLinkLabel class]]) {
                 
+//                NSString *deCodingStr = [CodingManager UTF8DecodeString:model.comment];
+//                label.text = [model.friend_nick stringByAppendingString:];
                 if (!model.attributedContent) {
                     model.attributedContent = [self generateAttributedStringWithCommentItemModel:model];
                 }
@@ -298,8 +301,7 @@
 
 #pragma mark - private actions
 //拼接评论以及回复信息
-- (NSMutableAttributedString *)generateAttributedStringWithCommentItemModel:(SDTimeLineCellCommentItemModel *)model
-{
+- (NSMutableAttributedString *)generateAttributedStringWithCommentItemModel:(SDTimeLineCellCommentItemModel *)model {
     NSString *text = model.friend_nick;
     if (model.reply_friend_nick.length) {
         text = [text stringByAppendingString:[NSString stringWithFormat:@"回复%@", model.reply_friend_nick]];

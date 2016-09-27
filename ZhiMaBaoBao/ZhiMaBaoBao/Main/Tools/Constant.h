@@ -63,6 +63,8 @@
 #import "UserInfo.h"
 #import "UIView+x.h"
 
+#import "KXCodingManager.h"
+
 #import "UIImageView+WebCache.h"
 #import "BaseViewController.h"
 

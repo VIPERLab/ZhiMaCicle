@@ -52,13 +52,13 @@ typedef enum : NSUInteger {
 
 #pragma mark - 朋友圈存、取操作
 // 把数据存放到数据库
-- (void)saveCircleDataWithDataArray:(NSArray <SDTimeLineCellModel *>*)dataArray;
+- (BOOL)saveCircleDataWithDataArray:(NSArray <SDTimeLineCellModel *>*)dataArray;
 
 // 获取朋友圈所有消息
 - (NSArray <SDTimeLineCellModel *> *)getCirCleDataInArray;
 
 // 根据某条朋友圈的id 去删除其对应的数据
-- (void)deleteCircleDataWithCircleID:(NSString *)circleID;
+- (BOOL)deleteCircleDataWithCircleID:(NSString *)circleID;
 
 
 #pragma mark - 聊天相关
@@ -86,7 +86,7 @@ typedef enum : NSUInteger {
  *  @param message      消息模型
  *  @param converseMode 会话模型
  */
-- (void)saveMessage:(LGMessage *)message toConverseID:(ConverseModel *)converseMode;
+- (BOOL)saveMessage:(LGMessage *)message toConverseID:(ConverseModel *)converseMode;
 
 /**
  *  根据会话id 获取消息列表

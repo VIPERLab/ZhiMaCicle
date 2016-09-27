@@ -457,6 +457,7 @@
     } else {
         locationStr = self.locationTips;
     }
+    
     [LGNetWorking AddNewDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andContent_type:@"1" andContent:self.textView.text andLink:@"" andType:_privateClass andCurrent_location:locationStr andImgs:_imgs block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
