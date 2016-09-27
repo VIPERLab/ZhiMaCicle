@@ -141,6 +141,10 @@ static SocketManager *manager = nil;
             conversation.converseType = [NSString stringWithFormat:@"%d",message.isGroup];
             conversation.converseId = message.fromUid;
             conversation.unReadCount = @"1";
+            conversation.topChat = NO;
+            conversation.disturb = NO;
+            conversation.converseName = @"hh";
+            conversation.converseHead_photo = @"aa";
             if (message.type == MessageTypeText) {
                 conversation.lastConverse = message.text;
             }else if (message.type == MessageTypeImage){
