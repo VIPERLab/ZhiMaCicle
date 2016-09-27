@@ -18,7 +18,7 @@
 /**
  *  会话类型  0:单聊  1:群聊
  */
-@property (nonatomic, copy) NSString *converseType;
+@property (nonatomic, assign) BOOL converseType;
 
 /**
  *  会话id:收到消息=fromUid , 发送消息=toUid

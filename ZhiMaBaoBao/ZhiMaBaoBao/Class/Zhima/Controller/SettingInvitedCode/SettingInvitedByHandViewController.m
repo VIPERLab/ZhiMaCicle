@@ -28,6 +28,10 @@
 - (void)setView {
     self.view.backgroundColor = [UIColor colorFormHexRGB:@"efeff4"];
     
+    if ([self.invitedCode isEqualToString:@""]) {
+        
+    }
+    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(30, 64 + 20, ScreenWidth - 60, 30)];
     label.textAlignment = NSTextAlignmentLeft;
     label.font = [UIFont systemFontOfSize:16];
@@ -38,7 +42,7 @@
     self.textField = textField;
     [self.view addSubview:textField];
     textField.borderStyle = UITextBorderStyleRoundedRect;
-    textField.textAlignment = NSTextAlignmentLeft;
+    textField.textAlignment = NSTextAlignmentCenter;
     textField.font = [UIFont boldSystemFontOfSize:25];
     textField.textColor = [UIColor blackColor];
     textField.text = self.invitedCode;

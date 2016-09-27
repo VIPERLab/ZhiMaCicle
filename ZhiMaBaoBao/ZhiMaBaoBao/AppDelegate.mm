@@ -91,9 +91,13 @@
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Comment_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Pic_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Like_Table];
+    
     // 聊天相关表
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_ConverseTable];
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_MessageTable];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_Converse_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_Message_Table];
+    
+    //用户相关的表
+    [FMDBShareManager creatTableWithTableType:ZhiMa_User_Message_Table];
 }
 
 // 注册通知
