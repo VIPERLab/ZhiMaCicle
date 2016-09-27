@@ -12,11 +12,8 @@
 
 #define Sqlite 的路径
 
-// 朋友圈数据库路径
-#define ZhiMaCircle_SqlitePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:@"ZhiMa_Circle.sqlite"]
-
-// 聊天数据库路径
-#define ZhiMaChat_SqlitePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:@"ZhiMa_Chat.sqlite"]
+// 数据库路径
+#define ZhiMa_SqlitePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:@"ZhiMa.sqlite"]
 
 //  表名
 /*朋友圈表*/
@@ -27,6 +24,9 @@
 /*消息表*/
 #define ZhiMaChatConvence_Table_Name @"ChatConverse "
 #define ZhiMaChatMessage_Table_Name @"ChatMessage "
+/*用户表*/
+#define ZhiMaUserMessage_Table_Name @"UserMessage "
+
 
 //  创建朋友圈table字段
 #define CircleField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, circle_ID TEXT NOT NULL, userID TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL)"
@@ -55,7 +55,7 @@
 
 
 // 创建 聊天会话 table 字段
-#define Chat_ConverseField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT NOT NULL, converseType TEXT NOT NULL, converseId TEXT NOT NULL, unReadCount TEXT NOT NULL, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL)"
+#define Chat_ConverseField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT NOT NULL, converseType INTEGER, converseId TEXT NOT NULL, unReadCount TEXT NOT NULL, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL)"
 #define Chat_ConverseFields_Name @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent"
 
 
@@ -64,5 +64,8 @@
 #define Chat_MessageFields_name @"msgid,type,fromUid,toUidOrGroupId,time,text,isGroup,converseId"
 
 
+// 用户表
+#define User_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, user_Name TEXT NOT NULL, user_Id TEXT NOT NULL, user_Head_photo TEXT NOT NULL, user_NickName TEXT NOT NULL)"
+#define User_MessageFields_name @"user_Name, user_Id, user_Head_photo, user_NickName";
 
 #endif /* FMDBManagerHeader_h */

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
-@class ConverseModel,LGMessage;
+@class ConverseModel,LGMessage,ZhiMaFriendModel;
 @class SDTimeLineCellModel;
 
 typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
@@ -21,9 +21,11 @@ typedef enum : NSUInteger {
     ZhiMa_Circle_Like_Table,        //朋友圈点赞的表
     
     /* ----   会话相关 ----  */
-    ZhiMa_Chat_ConverseTable,       //会话列表 的表
-    ZhiMa_Chat_MessageTable,        //消息表
+    ZhiMa_Chat_Converse_Table,       //会话列表 的表
+    ZhiMa_Chat_Message_Table,        //消息表
     
+    /* ----   用户相关 ----  */
+    ZhiMa_User_Message_Table,
 } ZhiMaSqliteTableType;
 
 @interface FMDBManager : NSObject

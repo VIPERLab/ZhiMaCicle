@@ -11,6 +11,7 @@
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
 		04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5051D99427B00CBB609 /* ConverseModel.m */; };
+		04CBF5091D9A695500CBB609 /* ZhiMaFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */; };
 		04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */; };
 		04EA79701D8F8F49005E5425 /* NSString+FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */; };
 		04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796D1D8F8F49005E5425 /* NSString+MD5.m */; };
@@ -551,6 +552,8 @@
 		04CBF5011D99228200CBB609 /* ConverseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseCell.m; sourceTree = "<group>"; };
 		04CBF5041D99427B00CBB609 /* ConverseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseModel.h; sourceTree = "<group>"; };
 		04CBF5051D99427B00CBB609 /* ConverseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseModel.m; sourceTree = "<group>"; };
+		04CBF5071D9A695500CBB609 /* ZhiMaFriendModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaFriendModel.h; sourceTree = "<group>"; };
+		04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaFriendModel.m; sourceTree = "<group>"; };
 		04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZhiMaImage.xcassets; sourceTree = "<group>"; };
 		04EA796A1D8F8F49005E5425 /* NSString+FontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontSize.h"; sourceTree = "<group>"; };
 		04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontSize.m"; sourceTree = "<group>"; };
@@ -4026,6 +4029,8 @@
 		31B7C71B1D8E96A100F1883A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				04CBF5071D9A695500CBB609 /* ZhiMaFriendModel.h */,
+				04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -4663,6 +4668,7 @@
 				04EA7D881D912872005E5425 /* ZXCGImageLuminanceSource.m in Sources */,
 				04EA7B651D91282E005E5425 /* LBXScanViewStyle.m in Sources */,
 				311CEFBB1D93F55000BBB1F9 /* SocketManager.m in Sources */,
+				04CBF5091D9A695500CBB609 /* ZhiMaFriendModel.m in Sources */,
 				04F862A71D95037000DCC6FE /* FMDBManager.m in Sources */,
 				04EA7E201D912872005E5425 /* ZXQRCodeVersion.m in Sources */,
 				04EA79B41D90DB2B005E5425 /* UIView+x.m in Sources */,
