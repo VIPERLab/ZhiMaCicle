@@ -25,7 +25,7 @@ extern CGFloat maxContentLabelHeight;
 
 + (NSDictionary *)mj_replacedKeyFromPropertyName {
     return @{
-              @"ID":@"id"
+              @"circle_ID":@"id",
              };
 }
 

@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
+		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
+		04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5051D99427B00CBB609 /* ConverseModel.m */; };
+		04CBF5091D9A695500CBB609 /* ZhiMaFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */; };
 		04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */; };
 		04EA79701D8F8F49005E5425 /* NSString+FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */; };
 		04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796D1D8F8F49005E5425 /* NSString+MD5.m */; };
@@ -480,6 +483,7 @@
 		316957861D91199100140126 /* dtmf-9.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957791D91199100140126 /* dtmf-9.aif */; };
 		316957871D91199100140126 /* dtmf-s.aif in Resources */ = {isa = PBXBuildFile; fileRef = 3169577A1D91199100140126 /* dtmf-s.aif */; };
 		316957881D91199100140126 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3169577B1D91199100140126 /* ring.mp3 */; };
+		319069A41D9A17C300D1D6D2 /* NSData+Replace.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069A31D9A17C300D1D6D2 /* NSData+Replace.m */; };
 		31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C6FD1D8E91F000F1883A /* MainViewController.m */; };
 		31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7021D8E96A100F1883A /* PersonalCenterController.m */; };
 		31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C70E1D8E96A100F1883A /* ConversationController.m */; };
@@ -556,6 +560,12 @@
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
+		04CBF5001D99228200CBB609 /* ConverseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseCell.h; sourceTree = "<group>"; };
+		04CBF5011D99228200CBB609 /* ConverseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseCell.m; sourceTree = "<group>"; };
+		04CBF5041D99427B00CBB609 /* ConverseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseModel.h; sourceTree = "<group>"; };
+		04CBF5051D99427B00CBB609 /* ConverseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseModel.m; sourceTree = "<group>"; };
+		04CBF5071D9A695500CBB609 /* ZhiMaFriendModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaFriendModel.h; sourceTree = "<group>"; };
+		04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaFriendModel.m; sourceTree = "<group>"; };
 		04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZhiMaImage.xcassets; sourceTree = "<group>"; };
 		04EA796A1D8F8F49005E5425 /* NSString+FontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontSize.h"; sourceTree = "<group>"; };
 		04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontSize.m"; sourceTree = "<group>"; };
@@ -1472,6 +1482,8 @@
 		316957791D91199100140126 /* dtmf-9.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-9.aif"; sourceTree = "<group>"; };
 		3169577A1D91199100140126 /* dtmf-s.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-s.aif"; sourceTree = "<group>"; };
 		3169577B1D91199100140126 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
+		319069A21D9A17C300D1D6D2 /* NSData+Replace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Replace.h"; sourceTree = "<group>"; };
+		319069A31D9A17C300D1D6D2 /* NSData+Replace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Replace.m"; sourceTree = "<group>"; };
 		31B7C6FC1D8E91F000F1883A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		31B7C6FD1D8E91F000F1883A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		31B7C7011D8E96A100F1883A /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
@@ -1643,6 +1655,24 @@
 			path = ChangeSex;
 			sourceTree = "<group>";
 		};
+		04CBF4FF1D99226700CBB609 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				04CBF5001D99228200CBB609 /* ConverseCell.h */,
+				04CBF5011D99228200CBB609 /* ConverseCell.m */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		04CBF5031D99427B00CBB609 /* ConverseModel */ = {
+			isa = PBXGroup;
+			children = (
+				04CBF5041D99427B00CBB609 /* ConverseModel.h */,
+				04CBF5051D99427B00CBB609 /* ConverseModel.m */,
+			);
+			path = ConverseModel;
+			sourceTree = "<group>";
+		};
 		04EA79631D8F85E8005E5425 /* PersonalCenter(用户中心) */ = {
 			isa = PBXGroup;
 			children = (
@@ -1690,6 +1720,8 @@
 				04EA796F1D8F8F49005E5425 /* UIColor+My.m */,
 				D5C8B3B11D9A0939007D6B5C /* NSString+Extension.h */,
 				D5C8B3B21D9A0939007D6B5C /* NSString+Extension.m */,
+				319069A21D9A17C300D1D6D2 /* NSData+Replace.h */,
+				319069A31D9A17C300D1D6D2 /* NSData+Replace.m */,
 			);
 			name = Categray;
 			path = ZhiMaBaoBao/Categray;
@@ -3991,7 +4023,7 @@
 			children = (
 				311CEF2C1D92182400BBB1F9 /* Chat(聊天) */,
 				316957511D90E5C900140126 /* AddFriends(添加好友) */,
-				31B7C70C1D8E96A100F1883A /* Controller */,
+				31B7C70C1D8E96A100F1883A /* Controller(会话列表) */,
 				31B7C70F1D8E96A100F1883A /* Model */,
 				31B7C7101D8E96A100F1883A /* View */,
 			);
@@ -3999,12 +4031,15 @@
 			path = ZhimaChat;
 			sourceTree = "<group>";
 		};
-		31B7C70C1D8E96A100F1883A /* Controller */ = {
+		31B7C70C1D8E96A100F1883A /* Controller(会话列表) */ = {
 			isa = PBXGroup;
 			children = (
+				04CBF5031D99427B00CBB609 /* ConverseModel */,
+				04CBF4FF1D99226700CBB609 /* Cell */,
 				31B7C70D1D8E96A100F1883A /* ConversationController.h */,
 				31B7C70E1D8E96A100F1883A /* ConversationController.m */,
 			);
+			name = "Controller(会话列表)";
 			path = Controller;
 			sourceTree = "<group>";
 		};
@@ -4045,6 +4080,8 @@
 		31B7C71B1D8E96A100F1883A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				04CBF5071D9A695500CBB609 /* ZhiMaFriendModel.h */,
+				04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -4588,6 +4625,7 @@
 				04EA7D981D912872005E5425 /* ZXDefaultGridSampler.m in Sources */,
 				04EA7E071D912872005E5425 /* ZXPDF417DetectionResult.m in Sources */,
 				04EA7D741D912872005E5425 /* ZXProductParsedResult.m in Sources */,
+				04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */,
 				04EA79E41D90E9F7005E5425 /* MyAccountViewController.m in Sources */,
 				04EA7D641D912872005E5425 /* ZXAddressBookAUResultParser.m in Sources */,
 				04EA7E1E1D912872005E5425 /* ZXQRCodeFormatInformation.m in Sources */,
@@ -4704,6 +4742,7 @@
 				04EA7D881D912872005E5425 /* ZXCGImageLuminanceSource.m in Sources */,
 				04EA7B651D91282E005E5425 /* LBXScanViewStyle.m in Sources */,
 				311CEFBB1D93F55000BBB1F9 /* SocketManager.m in Sources */,
+				04CBF5091D9A695500CBB609 /* ZhiMaFriendModel.m in Sources */,
 				04F862A71D95037000DCC6FE /* FMDBManager.m in Sources */,
 				04EA7E201D912872005E5425 /* ZXQRCodeVersion.m in Sources */,
 				04EA79B41D90DB2B005E5425 /* UIView+x.m in Sources */,
@@ -4756,6 +4795,7 @@
 				04EA7DFA1D912872005E5425 /* ZXUPCEANExtensionSupport.m in Sources */,
 				04EA7B371D9126BE005E5425 /* SecurityUtil.m in Sources */,
 				04EA7DF61D912872005E5425 /* ZXUPCAReader.m in Sources */,
+				319069A41D9A17C300D1D6D2 /* NSData+Replace.m in Sources */,
 				311CEF841D92252000BBB1F9 /* LGMessage.m in Sources */,
 				04EA799D1D8FD56C005E5425 /* NewMessageSettingController.m in Sources */,
 				04EA7D711D912872005E5425 /* ZXISBNParsedResult.m in Sources */,
@@ -4767,6 +4807,7 @@
 				04F862501D94FC6D00DCC6FE /* NSString+MLLabel.m in Sources */,
 				04EA7DBE1D912872005E5425 /* ZXDataMatrixX12Encoder.m in Sources */,
 				04EA79761D8FB95B005E5425 /* KXSettingController.m in Sources */,
+				04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */,
 				04F8625A1D94FC6D00DCC6FE /* TTTAttributedLabel.m in Sources */,
 				04EA7D621D912872005E5425 /* ZXAztecWriter.m in Sources */,
 				04F862991D94FC7900DCC6FE /* RFTextView.m in Sources */,

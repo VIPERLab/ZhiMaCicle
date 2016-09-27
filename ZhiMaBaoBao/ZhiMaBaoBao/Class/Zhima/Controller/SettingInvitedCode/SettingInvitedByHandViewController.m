@@ -21,17 +21,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self setCustomTitle:@"设置邀请码"];
+    [self setCustomTitle:@"绑定"];
     [self setView];
 }
 
 - (void)setView {
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor colorFormHexRGB:@"efeff4"];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, 30)];
-    label.textAlignment = NSTextAlignmentCenter;
+    if ([self.invitedCode isEqualToString:@""]) {
+        
+    }
     
-    label.font = [UIFont systemFontOfSize:18];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(30, 64 + 20, ScreenWidth - 60, 30)];
+    label.textAlignment = NSTextAlignmentLeft;
+    label.font = [UIFont systemFontOfSize:16];
     label.textColor = [UIColor lightGrayColor];
     [self.view addSubview:label];
     
@@ -46,16 +49,12 @@
     textField.keyboardType = UIKeyboardTypeNumberPad;
     
     if ([self.invitedCode isEqualToString:@""]) {
-        label.text = @"请输入你要绑定的邀请码";
+        label.text = @"请输入邀请码";
         textField.userInteractionEnabled = YES;
-    } else {
-        label.text = @"是否绑定此邀请码";
-        textField.userInteractionEnabled = NO;
     }
     
-    
-    UIButton *commitButton = [[UIButton alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(textField.frame) + 20, [UIScreen mainScreen].bounds.size.width - 40, 45)];
-    [commitButton setTitle:@"确认绑定" forState:UIControlStateNormal];
+    UIButton *commitButton = [[UIButton alloc] initWithFrame:CGRectMake(30, CGRectGetMaxY(textField.frame) + 20, [UIScreen mainScreen].bounds.size.width - 60, 45)];
+    [commitButton setTitle:@"去绑定" forState:UIControlStateNormal];
     [commitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [commitButton setBackgroundColor:THEMECOLOR];
     commitButton.layer.cornerRadius = 5;

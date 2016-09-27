@@ -17,7 +17,7 @@
 {
     if (self = [super init]) {
         _maxFrameSize = 65536;
-        _countOfLengthByte = 2;
+        _countOfLengthByte = 4;
         _reverseOfLengthByte = YES;
     }
     return self;
@@ -38,7 +38,7 @@
     while (downstreamData && downstreamData.length - headIndex > _countOfLengthByte) {
         NSData *lenData = [downstreamData subdataWithRange:NSMakeRange(headIndex, _countOfLengthByte)];
         //长度字节数据，可能存在高低位互换，通过数值转换工具处理
-        NSUInteger frameLen = (NSUInteger)[RHSocketUtils valueFromBytes:lenData reverse:_reverseOfLengthByte];
+        NSUInteger frameLen = (NSUInteger)[RHSocketUtils valueFromBytes:lenData reverse:_reverseOfLengthByte] - 4;
         if (frameLen >= _maxFrameSize - _countOfLengthByte) {
             [RHSocketException raiseWithReason:@"[Decode] Too Long Frame ..."];
             return -1;

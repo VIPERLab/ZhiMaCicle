@@ -109,7 +109,7 @@
 
 
 - (void)complainReason:(NSString *)reason {
-    [LGNetWorking ComplainsUserWithSessionID:USERINFO.sessionId andTheOpenFireAccount:self.model.openfireaccount andComplainsReason:reason andComplainFriendCicle:self.model.ID block:^(ResponseData *responseData) {
+    [LGNetWorking ComplainsUserWithSessionID:USERINFO.sessionId andTheOpenFireAccount:self.model.userId andComplainsReason:reason andComplainFriendCicle:self.model.circle_ID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             return ;

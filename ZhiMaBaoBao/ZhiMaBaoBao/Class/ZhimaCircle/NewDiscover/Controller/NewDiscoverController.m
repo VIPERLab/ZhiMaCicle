@@ -79,10 +79,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
     //全局变量
     assetLibrary = [[ALAssetsLibrary alloc]init];
+    
     self.locationTips = @"所在位置";
     self.headerCellHight = 230;
     _imageCount = 0;
@@ -90,13 +89,13 @@
     [self setupNav];
     [self setupView];
     [self setCustomTitle:@""];
+    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 - (void)setupNav {
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发布" style:UIBarButtonItemStylePlain target:self action:@selector(ReleaseButtonDidClick)];
@@ -247,6 +246,7 @@
 
 
 -(void)dealloc {
+    self.automaticallyAdjustsScrollViewInsets = YES;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -457,6 +457,7 @@
     } else {
         locationStr = self.locationTips;
     }
+    
     [LGNetWorking AddNewDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andContent_type:@"1" andContent:self.textView.text andLink:@"" andType:_privateClass andCurrent_location:locationStr andImgs:_imgs block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {

@@ -46,10 +46,10 @@
 #define APP_PUBLIC_PASSWORD     @"yihezhai16816888"
 
 //本地测试环境
-//#define DFAPIURL @"http://192.168.1.243:8088"
+#define DFAPIURL @"http://192.168.1.243:8088"
 
 //正式网络环境
-#define DFAPIURL @"http://app.zhima11.com:8080"
+//#define DFAPIURL @"http://app.zhima11.com:8080"
 #define DFAPIURLTEST @"http://wx.zhima11.com"
 
 //常用头文件
@@ -66,6 +66,8 @@
 #import "UIView+Helpers.h"
 #import "NSString+Helpers.h"
 #import "NSString+Extension.h"
+
+#import "KXCodingManager.h"
 
 #import "UIImageView+WebCache.h"
 #import "BaseViewController.h"

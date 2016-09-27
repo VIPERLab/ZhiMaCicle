@@ -294,6 +294,9 @@
     NSString *AESDecodingStr = [manager AESDecoding:subString];
     NSLog(@"AES解密之后的内容: %@",AESDecodingStr);
     
+    if ([AESDecodingStr isEqualToString:@""]) {
+        return;
+    }
     //做处理
     NSRange jidRange = [AESDecodingStr rangeOfString:@"invite_code="];
     NSString *invitedCode = [AESDecodingStr substringFromIndex:jidRange.location + 12];

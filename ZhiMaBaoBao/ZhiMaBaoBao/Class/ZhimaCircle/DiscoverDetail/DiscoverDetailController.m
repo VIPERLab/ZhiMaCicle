@@ -27,7 +27,7 @@
 @property (nonatomic, weak) DiscoverDetailHeaderView *headerView;
 @property (nonatomic, strong) NSMutableArray *picArray;
 
-@property (nonatomic, copy) NSString *commentOpenFirAccount;
+@property (nonatomic, copy) NSString *commentUserID;
 @property (nonatomic, strong) ChatKeyBoard *chatKeyBoard; //富文本键盘
 
 @property (nonatomic, weak) SDTimeLineCellCommentItemModel *tempCommentItemModel;
@@ -131,7 +131,7 @@
                     
                     SDTimeLineCellLikeItemModel *likeModel = [[SDTimeLineCellLikeItemModel alloc] init];
                     likeModel.userName = model.friend_nick;
-                    likeModel.userId = model.openfireaccount;
+                    likeModel.userId = model.userId;
                     likeModel.userPhoto = model.head_photo;
                     [likeItemsArray addObject:likeModel];
                 }
@@ -169,7 +169,7 @@
 // ---- 点击别人的头像
 - (void)DidClickLikeItemButton:(SDTimeLineCellLikeItemModel *)likeModel {
     PesonalDiscoverController *person = [[PesonalDiscoverController alloc] init];
-    person.openFirAccount = likeModel.userId;
+    person.userID = likeModel.userId;
     person.sessionID = USERINFO.sessionId;
     [self.navigationController pushViewController:person animated:YES];
 }
@@ -177,10 +177,8 @@
 
 // ------   评论按钮
 - (void)DiscoverDetailOperationButtonDidClickComment:(DiscoverDetailHeaderView *)view {
-    self.commentOpenFirAccount = @"";
+    self.commentUserID = @"";
     [self.chatKeyBoard keyboardUpforComment];
-    
-    
 }
 
 
@@ -188,7 +186,7 @@
     UIView *commentView = notification.userInfo[@"commentView"];
     SDTimeLineCellCommentItemModel *commentModel = notification.userInfo[@"commentModel"];
     
-    if ([commentModel.openfireaccount isEqualToString:USERINFO.userID]) {
+    if ([commentModel.userId isEqualToString:USERINFO.userID]) {
         //删除自己的评论
         self.tempCommentItemModel = commentModel;
         
@@ -199,7 +197,7 @@
         return;
     }
     
-    self.commentOpenFirAccount = commentModel.openfireaccount;
+    self.commentUserID = commentModel.userId;
     self.chatKeyBoard.placeHolder = [NSString stringWithFormat:@"回复:%@",commentModel.friend_nick];
     [self adjustTableViewToFitKeyboard:commentView];
     
@@ -242,7 +240,7 @@
 
 #pragma mark - 发送按钮回调
 - (void)chatKeyBoardSendText:(NSString *)text {
-    [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:self.headerView.model.ID andComment:text andOpenFirAccount:self.commentOpenFirAccount block:^(ResponseData *responseData) {
+    [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:self.headerView.model.circle_ID andComment:text andReply_userId:self.commentUserID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             return ;
@@ -259,7 +257,7 @@
 // -------   点赞按钮 网络请求
 - (void)DiscoverDetailOperationButtonDidClickLike:(DiscoverDetailHeaderView *)view {
     SDTimeLineCellModel *model = view.model;
-    [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.ID andComment:@"" andOpenFirAccount:@"" block:^(ResponseData *responseData) {
+    [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.circle_ID andComment:@"" andReply_userId:@"0" block:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             return ;
         }
@@ -362,7 +360,7 @@
             [self.delegate DiscoverDetailControllerDeletedButtonDidClick:self.indexPath];
         }
         
-        [FMDBShareManager deleteCircleDataWithCircleID:self.model.ID];
+        [FMDBShareManager deleteCircleDataWithCircleID:self.model.circle_ID];
         
         [self.navigationController popViewControllerAnimated:YES];
         

@@ -152,7 +152,7 @@
 
 #pragma mark - 朋友圈内容
 //------                   加载我的朋友圈内容接口
-+ (void)loadMyDiscoverWithSectionID:(NSString *)sectionID andMyCheatAcount:(NSString *)openfireaccount andPageCount:(NSString *)pageNumber block:(SuccessfulBlock)block;
++ (void)loadMyDiscoverWithSectionID:(NSString *)sectionID andMyCheatAcount:(NSString *)userId andPageCount:(NSString *)pageNumber block:(SuccessfulBlock)block;
 
 
 //朋友圈详情接口
@@ -194,7 +194,7 @@
 + (void)loadPersonalDiscoverDetailWithSessionID:(NSString *)sessionID andTargetOpenFirAccount:(NSString *)openFirAccount andPageNumber:(NSString *)pageNumber block:(SuccessfulBlock)block;
 
 //点赞入口
-+ (void)LikeOrCommentDiscoverWithSessionID:(NSString *)sessionID andFcId:(NSString *)fcId andComment:(NSString *)comment andOpenFirAccount:(NSString *)openFirAccount block:(SuccessfulBlock)block;
++ (void)LikeOrCommentDiscoverWithSessionID:(NSString *)sessionID andFcId:(NSString *)fcId andComment:(NSString *)comment andReply_userId:(NSString *)reply_userId block:(SuccessfulBlock)block;
 
 //发布新的说说入口
 + (void)AddNewDiscoverWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andContent_type:(NSString *)content_type andContent:(NSString *)content andLink:(NSString *)link andType:(NSString *)type andCurrent_location:(NSString *)current_location andImgs:(NSString *)imgs block:(SuccessfulBlock)block;

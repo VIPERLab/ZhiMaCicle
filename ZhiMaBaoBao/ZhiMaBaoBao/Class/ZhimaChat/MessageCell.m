@@ -74,7 +74,7 @@
     //文本消息
     if (message.type == MessageTypeText) {
         self.msgLabel.text = message.text;
-        self.timeLabel.text = message.time;
+//        self.timeLabel.text = message.time;
     }
     //语音消息
     else if (message.type == MessageTypeAudio){

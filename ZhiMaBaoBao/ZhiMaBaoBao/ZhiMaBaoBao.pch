@@ -21,6 +21,8 @@
 
 #define FMDBShareManager [FMDBManager shareManager]
 
+#define CodingManager [KXCodingManager shareInstance]
+
 #endif
 
 #endif /* Zhimabaobao_pch */
