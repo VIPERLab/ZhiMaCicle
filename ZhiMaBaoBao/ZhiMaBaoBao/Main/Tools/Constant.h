@@ -47,6 +47,9 @@
 //本地测试环境
 #define DFAPIURL @"http://192.168.1.243:8088"
 
+//测试环境
+//#define DFAPIURL @"http://zhimachat.yihezhai.cc"
+
 //正式网络环境
 //#define DFAPIURL @"http://app.zhima11.com:8080"
 #define DFAPIURLTEST @"http://wx.zhima11.com"

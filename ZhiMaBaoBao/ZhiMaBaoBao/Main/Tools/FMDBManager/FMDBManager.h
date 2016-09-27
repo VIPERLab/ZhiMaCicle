@@ -53,14 +53,85 @@ typedef enum : NSUInteger {
 
 
 #pragma mark - 朋友圈存、取操作
-// 把数据存放到数据库
+//                    ------------   朋友圈表  ----------------
+/**
+ *  把朋友圈数据存储到数据库
+ *
+ *  @param dataArray 模型数组
+ *
+ *  @return 是否存储成功
+ */
 - (BOOL)saveCircleDataWithDataArray:(NSArray <SDTimeLineCellModel *>*)dataArray;
 
-// 获取朋友圈所有消息
+/**
+ *  获取所有的朋友圈
+ *
+ *  @return 朋友圈数组
+ */
 - (NSArray <SDTimeLineCellModel *> *)getCirCleDataInArray;
 
-// 根据某条朋友圈的id 去删除其对应的数据
+
+/**
+ *  根据朋友圈的ID 删除对应的朋友圈、点赞、评论 和图片
+ *
+ *  @param circleID 朋友圈id
+ *
+ *  @return 是否操作成功
+ */
 - (BOOL)deleteCircleDataWithCircleID:(NSString *)circleID;
+
+
+#pragma mark - 用户相关
+//                    ------------   用户表  ----------------
+/**
+ *  向用户表插入用户数据
+ *
+ *  @param userMessageArray 用户数据模型数组
+ *
+ *  @return 是否插入成功
+ */
+- (BOOL)saveUserMessageWithMessageArray:(NSArray <ZhiMaFriendModel *> *)userMessageArray;
+
+/**
+ *  查询所有的消息
+ *
+ *  @return 返回一个ZhiMaFriendModel 的数组
+ */
+- (NSArray <ZhiMaFriendModel *>*)getAllUserMessageInArray;
+
+
+/**
+ *  根据用户的id查询用户信息
+ *
+ *  @param userID 要查询的用户id
+ *
+ *  @return 用户信息模型
+ */
+- (ZhiMaFriendModel *)getUserMessageByUserID:(NSString *)userID;
+
+
+/**
+ *  根据用户id更新用户信息
+ *
+ *  @param userMessage 用户数据模型
+ *
+ *  @return 是否成功
+ */
+- (BOOL)upDataUserMessage:(ZhiMaFriendModel *)userMessage;
+
+/**
+ *  根据用户id 来删除数据库中的用户信息
+ *
+ *  @param userID 用户id
+ *
+ *  @return 是否操作成功
+ */
+- (BOOL)deleteUserMessageByUserID:(NSString *)userID;
+
+
+
+
+
 
 
 #pragma mark - 聊天相关
@@ -80,6 +151,7 @@ typedef enum : NSUInteger {
 - (void)saveConverseListDataWithDataArray:(NSArray <ConverseModel *> *)dataArray;
 
 
+#pragma mark - 消息相关
 //                    ------------   消息表  ----------------
 
 /**

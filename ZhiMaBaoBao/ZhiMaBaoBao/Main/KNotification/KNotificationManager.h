@@ -56,7 +56,6 @@
 
 
 
-
 //                    ------ 登录通知 --------
 //登录成功，跳转到主控制器
 #define LOGIN_SUCCESS @"login_success"
