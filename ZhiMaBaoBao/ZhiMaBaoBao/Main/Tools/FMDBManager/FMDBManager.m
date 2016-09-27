@@ -448,7 +448,8 @@
 #pragma mark - 朋友圈相关
 //                              ----------   朋友圈相关
 // 存所有朋友圈信息
-- (void)saveCircleDataWithDataArray:(NSArray *)dataArray {
+- (BOOL)saveCircleDataWithDataArray:(NSArray *)dataArray {
+    __block BOOL successFul = YES;
     //插入数据
     for (SDTimeLineCellModel *cellModel in dataArray) {
         FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
@@ -481,13 +482,14 @@
                 NSLog(@"插入朋友圈成功");
             } else {
                 NSLog(@"插入朋友圈失败");
+                successFul = NO;
             }
             
         }];
         
-        
-        
-        
+        if (!successFul) {
+            return NO;
+        }
         
         //插入评论
         for (SDTimeLineCellCommentItemModel *commentModel in cellModel.commentList) {
@@ -519,10 +521,15 @@
                         NSLog(@"插入评论成功");
                     } else {
                         NSLog(@"插入评论失败");
+                        successFul = NO;
                     }
                     
                 }];
             }
+        }
+        
+        if (!successFul) {
+            return NO;
         }
         
         //插入图片
@@ -554,10 +561,15 @@
                         NSLog(@"插入图片成功");
                     } else {
                         NSLog(@"插入图片失败");
+                        successFul = NO;
                     }
                     
                 }];
             }
+        }
+        
+        if (!successFul) {
+            return NO;
         }
         
         //插入点赞
@@ -588,11 +600,18 @@
                         NSLog(@"插入点赞成功");
                     } else {
                         NSLog(@"插入点赞失败");
+                        successFul = NO;
                     }
                 }];
             }
         }
+        
+        if (!successFul) {
+            return NO;
+        }
+        
     }
+    return YES;
 }
 
 // 获取朋友圈所有消息
@@ -680,7 +699,8 @@
 }
 
 // 根据某条朋友圈的id 去删除其对应的数据
-- (void)deleteCircleDataWithCircleID:(NSString *)circleID {
+- (BOOL)deleteCircleDataWithCircleID:(NSString *)circleID {
+    __block BOOL successFul = YES;
     //删除朋友圈数据库该条记录
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
     NSString *operation = [FMDBShareManager deletedTableData:ZhiMa_Circle_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",circleID]];
@@ -690,8 +710,13 @@
             NSLog(@"删除成功");
         } else {
             NSLog(@"删除失败");
+            successFul = NO;
         }
     }];
+    
+    if (!successFul) {
+        return NO;
+    }
     
     //删除评论数据库该条记录
     FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
@@ -702,8 +727,13 @@
             NSLog(@"删除成功");
         } else {
             NSLog(@"删除失败");
+            successFul = NO;
         }
     }];
+    
+    if (!successFul) {
+        return NO;
+    }
     
     //删除图片数据库该条记录
     FMDatabaseQueue *picQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
@@ -714,8 +744,15 @@
             NSLog(@"删除成功");
         } else {
             NSLog(@"删除失败");
+            successFul = NO;
         }
     }];
+    
+    if (!successFul) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 #pragma mark - 聊天相关
@@ -790,7 +827,10 @@
 
 //                    ------------   消息表  ----------------
 //  插入消息到 -> 消息表
-- (void)saveMessage:(LGMessage *)message toConverseID:(ConverseModel *)converseModel {
+- (BOOL)saveMessage:(LGMessage *)message toConverseID:(ConverseModel *)converseModel {
+    
+    __block BOOL success = YES;   //消息是否插入成功
+    
     //查询是否有这个会话id
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_ConverseTable];
     NSLog(@"开始查会话表");
@@ -819,21 +859,34 @@
     }
     
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:opeartionStr,converseModel.time,converseModel.converseType,converseModel.converseId,converseModel.unReadCount,@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
-        if (success) {
+        BOOL successFul = [db executeUpdate:opeartionStr,converseModel.time,converseModel.converseType,converseModel.converseId,converseModel.unReadCount,@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+        if (successFul) {
             NSLog(@"插入会话成功");
         } else {
             NSLog(@"插入会话失败");
+            success = NO;
         }
     }];
     
     
     //往消息表 -> 插入 -> 消息
+    if (!success) { // 如果会话插入失败，则直接返回
+        return success;
+    }
+    
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_MessageTable];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_MessageTable];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.time,message.text,@(message.isGroup),converseModel.converseId];
+        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.time,message.text,@(message.isGroup),converseModel.converseId];
+        if (successFul) {
+            NSLog(@"插入消息成功");
+        } else {
+            NSLog(@"插入消息失败");
+            success = NO;
+        }
     }];
+    
+    return success;
 }
 
 /**
