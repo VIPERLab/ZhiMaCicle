@@ -10,7 +10,7 @@
 
 @interface NSString (MD5)
 + (NSString *)md5:(NSString *)str;
-+(NSString *)file_md5:(NSString*) path;
++ (NSString *)file_md5:(NSString*) path;
 
 - (NSString *)md5Encrypt;
 @end

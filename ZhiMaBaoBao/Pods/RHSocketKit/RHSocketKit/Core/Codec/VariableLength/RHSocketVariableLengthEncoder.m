@@ -39,7 +39,7 @@
     NSUInteger dataLen = data.length + 4;
     NSMutableData *sendData = [[NSMutableData alloc] init];
     
-    //将数据长度转换为长度字节，写入到数据块中。这里根据head占的字节个数转换data长度，默认为2个字节
+    //将数据长度转换为长度字节，写入到数据块中。这里根据head占的字节个数转换data长度，默认为4个字节
     NSData *headData = [RHSocketUtils bytesFromValue:dataLen byteCount:_countOfLengthByte reverse:_reverseOfLengthByte];
     [sendData appendData:headData];
     [sendData appendData:data];
