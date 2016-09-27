@@ -25,6 +25,7 @@
 #define SEPARTORCOLOR   RGB(228, 229, 230)
 #define BGCOLOR         RGB(230, 230, 230)
 #define GRAYCOLOR       RGB(154,154,154)
+#define ClearColor      [UIColor clearColor]
 
 
 //字体宏定义
@@ -62,6 +63,9 @@
 #import "LGNetWorking.h"
 #import "UserInfo.h"
 #import "UIView+x.h"
+#import "UIView+Helpers.h"
+#import "NSString+Helpers.h"
+#import "NSString+Extension.h"
 
 #import "UIImageView+WebCache.h"
 #import "BaseViewController.h"

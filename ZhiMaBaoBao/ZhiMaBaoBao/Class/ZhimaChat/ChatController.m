@@ -12,6 +12,12 @@
 #import "LGMessage.h"
 #import "FaceSourceManager.h"
 #import "RecordingHUD.h"
+#import "SDPhotoBrowser.h"
+
+#import "IMChatTableViewCell.h"
+#import "BaseChatTableViewCell.h"
+#import "IMMorePictureTableViewCell.h"
+#import "IMChatVoiceTableViewCell.h"
 
 //语音相关头文件
 #import "MLAudioRecorder.h"
@@ -23,7 +29,7 @@
 #import "MLAudioPlayer.h"
 #import "AmrPlayerReader.h"
 
-@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource>
+@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ChatKeyBoard *keyboard;
 
@@ -41,6 +47,8 @@
 
 
 @property (nonatomic, strong) NSMutableArray *messages;  //聊天消息
+@property (nonatomic, strong) NSMutableArray *subviews;  //所有的imageView
+
 @end
 
 static NSString *const reuseIdentifier = @"messageCell";
@@ -54,16 +62,16 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self initAudioRecorder];
     [self requestChatRecord];
     
-    //播放按钮
-    UIButton *playBtn = [[UIButton alloc] initWithFrame:CGRectMake(125, 400, 70, 50)];
-    [playBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
-    [playBtn setTitle:@"播放" forState:UIControlStateNormal];
-    [self.view insertSubview:playBtn aboveSubview:self.tableView];
-    [playBtn addTarget:self action:@selector(playAudio:) forControlEvents:UIControlEventTouchUpInside];
+//    //播放按钮
+//    UIButton *playBtn = [[UIButton alloc] initWithFrame:CGRectMake(125, 400, 70, 50)];
+//    [playBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+//    [playBtn setTitle:@"播放" forState:UIControlStateNormal];
+//    [self.view insertSubview:playBtn aboveSubview:self.tableView];
+//    [playBtn addTarget:self action:@selector(playAudio:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)addSubviews{
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, self.view.bounds.size.height - kChatKeyBoardHeight) style:UITableViewStylePlain];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, self.view.bounds.size.height - kChatToolBarHeight) style:UITableViewStylePlain];
     [tableView registerClass:[MessageCell class] forCellReuseIdentifier:reuseIdentifier];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.dataSource = self;
@@ -186,10 +194,182 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 //加载聊天数据
 - (void)requestChatRecord{
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"FakeData" ofType:@"plist"];
-    NSArray *chatData = [NSMutableArray arrayWithContentsOfFile:path];
-    self.messages = [LGMessage mj_objectArrayWithKeyValuesArray:chatData];
+//    NSString *path = [[NSBundle mainBundle] pathForResource:@"FakeData" ofType:@"plist"];
+//    NSArray *chatData = [NSMutableArray arrayWithContentsOfFile:path];
+//    self.messages = [LGMessage mj_objectArrayWithKeyValuesArray:chatData];
+    
+    for (int i=0; i<7; i++) {
+        LGMessage*msg = [[LGMessage alloc]init];
+        
+        switch (i) {
+            case 0:
+                msg.type = MessageTypeText;
+                msg.text = @"😄可是房价会更😄😄😄😄快的房价回归😄😄😄考试辅导和公司开发😄😄😄的受到法国开发的计划过";
+                msg.fromUid = USERINFO.userID;
+
+                break;
+            case 1:
+                msg.type = MessageTypeAudio;
+                msg.text = @"额锐鳄鱼肉贴如意贴一个的房间号公开";
+                msg.fromUid = @"1234";
+                msg.is_read = @"1";
+                break;
+            case 2:
+                msg.type = MessageTypeImage;
+                msg.text = @"http://app.zhima11.com:8080/upload/headPhoto/headPhoto1474962299468.jpg";
+                msg.fromUid = USERINFO.userID;
+                break;
+            case 3:
+                msg.type = MessageTypeText;
+                msg.text = @"是否客观合理分工合理的开发规划及类似的风格及婚礼上的开发规划了深刻的分工合理的恢复过来看大家分工合理开发和公司的来访客户给老师";
+                msg.fromUid = @"1234";
+                break;
+            case 4:
+                msg.type = MessageTypeText;
+                msg.text = @"SD卡付款时间都符合双方";
+                msg.fromUid = USERINFO.userID;
+                break;
+            case 5:
+                msg.type = MessageTypeImage;
+                msg.text = @"http://app.zhima11.com:8080//upload/headPhoto/headPhoto1473843925435.jpg";
+                msg.fromUid = @"1234";
+                break;
+            case 6:
+                msg.type = MessageTypeImage;
+                msg.text = @"http://app.zhima11.com:8080/upload/headPhoto/headPhoto1474950185153.jpg";
+                msg.fromUid = USERINFO.userID;
+                break;
+                
+            default:
+                break;
+        }
+        
+        [self.messages addObject:msg];
+        
+    }
     [self.tableView reloadData];
+    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
+}
+
+// 计算 cell 的高度
+- (CGFloat)calculateRowHeightAccordingChat:(LGMessage *)ch indexPath:(NSIndexPath *)ip
+{
+    MessageType ft = ch.type;;
+    CGFloat rowHeight = 44.0f;
+    
+    BOOL needShowTime = NO;
+    
+    NSString *time = nil;
+    
+//    if (ip.row > 0) {
+//        
+//        Chat *preChat = self.tableViewSource[ip.row - 1]; //前一条聊天记录]
+//        Chat *curChat = self.tableViewSource[ip.row];
+//        needShowTime = [CommenMethod needShowTime:preChat.send_time time2:curChat.send_time];
+//        
+//        if (needShowTime) {
+//            //            NSDate *date = [ch.send_time dateWithDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//            //            time = [date stringWithDateFormat:@"MM-dd HH:mm"];
+//        }
+//    }
+//    else
+//    {
+//        
+//        //        NSDate *date = [ch.send_time dateWithDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//        //        time = [date stringWithDateFormat:@"MM-dd HH:mm"];
+//        
+//    }
+    switch (ft) {
+        case MessageTypeText: {
+            rowHeight = [IMChatTableViewCell getHeightWithMessage:ch.text topText:time nickName:nil];
+            
+            break;
+        }
+//        case kFileAnimationEmotion:{
+//            
+//            UIImage * image=[UIImage sd_animatedGIFNamed:ch.message];
+//            rowHeight = [IMChatAnimeTableViewCell getBaseHeightTopText:time nick:nil contentHeight:image.size.height];
+//            break;
+//        }
+//            break;
+        case MessageTypeImage : {
+//            rowHeight = [IMMorePictureTableViewCell getHeightWithChat:ch TopText:time nickName:nil];
+            rowHeight = 130;
+            
+            break;
+        }
+        case MessageTypeAudio: {
+            rowHeight = [IMChatVoiceTableViewCell getHeightWithTopText:time nickName:nil];
+            break;
+        }
+//        case kFileVideo:
+//        {
+//            rowHeight = [IMChatOtherTableViewCell getBaseHeightTopText:time nick:nil contentHeight:DEFAULT_VIDEO_SIZE.height];
+//            break;
+//        }
+//        case kFileOther: {
+//            rowHeight = 80;
+//            break;
+//        }
+//        case kFilePictureAndText:
+//        {
+//            id obj = [CommenMethod jsonStringToObject:ch.message];
+//            if ([obj isKindOfClass:[NSDictionary class]]) {
+//                NSDictionary *news = (NSDictionary *)obj;
+//                NSInteger newsItemCount = [[news objectForKey:@"datalist"] count];
+//                if (newsItemCount > 0) {
+//                    rowHeight = (newsItemCount - 1) * NewsItemHeight + NewsHeaderHeight + NewsCellPaddingBottom; //20为cell间的间距
+//                }
+//            }
+//            NSLog(@"news cell height:%f",rowHeight);
+//            break;
+//        }
+//        case kFileRecomment:
+//        {
+//            
+//            NSDictionary *sharedFriendInfo = [ch.message jsonObject];
+//            NSString *nickName = [sharedFriendInfo objectForKey:@"nickName"];
+//            
+//            rowHeight = [IMFriendCardTableViewCell getBaseHeightTopText:time nick:nil sharedText:nickName];
+//        }
+//            break;
+        default:
+            break;
+    }
+    
+    return  rowHeight;
+}
+
+#pragma mark - ——----------浏览图片
+- (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
+{
+    
+    NSLog(@"图片点击");
+    [self.subviews removeAllObjects];
+    UIView *imageView = grz.view;
+    [self.subviews addObject:imageView];
+    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
+    browser.currentImageIndex = imageView.tag;
+    browser.sourceImagesContainerView = grz.view.superview;
+    browser.imageCount = self.subviews.count;
+    browser.delegate = self;
+    [browser show];
+    
+}
+
+#pragma mark - SDPhotoBrowserDelegate
+
+- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index
+{
+    LGMessage *msg = self.messages[index];
+    NSURL *url = [NSURL URLWithString:msg.text];
+    return url;
+}
+
+- (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index
+{
+    UIImageView *imageView = self.subviews[index];
+    return imageView.image;
 }
 
 #pragma mark - tableview datasource
@@ -198,14 +378,304 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-    cell.message = self.messages[indexPath.row];
-    return cell;
+//    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+//    cell.message = self.messages[indexPath.row];
+//    return cell;
+    
+    LGMessage *message = self.messages[indexPath.row];
+    MessageType fileType = message.type;
+    BOOL isMe = [message.fromUid isEqualToString:USERINFO.userID];
+    
+    NSString *resuseIdentifierString = [NSString stringWithFormat:@"chatCellIdentifier_%ld", (long)fileType];
+
+    BaseChatTableViewCell *baseChatCell = nil;
+    NSString *headPortraitUrlStr = nil;
+    NSString *uniqueFlagStr = nil;
+#pragma mark--MessageTypeText
+    if(fileType == MessageTypeText) {
+        IMChatTableViewCell *textChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
+        if(!textChatCell) {
+            textChatCell = [[IMChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resuseIdentifierString];
+        }
+        
+        baseChatCell = textChatCell;
+        
+        textChatCell.isMe = isMe;
+        textChatCell.chatMessageView.text = message.text;
+//        textChatCell.topLabel.text = time;
+        textChatCell.delegate = self;
+        textChatCell.indexPath = indexPath;
+        
+        //  以下内容判断是否发送失败
+//        if (chat.modelStatus == DVRequestFaile) {
+//            textChatCell.sendAgain.hidden = NO;
+//            [textChatCell.sending stopAnimating];
+//            textChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
+//                
+//                Chat *chat = [tableViewSource objectAtIndex:theCell.indexPath.row];
+//                chat.modelStatus = DVRequesting;
+//                [tableViewSource replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
+//                NSString *messageId = chat.timestamp;
+//                NSIndexPath *indexPath = theCell.indexPath;
+//                
+//                [self chat_updateTableView:@[indexPath] pattern:1];
+//                
+//                [DataBaseManager updateChatColumnValueByID:StringFromInt(DVRequesting) column:@"messageSendStatus" messageId:messageId];
+//                
+//                [[XMPPManager defaultInstance] sendMessageToUser:self.chatFriend
+//                                                            body:chat.message
+//                                                          myInfo:[GlobalCommen CurrentUser]
+//                                                         content:nil
+//                                                         subject:kFileText
+//                                                       messageId:messageId
+//                 
+//                 ];
+//            };
+//        } else {
+//            textChatCell.sendAgain.hidden = YES;
+//            if (chat.modelStatus == DVRequesting) {
+//                [textChatCell.sending startAnimating];
+//            } else {
+//                [textChatCell.sending stopAnimating];
+//            }
+//        }
+        
+    }
+    
+#pragma mark--MessageTypeImage
+    else if(fileType == MessageTypeImage) {
+        IMMorePictureTableViewCell *picChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
+        if(!picChatCell) {
+            picChatCell = [[IMMorePictureTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resuseIdentifierString];
+            
+            picChatCell.backgroundColor = WHITECOLOR;
+        }
+        
+        baseChatCell = picChatCell;
+        
+        picChatCell.isMe = isMe;
+        picChatCell.delegate=self;
+//        picChatCell.topLabel.text = time;
+        picChatCell.indexPath = indexPath;
+        
+        
+        [picChatCell reloadData:message isMySelf:isMe chousePicTarget:self action:@selector(chat_browseChoosePicture:)];
+        
+//        if (![self.subviews containsObject: picChatCell.picturesView]) {
+//            [self.subviews addObject:picChatCell.picturesView];
+//            picChatCell.picturesView.tag = [self.subviews indexOfObject:picChatCell.picturesView];
+//
+//        }
+        
+//        if (chat.modelStatus == DVRequestFaile) {
+//            picChatCell.sendAgain.hidden = NO;
+//            [picChatCell.sending stopAnimating];
+//            picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
+//                Chat *chat = [tableViewSource objectAtIndex:theCell.indexPath.row];
+//                chat.modelStatus = DVRequesting;
+//                [tableViewSource replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
+//                NSIndexPath *indexPath = theCell.indexPath;
+//                [self chat_updateTableView:@[indexPath] pattern:1];
+//                [DataBaseManager updateChatColumnValueByID:StringFromInt(DVRequesting) column:@"messageSendStatus" messageId:chat.timestamp];
+//                
+//                //上传成功发送失败
+//                if ([chat.message hasPrefix:@"/upload"]) {
+//                    
+//                    [[XMPPManager defaultInstance] sendMessageToUser:self.chatFriend
+//                                                                body:chat.message
+//                                                              myInfo:[GlobalCommen CurrentUser]
+//                                                             content:chat.content
+//                                                             subject:kFilePicture
+//                                                           messageId:chat.timestamp];
+//                } else {
+//                    
+//                    [self uploadImages:[chat.message componentsSeparatedByString:@","] remark:chat.content messageId:chat.timestamp];
+//                }
+//                
+//            };
+//        } else {
+//            picChatCell.sendAgain.hidden = YES;
+//            if (chat.modelStatus == DVRequesting) {
+//                [picChatCell.sending startAnimating];
+//            } else {
+//                [picChatCell.sending stopAnimating];
+//            }
+//        }
+        
+    }
+#pragma mark--MessageTypeAudio
+    else if(fileType == MessageTypeAudio) {
+        IMChatVoiceTableViewCell *voiceChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
+        if(!voiceChatCell) {
+            voiceChatCell = [[IMChatVoiceTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resuseIdentifierString];
+        }
+        
+        baseChatCell = voiceChatCell;
+        
+        
+        voiceChatCell.delegate = self;
+        voiceChatCell.voiceDelegate = self;
+        voiceChatCell.isMe = isMe;
+        voiceChatCell.voiceTimeLength = message.text;
+//        voiceChatCell.topLabel.text = time;
+        voiceChatCell.indexPath = indexPath;
+        
+        
+        short isRead = message.is_read.intValue;
+        if(!isMe) {
+            
+            if ([message.is_read isEqualToString:@"2"]) { //[chat.isReadContent isEqualToString:@"2"]
+                voiceChatCell.isReadVoice = YES;
+            } else {
+                voiceChatCell.isReadVoice = NO;
+            }
+
+            if(isRead == 1) {
+
+                //这里为什么要设成已读呢？？？？？？
+                //chat.is_read = @"2";
+                
+//                [self.messages replaceObjectAtIndex:voiceChatCell.indexPath.row withObject:message];
+//                [self performSelector:@selector(chat_updateChatForRead:) withObject:message afterDelay:0];
+                
+                
+//                TentinetFile *tentinetFile = [[TentinetFile alloc] init];
+//                tentinetFile.identity = chat.timestamp;
+//                tentinetFile.requestURL = [NSString stringWithFormat:@"%@%@",FileServerAddress, chat.message];
+//                
+//                
+//                __weak typeof(TentinetFile) *weakFile = tentinetFile;
+//                tentinetFile.requestResults = ^(AFHTTPRequestOperation *operation,id results, NSError *error){
+//                    
+//                    if (!error) {
+//                        [VoiceConverter upload_download_successArmToWav:results];
+//                        NSString *messageId = weakFile.identity;
+//                        NSLog(@"messageId  %@", messageId);
+//                        
+//                        NSInteger index = [self getMessageIndexByMessageId:messageId];
+//                        if (index > -1) {
+//                            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+//                            [self chat_updateTableView:@[indexPath] pattern:1];
+//                        }
+//                        
+//                        voiceChatCell.btnBg.enabled = YES;
+//                        
+//                    } else {
+//                        
+//                    }
+                };
+//
+//                NSString *filePath  = [[[BYDProductionObject defaultProduction] createDocumentSpecifiedFile:StoreVoicesChat] stringByAppendingPathComponent:[[chat.message componentsSeparatedByString:@"/"] lastObject]];
+//                
+//                [tentinetFile downloadFileWithBlock:filePath];
+//                
+//            } else {
+//                NSString *folderpath = [[BYDProductionObject defaultProduction] createDocumentSpecifiedFile:StoreVoicesChat];
+//                NSString *savepath    = [folderpath stringByAppendingPathComponent:[[chat.message componentsSeparatedByString:@"/"] lastObject]];
+//                
+//                NSLog(@"savepath=========:%@",savepath);
+//                if(![[NSFileManager defaultManager ]fileExistsAtPath:savepath])
+//                {
+//                    
+//                    TentinetFile *tentinetFile = [[TentinetFile alloc] init];
+//                    tentinetFile.identity = chat.timestamp;
+//                    tentinetFile.requestURL = [NSString stringWithFormat:@"%@%@",FileServerAddress, chat.message];
+//                    
+//                    
+//                    __weak typeof(TentinetFile) *weakFile = tentinetFile;
+//                    tentinetFile.requestResults = ^(AFHTTPRequestOperation *operation,id results, NSError *error){
+//                        
+//                        if (!error) {
+//                            [VoiceConverter upload_download_successArmToWav:results];
+//                            NSString *messageId = weakFile.identity;
+//                            NSLog(@"messageId  %@", messageId);
+//                            
+//                            NSInteger index = [self getMessageIndexByMessageId:messageId];
+//                            if (index > -1) {
+//                                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+//                                [self chat_updateTableView:@[indexPath] pattern:1];
+//                            }
+//                            
+//                        } else {
+//                            
+//                        }
+//                    };
+//                    
+//                    NSString *filePath  = [[[BYDProductionObject defaultProduction] createDocumentSpecifiedFile:StoreVoicesChat] stringByAppendingPathComponent:[[chat.message componentsSeparatedByString:@"/"] lastObject]];
+//                    
+//                    [tentinetFile downloadFileWithBlock:filePath];
+//                } else {
+//                    voiceChatCell.btnBg.enabled = YES;
+//                }
+//            }
+//        }
+//        else{
+//            voiceChatCell.isReadVoice = YES;
+//            if(isRead == 1) {
+//                //上传
+//                chat.is_read = @"2";
+//                [self performSelector:@selector(chat_updateChatForRead:) withObject:chat afterDelay:0];
+//                
+//            } else {
+//                voiceChatCell.btnBg.enabled = YES;
+//            }
+//        }
+//        
+//        if (chat.modelStatus == DVRequestFaile) {
+//            voiceChatCell.sendAgain.hidden = NO;
+//            [voiceChatCell.sending stopAnimating];
+//            voiceChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
+//                Chat *chat = [tableViewSource objectAtIndex:theCell.indexPath.row];
+//                chat.modelStatus = DVRequesting;
+//                [tableViewSource replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
+//                NSIndexPath *indexPath = theCell.indexPath;
+//                [self chat_updateTableView:@[indexPath] pattern:1];
+//                
+//                [DataBaseManager updateChatColumnValueByID:StringFromInt(DVRequesting) column:@"messageSendStatus" messageId:chat.timestamp];
+//                
+//                [self uploadVoice:chat.message durationTime:chat.content messageId:chat.timestamp];
+//            };
+//        } else {
+//            voiceChatCell.sendAgain.hidden = YES;
+//            if (chat.modelStatus == DVRequesting) {
+//                [voiceChatCell.sending startAnimating];
+//            } else {
+//                [voiceChatCell.sending stopAnimating];
+//            }
+        }
+        
+    }
+
+    
+//        //头像图片显示问题
+//        headPortraitUrlStr = nil;
+//        uniqueFlagStr = nil;
+//        if (baseChatCell.isMe){
+//            User *user = [GlobalCommen CurrentUser];
+//            headPortraitUrlStr = user.portrait;
+//            uniqueFlagStr = user.dixun_number;
+//        }else{
+//            headPortraitUrlStr = chat.chat_object_portrait;
+//            uniqueFlagStr = chat.dixun_number;
+//        }
+//        
+//        //头像
+//        if (![headPortraitUrlStr contains:@"1000000000"]) {
+//            [baseChatCell.userIcon setImageWithURL:[NSURL URLWithString:headPortraitUrlStr] placeholderImage:[UIFactory createOtherUserDefaultHeadPortraitWith:uniqueFlagStr]];
+//        }else{
+//            baseChatCell.userIcon.image = [UIFactory createOtherUserDefaultHeadPortraitWith:uniqueFlagStr];
+//        }
+        
+        
+        return baseChatCell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    LGMessage *message = self.messages[indexPath.row];
-    return message.buddleHeight + 2 * MSG_PADDING;
+//    LGMessage *message = self.messages[indexPath.row];
+//    return message.buddleHeight + 2 * MSG_PADDING;
+    
+    LGMessage * chat = [self.messages objectAtIndex:indexPath.row];
+    return [self calculateRowHeightAccordingChat:chat indexPath:indexPath];
 }
 
 #pragma mark - tableview delegate
@@ -217,6 +687,37 @@ static NSString *const reuseIdentifier = @"messageCell";
 //滑动tableview,收起键盘
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.keyboard keyboardDown];
+}
+
+#pragma mark - BaseChatTableViewCell delegate
+
+- (void)userIconTappedWithIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (void)deleteButtonTappedWithIndexPath:(NSIndexPath *)indexPath
+{
+
+}
+
+- (void)deleteTextComplete
+{
+
+}
+
+- (void)copyButtonTappedWithIndexPath:(NSIndexPath *)indexPath
+{
+
+}
+
+- (void)showMyDetailsInfo:(id)sender
+{
+    
+}
+
+- (void)showUserInfoWithDixinNumber:(NSString *)dixinNumber
+{
+    
 }
 
 #pragma mark - chatKeyboard delegate
@@ -337,6 +838,13 @@ static NSString *const reuseIdentifier = @"messageCell";
         _messages = [NSMutableArray array];
     }
     return _messages;
+}
+
+- (NSMutableArray *)subviews{
+    if (!_subviews) {
+        _subviews = [NSMutableArray array];
+    }
+    return _subviews;
 }
 
 @end

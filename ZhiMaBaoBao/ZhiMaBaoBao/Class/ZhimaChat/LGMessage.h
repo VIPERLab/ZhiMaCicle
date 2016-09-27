@@ -46,7 +46,8 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
  /** 签名*/
 @property (nonatomic, copy) NSString *sign;
 
-
+ /** 阅读状态（1未读，2已读'*/
+@property(nonatomic,strong) NSString * is_read;
 
 
  /** 单元格高度*/
