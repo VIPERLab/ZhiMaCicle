@@ -307,9 +307,9 @@
     
     text = [text stringByAppendingString:[NSString stringWithFormat:@":%@", model.comment]];
     NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:text];
-    [attString setAttributes:@{NSLinkAttributeName : model.openfireaccount} range:[text rangeOfString:model.friend_nick]];
+    [attString setAttributes:@{NSLinkAttributeName : model.userId} range:[text rangeOfString:model.friend_nick]];
     if (model.reply_friend_nick) {
-        [attString setAttributes:@{NSLinkAttributeName : model.reply_openfireaccount} range:[text rangeOfString:model.reply_friend_nick]];
+        [attString setAttributes:@{NSLinkAttributeName : model.reply_id} range:[text rangeOfString:model.reply_friend_nick]];
     }
     return attString;
 }

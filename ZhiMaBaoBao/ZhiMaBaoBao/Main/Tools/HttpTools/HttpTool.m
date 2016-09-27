@@ -51,13 +51,12 @@
 
 + (void)POST:(NSString *)url params:(NSDictionary *)params success:(SuccessfulBlock)SuccessfulBlock failure:(FailureBlock)FailureBlock
 {
-    
+//    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.requestSerializer.timeoutInterval = 15.f;
+    manager.requestSerializer.timeoutInterval = 30.0f;
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
     
     [manager POST:[NSString stringWithFormat:@"%@%@",DFAPIURL,url] parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-
         
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         
@@ -80,7 +79,9 @@
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [LCProgressHUD hide];
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        NSLog(@"请求掉起失败：%@",error.description);
         if (error) {
             ErrorData *errorData = [ErrorData new];
             errorData.code = error.code;

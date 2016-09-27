@@ -21,21 +21,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setCustomTitle:@"意见反馈"];
-
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = BGCOLOR;
-//    [self addAllViews];
+    [self addAllViews];
     
     // Do any additional setup after loading the view.
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [self.textView becomeFirstResponder];
+}
+
 - (void)addAllViews
 {
-    UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(7, 10, DEVICEWITH - 14, 200)];
+    UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(7, 74, DEVICEWITH - 14, 200)];
     textView.delegate = self;
     textView.backgroundColor = [UIColor whiteColor];
     
     textView.layer.borderWidth = 1;
-    textView.layer.borderColor = RGB(220, 220, 220).CGColor;
+    textView.layer.borderColor = [UIColor colorFormHexRGB:@"e1e1e1"].CGColor;
     [textView.layer setMasksToBounds:YES];
     textView.font = MAINFONT;
     
@@ -54,9 +58,8 @@
     UILabel *uilabel = [[UILabel alloc]init];
     uilabel.frame =CGRectMake(8, 3, CGRectGetWidth(textView.frame), 25);
     uilabel.text = @"您的意见对我们是非常宝贵的....";
-    uilabel.font = MAINFONT;
-    uilabel.enabled = NO;
-    uilabel.backgroundColor = [UIColor clearColor];
+    uilabel.font = [UIFont systemFontOfSize:15];
+    uilabel.textColor = [UIColor lightGrayColor];
     [self.textView addSubview:uilabel];
     self.pLabel = uilabel;
 }
@@ -68,16 +71,19 @@
         [LCProgressHUD showText:@"建议不能为空"];
         return;
     }
+    [LCProgressHUD showText:@"正在提交"];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
     
-    HttpTool *request = [HttpTool sharedHttpTool];
     NSString *url = [NSString stringWithFormat:@"%@/moblie/addsuggestion.do",DFAPIURL];
     
     NSMutableDictionary *parms = [NSMutableDictionary dictionary];
     parms[@"sessionId"] = USERINFO.sessionId;
     parms[@"content"] = self.textView.text;
     
-    [request POST:url parameters:parms progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
+    [manager POST:url parameters:parms progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [LCProgressHUD hide];
         ResponseData *data = [ResponseData mj_objectWithKeyValues:responseObject];
         if (![data.msg containsString:@"成功"]) {
             [LCProgressHUD showText:data.msg];
@@ -93,22 +99,16 @@
     
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    if ([textView.text isEqualToString:@""]) {
-        self.pLabel.text = @"";
-    }
-
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    self.pLabel.hidden = YES;
 }
 
 
-- (void)textViewDidChange:(UITextView *)textView
-{
-//    self.examineText = textView.text;
-    if (textView.text.length == 0) {
-        self.pLabel.text = @"您的意见对我们是非常宝贵的....";
-    }else{
-        self.pLabel.text = @"";
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    if ([textView.text isEqualToString:@""]) {
+        self.pLabel.hidden = NO;
+    } else {
+        self.pLabel.hidden = YES;
     }
 }
 
@@ -117,6 +117,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+- (void)dealloc {
+    self.automaticallyAdjustsScrollViewInsets = YES;
+}
 /*
 #pragma mark - Navigation
 

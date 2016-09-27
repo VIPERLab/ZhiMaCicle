@@ -344,10 +344,10 @@
 }
 
 //加载我的朋友圈内容接口
-+ (void)loadMyDiscoverWithSectionID:(NSString *)sectionID andMyCheatAcount:(NSString *)openfireaccount andPageCount:(NSString *)pageNumber block:(SuccessfulBlock)block {
++ (void)loadMyDiscoverWithSectionID:(NSString *)sectionID andMyCheatAcount:(NSString *)userId andPageCount:(NSString *)pageNumber block:(SuccessfulBlock)block {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sectionID;
-    params[@"openfireaccount"] = openfireaccount;
+    params[@"userId"] = userId;
     params[@"pageNumber"] = pageNumber;
     [HttpTool POST:@"/moblie/getFriendCircleByLoginer.do" params:params success:^(ResponseData *json) {
         
@@ -439,7 +439,7 @@
     
     NSMutableDictionary *parms = [NSMutableDictionary dictionary];
     parms[@"sessionId"] = sessionID;
-    parms[@"openfireaccount"] = openFirAccount;
+    parms[@"userId"] = openFirAccount;
     parms[@"pageNumber"] = pageNumber;
     
     [HttpTool POST:@"/moblie/getFriendCircleByUserId.do" params:parms success:^(ResponseData *responseData) {
@@ -450,15 +450,15 @@
 }
 
 
-+ (void)LikeOrCommentDiscoverWithSessionID:(NSString *)sessionID andFcId:(NSString *)fcId andComment:(NSString *)comment andOpenFirAccount:(NSString *)openFirAccount block:(SuccessfulBlock)block{
++ (void)LikeOrCommentDiscoverWithSessionID:(NSString *)sessionID andFcId:(NSString *)fcId andComment:(NSString *)comment andReply_userId:(NSString *)reply_userID block:(SuccessfulBlock)block{
     
     NSMutableDictionary *parms = [NSMutableDictionary dictionary];
     parms[@"sessionId"] = sessionID;
     parms[@"fcId"] = fcId;
-    parms[@"openfireaccount"] = openFirAccount;
+    parms[@"userId"] = reply_userID;
     parms[@"comment"] = comment;
     
-    [HttpTool POST:@"/moblie/addFriend_circles_comment.do" params:parms success:^(ResponseData *json) {
+    [HttpTool POST:@"/moblie/addFriend_circles_comment_new.do" params:parms success:^(ResponseData *json) {
         block(json);
     } failure:^(ErrorData *error) {
     
@@ -548,13 +548,13 @@
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionID;
-    params[@"openfireaccount"] = openfirAccount;
+    params[@"userId"] = openfirAccount;
     params[@"fcid"] = fcid;
     
     [HttpTool POST:@"/moblie/delete_circles.do" params:params success:^(ResponseData *json) {
         block(json);
     } failure:^(ErrorData *error) {
-    
+        
         
     }];
 }
@@ -674,10 +674,10 @@
 }
 
 //从后台唤醒的时候，加载是否有未读消息
-+ (void)ApplicationWakeUpAtBackgroundWithSessionId:(NSString *)sessionId andUserID:(NSString *)openFirAccount andLastMessageID:(NSString *)fcID block:(SuccessfulBlock)block{
++ (void)ApplicationWakeUpAtBackgroundWithSessionId:(NSString *)sessionId andUserID:(NSString *)userID andLastMessageID:(NSString *)fcID block:(SuccessfulBlock)block{
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;
-    params[@"openfireaccount"] = openFirAccount;
+    params[@"userId"] = userID;
     params[@"fcid"] = fcID;
     params[@"appSystem"] = @"ios";
     
