@@ -71,6 +71,8 @@
 //                    ------ 消息通知 --------
 //收到新消息
 #define kRecieveNewMessage @"kRecieveNewMessage"
+//消息发送成功
+
 
 
 #endif /* KNotificationManager_h */

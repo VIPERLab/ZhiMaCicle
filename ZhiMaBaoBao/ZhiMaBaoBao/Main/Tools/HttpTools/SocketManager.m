@@ -83,14 +83,36 @@ static SocketManager *manager = nil;
 
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
+    
+    //创建一个会话
+    ConverseModel *conversation = [[ConverseModel alloc] init];
+    conversation.time = message.msgtime;
+    conversation.converseType = message.isGroup;
+    conversation.converseId = message.toUidOrGroupId;
+    conversation.unReadCount = @"1";
+    conversation.topChat = NO;
+    conversation.disturb = NO;
+    conversation.converseName = @"我是会话名";
+    conversation.converseHead_photo = @"aa";
     //插入消息数据库
+    BOOL success = [FMDBShareManager saveMessage:message toConverseID:conversation];
+    if (success) {
+        
+        //发送消息成功通知
+//        [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSString *)#> object:<#(nullable id)#>]
+        
+        //插入数据库成功 - socket发送消息
+        //根据消息模型生成固定格式数据包
+        NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:message];
+        RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+        req.object = data;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+    }
+}
+
+//删除消息
+- (void)deleteMessage:(LGMessage *)message{
     
-    
-    //根据消息模型生成固定格式数据包
-    NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:message];
-    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = data;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
 
@@ -146,7 +168,7 @@ static SocketManager *manager = nil;
             conversation.unReadCount = @"1";
             conversation.topChat = NO;
             conversation.disturb = NO;
-            conversation.converseName = @"hh";
+            conversation.converseName = @"我是会话名";
             conversation.converseHead_photo = @"aa";
             if (message.type == MessageTypeText) {
                 conversation.lastConverse = message.text;
