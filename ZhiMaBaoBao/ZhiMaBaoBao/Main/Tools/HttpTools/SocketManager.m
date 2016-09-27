@@ -13,6 +13,7 @@
 #import "RHSocketUtils.h"
 #import "NSString+MD5.h"
 #import "NSData+Replace.h"
+#import "ConverseModel.h"
 
 @interface SocketManager ()
 
@@ -124,15 +125,30 @@ static SocketManager *manager = nil;
     NSDictionary *responceData = [data mj_JSONObject];
 
     
-    if ([rsp dataWithPacket].length) {
+    if (data.length) {
         
         LGMessage *message = [[LGMessage alloc] init];
         message = [message mj_setKeyValues:responceData[@"data"]];
+        ConverseModel *conversation = [[ConverseModel alloc] init];
         
         //解析消息指令类型
         NSString *actType = responceData[@"acttype"];
         if ([actType isEqualToString:@"normal"]) {      //普通消息
             message.actType = ActTypeNormal;
+            
+            //创建一个会话
+            conversation.time = message.msgtime;
+            conversation.converseType = [NSString stringWithFormat:@"%d",message.isGroup];
+            conversation.converseId = message.fromUid;
+            conversation.unReadCount = @"1";
+            if (message.type == MessageTypeText) {
+                conversation.lastConverse = message.text;
+            }else if (message.type == MessageTypeImage){
+                conversation.lastConverse = @"[图片]";
+            }else if (message.type == MessageTypeAudio){
+                conversation.lastConverse = @"[语音]";
+            }
+            
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
             message.actType = ActTypeAddfriend;
@@ -153,10 +169,13 @@ static SocketManager *manager = nil;
             message.actType = ActTypeUndomsg;
         }
         
+        //将消息插入数据库，并更新会话列表
+        [FMDBShareManager saveMessage:message toConverseID:conversation];
         
         if ([self.delegate respondsToSelector:@selector(recievedMessage:)]) {
             [self.delegate recievedMessage:message];
         }
+        
     }
 }
 

@@ -35,9 +35,9 @@
 }
 
 //计算时间的宽高
-- (void)setTime:(NSString *)time{
-    _time = time;
-    
-    self.timeWH = [time sizeWithFont:MSG_TIME_FONT maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-}
+//- (void)setTime:(NSString *)time{
+//    _time = time;
+//    
+//    self.timeWH = [time sizeWithFont:MSG_TIME_FONT maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+//}
 @end

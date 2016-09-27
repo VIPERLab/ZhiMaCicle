@@ -832,7 +832,7 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_MessageTable];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_MessageTable];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.time,message.text,@(message.isGroup),converseModel.converseId];
+        [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.msgtime,message.text,@(message.isGroup),converseModel.converseId];
     }];
 }
 
@@ -857,7 +857,7 @@
             message.fromUid = [result stringForColumn:@"fromUid"];
             message.isGroup = [result intForColumn:@"isGroup"];
             message.toUidOrGroupId = [result stringForColumn:@"toUidOrGroupId"];
-            message.time = [result stringForColumn:@"time"];
+            message.msgtime = [result stringForColumn:@"time"];
             message.text = [result stringForColumn:@"text"];
             [dataArray addObject:message];
         }

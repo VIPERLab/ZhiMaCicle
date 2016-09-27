@@ -53,12 +53,12 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
 @property (nonatomic, copy) NSString *toUidOrGroupId;
 
  /** 消息发送时间*/
-@property (nonatomic, copy) NSString *time;
+@property (nonatomic, copy) NSString *msgtime;
 
  /** 消息内容*/
 @property (nonatomic, copy) NSString *text;
  /** 签名*/
-@property (nonatomic, copy) NSString *sign;
+//@property (nonatomic, copy) NSString *sign;
 
 
 

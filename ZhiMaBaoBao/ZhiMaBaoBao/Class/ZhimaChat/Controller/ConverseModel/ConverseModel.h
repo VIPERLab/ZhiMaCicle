@@ -21,7 +21,7 @@
 @property (nonatomic, copy) NSString *converseType;
 
 /**
- *  会话id
+ *  会话id:收到消息=fromUid , 发送消息=toUid
  */
 @property (nonatomic, copy) NSString *converseId;
 
