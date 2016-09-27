@@ -55,8 +55,8 @@
 
 
 // 创建 聊天会话 table 字段
-#define Chat_ConverseField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT NOT NULL, converseType INTEGER, converseId TEXT NOT NULL, unReadCount TEXT NOT NULL, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL)"
-#define Chat_ConverseFields_Name @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent"
+#define Chat_ConverseField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT NOT NULL, converseType INTEGER, converseId TEXT NOT NULL, unReadCount TEXT NOT NULL, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL, lastConverse TEXT NOT NULL)"
+#define Chat_ConverseFields_Name @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent,lastConverse"
 
 
 // 创建 消息表 字段

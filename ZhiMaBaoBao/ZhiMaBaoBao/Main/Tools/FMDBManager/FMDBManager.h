@@ -160,7 +160,7 @@ typedef enum : NSUInteger {
  *  @param message      消息模型
  *  @param converseMode 会话模型
  */
-- (BOOL)saveMessage:(LGMessage *)message toConverseID:(ConverseModel *)converseMode;
+- (BOOL)saveMessage:(LGMessage *)message toConverseID:(NSString *)converseID;
 
 /**
  *  根据会话id 获取消息列表

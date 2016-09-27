@@ -174,7 +174,7 @@ static SocketManager *manager = nil;
         }
         
         //将消息插入数据库，并更新会话列表
-        [FMDBShareManager saveMessage:message toConverseID:conversation];
+        [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
         
         if ([self.delegate respondsToSelector:@selector(recievedMessage:)]) {
             [self.delegate recievedMessage:message];

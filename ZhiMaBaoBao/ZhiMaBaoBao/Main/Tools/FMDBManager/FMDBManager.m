@@ -1038,7 +1038,7 @@
     } else {
         //更新这个会话
         NSLog(@"会话存在,更新会话");
-        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', topChat = '%@',disturb = '%@', converseName = '%@', converseContent = '%@'",converseModel.unReadCount,@(converseModel.topChat),@(converseModel.disturb),converseModel.converseName,converseModel.lastConverse];
+        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', topChat = '%@',disturb = '%@', converseName = '%@', converseContent = '%@',lastConverse = '%@'",converseModel.unReadCount,@(converseModel.topChat),@(converseModel.disturb),converseModel.converseName,converseModel.lastConverse];
         NSString *option2 = [NSString stringWithFormat:@"converseId = %@",converseModel.converseId];
         opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
     }
