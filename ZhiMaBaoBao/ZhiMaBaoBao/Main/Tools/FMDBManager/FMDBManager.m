@@ -28,6 +28,10 @@
     
     //用户相关的表
     FMDatabaseQueue *user_message_DB;
+    
+    //用户相关的表
+    FMDatabaseQueue *group_Message_DB;
+    FMDatabaseQueue *group_userMenber_DB;
 }
 
 + (instancetype)shareManager {
