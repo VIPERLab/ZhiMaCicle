@@ -13,7 +13,7 @@
 #define Sqlite 的路径
 
 // 数据库路径
-#define ZhiMa_SqlitePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:@"ZhiMa%@.sqlite",USERINFO.userID]
+#define ZhiMa_SqlitePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:@"ZhiMa.sqlite"]
 
 //  表名
 /*朋友圈表*/

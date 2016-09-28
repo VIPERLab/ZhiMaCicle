@@ -219,58 +219,58 @@ static NSString *const reuseIdentifier = @"messageCell";
     /**
      *  读取消息列表
      */
-//    FMDBManager* shareManager = [FMDBManager shareManager];
-//    self.messages = [[shareManager getMessageDataWithConverseID:@""] mutableCopy];
+    FMDBManager* shareManager = [FMDBManager shareManager];
+    self.messages = [[shareManager getMessageDataWithConverseID:@"11596"] mutableCopy];
     
-    for (int i=0; i<7; i++) {
-        LGMessage*msg = [[LGMessage alloc]init];
-        
-        switch (i) {
-            case 0:
-                msg.type = MessageTypeText;
-                msg.text = @"😄可是房价会更😄😄😄😄快的房价回归😄😄😄考试辅导和公司开发😄😄😄的受到法国开发的计划过";
-                msg.fromUid = USERINFO.userID;
-
-                break;
-            case 1:
-                msg.type = MessageTypeAudio;
-                msg.text = @"额锐鳄鱼肉贴如意贴一个的房间号公开";
-                msg.fromUid = @"1234";
-                msg.is_read = @"1";
-                break;
-            case 2:
-                msg.type = MessageTypeImage;
-                msg.text = @"http://app.zhima11.com:8080/upload/headPhoto/headPhoto1474962299468.jpg";
-                msg.fromUid = USERINFO.userID;
-                break;
-            case 3:
-                msg.type = MessageTypeText;
-                msg.text = @"是否客观合理分工合理的开发规划及类似的风格及婚礼上的开发规划了深刻的分工合理的恢复过来看大家分工合理开发和公司的来访客户给老师";
-                msg.fromUid = @"1234";
-                break;
-            case 4:
-                msg.type = MessageTypeText;
-                msg.text = @"SD卡付款时间都符合双方";
-                msg.fromUid = USERINFO.userID;
-                break;
-            case 5:
-                msg.type = MessageTypeImage;
-                msg.text = @"http://app.zhima11.com:8080//upload/headPhoto/headPhoto1473843925435.jpg";
-                msg.fromUid = @"1234";
-                break;
-            case 6:
-                msg.type = MessageTypeImage;
-                msg.text = @"http://app.zhima11.com:8080/upload/headPhoto/headPhoto1474950185153.jpg";
-                msg.fromUid = USERINFO.userID;
-                break;
-                
-            default:
-                break;
-        }
-        
-        [self.messages addObject:msg];
-        
-    }
+//    for (int i=0; i<7; i++) {
+//        LGMessage*msg = [[LGMessage alloc]init];
+//        
+//        switch (i) {
+//            case 0:
+//                msg.type = MessageTypeText;
+//                msg.text = @"😄可是房价会更😄😄😄😄快的房价回归😄😄😄考试辅导和公司开发😄😄😄的受到法国开发的计划过";
+//                msg.fromUid = USERINFO.userID;
+//
+//                break;
+//            case 1:
+//                msg.type = MessageTypeAudio;
+//                msg.text = @"额锐鳄鱼肉贴如意贴一个的房间号公开";
+//                msg.fromUid = @"1234";
+//                msg.is_read = @"1";
+//                break;
+//            case 2:
+//                msg.type = MessageTypeImage;
+//                msg.text = @"http://app.zhima11.com:8080/upload/headPhoto/headPhoto1474962299468.jpg";
+//                msg.fromUid = USERINFO.userID;
+//                break;
+//            case 3:
+//                msg.type = MessageTypeText;
+//                msg.text = @"是否客观合理分工合理的开发规划及类似的风格及婚礼上的开发规划了深刻的分工合理的恢复过来看大家分工合理开发和公司的来访客户给老师";
+//                msg.fromUid = @"1234";
+//                break;
+//            case 4:
+//                msg.type = MessageTypeText;
+//                msg.text = @"SD卡付款时间都符合双方";
+//                msg.fromUid = USERINFO.userID;
+//                break;
+//            case 5:
+//                msg.type = MessageTypeImage;
+//                msg.text = @"http://app.zhima11.com:8080//upload/headPhoto/headPhoto1473843925435.jpg";
+//                msg.fromUid = @"1234";
+//                break;
+//            case 6:
+//                msg.type = MessageTypeImage;
+//                msg.text = @"http://app.zhima11.com:8080/upload/headPhoto/headPhoto1474950185153.jpg";
+//                msg.fromUid = USERINFO.userID;
+//                break;
+//                
+//            default:
+//                break;
+//        }
+//        
+//        [self.messages addObject:msg];
+//        
+//    }
     [self.tableView reloadData];
     // tableview 滑到底端
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
