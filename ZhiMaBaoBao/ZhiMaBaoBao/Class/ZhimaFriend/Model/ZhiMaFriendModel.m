@@ -10,4 +10,13 @@
 
 @implementation ZhiMaFriendModel
 
+- (NSString *)displayName{
+    NSString *name = nil;
+    if (self.user_NickName.length) {
+        name = self.user_NickName;
+    }else{
+        name = self.user_Name;
+    }
+    return name;
+}
 @end
