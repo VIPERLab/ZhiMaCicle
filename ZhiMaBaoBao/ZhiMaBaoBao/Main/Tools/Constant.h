@@ -74,6 +74,8 @@
 
 #import "UIImageView+WebCache.h"
 #import "BaseViewController.h"
+#import "NSDate+TimeCategory.h"
+
 
 //FMDB管理头文件
 #import "FMDBManager.h"

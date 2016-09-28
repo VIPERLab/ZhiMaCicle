@@ -32,7 +32,8 @@
     [self getDataFormSqlist];
     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage) name:kRecieveNewMessage object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kRecieveNewMessage object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageSuccess object:nil];
 }
 
 #pragma mark - 从数据库加载会话列表
@@ -67,10 +68,9 @@
 }
 
 //收到新消息-从数据库加载最新数据刷新列表
-- (void)recievedNewMessage{
+- (void)refreshConversionList{
     [self getDataFormSqlist];
 }
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;

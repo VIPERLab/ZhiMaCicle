@@ -72,6 +72,8 @@
 //                    ------ 消息通知 --------
 //相同的用户登录
 #define kOtherLogin @"kOtherLogin"
+//发送消息成功
+#define kSendMessageSuccess @"kSendMessageSuccess"
 //收到新消息
 #define kRecieveNewMessage @"kRecieveNewMessage"
 //新的好友请求
