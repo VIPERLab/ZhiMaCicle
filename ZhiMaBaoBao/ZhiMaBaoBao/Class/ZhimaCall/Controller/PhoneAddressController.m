@@ -682,7 +682,6 @@
 //添加索引列
 
 - (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView{
-    
     return self.sectionAry;
 }
 
