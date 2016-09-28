@@ -53,7 +53,9 @@
     
     if ([title isEqualToString:self.selectedSex]) {
         //打钩
-        
+        UIImageView *tickImage = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth - 15 - 20, (40 - 15) * 0.5, 15, 15)];
+        tickImage.image = [UIImage imageNamed:@"Sex_Tick"];
+        [cell addSubview:tickImage];
     }
     
     return cell;

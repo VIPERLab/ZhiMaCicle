@@ -17,10 +17,11 @@
 
 @interface KXQRCodeController ()
 
+@property (nonatomic, weak) UIView *centerView;
 @property (nonatomic, weak) UIImageView *imageView; //二维码
 @property (nonatomic, weak) UIImageView *userIcon;  //用户头像
 @property (nonatomic, weak) UILabel *nameLabel;     //名字
-@property (nonatomic, weak) UILabel *signLabel;     //个性签名
+@property (nonatomic, weak) UILabel *locationLabel;     //个性签名
 
 @end
 
@@ -45,73 +46,75 @@
 
 #pragma mark - setupView
 - (void)setupView {
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor colorFormHexRGB:@"2e3132"];
+    
+    UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, (ScreenHeight - 400 + 64) * 0.5, ScreenWidth - 60, 400)];
+    centerView.backgroundColor = [UIColor whiteColor];
+    centerView.layer.cornerRadius = 10;
+    self.centerView = centerView;
+    [self.view addSubview:centerView];
     
     
-    UIImageView *userIcon = [[UIImageView alloc] initWithFrame:CGRectMake(20, 30 + 64, 40, 40)];
+    UIImageView *userIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 45, 45)];
     self.userIcon = userIcon;
+    userIcon.layer.cornerRadius = 10;
     [userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
-    [self.view addSubview:userIcon];
+    [self.centerView addSubview:userIcon];
     
     UILabel *nameLabel = [[UILabel alloc] init];
-    nameLabel.frame = CGRectMake(CGRectGetMaxX(userIcon.frame) + 10, CGRectGetMinY(userIcon.frame) + 10, 300, 20);
+    nameLabel.frame = CGRectMake(CGRectGetMaxX(userIcon.frame) + 10, CGRectGetMinY(userIcon.frame), CGRectGetWidth(centerView.frame) -CGRectGetMaxX(userIcon.frame) - 10 , 20);
     nameLabel.font = [UIFont systemFontOfSize:15];
     self.nameLabel = nameLabel;
     self.nameLabel.text = USERINFO.username;
-    [self.view addSubview:nameLabel];
+    [self.centerView addSubview:nameLabel];
     
     
-    UILabel *signLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(userIcon.frame) + 10, CGRectGetMaxY(nameLabel.frame) + 5, 300, 20)];
-    signLabel.font = [UIFont systemFontOfSize:14];
-    signLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
-    self.signLabel = signLabel;
-    self.signLabel.text = USERINFO.location;
-    [self.view addSubview:signLabel];
+    UILabel *locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(userIcon.frame) + 10, CGRectGetMaxY(nameLabel.frame) + 5, CGRectGetWidth(nameLabel.frame), 20)];
+    locationLabel.font = [UIFont systemFontOfSize:13];
+    locationLabel.textColor = [UIColor colorFormHexRGB:@"353535"];
+    self.locationLabel = locationLabel;
+    self.locationLabel.text = @"广东省 深圳市";
+//    self.locationLabel.text = USERINFO.location;
+    [self.centerView addSubview:locationLabel];
     
     
-    CGFloat imageW = [UIScreen mainScreen].bounds.size.width / 2;
+    UIImageView *BJImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(userIcon.frame) + 10, CGRectGetWidth(centerView.frame) - 20, CGRectGetWidth(centerView.frame) / 2 + 100)];
+    BJImage.image = [UIImage imageNamed:@"QRCodeBackground"];
+    [self.centerView addSubview:BJImage];
+    
+    
+    CGFloat imageW = CGRectGetWidth(centerView.frame) / 2 + 60;
     CGFloat imageH = imageW;
-    CGFloat imageX = self.view.boundsCenter.x - imageW * 0.5;
-    CGFloat imageY = 150 + 64;
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
+    CGFloat imageX = self.centerView.boundsCenter.x - imageW * 0.5;
+    CGFloat imageY = self.centerView.boundsCenter.y - imageW * 0.5 - 10;
+    UIView *QRCodeView = [[UIView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
+    QRCodeView.backgroundColor = [UIColor whiteColor];
+    [self.centerView addSubview:QRCodeView];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, imageW - 40, imageH - 40)];
     self.imageView = imageView;
-    [self.view addSubview:imageView];
+    [QRCodeView addSubview:imageView];
     
     
-    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(imageView.frame) + 20, [UIScreen mainScreen].bounds.size.width, 30)];
+    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 400 - 60, CGRectGetWidth(centerView.frame), 15)];
     invitedLabel.textAlignment = NSTextAlignmentCenter;
     invitedLabel.font = [UIFont systemFontOfSize:15];
-    invitedLabel.textColor = [UIColor lightGrayColor];
+    invitedLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
     invitedLabel.text = [NSString stringWithFormat:@"我的邀请码:%@",USERINFO.invite_code];
-    [self.view addSubview:invitedLabel];
+    [self.centerView addSubview:invitedLabel];
     
     
-    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(invitedLabel.frame) + 20, [UIScreen mainScreen].bounds.size.width, 30)];
+    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(invitedLabel.frame),  CGRectGetWidth(centerView.frame), 30)];
     tipsLabel.textAlignment = NSTextAlignmentCenter;
-    tipsLabel.textColor = [UIColor lightGrayColor];
+    tipsLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
     tipsLabel.font = [UIFont systemFontOfSize:15];
     tipsLabel.text = @"扫一扫上面的二维码图案，加我好友";
-    [self.view addSubview:tipsLabel];
+    [self.centerView addSubview:tipsLabel];
 }
 
 
 #pragma mark - 创建二维码
 - (void)creatQRCode {
-    
-//    YiUserInfo * userInfo = [YiUserInfo defaultUserInfo];
-//    
-//    
-//    if (userInfo && [userInfo.username length] > 0) {
-//        if (!vcard) {
-//            vcard = [[YiXmppVCard alloc] init];
-//            [vcard load:[userInfo getJid] forceIntenet:NO success:^{
-//                [self updateVCard];
-//                [self updateNickNames];
-//            } failed:nil];
-//        }else {
-//            [self updateVCard];
-//        }
-//    }
     
     // 1.创建过滤器
     CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
@@ -145,15 +148,15 @@
     /*
      // 滤镜的参数配置
      NSDictionary *falseFilterPara = @{
-     @"inputColor0" : [CIColor colorWithCGColor:[UIColor greenColor].CGColor],    // 前景色
-     @"inputColor1" : [CIColor colorWithCGColor:[UIColor yellowColor].CGColor], // 背景色
+     @"inputColor0" : [CIColor colorWithCGColor:[UIColor greenColor].CGColor],     //前景色
+     @"inputColor1" : [CIColor colorWithCGColor:[UIColor yellowColor].CGColor],  //背景色
      @"inputImage" : outputImage,
      };
      
      CIFilter *falseFilter = [CIFilter filterWithName:@"CIFalseColor" withInputParameters:falseFilterPara];
      
      outputImage = falseFilter.outputImage;
-     */
+    */
     
     // 5.显示二维码
     // 模糊的二维码
@@ -168,8 +171,7 @@
     
 }
 
-- (UIImage *)creatNonInterpolatedUIImageFormCIImage:(CIImage *)image withSize:(CGFloat)size
-{
+- (UIImage *)creatNonInterpolatedUIImageFormCIImage:(CIImage *)image withSize:(CGFloat)size {
     CGRect extent = CGRectIntegral(image.extent);
     CGFloat scale = MIN(size/CGRectGetWidth(extent), size/CGRectGetHeight(extent));
     

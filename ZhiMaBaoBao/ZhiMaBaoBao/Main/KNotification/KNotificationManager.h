@@ -53,7 +53,9 @@
 // ---- 取消响应通知
 #define K_NewDiscoverPhotoClickNotifcation @"KNewDiscoverPhotoClickNotifcation"
 
-
+//  图片转发通知
+//  userInfo = @{imageContent = 要转发的图片}
+#define K_ForwardPhotoNotifation @"KForwardPhotoNotifation"
 
 
 //                    ------ 登录通知 --------

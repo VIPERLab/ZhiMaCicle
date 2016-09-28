@@ -23,6 +23,10 @@
 
 //  =============================================
 
+@interface SDPhotoBrowser () <UIActionSheetDelegate>
+
+@end
+
 @implementation SDPhotoBrowser 
 {
     UIScrollView *_scrollView;
@@ -63,25 +67,27 @@
     indexLabel.textAlignment = NSTextAlignmentCenter;
     indexLabel.textColor = [UIColor whiteColor];
     indexLabel.font = [UIFont boldSystemFontOfSize:20];
-    indexLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+    indexLabel.backgroundColor = [UIColor clearColor];
     indexLabel.layer.cornerRadius = indexLabel.bounds.size.height * 0.5;
     indexLabel.clipsToBounds = YES;
     if (self.imageCount > 1) {
         indexLabel.text = [NSString stringWithFormat:@"1/%ld", (long)self.imageCount];
+    } else {
+        indexLabel.hidden = YES;
     }
     _indexLabel = indexLabel;
     [self addSubview:indexLabel];
     
     // 2.保存按钮
-    UIButton *saveButton = [[UIButton alloc] init];
-    [saveButton setTitle:@"保存" forState:UIControlStateNormal];
-    [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    saveButton.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
-    saveButton.layer.cornerRadius = 5;
-    saveButton.clipsToBounds = YES;
-    [saveButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
-    _saveButton = saveButton;
-    [self addSubview:saveButton];
+//    UIButton *saveButton = [[UIButton alloc] init];
+//    [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+//    [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    saveButton.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
+//    saveButton.layer.cornerRadius = 5;
+//    saveButton.clipsToBounds = YES;
+//    [saveButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
+//    _saveButton = saveButton;
+//    [self addSubview:saveButton];
 }
 
 - (void)saveImage
@@ -144,6 +150,8 @@
         
         [singleTap requireGestureRecognizerToFail:doubleTap];
         
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressPhoto:)];
+        [imageView addGestureRecognizer:longPressGesture];
         [imageView addGestureRecognizer:singleTap];
         [imageView addGestureRecognizer:doubleTap];
         [_scrollView addSubview:imageView];
@@ -218,6 +226,30 @@
 
     [view doubleTapToZommWithScale:scale];
 }
+
+
+- (void)longPressPhoto:(UIGestureRecognizer *)gesture {
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"转发给朋友" otherButtonTitles:@"保存图片", nil];
+        [sheet showInView:self];
+    }
+}
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSLog(@"%zd",buttonIndex);
+    if (buttonIndex == 0) {   //转发给朋友
+        int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
+        UIImageView *currentImageView = _scrollView.subviews[index];
+        [[NSNotificationCenter defaultCenter] postNotificationName:K_ForwardPhotoNotifation object:nil userInfo:@{@"imageContent":currentImageView.image}];
+    } else if (buttonIndex == 1) { //保存图片
+        [self saveImage];
+    } else if (buttonIndex == 2) { //取消
+        
+    }
+    
+}
+
 
 - (void)layoutSubviews
 {
