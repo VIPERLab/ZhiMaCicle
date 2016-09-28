@@ -106,8 +106,20 @@
     model.user_Name = @"大雄";
     model.user_Head_photo = @"xxxx";
     model.user_NickName = @"";
-    model.user_Id = @"10";
-    [FMDBShareManager saveUserMessageWithMessageArray:@[model]];
+    model.user_Id = @"11594";
+    
+    ZhiMaFriendModel *model1 = [[ZhiMaFriendModel alloc] init];
+    model1.user_Name = @"汉章";
+    model1.user_Head_photo = @"xxxx";
+    model1.user_NickName = @"";
+    model1.user_Id = @"12784";
+    
+    ZhiMaFriendModel *model2 = [[ZhiMaFriendModel alloc] init];
+    model2.user_Name = @"刘刚";
+    model2.user_Head_photo = @"xxxx";
+    model2.user_NickName = @"";
+    model2.user_Id = @"11596";
+    [FMDBShareManager saveUserMessageWithMessageArray:@[model,model1,model2]];
     
 }
 
