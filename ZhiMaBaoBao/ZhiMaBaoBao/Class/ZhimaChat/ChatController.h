@@ -10,4 +10,5 @@
 
 @interface ChatController : BaseViewController
 
+@property (nonatomic, copy) NSString *conversionId;
 @end

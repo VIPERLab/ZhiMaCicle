@@ -93,8 +93,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    ConverseModel *model = self.dataArray[indexPath.row];
     ChatController *vc = [[ChatController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
+    vc.conversionId = model.converseId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
