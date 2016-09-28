@@ -72,6 +72,7 @@
     
     // 1.通过路径创建数据库
     NSString *path = ZhiMa_SqlitePath;
+    [NSString stringWithFormat:@""];
     NSLog(@"表的路径 %@",path);
     FMDatabaseQueue *db_Queue = [FMDatabaseQueue databaseQueueWithPath:path];
     

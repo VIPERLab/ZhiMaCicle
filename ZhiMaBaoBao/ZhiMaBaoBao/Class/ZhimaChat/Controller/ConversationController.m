@@ -61,6 +61,12 @@
     [_tableView registerClass:[ConverseCell class] forCellReuseIdentifier:ConverseCellReusedID];
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    ChatController *vc = [[ChatController alloc] init];
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 //收到新消息-从数据库加载最新数据刷新列表
 - (void)refreshConversionList{
     [self getDataFormSqlist];
@@ -97,13 +103,6 @@
     ChatController *vc = [[ChatController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     vc.conversionId = model.converseId;
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-
-    ChatController *vc = [[ChatController alloc] init];
-    vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
