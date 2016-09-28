@@ -273,7 +273,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    }
     [self.tableView reloadData];
     // tableview 滑到底端
-    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
+    if (self.tableView.contentSize.height > self.tableView.bounds.size.height+64) {
+        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
+    }
+    
 }
 
 // 计算 cell 的高度

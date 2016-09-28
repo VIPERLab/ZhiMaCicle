@@ -106,7 +106,7 @@
                                                                        realWidth:&realWidth];
     
     CGFloat height = [BaseChatTableViewCell getBaseHeightTopText:topText nick:nickName contentHeight:realContentViewHeight];
-        
+    
     return height;
 }
 
