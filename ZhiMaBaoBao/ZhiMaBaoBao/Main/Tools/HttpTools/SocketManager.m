@@ -89,7 +89,7 @@ static SocketManager *manager = nil;
     if (success) {
         
         //发送消息成功通知
-//        [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSString *)#> object:<#(nullable id)#>]
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageSuccess object:nil];
         
         //插入数据库成功 - socket发送消息
         //根据消息模型生成固定格式数据包
@@ -317,14 +317,15 @@ static SocketManager *manager = nil;
         case RequestTypeMessage:{      //消息类型
             //拼接控制器和方法名
             request[@"controller_name"] = @"MessageController";
-            request[@"method_name"] = @"send";
+            request[@"method_name"] = @"sendmsg";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=send&fromUid=%@&isGroup=%d&msgid=%@&text=%@&toUidOrGroupId=%@&type=%d&%@",message.fromUid,message.isGroup,message.msgid,message.text,message.toUidOrGroupId,message.type,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&fromUid=%@&isGroup=%d&msgid=%@&text=%@&toUidOrGroupId=%@&type=%zd&%@",message.fromUid,message.isGroup,message.msgid,message.text,message.toUidOrGroupId,message.type,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //拼接消息
+            NSInteger isgroup = message.isGroup;
             dataDic[@"msgid"] = message.msgid;
             dataDic[@"type"] = @(message.type);
-            dataDic[@"isGroup"] = @(message.isGroup);
+            dataDic[@"isGroup"] = @(isgroup);
             dataDic[@"fromUid"] = message.fromUid;
             dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
             dataDic[@"text"] = message.text;

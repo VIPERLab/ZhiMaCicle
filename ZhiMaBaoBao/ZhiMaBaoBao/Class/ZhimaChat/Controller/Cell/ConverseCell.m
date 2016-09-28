@@ -54,6 +54,7 @@
     _timeLabel.font = [UIFont systemFontOfSize:13];
     _timeLabel.textColor = [UIColor colorFormHexRGB:@"b8b8b8"];
     [self addSubview:_timeLabel];
+    _timeLabel.backgroundColor = [UIColor redColor];
     
     _unReadCountLabel = [UILabel new];
     _unReadCountLabel.backgroundColor = THEMECOLOR;

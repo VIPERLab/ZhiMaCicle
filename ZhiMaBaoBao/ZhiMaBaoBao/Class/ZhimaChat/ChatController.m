@@ -31,6 +31,7 @@
 #import "MLAudioPlayer.h"
 #import "AmrPlayerReader.h"
 
+
 @interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ChatKeyBoard *keyboard;
@@ -827,6 +828,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.type = MessageTypeText;
     message.msgid = [NSString stringWithFormat:@"%@12345678",USERINFO.userID];
     message.isGroup = NO;
+    message.timeStamp = [NSDate currentTimeStamp];
     
     [self.messages addObject:message];
     

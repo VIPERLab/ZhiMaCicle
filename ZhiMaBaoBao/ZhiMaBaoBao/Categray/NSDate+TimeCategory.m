@@ -58,4 +58,9 @@ static NSDateFormatter *dateFormatter;
     return [dateFormat stringFromDate:date];
 }
 
++ (NSInteger)currentTimeStamp{
+    NSDate *date = [NSDate date];
+    return [NSDate cTimestampFromDate:date];
+}
+
 @end
