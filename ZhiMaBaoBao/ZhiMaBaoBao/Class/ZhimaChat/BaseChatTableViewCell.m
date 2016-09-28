@@ -149,6 +149,7 @@
 - (void)resizeBubbleView:(CGSize)contetnViewSize
 {
     contetnViewSize.height = contetnViewSize.height< 22 ? 22 : contetnViewSize.height;//会切边，太低了的时候加一点
+    contetnViewSize.width = contetnViewSize.width< 20 ? 20 : contetnViewSize.width;
     
     [_bubble setFrameSize:CGSizeMake(contetnViewSize.width + _margin.left + _margin.right, contetnViewSize.height + _margin.top + _margin.bottom)];
     

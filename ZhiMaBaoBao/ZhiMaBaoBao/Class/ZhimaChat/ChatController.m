@@ -873,6 +873,8 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
     }
 }
+
+#pragma mark - 录音完成
 //完成录音
 - (void)chatKeyBoardDidFinishRecoding:(ChatKeyBoard *)chatKeyBoard{
     [self.recorder stopRecording];
