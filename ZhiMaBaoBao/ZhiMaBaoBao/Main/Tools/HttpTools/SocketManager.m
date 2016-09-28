@@ -69,7 +69,7 @@ static SocketManager *manager = nil;
     
     //设置心跳包，这里的object数据，和服务端约定好
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = [self generateRequest:RequestTypeHeart uid:11 message:nil];
+    req.object = [self generateRequest:RequestTypeHeart uid:USERINFO.userID message:nil];
     [RHSocketService sharedInstance].heartbeat = req;
     
     [[RHSocketService sharedInstance] startServiceWithConnectParam:connectParam];
@@ -83,11 +83,36 @@ static SocketManager *manager = nil;
 
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
-    //根据消息模型生成固定格式数据包
-    NSData *data = [self generateRequest:RequestTypeMessage uid:11 message:message];
-    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = data;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+    
+    //创建一个会话
+    ConverseModel *conversation = [[ConverseModel alloc] init];
+    conversation.time = message.msgtime;
+    conversation.converseType = message.isGroup;
+    conversation.converseId = message.toUidOrGroupId;
+    conversation.unReadCount = @"1";
+    conversation.topChat = NO;
+    conversation.disturb = NO;
+    conversation.converseName = @"我是会话名";
+    conversation.converseHead_photo = @"aa";
+    //插入消息数据库
+    BOOL success = [FMDBShareManager saveMessage:message toConverseID:conversation];
+    if (success) {
+        
+        //发送消息成功通知
+//        [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSString *)#> object:<#(nullable id)#>]
+        
+        //插入数据库成功 - socket发送消息
+        //根据消息模型生成固定格式数据包
+        NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:message];
+        RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+        req.object = data;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+    }
+}
+
+//删除消息
+- (void)deleteMessage:(LGMessage *)message{
+    
 }
 
 
@@ -104,7 +129,7 @@ static SocketManager *manager = nil;
     id state = notif.object;
     if (state && [state boolValue]) {
         //生成登录消息数据包
-        NSData *loginData = [self generateRequest:RequestTypeLogin uid:10 message:nil];
+        NSData *loginData = [self generateRequest:RequestTypeLogin uid:USERINFO.userID message:nil];
         RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
         req.object = loginData;
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
@@ -124,62 +149,62 @@ static SocketManager *manager = nil;
     NSData *data = [[rsp dataWithPacket] replaceNoUtf8];
     NSDictionary *responceData = [data mj_JSONObject];
 
-    
+    NSLog(@"\n从socket接收到的数据responceData :%@\n",responceData);
     if (data.length) {
-        
-        LGMessage *message = [[LGMessage alloc] init];
-        message = [message mj_setKeyValues:responceData[@"data"]];
-        ConverseModel *conversation = [[ConverseModel alloc] init];
-        
         //解析消息指令类型
         NSString *actType = responceData[@"acttype"];
-        if ([actType isEqualToString:@"normal"]) {      //普通消息
-            message.actType = ActTypeNormal;
+        
+        //有相同的用户登录
+        if ([actType isEqualToString:@"kickuser"]) {
+            //发送通知，执行被迫下线操作
+            [[NSNotificationCenter defaultCenter] postNotificationName:kOtherLogin object:nil];
+        }
+        else if ([actType isEqualToString:@"normal"]) {      //普通消息 -> 插入数据库
+                
+            LGMessage *message = [[LGMessage alloc] init];
+            message = [message mj_setKeyValues:responceData[@"data"]];
+            //将消息插入数据库，并更新会话列表
+            BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
             
-            //创建一个会话
-            conversation.time = message.msgtime;
-            conversation.converseType = [NSString stringWithFormat:@"%d",message.isGroup];
-            conversation.converseId = message.fromUid;
-            conversation.unReadCount = @"1";
-            conversation.topChat = NO;
-            conversation.disturb = NO;
-            conversation.converseName = @"hh";
-            conversation.converseHead_photo = @"aa";
-            if (message.type == MessageTypeText) {
-                conversation.lastConverse = message.text;
-            }else if (message.type == MessageTypeImage){
-                conversation.lastConverse = @"[图片]";
-            }else if (message.type == MessageTypeAudio){
-                conversation.lastConverse = @"[语音]";
+            if (success) {
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                userInfo[@"message"] = message;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:userInfo];
             }
             
+            //            if (message.type == MessageTypeText) {
+            //                conversation.lastConverse = message.text;
+            //            }else if (message.type == MessageTypeImage){
+            //                conversation.lastConverse = @"[图片]";
+            //            }else if (message.type == MessageTypeAudio){
+            //                conversation.lastConverse = @"[语音]";
+            //            }
+                
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
-            message.actType = ActTypeAddfriend;
+            NSDictionary *resDic = responceData[@"data"];
+            //请求者uid, 头像地址, 用户昵称, 请求时间
+            NSString *fromuid = resDic[@"fromuid"];
+            NSString *headPhoto = resDic[@"head_photo"];
+            NSString *userName = resDic[@"username"];
+            NSString *requestTime = resDic[@"request_time"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewFriendRequest object:resDic];
         }
         else if ([actType isEqualToString:@"updatefriend"]){   //更新好友数据
-            message.actType = ActTypeUpdatefriend;
+            
         }
         else if ([actType isEqualToString:@"updategroupnum"]){   //更新群用户数
-            message.actType = ActTypeUpdategroupnum;
+            
         }
         else if ([actType isEqualToString:@"deluserfromgroup"]){   //从群组中删除用户
-            message.actType = ActTypeDeluserfromgroup;
+            
         }
-        else if ([actType isEqualToString:@"renamegroup"]){   //好友请求
-            message.actType = ActTypeRenamegroup;
+        else if ([actType isEqualToString:@"renamegroup"]){   //重命名群组
+            
         }
-        else if ([actType isEqualToString:@"undomsg"]){   //好友请求
-            message.actType = ActTypeUndomsg;
+        else if ([actType isEqualToString:@"undomsg"]){   //撤销消息
+            
         }
-        
-        //将消息插入数据库，并更新会话列表
-        [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
-        
-        if ([self.delegate respondsToSelector:@selector(recievedMessage:)]) {
-            [self.delegate recievedMessage:message];
-        }
-        
     }
 }
 
@@ -265,7 +290,7 @@ static SocketManager *manager = nil;
 }
 
 //根据消息操作类型- 按照固定格式生成数据请求包 （不需要uid时直接传0，不需要message直接传nil）
-- (NSData *)generateRequest:(RequestType)type uid:(NSInteger)uid message:(LGMessage *)message{
+- (NSData *)generateRequest:(RequestType)type uid:(NSString *)uid message:(LGMessage *)message{
     
     NSMutableDictionary *request = [NSMutableDictionary dictionary];
     //data字段里面的数据
@@ -280,10 +305,10 @@ static SocketManager *manager = nil;
             request[@"method_name"] = @"bind_uid";
             
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=LoginController&method_name=bind_uid&uid=%d&%@",uid,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=LoginController&method_name=bind_uid&uid=%@&%@",uid,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //生成data
-            dataDic[@"uid"] = @(uid);
+            dataDic[@"uid"] = uid;
             dataDic[@"sign"] = sign;
 
         }
@@ -293,7 +318,7 @@ static SocketManager *manager = nil;
             //拼接控制器和方法名
             request[@"controller_name"] = @"HeartbeatController";
             request[@"method_name"] = @"check";
-            dataDic[@"uid"] = @(uid);
+            dataDic[@"uid"] = uid;
             
         }
             

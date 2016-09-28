@@ -8,7 +8,8 @@
 
 //消息指令类型
 typedef NS_OPTIONS(NSUInteger, ActType) {
-    ActTypeNormal  = 0,         //普通消息
+    ActTypeKickuser = 0,        //相同用户登录，剔除之前的登录用户
+    ActTypeNormal,              //普通消息
     ActTypeAddfriend,           //好友请求
     ActTypeUpdatefriend,        //更新好友数据
     ActTypeUpdategroupnum,      //更新群用户数
@@ -54,6 +55,8 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
 
  /** 消息发送时间*/
 @property (nonatomic, copy) NSString *msgtime;
+ /** 消息发送时间时间戳*/
+@property (nonatomic, assign) NSInteger timeStamp;
 
  /** 消息内容*/
 @property (nonatomic, copy) NSString *text;
@@ -78,4 +81,10 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
 
  /** 用户自身*/
 @property (nonatomic, assign, readonly, getter=isUser) BOOL user;
+
+//将消息模型中的时间 字符串 转换为 时间戳
+- (LGMessage *)messageTransToSamp;
+
+//将消息模型中的 时间戳 转换为 字符串
+- (LGMessage *)messageTransToStr;
 @end

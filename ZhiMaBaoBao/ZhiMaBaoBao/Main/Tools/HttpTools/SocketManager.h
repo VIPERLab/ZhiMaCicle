@@ -75,6 +75,11 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
 - (void)sendMessage:(LGMessage *)message;
 
 /**
+ *  删除消息
+ */
+- (void)deleteMessage:(LGMessage *)message;
+
+/**
  *  撤销消息
  */
 - (void)undoMessage:(LGMessage *)message;

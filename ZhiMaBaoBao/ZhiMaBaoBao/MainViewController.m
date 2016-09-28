@@ -43,6 +43,31 @@
     
     //添加异常捕获
     NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
+    
+    [self addNotifications];
+}
+
+- (void)addNotifications{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doOtherLogin) name:kOtherLogin object:nil];
+}
+
+//用户在其他地方登录
+- (void)doOtherLogin{
+    //断开socket
+    [[SocketManager shareInstance] disconnect];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您的帐号已在其它设备登录！" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    //重新登录
+    UIAlertAction *reLogin = [UIAlertAction actionWithTitle:@"重新登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[SocketManager shareInstance] connect];
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    UIAlertAction *loginOut = [UIAlertAction actionWithTitle:@"退出" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
+    }];
+    [alert addAction:reLogin];
+    [alert addAction:loginOut];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - socket接收到消息 
