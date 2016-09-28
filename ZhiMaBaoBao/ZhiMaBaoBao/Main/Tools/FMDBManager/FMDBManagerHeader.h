@@ -16,6 +16,7 @@
 #define ZhiMa_SqlitePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:[NSString stringWithFormat:@"ZhiMa%@.sqlite",USERINFO.userID]]
 
 
+
 //  表名
 /*朋友圈表*/
 #define ZhiMaCicle_Talbe_Name @"Circle "
