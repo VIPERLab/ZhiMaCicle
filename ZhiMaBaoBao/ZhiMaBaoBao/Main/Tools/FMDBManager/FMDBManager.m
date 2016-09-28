@@ -13,6 +13,7 @@
 #import "SDTimeLineCellModel.h"
 #import "ConverseModel.h"
 #import "ZhiMaFriendModel.h"
+#import "GroupChatModel.h"
 #import "LGMessage.h"
 
 @implementation FMDBManager {
@@ -64,6 +65,9 @@
             return chat_message_DB;
         case ZhiMa_User_Message_Table:
             return user_message_DB;
+        
+        case ZhiMa_GroupChat_GroupMessage_Table:
+            return group_Message_DB;
         default:
             NSLog(@"无效参数");
             return nil;
@@ -127,6 +131,12 @@
                     tableName = ZhiMaUserMessage_Table_Name;
                     tableField = User_MessageField;
                     user_message_DB = db_Queue;
+                    break;
+                }
+                case ZhiMa_GroupChat_GroupMessage_Table: { //群聊信息表
+                    tableName = ZhiMaGroupChat_Table_Name;
+                    tableField = ZhiMaGroupChatMember_Table_Name;
+                    group_Message_DB = db_Queue;
                     break;
                 }
                 default:{
@@ -193,6 +203,11 @@
             fieldName = User_MessageFields_name;
             break;
         }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
+            fieldName = GroupChat_MessageFields_name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -249,6 +264,11 @@
             fieldName = User_MessageFields_name;
             break;
         }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
+            fieldName = GroupChat_MessageFields_name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -297,6 +317,10 @@
             tableName = ZhiMaUserMessage_Table_Name;
             break;
         }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -340,6 +364,10 @@
         }
         case ZhiMa_User_Message_Table: {
             tableName = ZhiMaUserMessage_Table_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
             break;
         }
         default: {
@@ -1170,6 +1198,18 @@
             NSLog(@"删除消息失败");
         }
     }];
+}
+
+
+#pragma mark - 群聊信息表
+//                    ------------   群聊信息表  ----------------
+- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID {
+    
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
+    NSString *opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMessage_Table];
+    
+    
+    return YES;
 }
 
 

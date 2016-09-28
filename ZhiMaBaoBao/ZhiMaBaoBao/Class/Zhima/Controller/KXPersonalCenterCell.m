@@ -35,7 +35,7 @@
 }
 
 - (void)setupView {
-    hasSubView = YES;
+    
     _userIcon = [[UIImageView alloc] init];
     _userIcon.layer.cornerRadius = 5;
     [self addSubview:_userIcon];
@@ -55,6 +55,7 @@
     _subTitle.font = [UIFont systemFontOfSize:14];
     _subTitle.textAlignment = NSTextAlignmentLeft;
     
+    hasSubView = YES;
 }
 
 - (void)setImageName:(NSString *)imageName {
@@ -65,11 +66,15 @@
 - (void)setName:(NSString *)name {
     _name = name;
     _userName.text = name;
+    hasSubView = YES;
+    [self setNeedsDisplay];
 }
 
 - (void)setSubName:(NSString *)subName {
     _subName = subName;
     _subTitle.text = subName;
+    hasSubView = YES;
+    [self setNeedsDisplay];
 }
 
 - (void)setSex:(NSString *)Sex {

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
-@class ConverseModel,LGMessage,ZhiMaFriendModel;
+@class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel;
 @class SDTimeLineCellModel;
 
 typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
@@ -190,5 +190,16 @@ typedef enum : NSUInteger {
  *  @param messageID 需要删的消息id
  */
 - (void)deleteMessageFormMessageTableByMessageID:(NSString *)messageID;
+
+
+#pragma mark - 群聊信息表
+//                    ------------   群聊信息表  ----------------
+//- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
+
+
+#pragma mark - 群成员信息表
+//                    ------------   群成员信息表  ----------------
+
+
 
 @end

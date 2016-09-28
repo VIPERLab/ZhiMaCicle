@@ -54,8 +54,9 @@
 
 
 - (void)saveButtonDidClick {
-    
+    [LCProgressHUD showText:@"正在更改个性签名"];
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"signature" andChangeValue:self.textView.text block:^(ResponseData *responseData) {
+        [LCProgressHUD hide];
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:@"请检查网络"];
             return ;

@@ -12,6 +12,7 @@
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
 		04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5051D99427B00CBB609 /* ConverseModel.m */; };
 		04CBF5091D9A695500CBB609 /* ZhiMaFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */; };
+		04CBF50E1D9BE64700CBB609 /* GroupChatModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF50D1D9BE64700CBB609 /* GroupChatModel.m */; };
 		04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */; };
 		04EA79701D8F8F49005E5425 /* NSString+FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */; };
 		04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796D1D8F8F49005E5425 /* NSString+MD5.m */; };
@@ -569,6 +570,8 @@
 		04CBF5051D99427B00CBB609 /* ConverseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseModel.m; sourceTree = "<group>"; };
 		04CBF5071D9A695500CBB609 /* ZhiMaFriendModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaFriendModel.h; sourceTree = "<group>"; };
 		04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaFriendModel.m; sourceTree = "<group>"; };
+		04CBF50C1D9BE64700CBB609 /* GroupChatModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatModel.h; sourceTree = "<group>"; };
+		04CBF50D1D9BE64700CBB609 /* GroupChatModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatModel.m; sourceTree = "<group>"; };
 		04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZhiMaImage.xcassets; sourceTree = "<group>"; };
 		04EA796A1D8F8F49005E5425 /* NSString+FontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontSize.h"; sourceTree = "<group>"; };
 		04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontSize.m"; sourceTree = "<group>"; };
@@ -1679,6 +1682,24 @@
 				04CBF5051D99427B00CBB609 /* ConverseModel.m */,
 			);
 			path = ConverseModel;
+			sourceTree = "<group>";
+		};
+		04CBF50A1D9BE5F600CBB609 /* GroupChat(群聊) */ = {
+			isa = PBXGroup;
+			children = (
+				04CBF50B1D9BE61900CBB609 /* Model */,
+			);
+			name = "GroupChat(群聊)";
+			path = GroupChat;
+			sourceTree = "<group>";
+		};
+		04CBF50B1D9BE61900CBB609 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				04CBF50C1D9BE64700CBB609 /* GroupChatModel.h */,
+				04CBF50D1D9BE64700CBB609 /* GroupChatModel.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		04EA79631D8F85E8005E5425 /* PersonalCenter(用户中心) */ = {
@@ -4031,6 +4052,7 @@
 		31B7C70B1D8E96A100F1883A /* ZhimaChat(芝麻聊) */ = {
 			isa = PBXGroup;
 			children = (
+				04CBF50A1D9BE5F600CBB609 /* GroupChat(群聊) */,
 				311CEF2C1D92182400BBB1F9 /* Chat(聊天) */,
 				316957511D90E5C900140126 /* AddFriends(添加好友) */,
 				31B7C70C1D8E96A100F1883A /* Controller(会话列表) */,
@@ -4719,6 +4741,7 @@
 				311CEFAA1D937BE700BBB1F9 /* MLAudioPlayer.m in Sources */,
 				04F57AA91D9280BD002A6471 /* SDBaseRefreshView.m in Sources */,
 				04EA7AD61D910F89005E5425 /* JKPromptView.m in Sources */,
+				04CBF50E1D9BE64700CBB609 /* GroupChatModel.m in Sources */,
 				04EA7DB61D912872005E5425 /* ZXDataMatrixDefaultPlacement.m in Sources */,
 				04EA7DD11D912872005E5425 /* ZXAnyAIDecoder.m in Sources */,
 				04EA7B361D9126BE005E5425 /* NSData+AES.m in Sources */,
