@@ -29,7 +29,6 @@
     [self setCustomRightItems];
     
     [self setupView];
-    [self saveDataToSqlist:self.dataArray];
     [self getDataFormSqlist];
     
     
@@ -101,24 +100,6 @@
 
 
 #pragma mark - lazyLoad
-- (NSMutableArray *)dataArray {
-    if (!_dataArray) {
-        _dataArray = [NSMutableArray array];
-        for (NSInteger index = 0; index < 1; index ++) {
-            ConverseModel *model = [[ConverseModel alloc] init];
-            model.converseName = @"芝麻IT部";
-            model.lastConverse = @"你在干嘛?";
-            model.converseHead_photo = @"userIcon";
-            model.time = @"昨天";
-            model.topChat = YES;
-            model.disturb = YES;
-            model.unReadCount = @"99";
-            model.converseId = @"123123";
-            model.converseType = 0;
-            [_dataArray addObject:model];
-        }
-    }
-    return _dataArray;
-}
+
 
 @end

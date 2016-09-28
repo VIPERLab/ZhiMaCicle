@@ -33,8 +33,8 @@
 
 - (void)addSubviews{
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-    tableView.delegate = self;
-    tableView.dataSource = self;
+//    tableView.delegate = self;
+//    tableView.dataSource = self;
     [self.view addSubview:tableView];
     self.tableView = tableView;
 }

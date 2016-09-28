@@ -904,8 +904,8 @@
 
 
 
-#pragma mark - 聊天相关
-//                    -----------   聊天表  ----------------
+#pragma mark - 会话相关
+//                    -----------   会话表  ----------------
 // 保存会话列表
 - (void)saveConverseListDataWithDataArray:(NSArray *)dataArray {
     for (ConverseModel *converseModel in dataArray) {
@@ -924,7 +924,8 @@
         NSString *operationStr;
         if (isExist) {
             NSLog(@"存在这条会话数据，更新数据");
-            NSString *option1 = [NSString stringWithFormat:@"time = '%@', converseType = '%@', converseId = '%@', unReadCount = '%@', topChat = '%@', disturb = '%@', converseName = '%@', converseHead_photo = '%@', converseContent = '%@'",@(converseModel.time),@(converseModel.converseType),converseModel.converseId,converseModel.unReadCount,@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+            converseModel.unReadCount ++;
+            NSString *option1 = [NSString stringWithFormat:@"time = '%@', converseType = '%@', converseId = '%@', unReadCount = '%@', topChat = '%@', disturb = '%@', converseName = '%@', converseHead_photo = '%@', converseContent = '%@'",@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
             NSString *option2 = [NSString stringWithFormat:@"converseId = %@",converseModel.converseId];
             operationStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
         } else {
@@ -958,13 +959,13 @@
         while ([result next]) {
             NSLog(@"查表成功");
             ConverseModel *model = [[ConverseModel alloc] init];
-            model.unReadCount = [result stringForColumn:@"unReadCount"];
+            model.unReadCount = [result intForColumn:@"unReadCount"];
             model.converseName = [result stringForColumn:@"converseName"];
-            model.lastConverse = [result stringForColumn:@"lastConverse"];
+            model.lastConverse = [result stringForColumn:@"converseContent"];
             model.converseHead_photo = [result stringForColumn:@"converseHead_photo"];
             model.converseId = [result stringForColumn:@"converseId"];
             model.converseType = [result intForColumn:@"converseType"];
-//            model.time = [result intForColumn:@"time"];
+            model.time = [result intForColumn:@"time"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"disturb"];
             [dataArray addObject:model];
@@ -972,6 +973,32 @@
     }];
     return dataArray;
 }
+
+
+- (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    ConverseModel *model = [[ConverseModel alloc] init];
+    [queue inDatabase:^(FMDatabase *db) {
+        
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@",converseID]];
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        
+        while ([result next]) {
+            NSLog(@"查表成功");
+            model.unReadCount = [result intForColumn:@"unReadCount"];
+            model.converseName = [result stringForColumn:@"converseName"];
+            model.lastConverse = [result stringForColumn:@"converseContent"];
+            model.converseHead_photo = [result stringForColumn:@"converseHead_photo"];
+            model.converseId = [result stringForColumn:@"converseId"];
+            model.converseType = [result intForColumn:@"converseType"];
+            model.time = [result intForColumn:@"time"];
+            model.topChat = [result intForColumn:@"topChat"];
+            model.disturb = [result intForColumn:@"disturb"];
+        }
+    }];
+    return model;
+}
+
 
 
 #pragma mark - 消息相关   罅隙（TM这两个字谁能打出来）
@@ -985,8 +1012,8 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.msgtime,message.text,@(message.isGroup),converseID];
-        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.msgtime,message.text,@(message.isGroup),converseID];
+        [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID];
+        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID];
         if (successFul) {
             NSLog(@"插入消息成功");
         } else {
@@ -1004,19 +1031,6 @@
     // converseID = userID 根据这个id 取出用户表对应的用户数据
     ZhiMaFriendModel *userModel = [FMDBShareManager getUserMessageByUserID:converseID];
     
-    //更新会话模型
-    ConverseModel *converseModel = [[ConverseModel alloc] init];
-//    converseModel.time = message.msgtime;
-    converseModel.lastConverse = message.text;
-    converseModel.converseHead_photo = userModel.user_Head_photo;
-    converseModel.converseName = userModel.user_Name;
-    converseModel.converseId = converseID;
-    converseModel.disturb = NO;
-    converseModel.topChat = NO;
-    converseModel.unReadCount = @"1";
-    converseModel.converseType = message.isGroup;
-    
-    
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     NSLog(@"开始查会话表");
     __block BOOL isExist = NO;
@@ -1029,22 +1043,50 @@
         }
     }];
     
+    //更新会话模型
+    ConverseModel *converseModel = [[ConverseModel alloc] init];
+    converseModel.time = message.timeStamp;
+    converseModel.converseHead_photo = userModel.user_Head_photo;
+    converseModel.converseName = userModel.user_Name;
+    if (message.type == MessageTypeText) {
+        converseModel.lastConverse = message.text;
+    }else if (message.type == MessageTypeImage){
+        converseModel.lastConverse = @"[图片]";
+    }else if (message.type == MessageTypeAudio){
+        converseModel.lastConverse = @"[语音]";
+    }
+    
+    
     NSString *opeartionStr = [NSString string];
     if (!isExist) {
         //不存在会话列表 ->  创建这个会话
         NSLog(@"会话不存在，需要创建");
+        
+        converseModel.converseId = converseID;
+        converseModel.disturb = NO;
+        converseModel.topChat = NO;
+        converseModel.unReadCount = 1;
+        converseModel.converseType = message.isGroup;
+        
         opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
         
     } else {
         //更新这个会话
         NSLog(@"会话存在,更新会话");
-        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', topChat = '%@',disturb = '%@', converseName = '%@', converseContent = '%@', time = '%@'",converseModel.unReadCount,@(converseModel.topChat),@(converseModel.disturb),converseModel.converseName,converseModel.lastConverse, @(converseModel.time)];
+        //取出这个会话
+        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID];
+        //设置更新内容
+        converseModel.unReadCount ++;
+        
+        
+        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time)];
         NSString *option2 = [NSString stringWithFormat:@"converseId = %@",converseModel.converseId];
+        
         opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
     }
     
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr,converseModel.time,@(converseModel.converseType),converseModel.converseId,converseModel.unReadCount,@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+        BOOL successFul = [db executeUpdate:opeartionStr,@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
         if (successFul) {
             NSLog(@"插入会话成功");
         } else {
@@ -1077,7 +1119,7 @@
             message.fromUid = [result stringForColumn:@"fromUid"];
             message.isGroup = [result intForColumn:@"isGroup"];
             message.toUidOrGroupId = [result stringForColumn:@"toUidOrGroupId"];
-//            message.msgtime = [result intForColumn:@"time"];
+            message.timeStamp = [result intForColumn:@"time"];
             message.text = [result stringForColumn:@"text"];
             [dataArray addObject:message];
         }

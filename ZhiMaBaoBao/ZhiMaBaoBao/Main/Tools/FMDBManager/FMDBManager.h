@@ -150,6 +150,8 @@ typedef enum : NSUInteger {
  */
 - (void)saveConverseListDataWithDataArray:(NSArray <ConverseModel *> *)dataArray;
 
+- (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID;
+
 
 #pragma mark - 消息相关
 //                    ------------   消息表  ----------------

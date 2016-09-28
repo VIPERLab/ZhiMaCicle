@@ -84,18 +84,8 @@ static SocketManager *manager = nil;
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
     
-    //创建一个会话
-    ConverseModel *conversation = [[ConverseModel alloc] init];
-    conversation.time = message.msgtime;
-    conversation.converseType = message.isGroup;
-    conversation.converseId = message.toUidOrGroupId;
-    conversation.unReadCount = @"1";
-    conversation.topChat = NO;
-    conversation.disturb = NO;
-    conversation.converseName = @"我是会话名";
-    conversation.converseHead_photo = @"aa";
     //插入消息数据库
-    BOOL success = [FMDBShareManager saveMessage:message toConverseID:conversation];
+    BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
     if (success) {
         
         //发送消息成功通知

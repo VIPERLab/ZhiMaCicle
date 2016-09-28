@@ -55,6 +55,7 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
 
  /** 消息发送时间*/
 @property (nonatomic, copy) NSString *msgtime;
+
  /** 消息发送时间时间戳*/
 @property (nonatomic, assign) NSInteger timeStamp;
 

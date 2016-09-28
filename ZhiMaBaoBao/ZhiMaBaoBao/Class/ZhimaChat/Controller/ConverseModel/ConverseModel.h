@@ -28,7 +28,7 @@
 /**
  *  未读消息数
  */
-@property (nonatomic, copy) NSString *unReadCount;
+@property (nonatomic, assign) int unReadCount;
 
 
 /**

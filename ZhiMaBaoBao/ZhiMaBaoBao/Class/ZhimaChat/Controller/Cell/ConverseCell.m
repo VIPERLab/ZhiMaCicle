@@ -80,7 +80,7 @@
     
     _lastConverseLabel.text = model.lastConverse;
     
-    _unReadCountLabel.text = model.unReadCount;
+    _unReadCountLabel.text = [NSString stringWithFormat:@"%zd",model.unReadCount];
     
     _timeLabel.text = [NSString stringWithFormat:@"%zd",model.time];
 }
