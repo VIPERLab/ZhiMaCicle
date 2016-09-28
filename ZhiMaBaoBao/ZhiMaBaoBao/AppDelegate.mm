@@ -54,7 +54,6 @@
     }
     
     //创建数据库表
-    [self creatMySQL];
     [self notification];
     return YES;
 }
@@ -140,6 +139,7 @@
 
 - (void)jumpMainController{
     //已经登录过，直接跳转到主界面
+    [self creatMySQL];
     MainViewController *mainVC = [[MainViewController alloc] init];
     self.window.rootViewController = mainVC;
 
