@@ -806,11 +806,12 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     LGMessage *message = [[LGMessage alloc] init];
     message.text = text;
-    message.toUidOrGroupId = @"11594";
+    message.toUidOrGroupId = @"11596";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
     message.msgid = [NSString stringWithFormat:@"%@12345678",USERINFO.userID];
     message.isGroup = NO;
+    message.timeStamp = 123123;
     
     [self.messages addObject:message];
     
