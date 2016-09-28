@@ -227,6 +227,14 @@
             self.pageNumber++;
             NSString *pageNumber = [NSString stringWithFormat:@"%zd",self.pageNumber];
             
+            NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
+            if (newDataArray.count != 0) {
+                [self.dataArray addObjectsFromArray:newDataArray];
+                [self.tableView.mj_footer endRefreshing];
+                [self.tableView reloadData];
+                [self.tableView reloadDataWithExistedHeightCache];
+                return ;
+            }
             NSString *sectionID = USERINFO.sessionId;
             NSString *userID = USERINFO.userID;
             
@@ -277,7 +285,7 @@
     [self.dataArray removeAllObjects];
     
     // 获取所有朋友圈的数据
-    self.dataArray = [[FMDBShareManager getCirCleDataInArray] mutableCopy];
+    self.dataArray = [[FMDBShareManager getCirCleDataInArrayWithPage:1] mutableCopy];
     
     [self setupKeyBoardAndRefreshHeader];
     [self.tableView reloadDataWithExistedHeightCache];

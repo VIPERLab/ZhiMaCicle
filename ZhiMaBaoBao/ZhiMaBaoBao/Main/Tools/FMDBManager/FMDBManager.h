@@ -68,7 +68,7 @@ typedef enum : NSUInteger {
  *
  *  @return 朋友圈数组
  */
-- (NSArray <SDTimeLineCellModel *> *)getCirCleDataInArray;
+- (NSArray <SDTimeLineCellModel *> *)getCirCleDataInArrayWithPage:(int)pageNumber;
 
 
 /**
