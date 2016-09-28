@@ -761,7 +761,18 @@
     } failure:^(ErrorData *error) {
         
     }];
+}
 
+//获取好友列表
++ (void)getFriendsList:(NSString *)sessionId friendType:(FriendType)type success:(SuccessfulBlock)success failure:(FailureBlock)failure{
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    dic[@"sessionId"] = sessionId;
+    dic[@"friend_type"] = @(type);
+    [HttpTool POST:@"/moblie/getFirendListByfriend_type.do" params:dic success:^(ResponseData *json) {
+        success(json);
+    } failure:^(ErrorData *error) {
+        failure(error);
+    }];
 }
 
 @end

@@ -9,6 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "HttpTool.h"
 
+//好友类型
+typedef NS_OPTIONS(NSUInteger, FriendType) {
+    FriendTypeNew  = 0,     //新的好友
+    FriendTypeFriends,      //好友列表
+    FriendTypeBlack         //黑名单
+};
+
 @interface LGNetWorking : NSObject
 
 +(LGNetWorking *)shareInstance;
@@ -259,7 +266,11 @@
 //查询手机联系人是否开通芝麻
 + (void)queryContacts:(NSString *)sessionId phone:(NSString *)phone success:(SuccessfulBlock)success failure:(FailureBlock)failure;
 
-
+/**
+ *  获取好友列表
+ *  @param type      好友类型
+ */
++ (void)getFriendsList:(NSString *)sessionId friendType:(FriendType)type success:(SuccessfulBlock)success failure:(FailureBlock)failure;
 
 
 @end

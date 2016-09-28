@@ -149,64 +149,62 @@ static SocketManager *manager = nil;
     NSData *data = [[rsp dataWithPacket] replaceNoUtf8];
     NSDictionary *responceData = [data mj_JSONObject];
 
-    
+    NSLog(@"\n从socket接收到的数据responceData :%@\n",responceData);
     if (data.length) {
-        
-        LGMessage *message = [[LGMessage alloc] init];
-        message = [message mj_setKeyValues:responceData[@"data"]];
-        ConverseModel *conversation = [[ConverseModel alloc] init];
-        
         //解析消息指令类型
         NSString *actType = responceData[@"acttype"];
-        if ([actType isEqualToString:@"normal"]) {      //普通消息
-            message.actType = ActTypeNormal;
+        
+        //有相同的用户登录
+        if ([actType isEqualToString:@"kickuser"]) {
+            //发送通知，执行被迫下线操作
+            [[NSNotificationCenter defaultCenter] postNotificationName:kOtherLogin object:nil];
+        }
+        else if ([actType isEqualToString:@"normal"]) {      //普通消息 -> 插入数据库
+                
+            LGMessage *message = [[LGMessage alloc] init];
+            message = [message mj_setKeyValues:responceData[@"data"]];
+            //将消息插入数据库，并更新会话列表
+            BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
             
-            //创建一个会话
-            conversation.time = message.msgtime;
-            conversation.converseType = message.isGroup;
-            conversation.converseId = message.fromUid;
-            conversation.unReadCount = @"1";
-            conversation.topChat = NO;
-            conversation.disturb = NO;
-            conversation.converseName = @"我是会话名";
-            conversation.converseHead_photo = @"aa";
-            if (message.type == MessageTypeText) {
-                conversation.lastConverse = message.text;
-            }else if (message.type == MessageTypeImage){
-                conversation.lastConverse = @"[图片]";
-            }else if (message.type == MessageTypeAudio){
-                conversation.lastConverse = @"[语音]";
+            if (success) {
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                userInfo[@"message"] = message;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:userInfo];
             }
             
+            //            if (message.type == MessageTypeText) {
+            //                conversation.lastConverse = message.text;
+            //            }else if (message.type == MessageTypeImage){
+            //                conversation.lastConverse = @"[图片]";
+            //            }else if (message.type == MessageTypeAudio){
+            //                conversation.lastConverse = @"[语音]";
+            //            }
+                
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
-            message.actType = ActTypeAddfriend;
+            NSDictionary *resDic = responceData[@"data"];
+            //请求者uid, 头像地址, 用户昵称, 请求时间
+            NSString *fromuid = resDic[@"fromuid"];
+            NSString *headPhoto = resDic[@"head_photo"];
+            NSString *userName = resDic[@"username"];
+            NSString *requestTime = resDic[@"request_time"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewFriendRequest object:resDic];
         }
         else if ([actType isEqualToString:@"updatefriend"]){   //更新好友数据
-            message.actType = ActTypeUpdatefriend;
+            
         }
         else if ([actType isEqualToString:@"updategroupnum"]){   //更新群用户数
-            message.actType = ActTypeUpdategroupnum;
+            
         }
         else if ([actType isEqualToString:@"deluserfromgroup"]){   //从群组中删除用户
-            message.actType = ActTypeDeluserfromgroup;
+            
         }
-        else if ([actType isEqualToString:@"renamegroup"]){   //好友请求
-            message.actType = ActTypeRenamegroup;
+        else if ([actType isEqualToString:@"renamegroup"]){   //重命名群组
+            
         }
-        else if ([actType isEqualToString:@"undomsg"]){   //好友请求
-            message.actType = ActTypeUndomsg;
+        else if ([actType isEqualToString:@"undomsg"]){   //撤销消息
+            
         }
-        
-        //将消息插入数据库，并更新会话列表
-        BOOL success = [FMDBShareManager saveMessage:message toConverseID:conversation];
-        
-        if (success) {
-            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-            userInfo[@"message"] = message;
-            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:userInfo];
-        }
-        
     }
 }
 

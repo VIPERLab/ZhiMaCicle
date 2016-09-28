@@ -803,6 +803,30 @@
 }
 
 /**
+ *  查询所有的消息
+ *
+ *  @return 返回一个ZhiMaFriendModel 的数组
+ */
+- (NSArray <ZhiMaFriendModel *>*)getAllUserMessageInArray {
+    NSMutableArray *dataArray = [NSMutableArray array];
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
+    NSString *option = [FMDBShareManager SearchTable:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"user_Id > 0 order by converseId desc"]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:option];
+        while ([result next]) {
+            ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
+            model.user_NickName = [result stringForColumn:@"user_NickName"];
+            model.user_Name = [result stringForColumn:@"user_Name"];
+            model.user_Id = [result stringForColumn:@"user_Id"];
+            model.user_Head_photo = [result stringForColumn:@"user_Head_photo"];
+            [dataArray addObject:model];
+        }
+    }];
+    
+    return [dataArray copy];
+}
+
+/**
  *  根据用户id更新用户信息
  *
  *  @param userMessage 用户数据模型
@@ -855,22 +879,27 @@
 }
 
 
+/**
+ *  根据用户的id查询用户信息
+ *
+ *  @param userID 要查询的用户id
+ *
+ *  @return 用户信息模型
+ */
 - (ZhiMaFriendModel *)getUserMessageByUserID:(NSString *)userID {
-    
-//    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
-//    NSString *option = [FMDBShareManager SearchTable:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"user_Id = %@",userID]];
-//    [queue inDatabase:^(FMDatabase *db) {
-//        FMResultSet *result = [db executeQuery:option];
-//        while ([result next]) {
-//            
-//            
-//            
-//        }
-//        
-//    }];
-//    
-    
-    return nil;
+    ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
+    NSString *option = [FMDBShareManager SearchTable:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"user_Id = %@",userID]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:option];
+        while ([result next]) {
+            model.user_NickName = [result stringForColumn:@"user_NickName"];
+            model.user_Name = [result stringForColumn:@"user_Name"];
+            model.user_Id = [result stringForColumn:@"user_Id"];
+            model.user_Head_photo = [result stringForColumn:@"user_Head_photo"];
+        }
+    }];
+    return model;
 }
 
 
@@ -948,16 +977,51 @@
 #pragma mark - 消息相关   罅隙（TM这两个字谁能打出来）
 //                    ------------   消息表  ----------------
 //  插入消息到 -> 消息表
-- (BOOL)saveMessage:(LGMessage *)message toConverseID:(ConverseModel *)converseModel {
+- (BOOL)saveMessage:(LGMessage *)message toConverseID:(NSString *)converseID {
     
     __block BOOL success = YES;   //消息是否插入成功
     
-    //查询是否有这个会话id
+    //先把消息插入到消息表
+    FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
+    NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
+    [messageQueue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.msgtime,message.text,@(message.isGroup),converseID];
+        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.msgtime,message.text,@(message.isGroup),converseID];
+        if (successFul) {
+            NSLog(@"插入消息成功");
+        } else {
+            NSLog(@"插入消息失败");
+            success = NO;
+        }
+    }];
+    
+    
+    if (!success) {
+        return success;
+    }
+    
+    //查询这个消息对应的会话是否存在
+    // converseID = userID 根据这个id 取出用户表对应的用户数据
+    ZhiMaFriendModel *userModel = [FMDBShareManager getUserMessageByUserID:converseID];
+    
+    //更新会话模型
+    ConverseModel *converseModel = [[ConverseModel alloc] init];
+    converseModel.time = message.msgtime;
+    converseModel.lastConverse = message.text;
+    converseModel.converseHead_photo = userModel.user_Head_photo;
+    converseModel.converseName = userModel.user_Name;
+    converseModel.converseId = converseID;
+    converseModel.disturb = NO;
+    converseModel.topChat = NO;
+    converseModel.unReadCount = @"1";
+    converseModel.converseType = message.isGroup;
+    
+    
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     NSLog(@"开始查会话表");
     __block BOOL isExist = NO;
     [queue inDatabase:^(FMDatabase *db) {
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@",converseModel.converseId]];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@",converseID]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         while ([result next]) {
             NSLog(@"存在这个会话");
@@ -985,25 +1049,6 @@
             NSLog(@"插入会话成功");
         } else {
             NSLog(@"插入会话失败");
-            success = NO;
-        }
-    }];
-    
-    
-    //往消息表 -> 插入 -> 消息
-    if (!success) { // 如果会话插入失败，则直接返回
-        return success;
-    }
-    
-    FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
-    NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
-    [messageQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.msgtime,message.text,@(message.isGroup),converseModel.converseId];
-        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,message.msgtime,message.text,@(message.isGroup),converseModel.converseId];
-        if (successFul) {
-            NSLog(@"插入消息成功");
-        } else {
-            NSLog(@"插入消息失败");
             success = NO;
         }
     }];

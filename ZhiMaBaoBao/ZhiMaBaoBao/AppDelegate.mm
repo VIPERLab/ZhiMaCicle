@@ -14,6 +14,9 @@
 #import "RealReachability.h"
 #import "SocketManager.h"
 
+//临时用
+#import "ZhiMaFriendModel.h"
+
 @interface AppDelegate ()
 
 @end
@@ -98,6 +101,14 @@
     
     //用户相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_User_Message_Table];
+    
+    ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
+    model.user_Name = @"大雄";
+    model.user_Head_photo = @"xxxx";
+    model.user_NickName = @"";
+    model.user_Id = @"10";
+    [FMDBShareManager saveUserMessageWithMessageArray:@[model]];
+    
 }
 
 // 注册通知

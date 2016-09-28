@@ -56,7 +56,6 @@
 
 
 
-
 //                    ------ 登录通知 --------
 //登录成功，跳转到主控制器
 #define LOGIN_SUCCESS @"login_success"
@@ -69,8 +68,12 @@
 
 
 //                    ------ 消息通知 --------
+//相同的用户登录
+#define kOtherLogin @"kOtherLogin"
 //收到新消息
 #define kRecieveNewMessage @"kRecieveNewMessage"
+//新的好友请求
+#define kNewFriendRequest @"kNewFriendRequest"
 //消息发送成功
 
 
