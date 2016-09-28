@@ -72,6 +72,22 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    [playBtn setTitle:@"播放" forState:UIControlStateNormal];
 //    [self.view insertSubview:playBtn aboveSubview:self.tableView];
 //    [playBtn addTarget:self action:@selector(playAudio:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage:) name:kRecieveNewMessage object:nil];
+
+}
+
+- (void)recievedNewMessage:(NSNotification *)notification
+{
+//    NSLog(@"=== %@",notification.object);
+    NSDictionary *userInfo = notification.userInfo;
+    LGMessage *message  = userInfo[@"message"];
+    [self.messages addObject:message];
+    
+    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+    NSArray *indexPaths = @[indexpath];
+    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void)addSubviews{
@@ -806,7 +822,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     LGMessage *message = [[LGMessage alloc] init];
     message.text = text;
-    message.toUidOrGroupId = self.conversionId;
+    message.toUidOrGroupId = @"11596";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
     message.msgid = [NSString stringWithFormat:@"%@12345678",USERINFO.userID];
