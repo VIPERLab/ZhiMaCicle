@@ -317,9 +317,9 @@ static SocketManager *manager = nil;
         case RequestTypeMessage:{      //消息类型
             //拼接控制器和方法名
             request[@"controller_name"] = @"MessageController";
-            request[@"method_name"] = @"send";
+            request[@"method_name"] = @"sendmsg";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=send&fromUid=%@&isGroup=%d&msgid=%@&text=%@&toUidOrGroupId=%@&type=%d&%@",message.fromUid,message.isGroup,message.msgid,message.text,message.toUidOrGroupId,message.type,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&fromUid=%@&isGroup=%d&msgid=%@&text=%@&toUidOrGroupId=%@&type=%d&%@",message.fromUid,message.isGroup,message.msgid,message.text,message.toUidOrGroupId,message.type,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //拼接消息
             dataDic[@"msgid"] = message.msgid;
