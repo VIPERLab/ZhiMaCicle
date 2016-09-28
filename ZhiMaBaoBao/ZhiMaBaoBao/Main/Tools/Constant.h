@@ -39,6 +39,9 @@
 #define SCLACEH     DEVICEHIGHT/(667.0)
 #define SCLACEW     DEVICEWITH/(375.0)
 
+// 需要显示时间的间隔最少分钟
+#define DiffTimeThreeMins  5
+
 //充值Appkey
 #define RECHAPPKEY @"yihezhai20152016"
 

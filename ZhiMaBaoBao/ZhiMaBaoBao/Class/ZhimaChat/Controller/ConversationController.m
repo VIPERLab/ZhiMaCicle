@@ -53,7 +53,7 @@
 
 - (void)setupView {
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-//    [self.view addSubview:_tableView];
+    [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

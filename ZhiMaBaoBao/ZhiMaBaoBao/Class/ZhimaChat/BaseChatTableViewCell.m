@@ -206,6 +206,7 @@
     BOOL isSetTop  = topText != nil;
     BOOL isSetNick  = nick != nil;
     
+    
     if (isSetTop) {
         
         height += [UIFont systemFontOfSize:TopLabelFontSize].lineHeight;
