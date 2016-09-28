@@ -226,10 +226,10 @@
 
 - (void)onBtn:(id)sender
 {
-    //    if (self.voiceDelegate != nil && [self.voiceDelegate respondsToSelector:@selector(onPlayBtn:)]) {
-    //
-    //        [self.voiceDelegate onPlayBtn:sender];
-    //    }
+    if (self.voiceDelegate != nil && [self.voiceDelegate respondsToSelector:@selector(onPlayBtn:)]) {
+        
+        [self.voiceDelegate onPlayBtn:sender];
+    }
 }
 
 - (void)playVoiceAction:(id)sender
