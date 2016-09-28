@@ -19,4 +19,13 @@
     }
     return name;
 }
+
++ (NSDictionary *)replacedKeyFromPropertyName{
+    return @{
+             @"user_Name" : @"username",
+             @"user_Id" : @"id",
+             @"user_Head_photo" : @"yuan_head_photo",
+             @"user_NickName" : @"friend_nick"
+             };
+}
 @end

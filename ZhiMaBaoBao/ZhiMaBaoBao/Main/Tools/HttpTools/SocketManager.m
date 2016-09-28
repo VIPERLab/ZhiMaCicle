@@ -136,10 +136,18 @@ static SocketManager *manager = nil;
     //解析消息模型
     NSDictionary *userInfo = notif.userInfo;
     RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
-    NSData *data = [[rsp dataWithPacket] replaceNoUtf8];
-    NSDictionary *responceData = [data mj_JSONObject];
+//    NSData *data = [[rsp dataWithPacket] replaceNoUtf8];
+    NSData *data = [rsp dataWithPacket];
+//    NSDictionary *responceData = [data mj_JSONObject];
+    
+    //测试用
+    NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    jsonStr = [jsonStr stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+    NSData *transData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *responceData = [transData mj_JSONObject];
 
-    NSLog(@"\n从socket接收到的数据responceData :%@\n",responceData);
+
+    NSLog(@"\n从socket接收到的数据responceData :%@\n jsonStr : %@ \n",responceData,jsonStr);
     if (data.length) {
         //解析消息指令类型
         NSString *actType = responceData[@"acttype"];
