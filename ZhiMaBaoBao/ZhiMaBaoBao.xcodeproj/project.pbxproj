@@ -485,6 +485,8 @@
 		316957881D91199100140126 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3169577B1D91199100140126 /* ring.mp3 */; };
 		319069A41D9A17C300D1D6D2 /* NSData+Replace.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069A31D9A17C300D1D6D2 /* NSData+Replace.m */; };
 		319069AD1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */; };
+		319069B11D9BC09200D1D6D2 /* FriendsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */; };
+		319069B21D9BC09200D1D6D2 /* FriendsListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069B01D9BC09200D1D6D2 /* FriendsListCell.xib */; };
 		31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C6FD1D8E91F000F1883A /* MainViewController.m */; };
 		31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7021D8E96A100F1883A /* PersonalCenterController.m */; };
 		31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C70E1D8E96A100F1883A /* ConversationController.m */; };
@@ -1487,6 +1489,9 @@
 		319069A31D9A17C300D1D6D2 /* NSData+Replace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Replace.m"; sourceTree = "<group>"; };
 		319069AB1D9A9DC100D1D6D2 /* NSDate+TimeCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TimeCategory.h"; sourceTree = "<group>"; };
 		319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+TimeCategory.m"; sourceTree = "<group>"; };
+		319069AE1D9BC09200D1D6D2 /* FriendsListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FriendsListCell.h; path = ZhiMaBaoBao/Categray/FriendsListCell.h; sourceTree = SOURCE_ROOT; };
+		319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FriendsListCell.m; path = ZhiMaBaoBao/Categray/FriendsListCell.m; sourceTree = SOURCE_ROOT; };
+		319069B01D9BC09200D1D6D2 /* FriendsListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FriendsListCell.xib; path = ZhiMaBaoBao/Categray/FriendsListCell.xib; sourceTree = SOURCE_ROOT; };
 		31B7C6FC1D8E91F000F1883A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		31B7C6FD1D8E91F000F1883A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		31B7C7011D8E96A100F1883A /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
@@ -4094,6 +4099,9 @@
 		31B7C71C1D8E96A100F1883A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				319069AE1D9BC09200D1D6D2 /* FriendsListCell.h */,
+				319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */,
+				319069B01D9BC09200D1D6D2 /* FriendsListCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4445,6 +4453,7 @@
 				316957861D91199100140126 /* dtmf-9.aif in Resources */,
 				310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */,
 				316957821D91199100140126 /* dtmf-5.aif in Resources */,
+				319069B21D9BC09200D1D6D2 /* FriendsListCell.xib in Resources */,
 				31B7C79F1D8FE71F00F1883A /* LGPhoneHeaderCell.xib in Resources */,
 				3169577E1D91199100140126 /* dtmf-1.aif in Resources */,
 				310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */,
@@ -4759,6 +4768,7 @@
 				04EA7D851D912872005E5425 /* ZXWifiParsedResult.m in Sources */,
 				04F862571D94FC6D00DCC6FE /* MLLinkLabel.m in Sources */,
 				04F57AFF1D928154002A6471 /* ComplainViewController.m in Sources */,
+				319069B11D9BC09200D1D6D2 /* FriendsListCell.m in Sources */,
 				04EA7DEB1D912872005E5425 /* ZXEAN13Reader.m in Sources */,
 				04EA7AD41D910F89005E5425 /* DNTapDetectingImageView.m in Sources */,
 				04EA7B5E1D91282E005E5425 /* LBXScanLineAnimation.m in Sources */,

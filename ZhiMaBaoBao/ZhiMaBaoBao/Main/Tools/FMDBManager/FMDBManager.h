@@ -26,6 +26,10 @@ typedef enum : NSUInteger {
     
     /* ----   用户相关 ----  */
     ZhiMa_User_Message_Table,        //用户信息表
+    
+    /* ----   群聊相关 ----  */
+    ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
+//    ZhiMa_GroupChat_GroupMenber_Table
 } ZhiMaSqliteTableType;
 
 @interface FMDBManager : NSObject
@@ -68,7 +72,7 @@ typedef enum : NSUInteger {
  *
  *  @return 朋友圈数组
  */
-- (NSArray <SDTimeLineCellModel *> *)getCirCleDataInArray;
+- (NSArray <SDTimeLineCellModel *> *)getCirCleDataInArrayWithPage:(int)pageNumber;
 
 
 /**

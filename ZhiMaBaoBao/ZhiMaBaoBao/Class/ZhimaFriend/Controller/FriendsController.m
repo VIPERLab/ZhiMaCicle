@@ -9,6 +9,7 @@
 #import "FriendsController.h"
 #import "ZhiMaFriendModel.h"
 #import "pinyin.h"
+#import "FriendsListCell.h"
 
 @interface FriendsController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -18,15 +19,31 @@
 @property (nonatomic, strong) NSMutableArray *countOfSectionArr;       //每组的好友个数
 @end
 
+static NSString * const reuseIdentifier = @"friendListcell";
 @implementation FriendsController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setCustomRightItems];
 
-    [self requestFriendsList];
     [self addSubviews];
 }
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self requestFriendsList];
+
+}
+
+- (void)addSubviews{
+    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    [tableView registerNib:[UINib nibWithNibName:@"FriendsListCell" bundle:nil] forCellReuseIdentifier:reuseIdentifier];
+    [self.view addSubview:tableView];
+    self.tableView = tableView;
+}
+
 //请求好友列表
 - (void)requestFriendsList{
     //先从数据库拉取好友列表，没有数据则从网络请求
@@ -100,23 +117,105 @@
                 num = 0;
             }
             else{
-                
                 num ++;
+                //最后一条数据 -> 将最后一组数据个数插入
+                if (i == self.friendsAfterSort.count - 2) {
+                    [self.countOfSectionArr addObject:@(num+1)];
+                }
             }
         }
     }
-
+    [self.tableView reloadData];
 }
 
-#pragma mark - tableview delegate
+#pragma mark - tableview 代理
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return self.sectionsArr.count + 1;
+}
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (section == 0) {
+        return 2;
+    }else{
+        //取到是哪一组，返回该数组中的个数
+        return [[self.countOfSectionArr objectAtIndex:section - 1] integerValue];
+    }
+}
 
-- (void)addSubviews{
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-//    tableView.delegate = self;
-//    tableView.dataSource = self;
-    [self.view addSubview:tableView];
-    self.tableView = tableView;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    //组一：新的好友 群组
+    FriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            cell.name.text = @"新的朋友";
+            cell.avtar.image = [UIImage imageNamed:@"new_friend"];
+        }else{
+            cell.name.text = @"群聊";
+            cell.avtar.image = [UIImage imageNamed:@"group_Icon"];
+        }
+    //好友列表
+    }else{
+        NSInteger rowNum = 0;
+        for (int i = 0; i < indexPath.section - 1; i++) {
+            
+            rowNum = [[self.countOfSectionArr objectAtIndex:i] intValue] + rowNum;
+        }
+        
+        ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
+        cell.friendModel = friend;
+    }
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 52;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (section == 0) {
+        return 0.1f;
+    }else{
+        return 20;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.1f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if (section == 0) {
+        
+        return [UIView new];
+    }else{
+        UIView *headerView  = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICEWITH, 20)];
+        headerView.backgroundColor = RGB(229, 229, 229);
+        
+        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(14, 0, DEVICEWITH - 14, 20)];
+        titleLabel.text = [self.sectionsArr objectAtIndex:section - 1];
+        titleLabel.font = [UIFont systemFontOfSize:16.0];
+        titleLabel.textColor = RGB(147, 147, 147);
+        titleLabel.backgroundColor = [UIColor clearColor];
+        [headerView addSubview:titleLabel];
+        return headerView;
+    }
+}
+
+//添加索引列
+- (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView{
+    return self.sectionsArr;
+}
+
+//索引列点击事件
+-(NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+{
+    //点击索引，列表跳转到对应索引的行
+    
+    [tableView
+     scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]
+     atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+    return index;
 }
 
 #pragma mark - 懒加载
@@ -132,5 +231,19 @@
         _friendsAfterSort = [NSMutableArray array];
     }
     return _friendsAfterSort;
+}
+
+- (NSMutableArray *)sectionsArr{
+    if (!_sectionsArr) {
+        _sectionsArr = [NSMutableArray array];
+    }
+    return _sectionsArr;
+}
+
+- (NSMutableArray *)countOfSectionArr{
+    if (!_countOfSectionArr) {
+        _countOfSectionArr = [NSMutableArray array];
+    }
+    return _countOfSectionArr;
 }
 @end

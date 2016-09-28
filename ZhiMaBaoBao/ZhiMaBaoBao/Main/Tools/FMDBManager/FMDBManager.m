@@ -28,6 +28,10 @@
     
     //用户相关的表
     FMDatabaseQueue *user_message_DB;
+    
+    //用户相关的表
+    FMDatabaseQueue *group_Message_DB;
+    FMDatabaseQueue *group_userMenber_DB;
 }
 
 + (instancetype)shareManager {
@@ -630,7 +634,6 @@
         if (!successFul) {
             return NO;
         }
-        
     }
     return YES;
 }
@@ -638,13 +641,13 @@
 /**
  *  获取所有朋友圈消息
  */
-- (NSArray *)getCirCleDataInArray {
+- (NSArray *)getCirCleDataInArrayWithPage:(int)pageNumber {
     
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
-    NSString *operationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Table withOption:@"circle_ID > 0 order by circle_ID desc"];
+    NSString *operationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Table withOption:[NSString stringWithFormat:@"circle_ID > 0 order by circle_ID desc LIMIT (%zd-1)*30,30",pageNumber]];
+    
     NSMutableArray *cellModelArray = [NSMutableArray array];
     [queue inDatabase:^(FMDatabase *db) {
-        
         FMResultSet *result = [db executeQuery:operationStr];
         while ([result next]) {
             SDTimeLineCellModel *model = [[SDTimeLineCellModel alloc] init];
