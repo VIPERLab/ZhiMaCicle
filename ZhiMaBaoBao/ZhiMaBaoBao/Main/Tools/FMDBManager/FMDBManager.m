@@ -635,7 +635,9 @@
     return YES;
 }
 
-// 获取朋友圈所有消息
+/**
+ *  获取所有朋友圈消息
+ */
 - (NSArray *)getCirCleDataInArray {
     
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
