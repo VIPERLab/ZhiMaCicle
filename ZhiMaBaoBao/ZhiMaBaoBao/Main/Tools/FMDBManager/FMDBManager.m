@@ -924,7 +924,7 @@
         NSString *operationStr;
         if (isExist) {
             NSLog(@"存在这条会话数据，更新数据");
-            NSString *option1 = [NSString stringWithFormat:@"time = '%@', converseType = '%@', converseId = '%@', unReadCount = '%@', topChat = '%@', disturb = '%@', converseName = '%@', converseHead_photo = '%@', converseContent = '%@'",converseModel.time,@(converseModel.converseType),converseModel.converseId,converseModel.unReadCount,@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+            NSString *option1 = [NSString stringWithFormat:@"time = '%@', converseType = '%@', converseId = '%@', unReadCount = '%@', topChat = '%@', disturb = '%@', converseName = '%@', converseHead_photo = '%@', converseContent = '%@'",@(converseModel.time),@(converseModel.converseType),converseModel.converseId,converseModel.unReadCount,@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
             NSString *option2 = [NSString stringWithFormat:@"converseId = %@",converseModel.converseId];
             operationStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
         } else {
@@ -949,10 +949,10 @@
 - (NSArray *)getChatConverseDataInArray {
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     NSMutableArray *dataArray = [NSMutableArray array];
-    NSLog(@"开始查朋友圈表");
+    NSLog(@"开始查会话表");
     [queue inDatabase:^(FMDatabase *db) {
         
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:@"converseId > 0 order by converseId desc"];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:@"time > 0 order by converseId desc"];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         
         while ([result next]) {
@@ -964,7 +964,7 @@
             model.converseHead_photo = [result stringForColumn:@"converseHead_photo"];
             model.converseId = [result stringForColumn:@"converseId"];
             model.converseType = [result intForColumn:@"converseType"];
-            model.time = [result stringForColumn:@"time"];
+//            model.time = [result intForColumn:@"time"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"disturb"];
             [dataArray addObject:model];
@@ -1006,7 +1006,7 @@
     
     //更新会话模型
     ConverseModel *converseModel = [[ConverseModel alloc] init];
-    converseModel.time = message.msgtime;
+//    converseModel.time = message.msgtime;
     converseModel.lastConverse = message.text;
     converseModel.converseHead_photo = userModel.user_Head_photo;
     converseModel.converseName = userModel.user_Name;
@@ -1038,7 +1038,7 @@
     } else {
         //更新这个会话
         NSLog(@"会话存在,更新会话");
-        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', topChat = '%@',disturb = '%@', converseName = '%@', converseContent = '%@'",converseModel.unReadCount,@(converseModel.topChat),@(converseModel.disturb),converseModel.converseName,converseModel.lastConverse];
+        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', topChat = '%@',disturb = '%@', converseName = '%@', converseContent = '%@', time = '%@'",converseModel.unReadCount,@(converseModel.topChat),@(converseModel.disturb),converseModel.converseName,converseModel.lastConverse, @(converseModel.time)];
         NSString *option2 = [NSString stringWithFormat:@"converseId = %@",converseModel.converseId];
         opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
     }
@@ -1077,7 +1077,7 @@
             message.fromUid = [result stringForColumn:@"fromUid"];
             message.isGroup = [result intForColumn:@"isGroup"];
             message.toUidOrGroupId = [result stringForColumn:@"toUidOrGroupId"];
-            message.msgtime = [result stringForColumn:@"time"];
+//            message.msgtime = [result intForColumn:@"time"];
             message.text = [result stringForColumn:@"text"];
             [dataArray addObject:message];
         }

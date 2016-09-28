@@ -25,7 +25,7 @@ typedef enum : NSUInteger {
     ZhiMa_Chat_Message_Table,        //消息表
     
     /* ----   用户相关 ----  */
-    ZhiMa_User_Message_Table,
+    ZhiMa_User_Message_Table,        //用户信息表
 } ZhiMaSqliteTableType;
 
 @interface FMDBManager : NSObject

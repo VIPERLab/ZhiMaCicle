@@ -82,7 +82,7 @@
     
     _unReadCountLabel.text = model.unReadCount;
     
-    _timeLabel.text = model.time;
+    _timeLabel.text = [NSString stringWithFormat:@"%zd",model.time];
 }
 
 - (void)layoutSubviews {

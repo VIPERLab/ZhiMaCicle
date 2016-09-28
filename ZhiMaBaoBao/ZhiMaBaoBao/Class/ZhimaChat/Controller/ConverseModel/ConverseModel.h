@@ -13,7 +13,7 @@
 /**
  *  时间
  */
-@property (nonatomic, copy) NSString *time;
+@property (nonatomic, assign) int time;
 
 /**
  *  会话类型  0:单聊  1:群聊

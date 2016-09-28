@@ -166,7 +166,8 @@
 //    NSString * avatarPath = [YiXmppVCard getAvatarPathByJid:[userInfo getJid]];
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]] options:0 progress:0 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-        self.imageView.image = [[self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:120] iconImageWithIcon:image];
+        self.imageView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:120];
+        // iconImageWithIcon:image];
     }];
     
 }
