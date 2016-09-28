@@ -897,7 +897,7 @@ static inline UIImage* createRoundedCornerMask(CGRect rect, CGFloat radius_tl, C
 
 - (void)isCornerRadius
 {
-    self.layer.cornerRadius = MAX(self.frameSizeWidth,self.frameSizeHeight)/2;
+    self.layer.cornerRadius =  5;//MAX(self.frameSizeWidth,self.frameSizeHeight)/2;
     self.layer.masksToBounds = YES;
     
 }
