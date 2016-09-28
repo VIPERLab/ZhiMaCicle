@@ -220,7 +220,8 @@ static NSString *const reuseIdentifier = @"messageCell";
      *  读取消息列表
      */
     FMDBManager* shareManager = [FMDBManager shareManager];
-    self.messages = [[shareManager getMessageDataWithConverseID:@"11596"] mutableCopy];
+//    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
+    self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId] mutableCopy];
     
 //    for (int i=0; i<7; i++) {
 //        LGMessage*msg = [[LGMessage alloc]init];
@@ -273,7 +274,18 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    }
     [self.tableView reloadData];
     // tableview 滑到底端
-    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
+    if (self.tableView.contentSize.height > self.tableView.bounds.size.height+64) {
+        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
+    }
+    
+}
+
+- (BOOL)needShowTime:(NSInteger)time1 time2:(NSInteger)time2
+{
+    NSInteger num = time2 - time1;
+    BOOL needShowTime = YES;
+    needShowTime = num >= DiffTimeThreeMins*60;
+    return needShowTime;
 }
 
 // 计算 cell 的高度
@@ -286,24 +298,19 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     NSString *time = nil;
     
-//    if (ip.row > 0) {
-//        
-//        Chat *preChat = self.tableViewSource[ip.row - 1]; //前一条聊天记录]
-//        Chat *curChat = self.tableViewSource[ip.row];
-//        needShowTime = [CommenMethod needShowTime:preChat.send_time time2:curChat.send_time];
-//        
-//        if (needShowTime) {
-//            //            NSDate *date = [ch.send_time dateWithDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//            //            time = [date stringWithDateFormat:@"MM-dd HH:mm"];
-//        }
-//    }
-//    else
-//    {
-//        
-//        //        NSDate *date = [ch.send_time dateWithDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        //        time = [date stringWithDateFormat:@"MM-dd HH:mm"];
-//        
-//    }
+    if (ip.row > 0) {
+        LGMessage *msg1 = self.messages[ip.row - 1]; //前一条聊天记录]
+        LGMessage *msg2 = self.messages[ip.row];
+        needShowTime = [self needShowTime:msg1.timeStamp time2:msg2.timeStamp];
+        
+        if (needShowTime) {
+            time = [NSString stringWithFormat:@"%ld",ch.timeStamp];
+        }
+    }
+    else
+    {
+        time = [NSString stringWithFormat:@"%ld",ch.timeStamp];
+    }
     switch (ft) {
         case MessageTypeText: {
             rowHeight = [IMChatTableViewCell getHeightWithMessage:ch.text topText:time nickName:nil] + 10;
@@ -313,7 +320,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
         case MessageTypeImage : {
 //            rowHeight = [IMMorePictureTableViewCell getHeightWithChat:ch TopText:time nickName:nil];
-            rowHeight = 140;
+            rowHeight = needShowTime ? 140+20 : 140;
             
             break;
         }
@@ -367,10 +374,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-//    cell.message = self.messages[indexPath.row];
-//    return cell;
-    
+
     LGMessage *message = self.messages[indexPath.row];
     MessageType fileType = message.type;
     BOOL isMe = [message.fromUid isEqualToString:USERINFO.userID];
@@ -380,6 +384,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     BaseChatTableViewCell *baseChatCell = nil;
     NSString *headPortraitUrlStr = nil;
     NSString *uniqueFlagStr = nil;
+    
 #pragma mark--MessageTypeText
     if(fileType == MessageTypeText) {
         IMChatTableViewCell *textChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
@@ -391,7 +396,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         textChatCell.isMe = isMe;
         textChatCell.chatMessageView.text = message.text;
-//        textChatCell.topLabel.text = time;
+//        textChatCell.topLabel.text = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         textChatCell.delegate = self;
         textChatCell.indexPath = indexPath;
         
@@ -656,6 +661,27 @@ static NSString *const reuseIdentifier = @"messageCell";
 //            baseChatCell.userIcon.image = [UIFactory createOtherUserDefaultHeadPortraitWith:uniqueFlagStr];
 //        }
     
+    BOOL needShowTime = NO;
+    
+    if (indexPath.row > 0) {
+        LGMessage *msg1 = self.messages[indexPath.row - 1]; //前一条聊天记录]
+        LGMessage *msg2 = self.messages[indexPath.row];
+        needShowTime = [self needShowTime:msg1.timeStamp time2:msg2.timeStamp];
+        if (!needShowTime) {
+            baseChatCell.topLabel.hidden = YES;
+        }else{
+            
+            baseChatCell.topLabel.hidden = NO;
+            baseChatCell.topLabel.text = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            
+        }
+    }else{
+        
+        baseChatCell.topLabel.hidden = NO;
+        baseChatCell.topLabel.text = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        
+    }
+    
 //    baseChatCell.backgroundColor = indexPath.row%2 == 0 ? [UIColor orangeColor]:[UIColor lightGrayColor];
     
         return baseChatCell;
@@ -870,6 +896,8 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
     }
 }
+
+#pragma mark - 录音完成
 //完成录音
 - (void)chatKeyBoardDidFinishRecoding:(ChatKeyBoard *)chatKeyBoard{
     [self.recorder stopRecording];
