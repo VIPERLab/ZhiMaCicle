@@ -32,7 +32,8 @@
     [self getDataFormSqlist];
     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage) name:kRecieveNewMessage object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kRecieveNewMessage object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageSuccess object:nil];
 }
 
 #pragma mark - 从数据库加载会话列表
@@ -61,10 +62,9 @@
 }
 
 //收到新消息-从数据库加载最新数据刷新列表
-- (void)recievedNewMessage{
+- (void)refreshConversionList{
     [self getDataFormSqlist];
 }
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -97,6 +97,13 @@
     ChatController *vc = [[ChatController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     vc.conversionId = model.converseId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+
+    ChatController *vc = [[ChatController alloc] init];
+    vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
