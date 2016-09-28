@@ -19,6 +19,8 @@
 #import "IMMorePictureTableViewCell.h"
 #import "IMChatVoiceTableViewCell.h"
 
+#import "SocketManager.h"
+
 //语音相关头文件
 #import "MLAudioRecorder.h"
 #import "CafRecordWriter.h"
@@ -28,6 +30,7 @@
 #import "MLAudioMeterObserver.h"
 #import "MLAudioPlayer.h"
 #import "AmrPlayerReader.h"
+
 
 @interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -44,6 +47,8 @@
 @property (nonatomic, strong) MLAudioMeterObserver *meterObserver;
 @property (nonatomic, strong) AVAudioPlayer *avAudioPlayer;
 @property (nonatomic, copy) NSString *filePath;
+
+@property (nonatomic, strong) NSIndexPath *currentPlayAudioIndexPath; //当前下在播放语音的cell indexpath;
 
 
 @property (nonatomic, strong) NSMutableArray *messages;  //聊天消息
@@ -194,9 +199,12 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 //加载聊天数据
 - (void)requestChatRecord{
-//    NSString *path = [[NSBundle mainBundle] pathForResource:@"FakeData" ofType:@"plist"];
-//    NSArray *chatData = [NSMutableArray arrayWithContentsOfFile:path];
-//    self.messages = [LGMessage mj_objectArrayWithKeyValuesArray:chatData];
+    
+    /**
+     *  读取消息列表
+     */
+//    FMDBManager* shareManager = [FMDBManager shareManager];
+//    self.messages = [[shareManager getMessageDataWithConverseID:@""] mutableCopy];
     
     for (int i=0; i<7; i++) {
         LGMessage*msg = [[LGMessage alloc]init];
@@ -248,6 +256,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         
     }
     [self.tableView reloadData];
+    // tableview 滑到底端
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
 }
 
@@ -281,20 +290,14 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    }
     switch (ft) {
         case MessageTypeText: {
-            rowHeight = [IMChatTableViewCell getHeightWithMessage:ch.text topText:time nickName:nil];
+            rowHeight = [IMChatTableViewCell getHeightWithMessage:ch.text topText:time nickName:nil] + 10;
             
             break;
         }
-//        case kFileAnimationEmotion:{
-//            
-//            UIImage * image=[UIImage sd_animatedGIFNamed:ch.message];
-//            rowHeight = [IMChatAnimeTableViewCell getBaseHeightTopText:time nick:nil contentHeight:image.size.height];
-//            break;
-//        }
-//            break;
+
         case MessageTypeImage : {
 //            rowHeight = [IMMorePictureTableViewCell getHeightWithChat:ch TopText:time nickName:nil];
-            rowHeight = 130;
+            rowHeight = 140;
             
             break;
         }
@@ -302,37 +305,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             rowHeight = [IMChatVoiceTableViewCell getHeightWithTopText:time nickName:nil];
             break;
         }
-//        case kFileVideo:
-//        {
-//            rowHeight = [IMChatOtherTableViewCell getBaseHeightTopText:time nick:nil contentHeight:DEFAULT_VIDEO_SIZE.height];
-//            break;
-//        }
-//        case kFileOther: {
-//            rowHeight = 80;
-//            break;
-//        }
-//        case kFilePictureAndText:
-//        {
-//            id obj = [CommenMethod jsonStringToObject:ch.message];
-//            if ([obj isKindOfClass:[NSDictionary class]]) {
-//                NSDictionary *news = (NSDictionary *)obj;
-//                NSInteger newsItemCount = [[news objectForKey:@"datalist"] count];
-//                if (newsItemCount > 0) {
-//                    rowHeight = (newsItemCount - 1) * NewsItemHeight + NewsHeaderHeight + NewsCellPaddingBottom; //20为cell间的间距
-//                }
-//            }
-//            NSLog(@"news cell height:%f",rowHeight);
-//            break;
-//        }
-//        case kFileRecomment:
-//        {
-//            
-//            NSDictionary *sharedFriendInfo = [ch.message jsonObject];
-//            NSString *nickName = [sharedFriendInfo objectForKey:@"nickName"];
-//            
-//            rowHeight = [IMFriendCardTableViewCell getBaseHeightTopText:time nick:nil sharedText:nickName];
-//        }
-//            break;
+
         default:
             break;
     }
@@ -349,7 +322,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     UIView *imageView = grz.view;
     [self.subviews addObject:imageView];
     SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-    browser.currentImageIndex = imageView.tag;
+    browser.currentImageIndex = 0;
     browser.sourceImagesContainerView = grz.view.superview;
     browser.imageCount = self.subviews.count;
     browser.delegate = self;
@@ -407,14 +380,14 @@ static NSString *const reuseIdentifier = @"messageCell";
         textChatCell.indexPath = indexPath;
         
         //  以下内容判断是否发送失败
-//        if (chat.modelStatus == DVRequestFaile) {
-//            textChatCell.sendAgain.hidden = NO;
-//            [textChatCell.sending stopAnimating];
-//            textChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
-//                
-//                Chat *chat = [tableViewSource objectAtIndex:theCell.indexPath.row];
-//                chat.modelStatus = DVRequesting;
-//                [tableViewSource replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
+        if (message.sendStatus == IMRequestFaile) {
+            textChatCell.sendAgain.hidden = NO;
+            [textChatCell.sending stopAnimating];
+            textChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
+                
+                LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
+                chat.sendStatus = IMRequesting;
+                [self.messages replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
 //                NSString *messageId = chat.timestamp;
 //                NSIndexPath *indexPath = theCell.indexPath;
 //                
@@ -430,15 +403,15 @@ static NSString *const reuseIdentifier = @"messageCell";
 //                                                       messageId:messageId
 //                 
 //                 ];
-//            };
-//        } else {
-//            textChatCell.sendAgain.hidden = YES;
-//            if (chat.modelStatus == DVRequesting) {
-//                [textChatCell.sending startAnimating];
-//            } else {
-//                [textChatCell.sending stopAnimating];
-//            }
-//        }
+            };
+        } else {
+            textChatCell.sendAgain.hidden = YES;
+            if (message.sendStatus == IMRequesting) {
+                [textChatCell.sending startAnimating];
+            } else {
+                [textChatCell.sending stopAnimating];
+            }
+        }
         
     }
     
@@ -466,8 +439,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 //            picChatCell.picturesView.tag = [self.subviews indexOfObject:picChatCell.picturesView];
 //
 //        }
+
         
-//        if (chat.modelStatus == DVRequestFaile) {
+//        if (message.sendStatus == IMRequestFaile) {
 //            picChatCell.sendAgain.hidden = NO;
 //            [picChatCell.sending stopAnimating];
 //            picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
@@ -495,7 +469,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 //            };
 //        } else {
 //            picChatCell.sendAgain.hidden = YES;
-//            if (chat.modelStatus == DVRequesting) {
+//            if (message.sendStatus == IMRequesting) {
 //                [picChatCell.sending startAnimating];
 //            } else {
 //                [picChatCell.sending stopAnimating];
@@ -621,7 +595,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 //            }
 //        }
 //        
-//        if (chat.modelStatus == DVRequestFaile) {
+//        if (message.sendStatus == IMRequestFaile) {
 //            voiceChatCell.sendAgain.hidden = NO;
 //            [voiceChatCell.sending stopAnimating];
 //            voiceChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
@@ -637,7 +611,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 //            };
 //        } else {
 //            voiceChatCell.sendAgain.hidden = YES;
-//            if (chat.modelStatus == DVRequesting) {
+//            if (message.sendStatus == IMRequesting) {
 //                [voiceChatCell.sending startAnimating];
 //            } else {
 //                [voiceChatCell.sending stopAnimating];
@@ -650,23 +624,24 @@ static NSString *const reuseIdentifier = @"messageCell";
 //        //头像图片显示问题
 //        headPortraitUrlStr = nil;
 //        uniqueFlagStr = nil;
-//        if (baseChatCell.isMe){
-//            User *user = [GlobalCommen CurrentUser];
-//            headPortraitUrlStr = user.portrait;
-//            uniqueFlagStr = user.dixun_number;
-//        }else{
+        if (baseChatCell.isMe){
+            
+            [baseChatCell.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]]];
+            
+        }else{
 //            headPortraitUrlStr = chat.chat_object_portrait;
 //            uniqueFlagStr = chat.dixun_number;
-//        }
-//        
+        }
+//
 //        //头像
 //        if (![headPortraitUrlStr contains:@"1000000000"]) {
 //            [baseChatCell.userIcon setImageWithURL:[NSURL URLWithString:headPortraitUrlStr] placeholderImage:[UIFactory createOtherUserDefaultHeadPortraitWith:uniqueFlagStr]];
 //        }else{
 //            baseChatCell.userIcon.image = [UIFactory createOtherUserDefaultHeadPortraitWith:uniqueFlagStr];
 //        }
-        
-        
+    
+//    baseChatCell.backgroundColor = indexPath.row%2 == 0 ? [UIColor orangeColor]:[UIColor lightGrayColor];
+    
         return baseChatCell;
 }
 
@@ -720,20 +695,139 @@ static NSString *const reuseIdentifier = @"messageCell";
     
 }
 
-#pragma mark - chatKeyboard delegate
+#pragma mark - 声音cell代理_________________________IMChatVoiceCell delegate
+
+- (void)onPlayBtn:(id)sender
+{
+    [self chat_playMusic:sender];
+    NSLog(@"播放声音");
+    
+}
+
+- (void)chat_playMusic:(UIButton *)sender{
+    
+    UIView *view = sender.superview;
+    while(![view isKindOfClass:[IMChatVoiceTableViewCell class]]) {
+        view = [view superview];
+    }
+    
+    NSIndexPath* ip = [self.tableView indexPathForCell:(IMChatVoiceTableViewCell *)view];
+    
+    if([self.player isPlaying]) {
+        
+        [self.player stopPlaying];
+//        [myTimer invalidate];
+        
+        
+        
+//        NSLog(@"当前VC的内存地址是——————————%p—————soundIp =%d———", self, soundIp);
+        
+//        NSIndexPath *index = [NSIndexPath indexPathForRow:soundIp inSection:0];
+        
+        
+        NSIndexPath *index = self.currentPlayAudioIndexPath;
+        
+        
+        IMChatVoiceTableViewCell *cell = (IMChatVoiceTableViewCell*)[self.tableView cellForRowAtIndexPath:index];
+        
+//        NSLog(@"_____table__________%p", self.chatTableView);
+//        NSLog(@"____cell.btnBg______%p__", cell.btnBg);
+//        NSLog(@"____cell______%p__", cell);
+        
+        NSString *imageName;
+
+        if (cell.isMe) {
+            imageName = [NSString stringWithFormat:@"chat_voice_sender"];
+        }else{
+            imageName = [NSString stringWithFormat:@"chat_voice_reciever"];
+        }
+        [cell.btnBg setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+        
+        
+        //如果当前cell 的语音正在播放，那么结束播放
+        if (self.currentPlayAudioIndexPath.row == ip.row) {
+            return;
+        }
+        
+    }
+    
+    
+    LGMessage *message = [self.messages objectAtIndex:ip.row];
+    if (![message.is_read isEqualToString:@"2"]) {  //![chat.isReadContent isEqualToString:@"2"]
+        message.is_read = @"2";
+
+        /**
+         *  1、更改数据库里面该message的状态，同时刷新cell
+         */
+//        [DataBaseManager updateChatColumnValueByID:@"2" column:@"is_read_content" theId:chat.theId.integerValue];
+//        [DataBaseManager closeDataBase];
+//        [self chat_updateTableView:@[ip] pattern:1];
+         [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+
+    }
+    /**
+     *  2、根据路径获取到音频内容，然后播放
+     */
+//    NSString *voice = [[chat.message componentsSeparatedByString:@"/"] lastObject];
+//    NSString *url = [[[BYDProductionObject defaultProduction] createDocumentSpecifiedFile:StoreVoicesChat] stringByAppendingPathComponent:voice];
+//    NSError *err = nil;
+//    self.player = nil;
+//    NSURL *playUrl = [NSURL fileURLWithPath:url];
+//    if(!playUrl) {
+//        [[GeneralToolClass defaultInstance] popUpWarningView:[CommenMethod localizationString:@"InvalidFile"]];
+//    }
+//    self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:playUrl error:&err];
+//    self.voicePlayer.delegate = self;
+//    soundLocation = sender.center.x;
+//    soundIp = ip.row;
+    
+//    NSLog(@"shichang:%f",self.voicePlayer.duration);
+//    myTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(playPic) userInfo:nil repeats:YES];
+//    [myTimer fire];
+//    if (err) {
+//        NSLog(@"voice error:%@",err);
+//    }
+//    if(self.voicePlayer) {
+//        [self.voicePlayer prepareToPlay];
+//        [self.voicePlayer play];
+//    } else {
+//        self.voicePlayer = [[AVAudioPlayer alloc] initWithData:[IMNetworkRequest fetchFileFromLocal:voice folder:StoreVoicesChat] error:&err];
+//        self.voicePlayer.delegate = self;
+//        [self.voicePlayer prepareToPlay];
+//        [self.voicePlayer play];
+//    }
+    
+    self.currentPlayAudioIndexPath = ip;
+}
+
+
+#pragma mark - chatKeyboard delegate ：发送文本消息
 //发送文本
 - (void)chatKeyBoardSendText:(NSString *)text{
+    
     LGMessage *message = [[LGMessage alloc] init];
-//    message.body = text;
-//    message.from = @"15171225855";
-//    message.to = @"111";
+    message.text = text;
+    message.toUidOrGroupId = @"11596";
+    message.fromUid = USERINFO.userID;
+    message.type = MessageTypeText;
+    message.msgid = [NSString stringWithFormat:@"%@12345678",USERINFO.userID];
+    message.isGroup = NO;
+    message.timeStamp = [NSDate currentTimeStamp];
+    
     [self.messages addObject:message];
+    
+
+    
+    SocketManager* socket = [SocketManager shareInstance];
+    [socket sendMessage:message];
     
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
     NSArray *indexPaths = @[indexpath];
 //    [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
+    
 }
 
 #pragma mark - 语音代理方法
@@ -784,14 +878,15 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 }
 
-- (void)playAudio:(UIButton *)sender{
+- (void)playAudio:(id)sender{
+    
     self.amrReader.filePath = self.amrWriter.filePath;
     NSLog(@"文件时长%f",[AmrPlayerReader durationOfAmrFilePath:self.amrReader.filePath]);
 
     if (self.player.isPlaying) {
         [self.player stopPlaying];
     }else{
-        [sender setTitle:@"停止" forState:UIControlStateNormal];
+
         [self.player startPlaying];
     }
 }

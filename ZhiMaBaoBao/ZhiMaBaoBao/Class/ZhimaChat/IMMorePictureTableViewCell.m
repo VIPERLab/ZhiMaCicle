@@ -55,8 +55,8 @@
     
     [self.picturesView centerAlignHorizontalForSuperView];
     
-    [self resizeBubbleViewPicType:_picturesView.frame.size];
-    [self repositionContentView:_picturesView];
+    [self resizeBubbleView:_picturesView.frame.size];
+    [self repositionContentViewTypePic:_picturesView];
     
 }
 
@@ -73,6 +73,8 @@
     _picturesView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
     _picturesView.backgroundColor = [UIColor lightGrayColor];
     _picturesView.userInteractionEnabled = YES;
+    _picturesView.contentMode =  UIViewContentModeScaleAspectFill;
+    _picturesView.clipsToBounds  = YES;
     
 //    _botLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 //    _botLabel.backgroundColor = [UIColor clearColor];

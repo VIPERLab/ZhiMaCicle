@@ -42,8 +42,8 @@ typedef void (^ResendBlock)(BaseChatTableViewCell *cell);
 @property (nonatomic, strong) UILabel *topLabel;                //顶部的label，如时间
 @property (nonatomic, strong) UILabel *nickLabel;               //昵称
 @property (nonatomic, strong) UIImageView *userIcon;            //头像
-@property (nonatomic, strong) UIActivityIndicatorView *sending; //正在发送的,暂时不要此功能，所以注释掉
-@property (nonatomic, strong) UIButton *sendAgain;              //重送按钮, 暂时不要此功能，所以注释掉
+@property (nonatomic, strong) UIActivityIndicatorView *sending; //正在发送的,所以注释掉
+@property (nonatomic, strong) UIButton *sendAgain;              //重送按钮, 所以注释掉
 
 @property (nonatomic, assign) UIEdgeInsets margin;              //内容与气泡之间的间距, 默认值 DEFAULT_CHAT_CELL_BUBBLE_EDGEINTS
 @property (nonatomic, strong) NSIndexPath *indexPath;
@@ -55,7 +55,7 @@ typedef void (^ResendBlock)(BaseChatTableViewCell *cell);
 
 - (void)resizeBubbleView:(CGSize)contetnViewSize;               //根据内容视图的尺寸调整气泡的大小
 - (void)repositionContentView:(UIView *)contentView;            //调整内容视图在气泡中的位置
-- (void)resizeBubbleViewPicType:(CGSize)contetnViewSize;        //调整内容视图在气泡中的位置(图片)
+- (void)repositionContentViewTypePic:(UIView *)contentView;       //调整内容视图在气泡中的位置(图片)
 
 + (CGFloat)getBaseHeightTopText:(NSString *)topText nick:(NSString *)nick;
 + (CGFloat)getBaseHeightTopText:(NSString *)topText nick:(NSString *)nick contentHeight:(CGFloat)contentHeight; //获取cell高度

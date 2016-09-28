@@ -171,30 +171,19 @@
     
 }
 
-- (void)resizeBubbleViewPicType:(CGSize)contetnViewSize
-{
-    [_bubble setFrameSize:CGSizeMake(contetnViewSize.width + _margin.left + _margin.right, contetnViewSize.height + _margin.top + _margin.bottom)];
-    
-    if (self.isMe) {
-        [_bubble setFrameOriginXLeftOfView:_userIcon offset:DEFAULT_CHAT_CELL_H_PADDING];
-        [_sendAgain setFrameOriginXLeftOfView:_bubble offset:10];
-    }
-    else
-    {
-        [_bubble setFrameOriginXRightOfView:_userIcon offset:DEFAULT_CHAT_CELL_H_PADDING];
-        [_sendAgain setFrameOriginXRightOfView:_bubble offset:10];
-    }
-    [_sendAgain topAlignForView:_bubble offset:((_bubble.frameSizeHeight - _sendAgain.frameSizeHeight) / 2)];
-    _sending.center = _sendAgain.center;
-    
-}
-
 - (void)repositionContentView:(UIView *)contentView
 {
     CGFloat offsetX = self.isMe ? _margin.left : _margin.right;
     
-//    [contentView setFrameOrigin:CGPointMake(offsetX, DEFAULT_CHAT_CELL_BUBBLE_EDGEINTS.top)]; //可能会导致崩溃
     contentView.frame = CGRectMake(offsetX, _margin.top, contentView.frame.size.width, contentView.frame.size.height);
+}
+
+// 图片的上下间距
+- (void)repositionContentViewTypePic:(UIView *)contentView
+{
+    CGFloat offsetX = self.isMe ? _margin.left : _margin.right+1;
+    
+    contentView.frame = CGRectMake(offsetX, _margin.top-5, contentView.frame.size.width, contentView.frame.size.height+8);
 }
 
 + (CGFloat)getBaseHeightTopText:(NSString *)topText nick:(NSString *)nick
@@ -257,6 +246,7 @@
     
 
     _userIcon = [[UIImageView alloc] initWithSize:DEFAULT_CHAT_CELL_USER_ICON_SIZE];
+    _userIcon.backgroundColor = [UIColor lightGrayColor];
     _userIcon.userInteractionEnabled = YES;
     [_userIcon isCornerRadius];
     _tapGest    = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUserIconTap:)];

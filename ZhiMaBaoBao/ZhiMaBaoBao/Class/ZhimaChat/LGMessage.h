@@ -25,6 +25,13 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
     MessageTypeAudio          //语音
 };
 
+//发送状态
+typedef NS_OPTIONS(NSUInteger, SendStatus){
+    IMRequesting = 1,       // 请求
+    IMRequestFaile = 2,     // 请求失败
+    IMRequestSuccessed = 3  // 成功
+};
+
 #import <Foundation/Foundation.h>
 
 #define MSG_MAX_WIDTH   DEVICEWITH - 2 * MSG_AVTAR_SIZE - 7 * MSG_MARGIN   //消息最大宽度
@@ -66,6 +73,9 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
 
  /** 阅读状态（1未读，2已读'*/
 @property(nonatomic,strong) NSString * is_read;
+ /** 消息发送状态*/
+@property (nonatomic,assign) SendStatus sendStatus;
+
 
 
  /** 单元格高度*/

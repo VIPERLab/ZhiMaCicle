@@ -72,6 +72,7 @@
     
     // 1.通过路径创建数据库
     NSString *path = ZhiMa_SqlitePath;
+    [NSString stringWithFormat:@""];
     NSLog(@"表的路径 %@",path);
     FMDatabaseQueue *db_Queue = [FMDatabaseQueue databaseQueueWithPath:path];
     
@@ -810,7 +811,7 @@
 - (NSArray <ZhiMaFriendModel *>*)getAllUserMessageInArray {
     NSMutableArray *dataArray = [NSMutableArray array];
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
-    NSString *option = [FMDBShareManager SearchTable:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"user_Id > 0 order by converseId desc"]];
+    NSString *option = [FMDBShareManager SearchTable:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"user_Id > 0 order by user_Id desc"]];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:option];
         while ([result next]) {
@@ -953,7 +954,7 @@
     NSLog(@"开始查会话表");
     [queue inDatabase:^(FMDatabase *db) {
         
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:@"time > 0 order by converseId desc"];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:@"time > 0 order by time desc"];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         
         while ([result next]) {
@@ -1077,7 +1078,8 @@
         converseModel = [FMDBShareManager searchConverseWithConverseID:converseID];
         //设置更新内容
         converseModel.unReadCount ++;
-        
+        converseModel.time = message.timeStamp;
+        converseModel.lastConverse = message.text;
         
         NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time)];
         NSString *option2 = [NSString stringWithFormat:@"converseId = %@",converseModel.converseId];

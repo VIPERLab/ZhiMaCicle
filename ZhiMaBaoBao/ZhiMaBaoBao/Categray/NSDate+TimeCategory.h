@@ -63,4 +63,9 @@
  */
 + (NSString *)datestrFromDate:(NSDate *)date
                withDateFormat:(NSString *)format;
+
+/**
+ *  获取当前时间戳
+ */
++ (NSInteger)currentTimeStamp;
 @end
