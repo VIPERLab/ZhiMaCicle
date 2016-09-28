@@ -7,6 +7,7 @@
 //
 
 #import "ConverseCell.h"
+#import "NSDate+TimeCategory.h"
 
 @implementation ConverseCell {
     UIImageView *_iconView;
@@ -81,9 +82,15 @@
     
     _lastConverseLabel.text = model.lastConverse;
     
-    _unReadCountLabel.text = [NSString stringWithFormat:@"%zd",model.unReadCount];
+    if (model.unReadCount > 99) {
+        _unReadCountLabel.text = [NSString stringWithFormat:@"99"];
+    } else {
+        _unReadCountLabel.text = [NSString stringWithFormat:@"%zd",model.unReadCount];
+    }
     
-    _timeLabel.text = [NSString stringWithFormat:@"%zd",model.time];
+    
+    _timeLabel.text = [NSDate dateStrFromCstampTime:model.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
 }
 
 - (void)layoutSubviews {
