@@ -121,6 +121,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     path = [path stringByAppendingString:[NSString stringWithFormat:@"-%@",uid]];
     
     self.audioName = [NSString stringWithFormat:@"%@.amr",path];
+    NSLog(@"注册时候的时间 = %@",self.audioName);
     
     return path;
 }
@@ -621,6 +622,8 @@ static NSString *const reuseIdentifier = @"messageCell";
         needShowTime = [self needShowTime:msg1.timeStamp time2:msg2.timeStamp];
         if (!needShowTime) {
             baseChatCell.topLabel.hidden = YES;
+            baseChatCell.topLabel.text = nil;
+
         }else{
             
             baseChatCell.topLabel.hidden = NO;
@@ -873,7 +876,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 {
 //    NSData* auvioData = [NSData dataWithContentsOfFile:self.amrWriter.filePath];
 //    NSLog(@"语音内容 = %@",auvioData);
-//    NSLog(@"===== %f  语音路径：%@",fileLength,self.amrWriter.filePath);
+    NSLog(@"=====   语音路径：%@",self.amrWriter.filePath);
+    
+    NSLog(@"发送的时间1 = %@",self.audioName);
+
     
     LGMessage *message = [[LGMessage alloc] init];
     message.text = self.audioName;
@@ -885,6 +891,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.timeStamp = [NSDate currentTimeStamp];
     
     [self.messages addObject:message];
+    
+    NSLog(@"发送的时间2 = %@",self.audioName);
+
     
     SocketManager* socket = [SocketManager shareInstance];
     [socket sendMessage:message];

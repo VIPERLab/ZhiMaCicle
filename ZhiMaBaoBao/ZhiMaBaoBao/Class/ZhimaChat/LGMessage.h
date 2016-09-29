@@ -76,8 +76,6 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
  /** 消息发送状态*/
 @property (nonatomic,assign) SendStatus sendStatus;
 
-
-
  /** 单元格高度*/
 @property (nonatomic, assign) CGFloat cellHeight;
 
