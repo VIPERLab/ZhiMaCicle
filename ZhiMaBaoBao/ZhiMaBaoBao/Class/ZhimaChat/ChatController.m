@@ -109,6 +109,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     self.keyboard = keyboard;
 
 }
+
+//- (NSString*)audioPathWithUid:(NSString*)
+
 //初始化录音
 - (void)initAudioRecorder{
 #warning 以后拼接用户uid
@@ -339,7 +342,6 @@ static NSString *const reuseIdentifier = @"messageCell";
 #pragma mark - ——----------浏览图片
 - (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
 {
-    
     NSLog(@"图片点击");
     [self.subviews removeAllObjects];
     UIView *imageView = grz.view;
@@ -396,7 +398,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         textChatCell.isMe = isMe;
         textChatCell.chatMessageView.text = message.text;
-//        textChatCell.topLabel.text = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         textChatCell.delegate = self;
         textChatCell.indexPath = indexPath;
         
@@ -449,7 +450,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         picChatCell.isMe = isMe;
         picChatCell.delegate=self;
-//        picChatCell.topLabel.text = time;
         picChatCell.indexPath = indexPath;
         
         
@@ -512,7 +512,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         voiceChatCell.voiceDelegate = self;
         voiceChatCell.isMe = isMe;
         voiceChatCell.voiceTimeLength = message.text;
-//        voiceChatCell.topLabel.text = time;
         voiceChatCell.indexPath = indexPath;
         
         
@@ -672,13 +671,15 @@ static NSString *const reuseIdentifier = @"messageCell";
         }else{
             
             baseChatCell.topLabel.hidden = NO;
-            baseChatCell.topLabel.text = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            baseChatCell.topLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];
             
         }
     }else{
         
         baseChatCell.topLabel.hidden = NO;
-        baseChatCell.topLabel.text = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        baseChatCell.topLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];
         
     }
     
@@ -842,17 +843,16 @@ static NSString *const reuseIdentifier = @"messageCell";
     self.currentPlayAudioIndexPath = ip;
 }
 
-
 #pragma mark - chatKeyboard delegate ：发送文本消息
 //发送文本
 - (void)chatKeyBoardSendText:(NSString *)text{
     
     LGMessage *message = [[LGMessage alloc] init];
     message.text = text;
-    message.toUidOrGroupId = @"11596";
+    message.toUidOrGroupId = self.conversionId;
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
-    message.msgid = [NSString stringWithFormat:@"%@12345678",USERINFO.userID];
+    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     message.isGroup = NO;
     message.timeStamp = [NSDate currentTimeStamp];
     
@@ -870,6 +870,23 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
     
+}
+
+/** 生成随机messageID */
+- (NSString *)generateMessageID
+{
+    static int kNumber = 8;
+    
+    NSString *sourceStr = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    NSMutableString *resultStr = [[NSMutableString alloc] init];
+    srand((unsigned int)time(0));
+    for (int i = 0; i < kNumber; i++)
+    {
+        unsigned index = rand() % [sourceStr length];
+        NSString *oneStr = [sourceStr substringWithRange:NSMakeRange(index, 1)];
+        [resultStr appendString:oneStr];
+    }
+    return resultStr;
 }
 
 #pragma mark - 语音代理方法
@@ -911,6 +928,10 @@ static NSString *const reuseIdentifier = @"messageCell";
                 [RecordingHUD dismiss];
             });
         });
+    }else{
+    
+        NSLog(@"===== %f  语音内容：%@",fileLength,self.amrWriter.filePath);
+    
     }
 }
 //将要取消录音
