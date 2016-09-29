@@ -109,6 +109,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     self.keyboard = keyboard;
 
 }
+
+//- (NSString*)audioPathWithUid:(NSString*)
+
 //初始化录音
 - (void)initAudioRecorder{
 #warning 以后拼接用户uid
@@ -339,7 +342,6 @@ static NSString *const reuseIdentifier = @"messageCell";
 #pragma mark - ——----------浏览图片
 - (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
 {
-    
     NSLog(@"图片点击");
     [self.subviews removeAllObjects];
     UIView *imageView = grz.view;
@@ -396,7 +398,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         textChatCell.isMe = isMe;
         textChatCell.chatMessageView.text = message.text;
-//        textChatCell.topLabel.text = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         textChatCell.delegate = self;
         textChatCell.indexPath = indexPath;
         
@@ -449,7 +450,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         picChatCell.isMe = isMe;
         picChatCell.delegate=self;
-//        picChatCell.topLabel.text = time;
         picChatCell.indexPath = indexPath;
         
         
@@ -512,7 +512,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         voiceChatCell.voiceDelegate = self;
         voiceChatCell.isMe = isMe;
         voiceChatCell.voiceTimeLength = message.text;
-//        voiceChatCell.topLabel.text = time;
         voiceChatCell.indexPath = indexPath;
         
         
@@ -929,6 +928,10 @@ static NSString *const reuseIdentifier = @"messageCell";
                 [RecordingHUD dismiss];
             });
         });
+    }else{
+    
+        NSLog(@"===== %f  语音内容：%@",fileLength,self.amrWriter.filePath);
+    
     }
 }
 //将要取消录音

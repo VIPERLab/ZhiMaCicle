@@ -148,8 +148,8 @@
 
 - (void)resizeBubbleView:(CGSize)contetnViewSize
 {
-    contetnViewSize.height = contetnViewSize.height< 22 ? 22 : contetnViewSize.height;//会切边，太低了的时候加一点
-    contetnViewSize.width = contetnViewSize.width< 20 ? 20 : contetnViewSize.width;
+    contetnViewSize.height = contetnViewSize.height< 22 ? 22 : contetnViewSize.height; //气泡会切边，太低了的时候加一点
+    contetnViewSize.width = contetnViewSize.width< 25 ? 25 : contetnViewSize.width;    //设置聊天内容最小宽度 防止气泡变形
     
     [_bubble setFrameSize:CGSizeMake(contetnViewSize.width + _margin.left + _margin.right, contetnViewSize.height + _margin.top + _margin.bottom)];
     
