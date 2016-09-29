@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSMutableArray *friendsAfterSort;     //排序后的好友列表数组
 @property (nonatomic, strong) NSMutableArray *sectionsArr;             //排序后好友名称首字母
 @property (nonatomic, strong) NSMutableArray *countOfSectionArr;       //每组的好友个数
+
+@property (nonatomic, strong) UILabel *unReadLabel;     //未读好友请求角标
 @end
 
 static NSString * const reuseIdentifier = @"friendListcell";
@@ -27,8 +29,10 @@ static NSString * const reuseIdentifier = @"friendListcell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setCustomRightItems];
-
     [self addSubviews];
+    
+    //监听新的好友请求消息
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveFriendRequest:) name:kNewFriendRequest object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -50,24 +54,23 @@ static NSString * const reuseIdentifier = @"friendListcell";
 
 //请求好友列表
 - (void)requestFriendsList{
-    //先从数据库拉取好友列表，没有数据则从网络请求
+    //先从数据库拉取好友列表 从网络请求加载最新数据更新数据库
     self.friends = [[FMDBShareManager getAllUserMessageInArray] mutableCopy];
     [self friendsListSort];
-    if (!self.friends.count) {
-        [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
-            self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+    
+    [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
+        self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+        //更新数据库，然后刷新列表
+        if ([FMDBShareManager saveUserMessageWithMessageArray:self.friends]) {
+            NSLog(@"好友列表插入数据库成功");
             [self friendsListSort];
-            //将拉取的好友列表插入数据库
-            if ([FMDBShareManager saveUserMessageWithMessageArray:self.friends]) {
-                NSLog(@"好友列表插入数据库成功");
-            }else{
-                NSLog(@"好友列表插入数据库成功");
-            }
-            
-        } failure:^(ErrorData *error) {
-            [LCProgressHUD showFailureText:@"网络好像有点差哦[^_^]"];
-        }];
-    }
+        }else{
+            NSLog(@"好友列表插入数据库成功");
+        }
+        
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:@"网络好像有点差哦[^_^]"];
+    }];
 }
 
 //好友列表排序分组
@@ -135,6 +138,24 @@ static NSString * const reuseIdentifier = @"friendListcell";
         }
     }
     [self.tableView reloadData];
+}
+
+/**
+ *  收到好友请求
+ *
+ *  @param notify 好友信息字典
+ */
+- (void)recieveFriendRequest:(NSNotification *)notify{
+    //本地存储好友请求数量
+    UserInfo *userInfo = [UserInfo shareInstance];
+    userInfo.unReadCount ++;
+    [userInfo save];
+    
+    NSDictionary *userDic = notify.userInfo;
+    ZhiMaFriendModel *friend = userDic[@"friend"];
+    //插入数据库，显示未读角标
+    [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
+    
 }
 
 #pragma mark - tableview 代理
@@ -280,5 +301,14 @@ static NSString * const reuseIdentifier = @"friendListcell";
         _countOfSectionArr = [NSMutableArray array];
     }
     return _countOfSectionArr;
+}
+
+- (UILabel *)unReadLabel{
+    if (!_unReadLabel) {
+        _unReadLabel = [[UILabel alloc] initWithFrame:CGRectMake(47, 4, 14, 14)];
+        _unReadLabel.font = MAINFONT;
+        _unReadLabel.backgroundColor = THEMECOLOR;
+    }
+    return _unReadLabel;
 }
 @end

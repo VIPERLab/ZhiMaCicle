@@ -15,6 +15,7 @@
 #import "NSData+Replace.h"
 #import "ConverseModel.h"
 #import "NSData+Base64.h"
+#import "ZhiMaFriendModel.h"
 
 @interface SocketManager ()
 
@@ -208,19 +209,22 @@ static SocketManager *manager = nil;
                 if (success) {
                     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
                     userInfo[@"message"] = message;
-                    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:userInfo];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+
                 }
             }
             
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
             NSDictionary *resDic = responceData[@"data"];
-            //请求者uid, 头像地址, 用户昵称, 请求时间
-            NSString *fromuid = resDic[@"fromuid"];
-            NSString *headPhoto = resDic[@"head_photo"];
-            NSString *userName = resDic[@"username"];
-            NSString *requestTime = resDic[@"request_time"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNewFriendRequest object:resDic];
+            ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
+            friend.user_Id = resDic[@"fromuid"];
+            friend.user_Name = resDic[@"username"];
+            friend.user_Head_photo = resDic[@"head_photo"];
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo[@"friend"] = friend;
+            //生成一个好友模型发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewFriendRequest object:nil userInfo:userInfo];
         }
         else if ([actType isEqualToString:@"updatefriend"]){   //更新好友数据
             
