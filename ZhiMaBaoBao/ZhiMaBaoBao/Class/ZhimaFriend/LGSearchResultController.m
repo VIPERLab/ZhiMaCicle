@@ -4,18 +4,19 @@
 //
 //  Created by liugang on 16/8/12.
 //  Copyright © 2016年 ikantech. All rights reserved.
-//  添加好友结果列表
+//
 
 #import "LGSearchResultController.h"
 //#import "YiUserInfoViewController.h"
 #import "LGSearchResultCell.h"
-#import "UIImageView+WebCache.h"
+
 
 @interface LGSearchResultController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 
 @end
 
+static NSString *const reuseIdentifier = @"LGSearchResultCell";
 @implementation LGSearchResultController
 
 - (void)viewDidLoad {
@@ -23,13 +24,13 @@
     
     [self setCustomTitle:@"搜索结果"];
 
-    self.view.backgroundColor = RGB(229, 229, 229);
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, DEVICEHIGHT) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.backgroundColor = RGB(229, 229, 229);
+    self.tableView.backgroundColor = BGCOLOR;
     self.tableView.rowHeight = 53;
+    [self.tableView registerNib:[UINib nibWithNibName:@"LGSearchResultCell" bundle:nil] forCellReuseIdentifier:reuseIdentifier];
     [self.view addSubview:self.tableView];
 }
 
@@ -38,10 +39,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    LGSearchResultCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
-    if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:@"LGSearchResultCell" owner:nil options:nil] firstObject];
-    }
+    LGSearchResultCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+
     NSDictionary *dic = self.dataArr[indexPath.row];
     [cell.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,dic[@"head_photo"]]]];
     cell.name.text = dic[@"username"];
@@ -51,15 +50,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-#warning TODO:跳转到好友信息详情
-    /*
     NSDictionary *dic = self.dataArr[indexPath.row];
-    NSString *jid = [NSString stringWithFormat:@"%@@%@",dic[@"openfireaccount"],XMPPSERVER];
-    YiUserInfoViewController *vc = [[YiUserInfoViewController alloc] init];
-    vc.jid = jid;
-    vc.isAddFriend = self.isAddFriend;
-    [self.navigationController pushViewController:vc animated:YES];
-     */
+//    NSString *jid = [NSString stringWithFormat:@"%@@%@",dic[@"openfireaccount"],XMPPSERVER];
+//    YiUserInfoViewController *vc = [[YiUserInfoViewController alloc] init];
+//    vc.jid = jid;
+//    vc.isAddFriend = self.isAddFriend;
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

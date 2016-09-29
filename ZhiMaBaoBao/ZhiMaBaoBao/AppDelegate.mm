@@ -108,13 +108,13 @@
     //群聊相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_GroupChat_GroupMenber_Table];
     
-    ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
-    model.user_Name = @"大雄";
-    model.user_Head_photo = @"xxxx";
-    model.user_NickName = @"";
-    model.user_Id = @"11594";
+//    ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
+//    model.user_Name = @"大雄";
+//    model.user_Head_photo = @"xxxx";
+//    model.user_NickName = @"";
+//    model.user_Id = @"11594";
     
-    [FMDBShareManager saveUserMessageWithMessageArray:@[model]];
+//    [FMDBShareManager saveUserMessageWithMessageArray:@[model]];
     
 }
 

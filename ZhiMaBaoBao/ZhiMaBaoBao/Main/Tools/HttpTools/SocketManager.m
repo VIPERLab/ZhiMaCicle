@@ -14,6 +14,7 @@
 #import "NSString+MD5.h"
 #import "NSData+Replace.h"
 #import "ConverseModel.h"
+#import "NSData+Base64.h"
 
 @interface SocketManager ()
 
@@ -84,19 +85,46 @@ static SocketManager *manager = nil;
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
     
-    //插入消息数据库
-    BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
-    if (success) {
+    //语音消息 -- 发送base64到socket服务器，存语音路径到本地数据库
+    if (message.type == MessageTypeAudio) {
+        //通过路径拿到音频文件
+        NSData *data = [NSData dataWithContentsOfFile:message.text];
         
-        //发送消息成功通知
-        [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageSuccess object:nil];
+        //转换成base64编码
+        NSString *base64 = [NSData base64StringFromData:data];
         
-        //插入数据库成功 - socket发送消息
-        //根据消息模型生成固定格式数据包
-        NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:message];
-        RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-        req.object = data;
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+        BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
+        if (success) {
+            message.text = base64;
+            //发送消息成功通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageSuccess object:nil];
+            
+            //插入数据库成功 - socket发送消息
+            //根据消息模型生成固定格式数据包
+            NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:message];
+            RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+            req.object = data;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+        }
+        
+    }
+    //文本消息
+    else if (message.type == MessageTypeText){
+        //插入消息数据库
+        BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
+        if (success) {
+            
+            //发送消息成功通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageSuccess object:nil];
+            
+            //插入数据库成功 - socket发送消息
+            //根据消息模型生成固定格式数据包
+            NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:message];
+            RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+            req.object = data;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+
+        }
     }
 }
 
@@ -137,9 +165,10 @@ static SocketManager *manager = nil;
     NSDictionary *userInfo = notif.userInfo;
     RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
     NSData *data = [rsp dataWithPacket];
+    NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSDictionary *responceData = [data mj_JSONObject];
 
-    NSLog(@"\n从socket接收到的数据responceData :%@\n",responceData);
+    NSLog(@"\n从socket接收到的数据responceData :%@\n json:%@ \n",responceData,jsonStr);
     if (data.length) {
         //解析消息指令类型
         NSString *actType = responceData[@"acttype"];

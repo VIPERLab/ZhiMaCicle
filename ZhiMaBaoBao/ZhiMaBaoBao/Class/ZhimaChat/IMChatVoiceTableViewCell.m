@@ -14,7 +14,7 @@
 
 @interface IMChatVoiceTableViewCell (PrivateMethods)
 
-- (CGFloat)bubbleWithVoiceLength:(NSInteger)voiceLength;    //通过语音时长计算聊天气泡的宽度
+- (CGFloat)bubbleWithVoiceLength:(NSString*)voiceLength;    //通过语音时长计算聊天气泡的宽度
 - (void)onBtn:(id)sender;
 
 @end
@@ -36,6 +36,7 @@
         _voiceLengthLabel = [[UILabel alloc] init];
         _voiceLengthLabel.lineBreakMode = NSLineBreakByCharWrapping;
         _voiceLengthLabel.backgroundColor = ClearColor;
+        _voiceLengthLabel.font = [UIFont systemFontOfSize:13];
         //[_bubble addSubview:_voiceLengthLabel];
         [self addSubview:_voiceLengthLabel];
         
@@ -78,7 +79,7 @@
         self.btnBg.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         imageViewEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         
-        self.voiceLengthLabel.textColor = BLACKCOLOR;
+        self.voiceLengthLabel.textColor = GRAYCOLOR;
         self.voiceLengthLabel.textAlignment = NSTextAlignmentRight;
         
     } else {
@@ -87,7 +88,7 @@
         self.btnBg.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         imageViewEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         
-        self.voiceLengthLabel.textColor = BLACKCOLOR;
+        self.voiceLengthLabel.textColor = GRAYCOLOR;
         self.voiceLengthLabel.textAlignment = NSTextAlignmentLeft;
     }
     
@@ -111,15 +112,15 @@
 
 - (NSString *)formatVoiceLength:(NSString *)length
 {
-    NSInteger timeLength = length.intValue;
+    NSInteger timeLength = [length floatValue] * 1000;
     NSString *lengthStr = nil;
     
-    if (timeLength < 1) {
-        lengthStr = @"0\"";
+    if (timeLength < 1000) {
+        lengthStr = @"1\"";
     }
     else
     {
-        if (timeLength > 1000) {    //转换成秒数
+        if (timeLength >= 1000) {    //转换成秒数
             
             timeLength = timeLength / 1000;
             lengthStr = [NSString stringWithFormat:@"%li\"",(long)timeLength];
@@ -143,7 +144,7 @@
 //    CGFloat  height = DefaultVoiceButtonHeight;
     
     //CGFloat  realWidth = [self bubbleWithVoiceLength:self.voiceTimeLength.integerValue];
-    CGFloat bubbleWidth = [self bubbleWithVoiceLength:_voiceTimeLength.integerValue];
+    CGFloat bubbleWidth = [self bubbleWithVoiceLength:_voiceTimeLength];
     
     
     [self.btnBg setFrameSize:CGSizeMake(26/2, 40/2)];  //CGSizeMake(bubbleWidth, height)
@@ -173,7 +174,7 @@
         self.btnBg.frameOriginX = self.bubble.frameSizeWidth - (10 + 26 + 26)/2;
         
         //_bubble.frameOriginY + (_bubble.frameSizeHeight - self.voiceLengthLabel.frameSizeHeight)
-        self.voiceLengthLabel.frameOrigin = CGPointMake(_bubble.frameOriginX - self.voiceLengthLabel.frameSizeWidth - 10/2, _bubble.frameMaxY - self.voiceLengthLabel.frameSizeHeight + 3);
+        self.voiceLengthLabel.frameOrigin = CGPointMake(_bubble.frameOriginX - self.voiceLengthLabel.frameSizeWidth - 10/2, _bubble.frameMaxY - self.voiceLengthLabel.frameSizeHeight);
         
         _badgedView.hidden = YES;
         
@@ -182,7 +183,7 @@
     else
     {
         //_bubble.frameOriginY + (_bubble.frameSizeHeight - self.voiceLengthLabel.frameSizeHeight)/2
-        self.voiceLengthLabel.frameOrigin = CGPointMake(_bubble.frameMaxX + 10/2, _bubble.frameMaxY - self.voiceLengthLabel.frameSizeHeight + 3);
+        self.voiceLengthLabel.frameOrigin = CGPointMake(_bubble.frameMaxX + 10/2, _bubble.frameMaxY - self.voiceLengthLabel.frameSizeHeight);
         
         
         //_badgedView.hidden = NO;
@@ -203,18 +204,23 @@
 
 #pragma mark private
 
-- (CGFloat)bubbleWithVoiceLength:(NSInteger)voiceLength
+- (CGFloat)bubbleWithVoiceLength:(NSString *) voiceLength
 {
-    CGFloat width = 75;
-    NSInteger m = (voiceLength / 1000); //把毫秒转换成秒
+    NSLog(@"------------- %@",voiceLength);
+    CGFloat width = 60;
+    NSInteger m = [voiceLength integerValue];
     
-    if (m < 10) {
-        width = 136/2;
-    }else if (m >= 10 && m <= 30){
-        width = 186/2;
-    }else{
-        width = 286/2;
-    }
+    CGFloat minWW = (DEVICEWITH/2 - 80)/60;
+    
+    width += m*minWW;
+    
+//    if (m < 10) {
+//        width = 136/2;
+//    }else if (m >= 10 && m <= 30){
+//        width = 186/2;
+//    }else{
+//        width = 286/2;
+//    }
     
     //    CGFloat percent = m / 60.0f;
     //    NSLog(@"voiceLength:%i,m:%i,percent:%f",voiceLength,m,percent);
