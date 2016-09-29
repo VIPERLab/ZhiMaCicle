@@ -41,6 +41,8 @@
 
 // 需要显示时间的间隔最少分钟
 #define DiffTimeThreeMins  5
+// 沙盒路径
+#define AUDIOPATH  [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
 //充值Appkey
 #define RECHAPPKEY @"yihezhai20152016"
@@ -78,6 +80,8 @@
 #import "UIImageView+WebCache.h"
 #import "BaseViewController.h"
 #import "NSDate+TimeCategory.h"
+
+#import "KXActionSheet.h"
 
 
 //FMDB管理头文件

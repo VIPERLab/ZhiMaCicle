@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04787AE91D9CFF4B000A0DB5 /* KXActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */; };
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
@@ -573,6 +574,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04787AE71D9CFF4B000A0DB5 /* KXActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXActionSheet.h; sourceTree = "<group>"; };
+		04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXActionSheet.m; sourceTree = "<group>"; };
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
@@ -3430,6 +3433,8 @@
 			children = (
 				04F862221D94FC5C00DCC6FE /* KXCopyView.h */,
 				04F862231D94FC5C00DCC6FE /* KXCopyView.m */,
+				04787AE71D9CFF4B000A0DB5 /* KXActionSheet.h */,
+				04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */,
 			);
 			path = KXTools;
 			sourceTree = "<group>";
@@ -5114,6 +5119,7 @@
 				04EA7DB71D912872005E5425 /* ZXDataMatrixEdifactEncoder.m in Sources */,
 				04EA7D611D912872005E5425 /* ZXAztecReader.m in Sources */,
 				04EA79941D8FC76A005E5425 /* BaseViewController.m in Sources */,
+				04787AE91D9CFF4B000A0DB5 /* KXActionSheet.m in Sources */,
 				04EA7DA51D912872005E5425 /* ZXEncodeHints.m in Sources */,
 				04F862C21D95545000DCC6FE /* DiscoverDetailHeaderView.m in Sources */,
 				04EA7DFE1D912872005E5425 /* ZXModulusGF.m in Sources */,

@@ -199,6 +199,7 @@ static SocketManager *manager = nil;
                 }else{
                     NSLog(@"语音写入沙盒失败");
                 }
+
             }
             //文本消息 -> 插入数据库
             else if (message.type == MessageTypeText){
