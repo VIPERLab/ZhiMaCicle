@@ -94,6 +94,8 @@ typedef NS_ENUM(NSInteger, ButKind)
 - (void)prepareForBeginComment;
 - (void)prepareForEndComment;
 
+- (void)setButtonStateWithNormal;
+
 
 /**
  *  加载数据

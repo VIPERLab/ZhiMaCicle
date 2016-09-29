@@ -44,6 +44,7 @@ return; \
 @property (nonatomic, strong) dispatch_semaphore_t semError; //一个信号量，用来保证队列中写文件错误事件处理只调用一次
 @property (nonatomic, assign) BOOL isRecording;
 
+
 @end
 
 @implementation MLAudioRecorder
@@ -214,12 +215,14 @@ void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRe
             [self.delegate recordStopped];
         }
         
+        if (self.isTimeOut) {
+            NSLog(@"chaoshi=======");
+        }
         if (self.receiveStoppedBlock){
             self.receiveStoppedBlock();
         }
     }
 }
-
 
 // 设置录音格式
 - (void)setupAudioFormat:(UInt32) inFormatID SampleRate:(int)sampeleRate
@@ -288,7 +291,9 @@ void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRe
     {
         NSLog(@"begin interruption");
         //直接停止录音
-        [self stopRecording];
+        if (self.isRecording) {
+            [self stopRecording];
+        }
     }
     else if (AVAudioSessionInterruptionTypeEnded == interruptionType)
     {

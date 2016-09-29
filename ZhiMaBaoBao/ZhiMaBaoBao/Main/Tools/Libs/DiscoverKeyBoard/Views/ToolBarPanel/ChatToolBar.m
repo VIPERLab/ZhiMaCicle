@@ -151,6 +151,12 @@
     };
 }
 
+- (void)setButtonStateWithNormal
+{
+    [self.recordBtn setButtonStateWithNormal];
+}
+
+
 // 设置子视图frame
 - (void)setbarSubViewsFrame
 {
