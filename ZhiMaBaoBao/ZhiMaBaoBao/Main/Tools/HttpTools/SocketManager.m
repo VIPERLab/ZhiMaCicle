@@ -214,11 +214,6 @@ static SocketManager *manager = nil;
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
             NSDictionary *resDic = responceData[@"data"];
-            //请求者uid, 头像地址, 用户昵称, 请求时间
-            NSString *fromuid = resDic[@"fromuid"];
-            NSString *headPhoto = resDic[@"head_photo"];
-            NSString *userName = resDic[@"username"];
-            NSString *requestTime = resDic[@"request_time"];
             [[NSNotificationCenter defaultCenter] postNotificationName:kNewFriendRequest object:resDic];
         }
         else if ([actType isEqualToString:@"updatefriend"]){   //更新好友数据
