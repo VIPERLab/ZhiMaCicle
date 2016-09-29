@@ -103,7 +103,11 @@
     ChatController *vc = [[ChatController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     vc.conversionId = model.converseId;
+    vc.conversionName = model.converseName;
     [self.navigationController pushViewController:vc animated:YES];
+    
+    //更新数据库会话未读消息
+    //        [FMDBShareManager ];
 }
 
 
