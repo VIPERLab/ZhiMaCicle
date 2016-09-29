@@ -690,5 +690,9 @@
     }
 }
 
+- (void)setButtonStateWithNormal
+{
+    [self.chatToolBar setButtonStateWithNormal];
+}
 
 @end

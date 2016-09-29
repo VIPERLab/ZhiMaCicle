@@ -63,13 +63,16 @@
     return YES;
 }
 
-- (BOOL)writeIntoFileWithData:(NSData*)data withRecorder:(MLAudioRecorder*)recoder inAQ:(AudioQueueRef)						inAQ inStartTime:(const AudioTimeStamp *)inStartTime inNumPackets:(UInt32)inNumPackets inPacketDesc:(const AudioStreamPacketDescription*)inPacketDesc
+- (BOOL)writeIntoFileWithData:(NSData*)data withRecorder:(MLAudioRecorder*)recoder inAQ:(AudioQueueRef)inAQ inStartTime:(const AudioTimeStamp *)inStartTime inNumPackets:(UInt32)inNumPackets inPacketDesc:(const AudioStreamPacketDescription*)inPacketDesc
 {
     if (self.maxSecondCount>0){
         if (self.recordedSecondCount+recoder.bufferDurationSeconds>self.maxSecondCount){
             //            NSLog(@"录音超时");
             dispatch_async(dispatch_get_main_queue(), ^{
-                [recoder stopRecording];
+                recoder.isTimeOut = YES;
+                if ([recoder isRecording]) {
+                    [recoder stopRecording];
+                }
             });
             return YES;
         }

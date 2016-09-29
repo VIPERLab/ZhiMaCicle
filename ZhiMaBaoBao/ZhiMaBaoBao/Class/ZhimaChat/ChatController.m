@@ -53,7 +53,9 @@
 
 @property (nonatomic, strong) NSMutableArray *messages;  //聊天消息
 @property (nonatomic, strong) NSMutableArray *subviews;  //所有的imageView
-@property (nonatomic,copy) NSString * audioName;         //最新语音文件后缀名
+@property (nonatomic, copy) NSString * audioName;         //最新语音文件后缀名
+
+@property (nonatomic, assign)BOOL isTimeOut; //录音时间超过60秒
 
 @end
 
@@ -215,10 +217,22 @@ static NSString *const reuseIdentifier = @"messageCell";
     };
     self.meterObserver = meterObserver;
     
+
     MLAudioRecorder *recorder = [[MLAudioRecorder alloc]init];
     __weak __typeof(self)weakSelf = self;
     recorder.receiveStoppedBlock = ^{
         NSLog(@"收到语音录制完成回调");
+        if (weakSelf.recorder.isTimeOut) {
+
+            self.isTimeOut = YES;
+            [RecordingHUD dismiss];
+            [weakSelf.keyboard setButtonStateWithNormal];
+            [weakSelf sendAudioMessage];
+//            [weakSelf chatKeyBoardDidFinishRecoding:weakSelf.keyboard];
+        }else{
+        
+            self.isTimeOut = NO;
+        }
         weakSelf.meterObserver.audioQueue = nil;
         
     };
@@ -834,8 +848,11 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 //取消录音
 - (void)chatKeyBoardDidCancelRecording:(ChatKeyBoard *)chatKeyBoard{
-    [self.recorder stopRecording];
     
+    if (self.recorder.isRecording) {
+        [self.recorder stopRecording];
+
+    }
     //删除录音文件
     NSFileManager *manager = [NSFileManager defaultManager];
     NSString *path = self.amrWriter.filePath;
@@ -851,10 +868,39 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 
 #pragma mark - 录音完成      ：   发送语音
+
+- (void)sendAudioMessage
+{
+//    NSData* auvioData = [NSData dataWithContentsOfFile:self.amrWriter.filePath];
+//    NSLog(@"语音内容 = %@",auvioData);
+//    NSLog(@"===== %f  语音路径：%@",fileLength,self.amrWriter.filePath);
+    
+    LGMessage *message = [[LGMessage alloc] init];
+    message.text = self.audioName;
+    message.toUidOrGroupId = self.conversionId;
+    message.fromUid = USERINFO.userID;
+    message.type = MessageTypeAudio;
+    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+    message.isGroup = NO;
+    message.timeStamp = [NSDate currentTimeStamp];
+    
+    [self.messages addObject:message];
+    
+    SocketManager* socket = [SocketManager shareInstance];
+    [socket sendMessage:message];
+    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+    NSArray *indexPaths = @[indexpath];
+    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
 //完成录音
 - (void)chatKeyBoardDidFinishRecoding:(ChatKeyBoard *)chatKeyBoard{
     
-    [self.recorder stopRecording];
+    if (self.recorder.isRecording) {
+        [self.recorder stopRecording];
+        
+    }
 
     //通过文件时长判断是否文件是否创建成功 -- 创建失败弹出提示框（录音时间太短）
     CGFloat fileLength = [AmrPlayerReader durationOfAmrFilePath:self.amrWriter.filePath];
@@ -867,34 +913,15 @@ static NSString *const reuseIdentifier = @"messageCell";
         });
     }else{
     
-        NSData* auvioData = [NSData dataWithContentsOfFile:self.amrWriter.filePath];
-        NSLog(@"语音内容 = %@",auvioData);
-        NSLog(@"===== %f  语音路径：%@",fileLength,self.amrWriter.filePath);
-        
-        LGMessage *message = [[LGMessage alloc] init];
-        message.text = self.audioName;
-        message.toUidOrGroupId = self.conversionId;
-        message.fromUid = USERINFO.userID;
-        message.type = MessageTypeAudio;
-        message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-        message.isGroup = NO;
-        message.timeStamp = [NSDate currentTimeStamp];
-        
-        [self.messages addObject:message];
-        
-        
-        
-        SocketManager* socket = [SocketManager shareInstance];
-        [socket sendMessage:message];
-        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
-        NSArray *indexPaths = @[indexpath];
-        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    
+        if (!self.isTimeOut) {
+
+            [self sendAudioMessage];
+        }
     }
     
     [self initAmrRecordWriter];
 }
+
 //将要取消录音
 - (void)chatKeyBoardWillCancelRecoding:(ChatKeyBoard *)chatKeyBoard{
 

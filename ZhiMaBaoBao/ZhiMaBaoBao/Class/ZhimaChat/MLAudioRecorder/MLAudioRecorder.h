@@ -91,6 +91,9 @@ typedef NS_OPTIONS(NSUInteger, MLAudioRecorderErrorCode) {
  */
 @property (atomic, assign,readonly) BOOL isRecording;
 
+@property (nonatomic, assign) BOOL isTimeOut;
+
+
 /**
  *  这俩是当前的采样率和缓冲区采集秒数，根据情况可以设置(对其设置必须在startRecording之前才有效)，随意设置可能有意外发生。
  *  这俩属性被标识为原子性的，读取写入是线程安全的。

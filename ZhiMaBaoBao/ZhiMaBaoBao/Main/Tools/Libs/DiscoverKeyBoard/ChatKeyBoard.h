@@ -165,6 +165,9 @@ typedef NS_ENUM(NSInteger, KeyBoardStyle)
  */
 - (void)keyboardDownForComment;
 
+- (void)setButtonStateWithNormal;
+
+
 @end
 
 
