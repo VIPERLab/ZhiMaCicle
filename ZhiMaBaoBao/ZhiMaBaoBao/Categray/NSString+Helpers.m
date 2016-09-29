@@ -366,4 +366,39 @@
 }
 
 
++ (NSString*)timeStringChangeToZMTimeString:(NSString*)time{
+    
+    NSCalendar *calendar2 = [NSCalendar currentCalendar];
+    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents *components = [calendar2 components:unitFlags fromDate:[NSDate date]];
+    NSInteger iCurDay = [components day];
+    NSInteger iCurY = [components year];
+    NSInteger iCurM = [components month];
+    
+    NSArray*timeAry1 = [time componentsSeparatedByString:@" "];
+    NSArray*dayAry = [timeAry1[0] componentsSeparatedByString:@"-"];
+    NSArray*minAry = [timeAry1[1] componentsSeparatedByString:@":"];
+    NSString*min = [NSString stringWithFormat:@"%@:%@",minAry[0],minAry[1]];
+    
+    //昨天
+    NSDate *yesterday = [NSDate dateWithTimeIntervalSinceNow:-(24*60*60)];
+    NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
+    [dateformatter setDateFormat:@"YYYY-MM-dd"];
+    NSString *  locationString=[dateformatter stringFromDate:yesterday];
+    NSArray*yesAry = [locationString componentsSeparatedByString:@"-"];
+    
+    if ([dayAry[0] integerValue] == iCurY&&[dayAry[1] integerValue] == iCurM&&[dayAry[2] integerValue] == iCurDay) {
+        return  [NSString stringWithFormat:@"%@",min];
+    }else if ([dayAry[0] isEqualToString:yesAry[0]]&&[dayAry[1] isEqualToString:yesAry[1]]&&[dayAry[2] isEqualToString:yesAry[2]]) {
+        
+        return  [NSString stringWithFormat:@"昨天 %@",min];
+        
+    }else{
+        
+        return  [NSString stringWithFormat:@"%@ %@",timeAry1[0],min];
+    }
+    
+}
+
+
 @end

@@ -672,13 +672,15 @@ static NSString *const reuseIdentifier = @"messageCell";
         }else{
             
             baseChatCell.topLabel.hidden = NO;
-            baseChatCell.topLabel.text = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            baseChatCell.topLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];
             
         }
     }else{
         
         baseChatCell.topLabel.hidden = NO;
-        baseChatCell.topLabel.text = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        baseChatCell.topLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];
         
     }
     
@@ -842,17 +844,16 @@ static NSString *const reuseIdentifier = @"messageCell";
     self.currentPlayAudioIndexPath = ip;
 }
 
-
 #pragma mark - chatKeyboard delegate ：发送文本消息
 //发送文本
 - (void)chatKeyBoardSendText:(NSString *)text{
     
     LGMessage *message = [[LGMessage alloc] init];
     message.text = text;
-    message.toUidOrGroupId = @"11596";
+    message.toUidOrGroupId = self.conversionId;
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
-    message.msgid = [NSString stringWithFormat:@"%@12345678",USERINFO.userID];
+    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     message.isGroup = NO;
     message.timeStamp = [NSDate currentTimeStamp];
     
@@ -870,6 +871,23 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
     
+}
+
+/** 生成随机messageID */
+- (NSString *)generateMessageID
+{
+    static int kNumber = 8;
+    
+    NSString *sourceStr = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    NSMutableString *resultStr = [[NSMutableString alloc] init];
+    srand((unsigned int)time(0));
+    for (int i = 0; i < kNumber; i++)
+    {
+        unsigned index = rand() % [sourceStr length];
+        NSString *oneStr = [sourceStr substringWithRange:NSMakeRange(index, 1)];
+        [resultStr appendString:oneStr];
+    }
+    return resultStr;
 }
 
 #pragma mark - 语音代理方法

@@ -44,6 +44,13 @@
 
 -(NSString *)isHttp;
 
-
+/**
+ *  时间字符串转换成芝麻聊天格式时间
+ *
+ *  @param time 需要转换的时间字符串 (yyyy-MM-dd HH:mm:ss)
+ *
+ *  @return 转换后的字符串
+ */
++ (NSString*)timeStringChangeToZMTimeString:(NSString*)time;
 
 @end
