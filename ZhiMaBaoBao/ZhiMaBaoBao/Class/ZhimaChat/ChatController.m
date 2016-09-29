@@ -82,7 +82,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 {
     NSLog(@"=== %@ ----- %@",notification.object, notification.userInfo[@"message"]);
 //    NSDictionary *userInfo = ;
-    LGMessage *message  = notification.userInfo[@"message"];
+    LGMessage *message  = notification.object[@"message"];
     [self.messages addObject:message];
     
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];

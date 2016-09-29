@@ -157,9 +157,7 @@ static SocketManager *manager = nil;
             BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
             
             if (success) {
-                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                userInfo[@"message"] = message;
-                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:userInfo];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:@{@"message":message}];
             }
             
             //            if (message.type == MessageTypeText) {

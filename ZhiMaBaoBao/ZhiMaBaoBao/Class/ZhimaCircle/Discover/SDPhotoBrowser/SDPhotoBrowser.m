@@ -9,6 +9,7 @@
 #import "SDPhotoBrowser.h"
 #import "UIImageView+WebCache.h"
 #import "SDBrowserImageView.h"
+#import "KXActionSheet.h"
 
  
 //  ============在这里方便配置样式相关设置===========
@@ -23,7 +24,7 @@
 
 //  =============================================
 
-@interface SDPhotoBrowser () <UIActionSheetDelegate>
+@interface SDPhotoBrowser () <KXActionSheetDelegate>
 
 @end
 
@@ -35,6 +36,7 @@
     UIButton *_saveButton;
     UIActivityIndicatorView *_indicatorView;
     BOOL _willDisappear;
+    KXActionSheet *_actionSheet;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -230,14 +232,15 @@
 
 - (void)longPressPhoto:(UIGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"转发给朋友" otherButtonTitles:@"保存图片", nil];
-        [sheet showInView:self];
+        KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"转发给朋友",@"保存图片"]];
+        [[UIApplication sharedApplication].keyWindow addSubview:sheet];
+        sheet.delegate = self;
+        [sheet show];
     }
 }
 
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSLog(@"%zd",buttonIndex);
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {   //转发给朋友
         int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
         UIImageView *currentImageView = _scrollView.subviews[index];
@@ -247,7 +250,6 @@
     } else if (buttonIndex == 2) { //取消
         
     }
-    
 }
 
 
