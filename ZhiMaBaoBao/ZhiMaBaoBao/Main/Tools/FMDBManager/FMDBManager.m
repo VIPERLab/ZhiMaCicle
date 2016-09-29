@@ -854,7 +854,6 @@
 - (BOOL)saveUserMessageWithMessageArray:(NSArray <ZhiMaFriendModel *> *)userMessageArray {
     __block BOOL isSuccess = YES;
     for (ZhiMaFriendModel *model in userMessageArray) {
-//        user_Name, user_Id, user_Head_photo, user_NickName"
         __block BOOL isExist = NO;
         FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
         NSString *searchOpeartionStr = [FMDBShareManager SearchTable:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"user_Id = %@",model.user_Id]];

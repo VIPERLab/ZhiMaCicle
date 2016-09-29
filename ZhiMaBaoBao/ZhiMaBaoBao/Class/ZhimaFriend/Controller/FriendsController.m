@@ -60,6 +60,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
     
     [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
         self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+        NSLog(@"%@",responseData.data);
         //更新数据库，然后刷新列表
         if ([FMDBShareManager saveUserMessageWithMessageArray:self.friends]) {
             NSLog(@"好友列表插入数据库成功");
