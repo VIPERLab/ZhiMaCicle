@@ -53,10 +53,13 @@
 
 @property (nonatomic, strong) NSMutableArray *messages;  //聊天消息
 @property (nonatomic, strong) NSMutableArray *subviews;  //所有的imageView
+@property (nonatomic,copy) NSString * audioName;         //最新语音文件后缀名
 
 @end
 
 static NSString *const reuseIdentifier = @"messageCell";
+
+
 @implementation ChatController
 
 - (void)viewDidLoad{
@@ -81,7 +84,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)recievedNewMessage:(NSNotification *)notification
 {
 //    NSLog(@"=== %@",notification.object);
-    NSDictionary *userInfo = notification.userInfo;
+    NSDictionary *userInfo = notification.object;
     LGMessage *message  = userInfo[@"message"];
     [self.messages addObject:message];
     
@@ -110,33 +113,98 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 }
 
-//- (NSString*)audioPathWithUid:(NSString*)
+- (NSString*)audioPathWithUid:(NSString*)uid{
 
-//初始化录音
-- (void)initAudioRecorder{
-#warning 以后拼接用户uid
-    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     //获取当前时间字符串
     NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy-MM-dd-hh-mm-ss-SSS";
-    NSString *currentTime = [dateFormatter stringFromDate:[NSDate date]];
+    NSString *path = [dateFormatter stringFromDate:[NSDate date]];
+    path = [path stringByAppendingString:[NSString stringWithFormat:@"-%@",uid]];
+    
+    self.audioName = [NSString stringWithFormat:@"%@.amr",path];
+    
+    return path;
+}
+
+//初始化录音
+- (void)initAudioRecorder{
+//#warning 以后拼接用户uid
+    
+//    NSString *path = AUVIOPATH;
+
+    
+//    CafRecordWriter *writer = [[CafRecordWriter alloc]init];
+//    writer.filePath = [path stringByAppendingPathComponent:@".caf"];
+//    self.cafWriter = writer;
+    
+    [self initAmrRecordWriter];
+    
+//    Mp3RecordWriter *mp3Writer = [[Mp3RecordWriter alloc]init];
+//    mp3Writer.filePath = [path stringByAppendingPathComponent:@".mp3"];
+//    mp3Writer.maxSecondCount = 60;
+//    mp3Writer.maxFileSize = 1024*256;
+//    self.mp3Writer = mp3Writer;
+    
+//    //监听录音时音量大小
+//    MLAudioMeterObserver *meterObserver = [[MLAudioMeterObserver alloc]init];
+//    meterObserver.actionBlock = ^(NSArray *levelMeterStates,MLAudioMeterObserver *meterObserver){
+//        NSLog(@"volume:%f",[MLAudioMeterObserver volumeForLevelMeterStates:levelMeterStates]);
+//        //更新hud音量显示
+//        [RecordingHUD updateStatues:RecordHUDStatusVoiceChange value:[MLAudioMeterObserver volumeForLevelMeterStates:levelMeterStates]];
+//    };
+//    meterObserver.errorBlock = ^(NSError *error,MLAudioMeterObserver *meterObserver){
+//        [[[UIAlertView alloc]initWithTitle:@"错误" message:error.userInfo[NSLocalizedDescriptionKey] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil]show];
+//    };
+//    self.meterObserver = meterObserver;
+//    
+//    MLAudioRecorder *recorder = [[MLAudioRecorder alloc]init];
+//    __weak __typeof(self)weakSelf = self;
+//    recorder.receiveStoppedBlock = ^{
+//        NSLog(@"收到语音录制完成回调");
+//        weakSelf.meterObserver.audioQueue = nil;
+//
+//    };
+//    recorder.receiveErrorBlock = ^(NSError *error){
+//        
+//        weakSelf.meterObserver.audioQueue = nil;
+//        
+//        [[[UIAlertView alloc]initWithTitle:@"错误" message:error.userInfo[NSLocalizedDescriptionKey] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil]show];
+//    };
+//    
+//    
+//    //caf
+////            recorder.fileWriterDelegate = writer;
+////            self.filePath = writer.filePath;
+//    //mp3
+////        recorder.fileWriterDelegate = mp3Writer;
+////        self.filePath = mp3Writer.filePath;
+//    
+//    //amr
+//    recorder.bufferDurationSeconds = 0.25;
+//    recorder.fileWriterDelegate = self.amrWriter;
+//    
+//    self.recorder = recorder;
+    
+    [self initAudioPlayAndReader];
     
     
-    CafRecordWriter *writer = [[CafRecordWriter alloc]init];
-    writer.filePath = [path stringByAppendingPathComponent:@"record1.caf"];
-    self.cafWriter = writer;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSessionDidChangeInterruptionType:)
+                                                 name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
+
+}
+
+- (void)initAmrRecordWriter
+{
+    self.amrWriter = nil;
+    self.meterObserver = nil;
+    self.recorder = nil;
     
+    NSString *pathName = [self audioPathWithUid:USERINFO.userID];
     AmrRecordWriter *amrWriter = [[AmrRecordWriter alloc]init];
-    amrWriter.filePath = [path stringByAppendingPathComponent:@"record1.amr"];
+    amrWriter.filePath = [AUDIOPATH stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@.amr",pathName]];
     amrWriter.maxSecondCount = 60;
     amrWriter.maxFileSize = 1024*256;
     self.amrWriter = amrWriter;
-    
-    Mp3RecordWriter *mp3Writer = [[Mp3RecordWriter alloc]init];
-    mp3Writer.filePath = [path stringByAppendingPathComponent:@"record1.mp3"];
-    mp3Writer.maxSecondCount = 60;
-    mp3Writer.maxFileSize = 1024*256;
-    self.mp3Writer = mp3Writer;
     
     //监听录音时音量大小
     MLAudioMeterObserver *meterObserver = [[MLAudioMeterObserver alloc]init];
@@ -155,7 +223,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     recorder.receiveStoppedBlock = ^{
         NSLog(@"收到语音录制完成回调");
         weakSelf.meterObserver.audioQueue = nil;
-
+        
     };
     recorder.receiveErrorBlock = ^(NSError *error){
         
@@ -163,23 +231,16 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         [[[UIAlertView alloc]initWithTitle:@"错误" message:error.userInfo[NSLocalizedDescriptionKey] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil]show];
     };
-    
-    
-    //caf
-//            recorder.fileWriterDelegate = writer;
-//            self.filePath = writer.filePath;
-    //mp3
-//        recorder.fileWriterDelegate = mp3Writer;
-//        self.filePath = mp3Writer.filePath;
-    
-    //amr
     recorder.bufferDurationSeconds = 0.25;
     recorder.fileWriterDelegate = self.amrWriter;
     
     self.recorder = recorder;
-    
-    
-    
+}
+
+- (void)initAudioPlayAndReader
+{
+    self.player = nil;
+    self.amrReader = nil;
     
     MLAudioPlayer *player = [[MLAudioPlayer alloc]init];
     AmrPlayerReader *amrReader = [[AmrPlayerReader alloc]init];
@@ -194,11 +255,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     };
     self.player = player;
     self.amrReader = amrReader;
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSessionDidChangeInterruptionType:)
-                                                 name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
-
 }
 
 //录音时，系统中断
@@ -384,8 +440,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     NSString *resuseIdentifierString = [NSString stringWithFormat:@"chatCellIdentifier_%ld", (long)fileType];
 
     BaseChatTableViewCell *baseChatCell = nil;
-    NSString *headPortraitUrlStr = nil;
-    NSString *uniqueFlagStr = nil;
+//    NSString *headPortraitUrlStr = nil;
+//    NSString *uniqueFlagStr = nil;
     
 #pragma mark--MessageTypeText
     if(fileType == MessageTypeText) {
@@ -511,11 +567,9 @@ static NSString *const reuseIdentifier = @"messageCell";
         voiceChatCell.delegate = self;
         voiceChatCell.voiceDelegate = self;
         voiceChatCell.isMe = isMe;
-        voiceChatCell.voiceTimeLength = message.text;
+        voiceChatCell.voiceTimeLength = [NSString stringWithFormat:@"%.2f",[AmrPlayerReader durationOfAmrFilePath:[NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text]]];
         voiceChatCell.indexPath = indexPath;
         
-        
-        short isRead = message.is_read.intValue;
         if(!isMe) {
             
             if ([message.is_read isEqualToString:@"2"]) { //[chat.isReadContent isEqualToString:@"2"]
@@ -524,118 +578,6 @@ static NSString *const reuseIdentifier = @"messageCell";
                 voiceChatCell.isReadVoice = NO;
             }
 
-            if(isRead == 1) {
-
-                //这里为什么要设成已读呢？？？？？？
-                //chat.is_read = @"2";
-                
-//                [self.messages replaceObjectAtIndex:voiceChatCell.indexPath.row withObject:message];
-//                [self performSelector:@selector(chat_updateChatForRead:) withObject:message afterDelay:0];
-                
-                
-//                TentinetFile *tentinetFile = [[TentinetFile alloc] init];
-//                tentinetFile.identity = chat.timestamp;
-//                tentinetFile.requestURL = [NSString stringWithFormat:@"%@%@",FileServerAddress, chat.message];
-//                
-//                
-//                __weak typeof(TentinetFile) *weakFile = tentinetFile;
-//                tentinetFile.requestResults = ^(AFHTTPRequestOperation *operation,id results, NSError *error){
-//                    
-//                    if (!error) {
-//                        [VoiceConverter upload_download_successArmToWav:results];
-//                        NSString *messageId = weakFile.identity;
-//                        NSLog(@"messageId  %@", messageId);
-//                        
-//                        NSInteger index = [self getMessageIndexByMessageId:messageId];
-//                        if (index > -1) {
-//                            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-//                            [self chat_updateTableView:@[indexPath] pattern:1];
-//                        }
-//                        
-//                        voiceChatCell.btnBg.enabled = YES;
-//                        
-//                    } else {
-//                        
-//                    }
-                };
-//
-//                NSString *filePath  = [[[BYDProductionObject defaultProduction] createDocumentSpecifiedFile:StoreVoicesChat] stringByAppendingPathComponent:[[chat.message componentsSeparatedByString:@"/"] lastObject]];
-//                
-//                [tentinetFile downloadFileWithBlock:filePath];
-//                
-//            } else {
-//                NSString *folderpath = [[BYDProductionObject defaultProduction] createDocumentSpecifiedFile:StoreVoicesChat];
-//                NSString *savepath    = [folderpath stringByAppendingPathComponent:[[chat.message componentsSeparatedByString:@"/"] lastObject]];
-//                
-//                NSLog(@"savepath=========:%@",savepath);
-//                if(![[NSFileManager defaultManager ]fileExistsAtPath:savepath])
-//                {
-//                    
-//                    TentinetFile *tentinetFile = [[TentinetFile alloc] init];
-//                    tentinetFile.identity = chat.timestamp;
-//                    tentinetFile.requestURL = [NSString stringWithFormat:@"%@%@",FileServerAddress, chat.message];
-//                    
-//                    
-//                    __weak typeof(TentinetFile) *weakFile = tentinetFile;
-//                    tentinetFile.requestResults = ^(AFHTTPRequestOperation *operation,id results, NSError *error){
-//                        
-//                        if (!error) {
-//                            [VoiceConverter upload_download_successArmToWav:results];
-//                            NSString *messageId = weakFile.identity;
-//                            NSLog(@"messageId  %@", messageId);
-//                            
-//                            NSInteger index = [self getMessageIndexByMessageId:messageId];
-//                            if (index > -1) {
-//                                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-//                                [self chat_updateTableView:@[indexPath] pattern:1];
-//                            }
-//                            
-//                        } else {
-//                            
-//                        }
-//                    };
-//                    
-//                    NSString *filePath  = [[[BYDProductionObject defaultProduction] createDocumentSpecifiedFile:StoreVoicesChat] stringByAppendingPathComponent:[[chat.message componentsSeparatedByString:@"/"] lastObject]];
-//                    
-//                    [tentinetFile downloadFileWithBlock:filePath];
-//                } else {
-//                    voiceChatCell.btnBg.enabled = YES;
-//                }
-//            }
-//        }
-//        else{
-//            voiceChatCell.isReadVoice = YES;
-//            if(isRead == 1) {
-//                //上传
-//                chat.is_read = @"2";
-//                [self performSelector:@selector(chat_updateChatForRead:) withObject:chat afterDelay:0];
-//                
-//            } else {
-//                voiceChatCell.btnBg.enabled = YES;
-//            }
-//        }
-//        
-//        if (message.sendStatus == IMRequestFaile) {
-//            voiceChatCell.sendAgain.hidden = NO;
-//            [voiceChatCell.sending stopAnimating];
-//            voiceChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
-//                Chat *chat = [tableViewSource objectAtIndex:theCell.indexPath.row];
-//                chat.modelStatus = DVRequesting;
-//                [tableViewSource replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
-//                NSIndexPath *indexPath = theCell.indexPath;
-//                [self chat_updateTableView:@[indexPath] pattern:1];
-//                
-//                [DataBaseManager updateChatColumnValueByID:StringFromInt(DVRequesting) column:@"messageSendStatus" messageId:chat.timestamp];
-//                
-//                [self uploadVoice:chat.message durationTime:chat.content messageId:chat.timestamp];
-//            };
-//        } else {
-//            voiceChatCell.sendAgain.hidden = YES;
-//            if (message.sendStatus == IMRequesting) {
-//                [voiceChatCell.sending startAnimating];
-//            } else {
-//                [voiceChatCell.sending stopAnimating];
-//            }
         }
         
     }
@@ -755,27 +697,16 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
     
     NSIndexPath* ip = [self.tableView indexPathForCell:(IMChatVoiceTableViewCell *)view];
+    IMChatVoiceTableViewCell *currentCell = (IMChatVoiceTableViewCell *)view;
     
     if([self.player isPlaying]) {
         
         [self.player stopPlaying];
 //        [myTimer invalidate];
         
-        
-        
-//        NSLog(@"当前VC的内存地址是——————————%p—————soundIp =%d———", self, soundIp);
-        
-//        NSIndexPath *index = [NSIndexPath indexPathForRow:soundIp inSection:0];
-        
-        
         NSIndexPath *index = self.currentPlayAudioIndexPath;
         
-        
         IMChatVoiceTableViewCell *cell = (IMChatVoiceTableViewCell*)[self.tableView cellForRowAtIndexPath:index];
-        
-//        NSLog(@"_____table__________%p", self.chatTableView);
-//        NSLog(@"____cell.btnBg______%p__", cell.btnBg);
-//        NSLog(@"____cell______%p__", cell);
         
         NSString *imageName;
 
@@ -793,21 +724,28 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
         
     }
+//    else{
     
-    
-    LGMessage *message = [self.messages objectAtIndex:ip.row];
-    if (![message.is_read isEqualToString:@"2"]) {  //![chat.isReadContent isEqualToString:@"2"]
-        message.is_read = @"2";
-
-        /**
-         *  1、更改数据库里面该message的状态，同时刷新cell
-         */
-//        [DataBaseManager updateChatColumnValueByID:@"2" column:@"is_read_content" theId:chat.theId.integerValue];
-//        [DataBaseManager closeDataBase];
-//        [self chat_updateTableView:@[ip] pattern:1];
-         [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
-
-    }
+        [self initAudioPlayAndReader];
+        
+        LGMessage *message = [self.messages objectAtIndex:ip.row];
+        self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
+        [self.player startPlaying];
+        
+        if (![message.is_read isEqualToString:@"2"] && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
+            message.is_read = @"2";
+            
+            /**
+             *  1、更改数据库里面该message的状态，同时刷新cell
+             */
+            //        [DataBaseManager updateChatColumnValueByID:@"2" column:@"is_read_content" theId:chat.theId.integerValue];
+            //        [DataBaseManager closeDataBase];
+            //        [self chat_updateTableView:@[ip] pattern:1];
+            
+            [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+        }
+//    }
     /**
      *  2、根据路径获取到音频内容，然后播放
      */
@@ -849,7 +787,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     LGMessage *message = [[LGMessage alloc] init];
     message.text = text;
-    message.toUidOrGroupId = self.conversionId;
+//    message.toUidOrGroupId =  @"12790";//self.conversionId;
+    message.toUidOrGroupId =  self.conversionId;
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
@@ -914,9 +853,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
 }
 
-#pragma mark - 录音完成
+#pragma mark - 录音完成      ：   发送语音
 //完成录音
 - (void)chatKeyBoardDidFinishRecoding:(ChatKeyBoard *)chatKeyBoard{
+    
     [self.recorder stopRecording];
 
     //通过文件时长判断是否文件是否创建成功 -- 创建失败弹出提示框（录音时间太短）
@@ -930,9 +870,33 @@ static NSString *const reuseIdentifier = @"messageCell";
         });
     }else{
     
-        NSLog(@"===== %f  语音内容：%@",fileLength,self.amrWriter.filePath);
+        NSData* auvioData = [NSData dataWithContentsOfFile:self.amrWriter.filePath];
+        NSLog(@"语音内容 = %@",auvioData);
+        NSLog(@"===== %f  语音路径：%@",fileLength,self.amrWriter.filePath);
+        
+        LGMessage *message = [[LGMessage alloc] init];
+        message.text = self.audioName;
+        message.toUidOrGroupId = self.conversionId;
+        message.fromUid = USERINFO.userID;
+        message.type = MessageTypeAudio;
+        message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+        message.isGroup = NO;
+        message.timeStamp = [NSDate currentTimeStamp];
+        
+        [self.messages addObject:message];
+        
+        
+        
+        SocketManager* socket = [SocketManager shareInstance];
+        [socket sendMessage:message];
+        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+        NSArray *indexPaths = @[indexpath];
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
     }
+    
+    [self initAmrRecordWriter];
 }
 //将要取消录音
 - (void)chatKeyBoardWillCancelRecoding:(ChatKeyBoard *)chatKeyBoard{
