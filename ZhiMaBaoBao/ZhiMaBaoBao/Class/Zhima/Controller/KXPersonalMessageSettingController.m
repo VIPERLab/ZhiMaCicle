@@ -18,7 +18,7 @@
 
 #define KXPersonalSettingCellReusedID @"KXPersonalSettingCellReusedID"
 
-@interface KXPersonalMessageSettingController () <UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate>
+@interface KXPersonalMessageSettingController () <UITableViewDelegate,UITableViewDataSource,KXActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, strong) NSArray *subTitleArray;
@@ -117,8 +117,9 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0 && indexPath.row == 0) {
         // -----    修改头像
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"从相册中选择", nil];
-        [sheet showInView:self.view];
+        KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"拍照",@"从相册中选择"]];
+        sheet.delegate = self;
+        [sheet show];
         
         
     } else if (indexPath.section == 0 && indexPath.row == 1) {
@@ -185,7 +186,7 @@
 }
 
 // --- 更换头像actionSheet
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)buttonIndex {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     picker.allowsEditing = YES;
@@ -199,7 +200,6 @@
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary | UIImagePickerControllerSourceTypeSavedPhotosAlbum;
         
     } else {
-        [actionSheet setHidden:YES];
         return;
     }
     
