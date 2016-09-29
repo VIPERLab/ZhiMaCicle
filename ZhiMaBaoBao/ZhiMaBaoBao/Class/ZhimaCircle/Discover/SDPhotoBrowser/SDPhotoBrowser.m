@@ -233,7 +233,6 @@
 - (void)longPressPhoto:(UIGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
         KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"转发给朋友",@"保存图片"]];
-        [[UIApplication sharedApplication].keyWindow addSubview:sheet];
         sheet.delegate = self;
         [sheet show];
     }

@@ -81,6 +81,8 @@
 #import "BaseViewController.h"
 #import "NSDate+TimeCategory.h"
 
+#import "KXActionSheet.h"
+
 
 //FMDB管理头文件
 #import "FMDBManager.h"

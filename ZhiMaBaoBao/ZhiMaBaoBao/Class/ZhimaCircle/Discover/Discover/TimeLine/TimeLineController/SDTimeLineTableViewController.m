@@ -48,7 +48,7 @@
 #define kTimeLineTableViewCellId @"SDTimeLineCell"
 
 
-@interface SDTimeLineTableViewController () <SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,KXDiscoverNewMessageViewDelegate,UITableViewDelegate,UITableViewDataSource,KXCopyViewDelegate>
+@interface SDTimeLineTableViewController () <SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,KXDiscoverNewMessageViewDelegate,UITableViewDelegate,UITableViewDataSource,KXCopyViewDelegate,KXActionSheetDelegate>
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) SDTimeLineTableHeaderView *headerView;  //头部视图
 
@@ -768,10 +768,13 @@
 
 // -----    点击了背景
 - (void)SDTimeLineTableHeaderViewBackGroundViewDidClick:(SDTimeLineTableHeaderView *)header andBackGround:(UIButton *)backGround {
-
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"相机" otherButtonTitles:@"相册", nil];
+    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"相机拍照",@"从相册选择图片"]];
+    sheet.delegate = self;
     sheet.tag = 100;
-    [sheet showInView:self.view];
+    [sheet show];
+//    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"相机" otherButtonTitles:@"相册", nil];
+//    sheet.tag = 100;
+//    [sheet showInView:self.view];
 }
 
 
@@ -812,9 +815,10 @@
     }
     
     NSLog(@"长按了");
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"投诉" otherButtonTitles:@"设置朋友圈权限",nil];
+    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"投诉",@"设置朋友圈权限"]];
+    sheet.delegate = self;
     sheet.tag = 1000;
-    [sheet showInView:self.view];
+    [sheet show];
 }
 
 
@@ -935,8 +939,8 @@
 
 
 #pragma mark - actionSheet代理
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (actionSheet.tag == 1000) {
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)buttonIndex {
+    if (sheet.tag == 1000) {
         if (buttonIndex == 0) {
             ComplainViewController *complain = [[ComplainViewController alloc] init];
             complain.model = self.complainModel;
@@ -948,7 +952,7 @@
             [self presentViewController:vc animated:YES completion:nil];
         }
         return;
-    } else if (actionSheet.tag == 100) {
+    } else if (sheet.tag == 100) {
         //打开图片相册
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
@@ -965,8 +969,8 @@
         }
         [self.navigationController presentViewController:picker animated:YES completion:nil];
     }
-    
 }
+
 
 #pragma mark - imagePicker回调
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {

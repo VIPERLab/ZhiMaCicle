@@ -19,7 +19,7 @@
     if (self = [super initWithFrame:[UIScreen mainScreen].bounds]) {
         [self setupView];
         [self setupButtonWithTitleName:titleName andCancellTitle:cancelTitle andOtherButton:titles];
-        
+        [[UIApplication sharedApplication].keyWindow addSubview:self];
     }
     return self;
 }
