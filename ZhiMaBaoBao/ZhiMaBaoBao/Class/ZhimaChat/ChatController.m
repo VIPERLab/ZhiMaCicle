@@ -66,7 +66,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    
+    [self setCustomTitle:self.conversionName];
     [self addSubviews];
     //初始化录音
     [self initAudioRecorder];
@@ -83,15 +83,23 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 }
 
+/**
+ *  收到新消息
+ */
 - (void)recievedNewMessage:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo;
     LGMessage *message  = userInfo[@"message"];
-    [self.messages addObject:message];
-    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
-    NSArray *indexPaths = @[indexpath];
-    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
+    //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
+    if (message.fromUid == self.conversionId) {
+        [self.messages addObject:message];
+        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+        NSArray *indexPaths = @[indexpath];
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
+    }
 }
 
 - (void)addSubviews{
@@ -293,7 +301,7 @@ static NSString *const reuseIdentifier = @"messageCell";
      */
     FMDBManager* shareManager = [FMDBManager shareManager];
 //    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
-    self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId] mutableCopy];
+    self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:1] mutableCopy];
     
 //    for (int i=0; i<7; i++) {
 //        LGMessage*msg = [[LGMessage alloc]init];
@@ -877,10 +885,6 @@ static NSString *const reuseIdentifier = @"messageCell";
 {
 //    NSData* auvioData = [NSData dataWithContentsOfFile:self.amrWriter.filePath];
 //    NSLog(@"语音内容 = %@",auvioData);
-    NSLog(@"=====   语音路径：%@",self.amrWriter.filePath);
-    
-    NSLog(@"发送的时间1 = %@",self.audioName);
-
     
     LGMessage *message = [[LGMessage alloc] init];
     message.text = self.audioName;

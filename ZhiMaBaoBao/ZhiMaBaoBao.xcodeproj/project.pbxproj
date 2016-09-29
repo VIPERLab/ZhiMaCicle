@@ -501,6 +501,8 @@
 		319069E01D9CF18500D1D6D2 /* InfoContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069DE1D9CF18500D1D6D2 /* InfoContentCell.m */; };
 		319069E11D9CF18500D1D6D2 /* InfoContentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069DF1D9CF18500D1D6D2 /* InfoContentCell.xib */; };
 		319069E41D9CF3B800D1D6D2 /* LGPhotosView.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069E31D9CF3B800D1D6D2 /* LGPhotosView.m */; };
+		319069E81D9D471E00D1D6D2 /* SetupFriendInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069E61D9D471E00D1D6D2 /* SetupFriendInfoController.m */; };
+		319069E91D9D471E00D1D6D2 /* SetupFriendInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069E71D9D471E00D1D6D2 /* SetupFriendInfoController.xib */; };
 		31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C6FD1D8E91F000F1883A /* MainViewController.m */; };
 		31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7021D8E96A100F1883A /* PersonalCenterController.m */; };
 		31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C70E1D8E96A100F1883A /* ConversationController.m */; };
@@ -1531,6 +1533,9 @@
 		319069DF1D9CF18500D1D6D2 /* InfoContentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoContentCell.xib; sourceTree = "<group>"; };
 		319069E21D9CF3B800D1D6D2 /* LGPhotosView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGPhotosView.h; sourceTree = "<group>"; };
 		319069E31D9CF3B800D1D6D2 /* LGPhotosView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPhotosView.m; sourceTree = "<group>"; };
+		319069E51D9D471E00D1D6D2 /* SetupFriendInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupFriendInfoController.h; sourceTree = "<group>"; };
+		319069E61D9D471E00D1D6D2 /* SetupFriendInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupFriendInfoController.m; sourceTree = "<group>"; };
+		319069E71D9D471E00D1D6D2 /* SetupFriendInfoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetupFriendInfoController.xib; sourceTree = "<group>"; };
 		31B7C6FC1D8E91F000F1883A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		31B7C6FD1D8E91F000F1883A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		31B7C7011D8E96A100F1883A /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
@@ -3995,6 +4000,9 @@
 				319069D71D9CE91700D1D6D2 /* Cell */,
 				319069D41D9CE56100D1D6D2 /* FriendProfilecontroller.h */,
 				319069D51D9CE56100D1D6D2 /* FriendProfilecontroller.m */,
+				319069E51D9D471E00D1D6D2 /* SetupFriendInfoController.h */,
+				319069E61D9D471E00D1D6D2 /* SetupFriendInfoController.m */,
+				319069E71D9D471E00D1D6D2 /* SetupFriendInfoController.xib */,
 			);
 			name = "FriendInfo(用户详情)";
 			sourceTree = "<group>";
@@ -4586,6 +4594,7 @@
 				316957821D91199100140126 /* dtmf-5.aif in Resources */,
 				319069B21D9BC09200D1D6D2 /* FriendsListCell.xib in Resources */,
 				31B7C79F1D8FE71F00F1883A /* LGPhoneHeaderCell.xib in Resources */,
+				319069E91D9D471E00D1D6D2 /* SetupFriendInfoController.xib in Resources */,
 				3169577E1D91199100140126 /* dtmf-1.aif in Resources */,
 				310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */,
 				316957571D90E63100140126 /* LGAddFriendCell.xib in Resources */,
@@ -4730,6 +4739,7 @@
 				D5C8B3AC1D9A08A9007D6B5C /* TQRichTextBaseRun.m in Sources */,
 				04EA7ACA1D910F89005E5425 /* NSURL+DNIMagePickerUrlEqual.m in Sources */,
 				04EA7DDB1D912872005E5425 /* ZXRSSExpandedPair.m in Sources */,
+				319069E81D9D471E00D1D6D2 /* SetupFriendInfoController.m in Sources */,
 				04F57AB81D9280BD002A6471 /* SDWeiXinPhotoContainerView.m in Sources */,
 				04EA79E31D90E9F7005E5425 /* KXMoneyDetailModel.m in Sources */,
 				04EA7D651D912872005E5425 /* ZXAddressBookDoCoMoResultParser.m in Sources */,

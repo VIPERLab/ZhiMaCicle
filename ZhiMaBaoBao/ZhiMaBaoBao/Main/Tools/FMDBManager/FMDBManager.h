@@ -165,7 +165,7 @@ typedef enum : NSUInteger {
 
 
 
-#pragma mark - 聊天相关
+#pragma mark - 会话相关
 //                    ------------   会话表  ----------------
 /**
  *  获取会话列表
@@ -194,7 +194,6 @@ typedef enum : NSUInteger {
 
 #pragma mark - 消息相关
 //                    ------------   消息表  ----------------
-
 /**
  *  插入消息->消息表，并 更新/创建 会话表
  *
@@ -210,7 +209,14 @@ typedef enum : NSUInteger {
  *
  *  @return 一个消息模型数组 <LGMessage *>
  */
-- (NSArray <LGMessage *> *)getMessageDataWithConverseID:(NSString *)converseID;
+- (NSArray <LGMessage *> *)getMessageDataWithConverseID:(NSString *)converseID andPageNumber:(int)pageNumber;
+
+/**
+ *  设置消息的未读数量为0
+ *
+ *  @param converseId 会话id
+ */
+- (void)setConverseUnReadCountZero:(NSString *)converseId;
 
 /**
  *  根据会话ID删除消息

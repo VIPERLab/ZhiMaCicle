@@ -1220,7 +1220,7 @@
     ConverseModel *converseModel = [[ConverseModel alloc] init];
     converseModel.time = message.timeStamp;
     converseModel.converseHead_photo = userModel.user_Head_photo;
-    converseModel.converseName = userModel.user_Name;
+    converseModel.converseName = userModel.displayName;
     if (message.type == MessageTypeText) {
         converseModel.lastConverse = message.text;
     }else if (message.type == MessageTypeImage){
@@ -1253,6 +1253,14 @@
         converseModel.time = message.timeStamp;
         converseModel.lastConverse = message.text;
         
+        if (message.type == MessageTypeText) {
+            converseModel.lastConverse = message.text;
+        }else if (message.type == MessageTypeImage){
+            converseModel.lastConverse = @"[图片]";
+        }else if (message.type == MessageTypeAudio){
+            converseModel.lastConverse = @"[语音]";
+        }
+        
         NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time)];
         NSString *option2 = [NSString stringWithFormat:@"converseId = %@",converseModel.converseId];
         
@@ -1279,10 +1287,10 @@
  *
  *  @return 一个消息模型数组 <LGMessage *>
  */
-- (NSArray *)getMessageDataWithConverseID:(NSString *)converseID {
+- (NSArray <LGMessage *> *)getMessageDataWithConverseID:(NSString *)converseID andPageNumber:(int)pageNumber {
     NSMutableArray *dataArray = [NSMutableArray array];
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
-    NSString *option = [NSString stringWithFormat:@"converseId = %@",converseID];
+    NSString *option = [NSString stringWithFormat:@"converseId = %@ order by time asc LIMIT (%zd-1)*20,20",converseID,pageNumber];
     NSString *opeartionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Message_Table withOption:option];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:opeartionStr];
@@ -1299,6 +1307,24 @@
         }
     }];
     return dataArray;
+}
+
+/**
+ *  设置消息的未读数量为0
+ *
+ *  @param converseId 会话id
+ */
+- (void)setConverseUnReadCountZero:(NSString *)converseId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSLog(@"开始查会话表");
+    [queue inDatabase:^(FMDatabase *db) {
+        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '0'"];
+        NSString *searchOptionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = %@",converseId]];
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        while ([result next]) {
+            NSLog(@"消息置0成功");
+        }
+    }];
 }
 
 

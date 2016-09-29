@@ -273,7 +273,9 @@ static NSString * const reuseIdentifier = @"friendListcell";
         ChatController *vc = [[ChatController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         vc.conversionId = friend.user_Id;
+        vc.conversionName = friend.displayName;
         [self.navigationController pushViewController:vc animated:YES];
+
     }
 }
 

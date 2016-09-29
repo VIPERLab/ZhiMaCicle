@@ -8,10 +8,10 @@
 
 #import "FriendProfilecontroller.h"
 #import "ZhiMaFriendModel.h"
-
 #import "InfoHeaderCell.h"
 #import "InfoContentCell.h"
 #import "LGPhotosView.h"
+#import "SetupFriendInfoController.h"   //设置好友资料
 
 @interface FriendProfilecontroller ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -44,6 +44,21 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     [tableView registerNib:[UINib nibWithNibName:@"InfoContentCell" bundle:nil] forCellReuseIdentifier:textIdentifier];
     [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:btnIdentifier];
     [self.view addSubview:tableView];
+}
+
+//根据好友类型设置导航栏右侧按钮
+- (void)setupNavRightItem{
+    UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 40)];
+    [rightBtn setImage:[UIImage imageNamed:@"nav_more"] forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(setupFriendInfo) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+}
+
+//设置好友资料
+- (void)setupFriendInfo{
+    SetupFriendInfoController *vc = [[SetupFriendInfoController alloc] init];
+    vc.friendModel = self.friend;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 //请求好友详细资料
