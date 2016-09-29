@@ -23,6 +23,11 @@
  */
 @property (nonatomic, copy) NSString *groupId;
 
+/**
+ *  用户状态，0 未添加好友 -  1 已添加好友
+ */
+@property (nonatomic, assign) BOOL status;
+
  /** 显示名称 （有备注显示备注，无备注显示昵称）*/
 @property (nonatomic, copy) NSString *displayName;
  /** 显示名称的大写拼音缩写*/

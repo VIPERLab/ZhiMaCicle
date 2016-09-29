@@ -26,6 +26,7 @@ typedef enum : NSUInteger {
     
     /* ----   用户相关 ----  */
     ZhiMa_User_Message_Table,        //用户信息表
+    ZhiMa_NewFriend_Message_Table,     //新好友表
     
     /* ----   群聊相关 ----  */
 //    ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
@@ -131,6 +132,37 @@ typedef enum : NSUInteger {
  *  @return 是否操作成功
  */
 - (BOOL)deleteUserMessageByUserID:(NSString *)userID;
+
+
+#pragma mark - 新的好友相关
+//                    ------------   新好友表  ----------------
+/**
+ *  根据用户id 取出当前用户所有的新好友列表
+ *
+ *  @param userID 当前用户id
+ *
+ *  @return 新的好友模型数组
+ */
+- (NSArray <ZhiMaFriendModel *> *)getAllNewFriendsByUserId:(NSString *)userID;
+
+
+/**
+ *  保存新的好友信息
+ *
+ *  @param dataArray 新的好友信息数组
+ *  @param userId    当前用户id
+ */
+- (void)saveNewFirendsWithArray:(NSArray <ZhiMaFriendModel *>*)dataArray andUserId:(NSString *)userId;
+
+/**
+ *  更新新的好友模型
+ *
+ *  @param model 新的好友模型
+ *
+ *  @return 是否更新成功
+ */
+- (BOOL)upDataNewFriendsMessageByFriendModel:(ZhiMaFriendModel *)model;
+
 
 
 #pragma mark - 聊天相关
