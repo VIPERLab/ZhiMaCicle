@@ -68,6 +68,9 @@
  /** 键盘按键音*/
 @property (nonatomic, assign, getter=isKeyboardVoice) BOOL keyboardVoice;
 
+ /** 未读好友请求数量*/
+@property (nonatomic, assign) NSInteger unReadInvited;
+
 
 /**
  *  位置信息
