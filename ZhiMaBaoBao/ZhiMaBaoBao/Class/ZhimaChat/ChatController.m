@@ -291,7 +291,7 @@ static NSString *const reuseIdentifier = @"messageCell";
      */
     FMDBManager* shareManager = [FMDBManager shareManager];
 //    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
-    self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId] mutableCopy];
+    self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:1] mutableCopy];
     
 //    for (int i=0; i<7; i++) {
 //        LGMessage*msg = [[LGMessage alloc]init];
