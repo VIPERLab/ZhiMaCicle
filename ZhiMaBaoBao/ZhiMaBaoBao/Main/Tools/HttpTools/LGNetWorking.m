@@ -567,16 +567,15 @@
 }
 
 //点击头像查看好友详情
-+ (void)getFriendInfo:(NSString *)sessionId openfire:(NSString *)account block:(SuccessfulBlock)block{
++ (void)getFriendInfo:(NSString *)sessionId userId:(NSString *)userId block:(SuccessfulBlock)block failure:(FailureBlock)failure{
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;
-    params[@"openfireaccount"] = account;
+    params[@"userId"] = userId;
     
     [HttpTool POST:@"/moblie/getWeuserFriendDetail.do" params:params success:^(ResponseData *json) {
         block(json);
     } failure:^(ErrorData *error) {
-    
-        
+        failure(error);
     }];
 }
 
@@ -642,11 +641,10 @@
     param[@"sessionId"] = sessionId;
     param[@"functionName"] = functionName;
     param[@"value"] = @(value);
-    param[@"openfireaccount"] = account;
+    param[@"userId"] = account;
     [HttpTool POST:@"/moblie/setfriend.do" params:param success:^(ResponseData *json) {
         block(json);
     } failure:^(ErrorData *error) {
-    
         
     }];
 }

@@ -8,13 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HttpTool.h"
-
-//好友类型
-typedef NS_OPTIONS(NSUInteger, FriendType) {
-    FriendTypeNew  = 0,     //新的好友
-    FriendTypeFriends,      //好友列表
-    FriendTypeBlack         //黑名单
-};
+#import "ZhiMaFriendModel.h"
 
 @interface LGNetWorking : NSObject
 
@@ -224,7 +218,7 @@ typedef NS_OPTIONS(NSUInteger, FriendType) {
 + (void)RequeatMyAccountWithOpenFirAccount:(NSString *)openFirAccount andApikey:(NSString *)apikey block:(SuccessfulBlock)block;
 
 //点击头像查看好友详情
-+ (void)getFriendInfo:(NSString *)sessionId openfire:(NSString *)account block:(SuccessfulBlock)block;
++ (void)getFriendInfo:(NSString *)sessionId userId:(NSString *)userId block:(SuccessfulBlock)block failure:(FailureBlock)failure;
 
 //上传用户个人信息
 + (void)upLoadUserDataWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andFunctionName:(NSString *)functionName andChangeValue:(NSString *)value block:(SuccessfulBlock)block;

@@ -494,6 +494,12 @@
 		319069C61D9CA39700D1D6D2 /* NewFriendListHeadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069C51D9CA39700D1D6D2 /* NewFriendListHeadCell.m */; };
 		319069CA1D9CA90800D1D6D2 /* LGSearchResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069C91D9CA90800D1D6D2 /* LGSearchResultController.m */; };
 		319069D21D9CC2AE00D1D6D2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069D11D9CC2AE00D1D6D2 /* NSData+Base64.m */; };
+		319069D61D9CE56100D1D6D2 /* FriendProfilecontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069D51D9CE56100D1D6D2 /* FriendProfilecontroller.m */; };
+		319069DB1D9CE91F00D1D6D2 /* InfoHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069D91D9CE91F00D1D6D2 /* InfoHeaderCell.m */; };
+		319069DC1D9CE91F00D1D6D2 /* InfoHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069DA1D9CE91F00D1D6D2 /* InfoHeaderCell.xib */; };
+		319069E01D9CF18500D1D6D2 /* InfoContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069DE1D9CF18500D1D6D2 /* InfoContentCell.m */; };
+		319069E11D9CF18500D1D6D2 /* InfoContentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069DF1D9CF18500D1D6D2 /* InfoContentCell.xib */; };
+		319069E41D9CF3B800D1D6D2 /* LGPhotosView.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069E31D9CF3B800D1D6D2 /* LGPhotosView.m */; };
 		31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C6FD1D8E91F000F1883A /* MainViewController.m */; };
 		31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7021D8E96A100F1883A /* PersonalCenterController.m */; };
 		31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C70E1D8E96A100F1883A /* ConversationController.m */; };
@@ -1512,6 +1518,16 @@
 		319069C91D9CA90800D1D6D2 /* LGSearchResultController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSearchResultController.m; sourceTree = "<group>"; };
 		319069D01D9CC2AE00D1D6D2 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		319069D11D9CC2AE00D1D6D2 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		319069D41D9CE56100D1D6D2 /* FriendProfilecontroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendProfilecontroller.h; sourceTree = "<group>"; };
+		319069D51D9CE56100D1D6D2 /* FriendProfilecontroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendProfilecontroller.m; sourceTree = "<group>"; };
+		319069D81D9CE91F00D1D6D2 /* InfoHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoHeaderCell.h; sourceTree = "<group>"; };
+		319069D91D9CE91F00D1D6D2 /* InfoHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoHeaderCell.m; sourceTree = "<group>"; };
+		319069DA1D9CE91F00D1D6D2 /* InfoHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoHeaderCell.xib; sourceTree = "<group>"; };
+		319069DD1D9CF18500D1D6D2 /* InfoContentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoContentCell.h; sourceTree = "<group>"; };
+		319069DE1D9CF18500D1D6D2 /* InfoContentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoContentCell.m; sourceTree = "<group>"; };
+		319069DF1D9CF18500D1D6D2 /* InfoContentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoContentCell.xib; sourceTree = "<group>"; };
+		319069E21D9CF3B800D1D6D2 /* LGPhotosView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGPhotosView.h; sourceTree = "<group>"; };
+		319069E31D9CF3B800D1D6D2 /* LGPhotosView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPhotosView.m; sourceTree = "<group>"; };
 		31B7C6FC1D8E91F000F1883A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		31B7C6FD1D8E91F000F1883A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		31B7C7011D8E96A100F1883A /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
@@ -3968,6 +3984,31 @@
 			name = "SearchResult(好友搜索结果)";
 			sourceTree = "<group>";
 		};
+		319069D31D9CE06400D1D6D2 /* FriendInfo(用户详情) */ = {
+			isa = PBXGroup;
+			children = (
+				319069D71D9CE91700D1D6D2 /* Cell */,
+				319069D41D9CE56100D1D6D2 /* FriendProfilecontroller.h */,
+				319069D51D9CE56100D1D6D2 /* FriendProfilecontroller.m */,
+			);
+			name = "FriendInfo(用户详情)";
+			sourceTree = "<group>";
+		};
+		319069D71D9CE91700D1D6D2 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				319069E21D9CF3B800D1D6D2 /* LGPhotosView.h */,
+				319069E31D9CF3B800D1D6D2 /* LGPhotosView.m */,
+				319069DD1D9CF18500D1D6D2 /* InfoContentCell.h */,
+				319069DE1D9CF18500D1D6D2 /* InfoContentCell.m */,
+				319069DF1D9CF18500D1D6D2 /* InfoContentCell.xib */,
+				319069D81D9CE91F00D1D6D2 /* InfoHeaderCell.h */,
+				319069D91D9CE91F00D1D6D2 /* InfoHeaderCell.m */,
+				319069DA1D9CE91F00D1D6D2 /* InfoHeaderCell.xib */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
 		31B7C6CB1D8E89D700F1883A /* Class */ = {
 			isa = PBXGroup;
 			children = (
@@ -4150,6 +4191,7 @@
 		31B7C7171D8E96A100F1883A /* ZhimaFriend(芝麻友) */ = {
 			isa = PBXGroup;
 			children = (
+				319069D31D9CE06400D1D6D2 /* FriendInfo(用户详情) */,
 				319069C71D9CA8EF00D1D6D2 /* SearchResult(好友搜索结果) */,
 				319069B31D9BE89000D1D6D2 /* NewFriends(新的好友) */,
 				31B7C7181D8E96A100F1883A /* Controller */,
@@ -4510,6 +4552,7 @@
 				316957811D91199100140126 /* dtmf-4.aif in Resources */,
 				31B7C79D1D8FE71F00F1883A /* LGCallRecordCell.xib in Resources */,
 				31B7C7A41D8FE71F00F1883A /* PhoneContactCell.xib in Resources */,
+				319069DC1D9CE91F00D1D6D2 /* InfoHeaderCell.xib in Resources */,
 				316957871D91199100140126 /* dtmf-s.aif in Resources */,
 				316957841D91199100140126 /* dtmf-7.aif in Resources */,
 				31B7C7721D8FBC8000F1883A /* hud_info@2x.png in Resources */,
@@ -4533,6 +4576,7 @@
 				04F8628D1D94FC7900DCC6FE /* emotion.plist in Resources */,
 				316957651D90E72800140126 /* LGSearchResultCell.xib in Resources */,
 				316957861D91199100140126 /* dtmf-9.aif in Resources */,
+				319069E11D9CF18500D1D6D2 /* InfoContentCell.xib in Resources */,
 				310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */,
 				316957821D91199100140126 /* dtmf-5.aif in Resources */,
 				319069B21D9BC09200D1D6D2 /* FriendsListCell.xib in Resources */,
@@ -4649,6 +4693,7 @@
 				04EA7D591D912872005E5425 /* ZXAztecBinaryShiftToken.m in Sources */,
 				04EA7D8B1D912872005E5425 /* ZXMonochromeRectangleDetector.m in Sources */,
 				04EA7E0A1D912872005E5425 /* ZXPDF417ScanningDecoder.m in Sources */,
+				319069DB1D9CE91F00D1D6D2 /* InfoHeaderCell.m in Sources */,
 				04EA7DD21D912872005E5425 /* ZXRSSExpandedBlockParsedResult.m in Sources */,
 				04EA7DA21D912872005E5425 /* ZXByteMatrix.m in Sources */,
 				04EA7E101D912872005E5425 /* ZXPDF417Dimensions.m in Sources */,
@@ -4740,6 +4785,7 @@
 				04EA7D9C1D912872005E5425 /* ZXHybridBinarizer.m in Sources */,
 				31B7C7A01D8FE71F00F1883A /* LGPhoneNumberCell.m in Sources */,
 				311CEF801D92246A00BBB1F9 /* MessageCell.m in Sources */,
+				319069D61D9CE56100D1D6D2 /* FriendProfilecontroller.m in Sources */,
 				04F57AFE1D928154002A6471 /* ComplainSubViewController.m in Sources */,
 				04EA7ACF1D910F89005E5425 /* DNAssetsViewCell.m in Sources */,
 				04F57AB71D9280BD002A6471 /* SDTimeLineCellOperationMenu.m in Sources */,
@@ -4834,6 +4880,7 @@
 				04EA7DE71D912872005E5425 /* ZXCode128Writer.m in Sources */,
 				04EA7DD61D912872005E5425 /* ZXRSSExpandedDecodedNumeric.m in Sources */,
 				04EA7DE11D912872005E5425 /* ZXRSSFinderPattern.m in Sources */,
+				319069E41D9CF3B800D1D6D2 /* LGPhotosView.m in Sources */,
 				04EA79E21D90E9F7005E5425 /* KXMoneyDetailController.m in Sources */,
 				311CEFAD1D937BE700BBB1F9 /* AmrRecordWriter.m in Sources */,
 				04EA7DEC1D912872005E5425 /* ZXEAN13Writer.m in Sources */,
@@ -4858,6 +4905,7 @@
 				04EA7DEB1D912872005E5425 /* ZXEAN13Reader.m in Sources */,
 				04EA7AD41D910F89005E5425 /* DNTapDetectingImageView.m in Sources */,
 				04EA7B5E1D91282E005E5425 /* LBXScanLineAnimation.m in Sources */,
+				319069E01D9CF18500D1D6D2 /* InfoContentCell.m in Sources */,
 				311CEF741D921F8800BBB1F9 /* LGPhoneContactInfoController.m in Sources */,
 				04EA7DD41D912872005E5425 /* ZXRSSExpandedDecodedChar.m in Sources */,
 				04EA7D6F1D912872005E5425 /* ZXGeoParsedResult.m in Sources */,

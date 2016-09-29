@@ -10,8 +10,10 @@
 #import "ZhiMaFriendModel.h"
 #import "NewFriendsListCell.h"
 #import "NewFriendListHeadCell.h"
+#import "LGSearchResultController.h"
+#import "FriendProfilecontroller.h"
 
-@interface NewFriendsListController ()<UITableViewDelegate,UITableViewDataSource,LGSearchBarDelegate>
+@interface NewFriendsListController ()<UITableViewDelegate,UITableViewDataSource,LGSearchBarDelegate,NewFriendsListCellDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *friendsArr;
 @end
@@ -38,18 +40,26 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     self.tableView = tableView;
 }
 
-//请求新的好友列表数据
+//请求新的好友列表数据 - 如果没有从网络加载
 - (void)requestNewFriendsList{
-#warning TODO: 从数据库拉取数据
-    [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
-        self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
-        [self.tableView reloadData];
-    } failure:^(ErrorData *error) {
-        [LCProgressHUD showFailureText:@"网络好像出错了哦[^_^]"];
-    }];
+    self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
+    [self.tableView reloadData];
+    
+    if (!self.friendsArr.count) {
+        [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
+            self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+            [self.tableView reloadData];
+            [FMDBShareManager saveNewFirendsWithArray:self.friendsArr andUserId:USERINFO.userID];
+        } failure:^(ErrorData *error) {
+            [LCProgressHUD showFailureText:@"网络好像出错了哦[^_^]"];
+        }];
+ 
+    }
 }
 
-//搜索栏代理方法 -- 搜索新的好友
+/**
+ *  搜索栏代理方法 -- 搜索新的好友
+ */
 - (void)searchAction:(NSString *)content{
     if (!content.length) {
         [LCProgressHUD showText:@"搜索内容不能为空！"];
@@ -61,18 +71,35 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
             if (responseData.code == 0) {
                 [LCProgressHUD hide];
                 //搜索成功 -- 跳转到搜索结果展示页面
-                
-//                LGSearchResultController *vc = [[LGSearchResultController alloc] init];
-//                vc.dataArr = responseData.data;
-//                vc.isAddFriend = YES;
-//                [self.navigationController pushViewController:vc animated:YES];
+                LGSearchResultController *vc = [[LGSearchResultController alloc] init];
+                vc.dataArr = responseData.data;
+                [self.navigationController pushViewController:vc animated:YES];
                 
             }else{
                 [LCProgressHUD showText:responseData.msg];
                 
             }
     }];
+}
 
+/**
+ *  接受好友请求
+ */
+- (void)acceptNewFriendRequest:(NSIndexPath *)indexPath{
+    ZhiMaFriendModel *friend = self.friendsArr[indexPath.row];
+    [LCProgressHUD showLoadingText:@"请稍等..."];
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:FriendTypeFriends openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            [LCProgressHUD hide];
+            //添加好友成功 -- 更新数据库
+            friend.status = YES;
+            [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            
+        }else{
+            [LCProgressHUD showText:responseData.msg];
+        }
+    }];
 }
 
 #pragma mark - tableView 代理方法
@@ -96,6 +123,8 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     }else{      //好友列表
         NewFriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
         cell.friendModel = self.friendsArr[indexPath.row];
+        cell.delegate = self;
+        cell.indexPath = indexPath;
         return cell;
     }
 }
@@ -105,7 +134,8 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     
     if (indexPath.section == 1) {
         //跳转到用户详情
-        
+        FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
