@@ -28,8 +28,8 @@ typedef enum : NSUInteger {
     ZhiMa_User_Message_Table,        //用户信息表
     
     /* ----   群聊相关 ----  */
-    ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
-//    ZhiMa_GroupChat_GroupMenber_Table
+//    ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
+    ZhiMa_GroupChat_GroupMenber_Table              //群成员表
 } ZhiMaSqliteTableType;
 
 @interface FMDBManager : NSObject
@@ -199,7 +199,32 @@ typedef enum : NSUInteger {
 
 #pragma mark - 群成员信息表
 //                    ------------   群成员信息表  ----------------
+/**
+ *  保存群成员信息，如果成员存在，则更新成员名称和头像
+ *
+ *  @param array   群成员数组
+ *  @param groupId 群聊id
+ *
+ */
+- (void)saveAllGroupMemberWithArray:(NSArray <ZhiMaFriendModel *> *)array andGroupChatId:(NSString *)groupId;
 
+/**
+ *  根据群id 和用户id 查询群成员表是否有这个人
+ *
+ *  @param groupId  群聊id
+ *  @param memberId 用户id
+ *
+ *  @return 是否存在
+ */
+- (BOOL)isGroupMemberWithGroupChatId:(NSString *)groupId andMemberId:(NSString *)memberId;
 
+/**
+ *  取出该群聊所有群成员
+ *
+ *  @param groupId 群Id
+ *
+ *  @return 群成员数组
+ */
+- (NSArray <ZhiMaFriendModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId;
 
 @end

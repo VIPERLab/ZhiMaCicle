@@ -80,9 +80,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)recievedNewMessage:(NSNotification *)notification
 {
-//    NSLog(@"=== %@",notification.object);
-    NSDictionary *userInfo = notification.userInfo;
-    LGMessage *message  = userInfo[@"message"];
+    NSLog(@"=== %@ ----- %@",notification.object, notification.userInfo[@"message"]);
+//    NSDictionary *userInfo = ;
+    LGMessage *message  = notification.userInfo[@"message"];
     [self.messages addObject:message];
     
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];

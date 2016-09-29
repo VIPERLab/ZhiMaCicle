@@ -29,7 +29,7 @@
 /*用户表*/
 #define ZhiMaUserMessage_Table_Name @"UserMessage "
 /*群聊信息表*/
-#define ZhiMaGroupChat_Table_Name @"GroupChat "
+//#define ZhiMaGroupChat_Table_Name @"GroupChat "
 #define ZhiMaGroupChatMember_Table_Name @"GroupChatMember "
 
 
@@ -74,7 +74,11 @@
 #define User_MessageFields_name @"user_Name, user_Id, user_Head_photo, user_NickName";
 
 //群聊信息表
-#define GroupChat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, converseId TEXT NOT NULL, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER)"
-#define GroupChat_MessageFields_name @"converseId, groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
+//#define GroupChat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, converseId TEXT NOT NULL, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER)"
+//#define GroupChat_MessageFields_name @"converseId, groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
+
+//群成员表
+#define GroupChat_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, converseId TEXT NOT NULL, memberId TEXT NOT NULL, memberName TEXT NOT NULL, memberNameInGroup TEXT NOT NULL, memberHeader_Photo TEXT NOT NULL)"
+#define GroupChat_MemberFields_Name @"converseId, memberId, memberName, memberNameInGroup, memberHeader_Photo"
 
 #endif /* FMDBManagerHeader_h */
