@@ -79,13 +79,13 @@ return; \
 
 void isRunningProc (void * inUserData,AudioQueueRef inAQ,AudioQueuePropertyID inID)
 {
-	MLAudioPlayer *player = (__bridge MLAudioPlayer*)inUserData;
+    MLAudioPlayer *player = (__bridge MLAudioPlayer*)inUserData;
     
     UInt32 isRunning;
-	UInt32 size = sizeof(isRunning);
-	OSStatus result = AudioQueueGetProperty (inAQ, kAudioQueueProperty_IsRunning, &isRunning, &size);
-	
-	if ((result == noErr) && (!isRunning)&&player.isPlaying){
+    UInt32 size = sizeof(isRunning);
+    OSStatus result = AudioQueueGetProperty (inAQ, kAudioQueueProperty_IsRunning, &isRunning, &size);
+    
+    if ((result == noErr) && (!isRunning)&&player.isPlaying){
         [player performSelector:@selector(stopPlaying) withObject:nil afterDelay:0.001f];
     }
 }
@@ -110,7 +110,7 @@ void outBufferHandler(void *inUserData,AudioQueueRef inAQ,AudioQueueBufferRef in
     if (data.length>0) {
         memcpy(inCompleteAQBuffer->mAudioData, data.bytes, data.length);
         inCompleteAQBuffer->mAudioDataByteSize = data.length;
-		inCompleteAQBuffer->mPacketDescriptionCount = 0;
+        inCompleteAQBuffer->mPacketDescriptionCount = 0;
         
         if(AudioQueueEnqueueBuffer(inAQ, inCompleteAQBuffer, 0, NULL)!=noErr){
             [player postAErrorWithErrorCode:MLAudioPlayerErrorCodeAboutQueue andDescription:@"重准备音频输出缓存区失败"];
@@ -173,17 +173,17 @@ void outBufferHandler(void *inUserData,AudioQueueRef inAQ,AudioQueueBufferRef in
     IfAudioQueueErrorPostAndReturn(AudioQueueNewOutput(&_audioFormat, outBufferHandler, (__bridge void *)(self), CFRunLoopGetCurrent(), kCFRunLoopCommonModes, 0, &_audioQueue),@"音频输出队列初始化失败");
     
     //设置正在运行的回调，这个还真不知道啥时候执行，回头测试下
-	IfAudioQueueErrorPostAndReturn(AudioQueueAddPropertyListener(_audioQueue, kAudioQueueProperty_IsRunning,isRunningProc, (__bridge void *)(self)), @"adding property listener");
+    IfAudioQueueErrorPostAndReturn(AudioQueueAddPropertyListener(_audioQueue, kAudioQueueProperty_IsRunning,isRunningProc, (__bridge void *)(self)), @"adding property listener");
     
     //计算估算的缓存区大小，这里我们忽略可变速率的情况
     static const int maxBufferSize = 0x10000;
-	static const int minBufferSize = 0x4000;
-	
+    static const int minBufferSize = 0x4000;
+    
     //每秒采集的帧数/每个packet有的帧数，算出来每秒有多少packet，然后乘以秒数，即为inSeconds时间里需要的packet数目
     //最后乘以参数给予的buffer最大的packet数目。即为估算的保守的buffer大小
     Float64 numPacketsForTime = ceil(_audioFormat.mSampleRate* kDefaultBufferDurationSeconds)/ _audioFormat.mFramesPerPacket ;
     int bufferByteSize = ceil(numPacketsForTime * _audioFormat.mBytesPerPacket);
-	bufferByteSize = bufferByteSize>maxBufferSize?maxBufferSize:bufferByteSize;
+    bufferByteSize = bufferByteSize>maxBufferSize?maxBufferSize:bufferByteSize;
     bufferByteSize = bufferByteSize<minBufferSize?minBufferSize:bufferByteSize;
     self.bufferByteSize = bufferByteSize;
     NSLog(@"缓冲区大小:%d",bufferByteSize);

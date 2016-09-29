@@ -50,7 +50,7 @@ return; \
     
     free(_levelMeterStates);
     
-	NSLog(@"MLAudioMeterObserver dealloc");
+    NSLog(@"MLAudioMeterObserver dealloc");
 }
 
 #pragma mark - setter and getter
@@ -71,7 +71,7 @@ return; \
 
 - (AudioQueueRef)audioQueue
 {
-	return _audioQueue;
+    return _audioQueue;
 }
 
 - (void)setAudioQueue:(AudioQueueRef)audioQueue
@@ -84,7 +84,7 @@ return; \
     //处理关闭定时器
     [self.timer invalidate];
     self.timer = nil;
-
+    
     
     //根据新的音频队列重新初始化_levelMeterStates的内存块
     if (audioQueue==NULL){
@@ -126,7 +126,7 @@ return; \
 - (void)refresh
 {
     UInt32 data_sz = sizeof(AudioQueueLevelMeterState) * self.channelCount;
-
+    
     IfAudioQueueErrorPostAndReturn(AudioQueueGetProperty(_audioQueue, kAudioQueueProperty_CurrentLevelMeterDB, _levelMeterStates, &data_sz),@"获取meter数据失败");
     
     //转化成LevelMeterState数组传递到block

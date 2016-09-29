@@ -44,7 +44,6 @@ return; \
 @property (nonatomic, strong) dispatch_semaphore_t semError; //一个信号量，用来保证队列中写文件错误事件处理只调用一次
 @property (nonatomic, assign) BOOL isRecording;
 
-
 @end
 
 @implementation MLAudioRecorder
@@ -215,14 +214,12 @@ void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRe
             [self.delegate recordStopped];
         }
         
-        if (self.isTimeOut) {
-            NSLog(@"chaoshi=======");
-        }
         if (self.receiveStoppedBlock){
             self.receiveStoppedBlock();
         }
     }
 }
+
 
 // 设置录音格式
 - (void)setupAudioFormat:(UInt32) inFormatID SampleRate:(int)sampeleRate
@@ -240,19 +237,19 @@ void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRe
     //    NSLog(@"sampleRate:%f,通道数:%d",_recordFormat.mSampleRate,_recordFormat.mChannelsPerFrame);
     
     //设置format，怎么称呼不知道。
-	_recordFormat.mFormatID = inFormatID;
+    _recordFormat.mFormatID = inFormatID;
     
-	if (inFormatID == kAudioFormatLinearPCM){
+    if (inFormatID == kAudioFormatLinearPCM){
         //这个屌属性不知道干啥的。，
-		_recordFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
+        _recordFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
         //每个通道里，一帧采集的bit数目
-		_recordFormat.mBitsPerChannel = 16;
+        _recordFormat.mBitsPerChannel = 16;
         //结果分析: 8bit为1byte，即为1个通道里1帧需要采集2byte数据，再*通道数，即为所有通道采集的byte数目。
         //所以这里结果赋值给每帧需要采集的byte数目，然后这里的packet也等于一帧的数据。
         //至于为什么要这样。。。不知道。。。
-		_recordFormat.mBytesPerPacket = _recordFormat.mBytesPerFrame = (_recordFormat.mBitsPerChannel / 8) * _recordFormat.mChannelsPerFrame;
-		_recordFormat.mFramesPerPacket = 1;
-	}
+        _recordFormat.mBytesPerPacket = _recordFormat.mBytesPerFrame = (_recordFormat.mBitsPerChannel / 8) * _recordFormat.mChannelsPerFrame;
+        _recordFormat.mFramesPerPacket = 1;
+    }
 }
 
 - (void)postAErrorWithErrorCode:(MLAudioRecorderErrorCode)code andDescription:(NSString*)description
@@ -291,9 +288,7 @@ void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRe
     {
         NSLog(@"begin interruption");
         //直接停止录音
-        if (self.isRecording) {
-            [self stopRecording];
-        }
+        [self stopRecording];
     }
     else if (AVAudioSessionInterruptionTypeEnded == interruptionType)
     {

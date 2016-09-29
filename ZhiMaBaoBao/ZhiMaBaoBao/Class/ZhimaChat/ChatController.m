@@ -121,7 +121,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     NSString *path = [dateFormatter stringFromDate:[NSDate date]];
     path = [path stringByAppendingString:[NSString stringWithFormat:@"-%@",uid]];
     
-    self.audioName = [NSString stringWithFormat:@"%@.amr",path];
+    self.audioName = [NSString stringWithFormat:@"/%@.amr",path];
     NSLog(@"注册时候的时间 = %@",self.audioName);
     
     return path;
@@ -894,14 +894,14 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.messages addObject:message];
     
     NSLog(@"发送的时间2 = %@",self.audioName);
-
-    
-    SocketManager* socket = [SocketManager shareInstance];
-    [socket sendMessage:message];
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
     NSArray *indexPaths = @[indexpath];
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
+    SocketManager* socket = [SocketManager shareInstance];
+    [socket sendMessage:message];
+
 }
 
 //完成录音
