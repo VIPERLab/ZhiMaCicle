@@ -191,6 +191,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
             
             rowNum = [[self.countOfSectionArr objectAtIndex:i] intValue] + rowNum;
         }
+        rowNum += indexPath.row;
         
         ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
         cell.friendModel = friend;
@@ -266,6 +267,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
             
             rowNum = [[self.countOfSectionArr objectAtIndex:i] intValue] + rowNum;
         }
+        rowNum += indexPath.row;
         
         ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
         ChatController *vc = [[ChatController alloc] init];
