@@ -30,7 +30,7 @@
     //用户相关的表
     FMDatabaseQueue *user_message_DB;
     
-    //用户相关的表
+    //群聊相关的表
     FMDatabaseQueue *group_userMenber_DB;
 }
 
@@ -51,17 +51,22 @@
     switch (type) {
         case ZhiMa_Circle_Table:
             return circle_DB;
+            
         case ZhiMa_Circle_Comment_Table:
             return circle_Comment_DB;
+            
         case ZhiMa_Circle_Pic_Table:
             return circle_Pic_DB;
+            
         case ZhiMa_Circle_Like_Table:
             return circle_Like_Db;
             
         case ZhiMa_Chat_Converse_Table:
             return chat_Converse_DB;
+            
         case ZhiMa_Chat_Message_Table:
             return chat_message_DB;
+            
         case ZhiMa_User_Message_Table:
             return user_message_DB;
         
@@ -132,7 +137,7 @@
                     user_message_DB = db_Queue;
                     break;
                 }
-                case ZhiMa_GroupChat_GroupMenber_Table: { //群聊信息表
+                case ZhiMa_GroupChat_GroupMenber_Table: { //群聊成员信息表
                     tableName = ZhiMaGroupChatMember_Table_Name;
                     tableField = GroupChat_MemberField;
                     group_userMenber_DB = db_Queue;

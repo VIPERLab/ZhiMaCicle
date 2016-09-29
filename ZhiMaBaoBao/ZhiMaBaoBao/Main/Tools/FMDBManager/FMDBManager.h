@@ -133,11 +133,6 @@ typedef enum : NSUInteger {
 - (BOOL)deleteUserMessageByUserID:(NSString *)userID;
 
 
-
-
-
-
-
 #pragma mark - 聊天相关
 //                    ------------   会话表  ----------------
 /**
@@ -154,6 +149,14 @@ typedef enum : NSUInteger {
  */
 - (void)saveConverseListDataWithDataArray:(NSArray <ConverseModel *> *)dataArray;
 
+
+/**
+ *  根据会话id查询会话模型
+ *
+ *  @param converseID 会话id
+ *
+ *  @return 会话模型
+ */
 - (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID;
 
 

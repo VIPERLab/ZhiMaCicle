@@ -46,10 +46,6 @@
 
 - (void)setupView {
     
-//    YiUserInfo * userInfo = [YiUserInfo defaultUserInfo];
-//    _vcard = [[YiXmppVCard alloc] init];
-//    [_vcard load:[userInfo getJid] forceIntenet:NO success:nil failed:nil];
-    
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     self.tableView = tableView;
     [self.view addSubview:tableView];
@@ -107,10 +103,11 @@
         if (responseData.code != 0) {
             return ;
         }
-//        _vcard.country = @"中国";
-//        _vcard.province = provinceModel.region_name;
-//        _vcard.address = areaModel.region_name;
-//        [_vcard store:nil failed:nil];
+        
+        UserInfo *info = [UserInfo read];
+        info.area = [provinceModel.region_name stringByAppendingString:[NSString stringWithFormat:@" %@",areaModel.region_name]];
+        [info save];
+        
         [LCProgressHUD showSuccessText:@"修改成功"];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             for (UIViewController *vc in self.navigationController.viewControllers) {

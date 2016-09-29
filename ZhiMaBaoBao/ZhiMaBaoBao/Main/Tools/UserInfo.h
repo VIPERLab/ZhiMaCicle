@@ -72,7 +72,7 @@
 /**
  *  位置信息
  */
-@property (nonatomic, copy) NSString *location;
+@property (nonatomic, copy) NSString *area;
 
 #pragma mark - 判断时候超过15天
 /**

@@ -44,7 +44,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    _subTitleArray = @[@[@"编辑",USERINFO.username],@[USERINFO.sex,@"深圳 南山区",USERINFO.signature],@[@"",@""]];
+    _subTitleArray = @[@[@"编辑",USERINFO.username],@[USERINFO.sex,USERINFO.area,USERINFO.signature],@[@"",@""]];
     [_tableView reloadData];
 }
 

@@ -138,8 +138,9 @@
             [LCProgressHUD hide];
             UserInfo *userInfo = [UserInfo mj_objectWithKeyValues:responseData.data];
             userInfo.hasLogin = YES;
-            if ([userInfo.location isEqualToString:@""] || userInfo.location == nil) {
-                userInfo.location = @"";
+            
+            if ([userInfo.area isEqualToString:@""] || userInfo.area == nil) {
+                userInfo.area = @"";
             }
             
             [userInfo save];
