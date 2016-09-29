@@ -10,6 +10,8 @@
 #import "ZhiMaFriendModel.h"
 #import "pinyin.h"
 #import "FriendsListCell.h"
+#import "ChatController.h"
+#import "NewFriendsListController.h"
 
 @interface FriendsController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -39,6 +41,8 @@ static NSString * const reuseIdentifier = @"friendListcell";
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     tableView.delegate = self;
     tableView.dataSource = self;
+    tableView.sectionIndexColor = RGB(54, 54, 54);
+    tableView.sectionIndexBackgroundColor = [UIColor clearColor];
     [tableView registerNib:[UINib nibWithNibName:@"FriendsListCell" bundle:nil] forCellReuseIdentifier:reuseIdentifier];
     [self.view addSubview:tableView];
     self.tableView = tableView;
@@ -52,7 +56,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
     if (!self.friends.count) {
         [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
             self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
-            [self friendsAfterSort];
+            [self friendsListSort];
             //将拉取的好友列表插入数据库
             if ([FMDBShareManager saveUserMessageWithMessageArray:self.friends]) {
                 NSLog(@"好友列表插入数据库成功");
@@ -112,6 +116,11 @@ static NSString * const reuseIdentifier = @"friendListcell";
                 NSString *numStr = [NSString stringWithFormat:@"%d",num + 1];
                 [self.countOfSectionArr addObject:numStr];
                 
+                ////最后一条数据 -> 将最后一组数据个数插入
+                if (i == self.friendsAfterSort.count - 2) {
+                    [self.countOfSectionArr addObject:@(1)];
+                }
+                
                 NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend1.pinyin characterAtIndex:0])];
                 [self.sectionsArr addObject:[str uppercaseString]];
                 num = 0;
@@ -168,7 +177,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 52;
+    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -216,6 +225,31 @@ static NSString * const reuseIdentifier = @"friendListcell";
      atScrollPosition:UITableViewScrollPositionTop animated:YES];
     
     return index;
+}
+
+#pragma mark - tableview 点击方法
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {   //新的朋友
+            NewFriendsListController *vc = [[NewFriendsListController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }else if (indexPath.row == 1){  //群组
+            
+        }
+    }else{  //跳转到聊天
+        NSInteger rowNum = 0;
+        for (int i = 0; i < indexPath.section - 1; i++) {
+            
+            rowNum = [[self.countOfSectionArr objectAtIndex:i] intValue] + rowNum;
+        }
+        
+        ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
+        ChatController *vc = [[ChatController alloc] init];
+        vc.conversionId = friend.user_Id;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 #pragma mark - 懒加载

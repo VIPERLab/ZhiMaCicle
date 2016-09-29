@@ -465,7 +465,6 @@
 		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
 		316957561D90E63100140126 /* LGAddFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957541D90E63100140126 /* LGAddFriendCell.m */; };
 		316957571D90E63100140126 /* LGAddFriendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 316957551D90E63100140126 /* LGAddFriendCell.xib */; };
-		3169575A1D90E67700140126 /* LGSearchResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957591D90E67700140126 /* LGSearchResultController.m */; };
 		3169575D1D90E68300140126 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169575C1D90E68300140126 /* AddFriendViewController.m */; };
 		316957641D90E72800140126 /* LGSearchResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957621D90E72800140126 /* LGSearchResultCell.m */; };
 		316957651D90E72800140126 /* LGSearchResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 316957631D90E72800140126 /* LGSearchResultCell.xib */; };
@@ -487,6 +486,13 @@
 		319069AD1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */; };
 		319069B11D9BC09200D1D6D2 /* FriendsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */; };
 		319069B21D9BC09200D1D6D2 /* FriendsListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069B01D9BC09200D1D6D2 /* FriendsListCell.xib */; };
+		319069B61D9BE8E300D1D6D2 /* NewFriendsListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069B51D9BE8E300D1D6D2 /* NewFriendsListController.m */; };
+		319069BD1D9BF24700D1D6D2 /* LGSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069BC1D9BF24700D1D6D2 /* LGSearchBar.m */; };
+		319069C11D9BF6F700D1D6D2 /* NewFriendsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069BF1D9BF6F700D1D6D2 /* NewFriendsListCell.m */; };
+		319069C21D9BF6F700D1D6D2 /* NewFriendsListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069C01D9BF6F700D1D6D2 /* NewFriendsListCell.xib */; };
+		319069C61D9CA39700D1D6D2 /* NewFriendListHeadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069C51D9CA39700D1D6D2 /* NewFriendListHeadCell.m */; };
+		319069CA1D9CA90800D1D6D2 /* LGSearchResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069C91D9CA90800D1D6D2 /* LGSearchResultController.m */; };
+		319069D21D9CC2AE00D1D6D2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069D11D9CC2AE00D1D6D2 /* NSData+Base64.m */; };
 		31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C6FD1D8E91F000F1883A /* MainViewController.m */; };
 		31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7021D8E96A100F1883A /* PersonalCenterController.m */; };
 		31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C70E1D8E96A100F1883A /* ConversationController.m */; };
@@ -1463,8 +1469,6 @@
 		316957531D90E63100140126 /* LGAddFriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGAddFriendCell.h; sourceTree = "<group>"; };
 		316957541D90E63100140126 /* LGAddFriendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGAddFriendCell.m; sourceTree = "<group>"; };
 		316957551D90E63100140126 /* LGAddFriendCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LGAddFriendCell.xib; sourceTree = "<group>"; };
-		316957581D90E67700140126 /* LGSearchResultController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGSearchResultController.h; sourceTree = "<group>"; };
-		316957591D90E67700140126 /* LGSearchResultController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSearchResultController.m; sourceTree = "<group>"; };
 		3169575B1D90E68300140126 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
 		3169575C1D90E68300140126 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
 		316957611D90E72800140126 /* LGSearchResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGSearchResultCell.h; sourceTree = "<group>"; };
@@ -1492,6 +1496,19 @@
 		319069AE1D9BC09200D1D6D2 /* FriendsListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FriendsListCell.h; path = ZhiMaBaoBao/Categray/FriendsListCell.h; sourceTree = SOURCE_ROOT; };
 		319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FriendsListCell.m; path = ZhiMaBaoBao/Categray/FriendsListCell.m; sourceTree = SOURCE_ROOT; };
 		319069B01D9BC09200D1D6D2 /* FriendsListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FriendsListCell.xib; path = ZhiMaBaoBao/Categray/FriendsListCell.xib; sourceTree = SOURCE_ROOT; };
+		319069B41D9BE8E300D1D6D2 /* NewFriendsListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewFriendsListController.h; sourceTree = "<group>"; };
+		319069B51D9BE8E300D1D6D2 /* NewFriendsListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewFriendsListController.m; sourceTree = "<group>"; };
+		319069BB1D9BF24700D1D6D2 /* LGSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGSearchBar.h; sourceTree = "<group>"; };
+		319069BC1D9BF24700D1D6D2 /* LGSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSearchBar.m; sourceTree = "<group>"; };
+		319069BE1D9BF6F700D1D6D2 /* NewFriendsListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewFriendsListCell.h; sourceTree = "<group>"; };
+		319069BF1D9BF6F700D1D6D2 /* NewFriendsListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewFriendsListCell.m; sourceTree = "<group>"; };
+		319069C01D9BF6F700D1D6D2 /* NewFriendsListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewFriendsListCell.xib; sourceTree = "<group>"; };
+		319069C41D9CA39700D1D6D2 /* NewFriendListHeadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewFriendListHeadCell.h; sourceTree = "<group>"; };
+		319069C51D9CA39700D1D6D2 /* NewFriendListHeadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewFriendListHeadCell.m; sourceTree = "<group>"; };
+		319069C81D9CA90800D1D6D2 /* LGSearchResultController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGSearchResultController.h; sourceTree = "<group>"; };
+		319069C91D9CA90800D1D6D2 /* LGSearchResultController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSearchResultController.m; sourceTree = "<group>"; };
+		319069D01D9CC2AE00D1D6D2 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		319069D11D9CC2AE00D1D6D2 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		31B7C6FC1D8E91F000F1883A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		31B7C6FD1D8E91F000F1883A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		31B7C7011D8E96A100F1883A /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
@@ -1732,6 +1749,8 @@
 				319069A31D9A17C300D1D6D2 /* NSData+Replace.m */,
 				319069AB1D9A9DC100D1D6D2 /* NSDate+TimeCategory.h */,
 				319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */,
+				319069D01D9CC2AE00D1D6D2 /* NSData+Base64.h */,
+				319069D11D9CC2AE00D1D6D2 /* NSData+Base64.m */,
 			);
 			name = Categray;
 			path = ZhiMaBaoBao/Categray;
@@ -3838,8 +3857,6 @@
 			isa = PBXGroup;
 			children = (
 				316957521D90E5F000140126 /* Cell */,
-				316957581D90E67700140126 /* LGSearchResultController.h */,
-				316957591D90E67700140126 /* LGSearchResultController.m */,
 				3169575B1D90E68300140126 /* AddFriendViewController.h */,
 				3169575C1D90E68300140126 /* AddFriendViewController.m */,
 				316957661D90E91700140126 /* LGSearchController.h */,
@@ -3887,6 +3904,47 @@
 			children = (
 			);
 			name = Controls;
+			sourceTree = "<group>";
+		};
+		319069B31D9BE89000D1D6D2 /* NewFriends(新的好友) */ = {
+			isa = PBXGroup;
+			children = (
+				319069C31D9CA37400D1D6D2 /* Cell */,
+				319069BA1D9BF22500D1D6D2 /* Tools */,
+				319069B41D9BE8E300D1D6D2 /* NewFriendsListController.h */,
+				319069B51D9BE8E300D1D6D2 /* NewFriendsListController.m */,
+			);
+			name = "NewFriends(新的好友)";
+			sourceTree = "<group>";
+		};
+		319069BA1D9BF22500D1D6D2 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				319069BB1D9BF24700D1D6D2 /* LGSearchBar.h */,
+				319069BC1D9BF24700D1D6D2 /* LGSearchBar.m */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
+		319069C31D9CA37400D1D6D2 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				319069BE1D9BF6F700D1D6D2 /* NewFriendsListCell.h */,
+				319069BF1D9BF6F700D1D6D2 /* NewFriendsListCell.m */,
+				319069C01D9BF6F700D1D6D2 /* NewFriendsListCell.xib */,
+				319069C41D9CA39700D1D6D2 /* NewFriendListHeadCell.h */,
+				319069C51D9CA39700D1D6D2 /* NewFriendListHeadCell.m */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		319069C71D9CA8EF00D1D6D2 /* SearchResult(好友搜索结果) */ = {
+			isa = PBXGroup;
+			children = (
+				319069C81D9CA90800D1D6D2 /* LGSearchResultController.h */,
+				319069C91D9CA90800D1D6D2 /* LGSearchResultController.m */,
+			);
+			name = "SearchResult(好友搜索结果)";
 			sourceTree = "<group>";
 		};
 		31B7C6CB1D8E89D700F1883A /* Class */ = {
@@ -4070,6 +4128,8 @@
 		31B7C7171D8E96A100F1883A /* ZhimaFriend(芝麻友) */ = {
 			isa = PBXGroup;
 			children = (
+				319069C71D9CA8EF00D1D6D2 /* SearchResult(好友搜索结果) */,
+				319069B31D9BE89000D1D6D2 /* NewFriends(新的好友) */,
 				31B7C7181D8E96A100F1883A /* Controller */,
 				31B7C71B1D8E96A100F1883A /* Model */,
 				31B7C71C1D8E96A100F1883A /* View */,
@@ -4461,6 +4521,7 @@
 				04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */,
 				316957801D91199100140126 /* dtmf-3.aif in Resources */,
 				31B7C7731D8FBC8000F1883A /* hud_success.png in Resources */,
+				319069C21D9BF6F700D1D6D2 /* NewFriendsListCell.xib in Resources */,
 				316957881D91199100140126 /* ring.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4544,6 +4605,7 @@
 				04EA7D811D912872005E5425 /* ZXVCardResultParser.m in Sources */,
 				04F862CC1D9554AA00DCC6FE /* UserMessageCell.m in Sources */,
 				04EA7E261D912872005E5425 /* ZXQRCodeFinderPatternInfo.m in Sources */,
+				319069B61D9BE8E300D1D6D2 /* NewFriendsListController.m in Sources */,
 				04EA7D6D1D912872005E5425 /* ZXExpandedProductParsedResult.m in Sources */,
 				04EA7D781D912872005E5425 /* ZXSMSParsedResult.m in Sources */,
 				04EA7E0B1D912872005E5425 /* ZXPDF417Detector.m in Sources */,
@@ -4606,6 +4668,7 @@
 				04EA7DC71D912872005E5425 /* ZXAbstractExpandedDecoder.m in Sources */,
 				04F8624F1D94FC6D00DCC6FE /* NSMutableAttributedString+MLLabel.m in Sources */,
 				04F862941D94FC7900DCC6FE /* PanelBottomView.m in Sources */,
+				319069CA1D9CA90800D1D6D2 /* LGSearchResultController.m in Sources */,
 				04EA7E1B1D912872005E5425 /* ZXQRCodeDecoder.m in Sources */,
 				311CEFAF1D937BE700BBB1F9 /* MLAudioMeterObserver.m in Sources */,
 				04EA7D6E1D912872005E5425 /* ZXExpandedProductResultParser.m in Sources */,
@@ -4618,6 +4681,7 @@
 				04EA7D701D912872005E5425 /* ZXGeoResultParser.m in Sources */,
 				04EA7DB41D912872005E5425 /* ZXDataMatrixBase256Encoder.m in Sources */,
 				04EA7D581D912872005E5425 /* ZXAztecDetector.m in Sources */,
+				319069BD1D9BF24700D1D6D2 /* LGSearchBar.m in Sources */,
 				04EA7AD01D910F89005E5425 /* DNBadgeLabel.m in Sources */,
 				04EA7E2C1D912872005E5425 /* ZXMultiDetector.m in Sources */,
 				04F57AE41D9280BD002A6471 /* SDBrowserImageView.m in Sources */,
@@ -4648,7 +4712,6 @@
 				316957681D90E91700140126 /* LGSearchController.m in Sources */,
 				311CEF771D921F9F00BBB1F9 /* LGQueryCell.m in Sources */,
 				316957561D90E63100140126 /* LGAddFriendCell.m in Sources */,
-				3169575A1D90E67700140126 /* LGSearchResultController.m in Sources */,
 				311CEF2F1D92185D00BBB1F9 /* ChatController.m in Sources */,
 				31B7C75C1D8FB33E00F1883A /* LGLoginController.m in Sources */,
 				31B7C75D1D8FB33E00F1883A /* LGRegisterController.m in Sources */,
@@ -4849,6 +4912,7 @@
 				04F57AA81D9280BD002A6471 /* ZhiMaCicleCell.m in Sources */,
 				04F862A11D94FC8900DCC6FE /* UIView+SDAutoLayout.m in Sources */,
 				04EA7E061D912872005E5425 /* ZXPDF417DecodedBitStreamParser.m in Sources */,
+				319069D21D9CC2AE00D1D6D2 /* NSData+Base64.m in Sources */,
 				04EA7B641D91282E005E5425 /* LBXScanViewController.m in Sources */,
 				04EA7E2E1D912872005E5425 /* ZXQRCodeMultiReader.m in Sources */,
 				311CEFB21D937BE700BBB1F9 /* Mp3RecordWriter.m in Sources */,
@@ -4950,6 +5014,7 @@
 				04EA7E271D912872005E5425 /* ZXQRCode.m in Sources */,
 				D5C8B3B01D9A08A9007D6B5C /* TQRichTextView.m in Sources */,
 				04EA7DA11D912872005E5425 /* ZXBinaryBitmap.m in Sources */,
+				319069C11D9BF6F700D1D6D2 /* NewFriendsListCell.m in Sources */,
 				04EA7E141D912872005E5425 /* ZXPDF417Reader.m in Sources */,
 				04EA7B191D9125C5005E5425 /* KXLocationModel.m in Sources */,
 				04F8628B1D94FC7900DCC6FE /* FaceThemeModel.m in Sources */,
@@ -4987,6 +5052,7 @@
 				04EA7D961D912872005E5425 /* ZXCharacterSetECI.m in Sources */,
 				04EA7E171D912872005E5425 /* ZXQRCodeBitMatrixParser.m in Sources */,
 				31B7C74B1D8FB0D900F1883A /* HttpTool.m in Sources */,
+				319069C61D9CA39700D1D6D2 /* NewFriendListHeadCell.m in Sources */,
 				D5C8B3B31D9A0939007D6B5C /* NSString+Extension.m in Sources */,
 				04EA7B241D912652005E5425 /* SettingInvitedByHandViewController.m in Sources */,
 			);
