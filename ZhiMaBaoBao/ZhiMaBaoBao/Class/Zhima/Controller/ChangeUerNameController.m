@@ -51,9 +51,9 @@
 }
 
 - (void)saveButtonDidClick {
-    
+    [LCProgressHUD showText:@"正在修改昵称"];
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"username" andChangeValue:self.textField.text block:^(ResponseData *responseData) {
-        
+        [LCProgressHUD hide];
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:@"请检查网络"];
             return ;
@@ -62,6 +62,7 @@
         UserInfo *info = [UserInfo read];
         info.username = self.textField.text;
         [info save];
+        [LCProgressHUD showSuccessText:@"修改成功"];
         [self.navigationController popViewControllerAnimated:YES];
         
     }];

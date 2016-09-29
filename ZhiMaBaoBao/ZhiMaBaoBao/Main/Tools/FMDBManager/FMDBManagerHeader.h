@@ -28,6 +28,9 @@
 #define ZhiMaChatMessage_Table_Name @"ChatMessage "
 /*用户表*/
 #define ZhiMaUserMessage_Table_Name @"UserMessage "
+/*群聊信息表*/
+#define ZhiMaGroupChat_Table_Name @"GroupChat "
+#define ZhiMaGroupChatMember_Table_Name @"GroupChatMember "
 
 
 //  创建朋友圈table字段
@@ -69,5 +72,9 @@
 // 用户表
 #define User_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, user_Name TEXT NOT NULL, user_Id TEXT NOT NULL, user_Head_photo TEXT NOT NULL, user_NickName TEXT NOT NULL)"
 #define User_MessageFields_name @"user_Name, user_Id, user_Head_photo, user_NickName";
+
+//群聊信息表
+#define GroupChat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, converseId TEXT NOT NULL, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER)"
+#define GroupChat_MessageFields_name @"converseId, groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
 
 #endif /* FMDBManagerHeader_h */
