@@ -26,7 +26,7 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+    NSLog(@"%@",NSHomeDirectory());
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpMainController) name:LOGIN_SUCCESS object:nil];
     
@@ -103,6 +103,10 @@
     
     //用户相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_User_Message_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_NewFriend_Message_Table];
+    
+    //群聊相关的表
+    [FMDBShareManager creatTableWithTableType:ZhiMa_GroupChat_GroupMenber_Table];
     
 //    ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
 //    model.user_Name = @"大雄";
@@ -131,7 +135,7 @@
 
 - (void)jumpMainController{
     //已经登录过，直接跳转到主界面
-    
+    [self creatMySQL];
     MainViewController *mainVC = [[MainViewController alloc] init];
     self.window.rootViewController = mainVC;
 

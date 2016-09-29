@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
-@class ConverseModel,LGMessage,ZhiMaFriendModel;
+@class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel;
 @class SDTimeLineCellModel;
 
 typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
@@ -26,6 +26,11 @@ typedef enum : NSUInteger {
     
     /* ----   用户相关 ----  */
     ZhiMa_User_Message_Table,        //用户信息表
+    ZhiMa_NewFriend_Message_Table,     //新好友表
+    
+    /* ----   群聊相关 ----  */
+//    ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
+    ZhiMa_GroupChat_GroupMenber_Table              //群成员表
 } ZhiMaSqliteTableType;
 
 @interface FMDBManager : NSObject
@@ -129,8 +134,34 @@ typedef enum : NSUInteger {
 - (BOOL)deleteUserMessageByUserID:(NSString *)userID;
 
 
+#pragma mark - 新的好友相关
+//                    ------------   新好友表  ----------------
+/**
+ *  根据用户id 取出当前用户所有的新好友列表
+ *
+ *  @param userID 当前用户id
+ *
+ *  @return 新的好友模型数组
+ */
+- (NSArray <ZhiMaFriendModel *> *)getAllNewFriendsByUserId:(NSString *)userID;
 
 
+/**
+ *  保存新的好友信息
+ *
+ *  @param dataArray 新的好友信息数组
+ *  @param userId    当前用户id
+ */
+- (void)saveNewFirendsWithArray:(NSArray <ZhiMaFriendModel *>*)dataArray andUserId:(NSString *)userId;
+
+/**
+ *  更新新的好友模型
+ *
+ *  @param model 新的好友模型
+ *
+ *  @return 是否更新成功
+ */
+- (BOOL)upDataNewFriendsMessageByFriendModel:(ZhiMaFriendModel *)model;
 
 
 
@@ -150,6 +181,14 @@ typedef enum : NSUInteger {
  */
 - (void)saveConverseListDataWithDataArray:(NSArray <ConverseModel *> *)dataArray;
 
+
+/**
+ *  根据会话id查询会话模型
+ *
+ *  @param converseID 会话id
+ *
+ *  @return 会话模型
+ */
 - (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID;
 
 
@@ -186,5 +225,41 @@ typedef enum : NSUInteger {
  *  @param messageID 需要删的消息id
  */
 - (void)deleteMessageFormMessageTableByMessageID:(NSString *)messageID;
+
+
+#pragma mark - 群聊信息表
+//                    ------------   群聊信息表  ----------------
+//- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
+
+
+#pragma mark - 群成员信息表
+//                    ------------   群成员信息表  ----------------
+/**
+ *  保存群成员信息，如果成员存在，则更新成员名称和头像
+ *
+ *  @param array   群成员数组
+ *  @param groupId 群聊id
+ *
+ */
+- (void)saveAllGroupMemberWithArray:(NSArray <ZhiMaFriendModel *> *)array andGroupChatId:(NSString *)groupId;
+
+/**
+ *  根据群id 和用户id 查询群成员表是否有这个人
+ *
+ *  @param groupId  群聊id
+ *  @param memberId 用户id
+ *
+ *  @return 是否存在
+ */
+- (BOOL)isGroupMemberWithGroupChatId:(NSString *)groupId andMemberId:(NSString *)memberId;
+
+/**
+ *  取出该群聊所有群成员
+ *
+ *  @param groupId 群Id
+ *
+ *  @return 群成员数组
+ */
+- (NSArray <ZhiMaFriendModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId;
 
 @end

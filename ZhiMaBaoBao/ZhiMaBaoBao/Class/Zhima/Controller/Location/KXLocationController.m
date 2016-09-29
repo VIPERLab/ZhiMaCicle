@@ -230,7 +230,7 @@
         }
         
         UserInfo *info = [UserInfo read];
-        info.location = [_provinceName stringByAppendingString:_areaName];
+        info.area = self.currentLoaction;
         [info save];
         [LCProgressHUD showSuccessText:@"修改成功"];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

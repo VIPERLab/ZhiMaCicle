@@ -13,6 +13,7 @@
 #import "SDTimeLineCellModel.h"
 #import "ConverseModel.h"
 #import "ZhiMaFriendModel.h"
+#import "GroupChatModel.h"
 #import "LGMessage.h"
 
 @implementation FMDBManager {
@@ -28,6 +29,10 @@
     
     //用户相关的表
     FMDatabaseQueue *user_message_DB;
+    FMDatabaseQueue *newFriend_message_DB;
+    
+    //群聊相关的表
+    FMDatabaseQueue *group_userMenber_DB;
 }
 
 + (instancetype)shareManager {
@@ -47,19 +52,30 @@
     switch (type) {
         case ZhiMa_Circle_Table:
             return circle_DB;
+            
         case ZhiMa_Circle_Comment_Table:
             return circle_Comment_DB;
+            
         case ZhiMa_Circle_Pic_Table:
             return circle_Pic_DB;
+            
         case ZhiMa_Circle_Like_Table:
             return circle_Like_Db;
             
         case ZhiMa_Chat_Converse_Table:
             return chat_Converse_DB;
+            
         case ZhiMa_Chat_Message_Table:
             return chat_message_DB;
+            
         case ZhiMa_User_Message_Table:
             return user_message_DB;
+            
+        case ZhiMa_NewFriend_Message_Table:
+            return newFriend_message_DB;
+        
+        case ZhiMa_GroupChat_GroupMenber_Table:
+            return group_userMenber_DB;
         default:
             NSLog(@"无效参数");
             return nil;
@@ -123,6 +139,18 @@
                     tableName = ZhiMaUserMessage_Table_Name;
                     tableField = User_MessageField;
                     user_message_DB = db_Queue;
+                    break;
+                }
+                
+                case ZhiMa_NewFriend_Message_Table: {  //新好友表
+                    tableName = ZhiMaNewFriend_Table_Name;
+                    tableField = NewFrend_MessageField;
+                    break;
+                }
+                case ZhiMa_GroupChat_GroupMenber_Table: { //群聊成员信息表
+                    tableName = ZhiMaGroupChatMember_Table_Name;
+                    tableField = GroupChat_MemberField;
+                    group_userMenber_DB = db_Queue;
                     break;
                 }
                 default:{
@@ -189,6 +217,16 @@
             fieldName = User_MessageFields_name;
             break;
         }
+        case ZhiMa_NewFriend_Message_Table: {
+            tableName = ZhiMaNewFriend_Table_Name;
+            fieldName = NewFriend_MessageFields_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMenber_Table: {
+            tableName = ZhiMaGroupChatMember_Table_Name;
+            fieldName = GroupChat_MemberFields_Name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -245,6 +283,16 @@
             fieldName = User_MessageFields_name;
             break;
         }
+        case ZhiMa_NewFriend_Message_Table: {
+            tableName = ZhiMaNewFriend_Table_Name;
+            fieldName = NewFriend_MessageFields_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMenber_Table: {
+            tableName = ZhiMaGroupChatMember_Table_Name;
+            fieldName = GroupChat_MemberFields_Name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -293,6 +341,14 @@
             tableName = ZhiMaUserMessage_Table_Name;
             break;
         }
+        case ZhiMa_NewFriend_Message_Table: {
+            tableName = ZhiMaNewFriend_Table_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMenber_Table: {
+            tableName = ZhiMaGroupChatMember_Table_Name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -336,6 +392,14 @@
         }
         case ZhiMa_User_Message_Table: {
             tableName = ZhiMaUserMessage_Table_Name;
+            break;
+        }
+        case ZhiMa_NewFriend_Message_Table: {
+            tableName = ZhiMaNewFriend_Table_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMenber_Table: {
+            tableName = ZhiMaGroupChatMember_Table_Name;
             break;
         }
         default: {
@@ -905,10 +969,89 @@
 }
 
 
+#pragma mark - 新的好友相关
+//                    ------------   新好友表  ----------------
+/**
+ *  根据用户id 取出当前用户所有的新好友列表
+ *
+ *  @param userID 当前用户id
+ *
+ *  @return 新的好友模型数组
+ */
+- (NSArray <ZhiMaFriendModel *> *)getAllNewFriendsByUserId:(NSString *)userID {
+    NSMutableArray *dataArray = [NSMutableArray array];
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_NewFriend_Message_Table];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_NewFriend_Message_Table withOption:[NSString stringWithFormat:@"userId = %@ order by id desc",userID]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:optionStr];
+        while ([result next]) {
+            ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
+            model.user_NickName = [result stringForColumn:@"user_NickName"];
+            model.user_Name = [result stringForColumn:@"user_Name"];
+            model.user_Id = [result stringForColumn:@"user_Id"];
+            model.user_Head_photo = [result stringForColumn:@"user_Head_photo"];
+            model.status = [result intForColumn:@"status"];
+            [dataArray addObject:model];
+        }
+        
+    }];
+    return [dataArray copy];
+}
+
+/**
+ *  保存新的好友信息
+ *
+ *  @param dataArray 新的好友信息数组
+ *  @param userId    当前用户id
+ */
+- (void)saveNewFirendsWithArray:(NSArray <ZhiMaFriendModel *>*)dataArray andUserId:(NSString *)userId {
+    for (ZhiMaFriendModel *model in dataArray) {
+        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_NewFriend_Message_Table];
+        NSString *optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_NewFriend_Message_Table];
+        [queue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:optionStr,model.user_Name,model.user_Id,model.user_Head_photo,@(model.status),userId];
+            if (success) {
+                NSLog(@"插入新好友成功");
+            } else {
+                NSLog(@"插入新好友失败");
+            }
+        }];
+    }
+}
+
+/**
+ *  更新新的好友模型
+ *
+ *  @param model 新的好友模型
+ *
+ *  @return 是否更新成功
+ */
+- (BOOL)upDataNewFriendsMessageByFriendModel:(ZhiMaFriendModel *)model {
+    __block BOOL successFul = NO;
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_NewFriend_Message_Table];
+    NSString *option1 = [NSString stringWithFormat:@"user_Name = '%@', user_Head_photo = '%@', status = '%@'",model.user_Name,model.user_Head_photo,@(model.status)];
+    NSString *option2 = [NSString stringWithFormat:@"user_Id = %@",model.user_Id];
+    NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_NewFriend_Message_Table withOpton1:option1 andOption2:option2];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr,model.user_Name,model.user_Head_photo,@(model.status)];
+        if (success) {
+            NSLog(@"更新新的好友成功");
+            successFul = YES;
+        } else {
+            NSLog(@"更新新的好友失败");
+        }
+    }];
+    
+    return successFul;
+}
 
 #pragma mark - 会话相关
 //                    -----------   会话表  ----------------
-// 保存会话列表
+/**
+ *  保存会话列表数据
+ *
+ *  @param dataArray 数据数组 <ConverseModel *>
+ */
 - (void)saveConverseListDataWithDataArray:(NSArray *)dataArray {
     for (ConverseModel *converseModel in dataArray) {
         FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
@@ -948,7 +1091,11 @@
     }
 }
 
-// 获取会话列表
+/**
+ *  获取会话列表
+ *
+ *  @return 返回一个ConverseModel数组
+ */
 - (NSArray *)getChatConverseDataInArray {
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     NSMutableArray *dataArray = [NSMutableArray array];
@@ -976,7 +1123,13 @@
     return dataArray;
 }
 
-
+/**
+ *  根据会话id查询会话模型
+ *
+ *  @param converseID 会话id
+ *
+ *  @return 会话模型
+ */
 - (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID {
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     ConverseModel *model = [[ConverseModel alloc] init];
@@ -1168,5 +1321,105 @@
     }];
 }
 
+
+#pragma mark - 群聊信息表
+//                    ------------   群聊信息表  ----------------
+//- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID {
+//    
+//    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
+//    NSString *opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMessage_Table];
+//    
+//    return YES;
+//}
+
+
+#pragma mark - 群成员信息表
+//                    ------------   群成员信息表  ----------------
+/**
+ *  保存群成员信息，如果成员存在，则更新成员名称和头像
+ *
+ *  @param array   群成员数组
+ *  @param groupId 群聊id
+ *
+ */
+- (void)saveAllGroupMemberWithArray:(NSArray <ZhiMaFriendModel *> *)array andGroupChatId:(NSString *)groupChatId {
+    FMDatabaseQueue *queuq = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
+    for (ZhiMaFriendModel *model in array) {
+        //查询是否存在该条群成员信息
+        BOOL isExist = [FMDBShareManager isGroupMemberWithGroupChatId:groupChatId andMemberId:model.user_Id];
+        
+        NSString *opeartionStr;
+        if (isExist) {
+            NSLog(@"存在成员信息");
+            NSString *option1 = [NSString stringWithFormat:@"memberNameInGroup = '%@', memberHeader_Photo = '%@'",model.user_NickName,model.user_Head_photo];
+            NSString *option2 = [NSString stringWithFormat:@"converseId = %@ and userId = %@",groupChatId, model.user_Id];
+            opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMenber_Table withOpton1:option1 andOption2:option2];
+        } else {
+            NSLog(@"不存在成员信息");
+            opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMenber_Table];
+        }
+        
+        [queuq inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:opeartionStr,model.groupId,model.user_Id,model.user_Name,model.user_NickName,model.user_Head_photo];
+            if (success) {
+                NSLog(@"插入群成员成功");
+            } else {
+                NSLog(@"插入群成员失败");
+            }
+            
+        }];
+    }
+}
+
+
+/**
+ *  根据群id 和用户id 查询群成员表是否有这个人
+ *
+ *  @param groupId  群聊id
+ *  @param memberId 用户id
+ *
+ *  @return 是否存在
+ */
+- (BOOL)isGroupMemberWithGroupChatId:(NSString *)groupId andMemberId:(NSString *)memberId {
+    __block BOOL successFul = NO;
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = %@ and userId = %@",groupId, memberId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:optionStr];
+        while ([result next]) {
+            NSLog(@"查询群聊成员成功");
+            successFul = YES;
+        }
+    }];
+    
+    return successFul;
+}
+
+/**
+ *  取出该群聊所有群成员
+ *
+ *  @param groupId 群Id
+ *
+ *  @return 群成员数组
+ */
+- (NSArray <ZhiMaFriendModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId {
+    NSMutableArray *dataArray = [NSMutableArray array];
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = %@",groupId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:optionStr];
+        while ([result next]) {
+            NSLog(@"查询群聊成员成功");
+            ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
+            model.user_Id = [result stringForColumn:@"memberId"];
+            model.user_Name = [result stringForColumn:@"memberName"];
+            model.user_NickName = [result stringForColumn:@"memberNameInGroup"];
+            model.user_Head_photo = [result stringForColumn:@"memberHeader_Photo"];
+            model.groupId = [result stringForColumn:@"converseId"];
+            [dataArray addObject:model];
+        }
+    }];
+    return dataArray;
+}
 
 @end

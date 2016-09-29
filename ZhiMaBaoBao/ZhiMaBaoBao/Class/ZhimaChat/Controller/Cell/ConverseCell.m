@@ -55,7 +55,6 @@
     _timeLabel.font = [UIFont systemFontOfSize:13];
     _timeLabel.textColor = [UIColor colorFormHexRGB:@"b8b8b8"];
     [self addSubview:_timeLabel];
-    _timeLabel.backgroundColor = [UIColor redColor];
     
     _unReadCountLabel = [UILabel new];
     _unReadCountLabel.backgroundColor = THEMECOLOR;
@@ -88,8 +87,7 @@
         _unReadCountLabel.text = [NSString stringWithFormat:@"%zd",model.unReadCount];
     }
     
-    
-    _timeLabel.text = [NSDate dateStrFromCstampTime:model.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    _timeLabel.text = [NSString timeStringChangeToZMTimeString:[NSDate dateStrFromCstampTime:model.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
     
 }
 

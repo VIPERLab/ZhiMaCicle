@@ -14,8 +14,8 @@
 #define DEFAULT_CHAT_CELL_CONTENT_PADDING   5   //聊天cell上下的间距
 #define DEFAULT_CHAT_CELL_NICK_PADDING      5   //聊天cell昵称与topLabel的上下间距
 #define DEFAULT_CHAT_CELL_USER_ICON_PADDING 5   //聊天cell头像与昵称的上下间距
-#define DEFAULT_CHAT_CELL_BUBBLE_PADDING    5   //聊天cell气泡与昵称的上下间距(有昵称时)
-#define DEFAULT_CHAT_CELL_BUBBLE_PADDING_T  3   //聊天cell气泡与图片的上下间距(无昵称时)
+#define DEFAULT_CHAT_CELL_BUBBLE_PADDING    0   //聊天cell气泡与昵称的上下间距(有昵称时)
+#define DEFAULT_CHAT_CELL_BUBBLE_PADDING_T  1   //聊天cell气泡与图片的上下间距(无昵称时)
 #define DEFAULT_CHAT_CELL_H_PADDING         5   //聊天cell头像，气泡，昵称的左右间距
 #define DEFAULT_CHAT_CELL_BUBBLE_EDGEINTS   UIEdgeInsetsMake(12, 10, 10, 17)    //聊天的内容与气泡的间距
 #define DEFAULT_CHAT_CELL_USER_ICON_SIZE    CGSizeMake(45, 45)  //聊天cell,默认的用户图标尺寸
@@ -148,6 +148,9 @@
 
 - (void)resizeBubbleView:(CGSize)contetnViewSize
 {
+    contetnViewSize.height = contetnViewSize.height< 22 ? 22 : contetnViewSize.height; //气泡会切边，太低了的时候加一点
+    contetnViewSize.width = contetnViewSize.width< 25 ? 25 : contetnViewSize.width;    //设置聊天内容最小宽度 防止气泡变形
+    
     [_bubble setFrameSize:CGSizeMake(contetnViewSize.width + _margin.left + _margin.right, contetnViewSize.height + _margin.top + _margin.bottom)];
     
     if (self.isMe) {
@@ -202,6 +205,7 @@
     
     BOOL isSetTop  = topText != nil;
     BOOL isSetNick  = nick != nil;
+    
     
     if (isSetTop) {
         

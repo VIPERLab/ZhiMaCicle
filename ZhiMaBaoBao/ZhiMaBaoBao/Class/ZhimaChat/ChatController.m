@@ -80,9 +80,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)recievedNewMessage:(NSNotification *)notification
 {
-//    NSLog(@"=== %@",notification.object);
-    NSDictionary *userInfo = notification.userInfo;
-    LGMessage *message  = userInfo[@"message"];
+    NSLog(@"=== %@ ----- %@",notification.object, notification.userInfo[@"message"]);
+//    NSDictionary *userInfo = ;
+    LGMessage *message  = notification.userInfo[@"message"];
     [self.messages addObject:message];
     
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
@@ -109,6 +109,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     self.keyboard = keyboard;
 
 }
+
+//- (NSString*)audioPathWithUid:(NSString*)
+
 //初始化录音
 - (void)initAudioRecorder{
 #warning 以后拼接用户uid
@@ -220,7 +223,8 @@ static NSString *const reuseIdentifier = @"messageCell";
      *  读取消息列表
      */
     FMDBManager* shareManager = [FMDBManager shareManager];
-    self.messages = [[shareManager getMessageDataWithConverseID:@"11596"] mutableCopy];
+//    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
+    self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId] mutableCopy];
     
 //    for (int i=0; i<7; i++) {
 //        LGMessage*msg = [[LGMessage alloc]init];
@@ -273,7 +277,18 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    }
     [self.tableView reloadData];
     // tableview 滑到底端
-    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
+    if (self.tableView.contentSize.height > self.tableView.bounds.size.height+64) {
+        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
+    }
+    
+}
+
+- (BOOL)needShowTime:(NSInteger)time1 time2:(NSInteger)time2
+{
+    NSInteger num = time2 - time1;
+    BOOL needShowTime = YES;
+    needShowTime = num >= DiffTimeThreeMins*60;
+    return needShowTime;
 }
 
 // 计算 cell 的高度
@@ -286,24 +301,19 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     NSString *time = nil;
     
-//    if (ip.row > 0) {
-//        
-//        Chat *preChat = self.tableViewSource[ip.row - 1]; //前一条聊天记录]
-//        Chat *curChat = self.tableViewSource[ip.row];
-//        needShowTime = [CommenMethod needShowTime:preChat.send_time time2:curChat.send_time];
-//        
-//        if (needShowTime) {
-//            //            NSDate *date = [ch.send_time dateWithDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//            //            time = [date stringWithDateFormat:@"MM-dd HH:mm"];
-//        }
-//    }
-//    else
-//    {
-//        
-//        //        NSDate *date = [ch.send_time dateWithDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        //        time = [date stringWithDateFormat:@"MM-dd HH:mm"];
-//        
-//    }
+    if (ip.row > 0) {
+        LGMessage *msg1 = self.messages[ip.row - 1]; //前一条聊天记录]
+        LGMessage *msg2 = self.messages[ip.row];
+        needShowTime = [self needShowTime:msg1.timeStamp time2:msg2.timeStamp];
+        
+        if (needShowTime) {
+            time = [NSString stringWithFormat:@"%ld",ch.timeStamp];
+        }
+    }
+    else
+    {
+        time = [NSString stringWithFormat:@"%ld",ch.timeStamp];
+    }
     switch (ft) {
         case MessageTypeText: {
             rowHeight = [IMChatTableViewCell getHeightWithMessage:ch.text topText:time nickName:nil] + 10;
@@ -313,7 +323,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
         case MessageTypeImage : {
 //            rowHeight = [IMMorePictureTableViewCell getHeightWithChat:ch TopText:time nickName:nil];
-            rowHeight = 140;
+            rowHeight = needShowTime ? 140+20 : 140;
             
             break;
         }
@@ -332,7 +342,6 @@ static NSString *const reuseIdentifier = @"messageCell";
 #pragma mark - ——----------浏览图片
 - (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
 {
-    
     NSLog(@"图片点击");
     [self.subviews removeAllObjects];
     UIView *imageView = grz.view;
@@ -367,10 +376,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-//    cell.message = self.messages[indexPath.row];
-//    return cell;
-    
+
     LGMessage *message = self.messages[indexPath.row];
     MessageType fileType = message.type;
     BOOL isMe = [message.fromUid isEqualToString:USERINFO.userID];
@@ -380,6 +386,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     BaseChatTableViewCell *baseChatCell = nil;
     NSString *headPortraitUrlStr = nil;
     NSString *uniqueFlagStr = nil;
+    
 #pragma mark--MessageTypeText
     if(fileType == MessageTypeText) {
         IMChatTableViewCell *textChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
@@ -391,7 +398,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         textChatCell.isMe = isMe;
         textChatCell.chatMessageView.text = message.text;
-//        textChatCell.topLabel.text = time;
         textChatCell.delegate = self;
         textChatCell.indexPath = indexPath;
         
@@ -444,7 +450,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         picChatCell.isMe = isMe;
         picChatCell.delegate=self;
-//        picChatCell.topLabel.text = time;
         picChatCell.indexPath = indexPath;
         
         
@@ -507,7 +512,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         voiceChatCell.voiceDelegate = self;
         voiceChatCell.isMe = isMe;
         voiceChatCell.voiceTimeLength = message.text;
-//        voiceChatCell.topLabel.text = time;
         voiceChatCell.indexPath = indexPath;
         
         
@@ -655,6 +659,29 @@ static NSString *const reuseIdentifier = @"messageCell";
 //        }else{
 //            baseChatCell.userIcon.image = [UIFactory createOtherUserDefaultHeadPortraitWith:uniqueFlagStr];
 //        }
+    
+    BOOL needShowTime = NO;
+    
+    if (indexPath.row > 0) {
+        LGMessage *msg1 = self.messages[indexPath.row - 1]; //前一条聊天记录]
+        LGMessage *msg2 = self.messages[indexPath.row];
+        needShowTime = [self needShowTime:msg1.timeStamp time2:msg2.timeStamp];
+        if (!needShowTime) {
+            baseChatCell.topLabel.hidden = YES;
+        }else{
+            
+            baseChatCell.topLabel.hidden = NO;
+            NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            baseChatCell.topLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];
+            
+        }
+    }else{
+        
+        baseChatCell.topLabel.hidden = NO;
+        NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        baseChatCell.topLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];
+        
+    }
     
 //    baseChatCell.backgroundColor = indexPath.row%2 == 0 ? [UIColor orangeColor]:[UIColor lightGrayColor];
     
@@ -816,17 +843,16 @@ static NSString *const reuseIdentifier = @"messageCell";
     self.currentPlayAudioIndexPath = ip;
 }
 
-
 #pragma mark - chatKeyboard delegate ：发送文本消息
 //发送文本
 - (void)chatKeyBoardSendText:(NSString *)text{
     
     LGMessage *message = [[LGMessage alloc] init];
     message.text = text;
-    message.toUidOrGroupId = @"11596";
+    message.toUidOrGroupId = self.conversionId;
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
-    message.msgid = [NSString stringWithFormat:@"%@12345678",USERINFO.userID];
+    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     message.isGroup = NO;
     message.timeStamp = [NSDate currentTimeStamp];
     
@@ -844,6 +870,23 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
     
+}
+
+/** 生成随机messageID */
+- (NSString *)generateMessageID
+{
+    static int kNumber = 8;
+    
+    NSString *sourceStr = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    NSMutableString *resultStr = [[NSMutableString alloc] init];
+    srand((unsigned int)time(0));
+    for (int i = 0; i < kNumber; i++)
+    {
+        unsigned index = rand() % [sourceStr length];
+        NSString *oneStr = [sourceStr substringWithRange:NSMakeRange(index, 1)];
+        [resultStr appendString:oneStr];
+    }
+    return resultStr;
 }
 
 #pragma mark - 语音代理方法
@@ -870,6 +913,8 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
     }
 }
+
+#pragma mark - 录音完成
 //完成录音
 - (void)chatKeyBoardDidFinishRecoding:(ChatKeyBoard *)chatKeyBoard{
     [self.recorder stopRecording];
@@ -883,6 +928,10 @@ static NSString *const reuseIdentifier = @"messageCell";
                 [RecordingHUD dismiss];
             });
         });
+    }else{
+    
+        NSLog(@"===== %f  语音内容：%@",fileLength,self.amrWriter.filePath);
+    
     }
 }
 //将要取消录音
