@@ -85,7 +85,8 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)recievedNewMessage:(NSNotification *)notification
 {
-    LGMessage *message  = notification.object[@"message"];
+    NSDictionary *userInfo = notification.userInfo;
+    LGMessage *message  = userInfo[@"message"];
     [self.messages addObject:message];
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
     NSArray *indexPaths = @[indexpath];

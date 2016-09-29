@@ -89,7 +89,9 @@ static SocketManager *manager = nil;
     //语音消息 -- 发送base64到socket服务器，存语音路径到本地数据库
     if (message.type == MessageTypeAudio) {
         //通过路径拿到音频文件
-        NSData *data = [NSData dataWithContentsOfFile:message.text];
+        NSString *sandboxPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *path = [NSString stringWithFormat:@"%@%@",sandboxPath,message.text];
+        NSData *data = [NSData dataWithContentsOfFile:path];
         
         //转换成base64编码
         NSString *base64 = [NSData base64StringFromData:data];
