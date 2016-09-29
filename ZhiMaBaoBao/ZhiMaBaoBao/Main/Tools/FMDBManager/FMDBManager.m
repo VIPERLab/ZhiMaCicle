@@ -854,8 +854,28 @@
 - (BOOL)saveUserMessageWithMessageArray:(NSArray <ZhiMaFriendModel *> *)userMessageArray {
     __block BOOL isSuccess = YES;
     for (ZhiMaFriendModel *model in userMessageArray) {
+//        user_Name, user_Id, user_Head_photo, user_NickName"
+        __block BOOL isExist = NO;
         FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
-        NSString *opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_User_Message_Table];
+        NSString *searchOpeartionStr = [FMDBShareManager SearchTable:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"user_Id = %@",model.user_Id]];
+        [queue inDatabase:^(FMDatabase *db) {
+            FMResultSet *result =[db executeQuery:searchOpeartionStr];
+            while ([result next]) {
+                isExist = YES;
+            }
+        }];
+        
+        NSString *opeartionStr = [NSString string];
+        if (isExist) {
+            NSLog(@"存在用户,需要更新");
+            NSString *option1 = [NSString stringWithFormat:@"user_Name = '%@', user_Head_photo = '%@', user_NickName = '%@'",model.user_Name,model.user_Head_photo,model.user_NickName];
+            NSString *option2 = [NSString stringWithFormat:@"user_Id = %@",model.user_Id];
+            opeartionStr = [FMDBShareManager alterTable:ZhiMa_User_Message_Table withOpton1:option1 andOption2:option2];
+        } else {
+            NSLog(@"不存在用户，需要插入");
+            opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_User_Message_Table];
+        }
+        
         [queue inDatabase:^(FMDatabase *db) {
             BOOL success = [db executeUpdate:opeartionStr,model.user_Name,model.user_Id,model.user_Head_photo,model.user_NickName];
             if (success) {

@@ -46,7 +46,7 @@
         case LCProgressHUDStatusSuccess: {
             
             hud.mode = MBProgressHUDModeCustomView;
-            UIImageView *sucView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hud_success"]];
+            UIImageView *sucView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Sex_Tick"]];
             hud.customView = sucView;
             [hud hideAnimated:YES afterDelay:1.3f];
         }

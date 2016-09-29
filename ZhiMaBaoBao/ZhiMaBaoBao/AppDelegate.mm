@@ -58,6 +58,8 @@
         [self creatMySQL];
     }
     [self notification];
+    
+    
     return YES;
 }
 
@@ -161,6 +163,8 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+    
+    [LCProgressHUD showSuccessText:@"123"];
     
     //计算是否超过设置邀请码的有效期
     if (USERINFO.sessionId && ![USERINFO.create_time isEqualToString:@""] && USERINFO.create_time!= nil) {
