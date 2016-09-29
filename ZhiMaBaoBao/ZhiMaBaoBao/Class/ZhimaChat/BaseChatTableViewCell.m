@@ -93,6 +93,7 @@
     _wrapView.frame = UIEdgeInsetsInsetRect(self.contentView.bounds, UIEdgeInsetsMake(DEFAULT_CHAT_CELL_CONTENT_PADDING, 0, DEFAULT_CHAT_CELL_CONTENT_PADDING, 0));
     _topLabel.lineBreakMode = NSLineBreakByCharWrapping;
     [_topLabel sizeToFit];
+    _topLabel.width += 10;
     [_topLabel centerAlignHorizontalForSuperView];
     
     _isSetTopLabel  = ![_topLabel.text isBlank];
@@ -122,6 +123,9 @@
     }
     
     [_bubble setFrameOriginYBelowView:_nickLabel offset:_bubbleOffsetY];
+    
+    _topLabel.layer.cornerRadius = 5;
+    _topLabel.layer.masksToBounds = YES;
     
 }
 
@@ -240,9 +244,10 @@
 
     
     _topLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    _topLabel.textColor = [UIColor lightGrayColor];
+    _topLabel.textColor = [UIColor whiteColor];
     _topLabel.font = SUBFONT;
-    _topLabel.backgroundColor=[UIColor clearColor];
+    _topLabel.backgroundColor= GRAYCOLOR;
+    _topLabel.textAlignment = 1;
 
     _nickLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _nickLabel.font = SUBFONT;
