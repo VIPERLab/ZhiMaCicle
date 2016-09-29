@@ -247,6 +247,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
         
         ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
         ChatController *vc = [[ChatController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
         vc.conversionId = friend.user_Id;
         [self.navigationController pushViewController:vc animated:YES];
     }

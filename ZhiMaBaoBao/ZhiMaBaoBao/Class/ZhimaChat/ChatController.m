@@ -85,10 +85,8 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)recievedNewMessage:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.object;
-    LGMessage *message  = userInfo[@"message"];
+    LGMessage *message  = notification.object[@"message"];
     [self.messages addObject:message];
-    
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
     NSArray *indexPaths = @[indexpath];
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];

@@ -179,26 +179,39 @@ static SocketManager *manager = nil;
             [[NSNotificationCenter defaultCenter] postNotificationName:kOtherLogin object:nil];
         }
         else if ([actType isEqualToString:@"normal"]) {      //普通消息 -> 插入数据库
-                
+            
             LGMessage *message = [[LGMessage alloc] init];
             message = [message mj_setKeyValues:responceData[@"data"]];
-            //将消息插入数据库，并更新会话列表
-            BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
             
-            if (success) {
-                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                userInfo[@"message"] = message;
-                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:userInfo];
+            //语音消息，先解码，然后根据时间戳存到本地，拿到路径存到数据库
+            if (message.type == MessageTypeAudio) {
+                NSData *audioData = [NSData dataTromBase64String:message.text];
+                //沙盒路径
+                NSString *sandboxPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+                //根据当前时间和发送者uid 拼接语音文件名
+                NSInteger stamp = [NSDate currentTimeStamp];
+                NSString *fileName = [NSString stringWithFormat:@"%@-%@",[NSDate dateStrFromCstampTime:stamp withDateFormat:@"yyyy-MM-dd-hh-mm-ss-SSS"],message.fromUid];
+                //语音文件路径
+                NSString *path = [NSString stringWithFormat:@"%@%@.amr",sandboxPath,fileName];
+                if ([audioData writeToFile:path atomically:YES]) {
+                    NSLog(@"语音写入沙盒成功");
+                }else{
+                    NSLog(@"语音写入沙盒失败");
+                }
+
+            }
+            //文本消息 -> 插入数据库
+            else if (message.type == MessageTypeText){
+                //将消息插入数据库，并更新会话列表
+                BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
+                
+                if (success) {
+                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                    userInfo[@"message"] = message;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:userInfo];
+                }
             }
             
-            //            if (message.type == MessageTypeText) {
-            //                conversation.lastConverse = message.text;
-            //            }else if (message.type == MessageTypeImage){
-            //                conversation.lastConverse = @"[图片]";
-            //            }else if (message.type == MessageTypeAudio){
-            //                conversation.lastConverse = @"[语音]";
-            //            }
-                
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
             NSDictionary *resDic = responceData[@"data"];

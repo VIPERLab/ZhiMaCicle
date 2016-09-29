@@ -7,7 +7,7 @@
 //
 
 #import "LGSearchResultController.h"
-//#import "YiUserInfoViewController.h"
+#import "FriendProfilecontroller.h"
 #import "LGSearchResultCell.h"
 
 
@@ -42,7 +42,8 @@ static NSString *const reuseIdentifier = @"LGSearchResultCell";
     LGSearchResultCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
 
     NSDictionary *dic = self.dataArr[indexPath.row];
-    [cell.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,dic[@"head_photo"]]]];
+    NSString *urlStr = [NSString stringWithFormat:@"%@%@",DFAPIURL,dic[@"head_photo"]];
+    [cell.avtar sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
     cell.name.text = dic[@"username"];
     return cell;
 }
@@ -51,11 +52,10 @@ static NSString *const reuseIdentifier = @"LGSearchResultCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSDictionary *dic = self.dataArr[indexPath.row];
-//    NSString *jid = [NSString stringWithFormat:@"%@@%@",dic[@"openfireaccount"],XMPPSERVER];
-//    YiUserInfoViewController *vc = [[YiUserInfoViewController alloc] init];
-//    vc.jid = jid;
-//    vc.isAddFriend = self.isAddFriend;
-//    [self.navigationController pushViewController:vc animated:YES];
+    NSString *userId = dic[@"openfireaccount"];
+    FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
+    vc.userId = userId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

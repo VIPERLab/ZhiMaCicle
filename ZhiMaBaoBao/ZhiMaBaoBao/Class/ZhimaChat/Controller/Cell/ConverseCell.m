@@ -41,6 +41,7 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     _iconView = [UIImageView new];
     _iconView.layer.cornerRadius = 10;
+    _iconView.image = [UIImage imageNamed:@"userIcon"];
     [self addSubview:_iconView];
     
     _converseLabel = [UILabel new];
@@ -75,7 +76,7 @@
 
 - (void)setModel:(ConverseModel *)model {
     _model = model;
-    _iconView.image = [UIImage imageNamed:model.converseHead_photo];
+//    _iconView.image = [UIImage imageNamed:model.converseHead_photo];
     
     _converseLabel.text = model.converseName;
     
@@ -88,6 +89,8 @@
     }
     
     _timeLabel.text = [NSString timeStringChangeToZMTimeString:[NSDate dateStrFromCstampTime:model.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+    hasSubViews = YES;
+    [self setNeedsDisplay];
     
 }
 
@@ -119,17 +122,12 @@
         CGFloat lastH = 20;
         _lastConverseLabel.frame = CGRectMake(lastX, lastY, lastW, lastH);
         
-        
-        CGFloat countCenterX = CGRectGetMaxX(_iconView.frame) - 10;
-        CGFloat countCenterY = CGRectGetMinY(_iconView.frame) - 5;
-        _unReadCountLabel.center = CGPointMake(countCenterX, countCenterY);
-        if ([_unReadCountLabel.text isEqualToString:@"0"]) {
-            _unReadCountLabel.hidden = YES;
-        } else {
-            _unReadCountLabel.hidden = NO;
-            _unReadCountLabel.width = 20;
-            _unReadCountLabel.height = _unReadCountLabel.width;
-        }
+        CGFloat countWidth = 20;
+        CGFloat countHight = countWidth;
+        CGFloat countX = CGRectGetMaxX(_iconView.frame) - countWidth * 0.5;
+        CGFloat countY = CGRectGetMinY(_iconView.frame) - countHight * 0.5 + 3;
+        _unReadCountLabel.frame = CGRectMake(countX, countY, countWidth, countHight);
+
         _bottomLineView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - 0.5, CGRectGetWidth(self.frame), 0.5);
         
         hasSubViews = NO;

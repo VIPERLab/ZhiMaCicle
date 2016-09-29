@@ -145,6 +145,7 @@
                 case ZhiMa_NewFriend_Message_Table: {  //新好友表
                     tableName = ZhiMaNewFriend_Table_Name;
                     tableField = NewFrend_MessageField;
+                    newFriend_message_DB = db_Queue;
                     break;
                 }
                 case ZhiMa_GroupChat_GroupMenber_Table: { //群聊成员信息表
@@ -986,7 +987,6 @@
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
             ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
-            model.user_NickName = [result stringForColumn:@"user_NickName"];
             model.user_Name = [result stringForColumn:@"user_Name"];
             model.user_Id = [result stringForColumn:@"user_Id"];
             model.user_Head_photo = [result stringForColumn:@"user_Head_photo"];

@@ -8,8 +8,11 @@
 
 #import "ModifySignController.h"
 
-@interface ModifySignController ()
+#define MaxCount 30
+
+@interface ModifySignController () <UITextViewDelegate>
 @property (nonatomic, weak) UITextView *textView;
+@property (nonatomic, weak) UILabel *countLabel;
 @end
 
 @implementation ModifySignController
@@ -48,8 +51,29 @@
     textView.layer.borderColor = [UIColor colorFormHexRGB:@"dedede"].CGColor;
     textView.layer.borderWidth = 0.5;
     textView.font = [UIFont systemFontOfSize:15];
-    self.textView = textView;
     
+    self.textView = textView;
+    self.textView.delegate = self;
+    
+    
+    UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(textView.frame) - 50, CGRectGetHeight(textView.frame) - 30, 50, 30)];
+    self.countLabel = countLabel;
+    countLabel.text = [NSString stringWithFormat:@"%zd",MaxCount - textView.text.length];
+    countLabel.textColor = [UIColor lightGrayColor];
+    countLabel.font = [UIFont systemFontOfSize:16];
+    [textView addSubview:countLabel];
+}
+
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    //判断加上输入的字符，是否超过界限
+    NSString *str = [NSString stringWithFormat:@"%@%@", textView.text, text];
+    if (str.length > MaxCount) {
+        textView.text = [str substringToIndex:MaxCount];
+        return NO;
+    }
+    _countLabel.text = [NSString stringWithFormat:@"%zd",MaxCount - str.length];
+    return YES;
 }
 
 

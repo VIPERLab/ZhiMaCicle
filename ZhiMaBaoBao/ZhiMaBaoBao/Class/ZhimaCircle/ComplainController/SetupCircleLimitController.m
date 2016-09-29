@@ -29,18 +29,11 @@
 //请求好友朋友圈权限状态
 - (void)requestData{
     //调用本地好友信息接口
-    [LGNetWorking getFriendInfo:USERINFO.sessionId openfire:self.model.userId block:^(ResponseData *responseData) {
-        if (responseData.code == 0) {
-            
-//            self.friendInfo = [FriendInfo mj_objectWithKeyValues:responseData.data];
-//            [self.switch1 setOn:self.friendInfo.notread_my_cricles];
-//            [self.switch2 setOn:self.friendInfo.notread_his_cricles];
-            
-            }else{
-            [LCProgressHUD showText:responseData.msg];
-        }
+    [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.model.userId block:^(ResponseData *responseData) {
+        
+    } failure:^(ErrorData *error) {
+        
     }];
-
 }
 
 //添加所有子试图
