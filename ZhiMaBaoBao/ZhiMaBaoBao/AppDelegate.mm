@@ -164,8 +164,6 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     
-    [LCProgressHUD showSuccessText:@"成功"];
-    
     //计算是否超过设置邀请码的有效期
     if (USERINFO.sessionId && ![USERINFO.create_time isEqualToString:@""] && USERINFO.create_time!= nil) {
         //登录过的用户且有注册时间的才需要计算失效时间

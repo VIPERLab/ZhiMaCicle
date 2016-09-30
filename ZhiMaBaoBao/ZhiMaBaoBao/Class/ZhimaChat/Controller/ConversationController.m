@@ -33,9 +33,6 @@
     
     [self setCustomRightItems];
     [self setupView];
-    [self getDataFormSqlist];
-    
-    
     [self notification];
 }
 
@@ -45,6 +42,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageSuccess object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRecovery) name:K_NetworkRecoveryNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withoutNetwork) name:K_WithoutNetWorkNotification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self getDataFormSqlist];
 }
 
 // 没有网的情况

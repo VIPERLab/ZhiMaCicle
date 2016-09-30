@@ -83,8 +83,12 @@
     _lastConverseLabel.text = model.lastConverse;
     
     if (model.unReadCount > 99) {
+        _unReadCountLabel.hidden = NO;
         _unReadCountLabel.text = [NSString stringWithFormat:@"99"];
+    } else if (model.unReadCount == 0) {
+        _unReadCountLabel.hidden = YES;
     } else {
+        _unReadCountLabel.hidden = NO;
         _unReadCountLabel.text = [NSString stringWithFormat:@"%zd",model.unReadCount];
     }
     

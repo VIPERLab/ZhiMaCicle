@@ -767,20 +767,20 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
     }
     
-        [self initAudioPlayAndReader];
+    [self initAudioPlayAndReader];
+    
+    LGMessage *message = [self.messages objectAtIndex:ip.row];
+    self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
+    [self.player startPlaying];
+    
+    if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
+        message.is_read = YES;
         
-        LGMessage *message = [self.messages objectAtIndex:ip.row];
-        self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
-        [self.player startPlaying];
+        [FMDBShareManager upDataMessageStatusWithMessage:message];
         
-        if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
-            message.is_read = YES;
-            
-//            FMDBManager* shareManager = [FMDBManager shareManager];
-            
-            [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
-            
-        }
+        [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+    }
 
     
     self.currentPlayAudioIndexPath = ip;
@@ -967,6 +967,13 @@ static NSString *const reuseIdentifier = @"messageCell";
 {
     return [FaceSourceManager loadFaceSource];
 }
+
+
+- (void)backAction {
+    [FMDBShareManager setConverseUnReadCountZero:self.conversionId];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 - (void)dealloc{
     //音谱检测关联着录音类，录音类要停止了。所以要设置其audioQueue为nil
