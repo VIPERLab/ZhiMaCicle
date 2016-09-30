@@ -191,6 +191,20 @@ typedef enum : NSUInteger {
  */
 - (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID;
 
+/**
+ *  设置消息的未读数量为0
+ *
+ *  @param converseId 会话id
+ */
+- (void)setConverseUnReadCountZero:(NSString *)converseId;
+
+/**
+ *  根据会话id删除会话
+ *
+ *  @param converseId 会话id
+ */
+- (void)deleteConverseWithConverseId:(NSString *)converseId;
+
 
 #pragma mark - 消息相关
 //                    ------------   消息表  ----------------
@@ -212,25 +226,20 @@ typedef enum : NSUInteger {
 - (NSArray <LGMessage *> *)getMessageDataWithConverseID:(NSString *)converseID andPageNumber:(int)pageNumber;
 
 /**
- *  设置消息的未读数量为0
- *
- *  @param converseId 会话id
- */
-- (void)setConverseUnReadCountZero:(NSString *)converseId;
-
-/**
- *  根据会话id删除会话
- *
- *  @param converseId 会话id
- */
-- (void)deleteConverseWithConverseId:(NSString *)converseId;
-
-/**
  *  根据会话ID删除消息
  *
  *  @param converseID 会话id
  */
 - (void)deleteMessageFormMessageTableByConverseID:(NSString *)converseID;
+
+/**
+ *  更新消息模型
+ *
+ *  @param message 新的消息
+ *
+ *  @return 是否更新成功
+ */
+- (BOOL)upDataMessageStatusWithMessage:(LGMessage *)message;
 
 /**
  *  根据消息ID删除消息

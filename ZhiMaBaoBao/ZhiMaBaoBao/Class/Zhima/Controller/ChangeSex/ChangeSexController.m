@@ -63,16 +63,38 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    UserInfo *info = [UserInfo read];
+    NSString *value = [NSString string];
     if (indexPath.row == 0) {
-        info.sex = @"男";
-    } else if (indexPath.row == 1) {
-        info.sex = @"女";
+        value = @"男";
+    } else {
+        value = @"女";
     }
-    [info save];
-    [self.navigationController popViewControllerAnimated:YES];
+    [LCProgressHUD showLoadingText:@"正在修改性别"];
+    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"sex" andChangeValue:value block:^(ResponseData *responseData) {
+        [LCProgressHUD hide];
+        if (responseData.code != 0) {
+            [LCProgressHUD showFailureText:@"修改失败"];
+            return ;
+        }
+        
+        UserInfo *info = [UserInfo read];
+        info.sex = value;
+        [info save];
+        [LCProgressHUD showSuccessText:@"修改成功"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [LCProgressHUD hide];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+        
+    }];
+    
+    
     
 }
+
+
+
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 10;

@@ -51,6 +51,7 @@
 }
 
 - (void)saveButtonDidClick {
+    [self.textField resignFirstResponder];
     [LCProgressHUD showText:@"正在修改昵称"];
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"username" andChangeValue:self.textField.text block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
@@ -63,7 +64,11 @@
         info.username = self.textField.text;
         [info save];
         [LCProgressHUD showSuccessText:@"修改成功"];
-        [self.navigationController popViewControllerAnimated:YES];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [LCProgressHUD hide];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+        
         
     }];
 }
