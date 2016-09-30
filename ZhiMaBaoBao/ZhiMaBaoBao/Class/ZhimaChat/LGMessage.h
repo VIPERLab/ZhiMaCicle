@@ -71,10 +71,10 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
  /** 签名*/
 //@property (nonatomic, copy) NSString *sign;
 
- /** 阅读状态（1未读，2已读'*/
-@property(nonatomic,strong) NSString * is_read;
- /** 消息发送状态*/
-@property (nonatomic,assign) SendStatus sendStatus;
+ /** 阅读状态（0未读，1已读'*/
+@property (nonatomic, assign) BOOL is_read;
+ /** 消息发送状态 0 发送失败  1 发送成功*/
+@property (nonatomic,assign) BOOL sendStatus;
 
  /** 单元格高度*/
 @property (nonatomic, assign) CGFloat cellHeight;

@@ -219,6 +219,13 @@ typedef enum : NSUInteger {
 - (void)setConverseUnReadCountZero:(NSString *)converseId;
 
 /**
+ *  根据会话id删除会话
+ *
+ *  @param converseId 会话id
+ */
+- (void)deleteConverseWithConverseId:(NSString *)converseId;
+
+/**
  *  根据会话ID删除消息
  *
  *  @param converseID 会话id

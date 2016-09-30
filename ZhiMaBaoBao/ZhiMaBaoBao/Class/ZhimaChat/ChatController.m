@@ -92,7 +92,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     LGMessage *message  = userInfo[@"message"];
     
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
-    if (message.fromUid == self.conversionId) {
+    if ([message.fromUid isEqualToString:self.conversionId]) {
         [self.messages addObject:message];
         NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
         NSArray *indexPaths = @[indexpath];
@@ -593,7 +593,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         if(!isMe) {
             
-            if ([message.is_read isEqualToString:@"2"]) { //[chat.isReadContent isEqualToString:@"2"]
+            if (message.is_read == 1) { //[chat.isReadContent isEqualToString:@"2"]
                 voiceChatCell.isReadVoice = YES;
             } else {
                 voiceChatCell.isReadVoice = NO;
@@ -755,8 +755,8 @@ static NSString *const reuseIdentifier = @"messageCell";
         self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
         [self.player startPlaying];
         
-        if (![message.is_read isEqualToString:@"2"] && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
-            message.is_read = @"2";
+        if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
+            message.is_read = YES;
             
             /**
              *  1、更改数据库里面该message的状态，同时刷新cell
