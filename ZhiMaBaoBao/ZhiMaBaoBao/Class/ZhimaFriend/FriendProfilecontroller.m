@@ -250,10 +250,19 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         [manager addFriend:self.friend.user_Id];
     }
     else if (self.friendType == FriendTypeFriends){     //好友 -> 发消息
+        //先pop到跟控制器。然后切换到会话控制器。然后push到聊天
+        UserInfo *userInfo = [UserInfo shareInstance];
+//        [self.navigationController popToRootViewControllerAnimated:YES];
+//        userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
+        
         ChatController *vc = [[ChatController alloc] init];
         vc.conversionId = self.friend.user_Id;
         vc.conversionName = self.friend.displayName;
+        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
+//        ConversationController *conversationVC = userInfo.conversationVC;
+//        [conversationVC.navigationController pushViewController:vc animated:YES];
+        
     }
 
 }

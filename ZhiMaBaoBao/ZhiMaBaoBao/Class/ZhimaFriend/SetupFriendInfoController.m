@@ -30,8 +30,8 @@
     [super viewDidLoad];
     
     [self setCustomTitle:@"资料设置"];
-    self.deleteBtn.layer.cornerRadius = 5;
     [self requestFriendProfile];
+    self.deleteBtn.layer.cornerRadius = 5;
 
 }
 

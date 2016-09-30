@@ -26,8 +26,22 @@
 
 @implementation MainViewController
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.tabBar.hidden = NO;
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.tabBar.hidden = YES;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UserInfo *userInfo = [UserInfo shareInstance];
+    userInfo.mainVC = self;
     
     self.tabBar.barTintColor = [UIColor whiteColor];
     
