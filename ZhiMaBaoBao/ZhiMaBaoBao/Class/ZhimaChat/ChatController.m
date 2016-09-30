@@ -302,6 +302,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     FMDBManager* shareManager = [FMDBManager shareManager];
 //    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
     self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:1] mutableCopy];
+    self.messages = (NSMutableArray *)[[self.messages reverseObjectEnumerator] allObjects];
     
 //    for (int i=0; i<7; i++) {
 //        LGMessage*msg = [[LGMessage alloc]init];
@@ -593,7 +594,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         if(!isMe) {
             
-            if (message.is_read == 1) { //[chat.isReadContent isEqualToString:@"2"]
+            if (message.is_read) {
                 voiceChatCell.isReadVoice = YES;
             } else {
                 voiceChatCell.isReadVoice = NO;
