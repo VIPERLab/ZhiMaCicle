@@ -774,9 +774,10 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.player startPlaying];
         
         if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
-            message.is_read = YES;
+            message.is_read = 1;
             
-//            FMDBManager* shareManager = [FMDBManager shareManager];
+            FMDBManager* shareManager = [FMDBManager shareManager];
+            [shareManager upDataMessageStatusWithMessage:message];
             
             [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
             
