@@ -86,6 +86,12 @@ static SocketManager *manager = nil;
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
     
+    //如果网络状态不可用
+    UserInfo *userInfo = [UserInfo shareInstance];
+    if (userInfo.networkUnReachable) {
+        
+    }
+    
     //语音消息 -- 发送base64到socket服务器，存语音路径到本地数据库
     if (message.type == MessageTypeAudio) {
         
@@ -97,6 +103,8 @@ static SocketManager *manager = nil;
         //转换成base64编码
 //        NSString *base64 = [NSData base64StringFromData:data];
         NSString *base64 = [data base64EncodedStringWithOptions:0];
+        
+        
         
         BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
         if (success) {

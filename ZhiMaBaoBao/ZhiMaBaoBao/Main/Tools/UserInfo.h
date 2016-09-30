@@ -79,6 +79,9 @@
  /** 会话控制器*/
 @property (nonatomic, strong) ConversationController *conversationVC;
 
+ /** 网络不可用*/
+@property (nonatomic, assign) BOOL networkUnReachable;
+
 /**
  *  位置信息
  */

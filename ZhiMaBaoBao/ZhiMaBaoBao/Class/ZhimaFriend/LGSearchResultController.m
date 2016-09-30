@@ -52,7 +52,7 @@ static NSString *const reuseIdentifier = @"LGSearchResultCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSDictionary *dic = self.dataArr[indexPath.row];
-    NSString *userId = dic[@"openfireaccount"];
+    NSString *userId = dic[@"id"];
     FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
     vc.userId = userId;
     [self.navigationController pushViewController:vc animated:YES];

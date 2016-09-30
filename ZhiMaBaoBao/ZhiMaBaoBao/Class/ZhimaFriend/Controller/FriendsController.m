@@ -83,19 +83,19 @@ static NSString * const reuseIdentifier = @"friendListcell";
     [self.sectionsArr removeAllObjects];
     [self.countOfSectionArr removeAllObjects];
 
-//    //遍历好友数组
-//    for (int i = 0; i < self.friends.count; i++) {
-//        ZhiMaFriendModel *friend = self.friends[i];
-//        NSString *pinyin = [NSString string];
-//        for(int j = 0; j< friend.displayName.length ;j++){
-//            
-//            NSString *singlePinyinLetter = [[NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.displayName characterAtIndex:j])] uppercaseString];
-//            pinyin = [pinyin stringByAppendingString:singlePinyinLetter];
-//        }
-//        //将好友显示名称转换成拼音缩写
-//        friend.pinyin = pinyin;
-//        [self.friendsAfterSort addObject:friend];
-//    }
+    //遍历好友数组
+    for (int i = 0; i < self.friends.count; i++) {
+        ZhiMaFriendModel *friend = self.friends[i];
+        NSString *pinyin = [NSString string];
+        for(int j = 0; j< friend.displayName.length ;j++){
+            
+            NSString *singlePinyinLetter = [[NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.displayName characterAtIndex:j])] uppercaseString];
+            pinyin = [pinyin stringByAppendingString:singlePinyinLetter];
+        }
+        //将好友显示名称转换成拼音缩写
+        friend.pinyin = pinyin;
+        [self.friendsAfterSort addObject:friend];
+    }
     // 按照模型"pinyin"属性 排序数组
     self.friendsAfterSort = self.friends;
     NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"headchar" ascending:YES]];
@@ -109,17 +109,17 @@ static NSString * const reuseIdentifier = @"friendListcell";
         ZhiMaFriendModel *friend = self.friendsAfterSort[i];
         if (i == 0) {
             //第一个数据首字母
-//            NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.pinyin characterAtIndex:0])];
-//            [self.sectionsArr addObject:[str uppercaseString]];
-            [self.sectionsArr addObject:friend.headchar];
+            NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.pinyin characterAtIndex:0])];
+            [self.sectionsArr addObject:[str uppercaseString]];
+//            [self.sectionsArr addObject:friend.headchar];
         }
         
         if (i < self.friendsAfterSort.count - 1) {
             //取到第二条数据，与第一条数据首字母比较
             ZhiMaFriendModel *friend1 = self.friendsAfterSort[i+1];
 
-//            pinyinFirstLetter([friend1.pinyin characterAtIndex:0]) != pinyinFirstLetter([friend.pinyin characterAtIndex:0])
-            if (![friend1.headchar isEqualToString:friend.headchar]) {
+//            ![friend1.headchar isEqualToString:friend.headchar]
+            if (pinyinFirstLetter([friend1.pinyin characterAtIndex:0]) != pinyinFirstLetter([friend.pinyin characterAtIndex:0])) {
                 
                 NSString *numStr = [NSString stringWithFormat:@"%d",num + 1];
                 [self.countOfSectionArr addObject:numStr];
@@ -129,9 +129,9 @@ static NSString * const reuseIdentifier = @"friendListcell";
                     [self.countOfSectionArr addObject:@(1)];
                 }
                 
-//                NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend1.pinyin characterAtIndex:0])];
-//                [self.sectionsArr addObject:[str uppercaseString]];
-                [self.sectionsArr addObject:friend1.headchar];
+                NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend1.pinyin characterAtIndex:0])];
+                [self.sectionsArr addObject:[str uppercaseString]];
+//                [self.sectionsArr addObject:friend1.headchar];
                 num = 0;
             }
             else{

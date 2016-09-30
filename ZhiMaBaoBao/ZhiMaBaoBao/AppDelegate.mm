@@ -76,6 +76,8 @@
     if (status == RealStatusNotReachable)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
+        UserInfo *userInfo = [UserInfo shareInstance];
+        userInfo.networkUnReachable = YES;
     }
     //wifi
     if (status == RealStatusViaWiFi)
