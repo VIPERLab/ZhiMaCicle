@@ -92,7 +92,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     LGMessage *message  = userInfo[@"message"];
     
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
-    if (message.fromUid == self.conversionId) {
+    if ([message.fromUid isEqualToString:self.conversionId]) {
         [self.messages addObject:message];
         NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
         NSArray *indexPaths = @[indexpath];

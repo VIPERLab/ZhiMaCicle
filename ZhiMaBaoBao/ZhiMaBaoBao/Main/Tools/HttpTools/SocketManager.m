@@ -200,16 +200,28 @@ static SocketManager *manager = nil;
             
             //语音消息，先解码，然后根据时间戳存到本地，拿到路径存到数据库
             if (message.type == MessageTypeAudio) {
-                NSData *audioData = [NSData dataTromBase64String:message.text];
+                NSData *audioData = [[NSData alloc] initWithBase64EncodedString:message.text options:0];
+                
                 //沙盒路径
                 NSString *sandboxPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
                 //根据当前时间和发送者uid 拼接语音文件名
                 NSInteger stamp = [NSDate currentTimeStamp];
-                NSString *fileName = [NSString stringWithFormat:@"%@-%@",[NSDate dateStrFromCstampTime:stamp withDateFormat:@"yyyy-MM-dd-hh-mm-ss-SSS"],message.fromUid];
+                NSString *fileName = [NSString stringWithFormat:@"%@-%@.amr",[NSDate dateStrFromCstampTime:stamp withDateFormat:@"yyyy-MM-dd-hh-mm-ss-SSS"],message.fromUid];
                 //语音文件路径
-                NSString *path = [NSString stringWithFormat:@"%@%@.amr",sandboxPath,fileName];
+                NSString *path = [NSString stringWithFormat:@"%@/%@",sandboxPath,fileName];
+                message.text = fileName;
                 if ([audioData writeToFile:path atomically:YES]) {
                     NSLog(@"语音写入沙盒成功");
+                    //将消息插入数据库，并更新会话列表
+                    BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
+                    
+                    if (success) {
+                        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                        userInfo[@"message"] = message;
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                        
+                    }
+
                 }else{
                     NSLog(@"语音写入沙盒失败");
                 }
