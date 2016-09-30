@@ -142,7 +142,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
 }
 
 /**
- *  收到好友请求
+ *  收到好友请求  -- 显示未读请求消息条数
  *
  *  @param notify 好友信息字典
  */
@@ -157,6 +157,10 @@ static NSString * const reuseIdentifier = @"friendListcell";
     //插入数据库，显示未读角标
     [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
     
+    self.unReadLabel.text = [NSString stringWithFormat:@"%d",USERINFO.unReadCount];
+    if (USERINFO.unReadCount == 0) {
+        self.unReadLabel.hidden = YES;
+    }
 }
 
 #pragma mark - tableview 代理
@@ -180,6 +184,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
         if (indexPath.row == 0) {
             cell.name.text = @"新的朋友";
             cell.avtar.image = [UIImage imageNamed:@"new_friend"];
+            [cell addSubview:self.unReadLabel];
         }else{
             cell.name.text = @"群聊";
             cell.avtar.image = [UIImage imageNamed:@"group_Icon"];
@@ -258,6 +263,12 @@ static NSString * const reuseIdentifier = @"friendListcell";
             NewFriendsListController *vc = [[NewFriendsListController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
+            
+            //清除新朋友请求角标
+//            UserInfo *userInfo = [UserInfo shareInstance];
+//            userInfo.unReadCount = 0;
+//            [userInfo save];
+//            self.unReadLabel.hidden = YES;
         }else if (indexPath.row == 1){  //群组
             
         }
@@ -310,9 +321,15 @@ static NSString * const reuseIdentifier = @"friendListcell";
 
 - (UILabel *)unReadLabel{
     if (!_unReadLabel) {
-        _unReadLabel = [[UILabel alloc] initWithFrame:CGRectMake(47, 4, 14, 14)];
-        _unReadLabel.font = MAINFONT;
+        _unReadLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 2, 16, 16)];
+        _unReadLabel.textColor = WHITECOLOR;
+        _unReadLabel.font = [UIFont systemFontOfSize:14];
+        _unReadLabel.textAlignment = NSTextAlignmentCenter;
         _unReadLabel.backgroundColor = THEMECOLOR;
+        _unReadLabel.layer.cornerRadius = 8.0f;
+        _unReadLabel.clipsToBounds = YES;
+        _unReadLabel.hidden = YES;
+
     }
     return _unReadLabel;
 }
