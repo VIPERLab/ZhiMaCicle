@@ -1174,6 +1174,49 @@
 }
 
 
+/**
+ *  设置会话的未读数量为0
+ *
+ *  @param converseId 会话id
+ */
+- (void)setConverseUnReadCountZero:(NSString *)converseId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSLog(@"开始查会话表");
+    [queue inDatabase:^(FMDatabase *db) {
+        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '0'"];
+        NSString *searchOptionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = %@",converseId]];
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        while ([result next]) {
+            NSLog(@"消息置0成功");
+        }
+    }];
+}
+
+
+
+/**
+ *  根据会话id删除会话
+ *
+ *  @param converseId 会话模型
+ */
+- (void)deleteConverseWithConverseId:(NSString *)converseId {
+    //先删除消息表
+    [self deleteMessageFormMessageTableByConverseID:converseId];
+    
+    //再删除会话表
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@",converseId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"删除会话成功");
+        } else {
+            NSLog(@"删除会话失败");
+        }
+    }];
+}
+
+
 
 #pragma mark - 消息相关   罅隙（TM这两个字谁能打出来）
 //                    ------------   消息表  ----------------
@@ -1186,7 +1229,7 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID];
+        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID,@(message.is_read),@(message.sendStatus)];
         if (successFul) {
             NSLog(@"插入消息成功");
         } else {
@@ -1281,7 +1324,7 @@
 }
 
 /**
- *  根据会话id 获取消息列表
+ *  根据会话id和页数 获取消息列表
  *
  *  @param converseID 会话id
  *
@@ -1303,6 +1346,8 @@
             message.toUidOrGroupId = [result stringForColumn:@"toUidOrGroupId"];
             message.timeStamp = [result intForColumn:@"time"];
             message.text = [result stringForColumn:@"text"];
+            message.is_read = [result intForColumn:@"is_read"];
+            message.sendStatus = [result intForColumn:@"sendStatus"];
             [dataArray addObject:message];
         }
     }];
@@ -1310,44 +1355,31 @@
 }
 
 /**
- *  设置消息的未读数量为0
+ *  更新消息模型
  *
- *  @param converseId 会话id
- */
-- (void)setConverseUnReadCountZero:(NSString *)converseId {
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-    NSLog(@"开始查会话表");
-    [queue inDatabase:^(FMDatabase *db) {
-        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '0'"];
-        NSString *searchOptionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = %@",converseId]];
-        FMResultSet *result = [db executeQuery:searchOptionStr];
-        while ([result next]) {
-            NSLog(@"消息置0成功");
-        }
-    }];
-}
-
-/**
- *  根据会话id删除会话
+ *  @param message 新的消息
  *
- *  @param converseId 会话模型
+ *  @return 是否更新成功
  */
-- (void)deleteConverseWithConverseId:(NSString *)converseId {
-    //先删除消息表
-    [self deleteMessageFormMessageTableByConverseID:converseId];
-    
-    //再删除会话表
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@",converseId]];
+- (BOOL)upDataMessageStatusWithMessage:(LGMessage *)message{
+    __block BOOL isSuccess = NO;
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
+//     is_read, sendStatus
+    NSString *option1 = [NSString stringWithFormat:@"is_read = '%zd', sendStatus = '%@'",@(message.is_read),@(message.sendStatus)];
+    NSString *option2 = [NSString stringWithFormat:@"msgid = %@",message.msgid];
+    NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Message_Table withOpton1:option1 andOption2:option2];
     [queue inDatabase:^(FMDatabase *db) {
         BOOL success = [db executeUpdate:optionStr];
         if (success) {
-            NSLog(@"删除会话成功");
-        } else {
-            NSLog(@"删除会话失败");
+            isSuccess = YES;
         }
     }];
+    
+    return YES;
 }
+
+
+
 
 /**
  *  根据会话ID删除消息
