@@ -63,16 +63,13 @@
     return YES;
 }
 
-- (BOOL)writeIntoFileWithData:(NSData*)data withRecorder:(MLAudioRecorder*)recoder inAQ:(AudioQueueRef)inAQ inStartTime:(const AudioTimeStamp *)inStartTime inNumPackets:(UInt32)inNumPackets inPacketDesc:(const AudioStreamPacketDescription*)inPacketDesc
+- (BOOL)writeIntoFileWithData:(NSData*)data withRecorder:(MLAudioRecorder*)recoder inAQ:(AudioQueueRef)						inAQ inStartTime:(const AudioTimeStamp *)inStartTime inNumPackets:(UInt32)inNumPackets inPacketDesc:(const AudioStreamPacketDescription*)inPacketDesc
 {
     if (self.maxSecondCount>0){
         if (self.recordedSecondCount+recoder.bufferDurationSeconds>self.maxSecondCount){
             //            NSLog(@"录音超时");
             dispatch_async(dispatch_get_main_queue(), ^{
-                recoder.isTimeOut = YES;
-                if ([recoder isRecording]) {
-                    [recoder stopRecording];
-                }
+                [recoder stopRecording];
             });
             return YES;
         }
@@ -83,16 +80,16 @@
     const void *recordingData = data.bytes;
     NSUInteger pcmLen = data.length;
     
-//    NSLog(@"%lu",(unsigned long)pcmLen);
+    //    NSLog(@"%lu",(unsigned long)pcmLen);
     
     if (pcmLen<=0){
         return YES;
     }
     if (pcmLen%2!=0){
         pcmLen--; //防止意外，如果不是偶数，情愿减去最后一个字节。
-//        NSLog(@"不是偶数");
+        //        NSLog(@"不是偶数");
     }
-
+    
     unsigned char * bytes = malloc(pcmLen+320);
     memset(bytes,0,pcmLen+320);
     memcpy(bytes,self.lastBytes,self.lastBytesLength);
@@ -126,7 +123,7 @@
             }
             
             if(fwrite(buffer,1,recvLen,_file)==0){
-                 free(bytes);
+                free(bytes);
                 return NO;//只有写文件有可能出错。返回NO
             }
             self.recordedFileSize += recvLen;
@@ -161,7 +158,7 @@
 
 - (void)dealloc
 {
-	if(_file){
+    if(_file){
         fclose(_file);
         _file = 0;
     }

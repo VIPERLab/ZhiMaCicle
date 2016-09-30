@@ -37,31 +37,31 @@ int amrEncodeMode[] = {4750, 5150, 5900, 6700, 7400, 7950, 10200, 12200}; // amr
 
 const int myround(const double x)
 {
-	return((int)(x+0.5));
+    return((int)(x+0.5));
 }
 
 // 根据帧头计算当前帧大小
 int caclAMRFrameSize(unsigned char frameHeader)
 {
-	int mode;
-	int temp1 = 0;
-	int temp2 = 0;
-	int frameSize;
-	
-	temp1 = frameHeader;
-	
-	// 编码方式编号 = 帧头的3-6位
-	temp1 &= 0x78; // 0111-1000
-	temp1 >>= 3;
-	
-	mode = amrEncodeMode[temp1];
-	
-	// 计算amr音频数据帧大小
-	// 原理: amr 一帧对应20ms，那么一秒有50帧的音频数据
-	temp2 = myround((double)(((double)mode / (double)AMR_FRAME_COUNT_PER_SECOND) / (double)8));
-	
-	frameSize = myround((double)temp2 + 0.5);
-	return frameSize;
+    int mode;
+    int temp1 = 0;
+    int temp2 = 0;
+    int frameSize;
+    
+    temp1 = frameHeader;
+    
+    // 编码方式编号 = 帧头的3-6位
+    temp1 &= 0x78; // 0111-1000
+    temp1 >>= 3;
+    
+    mode = amrEncodeMode[temp1];
+    
+    // 计算amr音频数据帧大小
+    // 原理: amr 一帧对应20ms，那么一秒有50帧的音频数据
+    temp2 = myround((double)(((double)mode / (double)AMR_FRAME_COUNT_PER_SECOND) / (double)8));
+    
+    frameSize = myround((double)temp2 + 0.5);
+    return frameSize;
 }
 
 // 读第一个帧 - (参考帧)
@@ -72,15 +72,15 @@ BOOL ReadAMRFrameFirst(FILE* fpamr, int* stdFrameSize, unsigned char* stdFrameHe
     fseek(fpamr, strlen(AMR_MAGIC_NUMBER), SEEK_SET);
     
     //先读帧头
-	fread(stdFrameHeader, 1, sizeof(unsigned char), fpamr);
-	if (feof(fpamr)) return NO;
-	
+    fread(stdFrameHeader, 1, sizeof(unsigned char), fpamr);
+    if (feof(fpamr)) return NO;
+    
     fseek(fpamr,curpos,SEEK_SET); //还原位置
     
-	// 根据帧头计算帧大小
-	*stdFrameSize = caclAMRFrameSize(*stdFrameHeader);
-	
-	return YES;
+    // 根据帧头计算帧大小
+    *stdFrameSize = caclAMRFrameSize(*stdFrameHeader);
+    
+    return YES;
 }
 
 long filesize(FILE *stream)
@@ -144,22 +144,22 @@ long filesize(FILE *stream)
         NSLog(@"打开文件失败:%s",__FUNCTION__);
         return NO;
     }
-
+    
     //忽略文件头大小
     char magic[8];
     static const char* amrHeader = AMR_MAGIC_NUMBER;
     int realReadedLength = fread(magic, sizeof(char), strlen(amrHeader), _file);
-	if (strncmp(magic, amrHeader, strlen(amrHeader)))
-	{
-		return NO;
-	}
+    if (strncmp(magic, amrHeader, strlen(amrHeader)))
+    {
+        return NO;
+    }
     self.readedLength += realReadedLength;
     
     //读取一个参考帧
     if(!ReadAMRFrameFirst(_file, &_stdFrameSize, &_stdFrameHeader)){
         return NO;
     }
-//	NSLog(@"帧大小%d,帧头%c",_stdFrameSize,_stdFrameHeader);
+    //	NSLog(@"帧大小%d,帧头%c",_stdFrameSize,_stdFrameHeader);
     
     return YES;
 }
@@ -169,7 +169,7 @@ long filesize(FILE *stream)
     AudioStreamBasicDescription format;
     format.mSampleRate = 8000;
     format.mChannelsPerFrame = 1;
-	format.mFormatID = kAudioFormatLinearPCM;
+    format.mFormatID = kAudioFormatLinearPCM;
     format.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
     format.mBitsPerChannel = 16;
     format.mBytesPerPacket = format.mBytesPerFrame = (format.mBitsPerChannel / 8) * format.mChannelsPerFrame;
@@ -189,13 +189,13 @@ long filesize(FILE *stream)
     
     NSMutableData *data = [NSMutableData data];
     
-	unsigned char amrFrame[MAX_AMR_FRAME_SIZE];
-	short pcmFrame[PCM_FRAME_SIZE];
+    unsigned char amrFrame[MAX_AMR_FRAME_SIZE];
+    short pcmFrame[PCM_FRAME_SIZE];
     
     for (NSUInteger i=0; i<needReadFrameCount; i++) {
         memset(amrFrame, 0, sizeof(amrFrame));
         memset(pcmFrame, 0, sizeof(pcmFrame));
-		
+        
         int bytes = 0;
         unsigned char frameHeader; // 帧头
         
@@ -220,9 +220,9 @@ long filesize(FILE *stream)
         if (feof(_file)) break;
         
         self.readedLength += bytes;
-		
-		// 解码一个AMR音频帧成PCM数据 (8k-16b-单声道)
-		Decoder_Interface_Decode(_destate, amrFrame, pcmFrame, 0);
+        
+        // 解码一个AMR音频帧成PCM数据 (8k-16b-单声道)
+        Decoder_Interface_Decode(_destate, amrFrame, pcmFrame, 0);
         
         [data appendBytes:pcmFrame length:sizeof(pcmFrame)];
     }
@@ -247,7 +247,7 @@ long filesize(FILE *stream)
 
 - (void)dealloc
 {
-	if(_file){
+    if(_file){
         fclose(_file);
         _file = 0;
     }
