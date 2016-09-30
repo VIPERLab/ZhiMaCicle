@@ -593,7 +593,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         if(!isMe) {
             
-            if ([message.is_read isEqualToString:@"2"]) { //[chat.isReadContent isEqualToString:@"2"]
+            if (message.is_read == 1) { //[chat.isReadContent isEqualToString:@"2"]
                 voiceChatCell.isReadVoice = YES;
             } else {
                 voiceChatCell.isReadVoice = NO;
@@ -755,8 +755,8 @@ static NSString *const reuseIdentifier = @"messageCell";
         self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
         [self.player startPlaying];
         
-        if (![message.is_read isEqualToString:@"2"] && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
-            message.is_read = @"2";
+        if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
+            message.is_read = YES;
             
             /**
              *  1、更改数据库里面该message的状态，同时刷新cell
