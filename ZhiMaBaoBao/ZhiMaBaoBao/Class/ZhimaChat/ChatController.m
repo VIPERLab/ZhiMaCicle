@@ -18,6 +18,7 @@
 #import "BaseChatTableViewCell.h"
 #import "IMMorePictureTableViewCell.h"
 #import "IMChatVoiceTableViewCell.h"
+#import "LGChatInfoController.h"
 
 #import "SocketManager.h"
 
@@ -67,6 +68,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)viewDidLoad{
     [super viewDidLoad];
     [self setCustomTitle:self.conversionName];
+    [self setupNavRightItem];
     [self addSubviews];
     //初始化录音
     [self initAudioRecorder];
@@ -81,6 +83,22 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage:) name:kRecieveNewMessage object:nil];
 
+}
+
+//设置导航栏右侧按钮
+- (void)setupNavRightItem{
+    UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 40)];
+    [rightBtn setImage:[UIImage imageNamed:@"redContant"] forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(lookConversionInfo) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+}
+
+//查看会话详情 ->
+- (void)lookConversionInfo{
+    LGChatInfoController *vc = [[LGChatInfoController alloc] init];
+    vc.userId = self.conversionId;
+    vc.displayName = self.conversionName;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 /**
