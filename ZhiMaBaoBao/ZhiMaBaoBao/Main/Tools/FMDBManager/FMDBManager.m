@@ -1295,7 +1295,8 @@
         converseModel.unReadCount ++;
         converseModel.time = message.timeStamp;
         converseModel.lastConverse = message.text;
-        
+        converseModel.converseHead_photo = userModel.user_Head_photo;
+        converseModel.converseName = userModel.displayName;
         if (message.type == MessageTypeText) {
             converseModel.lastConverse = message.text;
         }else if (message.type == MessageTypeImage){
@@ -1304,7 +1305,7 @@
             converseModel.lastConverse = @"[语音]";
         }
         
-        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time)];
+        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseHead_photo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];
         NSString *option2 = [NSString stringWithFormat:@"converseId = %@",converseModel.converseId];
         
         opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
