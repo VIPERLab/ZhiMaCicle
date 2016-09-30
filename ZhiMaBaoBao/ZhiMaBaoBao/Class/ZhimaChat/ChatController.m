@@ -57,6 +57,8 @@
 
 @property (nonatomic, assign)BOOL isTimeOut; //录音时间超过60秒
 
+@property (nonatomic, assign)int currentPage;
+
 @end
 
 static NSString *const reuseIdentifier = @"messageCell";
@@ -71,13 +73,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     //初始化录音
     [self initAudioRecorder];
     [self requestChatRecord];
-    
-//    //播放按钮
-//    UIButton *playBtn = [[UIButton alloc] initWithFrame:CGRectMake(125, 400, 70, 50)];
-//    [playBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
-//    [playBtn setTitle:@"播放" forState:UIControlStateNormal];
-//    [self.view insertSubview:playBtn aboveSubview:self.tableView];
-//    [playBtn addTarget:self action:@selector(playAudio:) forControlEvents:UIControlEventTouchUpInside];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage:) name:kRecieveNewMessage object:nil];
 
@@ -118,6 +113,13 @@ static NSString *const reuseIdentifier = @"messageCell";
     keyboard.associateTableView = self.tableView;
     [self.view addSubview:keyboard];
     self.keyboard = keyboard;
+    
+    self.currentPage = 1;
+    
+    MJRefreshNormalHeader*header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshAction)];
+    header.stateLabel.text = @"Loading";
+    header.lastUpdatedTimeLabel.hidden = YES;
+    self.tableView.mj_header = header;
 
 }
 
@@ -293,6 +295,24 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
 }
 
+#pragma mark - 下拉刷新
+
+- (void)refreshAction {
+    
+    self.currentPage ++;
+    
+    FMDBManager* shareManager = [FMDBManager shareManager];
+    NSMutableArray*marr = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
+
+    for (int i=0; i<marr.count; i++) {
+        [self.messages insertObject:marr[i] atIndex:0];
+    }
+    [self.tableView reloadData];
+    [self.tableView.mj_header endRefreshing];
+}
+
+
+
 //加载聊天数据
 - (void)requestChatRecord{
     
@@ -301,7 +321,7 @@ static NSString *const reuseIdentifier = @"messageCell";
      */
     FMDBManager* shareManager = [FMDBManager shareManager];
 //    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
-    self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:1] mutableCopy];
+    self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
     self.messages = (NSMutableArray *)[[self.messages reverseObjectEnumerator] allObjects];
     
 //    for (int i=0; i<7; i++) {
@@ -741,14 +761,11 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
         [cell.btnBg setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         
-        
         //如果当前cell 的语音正在播放，那么结束播放
         if (self.currentPlayAudioIndexPath.row == ip.row) {
             return;
         }
-        
     }
-//    else{
     
         [self initAudioPlayAndReader];
         
@@ -759,48 +776,12 @@ static NSString *const reuseIdentifier = @"messageCell";
         if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
             message.is_read = YES;
             
-            /**
-             *  1、更改数据库里面该message的状态，同时刷新cell
-             */
-            //        [DataBaseManager updateChatColumnValueByID:@"2" column:@"is_read_content" theId:chat.theId.integerValue];
-            //        [DataBaseManager closeDataBase];
-            //        [self chat_updateTableView:@[ip] pattern:1];
+//            FMDBManager* shareManager = [FMDBManager shareManager];
             
             [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
             
         }
-//    }
-    /**
-     *  2、根据路径获取到音频内容，然后播放
-     */
-//    NSString *voice = [[chat.message componentsSeparatedByString:@"/"] lastObject];
-//    NSString *url = [[[BYDProductionObject defaultProduction] createDocumentSpecifiedFile:StoreVoicesChat] stringByAppendingPathComponent:voice];
-//    NSError *err = nil;
-//    self.player = nil;
-//    NSURL *playUrl = [NSURL fileURLWithPath:url];
-//    if(!playUrl) {
-//        [[GeneralToolClass defaultInstance] popUpWarningView:[CommenMethod localizationString:@"InvalidFile"]];
-//    }
-//    self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:playUrl error:&err];
-//    self.voicePlayer.delegate = self;
-//    soundLocation = sender.center.x;
-//    soundIp = ip.row;
-    
-//    NSLog(@"shichang:%f",self.voicePlayer.duration);
-//    myTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(playPic) userInfo:nil repeats:YES];
-//    [myTimer fire];
-//    if (err) {
-//        NSLog(@"voice error:%@",err);
-//    }
-//    if(self.voicePlayer) {
-//        [self.voicePlayer prepareToPlay];
-//        [self.voicePlayer play];
-//    } else {
-//        self.voicePlayer = [[AVAudioPlayer alloc] initWithData:[IMNetworkRequest fetchFileFromLocal:voice folder:StoreVoicesChat] error:&err];
-//        self.voicePlayer.delegate = self;
-//        [self.voicePlayer prepareToPlay];
-//        [self.voicePlayer play];
-//    }
+
     
     self.currentPlayAudioIndexPath = ip;
 }
