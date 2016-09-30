@@ -32,7 +32,6 @@ static NSString * const reuseIdentifier = @"friendListcell";
     [super viewDidLoad];
     [self setCustomRightItems];
     [self addSubviews];
-    [self requestFriendsList];
     
     //监听新的好友请求消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveFriendRequest:) name:kNewFriendRequest object:nil];
@@ -40,6 +39,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self requestFriendsList];
 }
 
 - (void)addSubviews{
@@ -58,6 +58,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
     //先从数据库拉取好友列表 从网络请求加载最新数据更新数据库
     self.friends = [[FMDBShareManager getAllUserMessageInArray] mutableCopy];
     [self friendsListSort];
+    
     
     [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
         self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
@@ -97,8 +98,8 @@ static NSString * const reuseIdentifier = @"friendListcell";
         [self.friendsAfterSort addObject:friend];
     }
     // 按照模型"pinyin"属性 排序数组
-    self.friendsAfterSort = self.friends;
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"headchar" ascending:YES]];
+//    self.friendsAfterSort = self.friends;
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"pinyin" ascending:YES]];
     [self.friendsAfterSort sortUsingDescriptors:sortDescriptors];
     
     int num = 0;

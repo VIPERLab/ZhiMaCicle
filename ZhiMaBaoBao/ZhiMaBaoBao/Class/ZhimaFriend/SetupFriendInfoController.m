@@ -91,6 +91,9 @@
             if (responseData.code == 0) {
                 [LCProgressHUD hide];
                 [self.navigationController popToRootViewControllerAnimated:YES];
+                //从数据库删除会话 -- 删除好友列表
+                [FMDBShareManager deleteConverseWithConverseId:self.friendInfo.user_Id];
+                [FMDBShareManager deleteUserMessageByUserID:self.friendInfo.user_Id];
             }else{
                 [LCProgressHUD showFailureText:responseData.msg];
             }

@@ -67,7 +67,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 //设置好友资料
 - (void)setupFriendInfo{
     SetupFriendInfoController *vc = [[SetupFriendInfoController alloc] init];
-    vc.userId = self.friend.user_Id;
+    vc.userId = self.userId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

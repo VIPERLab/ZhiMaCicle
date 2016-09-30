@@ -77,7 +77,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self requestChatRecord];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage:) name:kRecieveNewMessage object:nil];
-
+    //监听消息发送状态回调
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMsgStatuescall:) name:kSendMessageStateCall object:nil];
 }
 
 //设置导航栏右侧按钮
@@ -113,6 +114,12 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
     }
+}
+//消息发送状态回调
+- (void)sendMsgStatuescall:(NSNotification *)notification{
+    NSDictionary *userInfo = notification.userInfo;
+    LGMessage *message  = userInfo[@"message"];
+    
 }
 
 - (void)addSubviews{

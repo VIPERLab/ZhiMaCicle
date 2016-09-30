@@ -46,7 +46,7 @@
 
 - (void)notification {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kRecieveNewMessage object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageSuccess object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageStateCall object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRecovery) name:K_NetworkRecoveryNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withoutNetwork) name:K_WithoutNetWorkNotification object:nil];
 }
