@@ -13,6 +13,7 @@
 #import "ChatController.h"
 #import "NewFriendsListController.h"
 #import "FriendProfilecontroller.h"
+#import "ConversationController.h"
 
 @interface FriendsController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -285,16 +286,14 @@ static NSString * const reuseIdentifier = @"friendListcell";
         rowNum += indexPath.row;
         
         ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
-//        ChatController *vc = [[ChatController alloc] init];
-//        vc.conversionId = friend.user_Id;
-//        vc.conversionName = friend.displayName;
+//        ChatController *chatVC = [[ChatController alloc] init];
+//        chatVC.conversionId = friend.user_Id;
+//        chatVC.conversionName = friend.displayName;
+        
         FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
         vc.userId = friend.user_Id;
-        
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
-        
-
 
     }
 }

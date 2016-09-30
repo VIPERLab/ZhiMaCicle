@@ -88,6 +88,12 @@
         _unReadCountLabel.text = [NSString stringWithFormat:@"%zd",model.unReadCount];
     }
     
+    if (model.unReadCount < 1) {
+        _unReadCountLabel.hidden = YES;
+    }else{
+        _unReadCountLabel.hidden = NO;
+    }
+    
     _timeLabel.text = [NSString timeStringChangeToZMTimeString:[NSDate dateStrFromCstampTime:model.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
     hasSubViews = YES;
     [self setNeedsDisplay];
