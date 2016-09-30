@@ -97,6 +97,8 @@
     return 0.5;
 }
 
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ConverseModel *model = self.dataArray[indexPath.row];
@@ -106,6 +108,23 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source.
+        ConverseModel *model = self.dataArray[indexPath.row];
+        //数据库删除该条会话
+        [FMDBShareManager deleteConverseWithConverseId:model.converseId];
+        
+        [self getDataFormSqlist];
+        
+    }
+}
 
 #pragma mark - lazyLoad
 
