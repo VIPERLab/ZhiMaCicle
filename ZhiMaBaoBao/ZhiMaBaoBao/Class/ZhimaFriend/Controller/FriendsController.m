@@ -12,6 +12,7 @@
 #import "FriendsListCell.h"
 #import "ChatController.h"
 #import "NewFriendsListController.h"
+#import "FriendProfilecontroller.h"
 
 @interface FriendsController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -30,6 +31,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
     [super viewDidLoad];
     [self setCustomRightItems];
     [self addSubviews];
+    [self requestFriendsList];
     
     //监听新的好友请求消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveFriendRequest:) name:kNewFriendRequest object:nil];
@@ -37,8 +39,6 @@ static NSString * const reuseIdentifier = @"friendListcell";
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self requestFriendsList];
-
 }
 
 - (void)addSubviews{
@@ -82,21 +82,22 @@ static NSString * const reuseIdentifier = @"friendListcell";
     [self.sectionsArr removeAllObjects];
     [self.countOfSectionArr removeAllObjects];
 
-    //遍历好友数组
-    for (int i = 0; i < self.friends.count; i++) {
-        ZhiMaFriendModel *friend = self.friends[i];
-        NSString *pinyin = [NSString string];
-        for(int j = 0; j< friend.displayName.length ;j++){
-            
-            NSString *singlePinyinLetter = [[NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.displayName characterAtIndex:j])] uppercaseString];
-            pinyin = [pinyin stringByAppendingString:singlePinyinLetter];
-        }
-        //将好友显示名称转换成拼音缩写
-        friend.pinyin = pinyin;
-        [self.friendsAfterSort addObject:friend];
-    }
+//    //遍历好友数组
+//    for (int i = 0; i < self.friends.count; i++) {
+//        ZhiMaFriendModel *friend = self.friends[i];
+//        NSString *pinyin = [NSString string];
+//        for(int j = 0; j< friend.displayName.length ;j++){
+//            
+//            NSString *singlePinyinLetter = [[NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.displayName characterAtIndex:j])] uppercaseString];
+//            pinyin = [pinyin stringByAppendingString:singlePinyinLetter];
+//        }
+//        //将好友显示名称转换成拼音缩写
+//        friend.pinyin = pinyin;
+//        [self.friendsAfterSort addObject:friend];
+//    }
     // 按照模型"pinyin"属性 排序数组
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"pinyin" ascending:YES]];
+    self.friendsAfterSort = self.friends;
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"headchar" ascending:YES]];
     [self.friendsAfterSort sortUsingDescriptors:sortDescriptors];
     
     int num = 0;
@@ -107,15 +108,17 @@ static NSString * const reuseIdentifier = @"friendListcell";
         ZhiMaFriendModel *friend = self.friendsAfterSort[i];
         if (i == 0) {
             //第一个数据首字母
-            NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.pinyin characterAtIndex:0])];
-            [self.sectionsArr addObject:[str uppercaseString]];
+//            NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.pinyin characterAtIndex:0])];
+//            [self.sectionsArr addObject:[str uppercaseString]];
+            [self.sectionsArr addObject:friend.headchar];
         }
         
         if (i < self.friendsAfterSort.count - 1) {
             //取到第二条数据，与第一条数据首字母比较
             ZhiMaFriendModel *friend1 = self.friendsAfterSort[i+1];
 
-            if (pinyinFirstLetter([friend1.pinyin characterAtIndex:0]) != pinyinFirstLetter([friend.pinyin characterAtIndex:0])) {
+//            pinyinFirstLetter([friend1.pinyin characterAtIndex:0]) != pinyinFirstLetter([friend.pinyin characterAtIndex:0])
+            if (![friend1.headchar isEqualToString:friend.headchar]) {
                 
                 NSString *numStr = [NSString stringWithFormat:@"%d",num + 1];
                 [self.countOfSectionArr addObject:numStr];
@@ -125,8 +128,9 @@ static NSString * const reuseIdentifier = @"friendListcell";
                     [self.countOfSectionArr addObject:@(1)];
                 }
                 
-                NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend1.pinyin characterAtIndex:0])];
-                [self.sectionsArr addObject:[str uppercaseString]];
+//                NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend1.pinyin characterAtIndex:0])];
+//                [self.sectionsArr addObject:[str uppercaseString]];
+                [self.sectionsArr addObject:friend1.headchar];
                 num = 0;
             }
             else{
@@ -148,7 +152,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
  */
 - (void)recieveFriendRequest:(NSNotification *)notify{
     //本地存储好友请求数量
-    UserInfo *userInfo = [UserInfo shareInstance];
+    UserInfo *userInfo = [UserInfo read];
     userInfo.unReadCount ++;
     [userInfo save];
     
@@ -265,10 +269,10 @@ static NSString * const reuseIdentifier = @"friendListcell";
             [self.navigationController pushViewController:vc animated:YES];
             
             //清除新朋友请求角标
-//            UserInfo *userInfo = [UserInfo shareInstance];
-//            userInfo.unReadCount = 0;
-//            [userInfo save];
-//            self.unReadLabel.hidden = YES;
+            UserInfo *userInfo = [UserInfo read];
+            userInfo.unReadCount = 0;
+            [userInfo save];
+            self.unReadLabel.hidden = YES;
         }else if (indexPath.row == 1){  //群组
             
         }
@@ -281,11 +285,16 @@ static NSString * const reuseIdentifier = @"friendListcell";
         rowNum += indexPath.row;
         
         ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
-        ChatController *vc = [[ChatController alloc] init];
+//        ChatController *vc = [[ChatController alloc] init];
+//        vc.conversionId = friend.user_Id;
+//        vc.conversionName = friend.displayName;
+        FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
+        vc.userId = friend.user_Id;
+        
         vc.hidesBottomBarWhenPushed = YES;
-        vc.conversionId = friend.user_Id;
-        vc.conversionName = friend.displayName;
         [self.navigationController pushViewController:vc animated:YES];
+        
+
 
     }
 }
