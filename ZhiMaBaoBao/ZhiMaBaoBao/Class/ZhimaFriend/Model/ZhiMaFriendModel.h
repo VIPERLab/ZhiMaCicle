@@ -11,8 +11,8 @@ typedef NS_OPTIONS(NSUInteger, FriendType) {
     FriendTypeNotFriend = 0,     //不是好友
     FriendTypeNew,              //新的好友
     FriendTypeFriends,          //好友
-    FriendTypeBlack,            //黑名单
-    FriendTypeSelf              //用户自己
+    FriendTypeBlack            //黑名单
+//    FriendTypeSelf              //用户自己
 };
 
 #import <Foundation/Foundation.h>
@@ -41,6 +41,8 @@ typedef NS_OPTIONS(NSUInteger, FriendType) {
 
  /** 显示名称 （有备注显示备注，无备注显示昵称）*/
 @property (nonatomic, copy) NSString *displayName;
+ /** 服务器返回大写首字母*/
+@property (nonatomic, copy) NSString *headchar;
  /** 显示名称的大写拼音缩写*/
 @property (nonatomic, copy) NSString *pinyin;
  /** 手机号码*/

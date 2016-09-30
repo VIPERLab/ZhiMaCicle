@@ -134,7 +134,9 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     
     if (indexPath.section == 1) {
         //跳转到用户详情
+        ZhiMaFriendModel *friend = self.friendsArr[indexPath.row];
         FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
+        vc.userId = friend.user_Id;
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
