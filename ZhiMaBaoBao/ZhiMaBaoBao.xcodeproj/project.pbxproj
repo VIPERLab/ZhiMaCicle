@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		04787AE91D9CFF4B000A0DB5 /* KXActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */; };
+		04787AF11D9E07FF000A0DB5 /* hud_success.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF01D9E07FF000A0DB5 /* hud_success.png */; };
+		04787AF31D9E0896000A0DB5 /* hud_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF21D9E0896000A0DB5 /* hud_error.png */; };
+		04787AF61D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */; };
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
@@ -517,12 +520,8 @@
 		31B7C75F1D8FB33E00F1883A /* LGRessetPassController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C7561D8FB33E00F1883A /* LGRessetPassController.xib */; };
 		31B7C7601D8FB33E00F1883A /* LGSetNickNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7581D8FB33E00F1883A /* LGSetNickNameController.m */; };
 		31B7C7611D8FB33E00F1883A /* LGSetPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C75A1D8FB33E00F1883A /* LGSetPasswordController.m */; };
-		31B7C76F1D8FBC8000F1883A /* hud_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C7671D8FBC8000F1883A /* hud_error.png */; };
-		31B7C7701D8FBC8000F1883A /* hud_error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C7681D8FBC8000F1883A /* hud_error@2x.png */; };
 		31B7C7711D8FBC8000F1883A /* hud_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C7691D8FBC8000F1883A /* hud_info.png */; };
 		31B7C7721D8FBC8000F1883A /* hud_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C76A1D8FBC8000F1883A /* hud_info@2x.png */; };
-		31B7C7731D8FBC8000F1883A /* hud_success.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C76B1D8FBC8000F1883A /* hud_success.png */; };
-		31B7C7741D8FBC8000F1883A /* hud_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C76C1D8FBC8000F1883A /* hud_success@2x.png */; };
 		31B7C7751D8FBC8000F1883A /* LCProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C76E1D8FBC8000F1883A /* LCProgressHUD.m */; };
 		31B7C7781D8FC3C500F1883A /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7771D8FC3C500F1883A /* UserInfo.m */; };
 		31B7C7811D8FE69E00F1883A /* PhoneAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C77E1D8FE69E00F1883A /* PhoneAddressController.m */; };
@@ -578,6 +577,10 @@
 /* Begin PBXFileReference section */
 		04787AE71D9CFF4B000A0DB5 /* KXActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXActionSheet.h; sourceTree = "<group>"; };
 		04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXActionSheet.m; sourceTree = "<group>"; };
+		04787AF01D9E07FF000A0DB5 /* hud_success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_success.png; sourceTree = "<group>"; };
+		04787AF21D9E0896000A0DB5 /* hud_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_error.png; sourceTree = "<group>"; };
+		04787AF41D9E13FB000A0DB5 /* ConverseWithouNetworkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseWithouNetworkCell.h; sourceTree = "<group>"; };
+		04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseWithouNetworkCell.m; sourceTree = "<group>"; };
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
@@ -1565,12 +1568,8 @@
 		31B7C7581D8FB33E00F1883A /* LGSetNickNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSetNickNameController.m; sourceTree = "<group>"; };
 		31B7C7591D8FB33E00F1883A /* LGSetPasswordController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGSetPasswordController.h; sourceTree = "<group>"; };
 		31B7C75A1D8FB33E00F1883A /* LGSetPasswordController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSetPasswordController.m; sourceTree = "<group>"; };
-		31B7C7671D8FBC8000F1883A /* hud_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_error.png; sourceTree = "<group>"; };
-		31B7C7681D8FBC8000F1883A /* hud_error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hud_error@2x.png"; sourceTree = "<group>"; };
 		31B7C7691D8FBC8000F1883A /* hud_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_info.png; sourceTree = "<group>"; };
 		31B7C76A1D8FBC8000F1883A /* hud_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hud_info@2x.png"; sourceTree = "<group>"; };
-		31B7C76B1D8FBC8000F1883A /* hud_success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_success.png; sourceTree = "<group>"; };
-		31B7C76C1D8FBC8000F1883A /* hud_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hud_success@2x.png"; sourceTree = "<group>"; };
 		31B7C76D1D8FBC8000F1883A /* LCProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCProgressHUD.h; sourceTree = "<group>"; };
 		31B7C76E1D8FBC8000F1883A /* LCProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCProgressHUD.m; sourceTree = "<group>"; };
 		31B7C7761D8FC3C500F1883A /* UserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfo.h; sourceTree = "<group>"; };
@@ -1712,6 +1711,8 @@
 			children = (
 				04CBF5001D99228200CBB609 /* ConverseCell.h */,
 				04CBF5011D99228200CBB609 /* ConverseCell.m */,
+				04787AF41D9E13FB000A0DB5 /* ConverseWithouNetworkCell.h */,
+				04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -4320,12 +4321,10 @@
 		31B7C7661D8FBC8000F1883A /* HUDImage */ = {
 			isa = PBXGroup;
 			children = (
-				31B7C7671D8FBC8000F1883A /* hud_error.png */,
-				31B7C7681D8FBC8000F1883A /* hud_error@2x.png */,
+				04787AF21D9E0896000A0DB5 /* hud_error.png */,
+				04787AF01D9E07FF000A0DB5 /* hud_success.png */,
 				31B7C7691D8FBC8000F1883A /* hud_info.png */,
 				31B7C76A1D8FBC8000F1883A /* hud_info@2x.png */,
-				31B7C76B1D8FBC8000F1883A /* hud_success.png */,
-				31B7C76C1D8FBC8000F1883A /* hud_success@2x.png */,
 			);
 			path = HUDImage;
 			sourceTree = "<group>";
@@ -4558,9 +4557,7 @@
 				04F8628F1D94FC7900DCC6FE /* systemEmoji.plist in Resources */,
 				04F862581D94FC6D00DCC6FE /* LICENSE in Resources */,
 				04F8624B1D94FC6D00DCC6FE /* MLEmoji_Expression.plist in Resources */,
-				31B7C7701D8FBC8000F1883A /* hud_error@2x.png in Resources */,
 				31B7C7B81D90031D00F1883A /* YiKeyBoardView.xib in Resources */,
-				31B7C76F1D8FBC8000F1883A /* hud_error.png in Resources */,
 				31B7C75F1D8FB33E00F1883A /* LGRessetPassController.xib in Resources */,
 				316957811D91199100140126 /* dtmf-4.aif in Resources */,
 				31B7C79D1D8FE71F00F1883A /* LGCallRecordCell.xib in Resources */,
@@ -4580,10 +4577,10 @@
 				04EA7AC91D910F89005E5425 /* DNImagePicker.strings in Resources */,
 				311CEF7C1D92219200BBB1F9 /* FakeData.plist in Resources */,
 				04F8624C1D94FC6D00DCC6FE /* MLEmoji_ExpressionImage.plist in Resources */,
-				31B7C7741D8FBC8000F1883A /* hud_success@2x.png in Resources */,
 				04EA7ACE1D910F89005E5425 /* imageResources.xcassets in Resources */,
 				310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */,
 				04EA7AC71D910F89005E5425 /* DNImagePickerController.strings in Resources */,
+				04787AF31D9E0896000A0DB5 /* hud_error.png in Resources */,
 				316957851D91199100140126 /* dtmf-8.aif in Resources */,
 				3169577D1D91199100140126 /* dtmf-0.aif in Resources */,
 				04F8628D1D94FC7900DCC6FE /* emotion.plist in Resources */,
@@ -4598,9 +4595,9 @@
 				3169577E1D91199100140126 /* dtmf-1.aif in Resources */,
 				310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */,
 				316957571D90E63100140126 /* LGAddFriendCell.xib in Resources */,
+				04787AF11D9E07FF000A0DB5 /* hud_success.png in Resources */,
 				04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */,
 				316957801D91199100140126 /* dtmf-3.aif in Resources */,
-				31B7C7731D8FBC8000F1883A /* hud_success.png in Resources */,
 				319069C21D9BF6F700D1D6D2 /* NewFriendsListCell.xib in Resources */,
 				316957881D91199100140126 /* ring.mp3 in Resources */,
 			);
@@ -4764,6 +4761,7 @@
 				04EA7DB41D912872005E5425 /* ZXDataMatrixBase256Encoder.m in Sources */,
 				04EA7D581D912872005E5425 /* ZXAztecDetector.m in Sources */,
 				319069BD1D9BF24700D1D6D2 /* LGSearchBar.m in Sources */,
+				04787AF61D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m in Sources */,
 				04EA7AD01D910F89005E5425 /* DNBadgeLabel.m in Sources */,
 				04EA7E2C1D912872005E5425 /* ZXMultiDetector.m in Sources */,
 				04F57AE41D9280BD002A6471 /* SDBrowserImageView.m in Sources */,

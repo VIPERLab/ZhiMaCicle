@@ -13,6 +13,15 @@
 // --   进入前台的通知
 #define KEnteryForeground_Notification @"KEnteryForeground_Notification"
 
+
+//                    ------ 网络状态通知 --------
+// 没有网络
+#define K_WithoutNetWorkNotification @"KWithoutNetwrokingNotification"
+// 网络恢复
+#define K_NetworkRecoveryNotification @"KNetworkRecoveryNotification"
+
+
+
 //                    ------ 朋友圈未读消息通知 --------
 /**
  *  通知appDelegate更新未读消息

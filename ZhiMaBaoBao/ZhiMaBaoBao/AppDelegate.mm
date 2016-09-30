@@ -75,17 +75,17 @@
     //网络连接不可用
     if (status == RealStatusNotReachable)
     {
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
     }
     //wifi
     if (status == RealStatusViaWiFi)
     {
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
     }
     //蜂窝数据
     if (status == RealStatusViaWWAN)
     {
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
     }
     
 }
@@ -164,7 +164,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     
-    [LCProgressHUD showSuccessText:@"123"];
+    [LCProgressHUD showSuccessText:@"成功"];
     
     //计算是否超过设置邀请码的有效期
     if (USERINFO.sessionId && ![USERINFO.create_time isEqualToString:@""] && USERINFO.create_time!= nil) {

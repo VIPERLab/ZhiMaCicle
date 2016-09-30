@@ -78,7 +78,7 @@
 
 
 - (void)saveButtonDidClick {
-    [LCProgressHUD showText:@"正在更改个性签名"];
+    [LCProgressHUD showLoadingText:@"正在更改个性签名"];
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"signature" andChangeValue:self.textView.text block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
         if (responseData.code != 0) {
@@ -89,8 +89,12 @@
         
         info.signature = self.textView.text;
         [info save];
-        [LCProgressHUD showInfoText:@"修改成功"];
-        [self.navigationController popViewControllerAnimated:YES];
+        [LCProgressHUD showSuccessText:@"修改成功"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [LCProgressHUD hide];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+        
     }];
 }
 

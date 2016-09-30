@@ -583,7 +583,7 @@
 + (void)upLoadUserDataWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andFunctionName:(NSString *)functionName andChangeValue:(NSString *)value block:(SuccessfulBlock)block {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionID;
-    params[@"openfireaccount"] = openFirAccount;
+    params[@"userId"] = openFirAccount;
     params[@"functionName"] = functionName;
     params[@"value"] = value;
     

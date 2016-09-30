@@ -1362,7 +1362,7 @@
  *
  *  @return 是否更新成功
  */
-- (BOOL)upDataMessageStatusWithMessage:(LGMessage *)message{
+- (BOOL)upDataMessageStatusWithMessage:(LGMessage *)message {
     __block BOOL isSuccess = NO;
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
 //     is_read, sendStatus

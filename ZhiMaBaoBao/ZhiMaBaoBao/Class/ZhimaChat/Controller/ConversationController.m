@@ -10,9 +10,11 @@
 #import "ChatController.h"
 
 #import "ConverseCell.h"
+#import "ConverseWithouNetworkCell.h"
 
 
 #define ConverseCellReusedID @"ConverseCellReusedID"
+#define ConverseWithoutNetworkCellReusedID @"ConverseWithoutNetworkCellReusedID"
 
 @interface ConversationController () <UITableViewDelegate,UITableViewDataSource>
 
@@ -22,18 +24,39 @@
 
 @implementation ConversationController {
     UITableView *_tableView;
+    BOOL netWorkStatus;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setCustomRightItems];
+    netWorkStatus = YES;
     
+    [self setCustomRightItems];
     [self setupView];
     [self getDataFormSqlist];
     
     
+    [self notification];
+}
+
+
+- (void)notification {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kRecieveNewMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageSuccess object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRecovery) name:K_NetworkRecoveryNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withoutNetwork) name:K_WithoutNetWorkNotification object:nil];
+}
+
+// 没有网的情况
+- (void)withoutNetwork {
+    netWorkStatus = NO;
+    [_tableView reloadData];
+}
+
+// 有网的情况
+- (void)networkRecovery {
+    netWorkStatus = YES;
+    [_tableView reloadData];
 }
 
 #pragma mark - 从数据库加载会话列表
@@ -59,6 +82,7 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [_tableView registerClass:[ConverseCell class] forCellReuseIdentifier:ConverseCellReusedID];
+    [_tableView registerClass:[ConverseWithouNetworkCell class] forCellReuseIdentifier:ConverseWithoutNetworkCellReusedID];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -73,19 +97,31 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    if (netWorkStatus) {
+        return 1;
+    }
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataArray.count;
+    if ((netWorkStatus && section == 0) || section == 1) {
+        return self.dataArray.count;
+    }
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ConverseModel *model = self.dataArray[indexPath.row];
+    if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
+        ConverseModel *model = self.dataArray[indexPath.row];
+        
+        ConverseCell *cell = [tableView dequeueReusableCellWithIdentifier:ConverseCellReusedID forIndexPath:indexPath];
+        cell.model = model;
+        
+        return cell;
+    }
     
-    ConverseCell *cell = [tableView dequeueReusableCellWithIdentifier:ConverseCellReusedID forIndexPath:indexPath];
-    cell.model = model;
-    
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"123"];
+    cell.textLabel.text = @"没有网啊";
     return cell;
 }
 
@@ -101,15 +137,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    ConverseModel *model = self.dataArray[indexPath.row];
-    ChatController *vc = [[ChatController alloc] init];
-    vc.hidesBottomBarWhenPushed = YES;
-    vc.conversionId = model.converseId;
-    vc.conversionName = model.converseName;
-    [self.navigationController pushViewController:vc animated:YES];
+    if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
+        ConverseModel *model = self.dataArray[indexPath.row];
+        ChatController *vc = [[ChatController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        vc.conversionId = model.converseId;
+        vc.conversionName = model.converseName;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     
-    //更新数据库会话未读消息
-    //        [FMDBShareManager ];
+    // 点击了没有网络
+    
+    
 }
 
 

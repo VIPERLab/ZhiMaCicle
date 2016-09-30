@@ -233,6 +233,15 @@ typedef enum : NSUInteger {
 - (void)deleteMessageFormMessageTableByConverseID:(NSString *)converseID;
 
 /**
+ *  更新消息模型
+ *
+ *  @param message 新的消息
+ *
+ *  @return 是否更新成功
+ */
+- (BOOL)upDataMessageStatusWithMessage:(LGMessage *)message;
+
+/**
  *  根据消息ID删除消息
  *
  *  @param messageID 需要删的消息id
