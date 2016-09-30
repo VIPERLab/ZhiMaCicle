@@ -1327,6 +1327,27 @@
     }];
 }
 
+/**
+ *  根据会话id删除会话
+ *
+ *  @param converseId 会话模型
+ */
+- (void)deleteConverseWithConverseId:(NSString *)converseId {
+    //先删除消息表
+    [self deleteMessageFormMessageTableByConverseID:converseId];
+    
+    //再删除会话表
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@",converseId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"删除会话成功");
+        } else {
+            NSLog(@"删除会话失败");
+        }
+    }];
+}
 
 /**
  *  根据会话ID删除消息
