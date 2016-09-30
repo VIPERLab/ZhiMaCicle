@@ -120,13 +120,15 @@
         return cell;
     }
     
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"123"];
-    cell.textLabel.text = @"没有网啊";
+    ConverseWithouNetworkCell *cell = [tableView dequeueReusableCellWithIdentifier:ConverseWithoutNetworkCellReusedID forIndexPath:indexPath];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 75;
+    if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
+        return 75;
+    }
+    return 45;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -153,19 +155,23 @@
 
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
+    if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source.
-        ConverseModel *model = self.dataArray[indexPath.row];
-        //数据库删除该条会话
-        [FMDBShareManager deleteConverseWithConverseId:model.converseId];
-        
-        [self getDataFormSqlist];
-        
+    if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
+        if (editingStyle == UITableViewCellEditingStyleDelete) {
+            // Delete the row from the data source.
+            ConverseModel *model = self.dataArray[indexPath.row];
+            //数据库删除该条会话
+            [FMDBShareManager deleteConverseWithConverseId:model.converseId];
+            
+            [self getDataFormSqlist];
+            
+        }
     }
 }
 

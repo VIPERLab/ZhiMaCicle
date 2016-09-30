@@ -10,6 +10,7 @@
 
 @implementation ConverseWithouNetworkCell {
     UILabel *_titleLabel;
+    UIView *_bottomLineView;
 }
 
 - (void)awakeFromNib {
@@ -31,15 +32,23 @@
 }
 
 - (void)setupView {
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
     _titleLabel = [[UILabel alloc] init];
     _titleLabel.text = @"当前网络不可用，请检查你的网络设置";
-    _titleLabel.textColor = [UIColor colorFormHexRGB:@"989898"];
+    _titleLabel.textColor = [UIColor colorFormHexRGB:@"6b5d5d"];
+    _titleLabel.backgroundColor = [UIColor colorFormHexRGB:@"ffdfdf"];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
+    _titleLabel.font = [UIFont systemFontOfSize:15];
     [self addSubview:_titleLabel];
+    
+    _bottomLineView = [UIView new];
+    _bottomLineView.backgroundColor = [UIColor colorFormHexRGB:@"dedede"];
+    [self addSubview:_bottomLineView];
 }
 
 - (void)layoutSubviews {
     _titleLabel.frame = self.bounds;
+    _bottomLineView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - 1, CGRectGetWidth(self.frame), 1);
 }
 
 
