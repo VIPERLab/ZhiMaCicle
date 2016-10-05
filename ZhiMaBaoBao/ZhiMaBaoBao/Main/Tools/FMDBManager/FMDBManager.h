@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
 @class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel;
-@class SDTimeLineCellModel;
+@class SDTimeLineCellModel,SDTimeLineCellCommentItemModel,SDTimeLineCellLikeItemModel;
 
 typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
 
@@ -75,6 +75,12 @@ typedef enum : NSUInteger {
  */
 - (NSArray <SDTimeLineCellModel *> *)getCirCleDataInArrayWithPage:(int)pageNumber;
 
+/**
+ *  根据朋友圈ID 删除评论和点赞数据库
+ *
+ *  @param circleID 朋友圈ID
+ */
+- (void)deletedCircleCommentItemsAndLikeItemsByCircleID:(NSString *)circleID;
 
 /**
  *  根据朋友圈的ID 删除对应的朋友圈、点赞、评论 和图片
@@ -84,6 +90,22 @@ typedef enum : NSUInteger {
  *  @return 是否操作成功
  */
 - (BOOL)deleteCircleDataWithCircleID:(NSString *)circleID;
+
+/**
+ *  插入一个 模型数组 到评论数据库
+ *
+ *  @param modelArray 模型数组
+ *  @param circleID   对应的朋友圈ID
+ */
+- (void)saveCommentItemsInCommentTable:(NSArray <SDTimeLineCellCommentItemModel *>*)modelArray andCircleID:(NSString *)circleID;
+
+/**
+ *  插入一个 模型数组 到点赞数据库中
+ *
+ *  @param modelArray 模型数组
+ *  @param circleID   对应的朋友圈ID
+ */
+- (void)saveLikeItemsInLikeTable:(NSArray <SDTimeLineCellLikeItemModel *>*)modelArray andCircleID:(NSString *)circleID;
 
 
 #pragma mark - 用户相关

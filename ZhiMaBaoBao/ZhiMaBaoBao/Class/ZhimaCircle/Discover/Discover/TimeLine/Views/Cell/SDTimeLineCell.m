@@ -301,7 +301,12 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
         bottomView = _commentView;
     }
     
-    _operationMenu.isLike = model.liked;
+    for (SDTimeLineCellLikeItemModel *model in _model.likeItemsArray) {
+        if ([model.userId isEqualToString:USERINFO.userID]) {
+            _operationMenu.isLike = YES;
+        }
+    }
+    
     [self setupAutoHeightWithBottomView:bottomView bottomMargin:15];
     
     

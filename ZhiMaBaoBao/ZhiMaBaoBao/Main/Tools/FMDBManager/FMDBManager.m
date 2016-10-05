@@ -785,6 +785,37 @@
     return cellModelArray;
 }
 
+/**
+ *  根据朋友圈ID 删除评论和点赞数据库
+ *
+ *  @param circleID 朋友圈ID
+ */
+- (void)deletedCircleCommentItemsAndLikeItemsByCircleID:(NSString *)circleID {
+    
+    FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
+    FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
+    //删除这条朋友圈ID 的所有点赞和评论信息
+    NSString *commentDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",circleID]];
+    [commentQueue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:commentDelOpeartion];
+        if (success) {
+            NSLog(@"删除评论成功");
+        } else {
+            NSLog(@"删除评论失败");
+        }
+    }];
+    
+    NSString *likeDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",circleID]];
+    [likeQueue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:likeDelOpeartion];
+        if (success) {
+            NSLog(@"删除点赞成功");
+        } else {
+            NSLog(@"删除点赞失败");
+        }
+    }];
+}
+
 // 根据某条朋友圈的id 去删除其对应的数据
 - (BOOL)deleteCircleDataWithCircleID:(NSString *)circleID {
     __block BOOL successFul = YES;
@@ -841,6 +872,56 @@
     
     return YES;
 }
+
+
+/**
+ *  插入一个 模型数组 到评论数据库
+ *
+ *  @param modelArray 模型数组
+ *  @param circleID   对应的朋友圈ID
+ */
+- (void)saveCommentItemsInCommentTable:(NSArray <SDTimeLineCellCommentItemModel *>*)modelArray andCircleID:(NSString *)circleID{
+    
+    FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
+    
+    for (SDTimeLineCellCommentItemModel *commentItemModel in modelArray) {
+        //把这条评论插入评论数据库
+        NSString *operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Comment_Table];
+        
+        [commentQueue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:operationStr,commentItemModel.friend_nick,commentItemModel.ID,commentItemModel.comment,commentItemModel.reply_friend_nick,commentItemModel.reply_id,commentItemModel.head_photo,commentItemModel.create_time,circleID,commentItemModel.userId];
+            if (success) {
+                NSLog(@"插入评论成功");
+            } else {
+                NSLog(@"插入评论失败");
+            }
+        }];
+    }
+}
+
+
+
+/**
+ *  插入一个 模型数组 到点赞数据库中
+ *
+ *  @param modelArray 模型数组
+ *  @param circleID   对应的朋友圈ID
+ */
+- (void)saveLikeItemsInLikeTable:(NSArray <SDTimeLineCellLikeItemModel *>*)modelArray andCircleID:(NSString *)circleID {
+    FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
+    for (SDTimeLineCellLikeItemModel *likeModel in modelArray) {
+        NSString *operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Like_Table];
+        [likeQueue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:operationStr,likeModel.userName,likeModel.userId,@"",circleID];
+            if (success) {
+                NSLog(@"插入点赞成功");
+            } else {
+                NSLog(@"插入点赞失败");
+            }
+        }];
+    }
+}
+
 
 #pragma mark - 用户相关
 //                    -----------   用户表  ----------------

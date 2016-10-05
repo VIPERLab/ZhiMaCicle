@@ -18,13 +18,13 @@
 #import "SDTimeLineCellModel.h"
 
 #import "UITableView+SDAutoTableViewCellHeight.h"
-
+#import "SDTimeLineCellOperationMenu.h"
 #import "UIView+SDAutoLayout.h"
 
 #import "SDWebImagePrefetcher.h"
-
 #import "GlobalDefines.h"
 #import "UIColor+My.h"
+
 
 #import "MJExtension.h"
 #import "DiscoverDetailController.h"  //朋友圈详情
@@ -96,7 +96,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setCustomTitle:@"朋友圈"];
-    self.pageNumber = 0;
+    self.pageNumber = 1;
     [self setupNav];
     [self setupView];
     [self notification];
@@ -168,6 +168,20 @@
 }
 
 
+// 右栏目按钮点击事件
+#pragma mark - 新增说说
+- (void)rightBarButtonItemAction:(UIBarButtonItem *)sender{
+    //新增说说
+    __weak typeof(self) weakSelf = self;
+    
+    NewDiscoverController *new = [[NewDiscoverController alloc] init];
+    new.block = ^() {
+        [weakSelf.tableView.mj_header beginRefreshing];
+    };
+    [self.navigationController pushViewController:new animated:YES];
+    
+}
+
 #pragma mark - 设置下拉和上啦刷新控件
 - (void)setupKeyBoardAndRefreshHeader {
     
@@ -202,7 +216,7 @@
                     [FMDBShareManager deleteCircleDataWithCircleID:circleID];
                 }
                 
-                NSArray *dataArray = [weakSelf setupModelDataWithJson:responseData andUpDataLastFcID:YES];
+                NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:YES];
                 
                 //存数据到朋友圈表
                 [FMDBShareManager saveCircleDataWithDataArray:dataArray];
@@ -233,8 +247,8 @@
                 [self.tableView.mj_footer endRefreshing];
                 [self.tableView reloadData];
                 [self.tableView reloadDataWithExistedHeightCache];
-                return ;
             }
+            
             NSString *sectionID = USERINFO.sessionId;
             NSString *userID = USERINFO.userID;
             
@@ -245,7 +259,8 @@
                     return;
                 }
                 
-                NSArray *dataArray = [self setupModelDataWithJson:responseData andUpDataLastFcID:YES];
+                NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:YES];
+                
                 if (dataArray.count) {
                     [self.dataArray addObjectsFromArray:dataArray];
                     self.pageNumber++;
@@ -258,6 +273,11 @@
                 
                 //存数据到朋友圈表
                 [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+                
+#warning 这里有可能会造成刷新不及时的原因
+                if (newDataArray.count) {
+                    return;
+                }
                 
                 [self.tableView.mj_footer endRefreshing];
                 [self.tableView reloadData];
@@ -326,112 +346,6 @@
     return [FaceSourceManager loadFaceSource];
 }
 
-
-
-
-// 右栏目按钮点击事件
-#pragma mark - 新增说说
-- (void)rightBarButtonItemAction:(UIBarButtonItem *)sender{
-    //新增说说
-    __weak typeof(self) weakSelf = self;
-    
-    NewDiscoverController *new = [[NewDiscoverController alloc] init];
-    new.block = ^() {
-        [weakSelf.tableView.mj_header beginRefreshing];
-    };
-    [self.navigationController pushViewController:new animated:YES];
-    
-}
-
-#pragma mark - 转换成模型数据
-- (NSArray *)setupModelDataWithJson:(ResponseData *)responseData andUpDataLastFcID:(BOOL)isUpdata {
-    
-    NSMutableArray *modelArray = [SDTimeLineCellModel mj_objectArrayWithKeyValuesArray:responseData.data];
-    UserInfo *info = [UserInfo read];
-    for (SDTimeLineCellModel *cellModel in modelArray) {
-        
-        //保存第一条（最新一条的朋友圈ID）
-        if (!USERINFO.lastFcID.length || isUpdata) {
-            info.lastFcID = cellModel.circle_ID;
-            [info save];
-            isUpdata = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
-        }
-        
-        //转换数组类型
-        if (cellModel.imglist.count != 0) {
-            NSArray *picArray = [SDTimeLineCellPicItemModel mj_objectArrayWithKeyValuesArray:cellModel.imglist];
-            cellModel.imglist = picArray;
-        }
-        
-        
-        //如果有评论，则转换评论数据类型
-        if (cellModel.commentList.count !=0) {
-            NSMutableArray *commentListArray = [SDTimeLineCellCommentItemModel mj_objectArrayWithKeyValuesArray:cellModel.commentList];
-            
-            NSMutableArray *likeItemsArray = [NSMutableArray array];
-            
-            //需要循环的次数
-            NSInteger count = commentListArray.count -1;
-            
-            //拷贝一份评论数组
-            NSMutableArray *copyArray = [commentListArray mutableCopy];
-            
-            //循环开始
-            for (NSInteger index = count; index >= 0; index--) {
-                
-                //获取原始数据Model
-                SDTimeLineCellCommentItemModel *model = commentListArray[index];
-                
-                
-                if (model.type) {
-                    //如果是点赞，则把MODEL移出拷贝数组，放到like数组
-                    [copyArray removeObjectAtIndex:index];
-                    
-                    SDTimeLineCellLikeItemModel *likeModel = [[SDTimeLineCellLikeItemModel alloc] init];
-                    if (!model.friend_nick) {
-                        model.friend_nick = @"未命名";
-                    }
-                    
-                    likeModel.userName = model.friend_nick;
-                    likeModel.userId = model.userId;
-                    [likeItemsArray addObject:likeModel];
-                    
-                    //判断是否点赞了
-                    if (!cellModel.liked) {
-                        if ([likeModel.userId isEqualToString:USERINFO.userID]) {
-                            cellModel.liked = YES;
-                        } else {
-                            cellModel.liked = NO;
-                        }
-                    }
-                }
-            }
-            
-            //循环结束之后，把筛选剩下的评论数赋值回去
-            commentListArray = [copyArray mutableCopy];
-            
-            
-            for (SDTimeLineCellCommentItemModel *model in commentListArray) {
-                if (!model.friend_nick) {
-                    model.friend_nick = @"未命名";
-                }
-            }
-            
-            cellModel.likeItemsArray = [likeItemsArray mutableCopy];
-            cellModel.commentList = [commentListArray mutableCopy];
-        }
-        
-    }
-    self.modelDataArray = [modelArray copy];
-    
-    
-    return [modelArray copy];
-    
-}
-
-
-
 #pragma mark - tableViewDatasouce
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataArray.count;
@@ -455,8 +369,6 @@
     }
     
     //缓存行高
-    
-    
 #warning 下一步优化：如果tableView快速滑动，则不加载图片,以及离屏渲染优化
     
     cell.model = model;
@@ -545,14 +457,15 @@
     SDTimeLineCellModel *model = self.dataArray[index.row];
     NSMutableArray *temp = [NSMutableArray arrayWithArray:model.likeItemsArray];
     
-    
     if (!model.isLiked) {  //未赞
+        menu.isLike = NO;
         SDTimeLineCellLikeItemModel *likeModel = [SDTimeLineCellLikeItemModel new];
         likeModel.userName = USERINFO.username;
         likeModel.userId = USERINFO.userID;
         [temp addObject:likeModel];
         model.liked = YES;
     } else {               //已赞
+        menu.isLike = YES;
         SDTimeLineCellLikeItemModel *tempLikeModel = nil;
         for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
             if ([likeModel.userId isEqualToString:USERINFO.userID]) {
@@ -564,8 +477,6 @@
         model.liked = NO;
     }
     model.likeItemsArray = [temp copy];
-    
-    
 }
 
 #pragma mark - 回复别人的评论
@@ -660,57 +571,14 @@
         model.likeItemsArray = [likeItemsArray mutableCopy];
         model.commentList = [commentListArray mutableCopy];
         
-        FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
-        FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
+        // 删除点赞和评论
+        [FMDBShareManager deletedCircleCommentItemsAndLikeItemsByCircleID:model.circle_ID];
         
-        //删除这条朋友圈ID 的所有点赞和评论信息
-        NSString *commentDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",model.circle_ID]];
-        [commentQueue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:commentDelOpeartion];
-            if (success) {
-                NSLog(@"删除评论成功");
-            } else {
-                NSLog(@"删除评论失败");
-            }
-        }];
+        // 保存新的评论
+        [FMDBShareManager saveCommentItemsInCommentTable:model.commentList andCircleID:model.circle_ID];
         
-        NSString *likeDelOpeartion = [FMDBShareManager deletedTableData:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",model.circle_ID]];
-        [likeQueue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:likeDelOpeartion];
-            if (success) {
-                NSLog(@"删除点赞成功");
-            } else {
-                NSLog(@"删除点赞失败");
-            }
-        }];
-        
-        
-        for (SDTimeLineCellCommentItemModel *commentItemModel in model.commentList) {
-            //把这条评论插入评论数据库
-            NSString *operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Comment_Table];
-            
-            [commentQueue inDatabase:^(FMDatabase *db) {
-                BOOL success = [db executeUpdate:operationStr,commentItemModel.friend_nick,commentItemModel.ID,commentItemModel.comment,commentItemModel.reply_friend_nick,commentItemModel.reply_id,commentItemModel.head_photo,commentItemModel.create_time,model.circle_ID,commentItemModel.userId];
-                if (success) {                    
-                    NSLog(@"插入评论成功");
-                } else {
-                    NSLog(@"插入评论失败");
-                }
-            }];
-        }
-        
-        
-        for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
-            NSString *operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Like_Table];
-            [likeQueue inDatabase:^(FMDatabase *db) {
-                BOOL success = [db executeUpdate:operationStr,likeModel.userName,likeModel.userId,@"",model.circle_ID];
-                if (success) {
-                    NSLog(@"插入点赞成功");
-                } else {
-                    NSLog(@"插入点赞失败");
-                }
-            }];
-        }
+        // 保存新的点赞
+        [FMDBShareManager saveLikeItemsInLikeTable:model.likeItemsArray andCircleID:model.circle_ID];
         
         [self.tableView reloadRowsAtIndexPaths:@[_currentEditingIndexthPath] withRowAnimation:UITableViewRowAnimationNone];
         self.currentCommenterUserID = @"";
