@@ -48,7 +48,8 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {
-        
+        [FMDBShareManager deleteMessageFormMessageTableByConverseID:self.userId];
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 

@@ -1401,6 +1401,20 @@
             NSLog(@"删除消息失败");
         }
     }];
+    
+    //更新会话列表
+    FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = ' '"];
+    NSString *optionStr2 = [NSString stringWithFormat:@"converseId = '%@'",converseID];
+    NSString *converseOption = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:optionStr2];
+    [converseQueue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:converseOption];
+        if (success) {
+            NSLog(@"更新会话成功");
+        } else {
+            NSLog(@"更新会话失败");
+        }
+    }];
 }
 
 /**
