@@ -30,8 +30,8 @@
     [super viewDidLoad];
     
     [self setCustomTitle:@"资料设置"];
-    self.deleteBtn.layer.cornerRadius = 5;
     [self requestFriendProfile];
+    self.deleteBtn.layer.cornerRadius = 5;
 
 }
 
@@ -91,6 +91,9 @@
             if (responseData.code == 0) {
                 [LCProgressHUD hide];
                 [self.navigationController popToRootViewControllerAnimated:YES];
+                //从数据库删除会话 -- 删除好友列表
+                [FMDBShareManager deleteConverseWithConverseId:self.friendInfo.user_Id];
+                [FMDBShareManager deleteUserMessageByUserID:self.friendInfo.user_Id];
             }else{
                 [LCProgressHUD showFailureText:responseData.msg];
             }

@@ -86,6 +86,10 @@ static SocketManager *manager = nil;
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
     
+    
+    //处理过后的发送给socket的message
+    LGMessage *sendMsg = [[LGMessage alloc] init];
+    
     //语音消息 -- 发送base64到socket服务器，存语音路径到本地数据库
     if (message.type == MessageTypeAudio) {
         
@@ -98,48 +102,44 @@ static SocketManager *manager = nil;
 //        NSString *base64 = [NSData base64StringFromData:data];
         NSString *base64 = [data base64EncodedStringWithOptions:0];
         
-        BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
-        if (success) {
-
-            //将text转换为base64 发送给socket
-            LGMessage *msg = [[LGMessage alloc] init];
-            msg.toUidOrGroupId = message.toUidOrGroupId;
-            msg.fromUid = message.fromUid;
-            msg.type = message.type;
-            msg.msgid = message.msgid;
-            msg.isGroup = message.isGroup;
-            msg.timeStamp = message.timeStamp;
-            msg.text = base64;
-
-            //发送消息成功通知
-            [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageSuccess object:nil];
-            
-            //插入数据库成功 - socket发送消息
-            //根据消息模型生成固定格式数据包
-            NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:msg];
-            RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-            req.object = data;
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-        }
+        //将text转换为base64 发送给socket
+        sendMsg.toUidOrGroupId = message.toUidOrGroupId;
+        sendMsg.fromUid = message.fromUid;
+        sendMsg.type = message.type;
+        sendMsg.msgid = message.msgid;
+        sendMsg.isGroup = message.isGroup;
+        sendMsg.timeStamp = message.timeStamp;
+        sendMsg.text = base64;
         
     }
     //文本消息
     else if (message.type == MessageTypeText){
-        //插入消息数据库
-        BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
-        if (success) {
-            
-            //发送消息成功通知
-            [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageSuccess object:nil];
-            
-            //插入数据库成功 - socket发送消息
-            //根据消息模型生成固定格式数据包
-            NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:message];
-            RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-            req.object = data;
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-
-        }
+        sendMsg = message;
+    }
+    
+    //根据网络状态-- 标记消息发送状态
+    UserInfo *userInfo = [UserInfo shareInstance];
+    if (userInfo.networkUnReachable) {
+        message.sendStatus = NO;
+    }else{
+        message.sendStatus = YES;
+    }
+    
+    //插入消息数据库
+    BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
+    if (success) {
+        
+        //发送消息状态回调通知
+        NSDictionary *infoDic = @{@"message":message};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageStateCall object:nil userInfo:infoDic];
+        
+        //插入数据库成功 - socket发送消息
+        //根据消息模型生成固定格式数据包
+        NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:sendMsg];
+        RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+        req.object = data;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+        
     }
 }
 

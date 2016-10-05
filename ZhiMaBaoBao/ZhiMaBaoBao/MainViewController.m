@@ -16,7 +16,7 @@
 #import "LGGuideController.h"
 #import "BaseNavigationController.h"
 #import "SocketManager.h"
-
+#import <AudioToolbox/AudioToolbox.h>
 #import "RHSocketService.h"
 //#import "RHSocketUtils.h"
 
@@ -26,8 +26,22 @@
 
 @implementation MainViewController
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.tabBar.hidden = NO;
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.tabBar.hidden = YES;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UserInfo *userInfo = [UserInfo shareInstance];
+    userInfo.mainVC = self;
     
     self.tabBar.barTintColor = [UIColor whiteColor];
     
@@ -49,8 +63,10 @@
 
 - (void)addNotifications{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doOtherLogin) name:kOtherLogin object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMessageRecieved:) name:kRecieveNewMessage object:nil];
 }
 
+#pragma mark - socket 通知回调
 //用户在其他地方登录
 - (void)doOtherLogin{
     //断开socket
@@ -68,6 +84,11 @@
     [alert addAction:reLogin];
     [alert addAction:loginOut];
     [self presentViewController:alert animated:YES completion:nil];
+}
+//收到新消息
+- (void)newMessageRecieved:(NSNotification *)notification{
+    //播放系统消息提示音
+    [self playSystemAudio];
 }
 
 #pragma mark - socket接收到消息 
@@ -97,6 +118,11 @@
     BaseNavigationController *navigationVc = [[BaseNavigationController alloc] initWithRootViewController:childVc];
     // 添加子控制器
     [self addChildViewController:navigationVc];
+}
+
+//播放消息提示音
+- (void)playSystemAudio{
+    AudioServicesPlaySystemSound(1006);
 }
 
 

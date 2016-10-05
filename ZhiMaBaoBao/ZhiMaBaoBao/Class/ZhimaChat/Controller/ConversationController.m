@@ -30,24 +30,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     netWorkStatus = YES;
-    
+    UserInfo *userInfo = [UserInfo shareInstance];
+    userInfo.conversationVC = self;
     [self setCustomRightItems];
     [self setupView];
+
     [self notification];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self getDataFormSqlist];
 }
 
 
 - (void)notification {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kRecieveNewMessage object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageSuccess object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageStateCall object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRecovery) name:K_NetworkRecoveryNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withoutNetwork) name:K_WithoutNetWorkNotification object:nil];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self getDataFormSqlist];
-}
 
 // 没有网的情况
 - (void)withoutNetwork {
@@ -149,10 +152,14 @@
     if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
         ConverseModel *model = self.dataArray[indexPath.row];
         ChatController *vc = [[ChatController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
         vc.conversionId = model.converseId;
         vc.conversionName = model.converseName;
+        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
+        
+        //清除未读消息
+        model.unReadCount = -1;
+        [FMDBShareManager saveConverseListDataWithDataArray:@[model]];
     }
     
     // 点击了没有网络
