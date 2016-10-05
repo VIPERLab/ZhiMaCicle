@@ -14,6 +14,7 @@
 
 #import "FriendProfilecontroller.h" // 好友详情
 
+
 #define CharRoomInfoHeaderCellReusedID @"CharRoomInfoHeaderCellReusedID"
 #define CharRoomInfoCellReusedID @"CharRoomInfoCellReusedID"
 
@@ -97,7 +98,7 @@
     if (indexPath.section == 0) {
         return 95;
     }
-    return 40;
+    return 45;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

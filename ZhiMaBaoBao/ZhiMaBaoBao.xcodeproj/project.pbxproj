@@ -11,6 +11,10 @@
 		0417509C1DA4952D00DCD7A9 /* ChatRoomInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417509B1DA4952D00DCD7A9 /* ChatRoomInfoController.m */; };
 		041750A01DA499B600DCD7A9 /* ChatInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417509F1DA499B600DCD7A9 /* ChatInfoCell.m */; };
 		041750A61DA4A06400DCD7A9 /* ChatInfoHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750A51DA4A06400DCD7A9 /* ChatInfoHeaderCell.m */; };
+		041750AA1DA4C9A500DCD7A9 /* GroupChatRoomInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750A91DA4C9A500DCD7A9 /* GroupChatRoomInfoController.m */; };
+		041750B21DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750B11DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m */; };
+		041750B51DA4CFE800DCD7A9 /* GroupChatInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750B41DA4CFE800DCD7A9 /* GroupChatInfoCell.m */; };
+		041750B81DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750B71DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m */; };
 		04787AE91D9CFF4B000A0DB5 /* KXActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */; };
 		04787AF11D9E07FF000A0DB5 /* hud_success.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF01D9E07FF000A0DB5 /* hud_success.png */; };
 		04787AF31D9E0896000A0DB5 /* hud_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF21D9E0896000A0DB5 /* hud_error.png */; };
@@ -587,6 +591,14 @@
 		0417509F1DA499B600DCD7A9 /* ChatInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatInfoCell.m; sourceTree = "<group>"; };
 		041750A41DA4A06400DCD7A9 /* ChatInfoHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatInfoHeaderCell.h; sourceTree = "<group>"; };
 		041750A51DA4A06400DCD7A9 /* ChatInfoHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatInfoHeaderCell.m; sourceTree = "<group>"; };
+		041750A81DA4C9A500DCD7A9 /* GroupChatRoomInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatRoomInfoController.h; sourceTree = "<group>"; };
+		041750A91DA4C9A500DCD7A9 /* GroupChatRoomInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatRoomInfoController.m; sourceTree = "<group>"; };
+		041750B01DA4CDE000DCD7A9 /* GroupChatInfoFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatInfoFooterView.h; sourceTree = "<group>"; };
+		041750B11DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatInfoFooterView.m; sourceTree = "<group>"; };
+		041750B31DA4CFE800DCD7A9 /* GroupChatInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatInfoCell.h; sourceTree = "<group>"; };
+		041750B41DA4CFE800DCD7A9 /* GroupChatInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatInfoCell.m; sourceTree = "<group>"; };
+		041750B61DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatInfoHeaderCell.h; sourceTree = "<group>"; };
+		041750B71DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatInfoHeaderCell.m; sourceTree = "<group>"; };
 		04787AE71D9CFF4B000A0DB5 /* KXActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXActionSheet.h; sourceTree = "<group>"; };
 		04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXActionSheet.m; sourceTree = "<group>"; };
 		04787AF01D9E07FF000A0DB5 /* hud_success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_success.png; sourceTree = "<group>"; };
@@ -1708,7 +1720,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		041750911DA4950800DCD7A9 /* ChatRoomInfo */ = {
+		041750911DA4950800DCD7A9 /* ChatRoomInfo(单聊详情页) */ = {
 			isa = PBXGroup;
 			children = (
 				0417509D1DA4998B00DCD7A9 /* Cell */,
@@ -1717,6 +1729,7 @@
 				0417509A1DA4952D00DCD7A9 /* ChatRoomInfoController.h */,
 				0417509B1DA4952D00DCD7A9 /* ChatRoomInfoController.m */,
 			);
+			name = "ChatRoomInfo(单聊详情页)";
 			path = ChatRoomInfo;
 			sourceTree = "<group>";
 		};
@@ -1729,6 +1742,38 @@
 				041750A51DA4A06400DCD7A9 /* ChatInfoHeaderCell.m */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		041750A71DA4C97100DCD7A9 /* GroupChatRoomInfo(群聊详情页) */ = {
+			isa = PBXGroup;
+			children = (
+				041750AB1DA4CDB500DCD7A9 /* Cell */,
+				041750AC1DA4CDB500DCD7A9 /* View */,
+				041750A81DA4C9A500DCD7A9 /* GroupChatRoomInfoController.h */,
+				041750A91DA4C9A500DCD7A9 /* GroupChatRoomInfoController.m */,
+			);
+			name = "GroupChatRoomInfo(群聊详情页)";
+			path = GroupChatRoomInfo;
+			sourceTree = "<group>";
+		};
+		041750AB1DA4CDB500DCD7A9 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				041750B31DA4CFE800DCD7A9 /* GroupChatInfoCell.h */,
+				041750B41DA4CFE800DCD7A9 /* GroupChatInfoCell.m */,
+				041750B61DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.h */,
+				041750B71DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		041750AC1DA4CDB500DCD7A9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				041750B01DA4CDE000DCD7A9 /* GroupChatInfoFooterView.h */,
+				041750B11DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */ = {
@@ -4200,7 +4245,8 @@
 		31B7C70B1D8E96A100F1883A /* ZhimaChat(芝麻聊) */ = {
 			isa = PBXGroup;
 			children = (
-				041750911DA4950800DCD7A9 /* ChatRoomInfo */,
+				041750A71DA4C97100DCD7A9 /* GroupChatRoomInfo(群聊详情页) */,
+				041750911DA4950800DCD7A9 /* ChatRoomInfo(单聊详情页) */,
 				04CBF50A1D9BE5F600CBB609 /* GroupChat(群聊) */,
 				311CEF2C1D92182400BBB1F9 /* Chat(聊天) */,
 				316957511D90E5C900140126 /* AddFriends(添加好友) */,
@@ -4722,6 +4768,7 @@
 				04F57AF81D9280BD002A6471 /* PersonalDiscoverPhotoModel.m in Sources */,
 				04F8628A1D94FC7900DCC6FE /* ChatToolBarItem.m in Sources */,
 				041750A01DA499B600DCD7A9 /* ChatInfoCell.m in Sources */,
+				041750B81DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m in Sources */,
 				04F57AEB1D9280BD002A6471 /* KXCurrentLocationCell.m in Sources */,
 				04F57AB31D9280BD002A6471 /* SDTimeLineCell.m in Sources */,
 				04EA797A1D8FBA0C005E5425 /* KXWebViewController.m in Sources */,
@@ -4835,6 +4882,7 @@
 				04F57AB71D9280BD002A6471 /* SDTimeLineCellOperationMenu.m in Sources */,
 				04F862591D94FC6D00DCC6FE /* README.md in Sources */,
 				04EA7D971D912872005E5425 /* ZXDecoderResult.m in Sources */,
+				041750B21DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m in Sources */,
 				04EA7AC51D910F89005E5425 /* DNImageFlowViewController.m in Sources */,
 				04EA7E251D912872005E5425 /* ZXQRCodeFinderPatternFinder.m in Sources */,
 				04EA7DA81D912872005E5425 /* ZXLuminanceSource.m in Sources */,
@@ -4866,6 +4914,7 @@
 				04EA7D5C1D912872005E5425 /* ZXAztecHighLevelEncoder.m in Sources */,
 				04EA7D631D912872005E5425 /* ZXAbstractDoCoMoResultParser.m in Sources */,
 				D5DC48601D9A4AE9005E8766 /* IMChatVoiceTableViewCell.m in Sources */,
+				041750AA1DA4C9A500DCD7A9 /* GroupChatRoomInfoController.m in Sources */,
 				D5C8B3971D9A0059007D6B5C /* BaseChatTableViewCell.m in Sources */,
 				04EA7D671D912872005E5425 /* ZXBizcardResultParser.m in Sources */,
 				04EA7D661D912872005E5425 /* ZXAddressBookParsedResult.m in Sources */,
@@ -5059,6 +5108,7 @@
 				04EA7D841D912872005E5425 /* ZXVINResultParser.m in Sources */,
 				04EA7DFD1D912872005E5425 /* ZXUPCEReader.m in Sources */,
 				04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */,
+				041750B51DA4CFE800DCD7A9 /* GroupChatInfoCell.m in Sources */,
 				D5C8B3A01D9A07DC007D6B5C /* IMChatTableViewCell.m in Sources */,
 				04F57AF61D9280BD002A6471 /* PersonalDiscoverCell.m in Sources */,
 				04EA7D991D912872005E5425 /* ZXDetectorResult.m in Sources */,
