@@ -148,8 +148,8 @@
     }
     
 #warning TODO:查询通讯录好友是否开通芝麻
-    /*
-    [LGNetWorking queryPhoneBook:USERINFO.sessionId openfire:USERINFO.openfireAccount flag:@"check" phonedata:self.jsonStr block:^(ResponseData *responseData) {
+    
+    [LGNetWorking queryPhoneBook:USERINFO.sessionId openfire:USERINFO.userID flag:@"check" phonedata:self.jsonStr block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
         if (responseData.code == 0) {
             self.contactsArr = [LGQueryResModel mj_objectArrayWithKeyValuesArray:responseData.data];
@@ -157,8 +157,6 @@
             [self queryResultCompare];
         }
     }];
-     */
- 
 }
 
 - (void)getContacts{

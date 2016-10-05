@@ -26,7 +26,7 @@
 - (void)setFriendModel:(ZhiMaFriendModel *)friendModel{
     _friendModel = friendModel;
     
-    [self.avtar sd_setImageWithURL:[NSURL URLWithString:friendModel.head_photo] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
+    [self.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,friendModel.head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
     self.name.text = friendModel.user_Name;
     self.nickName.text = [NSString stringWithFormat:@"昵称：%@",friendModel.displayName];
     if ([friendModel.sex isEqualToString:@"男"]) {

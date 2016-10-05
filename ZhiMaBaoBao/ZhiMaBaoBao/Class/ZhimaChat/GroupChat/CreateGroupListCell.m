@@ -1,14 +1,14 @@
 //
-//  FriendsListCell.m
+//  CreateGroupListCell.m
 //  ZhiMaBaoBao
 //
-//  Created by liugang on 16/9/28.
+//  Created by liugang on 16/10/5.
 //  Copyright © 2016年 liugang. All rights reserved.
 //
 
-#import "FriendsListCell.h"
+#import "CreateGroupListCell.h"
 
-@implementation FriendsListCell
+@implementation CreateGroupListCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -20,12 +20,14 @@
     
     [self.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",friendModel.user_Head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
     self.name.text = friendModel.displayName;
+    self.selectFlagBtn.selected = friendModel.selectedGroup;
 }
+
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
 }
 
 @end
