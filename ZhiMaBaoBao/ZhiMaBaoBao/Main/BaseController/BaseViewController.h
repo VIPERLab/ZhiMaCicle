@@ -15,4 +15,7 @@
 
 //添加右侧items
 - (void)setCustomRightItems;
+
+//导航栏返回方法
+- (void)backAction;
 @end
