@@ -7,6 +7,7 @@
 //
 
 #import "ConverseCell.h"
+#import "UIImageView+WebCache.h"
 #import "NSDate+TimeCategory.h"
 
 @implementation ConverseCell {
@@ -76,7 +77,8 @@
 
 - (void)setModel:(ConverseModel *)model {
     _model = model;
-//    _iconView.image = [UIImage imageNamed:model.converseHead_photo];
+    
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.converseHead_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
     
     _converseLabel.text = model.converseName;
     

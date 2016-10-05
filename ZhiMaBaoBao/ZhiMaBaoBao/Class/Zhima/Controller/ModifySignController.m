@@ -78,6 +78,7 @@
 
 
 - (void)saveButtonDidClick {
+    [self.countLabel resignFirstResponder];
     [LCProgressHUD showLoadingText:@"正在更改个性签名"];
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"signature" andChangeValue:self.textView.text block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
@@ -86,7 +87,6 @@
             return ;
         }
         UserInfo *info = [UserInfo read];
-        
         info.signature = self.textView.text;
         [info save];
         [LCProgressHUD showSuccessText:@"修改成功"];
