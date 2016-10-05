@@ -18,7 +18,8 @@
 #import "BaseChatTableViewCell.h"
 #import "IMMorePictureTableViewCell.h"
 #import "IMChatVoiceTableViewCell.h"
-#import "LGChatInfoController.h"
+
+#import "ChatRoomInfoController.h" // 聊天室详情
 
 #import "SocketManager.h"
 
@@ -91,7 +92,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 //查看会话详情 ->
 - (void)lookConversionInfo{
-    LGChatInfoController *vc = [[LGChatInfoController alloc] init];
+    ChatRoomInfoController *vc = [[ChatRoomInfoController alloc] init];
     vc.userId = self.conversionId;
     vc.displayName = self.conversionName;
     [self.navigationController pushViewController:vc animated:YES];

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		041750991DA4950900DCD7A9 /* LGGroupChatInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750961DA4950800DCD7A9 /* LGGroupChatInfoController.m */; };
+		0417509C1DA4952D00DCD7A9 /* ChatRoomInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417509B1DA4952D00DCD7A9 /* ChatRoomInfoController.m */; };
+		041750A01DA499B600DCD7A9 /* ChatInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417509F1DA499B600DCD7A9 /* ChatInfoCell.m */; };
+		041750A61DA4A06400DCD7A9 /* ChatInfoHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750A51DA4A06400DCD7A9 /* ChatInfoHeaderCell.m */; };
 		04787AE91D9CFF4B000A0DB5 /* KXActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */; };
 		04787AF11D9E07FF000A0DB5 /* hud_success.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF01D9E07FF000A0DB5 /* hud_success.png */; };
 		04787AF31D9E0896000A0DB5 /* hud_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF21D9E0896000A0DB5 /* hud_error.png */; };
@@ -506,9 +510,6 @@
 		319069E41D9CF3B800D1D6D2 /* LGPhotosView.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069E31D9CF3B800D1D6D2 /* LGPhotosView.m */; };
 		319069E81D9D471E00D1D6D2 /* SetupFriendInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069E61D9D471E00D1D6D2 /* SetupFriendInfoController.m */; };
 		319069E91D9D471E00D1D6D2 /* SetupFriendInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069E71D9D471E00D1D6D2 /* SetupFriendInfoController.xib */; };
-		319069F01D9E1C1300D1D6D2 /* LGChatInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069EC1D9E1C1300D1D6D2 /* LGChatInfoController.m */; };
-		319069F11D9E1C1300D1D6D2 /* LGChatInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069ED1D9E1C1300D1D6D2 /* LGChatInfoController.xib */; };
-		319069F21D9E1C1300D1D6D2 /* LGGroupChatInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069EF1D9E1C1300D1D6D2 /* LGGroupChatInfoController.m */; };
 		31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C6FD1D8E91F000F1883A /* MainViewController.m */; };
 		31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7021D8E96A100F1883A /* PersonalCenterController.m */; };
 		31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C70E1D8E96A100F1883A /* ConversationController.m */; };
@@ -578,6 +579,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		041750951DA4950800DCD7A9 /* LGGroupChatInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGGroupChatInfoController.h; sourceTree = "<group>"; };
+		041750961DA4950800DCD7A9 /* LGGroupChatInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGGroupChatInfoController.m; sourceTree = "<group>"; };
+		0417509A1DA4952D00DCD7A9 /* ChatRoomInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomInfoController.h; sourceTree = "<group>"; };
+		0417509B1DA4952D00DCD7A9 /* ChatRoomInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatRoomInfoController.m; sourceTree = "<group>"; };
+		0417509E1DA499B600DCD7A9 /* ChatInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatInfoCell.h; sourceTree = "<group>"; };
+		0417509F1DA499B600DCD7A9 /* ChatInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatInfoCell.m; sourceTree = "<group>"; };
+		041750A41DA4A06400DCD7A9 /* ChatInfoHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatInfoHeaderCell.h; sourceTree = "<group>"; };
+		041750A51DA4A06400DCD7A9 /* ChatInfoHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatInfoHeaderCell.m; sourceTree = "<group>"; };
 		04787AE71D9CFF4B000A0DB5 /* KXActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXActionSheet.h; sourceTree = "<group>"; };
 		04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXActionSheet.m; sourceTree = "<group>"; };
 		04787AF01D9E07FF000A0DB5 /* hud_success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_success.png; sourceTree = "<group>"; };
@@ -1542,11 +1551,6 @@
 		319069E51D9D471E00D1D6D2 /* SetupFriendInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupFriendInfoController.h; sourceTree = "<group>"; };
 		319069E61D9D471E00D1D6D2 /* SetupFriendInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupFriendInfoController.m; sourceTree = "<group>"; };
 		319069E71D9D471E00D1D6D2 /* SetupFriendInfoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetupFriendInfoController.xib; sourceTree = "<group>"; };
-		319069EB1D9E1C1300D1D6D2 /* LGChatInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGChatInfoController.h; sourceTree = "<group>"; };
-		319069EC1D9E1C1300D1D6D2 /* LGChatInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGChatInfoController.m; sourceTree = "<group>"; };
-		319069ED1D9E1C1300D1D6D2 /* LGChatInfoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LGChatInfoController.xib; sourceTree = "<group>"; };
-		319069EE1D9E1C1300D1D6D2 /* LGGroupChatInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGGroupChatInfoController.h; sourceTree = "<group>"; };
-		319069EF1D9E1C1300D1D6D2 /* LGGroupChatInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGGroupChatInfoController.m; sourceTree = "<group>"; };
 		31B7C6FC1D8E91F000F1883A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		31B7C6FD1D8E91F000F1883A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		31B7C7011D8E96A100F1883A /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
@@ -1704,6 +1708,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		041750911DA4950800DCD7A9 /* ChatRoomInfo */ = {
+			isa = PBXGroup;
+			children = (
+				0417509D1DA4998B00DCD7A9 /* Cell */,
+				041750951DA4950800DCD7A9 /* LGGroupChatInfoController.h */,
+				041750961DA4950800DCD7A9 /* LGGroupChatInfoController.m */,
+				0417509A1DA4952D00DCD7A9 /* ChatRoomInfoController.h */,
+				0417509B1DA4952D00DCD7A9 /* ChatRoomInfoController.m */,
+			);
+			path = ChatRoomInfo;
+			sourceTree = "<group>";
+		};
+		0417509D1DA4998B00DCD7A9 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				0417509E1DA499B600DCD7A9 /* ChatInfoCell.h */,
+				0417509F1DA499B600DCD7A9 /* ChatInfoCell.m */,
+				041750A41DA4A06400DCD7A9 /* ChatInfoHeaderCell.h */,
+				041750A51DA4A06400DCD7A9 /* ChatInfoHeaderCell.m */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */ = {
 			isa = PBXGroup;
 			children = (
@@ -4031,18 +4058,6 @@
 			name = Cell;
 			sourceTree = "<group>";
 		};
-		319069EA1D9E1B9300D1D6D2 /* ChatRoomInfo(聊天室资料) */ = {
-			isa = PBXGroup;
-			children = (
-				319069EB1D9E1C1300D1D6D2 /* LGChatInfoController.h */,
-				319069EC1D9E1C1300D1D6D2 /* LGChatInfoController.m */,
-				319069ED1D9E1C1300D1D6D2 /* LGChatInfoController.xib */,
-				319069EE1D9E1C1300D1D6D2 /* LGGroupChatInfoController.h */,
-				319069EF1D9E1C1300D1D6D2 /* LGGroupChatInfoController.m */,
-			);
-			name = "ChatRoomInfo(聊天室资料)";
-			sourceTree = "<group>";
-		};
 		31B7C6CB1D8E89D700F1883A /* Class */ = {
 			isa = PBXGroup;
 			children = (
@@ -4185,7 +4200,7 @@
 		31B7C70B1D8E96A100F1883A /* ZhimaChat(芝麻聊) */ = {
 			isa = PBXGroup;
 			children = (
-				319069EA1D9E1B9300D1D6D2 /* ChatRoomInfo(聊天室资料) */,
+				041750911DA4950800DCD7A9 /* ChatRoomInfo */,
 				04CBF50A1D9BE5F600CBB609 /* GroupChat(群聊) */,
 				311CEF2C1D92182400BBB1F9 /* Chat(聊天) */,
 				316957511D90E5C900140126 /* AddFriends(添加好友) */,
@@ -4584,7 +4599,6 @@
 				31B7C7711D8FBC8000F1883A /* hud_info.png in Resources */,
 				3169577F1D91199100140126 /* dtmf-2.aif in Resources */,
 				3169577C1D91199100140126 /* dtmf-#.aif in Resources */,
-				319069F11D9E1C1300D1D6D2 /* LGChatInfoController.xib in Resources */,
 				04F8628E1D94FC7900DCC6FE /* face.plist in Resources */,
 				31B7C7A11D8FE71F00F1883A /* LGPhoneNumberCell.xib in Resources */,
 				310B83331D8E7B0100A0F408 /* LaunchScreen.storyboard in Resources */,
@@ -4690,7 +4704,6 @@
 				04EA7DCA1D912872005E5425 /* ZXAI01392xDecoder.m in Sources */,
 				04EA7DA01D912872005E5425 /* ZXBinarizer.m in Sources */,
 				04EA7E281D912872005E5425 /* ZXQRCodeBlockPair.m in Sources */,
-				319069F01D9E1C1300D1D6D2 /* LGChatInfoController.m in Sources */,
 				04F8624D1D94FC6D00DCC6FE /* MLEmojiLabel.m in Sources */,
 				04EA7E221D912872005E5425 /* ZXQRCodeAlignmentPatternFinder.m in Sources */,
 				04EA7ACB1D910F89005E5425 /* UIColor+Hex.m in Sources */,
@@ -4708,11 +4721,13 @@
 				04EA7DD51D912872005E5425 /* ZXRSSExpandedDecodedInformation.m in Sources */,
 				04F57AF81D9280BD002A6471 /* PersonalDiscoverPhotoModel.m in Sources */,
 				04F8628A1D94FC7900DCC6FE /* ChatToolBarItem.m in Sources */,
+				041750A01DA499B600DCD7A9 /* ChatInfoCell.m in Sources */,
 				04F57AEB1D9280BD002A6471 /* KXCurrentLocationCell.m in Sources */,
 				04F57AB31D9280BD002A6471 /* SDTimeLineCell.m in Sources */,
 				04EA797A1D8FBA0C005E5425 /* KXWebViewController.m in Sources */,
 				311CEFB81D93D98700BBB1F9 /* BuddleView.m in Sources */,
 				04EA7D901D912872005E5425 /* ZXReedSolomonEncoder.m in Sources */,
+				041750991DA4950900DCD7A9 /* LGGroupChatInfoController.m in Sources */,
 				04F862521D94FC6D00DCC6FE /* MLTextAttachment.m in Sources */,
 				04EA7AD51D910F89005E5425 /* DNUnAuthorizedTipsView.m in Sources */,
 				04EA7D931D912872005E5425 /* ZXBitSource.m in Sources */,
@@ -4795,6 +4810,7 @@
 				04EA7DC01D912872005E5425 /* ZXDataMatrixWriter.m in Sources */,
 				04EA7D9F1D912872005E5425 /* ZXStringUtils.m in Sources */,
 				04F57ABA1D9280BD002A6471 /* SDTimeLineRefreshHeader.m in Sources */,
+				041750A61DA4A06400DCD7A9 /* ChatInfoHeaderCell.m in Sources */,
 				04EA7D981D912872005E5425 /* ZXDefaultGridSampler.m in Sources */,
 				04EA7E071D912872005E5425 /* ZXPDF417DetectionResult.m in Sources */,
 				04EA7D741D912872005E5425 /* ZXProductParsedResult.m in Sources */,
@@ -4923,6 +4939,7 @@
 				04EA79B41D90DB2B005E5425 /* UIView+x.m in Sources */,
 				04EA7E0E1D912872005E5425 /* ZXPDF417BarcodeMatrix.m in Sources */,
 				04EA7D5B1D912872005E5425 /* ZXAztecEncoder.m in Sources */,
+				0417509C1DA4952D00DCD7A9 /* ChatRoomInfoController.m in Sources */,
 				04EA7B1A1D9125C5005E5425 /* SelectedAreaController.m in Sources */,
 				311CEF7A1D921FDA00BBB1F9 /* LGNetWorking.m in Sources */,
 				04EA7B631D91282E005E5425 /* LBXScanView.m in Sources */,
@@ -4996,7 +5013,6 @@
 				04EA7D8C1D912872005E5425 /* ZXWhiteRectangleDetector.m in Sources */,
 				04EA7AC61D910F89005E5425 /* DNImagePickerController.m in Sources */,
 				04EA7D7A1D912872005E5425 /* ZXSMTPResultParser.m in Sources */,
-				319069F21D9E1C1300D1D6D2 /* LGGroupChatInfoController.m in Sources */,
 				04EA7DAE1D912872005E5425 /* ZXDataMatrixDataBlock.m in Sources */,
 				04F862CD1D9554AA00DCC6FE /* UserMessageController.m in Sources */,
 				04EA7DF41D912872005E5425 /* ZXOneDimensionalCodeWriter.m in Sources */,
