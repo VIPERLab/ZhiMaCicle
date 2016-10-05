@@ -137,6 +137,11 @@
     return 0.5;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView  heightForFooterInSection:(NSInteger)section {
+    return 0.5;
+}
+
+
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
