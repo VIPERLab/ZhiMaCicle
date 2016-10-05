@@ -34,7 +34,13 @@
 
 
 - (void)setupButtonWithTitleName:(NSString *)titleName andCancellTitle:(NSString *)cancellTitle andOtherButton:(NSArray *)titles {
-    NSInteger buttonCount = titles.count + 1;
+    NSInteger buttonCount;
+    if ([titleName isEqualToString:@""] || titleName == nil) {
+        buttonCount = titles.count + 1;
+    } else {
+        buttonCount = titles.count + 2;
+    }
+    
     UIView *buttonView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds), ScreenWidth, ButtonHeight * buttonCount + 5)];
     [self addSubview:buttonView];
     _buttonView = buttonView;
@@ -44,8 +50,16 @@
     if (![titleName isEqualToString:@""]) {
         UILabel *titleLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(buttonView.frame), ButtonHeight)];
         titleLable.text = titleName;
+        titleLable.font = [UIFont systemFontOfSize:12];
+        titleLable.textColor = [UIColor lightGrayColor];
+        titleLable.backgroundColor = [UIColor whiteColor];
+        titleLable.textAlignment = NSTextAlignmentCenter;
         lastView = titleLable;
         [buttonView addSubview:titleLable];
+        
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(titleLable.frame) - 0.5, CGRectGetWidth(titleLable.frame), 0.5)];
+        lineView.backgroundColor = [UIColor colorFormHexRGB:@"dedede"];
+        [buttonView addSubview:lineView];
     }
     
     
