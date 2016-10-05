@@ -32,6 +32,9 @@
 #import "MLAudioPlayer.h"
 #import "AmrPlayerReader.h"
 
+#import "ForwardMsgController.h"    //消息转发控制器
+#import "BaseNavigationController.h"
+
 
 @interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -711,6 +714,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 //点击单元格收起键盘
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.keyboard keyboardDown];
+    ForwardMsgController *vc = [[ForwardMsgController alloc] init];
+    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 //滑动tableview,收起键盘

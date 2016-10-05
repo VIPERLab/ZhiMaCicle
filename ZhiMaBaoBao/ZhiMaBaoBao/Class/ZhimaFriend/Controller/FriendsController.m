@@ -14,6 +14,7 @@
 #import "NewFriendsListController.h"
 #import "FriendProfilecontroller.h"
 #import "ConversationController.h"
+#import "CreateGroupChatController.h"
 
 @interface FriendsController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -276,7 +277,9 @@ static NSString * const reuseIdentifier = @"friendListcell";
             [userInfo save];
             self.unReadLabel.hidden = YES;
         }else if (indexPath.row == 1){  //群组
-            
+            CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
         }
     }else{  //跳转到聊天
         NSInteger rowNum = 0;

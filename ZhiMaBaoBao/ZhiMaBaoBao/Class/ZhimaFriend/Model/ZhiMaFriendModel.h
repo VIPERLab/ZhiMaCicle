@@ -65,4 +65,7 @@ typedef NS_OPTIONS(NSUInteger, FriendType) {
 @property (nonatomic, copy) NSString *album2;
  /** 相册第三张*/
 @property (nonatomic, copy) NSString *album3;
+
+ /** 被选中为群聊  （发起群聊时用到该属性）*/
+@property (nonatomic, assign) BOOL selectedGroup;
 @end

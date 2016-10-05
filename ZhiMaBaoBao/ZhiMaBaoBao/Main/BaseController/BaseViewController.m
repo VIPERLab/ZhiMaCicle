@@ -69,12 +69,14 @@
 - (void)searchFriendAction{
     LGSearchController *searchVC = [[LGSearchController alloc] init];
     searchVC.fatherVC = self;
+    searchVC.hidesBottomBarWhenPushed = YES;
     [self presentViewController:searchVC animated:NO completion:nil];
 }
 
 //添加新好友
 - (void)addFriendAction{
     AddFriendViewController *vc = [[AddFriendViewController alloc] init];
+    vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
