@@ -212,18 +212,27 @@
                 
                 NSArray *delCircleIDArray = [NSString mj_objectArrayWithKeyValuesArray:responseData.data_temp[@"dataList"]];
                 
+                
                 for (NSString *circleID in delCircleIDArray) {
                     [FMDBShareManager deleteCircleDataWithCircleID:circleID];
                 }
                 
+                
                 NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:YES];
-                
-                //存数据到朋友圈表
-                [FMDBShareManager saveCircleDataWithDataArray:dataArray];
-                
                 self.dataArray = [dataArray mutableCopy];
-                [self.tableView reloadDataWithExistedHeightCache];
-                [self.tableView reloadData];
+                // 异步 存数据 到朋友圈数据库
+                dispatch_async(dispatch_queue_create(0, 0), ^{
+                    //存数据到朋友圈表
+                    [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.tableView reloadDataWithExistedHeightCache];
+                        [self.tableView reloadData];
+                    });
+                    
+                });
+                
+                
                 
             }];
 
@@ -259,7 +268,7 @@
                     return;
                 }
                 
-                NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:YES];
+                NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:NO];
                 
                 if (dataArray.count) {
                     [self.dataArray addObjectsFromArray:dataArray];
@@ -271,8 +280,11 @@
                     
                 }
                 
-                //存数据到朋友圈表
-                [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+                // 异步 存数据 到朋友圈数据库
+                dispatch_async(dispatch_queue_create(0, 0), ^{
+                    //存数据到朋友圈表
+                    [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+                });
                 
 #warning 这里有可能会造成刷新不及时的原因
                 if (newDataArray.count) {
@@ -304,12 +316,24 @@
 - (void)getDataFromSQL {
     [self.dataArray removeAllObjects];
     
-    // 获取所有朋友圈的数据
-    self.dataArray = [[FMDBShareManager getCirCleDataInArrayWithPage:1] mutableCopy];
+    // 异步获取数据库
+    dispatch_async(dispatch_queue_create(0, 0), ^{
+        
+        self.dataArray = [[FMDBShareManager getCirCleDataInArrayWithPage:1] mutableCopy];
+        
+        //返回主线程更新ui
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // 获取所有朋友圈的数据
+            [self setupKeyBoardAndRefreshHeader];
+            
+            [self.tableView reloadDataWithExistedHeightCache];
+            [self.tableView reloadData];
+        });
+        
+    });
     
-    [self setupKeyBoardAndRefreshHeader];
-    [self.tableView reloadDataWithExistedHeightCache];
-    [self.tableView reloadData];
+    
+    
 }
 
 
@@ -370,7 +394,6 @@
     
     //缓存行高
 #warning 下一步优化：如果tableView快速滑动，则不加载图片,以及离屏渲染优化
-    
     cell.model = model;
     
     [cell useCellFrameCacheWithIndexPath:indexPath tableView:tableView];
@@ -634,7 +657,7 @@
 
 // -----    点击了背景
 - (void)SDTimeLineTableHeaderViewBackGroundViewDidClick:(SDTimeLineTableHeaderView *)header andBackGround:(UIButton *)backGround {
-    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"相机拍照",@"从相册选择图片"]];
+    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"拍一张",@"从相册选择"]];
     sheet.delegate = self;
     sheet.tag = 100;
     [sheet show];

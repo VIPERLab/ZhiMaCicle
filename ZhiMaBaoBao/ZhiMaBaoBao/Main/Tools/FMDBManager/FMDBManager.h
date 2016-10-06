@@ -55,7 +55,10 @@ typedef enum : NSUInteger {
 // 删表
 - (NSString *)deletedTableData:(ZhiMaSqliteTableType)type withOption:(NSString *)option;
 
-
+/**
+ *   关闭所有表
+ */
+- (void)closeAllSquilteTable;
 
 #pragma mark - 朋友圈存、取操作
 //                    ------------   朋友圈表  ----------------

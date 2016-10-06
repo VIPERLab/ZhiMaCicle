@@ -240,17 +240,15 @@ NSString *const kDiscoverDetailOperationButtonClickedNotification = @"DiscoverDe
     self.user_name.text = model.friend_nick;
     self.timeLabel.text = model.create_time;
     
-    for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
-        if ([likeModel.userId isEqualToString:USERINFO.userID]) {
-            _operationMenu.isLike = YES;
-        } else {
-            _operationMenu.isLike = NO;
-        }
-    }
-    
     _picContainerView.picPathStringsArray = model.imglist;
     [_commentView setupWithLikeItemsArray:model.likeItemsArray commentItemsArray:model.commentList];
     
+    
+    for (SDTimeLineCellLikeItemModel *model in _model.likeItemsArray) {
+        if ([USERINFO.userID isEqualToString:model.userId]) {
+            _operationMenu.isLike = YES;
+        }
+    }
     
     [self setupAutoHeightWithBottomView:_commentView bottomMargin:15];
     

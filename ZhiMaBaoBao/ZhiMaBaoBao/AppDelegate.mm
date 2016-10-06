@@ -111,15 +111,6 @@
     
     //群聊相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_GroupChat_GroupMenber_Table];
-    
-//    ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
-//    model.user_Name = @"大雄";
-//    model.user_Head_photo = @"xxxx";
-//    model.user_NickName = @"";
-//    model.user_Id = @"11594";
-    
-//    [FMDBShareManager saveUserMessageWithMessageArray:@[model]];
-    
 }
 
 // 注册通知
@@ -244,6 +235,9 @@
 #pragma mark - 用户退出通知
 - (void)userLogOut {
     [[SocketManager shareInstance] disconnect];
+    
+    // 关闭数据库
+    [FMDBShareManager closeAllSquilteTable];
     
     LGGuideController *vc = [[LGGuideController alloc] init];
     UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];

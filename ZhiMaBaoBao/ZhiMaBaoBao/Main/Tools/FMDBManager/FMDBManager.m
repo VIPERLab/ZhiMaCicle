@@ -530,6 +530,29 @@
 }
 
 
+
+/**
+ *   关闭所有表
+ */
+- (void)closeAllSquilteTable {
+    // 朋友圈相关的表
+    [circle_DB close];
+    [circle_Comment_DB close];
+    [circle_Pic_DB close];
+    [circle_Like_Db close];
+    
+    // 聊天相关的表
+    [chat_Converse_DB close];
+    [chat_message_DB close];
+    
+    //用户相关的表
+    [user_message_DB close];
+    [newFriend_message_DB close];
+    
+    //群聊相关的表
+    [group_userMenber_DB close];
+}
+
 #pragma mark 获取数据源方法
 #pragma mark - 朋友圈相关
 //                              ----------   朋友圈相关
