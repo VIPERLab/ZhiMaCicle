@@ -442,8 +442,9 @@
             [self upLoadImageCount:self.imageCount andImageArray:_imagesArray];
             
         }else{
-            [LCProgressHUD showFailureText:obj.msg];
-
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [LCProgressHUD showFailureText:obj.msg];
+            });
         }
         
         
@@ -461,6 +462,8 @@
     [LGNetWorking AddNewDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andContent_type:@"1" andContent:self.textView.text andLink:@"" andType:_privateClass andCurrent_location:locationStr andImgs:_imgs block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
+            _imgs = @"";
+            [LCProgressHUD showFailureText:responseData.msg];
             return;
         }
         
@@ -508,11 +511,11 @@
 - (void)upDataView {
     CGFloat buttonWidth = ([UIScreen mainScreen].bounds.size.width - 50) / 4;
     if (self.imagesArray.count >= 4 && self.imagesArray.count < 8) {
-        self.headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 230 + buttonWidth + 5);
+        self.headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 230 + buttonWidth + 5);
     } else if (self.imagesArray.count >= 8){
-        self.headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 230 + buttonWidth * 2 + 10);
+        self.headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 230 + buttonWidth * 2 + 10);
     } else {
-        self.headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 230);
+        self.headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 230);
     }
     
     [self.headerView setContentWithImageArray:self.imagesArray];

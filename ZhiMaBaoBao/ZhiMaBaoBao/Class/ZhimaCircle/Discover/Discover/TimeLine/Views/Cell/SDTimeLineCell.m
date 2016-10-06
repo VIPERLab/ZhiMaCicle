@@ -357,7 +357,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 - (void)longPressContentLabel:(UIGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
             
-        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverLongPressContentNotification object:nil userInfo:@{@"contentLabel":_contentLabel}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverLongPressContentNotification object:nil userInfo:@{@"contentLabel":_contentLabel,@"cell":self}];
 
         
     }

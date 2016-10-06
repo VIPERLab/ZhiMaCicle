@@ -266,5 +266,17 @@
  */
 + (void)getFriendsList:(NSString *)sessionId friendType:(FriendType)type success:(SuccessfulBlock)success failure:(FailureBlock)failure;
 
+/**
+ *  收藏接口
+ *
+ *  @param collectionType 1：文字 2：链接 3：图片 4：视频 5：语音 6：文件
+ *  @param sessionId      登录者的sessionId
+ *  @param content        文字内容，链接标题
+ *  @param smallImg       小图地址、
+ *  @param source         来源 目前给nil
+ *  @param account        被收藏者的userID
+ */
++ (void)collectionCircleListWithCollectionType:(int)collectionType andSessionId:(NSString *)sessionId andConent:(NSString *)content andSmallImg:(NSString *)smallImg andSource:(NSString *)source andAccount:(NSString *)account success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
 
 @end

@@ -8,9 +8,10 @@
 
 #import "NewDiscoverPhotoPickerView.h"
 #import "SDAutoLayout.h"
+#import "KXActionSheet.h"
 #import "LCProgressHUD.h"
 
-@interface NewDiscoverPhotoPickerView () <UIActionSheetDelegate>
+@interface NewDiscoverPhotoPickerView () <KXActionSheetDelegate>
 
 @property (nonatomic, weak) UIButton *currentSelectedButton;
 @property (nonatomic, weak) UIButton *tempButton;
@@ -29,7 +30,7 @@
 
 - (void)setupView {
     UIButton *button = [[UIButton alloc] init];
-    [button setImage:[UIImage imageNamed:@"NewDiscover_AddPhoto"] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIImage imageNamed:@"NewDiscover_AddPhoto"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(addPhotoButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
     button.imageView.layer.masksToBounds = YES;
     button.clipsToBounds = YES;
@@ -57,31 +58,25 @@
     self.currentSelectedButton = sender;
     [[NSNotificationCenter defaultCenter] postNotificationName:K_NewDiscoverPhotoClickNotifcation object:nil userInfo:@{@"CurrentSelectedButton" : sender
                                                                                                                         }];
-    //判断是打开图片还是选择图片
-    if (sender.imageView.image) {
-        //选择图片
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"从手机相册选择", nil];
-        
-        [sheet showInView:self];
+
+    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"拍照",@"从手机相册选择"]];
+    sheet.delegate = self;
+    [sheet show];
         
         
-    }
+    
     
 }
 
 
 #pragma mark - actionSheetDelegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSLog(@"%zd",buttonIndex);
-    
-//    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    [[NSNotificationCenter defaultCenter] postNotificationName:K_NewDiscoverPhotoPickerNotifcation object:self userInfo:@{   @"buttonIndex":[NSString stringWithFormat:@"%zd",buttonIndex],
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
+    [[NSNotificationCenter defaultCenter] postNotificationName:K_NewDiscoverPhotoPickerNotifcation object:self userInfo:@{   @"buttonIndex":[NSString stringWithFormat:@"%zd",index],
                       @"currentSelectedButton" : self.currentSelectedButton,
                       @"PhotoPickerViewController" : self
-                  }];
-    
-    
+                                                                                                                             }];
 }
+
 
 //增加下一个图片选择按钮
 - (void)addAnotherButton {

@@ -50,7 +50,7 @@
 #define KCommentOtherNotification @"KCommentOtherNotification"
 
 // ---- 朋友圈长按文字文本通知
-// info :  @"contentLabel" : 文本控件
+// info :  @"contentLabel" : 文本控件 、 @"cell" : 当前文本所在的cell
 #define KDiscoverLongPressContentNotification @"KDiscoverLongPressContentNotification"
 #define KDiscoverDisLongPressContentNotificaion @"KDiscoverDisLongPressContentNotificaion"
 

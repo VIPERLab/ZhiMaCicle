@@ -439,8 +439,6 @@
     self.commentToUser = @"";
     self.chatKeyBoard.placeHolder = @"请输入消息";
     
-    _currentEditingIndexthPath = [self.tableView indexPathForCell:cell];
-    
     [self.view bringSubviewToFront:self.chatKeyBoard];
     
     [self adjustTableViewToFitKeyboard:cell];
@@ -640,9 +638,6 @@
     sheet.delegate = self;
     sheet.tag = 100;
     [sheet show];
-//    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"相机" otherButtonTitles:@"相册", nil];
-//    sheet.tag = 100;
-//    [sheet showInView:self.view];
 }
 
 
@@ -744,13 +739,16 @@
 
 #pragma mark - 长按内容文本回调
 - (void)longPressContentLabel:(NSNotification *)notification {
-    UIView *contentLabel = notification.userInfo[@"contentLabel"];
+    UILabel *contentLabel = notification.userInfo[@"contentLabel"];
+    SDTimeLineCell *cell = notification.userInfo[@"cell"];
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    self.currentEditingIndexthPath = indexPath;
     self.contentLabel = contentLabel;
     if (!_copyView) {
         CGRect controlFrame = [contentLabel convertRect:contentLabel.frame toView:[UIApplication sharedApplication].keyWindow];
         _copyView = [[KXCopyView alloc] initWithFrame:CGRectMake(controlFrame.origin.x, controlFrame.origin.y - 80, 50, 40)];
         _copyView.delegate = self;
-        _copyView.titleArray = @[@"复制"];
+        _copyView.titleArray = @[@"复制",@"收藏"];
         [_copyView setImage:[UIImage imageNamed:@"Discovre_Copy"] andInsets:UIEdgeInsetsMake(30, 40, 30, 40)];
         [self.view addSubview:_copyView];
     }
@@ -767,12 +765,28 @@
         // 点击了复制
         UIPasteboard *pboard = [UIPasteboard generalPasteboard];
         pboard.string = self.contentLabel.text;
+        [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
     } else if (index == 1) {
         //点击了收藏
-        
+        NSLog(@"点击了收藏");
+        // 调用收藏接口
+        SDTimeLineCellModel *model = self.dataArray[self.currentEditingIndexthPath.row];
+        [LGNetWorking collectionCircleListWithCollectionType:1 andSessionId:USERINFO.sessionId andConent:self.contentLabel.text andSmallImg:@"" andSource:@"" andAccount:model.userId success:^(ResponseData *responseData) {
+            
+            if (responseData.code != 0) {
+                [LCProgressHUD showFailureText:@"收藏失败"];
+                return ;
+            }
+            
+            [LCProgressHUD showSuccessText:@"收藏成功"];
+            
+        } failure:^(ErrorData *error) {
+            
+        }];
     }
     
     [UIView animateWithDuration:0.3 animations:^{
+        self.currentEditingIndexthPath = nil;
         _copyView.alpha = 0.0;
         _copyView = nil;
         _contentLabel.backgroundColor = [UIColor whiteColor];

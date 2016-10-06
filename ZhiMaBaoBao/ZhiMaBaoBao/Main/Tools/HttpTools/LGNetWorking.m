@@ -773,4 +773,31 @@
     }];
 }
 
+
+/**
+ *  收藏接口
+ *
+ *  @param collectionType 1：文字 2：链接 3：图片 4：视频 5：语音 6：文件
+ *  @param sessionId      登录者的sessionId
+ *  @param content        文字内容，链接标题
+ *  @param smallImg       小图地址、
+ *  @param source         来源 目前给nil
+ *  @param account        被收藏者的userID
+ */
++ (void)collectionCircleListWithCollectionType:(int)collectionType andSessionId:(NSString *)sessionId andConent:(NSString *)content andSmallImg:(NSString *)smallImg andSource:(NSString *)source andAccount:(NSString *)account success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = sessionId;
+    params[@"collection_type"] = [NSString stringWithFormat:@"%zd",collectionType];
+    params[@"content"] = content;
+    params[@"small_img"] = smallImg;
+    params[@"source"] = source;
+    params[@"account"] = account;
+    
+    [HttpTool POST:@"/moblie/addLoveCollection.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
 @end
