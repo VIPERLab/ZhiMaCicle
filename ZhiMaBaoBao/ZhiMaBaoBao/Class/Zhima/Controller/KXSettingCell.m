@@ -36,6 +36,7 @@
     
     _zhimaSwitch = [UISwitch new];
     _zhimaSwitch.onTintColor = THEMECOLOR;
+    [_zhimaSwitch addTarget:self action:@selector(valueChange:) forControlEvents:UIControlEventValueChanged];
     [self addSubview:_zhimaSwitch];
     
     _bottomLineView = [UIView new];
@@ -47,6 +48,18 @@
 - (void)setTitle:(NSString *)title {
     _title = title;
     _titleLabel.text = title;
+}
+
+- (void)setSwitchStatus:(BOOL)switchStatus {
+    _switchStatus = switchStatus;
+    [_zhimaSwitch setOn:switchStatus animated:YES];
+}
+
+
+- (void)valueChange:(UISwitch *)zhimaSwitch {
+    if ([self.delegate respondsToSelector:@selector(switchValueDidChanage:andSwitch:)]) {
+        [self.delegate switchValueDidChanage:self andSwitch:zhimaSwitch];
+    }
 }
 
 - (void)layoutSubviews {

@@ -82,6 +82,25 @@
  /** 网络不可用*/
 @property (nonatomic, assign) BOOL networkUnReachable;
 
+#pragma mark - 消息通知提示
+/**
+ *  新消息通知
+ */
+@property (nonatomic, assign) BOOL newMessageNotify;
+
+/**
+ *  新消息声音通知
+ */
+@property (nonatomic, assign) BOOL newMessageVoiceNotify;
+
+/**
+ *  新消息震动通知
+ */
+@property (nonatomic, assign) BOOL newMessageShakeNotify;
+
+
+
+
 /**
  *  位置信息
  */

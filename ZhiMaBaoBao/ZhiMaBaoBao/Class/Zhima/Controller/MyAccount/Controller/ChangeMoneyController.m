@@ -25,13 +25,18 @@
     // Do any additional setup after loading the view.
     [self setCustomTitle:@"零钱"];
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
-//    [self setCustomRightBarBUtton:@"明细"];
+    [self setupNav];
     [self setupView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)setupNav {
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithTitle:@"明细" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonAction)];
+    self.navigationItem.rightBarButtonItem = rightBarButton;
 }
 
 - (void)setupView {
