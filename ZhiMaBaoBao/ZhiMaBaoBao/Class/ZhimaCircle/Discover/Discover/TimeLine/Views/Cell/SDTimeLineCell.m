@@ -240,6 +240,10 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 {
     _model = model;
     
+    if ([model.userId isEqualToString:USERINFO.userID]) {
+        [_complainButton setTitle:@"删除" forState:UIControlStateNormal];
+    }
+    
     if (_copyView) {
         [_copyView removeFromSuperview];
         _copyView = nil;

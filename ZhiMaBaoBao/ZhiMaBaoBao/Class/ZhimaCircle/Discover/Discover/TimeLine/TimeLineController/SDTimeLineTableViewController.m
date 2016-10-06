@@ -297,7 +297,6 @@
             }];
         }];
     }
-    
 }
 
 #pragma mark - 加载未读消息数
@@ -688,6 +687,22 @@
 
 // ----      点击了投诉按钮
 - (void)didClickComplainButton:(SDTimeLineCell *)cell {
+    if ([cell.model.userId isEqualToString:USERINFO.userID]) {
+        // 删除自己的朋友圈
+        [LGNetWorking DeletedMyDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFcid:cell.model.circle_ID block:^(ResponseData *responseData) {
+            
+            if (responseData.code != 0) {
+                [LCProgressHUD showFailureText:responseData.msg];
+            }
+            
+            [LCProgressHUD showSuccessText:responseData.msg];
+            [FMDBShareManager deleteCircleDataWithCircleID:cell.model.circle_ID];
+            [self getDataFromSQL];
+            
+            
+        }];
+        return;
+    }
     [self didLongPressUserIconWithCell:cell];
 }
 
