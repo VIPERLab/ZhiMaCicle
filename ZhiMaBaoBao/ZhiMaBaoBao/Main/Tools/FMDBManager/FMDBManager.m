@@ -642,7 +642,7 @@
                 NSLog(@"不存在这条图片数据，需要插入");
                 operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Pic_Table];
                 [picQueue inDatabase:^(FMDatabase *db) {
-                    BOOL success = [db executeUpdate:operationStr,picModel.img_url,picModel.bigimg_url,cellModel.circle_ID];
+                    BOOL success = [db executeUpdate:operationStr,picModel.img_url,picModel.bigimg_url,cellModel.circle_ID,picModel.weuser_id];
                     if (success) {
                         NSLog(@"插入图片成功");
                     } else {
@@ -757,6 +757,7 @@
             FMResultSet *result = [db executeQuery:operationStr];
             while ([result next]) {
                 SDTimeLineCellPicItemModel *model = [[SDTimeLineCellPicItemModel alloc] init];
+                model.weuser_id = [result stringForColumn:@"weuser_id"];
                 model.bigimg_url = [result stringForColumn:@"bigimg_url"];
                 model.img_url = [result stringForColumn:@"img_url"];
                 [commentListArray addObject:model];

@@ -143,9 +143,11 @@
 
 - (void)tapImageView:(UITapGestureRecognizer *)tap
 {
+    SDTimeLineCellPicItemModel *picModel = self.picPathStringsArray[0];
     UIView *imageView = tap.view;
     SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
     browser.currentImageIndex = imageView.tag;
+    browser.userId = picModel.weuser_id;
     browser.sourceImagesContainerView = self;
     browser.imageCount = self.picPathStringsArray.count;
     browser.delegate = self;
