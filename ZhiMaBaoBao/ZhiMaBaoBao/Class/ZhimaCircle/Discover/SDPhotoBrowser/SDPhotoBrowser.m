@@ -253,7 +253,7 @@
 
 - (void)longPressPhoto:(UIGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
-        KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"转发给朋友",@"收藏",@"保存图片"]];
+        KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"转发给朋友",@"保存图片",@"收藏"]];
         sheet.delegate = self;
         [sheet show];
     }
@@ -265,11 +265,11 @@
         int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
         UIImageView *currentImageView = _scrollView.subviews[index];
         [[NSNotificationCenter defaultCenter] postNotificationName:K_ForwardPhotoNotifation object:nil userInfo:@{@"imageContent":currentImageView.image}];
-    } else if (buttonIndex == 1) { //收藏图片
-        [self collectionImage];
-    } else if (buttonIndex == 2) {
+    } else if (buttonIndex == 1) { // 收藏图片
         [self saveImage];
-    } else if (buttonIndex == 3) { //保存图片
+    } else if (buttonIndex == 2) { // 保存图片
+        [self collectionImage];
+    } else if (buttonIndex == 3) { // 取消
         
     }
 }
