@@ -14,7 +14,7 @@
 #import "NewFriendsListController.h"
 #import "FriendProfilecontroller.h"
 #import "ConversationController.h"
-#import "CreateGroupChatController.h"
+#import "GroupChatListController.h"
 
 @interface FriendsController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -56,14 +56,15 @@ static NSString * const reuseIdentifier = @"friendListcell";
 
 //请求好友列表
 - (void)requestFriendsList{
+    [self clearAllArray];
     //先从数据库拉取好友列表 从网络请求加载最新数据更新数据库
     self.friends = [[FMDBShareManager getAllUserMessageInArray] mutableCopy];
     [self friendsListSort];
     
-    
     [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
+
         self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
-        NSLog(@"%@",responseData.data);
+        
         //更新数据库，然后刷新列表
         if ([FMDBShareManager saveUserMessageWithMessageArray:self.friends]) {
             NSLog(@"好友列表插入数据库成功");
@@ -75,6 +76,13 @@ static NSString * const reuseIdentifier = @"friendListcell";
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:@"网络好像有点差哦[^_^]"];
     }];
+}
+
+- (void)clearAllArray{
+    [self.friends removeAllObjects];
+    [self.sectionsArr removeAllObjects];
+    [self.friendsAfterSort removeAllObjects];
+    [self.countOfSectionArr removeAllObjects];
 }
 
 //好友列表排序分组
@@ -114,6 +122,10 @@ static NSString * const reuseIdentifier = @"friendListcell";
             NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.pinyin characterAtIndex:0])];
             [self.sectionsArr addObject:[str uppercaseString]];
 //            [self.sectionsArr addObject:friend.headchar];
+            //如果只有一个好友
+            if (self.friendsAfterSort.count == 1) {
+                [self.countOfSectionArr addObject:@(1)];
+            }
         }
         
         if (i < self.friendsAfterSort.count - 1) {
@@ -277,7 +289,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
             [userInfo save];
             self.unReadLabel.hidden = YES;
         }else if (indexPath.row == 1){  //群组
-            CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+            GroupChatListController *vc = [[GroupChatListController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }

@@ -11,8 +11,8 @@ typedef NS_OPTIONS(NSUInteger, FriendType) {
     FriendTypeNotFriend = 0,     //不是好友
     FriendTypeNew,              //新的好友
     FriendTypeFriends,          //好友
-    FriendTypeBlack            //黑名单
-//    FriendTypeSelf              //用户自己
+    FriendTypeBlack,            //黑名单
+    FriendTypeSelf              //用户自己
 };
 
 #import <Foundation/Foundation.h>

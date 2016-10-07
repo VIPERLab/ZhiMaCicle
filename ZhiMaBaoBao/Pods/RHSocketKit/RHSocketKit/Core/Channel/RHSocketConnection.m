@@ -179,7 +179,7 @@ NSString * const RHSocketQueueSpecific = @"com.zrh.rhsocket.RHSocketQueueSpecifi
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
-//    RHSocketLog(@"didWriteDataWithTag: %ld", tag);
+    RHSocketLog(@"didWriteDataWithTag: %ld", tag);
     [sock readDataWithTimeout:-1 tag:tag];
 }
 

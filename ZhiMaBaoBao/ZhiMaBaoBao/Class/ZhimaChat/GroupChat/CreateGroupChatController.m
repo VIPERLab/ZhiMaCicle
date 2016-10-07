@@ -9,6 +9,8 @@
 #import "CreateGroupChatController.h"
 #import "CreateGroupListCell.h"
 #import "pinyin.h"
+#import "GroupChatModel.h"
+#import "SocketManager.h"
 
 
 @interface CreateGroupChatController ()<UITableViewDelegate,UITableViewDataSource>
@@ -23,6 +25,9 @@
 @property (nonatomic, strong) UITableView *searchTableView;     //搜索好友时展示的tableview
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UIScrollView *imagesView;     //展示被选好友头像
+@property (nonatomic, strong) UIButton *rightBtn;           //导航栏右侧按钮
+
+@property (nonatomic, strong) GroupChatModel *groupChatModel;
 @end
 
 
@@ -35,7 +40,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     [super viewDidLoad];
     
     [self setCustomTitle:@"选择联系人"];
-    [self setNavRightItem];
+    [self setNavItem];
     [self addAllSubviews];
     [self requestFriendsList];
     
@@ -50,15 +55,24 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     [self friendsListSort];
 }
 
-- (void)setNavRightItem{
-    UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
+- (void)setNavItem{
+    UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
+    rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [rightBtn setTitle:@"确定" forState:UIControlStateNormal];
-    [rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
-    [rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateDisabled];
+    [rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
     rightBtn.titleLabel.font = MAINFONT;
-    [rightBtn addTarget:self action:@selector(createGroupChat) forControlEvents:UIControlEventTouchUpInside];
+    [rightBtn addTarget:self action:@selector(createGroupChatAction) forControlEvents:UIControlEventTouchUpInside];
+    self.rightBtn = rightBtn;
+    
+    UIButton *leftBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [leftBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+    leftBtn.titleLabel.font = MAINFONT;
+    [leftBtn addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
 }
 
 - (void)addAllSubviews{
@@ -90,7 +104,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     [searchView addSubview:separtor];
 
     
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(searchView.frame), DEVICEWITH, DEVICEHIGHT - searchView.height) style:UITableViewStylePlain];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(searchView.frame), DEVICEWITH, DEVICEHIGHT - CGRectGetMaxY(searchView.frame)) style:UITableViewStylePlain];
     [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:headerReuseIdentifier];
     [tableView registerNib:[UINib nibWithNibName:@"CreateGroupListCell" bundle:nil] forCellReuseIdentifier:listReuseIdentifier];
     tableView.sectionIndexColor = RGB(54, 54, 54);
@@ -303,12 +317,45 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 }
 
 //选择完毕，发起群聊
-- (void)createGroupChat{
+- (void)createGroupChatAction{
+    if (self.selectedFriends.count == 0) {
+        return;
+    }
+    //拼接自己的userId和好友userId
+    NSMutableArray *userIdArr = [NSMutableArray array];
+    [userIdArr addObject:USERINFO.userID];
+    for (ZhiMaFriendModel *model in self.selectedFriends) {
+        [userIdArr addObject:model.user_Id];
+    }
+    NSString *userIds = [userIdArr componentsJoinedByString:@","];
+
+    [LCProgressHUD showLoadingText:@"准备开始群聊..."];
+    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            [LCProgressHUD hide];
+            //生成群聊数据模型
+            [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                return @{
+                         @"groupUserVos":@"GroupUserModel"
+                         };
+            }];
+            self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+            //通过socket创建群聊
+            [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:userIds];
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:error.msg];
+    }];
     
+}
+
+- (void)cancelAction{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 //刷新imagesView 的frame
 - (void)refreshImagesViewFrame{
+    
     CGFloat margin = 7;
     CGFloat imageS = 40;
     NSInteger count = self.selectedFriends.count;
@@ -319,9 +366,17 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     if (count == 0) {
         self.imagesView.width = 0;
         self.textField.x = 40;
+        //更新导航栏右侧按钮显示
+        [self.rightBtn setTitle:@"确定" forState:UIControlStateNormal];
+        [self.rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
+
+
     }else{
         self.imagesView.width = width;
         self.textField.x = CGRectGetMaxX(self.imagesView.frame) + margin;
+        //更新导航栏右侧按钮显示
+        [self.rightBtn setTitle:[NSString stringWithFormat:@"确定(%d)",count] forState:UIControlStateNormal];
+        [self.rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     }
     
     //设置滑动试图最大宽度，
@@ -381,6 +436,11 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             //第一个数据首字母
             NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.pinyin characterAtIndex:0])];
             [self.sectionsArr addObject:[str uppercaseString]];
+            
+            //如果只有一个好友
+            if (self.friendsAfterSort.count == 1) {
+                [self.countOfSectionArr addObject:@(1)];
+            }
         }
         
         if (i < self.friendsAfterSort.count - 1) {

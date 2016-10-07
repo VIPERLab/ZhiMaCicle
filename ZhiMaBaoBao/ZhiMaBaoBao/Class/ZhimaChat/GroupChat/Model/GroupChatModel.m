@@ -10,4 +10,12 @@
 
 @implementation GroupChatModel
 
++ (NSDictionary *)replacedKeyFromPropertyName{
+    return @{
+             @"groupId" : @"id",
+             @"groupName" : @"groupname",
+             @"groupAvtar" : @"img"
+             };
+}
+
 @end

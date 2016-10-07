@@ -27,8 +27,8 @@
     _friendModel = friendModel;
     
     [self.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,friendModel.head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
-    self.name.text = friendModel.user_Name;
-    self.nickName.text = [NSString stringWithFormat:@"昵称：%@",friendModel.displayName];
+    self.name.text = friendModel.displayName;
+    self.nickName.text = [NSString stringWithFormat:@"昵称：%@",friendModel.user_Name];
     if ([friendModel.sex isEqualToString:@"男"]) {
         [self.sexBtn setImage:[UIImage imageNamed:@"man"]];
     }else{
@@ -39,8 +39,8 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     
-    NSString *name = _friendModel.user_Name;
-    CGFloat width = [name sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17]}].width;
+    NSString *name = _friendModel.displayName;
+    CGFloat width = [name sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].width;
     self.widthConstraints.constant = width;
 }
 

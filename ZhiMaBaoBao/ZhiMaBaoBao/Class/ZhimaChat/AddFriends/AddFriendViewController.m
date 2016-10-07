@@ -10,6 +10,7 @@
 #import "LGAddFriendCell.h"
 #import "LGSearchResultController.h"
 #import "PhoneAddressController.h"
+#import "ScanQRCodeController.h"
 
 @interface AddFriendViewController ()<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
 {
@@ -163,25 +164,8 @@
         
     }else{
         //跳转到扫一扫页面
-#warning TODO: 跳转到扫一扫页面
-    }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-
-/*
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"userinfo"]) {
-        YiUserInfoViewController * controller = segue.destinationViewController;
-        controller.jid = _vcard.jid;
-        controller.vcard = _vcard;
-        controller.isAddFriend = YES;
-    }
-    else if ([segue.identifier isEqualToString:@"myScanCode"]) {
-        SubLBXScanViewController *vc = (SubLBXScanViewController *)segue.destinationViewController;
-        
-        //设置扫码区域参数设置
+        //扫一扫
+        ScanQRCodeController *QRCode = [[ScanQRCodeController alloc] init];
         
         //创建参数对象
         LBXScanViewStyle *style = [[LBXScanViewStyle alloc]init];
@@ -210,13 +194,16 @@
         //SubLBXScanViewController继承自LBXScanViewController
         //添加一些扫码或相册结果处理
         //    SubLBXScanViewController *vc = [SubLBXScanViewController new];
-        vc.style = style;
+        QRCode.style = style;
         
-        vc.isQQSimulator = YES;
-        vc.isVideoZoom = YES;
+        QRCode.isQQSimulator = YES;
+        QRCode.isVideoZoom = YES;
+        
+        QRCode.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:QRCode animated:YES];
     }
 
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
- */
 
 @end

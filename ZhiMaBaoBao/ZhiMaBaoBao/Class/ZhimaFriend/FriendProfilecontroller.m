@@ -21,7 +21,9 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ZhiMaFriendModel *friend;
 @property (nonatomic, strong) NSMutableArray *photosUrl;    //存放个人相册图片url
-@property (nonatomic, assign) FriendType friendType;    //好友类型
+@property (nonatomic, assign) FriendType friendType;        //好友类型
+@property (nonatomic, assign) BOOL hasRequestData;          //标记已经请求数据
+
 
 @end
 static NSString *const headerIdentifier = @"headerIdentifier";
@@ -75,8 +77,13 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 - (void)requestFriendProfile{
     [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
+            self.hasRequestData = YES;
             self.friend = [ZhiMaFriendModel mj_objectWithKeyValues:responseData.data];
             self.friendType = self.friend.friend_type;
+
+            if ([self.friend.user_Id isEqualToString:USERINFO.userID]) {
+                self.friendType = FriendTypeSelf;
+            }
             //生成好友相册
             [self generateAlbums];
             [self setupNavRightItem];
@@ -188,7 +195,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 - (UIView *)setupLastSectionView{
     
     UIView *footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 135)];
-    footerView.backgroundColor = BGCOLOR;
+    footerView.backgroundColor = self.tableView.backgroundColor;
     
     UIButton *sendMsg = [[UIButton alloc] initWithFrame:CGRectMake(14, 0, DEVICEWITH - 28, 48)];
     sendMsg.backgroundColor = THEMECOLOR;
@@ -214,7 +221,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         sendMsg.hidden = NO;
         [sendMsg setTitle:@"移出黑名单" forState:UIControlStateNormal];
     }
-    else if (self.friendType == FriendTypeNotFriend || self.friendType == FriendTypeNew){   //不是好友
+    else if ((self.friendType == FriendTypeNotFriend || self.friendType == FriendTypeNew) && self.hasRequestData){   //不是好友
         sendMsg.hidden = NO;
         [sendMsg setTitle:@"添加到通讯录" forState:UIControlStateNormal];
     }
@@ -236,7 +243,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
  */
 - (void)sendMsgAction{
     if (self.friendType == FriendTypeBlack) {   //黑名单 -> 移出黑名单
-        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:2 openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
+        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 //重新加载数据 -> 刷新
                 [self requestFriendProfile];
@@ -248,20 +255,21 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     else if (self.friendType == FriendTypeNotFriend || self.friendType == FriendTypeNew){   //不是好友 -> 添加到通讯录
         SocketManager *manager = [SocketManager shareInstance];
         [manager addFriend:self.friend.user_Id];
+        [LCProgressHUD showSuccessText:@"请求发送成功"];
     }
     else if (self.friendType == FriendTypeFriends){     //好友 -> 发消息
         //先pop到跟控制器。然后切换到会话控制器。然后push到聊天
         UserInfo *userInfo = [UserInfo shareInstance];
-//        [self.navigationController popToRootViewControllerAnimated:YES];
-//        userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
         
         ChatController *vc = [[ChatController alloc] init];
         vc.conversionId = self.friend.user_Id;
         vc.conversionName = self.friend.displayName;
         vc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:vc animated:YES];
-//        ConversationController *conversationVC = userInfo.conversationVC;
-//        [conversationVC.navigationController pushViewController:vc animated:YES];
+//        [self.navigationController pushViewController:vc animated:YES];
+        ConversationController *conversationVC = userInfo.conversationVC;
+        [conversationVC.navigationController pushViewController:vc animated:YES];
         
     }
 

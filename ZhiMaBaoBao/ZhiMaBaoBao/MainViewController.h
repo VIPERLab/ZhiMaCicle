@@ -10,4 +10,6 @@
 
 @interface MainViewController : UITabBarController
 
+
+- (void)adapterstatusBarHeight;
 @end

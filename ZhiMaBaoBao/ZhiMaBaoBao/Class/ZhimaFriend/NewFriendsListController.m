@@ -88,7 +88,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 - (void)acceptNewFriendRequest:(NSIndexPath *)indexPath{
     ZhiMaFriendModel *friend = self.friendsArr[indexPath.row];
     [LCProgressHUD showLoadingText:@"请稍等..."];
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:FriendTypeFriends openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
             //添加好友成功 -- 更新数据库
@@ -150,7 +150,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
         return [UIView new];
     }else{
         UIView *headerView  = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICEWITH, 30)];
-        headerView.backgroundColor = BGCOLOR;
+        headerView.backgroundColor = self.tableView.backgroundColor;
         
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(14, 5, DEVICEWITH - 14, 20)];
         titleLabel.text = @"新的朋友";

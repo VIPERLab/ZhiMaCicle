@@ -89,6 +89,9 @@
 #define kNewFriendRequest @"kNewFriendRequest"
 //消息发送成功
 
+//更新未读消息
+#define kUpdateUnReadMessage @"kUpdateUnReadMessage"
+
 
 
 #endif /* KNotificationManager_h */

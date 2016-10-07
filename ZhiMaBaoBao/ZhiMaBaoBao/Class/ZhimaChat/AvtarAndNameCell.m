@@ -28,6 +28,13 @@
     self.name.text = friendModel.displayName;
 }
 
+- (void)setGroupModel:(GroupChatModel *)groupModel{
+    _groupModel = _groupModel;
+    
+    [self.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,groupModel.groupAvtar]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
+    self.name.text = groupModel.groupName;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

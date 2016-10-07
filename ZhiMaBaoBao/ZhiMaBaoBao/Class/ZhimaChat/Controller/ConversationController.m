@@ -144,9 +144,6 @@
     return 0.5;
 }
 
-
-
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
@@ -160,10 +157,12 @@
         //清除未读消息
         model.unReadCount = -1;
         [FMDBShareManager saveConverseListDataWithDataArray:@[model]];
+        
+        //发送更新未读消息通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateUnReadMessage object:nil];
     }
     
     // 点击了没有网络
-    
     
 }
 
