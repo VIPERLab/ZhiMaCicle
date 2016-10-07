@@ -13,9 +13,10 @@
 #import <AlipaySDK/AlipaySDK.h>
 #import "RealReachability.h"
 #import "SocketManager.h"
-
+#import "ConverseModel.h"
 //临时用
 #import "ZhiMaFriendModel.h"
+
 
 @interface AppDelegate ()
 
@@ -60,7 +61,28 @@
     [self notification];
     
     
+    //注册本地通知
+    if ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0) {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+        [application registerUserNotificationSettings:settings];
+    }
+    
+    
     return YES;
+}
+
+/*
+ 应用程序在进入前台,或者在前台的时候都会执行该方法
+ */
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    // 必须要监听--应用程序在后台的时候进行的跳转
+    if (application.applicationState == UIApplicationStateInactive) {
+        NSLog(@"进行界面的跳转");
+        // 如果在上面的通知方法中设置了一些，可以在这里打印额外信息的内容，就做到监听，也就可以根据额外信息，做出相应的判断
+        NSLog(@"%@", notification.userInfo);
+        
+    }
 }
 
 //网络环境改变
@@ -154,8 +176,16 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    //获取未读消息数量，设置badgeValue
+    //获取所有会话列表
+    NSArray *conversions = [FMDBShareManager getChatConverseDataInArray];
+    
+    //遍历所有会话
+    NSInteger unRead = 0;
+    for (ConverseModel *conversion in conversions) {
+        unRead += conversion.unReadCount;
+    }
+    application.applicationIconBadgeNumber = unRead;
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -271,11 +301,11 @@
     }
 }
 
-
-
+//app处于活跃状态，调整tabbar高度
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    
+    [application cancelAllLocalNotifications];
+    UserInfo *manager = [UserInfo shareInstance];
+    [manager.mainVC adapterstatusBarHeight];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

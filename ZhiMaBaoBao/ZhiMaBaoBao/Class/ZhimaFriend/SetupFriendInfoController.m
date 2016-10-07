@@ -7,9 +7,8 @@
 //
 
 #import "SetupFriendInfoController.h"
-//#import "RemarkController.h"
-//#import "LBXAlertAction.h"
-//#import "NSString+YiIM.h"
+#import "RemarkController.h"
+#import "SocketManager.h"
 
 
 @interface SetupFriendInfoController ()
@@ -30,9 +29,13 @@
     [super viewDidLoad];
     
     [self setCustomTitle:@"资料设置"];
-    [self requestFriendProfile];
     self.deleteBtn.layer.cornerRadius = 5;
 
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self requestFriendProfile];
 }
 
 //请求好友详细资料
@@ -65,14 +68,10 @@
 
 //设置备注
 - (IBAction)setupMemo:(UIButton *)sender {
-//    RemarkController *vc = [[RemarkController alloc] init];
-//    vc.nickName = self.nickNametext;
-//    vc.jid = _jid;
-//    vc.isFromSearch = self.isFromSearch;
-//    vc.block = ^(NSString *text){
-//        self.nickName.text = text;
-//    };
-//    [self.navigationController pushViewController:vc animated:YES];
+    RemarkController *vc = [[RemarkController alloc] init];
+    vc.userId = self.friendInfo.user_Id;
+    vc.nickName = self.friendInfo.displayName;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (IBAction)deleteAction:(id)sender {
@@ -87,13 +86,15 @@
     if (buttonIndex == 1) {
         //删除好友 删除会话 清除聊天记录
         [LCProgressHUD showLoadingText:@"请稍等..."];
-        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:0 openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"0" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 [LCProgressHUD hide];
-                [self.navigationController popToRootViewControllerAnimated:YES];
                 //从数据库删除会话 -- 删除好友列表
+                [[SocketManager shareInstance] delFriend:self.friendInfo.user_Id];
                 [FMDBShareManager deleteConverseWithConverseId:self.friendInfo.user_Id];
                 [FMDBShareManager deleteUserMessageByUserID:self.friendInfo.user_Id];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+                
             }else{
                 [LCProgressHUD showFailureText:responseData.msg];
             }
@@ -104,7 +105,7 @@
 //加入黑名单
 - (IBAction)addBlackList:(UISwitch *)sender {
     if (sender.on) {
-        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:3 openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"3" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
 
             }else{
@@ -112,7 +113,7 @@
             }
         }];
     }else{
-        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:2 openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
 
             }else{
@@ -127,7 +128,7 @@
 - (IBAction)lookMyCircle:(UISwitch *)sender {
     
     NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:value openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:[NSString stringWithFormat:@"%ld",(long)value] openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             
         }else{
@@ -140,7 +141,7 @@
 //不看他的朋友圈
 - (IBAction)lookOtherCircle:(UISwitch *)sender {
     NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:value openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:[NSString stringWithFormat:@"%ld",(long)value] openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             
         }else{

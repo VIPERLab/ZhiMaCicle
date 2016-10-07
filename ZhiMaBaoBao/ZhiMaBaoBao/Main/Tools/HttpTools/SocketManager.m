@@ -56,7 +56,7 @@ static SocketManager *manager = nil;
     connectParam.host = HOST;
     connectParam.port = PORT;
     
-    //设置心跳定时器间隔15秒
+    //设置心跳定时器间隔5秒
     connectParam.heartbeatInterval = 5;
     
     //设置短线后是否自动重连
@@ -75,6 +75,29 @@ static SocketManager *manager = nil;
     [RHSocketService sharedInstance].heartbeat = req;
     
     [[RHSocketService sharedInstance] startServiceWithConnectParam:connectParam];
+}
+
+#pragma mark - socket 代理方法
+//socket服务器连接状态回调
+- (void)detectSocketServiceState:(NSNotification *)notif
+{
+    //NSDictionary *userInfo = @{@"host":host, @"port":@(port), @"isRunning":@(_isRunning)};
+    //对应的连接ip和状态数据。_isRunning为YES是连接成功。
+    //没有心跳超时后会自动断开。
+    NSLog(@"detectSocketServiceState: %@", notif);
+    
+    //连接成功 发送登录消息
+    id state = notif.object;
+    if (state && [state boolValue]) {
+        //生成登录消息数据包
+        NSData *loginData = [self generateRequest:RequestTypeLogin uid:USERINFO.userID message:nil];
+        RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+        req.object = loginData;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+        
+    } else {
+        //
+    }//if
 }
 
 
@@ -143,37 +166,7 @@ static SocketManager *manager = nil;
     }
 }
 
-//删除消息
-- (void)deleteMessage:(LGMessage *)message{
-    
-}
-
-
-#pragma mark - socket 代理方法
-//socket服务器连接状态回调
-- (void)detectSocketServiceState:(NSNotification *)notif
-{
-    //NSDictionary *userInfo = @{@"host":host, @"port":@(port), @"isRunning":@(_isRunning)};
-    //对应的连接ip和状态数据。_isRunning为YES是连接成功。
-    //没有心跳超时后会自动断开。
-    NSLog(@"detectSocketServiceState: %@", notif);
-    
-    //连接成功 发送登录消息
-    id state = notif.object;
-    if (state && [state boolValue]) {
-        //生成登录消息数据包
-        NSData *loginData = [self generateRequest:RequestTypeLogin uid:USERINFO.userID message:nil];
-        RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-        req.object = loginData;
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-
-    } else {
-        //
-    }//if
-}
-
-
-//收到socket数据回调
+//收到消息
 - (void)detectSocketPacketResponse:(NSNotification *)notif
 {
     //解析消息模型
@@ -267,10 +260,17 @@ static SocketManager *manager = nil;
         else if ([actType isEqualToString:@"undomsg"]){   //撤销消息
             
         }
+        
     }
 }
 
 #pragma mark - 封装消息操作指令
+
+//删除消息
+- (void)deleteMessage:(LGMessage *)message{
+    
+}
+
 //撤销消息 
 - (void)undoMessage:(LGMessage *)message{
     NSData *data = [self generateRequest:RequestTypeUndo uid:0 message:message];

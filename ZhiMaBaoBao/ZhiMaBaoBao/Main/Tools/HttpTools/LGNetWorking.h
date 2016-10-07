@@ -161,35 +161,37 @@
 
 //-------------------------------------------群组---------------------------------------
 /**
- *  添加用户到群组
+ *  创建群组/添加用户到群组
  *
- *  @param sessionId sessionid
- *  @param accounts  openfire帐号，多人用逗号隔开
- *  @param roomId    xmpp群id
- *  @param roomName  群地址
- *  @param block
+ *  @param sessionId sessionId
+ *  @param userIds   朋友的userId(可以是以逗号隔开的字符串)
  */
-+(void)addUserToGroup:(NSString *)sessionId accounts:(NSString *)accounts roomId:(NSString *)roomId roomName:(NSString *)roomName block:(SuccessfulBlock)block;
++ (void)addUserToGroup:(NSString *)sessionId userIds:(NSString *)userIds success:(SuccessfulBlock)success failure:(FailureBlock)failure;
 
 /**
  *  查看群组列表
  *
  *  @param sessionId sessionId
- *  @param account   openfire帐号
- *  @param block
  */
-+(void)getGroupList:(NSString *)sessionId account:(NSString *)account block:(SuccessfulBlock)block;
++(void)getGroupList:(NSString *)sessionId block:(SuccessfulBlock)block failure:(FailureBlock)failure;
 
 /**
  *  查看群详情
  *
  *  @param sessionId sessionId
- *  @param account   当前登录者的即时聊天账号
- *  @param roomId    房间ID
- *  @param name      群的地址
- *  @param block     至少传一个,name和roomid
+ *  @param groupId   群组房间id
  */
-+(void)getGroupInfo:(NSString *)sessionId account:(NSString *)account roomId:(NSString *)roomId name:(NSString *)name block:(SuccessfulBlock)block;
++ (void)getGroupInfo:(NSString *)sessionId groupId:(NSString *)groupId success:(SuccessfulBlock)success failure:(FailureBlock)failure;
+
+/**
+ *  设置群信息
+ *
+ *  @param sessionId    sessionId
+ *  @param groupId      群组房间id
+ *  @param functionName 保存相应的功能:functionName  固定值固定值("聊天置顶","set_chat_top"),("用户在群的昵称","group_nick"),("新消息提示","new_msg_tip"),("保存群到通讯录","save_to_contacts")
+ *  @param value        1 为是 0 为否
+ */
++ (void)setupGroup:(NSString *)sessionId groupId:(NSString *)groupId functionName:(NSString *)functionName value:(NSString *)value success:(SuccessfulBlock)success failure:(FailureBlock)failure;
 
 //加载个人朋友圈主页
 + (void)loadPersonalDiscoverDetailWithSessionID:(NSString *)sessionID andTargetOpenFirAccount:(NSString *)openFirAccount andPageNumber:(NSString *)pageNumber block:(SuccessfulBlock)block;
@@ -230,7 +232,7 @@
 + (void)getAreaWithSessionID:(NSString *)sessionID andProvinceID:(NSString *)provinceID block:(SuccessfulBlock)block;
 
 //设置好友功能
-+ (void)setupFriendFunction:(NSString *)sessionId function:(NSString *)functionName value:(NSInteger)value openfireAccount:(NSString *)account block:(SuccessfulBlock)block;
++ (void)setupFriendFunction:(NSString *)sessionId function:(NSString *)functionName value:(NSString *)value openfireAccount:(NSString *)account block:(SuccessfulBlock)block;
 
 //查询手机联系人是否开通活芝麻、 或已添加
 + (void)queryPhoneBook:(NSString *)sessionId openfire:(NSString *)openfire flag:(NSString *)action phonedata:(NSString *)jsonData block:(SuccessfulBlock)block;

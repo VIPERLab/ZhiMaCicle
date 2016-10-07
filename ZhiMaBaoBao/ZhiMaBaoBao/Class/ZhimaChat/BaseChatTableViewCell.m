@@ -299,12 +299,12 @@
 - (void)onUserIconTap:(UITapGestureRecognizer *)gest
 {
     //判断 如果不是自己 点击头像就查看详情
-    if (!_isMe)
-    {
+//    if (!_isMe)
+//    {
         if (self.delegate != nil && [self.delegate respondsToSelector:@selector(userIconTappedWithIndexPath:)]) {
             [self.delegate userIconTappedWithIndexPath:self.indexPath];
         }
-    }
+//    }
 }
 
 @end

@@ -370,26 +370,21 @@
     }];
 }
 
-//-------------------------------------------群组---------------------------------------
+//-------------------------------------------群组-------------------------------------
 /**
- *  添加用户到群组
+ *  创建群组/添加用户到群组
  *
- *  @param sessionId sessionid
- *  @param accounts  openfire帐号，多人用逗号隔开
- *  @param roomId    xmpp群id
- *  @param roomName  群地址
- *  @param name和roomid至少传一个
+ *  @param sessionId sessionId
+ *  @param userIds   朋友的userId(可以是以逗号隔开的字符串)
  */
-+(void)addUserToGroup:(NSString *)sessionId accounts:(NSString *)accounts roomId:(NSString *)roomId roomName:(NSString *)roomName block:(SuccessfulBlock)block{
++ (void)addUserToGroup:(NSString *)sessionId userIds:(NSString *)userIds success:(SuccessfulBlock)success failure:(FailureBlock)failure{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"sessionId"] = sessionId;
-    param[@"openfireaccount_s"] = accounts;
-    param[@"roomid"] = roomId;
-    param[@"name"] = roomName;
+    param[@"userId_s"] = userIds;
     [HttpTool POST:@"/moblie/addusertoGroup.do" params:param success:^(ResponseData *responseData) {
-        block(responseData);
+        success(responseData);
     } failure:^(ErrorData *error) {
-        
+        failure(error);
     }];
 }
 
@@ -397,17 +392,14 @@
  *  查看群组列表
  *
  *  @param sessionId sessionId
- *  @param account   openfire帐号
- *  @param block
  */
-+(void)getGroupList:(NSString *)sessionId account:(NSString *)account block:(SuccessfulBlock)block{
++(void)getGroupList:(NSString *)sessionId block:(SuccessfulBlock)block failure:(FailureBlock)failure{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"sessionId"] = sessionId;
-    param[@"openfireaccount"] = account;
     [HttpTool POST:@"/moblie/getGroupByuserId.do" params:param success:^(ResponseData *responseData) {
         block(responseData);
     } failure:^(ErrorData *error) {
-        
+        failure(error);
     }];
 }
 
@@ -415,22 +407,39 @@
  *  查看群详情
  *
  *  @param sessionId sessionId
- *  @param account   当前登录者的即时聊天账号
- *  @param roomId    房间ID
- *  @param name      群的地址
- *  @param block     至少传一个,name和roomid
+ *  @param groupId   群组房间id
  */
-+(void)getGroupInfo:(NSString *)sessionId account:(NSString *)account roomId:(NSString *)roomId name:(NSString *)name block:(SuccessfulBlock)block{
++ (void)getGroupInfo:(NSString *)sessionId groupId:(NSString *)groupId success:(SuccessfulBlock)success failure:(FailureBlock)failure{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"sessionId"] = sessionId;
-    param[@"openfireaccount"] = account;
-    param[@"roomid"] = roomId;
-    param[@"name"] = name;
+    param[@"groupid"] = groupId;
+
     [HttpTool POST:@"/moblie/getGroupDetail.do" params:param success:^(ResponseData *json) {
-        block(json);
+        success(json);
     } failure:^(ErrorData *error) {
+        failure(error);
+    }];
+}
+
+/**
+ *  设置群信息
+ *
+ *  @param sessionId    sessionId
+ *  @param groupId      群组房间id
+ *  @param functionName 保存相应的功能:functionName  固定值固定值("聊天置顶","set_chat_top"),("用户在群的昵称","group_nick"),("新消息提示","new_msg_tip"),("保存群到通讯录","save_to_contacts")
+ *  @param value        1 为是 0 为否
+ */
++ (void)setupGroup:(NSString *)sessionId groupId:(NSString *)groupId functionName:(NSString *)functionName value:(NSString *)value success:(SuccessfulBlock)success failure:(FailureBlock)failure{
+    NSMutableDictionary *parms = [NSMutableDictionary dictionary];
+    parms[@"sessionId"] = sessionId;
+    parms[@"groupid"] = groupId;
+    parms[@"functionName"] = functionName;
+    parms[@"value"] = value;
     
-        
+    [HttpTool POST:@"/moblie/getFriendCircleByUserId.do" params:parms success:^(ResponseData *responseData) {
+        success(responseData);
+    } failure:^(ErrorData *error) {
+        failure(error);
     }];
 }
 
@@ -636,11 +645,11 @@
  *  @param account      即时聊天账号
  *  @param block
  */
-+ (void)setupFriendFunction:(NSString *)sessionId function:(NSString *)functionName value:(NSInteger )value openfireAccount:(NSString *)account block:(SuccessfulBlock)block{
++ (void)setupFriendFunction:(NSString *)sessionId function:(NSString *)functionName value:(NSString *)value openfireAccount:(NSString *)account block:(SuccessfulBlock)block{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"sessionId"] = sessionId;
     param[@"functionName"] = functionName;
-    param[@"value"] = @(value);
+    param[@"value"] = value;
     param[@"userId"] = account;
     [HttpTool POST:@"/moblie/setfriend.do" params:param success:^(ResponseData *json) {
         block(json);
@@ -772,5 +781,6 @@
         failure(error);
     }];
 }
+
 
 @end

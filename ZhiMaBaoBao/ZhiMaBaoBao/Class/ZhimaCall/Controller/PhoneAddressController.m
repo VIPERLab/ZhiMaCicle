@@ -17,6 +17,7 @@
 #import "LGQueryCell.h"
 #import "LGQueryResModel.h"
 #import "LGPhoneContactInfoController.h"
+#import "FriendProfilecontroller.h"
 #import <AddressBookUI/ABPeoplePickerNavigationController.h>
 #import <AddressBook/ABPerson.h>
 #import <AddressBookUI/ABPersonViewController.h>
@@ -146,8 +147,6 @@
     if (self.contactsArr) {
         [self.contactsArr removeAllObjects];
     }
-    
-#warning TODO:查询通讯录好友是否开通芝麻
     
     [LGNetWorking queryPhoneBook:USERINFO.sessionId openfire:USERINFO.userID flag:@"check" phonedata:self.jsonStr block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
@@ -505,7 +504,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    //如果已添加为好友，跳转到好友详情
+    //，跳转到好友详情
     if (self.isAddPhoneFriend) {
         NSInteger rowNum = 0;
         for (int i = 0; i < indexPath.section; i++) {
@@ -515,14 +514,9 @@
         LGQueryResModel *model = self.nameAry[rowNum + indexPath.row];
         
 #warning TODO:跳转到好友详情
-        /*
-        YiUserInfoViewController *vc = [[YiUserInfoViewController alloc] init];
-        vc.jid = [NSString stringWithFormat:@"%@@localhost",model.openfireaccount];
-        if (model.isadd == 0 || model.isadd == 2) {
-            vc.isAddFriend = YES;
-        }
+        FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
+        vc.userId = model.openfireaccount;
         [self.navigationController pushViewController:vc animated:YES];
-         */
 
     }
     //跳转到手机联系人详情页

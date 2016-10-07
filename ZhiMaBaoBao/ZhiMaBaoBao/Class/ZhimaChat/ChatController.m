@@ -36,6 +36,8 @@
 
 #import "ForwardMsgController.h"    //消息转发控制器
 #import "BaseNavigationController.h"
+#import "FriendProfilecontroller.h"
+#import "ConverseModel.h"   //会话模型
 
 
 @interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate>
@@ -74,7 +76,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self setCustomTitle:self.conversionName];
+    
     [self setupNavRightItem];
     [self addSubviews];
     //初始化录音
@@ -84,6 +86,16 @@ static NSString *const reuseIdentifier = @"messageCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage:) name:kRecieveNewMessage object:nil];
     //监听消息发送状态回调
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMsgStatuescall:) name:kSendMessageStateCall object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    //通过id查数据库最新会话名->设置为标题
+    //1.先通过id查会话
+    ConverseModel *convesion = [FMDBShareManager searchConverseWithConverseID:self.conversionId];
+    [self setCustomTitle:convesion.converseName];
+
 }
 
 //设置导航栏右侧按钮
@@ -720,9 +732,6 @@ static NSString *const reuseIdentifier = @"messageCell";
 //点击单元格收起键盘
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.keyboard keyboardDown];
-    ForwardMsgController *vc = [[ForwardMsgController alloc] init];
-    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:nav animated:YES completion:nil];
 }
 
 //滑动tableview,收起键盘
@@ -734,6 +743,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)userIconTappedWithIndexPath:(NSIndexPath *)indexPath
 {
+    FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
+    LGMessage * message = [self.messages objectAtIndex:indexPath.row];
+    vc.userId = message.fromUid;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)deleteButtonTappedWithIndexPath:(NSIndexPath *)indexPath

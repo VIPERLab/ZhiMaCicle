@@ -9,6 +9,7 @@
 #import "NearByPeopleController.h"
 #import "NearByModel.h"
 #import "NearByPeopleCell.h"
+#import "FriendProfilecontroller.h"
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
 #import <BaiduMapAPI_Search/BMKSearchComponent.h>
 #import <BaiduMapAPI_Location/BMKLocationService.h>
@@ -109,6 +110,13 @@
     cell.iconName = model.head_photo;
     cell.distance = model.distance;
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NearByModel *model = self.dataArr[indexPath.row];
+
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -514,16 +514,15 @@
 		319069E41D9CF3B800D1D6D2 /* LGPhotosView.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069E31D9CF3B800D1D6D2 /* LGPhotosView.m */; };
 		319069E81D9D471E00D1D6D2 /* SetupFriendInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069E61D9D471E00D1D6D2 /* SetupFriendInfoController.m */; };
 		319069E91D9D471E00D1D6D2 /* SetupFriendInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069E71D9D471E00D1D6D2 /* SetupFriendInfoController.xib */; };
-
-		319069F01D9E1C1300D1D6D2 /* LGChatInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069EC1D9E1C1300D1D6D2 /* LGChatInfoController.m */; };
-		319069F11D9E1C1300D1D6D2 /* LGChatInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319069ED1D9E1C1300D1D6D2 /* LGChatInfoController.xib */; };
-		319069F21D9E1C1300D1D6D2 /* LGGroupChatInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069EF1D9E1C1300D1D6D2 /* LGGroupChatInfoController.m */; };
 		319EA0031DA493C6000EE216 /* CreateGroupChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA0021DA493C6000EE216 /* CreateGroupChatController.m */; };
 		319EA0081DA49A4F000EE216 /* CreateGroupListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA0061DA49A4F000EE216 /* CreateGroupListCell.m */; };
 		319EA0091DA49A4F000EE216 /* CreateGroupListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319EA0071DA49A4F000EE216 /* CreateGroupListCell.xib */; };
 		319EA00D1DA4DA09000EE216 /* ForwardMsgController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA00C1DA4DA09000EE216 /* ForwardMsgController.m */; };
 		319EA0111DA4E13D000EE216 /* AvtarAndNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA00F1DA4E13D000EE216 /* AvtarAndNameCell.m */; };
 		319EA0121DA4E13D000EE216 /* AvtarAndNameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319EA0101DA4E13D000EE216 /* AvtarAndNameCell.xib */; };
+		319EA0151DA4FB62000EE216 /* GroupChatListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA0141DA4FB62000EE216 /* GroupChatListController.m */; };
+		319EA0181DA62A44000EE216 /* GroupUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA0171DA62A44000EE216 /* GroupUserModel.m */; };
+		319EA01B1DA65214000EE216 /* RemarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA01A1DA65214000EE216 /* RemarkController.m */; };
 		31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C6FD1D8E91F000F1883A /* MainViewController.m */; };
 		31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7021D8E96A100F1883A /* PersonalCenterController.m */; };
 		31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C70E1D8E96A100F1883A /* ConversationController.m */; };
@@ -1573,12 +1572,6 @@
 		319069E51D9D471E00D1D6D2 /* SetupFriendInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupFriendInfoController.h; sourceTree = "<group>"; };
 		319069E61D9D471E00D1D6D2 /* SetupFriendInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupFriendInfoController.m; sourceTree = "<group>"; };
 		319069E71D9D471E00D1D6D2 /* SetupFriendInfoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetupFriendInfoController.xib; sourceTree = "<group>"; };
-
-		319069EB1D9E1C1300D1D6D2 /* LGChatInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGChatInfoController.h; sourceTree = "<group>"; };
-		319069EC1D9E1C1300D1D6D2 /* LGChatInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGChatInfoController.m; sourceTree = "<group>"; };
-		319069ED1D9E1C1300D1D6D2 /* LGChatInfoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LGChatInfoController.xib; sourceTree = "<group>"; };
-		319069EE1D9E1C1300D1D6D2 /* LGGroupChatInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGGroupChatInfoController.h; sourceTree = "<group>"; };
-		319069EF1D9E1C1300D1D6D2 /* LGGroupChatInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGGroupChatInfoController.m; sourceTree = "<group>"; };
 		319EA0011DA493C6000EE216 /* CreateGroupChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateGroupChatController.h; sourceTree = "<group>"; };
 		319EA0021DA493C6000EE216 /* CreateGroupChatController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateGroupChatController.m; sourceTree = "<group>"; };
 		319EA0051DA49A4F000EE216 /* CreateGroupListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateGroupListCell.h; sourceTree = "<group>"; };
@@ -1589,6 +1582,12 @@
 		319EA00E1DA4E13D000EE216 /* AvtarAndNameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvtarAndNameCell.h; sourceTree = "<group>"; };
 		319EA00F1DA4E13D000EE216 /* AvtarAndNameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvtarAndNameCell.m; sourceTree = "<group>"; };
 		319EA0101DA4E13D000EE216 /* AvtarAndNameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AvtarAndNameCell.xib; sourceTree = "<group>"; };
+		319EA0131DA4FB62000EE216 /* GroupChatListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatListController.h; sourceTree = "<group>"; };
+		319EA0141DA4FB62000EE216 /* GroupChatListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatListController.m; sourceTree = "<group>"; };
+		319EA0161DA62A44000EE216 /* GroupUserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupUserModel.h; sourceTree = "<group>"; };
+		319EA0171DA62A44000EE216 /* GroupUserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupUserModel.m; sourceTree = "<group>"; };
+		319EA0191DA65214000EE216 /* RemarkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemarkController.h; sourceTree = "<group>"; };
+		319EA01A1DA65214000EE216 /* RemarkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemarkController.m; sourceTree = "<group>"; };
 		31B7C6FC1D8E91F000F1883A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		31B7C6FD1D8E91F000F1883A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		31B7C7011D8E96A100F1883A /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
@@ -1839,6 +1838,8 @@
 				04CBF50B1D9BE61900CBB609 /* Model */,
 				319EA0011DA493C6000EE216 /* CreateGroupChatController.h */,
 				319EA0021DA493C6000EE216 /* CreateGroupChatController.m */,
+				319EA0131DA4FB62000EE216 /* GroupChatListController.h */,
+				319EA0141DA4FB62000EE216 /* GroupChatListController.m */,
 			);
 			name = "GroupChat(群聊)";
 			path = GroupChat;
@@ -1849,6 +1850,8 @@
 			children = (
 				04CBF50C1D9BE64700CBB609 /* GroupChatModel.h */,
 				04CBF50D1D9BE64700CBB609 /* GroupChatModel.m */,
+				319EA0161DA62A44000EE216 /* GroupUserModel.h */,
+				319EA0171DA62A44000EE216 /* GroupUserModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -4110,6 +4113,8 @@
 				319069D71D9CE91700D1D6D2 /* Cell */,
 				319069D41D9CE56100D1D6D2 /* FriendProfilecontroller.h */,
 				319069D51D9CE56100D1D6D2 /* FriendProfilecontroller.m */,
+				319EA0191DA65214000EE216 /* RemarkController.h */,
+				319EA01A1DA65214000EE216 /* RemarkController.m */,
 				319069E51D9D471E00D1D6D2 /* SetupFriendInfoController.h */,
 				319069E61D9D471E00D1D6D2 /* SetupFriendInfoController.m */,
 				319069E71D9D471E00D1D6D2 /* SetupFriendInfoController.xib */,
@@ -4130,19 +4135,6 @@
 				319069DA1D9CE91F00D1D6D2 /* InfoHeaderCell.xib */,
 			);
 			name = Cell;
-			sourceTree = "<group>";
-		};
-
-		319069EA1D9E1B9300D1D6D2 /* ChatRoomInfo(聊天室资料) */ = {
-			isa = PBXGroup;
-			children = (
-				319069EB1D9E1C1300D1D6D2 /* LGChatInfoController.h */,
-				319069EC1D9E1C1300D1D6D2 /* LGChatInfoController.m */,
-				319069ED1D9E1C1300D1D6D2 /* LGChatInfoController.xib */,
-				319069EE1D9E1C1300D1D6D2 /* LGGroupChatInfoController.h */,
-				319069EF1D9E1C1300D1D6D2 /* LGGroupChatInfoController.m */,
-			);
-			name = "ChatRoomInfo(聊天室资料)";
 			sourceTree = "<group>";
 		};
 		319EA0041DA49A25000EE216 /* Cell */ = {
@@ -4167,7 +4159,6 @@
 			name = "Forward(转发)";
 			sourceTree = "<group>";
 		};
-
 		31B7C6CB1D8E89D700F1883A /* Class */ = {
 			isa = PBXGroup;
 			children = (
@@ -4313,7 +4304,6 @@
 				041750A71DA4C97100DCD7A9 /* GroupChatRoomInfo(群聊详情页) */,
 				041750911DA4950800DCD7A9 /* ChatRoomInfo(单聊详情页) */,
 				319EA00A1DA4D8A0000EE216 /* Forward(转发) */,
-				319069EA1D9E1B9300D1D6D2 /* ChatRoomInfo(聊天室资料) */,
 				04CBF50A1D9BE5F600CBB609 /* GroupChat(群聊) */,
 				311CEF2C1D92182400BBB1F9 /* Chat(聊天) */,
 				316957511D90E5C900140126 /* AddFriends(添加好友) */,
@@ -4642,6 +4632,14 @@
 					310B831F1D8E7B0100A0F408 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = C74GJQS7VJ;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					310B83381D8E7B0100A0F408 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -4925,6 +4923,7 @@
 				316957561D90E63100140126 /* LGAddFriendCell.m in Sources */,
 				311CEF2F1D92185D00BBB1F9 /* ChatController.m in Sources */,
 				31B7C75C1D8FB33E00F1883A /* LGLoginController.m in Sources */,
+				319EA01B1DA65214000EE216 /* RemarkController.m in Sources */,
 				31B7C75D1D8FB33E00F1883A /* LGRegisterController.m in Sources */,
 				04EA7D9C1D912872005E5425 /* ZXHybridBinarizer.m in Sources */,
 				31B7C7A01D8FE71F00F1883A /* LGPhoneNumberCell.m in Sources */,
@@ -5070,6 +5069,7 @@
 				04EA7AC81D910F89005E5425 /* DNPhotoBrowser.m in Sources */,
 				04F57AB41D9280BD002A6471 /* SDTimeLineCellCommentView.m in Sources */,
 				04EA798A1D8FBCF3005E5425 /* LGBlackListViewController.m in Sources */,
+				319EA0151DA4FB62000EE216 /* GroupChatListController.m in Sources */,
 				319EA0031DA493C6000EE216 /* CreateGroupChatController.m in Sources */,
 				04EA7DDA1D912872005E5425 /* ZXBitArrayBuilder.m in Sources */,
 				04F862951D94FC7900DCC6FE /* MorePanel.m in Sources */,
@@ -5234,6 +5234,7 @@
 				04F8621B1D94F6FC00DCC6FE /* NearByModel.m in Sources */,
 				04EA7D871D912872005E5425 /* ZXCapture.m in Sources */,
 				04EA7E271D912872005E5425 /* ZXQRCode.m in Sources */,
+				319EA0181DA62A44000EE216 /* GroupUserModel.m in Sources */,
 				D5C8B3B01D9A08A9007D6B5C /* TQRichTextView.m in Sources */,
 				04EA7DA11D912872005E5425 /* ZXBinaryBitmap.m in Sources */,
 				319069C11D9BF6F700D1D6D2 /* NewFriendsListCell.m in Sources */,
