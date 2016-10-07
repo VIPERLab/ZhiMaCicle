@@ -403,11 +403,17 @@
         }];
     }
     
+    [imagePickerController dismissViewControllerAnimated:YES completion:^{
+        self.tabBarController.tabBar.hidden = YES;
+    }];
 }
 
 
 - (void)dnImagePickerControllerDidCancel:(DNImagePickerController *)imagePicker {
-    [imagePicker dismissViewControllerAnimated:YES completion:nil];
+    [imagePicker dismissViewControllerAnimated:YES completion:^{
+        self.tabBarController.tabBar.hidden = YES;
+    }];
+    
 }
 
 

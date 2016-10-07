@@ -77,6 +77,7 @@
 
 // ------ 投诉专用中间变量
 @property (nonatomic, weak) SDTimeLineCellModel *complainModel;
+@property (nonatomic, weak) SDTimeLineCell *tempCell;
 
 // ------ 复制、收藏中间变量
 @property (nonatomic, weak) UILabel *contentLabel;
@@ -509,6 +510,7 @@
         self.tempIndexPath = indexPath;
         
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"是否要删除评论" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alertView.tag = 100;
         [alertView show];
         
         return;
@@ -526,9 +528,34 @@
 
 #pragma mark - alertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex != 0) {
-        [self deleteMyComment:self.tempCommentItemModel andDiscoverCellIndex:self.tempIndexPath];
+    if (alertView.tag == 100) {
+        if (buttonIndex != 0) {
+            [self deleteMyComment:self.tempCommentItemModel andDiscoverCellIndex:self.tempIndexPath];
+        }
+    } else if (alertView.tag == 1) {
+        if (buttonIndex != 0) {
+            
+            [LGNetWorking DeletedMyDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFcid:_tempCell.model.circle_ID block:^(ResponseData *responseData) {
+                
+                if (responseData.code != 0) {
+                    [LCProgressHUD showFailureText:responseData.msg];
+                }
+                
+                [FMDBShareManager deleteCircleDataWithCircleID:_tempCell.model.circle_ID];
+                for (SDTimeLineCellModel *model in self.dataArray) {
+                    if ([model.circle_ID isEqualToString:_tempCell.model.circle_ID]) {
+                        [self.dataArray removeObject:model];
+                        break;
+                    }
+                }
+                
+                [self.tableView reloadData];
+                
+            }];
+
+        }
     }
+    
 }
 
 #pragma mark - 发送评论信息
@@ -688,19 +715,11 @@
 // ----      点击了投诉按钮
 - (void)didClickComplainButton:(SDTimeLineCell *)cell {
     if ([cell.model.userId isEqualToString:USERINFO.userID]) {
+        self.tempCell = cell;
         // 删除自己的朋友圈
-        [LGNetWorking DeletedMyDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFcid:cell.model.circle_ID block:^(ResponseData *responseData) {
-            
-            if (responseData.code != 0) {
-                [LCProgressHUD showFailureText:responseData.msg];
-            }
-            
-            [LCProgressHUD showSuccessText:responseData.msg];
-            [FMDBShareManager deleteCircleDataWithCircleID:cell.model.circle_ID];
-            [self getDataFromSQL];
-            
-            
-        }];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"确认删除吗？" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alertView.tag = 1;
+        [alertView show];
         return;
     }
     [self didLongPressUserIconWithCell:cell];

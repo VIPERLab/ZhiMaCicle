@@ -103,7 +103,7 @@
     UIButton *nextButton = [[UIButton alloc] initWithFrame:CGRectMake(nextButtonX, nextButtonY, nextButtonW, nextButtonH)];
     nextButton.tag = self.buttonArray.count;
     [nextButton addTarget:self action:@selector(addPhotoButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
-    [nextButton setImage:[UIImage imageNamed:@"NewDiscover_AddPhoto"] forState:UIControlStateNormal];
+    [nextButton setBackgroundImage:[UIImage imageNamed:@"NewDiscover_AddPhoto"] forState:UIControlStateNormal];
     [self addSubview:nextButton];
     
     if (self.buttonArray.count > 9) {
