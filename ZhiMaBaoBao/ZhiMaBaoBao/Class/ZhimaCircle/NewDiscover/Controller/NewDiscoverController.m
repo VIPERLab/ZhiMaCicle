@@ -372,6 +372,9 @@
             } failureBlock:^(NSError *error) {
                 
             }];
+            [imagePickerController dismissViewControllerAnimated:YES completion:^{
+                self.tabBarController.tabBar.hidden = YES;
+            }];
             return;
         }
     }

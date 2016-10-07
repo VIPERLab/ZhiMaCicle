@@ -177,11 +177,6 @@
 }
 
 
-
-
-
-
-
 - (void)showError:(NSString*)str
 {
     [LBXAlertAction showAlertWithTitle:@"提示" msg:str chooseBlock:nil buttonsStatement:@"知道了",nil];

@@ -178,6 +178,7 @@
 // ------   评论按钮
 - (void)DiscoverDetailOperationButtonDidClickComment:(DiscoverDetailHeaderView *)view {
     self.commentUserID = @"";
+    self.chatKeyBoard.placeHolder = @"";
     [self.chatKeyBoard keyboardUpforComment];
 }
 

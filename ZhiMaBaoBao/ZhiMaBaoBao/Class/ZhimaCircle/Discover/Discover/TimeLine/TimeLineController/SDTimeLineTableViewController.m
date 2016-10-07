@@ -319,7 +319,7 @@
     // 异步获取数据库
     dispatch_async(dispatch_queue_create(0, 0), ^{
         
-        self.dataArray = [[FMDBShareManager getCirCleDataInArrayWithPage:1] mutableCopy];
+        self.dataArray = [[FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber] mutableCopy];
         
         //返回主线程更新ui
         dispatch_async(dispatch_get_main_queue(), ^{
