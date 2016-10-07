@@ -7,10 +7,10 @@
 //  设置朋友圈权限
 
 #import "SetupCircleLimitController.h"
-//#import "FriendInfo.h"
+#import "ZhiMaFriendModel.h"
 
 @interface SetupCircleLimitController ()
-//@property (nonatomic, strong) FriendInfo *friendInfo;   //存放好友信息数据
+@property (nonatomic, strong) ZhiMaFriendModel *friendInfo;   //存放好友信息数据
 @property (nonatomic, strong) UISwitch *switch1;
 @property (nonatomic, strong) UISwitch *switch2;
 
@@ -22,14 +22,21 @@
     [super viewDidLoad];
 
     //请求好友朋友圈权限状态
-    [self requestData];
+    
     [self addAllSubviews];
+    [self requestData];
 }
 
 //请求好友朋友圈权限状态
 - (void)requestData{
     //调用本地好友信息接口
     [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.model.userId block:^(ResponseData *responseData) {
+        if (responseData.code != 0) {
+            return ;
+        }
+        
+        self.switch1.on = [responseData.data[@"notread_my_cricles"] intValue];
+        self.switch2.on = [responseData.data[@"notread_his_cricles"] intValue];
         
     } failure:^(ErrorData *error) {
         
@@ -105,28 +112,28 @@
 }
 //不让他看我的朋友圈
 - (void)notLookMyCircle:(UISwitch *)sender{
-//    NSInteger value = sender.on;
-//    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:value openfireAccount:self.friendInfo.openfireaccount block:^(ResponseData *responseData) {
-//        if (responseData.code == 0) {
-//            
-//        }else{
-//            [LCProgressHUD showText:responseData.msg];
-//            
-//        }
-//    }];
+    NSInteger value = sender.on;
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:value openfireAccount:self.model.userId block:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            
+        }else{
+            [LCProgressHUD showText:responseData.msg];
+            
+        }
+    }];
 
 }
 
 //不看他的朋友圈
 - (void)notLookHisCircle:(UISwitch *)sender{
-//    NSInteger value = sender.on;
-//    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:value openfireAccount:self.friendInfo.openfireaccount block:^(ResponseData *responseData) {
-//        if (responseData.code == 0) {
-//            
-//        }else{
-//            [LCProgressHUD showText:responseData.msg];
-//        }
-//    }];
+    NSInteger value = sender.on;
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:value openfireAccount:self.model.userId block:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            
+        }else{
+            [LCProgressHUD showText:responseData.msg];
+        }
+    }];
 }
 
 - (void)closeAction{
