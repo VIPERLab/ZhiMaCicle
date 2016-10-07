@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040FE26C1DA7720E00EF435F /* ZhiMaCollectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FE26B1DA7720E00EF435F /* ZhiMaCollectionController.m */; };
+		040FE2711DA7733000EF435F /* ZhiMaCollectionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FE2701DA7733000EF435F /* ZhiMaCollectionModel.m */; };
+		040FE2741DA7763100EF435F /* ZhiMaCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FE2731DA7763100EF435F /* ZhiMaCollectionCell.m */; };
+		040FE2781DA77EDA00EF435F /* ZhiMaCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FE2771DA77EDA00EF435F /* ZhiMaCollectionHeaderView.m */; };
+		040FE27B1DA78A2000EF435F /* ZhiMaCollectionDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FE27A1DA78A2000EF435F /* ZhiMaCollectionDetailController.m */; };
 		041750991DA4950900DCD7A9 /* LGGroupChatInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750961DA4950800DCD7A9 /* LGGroupChatInfoController.m */; };
 		0417509C1DA4952D00DCD7A9 /* ChatRoomInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417509B1DA4952D00DCD7A9 /* ChatRoomInfoController.m */; };
 		041750A01DA499B600DCD7A9 /* ChatInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417509F1DA499B600DCD7A9 /* ChatInfoCell.m */; };
@@ -592,6 +597,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		040FE26A1DA7720E00EF435F /* ZhiMaCollectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaCollectionController.h; sourceTree = "<group>"; };
+		040FE26B1DA7720E00EF435F /* ZhiMaCollectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCollectionController.m; sourceTree = "<group>"; };
+		040FE26F1DA7733000EF435F /* ZhiMaCollectionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaCollectionModel.h; sourceTree = "<group>"; };
+		040FE2701DA7733000EF435F /* ZhiMaCollectionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCollectionModel.m; sourceTree = "<group>"; };
+		040FE2721DA7763100EF435F /* ZhiMaCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaCollectionCell.h; sourceTree = "<group>"; };
+		040FE2731DA7763100EF435F /* ZhiMaCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCollectionCell.m; sourceTree = "<group>"; };
+		040FE2761DA77EDA00EF435F /* ZhiMaCollectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaCollectionHeaderView.h; sourceTree = "<group>"; };
+		040FE2771DA77EDA00EF435F /* ZhiMaCollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCollectionHeaderView.m; sourceTree = "<group>"; };
+		040FE2791DA78A2000EF435F /* ZhiMaCollectionDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaCollectionDetailController.h; sourceTree = "<group>"; };
+		040FE27A1DA78A2000EF435F /* ZhiMaCollectionDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCollectionDetailController.m; sourceTree = "<group>"; };
 		041750951DA4950800DCD7A9 /* LGGroupChatInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGGroupChatInfoController.h; sourceTree = "<group>"; };
 		041750961DA4950800DCD7A9 /* LGGroupChatInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGGroupChatInfoController.m; sourceTree = "<group>"; };
 		0417509A1DA4952D00DCD7A9 /* ChatRoomInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomInfoController.h; sourceTree = "<group>"; };
@@ -1745,6 +1760,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		040FE2691DA771F500EF435F /* ZhiMaCollection(收藏) */ = {
+			isa = PBXGroup;
+			children = (
+				040FE2751DA77ECA00EF435F /* View */,
+				040FE26D1DA7732300EF435F /* Cell */,
+				040FE26E1DA7732300EF435F /* Model */,
+				040FE26A1DA7720E00EF435F /* ZhiMaCollectionController.h */,
+				040FE26B1DA7720E00EF435F /* ZhiMaCollectionController.m */,
+				040FE2791DA78A2000EF435F /* ZhiMaCollectionDetailController.h */,
+				040FE27A1DA78A2000EF435F /* ZhiMaCollectionDetailController.m */,
+			);
+			name = "ZhiMaCollection(收藏)";
+			path = ZhiMaCollection;
+			sourceTree = "<group>";
+		};
+		040FE26D1DA7732300EF435F /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				040FE2721DA7763100EF435F /* ZhiMaCollectionCell.h */,
+				040FE2731DA7763100EF435F /* ZhiMaCollectionCell.m */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		040FE26E1DA7732300EF435F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				040FE26F1DA7733000EF435F /* ZhiMaCollectionModel.h */,
+				040FE2701DA7733000EF435F /* ZhiMaCollectionModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		040FE2751DA77ECA00EF435F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				040FE2761DA77EDA00EF435F /* ZhiMaCollectionHeaderView.h */,
+				040FE2771DA77EDA00EF435F /* ZhiMaCollectionHeaderView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		041750911DA4950800DCD7A9 /* ChatRoomInfo(单聊详情页) */ = {
 			isa = PBXGroup;
 			children = (
@@ -4198,6 +4255,7 @@
 		31B7C7001D8E96A100F1883A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				040FE2691DA771F500EF435F /* ZhiMaCollection(收藏) */,
 				0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */,
 				04F5760D1D9224F2002A6471 /* ModifySign(个性签名) */,
 				04F576091D9220FA002A6471 /* ChangeName(修改用户名) */,
@@ -4869,6 +4927,7 @@
 				04EA79E31D90E9F7005E5425 /* KXMoneyDetailModel.m in Sources */,
 				04EA7D651D912872005E5425 /* ZXAddressBookDoCoMoResultParser.m in Sources */,
 				04F862CE1D9554AA00DCC6FE /* UserMessageModel.m in Sources */,
+				040FE2711DA7733000EF435F /* ZhiMaCollectionModel.m in Sources */,
 				04EA79DC1D90E9F7005E5425 /* ChangeMoenySubController.m in Sources */,
 				04EA7DB21D912872005E5425 /* ZXDataMatrixDetector.m in Sources */,
 				04EA7D5F1D912872005E5425 /* ZXAztecToken.m in Sources */,
@@ -4952,6 +5011,7 @@
 				04EA7DFF1D912872005E5425 /* ZXModulusPoly.m in Sources */,
 				04EA7AD21D910F89005E5425 /* DNFullImageButton.m in Sources */,
 				04EA7D7F1D912872005E5425 /* ZXURIResultParser.m in Sources */,
+				040FE26C1DA7720E00EF435F /* ZhiMaCollectionController.m in Sources */,
 				31B7C72A1D8F845000F1883A /* LogResBaseController.m in Sources */,
 				04F5774E1D9277E8002A6471 /* BaseTableViewController.m in Sources */,
 				04EA7AC31D910F89005E5425 /* DNAlbumTableViewController.m in Sources */,
@@ -4987,6 +5047,7 @@
 				04EA7DE31D912872005E5425 /* ZXRSSUtils.m in Sources */,
 				04EA7DC11D912872005E5425 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
 				04F862921D94FC7900DCC6FE /* FacePanel.m in Sources */,
+				040FE27B1DA78A2000EF435F /* ZhiMaCollectionDetailController.m in Sources */,
 				04EA7E041D912872005E5425 /* ZXPDF417Codeword.m in Sources */,
 				04F57AB51D9280BD002A6471 /* SDTimeLineTableHeaderView.m in Sources */,
 				04EA7D751D912872005E5425 /* ZXProductResultParser.m in Sources */,
@@ -5008,6 +5069,7 @@
 				04EA7DAF1D912872005E5425 /* ZXDataMatrixDecodedBitStreamParser.m in Sources */,
 				04EA7E311D912872005E5425 /* ZXMultiFormatReader.m in Sources */,
 				04EA7B171D9125C5005E5425 /* KXLocationCell.m in Sources */,
+				040FE2741DA7763100EF435F /* ZhiMaCollectionCell.m in Sources */,
 				04EA7DC51D912872005E5425 /* ZXByQuadrantReader.m in Sources */,
 				04EA7D951D912872005E5425 /* ZXByteArray.m in Sources */,
 				04F57AB21D9280BD002A6471 /* SDTimeLineTableViewController.m in Sources */,
@@ -5240,6 +5302,7 @@
 				319069C11D9BF6F700D1D6D2 /* NewFriendsListCell.m in Sources */,
 				04EA7E141D912872005E5425 /* ZXPDF417Reader.m in Sources */,
 				04EA7B191D9125C5005E5425 /* KXLocationModel.m in Sources */,
+				040FE2781DA77EDA00EF435F /* ZhiMaCollectionHeaderView.m in Sources */,
 				04F8628B1D94FC7900DCC6FE /* FaceThemeModel.m in Sources */,
 				04EA7AC41D910F89005E5425 /* DNAsset.m in Sources */,
 				04EA7D761D912872005E5425 /* ZXResultParser.m in Sources */,

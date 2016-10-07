@@ -113,7 +113,7 @@
 //不让他看我的朋友圈
 - (void)notLookMyCircle:(UISwitch *)sender{
     NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:value openfireAccount:self.model.userId block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:[NSString stringWithFormat:@"%zd",value] openfireAccount:self.model.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             
         }else{
@@ -127,7 +127,7 @@
 //不看他的朋友圈
 - (void)notLookHisCircle:(UISwitch *)sender{
     NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:value openfireAccount:self.model.userId block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:[NSString stringWithFormat:@"%zd",value] openfireAccount:self.model.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             
         }else{
