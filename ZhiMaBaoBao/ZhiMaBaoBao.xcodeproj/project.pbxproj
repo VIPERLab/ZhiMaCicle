@@ -474,6 +474,7 @@
 		311CEFB81D93D98700BBB1F9 /* BuddleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFB71D93D98700BBB1F9 /* BuddleView.m */; };
 		311CEFBB1D93F55000BBB1F9 /* SocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFBA1D93F55000BBB1F9 /* SocketManager.m */; };
 		311CEFBD1D94D9C000BBB1F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */; };
+		3138F4051DA795990042D100 /* CallKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3138F4041DA795990042D100 /* CallKeyboardController.m */; };
 		316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957461D90D3DE00140126 /* KXPersonalCenterCell.m */; };
 		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
 		316957561D90E63100140126 /* LGAddFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957541D90E63100140126 /* LGAddFriendCell.m */; };
@@ -1512,6 +1513,8 @@
 		311CEFB91D93F55000BBB1F9 /* SocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketManager.h; path = HttpTools/SocketManager.h; sourceTree = "<group>"; };
 		311CEFBA1D93F55000BBB1F9 /* SocketManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SocketManager.m; path = HttpTools/SocketManager.m; sourceTree = "<group>"; };
 		311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		3138F4031DA795990042D100 /* CallKeyboardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallKeyboardController.h; sourceTree = "<group>"; };
+		3138F4041DA795990042D100 /* CallKeyboardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallKeyboardController.m; sourceTree = "<group>"; };
 		316957451D90D3DE00140126 /* KXPersonalCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPersonalCenterCell.h; sourceTree = "<group>"; };
 		316957461D90D3DE00140126 /* KXPersonalCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPersonalCenterCell.m; sourceTree = "<group>"; };
 		3169574B1D90E24A00140126 /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
@@ -4250,6 +4253,8 @@
 			children = (
 				311CEF6C1D921F6100BBB1F9 /* CallViewController.h */,
 				311CEF6D1D921F6100BBB1F9 /* CallViewController.m */,
+				3138F4031DA795990042D100 /* CallKeyboardController.h */,
+				3138F4041DA795990042D100 /* CallKeyboardController.m */,
 				31B7C77D1D8FE69E00F1883A /* PhoneAddressController.h */,
 				31B7C77E1D8FE69E00F1883A /* PhoneAddressController.m */,
 				311CEF721D921F8800BBB1F9 /* LGPhoneContactInfoController.h */,
@@ -5181,6 +5186,7 @@
 				04EA7DD71D912872005E5425 /* ZXRSSExpandedDecodedObject.m in Sources */,
 				04EA7E1A1D912872005E5425 /* ZXQRCodeDecodedBitStreamParser.m in Sources */,
 				31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */,
+				3138F4051DA795990042D100 /* CallKeyboardController.m in Sources */,
 				04F862531D94FC6D00DCC6FE /* NSAttributedString+MLExpression.m in Sources */,
 				04EA7A8F1D9107C0005E5425 /* APAuthV2Info.m in Sources */,
 				04EA7E301D912872005E5425 /* ZXQRCodeWriter.m in Sources */,
