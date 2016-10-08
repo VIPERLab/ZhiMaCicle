@@ -10,10 +10,10 @@
 #import "GroupUserModel.h"
 
 @interface GroupChatModel : NSObject
-//converseId TEXT NOT NULL, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER
+//groupId TEXT NOT NULL, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER
 
-/* 会话id */
-@property (nonatomic, copy) NSString *converseId;
+///* 会话id */
+//@property (nonatomic, copy) NSString *converseId;
 
 /* 群聊id */
 @property (nonatomic, copy) NSString *groupId;
@@ -56,9 +56,6 @@
 
 /* 是否保存到通讯录 0：否 1：是 */
 @property (nonatomic, assign) BOOL saveToMailList;
-
-
-
 
 
 @end

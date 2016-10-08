@@ -260,6 +260,16 @@ static SocketManager *manager = nil;
         else if ([actType isEqualToString:@"undomsg"]){   //撤销消息
             
         }
+        else if ([actType isEqualToString:@"updategroupuser"]){ //群用户修改群昵称
+            
+        }
+        else if ([actType isEqualToString:@"nofriend"]){ //对方把你删除好友，
+            //插入一条系统消息"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天。"到数据库
+        }
+        else if ([actType isEqualToString:@"inblacklist"]){ //对方把你设为黑名单
+            
+        }
+        
         
     }
 }
@@ -327,13 +337,13 @@ static SocketManager *manager = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
-//删除好友
-- (void)delFriend:(NSString *)friendId{
-    NSData *data = [self generateFriendActType:FriendActTypeDel friendId:friendId];
-    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = data;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-}
+////删除好友
+//- (void)delFriend:(NSString *)friendId{
+//    NSData *data = [self generateFriendActType:FriendActTypeDel friendId:friendId];
+//    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+//    req.object = data;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+//}
 
 //加入黑名单
 - (void)dragToBlack:(NSString *)friendId{
@@ -513,9 +523,9 @@ static SocketManager *manager = nil;
         }
             
             break;
-        case FriendActTypeDel:{     //删除好友
-            methodName = @"delFriend";
-        }
+//        case FriendActTypeDel:{     //删除好友
+//            methodName = @"delFriend";
+//        }
             
             break;
         case FriendActTypeBlack:{   //加入黑名单

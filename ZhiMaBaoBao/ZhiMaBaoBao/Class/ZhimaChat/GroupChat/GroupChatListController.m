@@ -63,7 +63,7 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
             [self addAllSubviews];
             self.dataArr = [GroupChatModel mj_objectArrayWithKeyValuesArray:responseData.data];
         }else{
-            [LCProgressHUD showFailureText:responseData.msg];
+//            [LCProgressHUD showFailureText:responseData.msg];
         }
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:error.msg];

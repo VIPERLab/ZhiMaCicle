@@ -20,9 +20,11 @@
 #import "PhoneContact.h"
 #import "LGPhoneContactInfoController.h"
 #import "CallSettingController.h"
+#import "CallKeyboardController.h"
 #import <AddressBookUI/ABPeoplePickerNavigationController.h>
 #import <AddressBook/ABPerson.h>
 #import <AddressBookUI/ABPersonViewController.h>
+#import "POP.h"
 
 @interface CallViewController ()<UITableViewDelegate,UITableViewDataSource,YiKeyBoardViewDelegate,CallBarDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -378,6 +380,12 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
     PhoneAddressController *vc = [[PhoneAddressController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
+//    CallKeyboardController *vc = [[CallKeyboardController alloc] init];
+//    
+//    [self presentViewController:vc animated:YES completion:nil];
+
+    
+    
 }
 
 //跳转到拨号设置
