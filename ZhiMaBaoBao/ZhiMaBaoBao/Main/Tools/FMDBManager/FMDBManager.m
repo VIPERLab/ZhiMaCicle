@@ -32,6 +32,7 @@
     FMDatabaseQueue *newFriend_message_DB;
     
     //群聊相关的表
+    FMDatabaseQueue *group_message_DB;
     FMDatabaseQueue *group_userMenber_DB;
 }
 
@@ -74,6 +75,9 @@
         case ZhiMa_NewFriend_Message_Table:
             return newFriend_message_DB;
         
+        case ZhiMa_GroupChat_GroupMessage_Table:
+            return group_message_DB;
+            
         case ZhiMa_GroupChat_GroupMenber_Table:
             return group_userMenber_DB;
         default:
@@ -148,6 +152,14 @@
                     newFriend_message_DB = db_Queue;
                     break;
                 }
+                    
+                case ZhiMa_GroupChat_GroupMessage_Table: { //群聊信息表
+                    tableName = ZhiMaGroupChat_Table_Name;
+                    tableField = GroupChat_MessageField;
+                    group_message_DB = db_Queue;
+                    break;
+                }
+                    
                 case ZhiMa_GroupChat_GroupMenber_Table: { //群聊成员信息表
                     tableName = ZhiMaGroupChatMember_Table_Name;
                     tableField = GroupChat_MemberField;
@@ -223,6 +235,11 @@
             fieldName = NewFriend_MessageFields_Name;
             break;
         }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
+            fieldName = GroupChat_MessageFields_name;
+            break;
+        }
         case ZhiMa_GroupChat_GroupMenber_Table: {
             tableName = ZhiMaGroupChatMember_Table_Name;
             fieldName = GroupChat_MemberFields_Name;
@@ -289,6 +306,11 @@
             fieldName = NewFriend_MessageFields_Name;
             break;
         }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
+            fieldName = GroupChat_MessageFields_name;
+            break;
+        }
         case ZhiMa_GroupChat_GroupMenber_Table: {
             tableName = ZhiMaGroupChatMember_Table_Name;
             fieldName = GroupChat_MemberFields_Name;
@@ -346,6 +368,10 @@
             tableName = ZhiMaNewFriend_Table_Name;
             break;
         }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
+            break;
+        }
         case ZhiMa_GroupChat_GroupMenber_Table: {
             tableName = ZhiMaGroupChatMember_Table_Name;
             break;
@@ -397,6 +423,10 @@
         }
         case ZhiMa_NewFriend_Message_Table: {
             tableName = ZhiMaNewFriend_Table_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
             break;
         }
         case ZhiMa_GroupChat_GroupMenber_Table: {
@@ -1544,13 +1574,55 @@
 
 #pragma mark - 群聊信息表
 //                    ------------   群聊信息表  ----------------
-//- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID {
-//    
-//    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
-//    NSString *opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMessage_Table];
-//    
-//    return YES;
-//}
+// 根据群model 保存到群表 和群成员表
+- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID {
+    __block BOOL isSuccess = YES;
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
+    //#define GroupChat_MessageFields_name @"groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
+    
+    // 查询是否存在该群表
+    __block BOOL isExist = NO;
+    [queue inDatabase:^(FMDatabase *db) {
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = %@",converseID]];
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        while ([result next]) {
+            NSLog(@"查表成功");
+            isExist = YES;
+        }
+    }];
+    
+    NSString *opeartionStr = [NSString string];
+
+    if (isExist) {
+        // 存在群表 ->  更新群信息表
+        NSString *option1 = [NSString stringWithFormat:@"groupName = '%@', notice = '%@', myGroupName = '%@',showMemberName = '%@'",model.groupName,model.notice,model.myGroupName,@(model.showMemberName)];
+        NSString *option2 = [NSString stringWithFormat:@"groupId = '%@'",converseID];
+        opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMessage_Table withOpton1:option1 andOption2:option2];
+    } else {
+        // 不存在群表 -> 创建群信息表
+        opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMessage_Table];
+    }
+    
+    // 创建/更新 群信息表
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:opeartionStr,model.groupId,model.groupName,model.notice,model,@(model.topChat),@(model.disturb),@(model.saveToMailList),model.myGroupName,@(model.saveToMailList)];
+        if (success) {
+            NSLog(@"创建/更新 群信息表成功");
+        }else {
+            NSLog(@"创建/更新 群信息表失败");
+            isSuccess = NO;
+        }
+    }];
+    
+    
+    
+    
+    
+    
+    
+    
+    return isSuccess;
+}
 
 
 #pragma mark - 群成员信息表

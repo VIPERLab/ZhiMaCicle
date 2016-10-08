@@ -29,7 +29,7 @@ typedef enum : NSUInteger {
     ZhiMa_NewFriend_Message_Table,     //新好友表
     
     /* ----   群聊相关 ----  */
-//    ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
+    ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
     ZhiMa_GroupChat_GroupMenber_Table              //群成员表
 } ZhiMaSqliteTableType;
 
@@ -276,7 +276,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - 群聊信息表
 //                    ------------   群聊信息表  ----------------
-//- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
+- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
 
 
 #pragma mark - 群成员信息表
