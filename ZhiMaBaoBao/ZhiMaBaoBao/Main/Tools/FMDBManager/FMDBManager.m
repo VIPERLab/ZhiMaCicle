@@ -1474,7 +1474,6 @@
     NSString *option1 = [NSString stringWithFormat:@"is_read = '%@', sendStatus = '%@'",@(message.is_read),@(message.sendStatus)];
     NSString *option2 = [NSString stringWithFormat:@"msgid = %@",message.msgid];
     NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Message_Table withOpton1:option1 andOption2:option2];
-    NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Message_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"msgid = '%@'",message.msgid]];
     [queue inDatabase:^(FMDatabase *db) {
 //        @"msgid,type,fromUid,toUidOrGroupId,time,text,isGroup,converseId,is_read,sendStatus"
         BOOL success = [db executeUpdate:optionStr];
