@@ -90,7 +90,7 @@
             if (responseData.code == 0) {
                 [LCProgressHUD hide];
                 //从数据库删除会话 -- 删除好友列表
-                [[SocketManager shareInstance] delFriend:self.friendInfo.user_Id];
+//                [[SocketManager shareInstance] delFriend:self.friendInfo.user_Id];
                 [FMDBShareManager deleteConverseWithConverseId:self.friendInfo.user_Id];
                 [FMDBShareManager deleteUserMessageByUserID:self.friendInfo.user_Id];
                 [self.navigationController popToRootViewControllerAnimated:YES];

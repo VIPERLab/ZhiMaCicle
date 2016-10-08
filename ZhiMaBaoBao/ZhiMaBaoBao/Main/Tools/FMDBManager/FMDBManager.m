@@ -1339,14 +1339,9 @@
             NSLog(@"插入消息成功");
         } else {
             NSLog(@"插入消息失败");
-            success = NO;
         }
     }];
     
-    
-    if (!success) {
-        return success;
-    }
     
     //查询这个消息对应的会话是否存在
     // converseID = userID 根据这个id 取出用户表对应的用户数据
