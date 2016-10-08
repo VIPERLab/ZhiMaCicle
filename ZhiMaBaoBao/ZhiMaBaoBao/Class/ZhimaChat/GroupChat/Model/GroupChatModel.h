@@ -8,12 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "GroupUserModel.h"
-
+@class GroupUserModel;
 @interface GroupChatModel : NSObject
 //converseId TEXT NOT NULL, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER
 
-/* 会话id */
-@property (nonatomic, copy) NSString *converseId;
 
 /* 群聊id */
 @property (nonatomic, copy) NSString *groupId;
@@ -31,7 +29,7 @@
 @property (nonatomic, copy) NSString *myGroupName;
 
 //群成员数组
-@property (nonatomic, strong) NSArray *groupUserVos;
+@property (nonatomic, strong) NSArray<GroupUserModel *> *groupUserVos;
 
  /** 创建时间*/
 @property (nonatomic, copy) NSString *create_time;
