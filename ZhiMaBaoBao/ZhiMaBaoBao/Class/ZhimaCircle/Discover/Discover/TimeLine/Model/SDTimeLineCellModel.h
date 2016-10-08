@@ -40,6 +40,9 @@
 @property (nonatomic, assign) BOOL shouldShowMoreButton;
 
 
++ (NSArray <SDTimeLineCellModel *>*)getModelArrayWithJsonData:(ResponseData *)jsonData andIsUpdata:(BOOL)isUpdata;
+
+
 @end
 
 

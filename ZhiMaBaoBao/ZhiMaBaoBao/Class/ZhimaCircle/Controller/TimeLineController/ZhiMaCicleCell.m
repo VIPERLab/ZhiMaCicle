@@ -12,6 +12,7 @@
     UILabel *_titleLabel;
     UIImageView *_titleImage;
     UIImageView *_unReadCircleImage;
+    UIView *_redView;
     UILabel *_unReadCountLabel;
     UIView *_bottomLineView;
     BOOL hasSubViews;
@@ -37,6 +38,10 @@
     _unReadCircleImage = [UIImageView new];
     _unReadCircleImage.hidden = YES;
     [self addSubview:_unReadCircleImage];
+    
+    _redView = [UIView new];
+    _redView.backgroundColor = THEMECOLOR;
+    [self addSubview:_redView];
     
     _unReadCountLabel = [UILabel new];
     _unReadCountLabel.hidden = YES;
@@ -67,8 +72,10 @@
 - (void)setUnReadImage:(NSString *)unReadImage {
     if ([unReadImage isEqualToString:@""] || unReadImage == nil) {
         _unReadCircleImage.hidden = YES;
+        _redView.hidden = YES;
         return;
     }
+    _redView.hidden = NO;
     _unReadCircleImage.hidden = NO;
     [_unReadCircleImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,unReadImage]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
 }
@@ -103,11 +110,19 @@
         CGFloat countY = (CGRectGetHeight(_titleLabel.frame) - countH) * 0.5;
         _unReadCountLabel.frame = CGRectMake(countX, countY, countW, countH);
         
-        CGFloat circleW = 40;
+        CGFloat circleW = 35;
         CGFloat circleH = circleW;
         CGFloat circelX = CGRectGetWidth(self.frame) - circleW - 20;
         CGFloat circleY = (CGRectGetHeight(self.frame) - circleH) * 0.5;
         _unReadCircleImage.frame = CGRectMake(circelX, circleY, circleW, circleH);
+        
+        CGFloat redW = 10;
+        CGFloat redH = redW;
+        CGFloat redX = CGRectGetMaxX(_unReadCircleImage.frame) - redW * 0.5;
+        CGFloat redY = CGRectGetMinY(_unReadCircleImage.frame) - redH * 0.5;
+        _redView.layer.cornerRadius = redW * 0.5;
+        _redView.clipsToBounds = YES;
+        _redView.frame = CGRectMake(redX, redY, redW, redH);
         
         
         _bottomLineView.frame = CGRectMake(20, CGRectGetHeight(self.frame) - 0.5, CGRectGetWidth(self.frame) - 0.5, 0.5);

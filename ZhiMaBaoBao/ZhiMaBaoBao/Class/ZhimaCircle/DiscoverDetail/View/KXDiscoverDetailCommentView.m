@@ -145,8 +145,8 @@
             button.sd_layout
             .topSpaceToView(self,7)
             .leftSpaceToView(self,30)
-            .widthIs(40)
-            .heightIs(40);
+            .widthIs(35)
+            .heightIs(35);
         } else if (isNext) {  //需要换行
             self.tempRow = row;
             
@@ -164,8 +164,8 @@
             button.sd_layout
             .topEqualToView(lastButton)
             .leftSpaceToView(lastButton,margin)
-            .widthIs(40)
-            .heightIs(40);
+            .widthIs(35)
+            .heightIs(35);
         }
         
         SDTimeLineCellLikeItemModel *model = self.likeItemArray[index];

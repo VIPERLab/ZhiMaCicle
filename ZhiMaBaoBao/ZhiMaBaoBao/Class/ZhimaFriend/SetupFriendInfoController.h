@@ -10,14 +10,8 @@
 #import "ZhiMaFriendModel.h"
 
 @interface SetupFriendInfoController : BaseViewController
-
-@property (nonatomic, copy) NSString *nickNametext;
-
-@property (weak, nonatomic) IBOutlet UILabel *nickName;
-@property (nonatomic, copy) NSString *jid;
-
-
+ /** 用户id*/
+@property (nonatomic, copy) NSString *userId;
 @property (nonatomic, assign) BOOL isFromSearch;
-@property (nonatomic, strong) ZhiMaFriendModel *friendModel;
 
 @end

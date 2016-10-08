@@ -11,7 +11,7 @@
 
 #define KXSettingCellReusedID @"KXSettingCellReusedID"
 
-@interface NewMessageSettingController () <UITableViewDelegate,UITableViewDataSource>
+@interface NewMessageSettingController () <UITableViewDelegate,UITableViewDataSource,KXSettingCellDelegate>
 @property (nonatomic, strong) NSArray *dataArray;
 @end
 
@@ -48,12 +48,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KXSettingCell *cell = [tableView dequeueReusableCellWithIdentifier:KXSettingCellReusedID forIndexPath:indexPath];
+    cell.delegate = self;
     cell.title = self.dataArray[indexPath.row];
+    if (indexPath.row == 0) {
+        cell.switchStatus = USERINFO.newMessageNotify;
+    } else if (indexPath.row == 1) {
+        cell.switchStatus = USERINFO.newMessageVoiceNotify;
+    } else if (indexPath.row == 2) {
+        cell.switchStatus = USERINFO.newMessageShakeNotify;
+    }
     return cell;
 }
-
-
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 45;
@@ -61,6 +66,19 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 20;
+}
+
+- (void)switchValueDidChanage:(KXSettingCell *)cell andSwitch:(UISwitch *)ZhiMaSwitch {
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    UserInfo *info = [UserInfo read];
+    if (indexPath.row == 0) {
+        info.newMessageNotify = ZhiMaSwitch.on;
+    } else if (indexPath.row == 1) {
+        info.newMessageVoiceNotify = ZhiMaSwitch.on;
+    } else if (indexPath.row == 2) {
+        info.newMessageShakeNotify = ZhiMaSwitch.on;
+    }
+    [info save];
 }
 
 

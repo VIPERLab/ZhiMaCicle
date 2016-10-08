@@ -33,7 +33,7 @@
 }
 
 - (void)setupView {
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self.view addSubview:_tableView];
     [_tableView registerClass:[KXMoneyDetailCell class] forCellReuseIdentifier:KXMoneyDetailCellReusedID];
     _tableView.delegate = self;

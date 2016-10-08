@@ -26,7 +26,7 @@
 
 - (void)setupView {
     
-    UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 85)];
+    UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 85)];
     firstView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:firstView];
     self.firstView = firstView;

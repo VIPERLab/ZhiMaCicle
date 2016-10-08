@@ -13,6 +13,7 @@
 #import "LGFeedBackViewController.h"   //意见反馈
 #import "MyAccountViewController.h"    //我的账户
 #import "KXPersonalMessageSettingController.h" //个人信息设置
+#import "ZhiMaCollectionController.h"  //收藏
 #import "PesonalDiscoverController.h"
 
 
@@ -136,12 +137,18 @@
         [self.navigationController pushViewController:MeAccVC animated:YES];
         
     } else if (indexPath.section == 1 && indexPath.row == 2) {
+        // 收藏
+        ZhiMaCollectionController *collection = [[ZhiMaCollectionController alloc] init];
+        collection.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:collection animated:YES];
+        
+    } else if (indexPath.section == 1 && indexPath.row == 3) {
         //意见反馈
         LGFeedBackViewController *feedBack = [[LGFeedBackViewController alloc] init];
         feedBack.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:feedBack animated:YES];
         
-    } else if (indexPath.section == 1 && indexPath.row == 3) {
+    } else if (indexPath.section == 1 && indexPath.row == 4) {
         //设置中心
         KXSettingController *setting = [[KXSettingController alloc] init];
         setting.hidesBottomBarWhenPushed = YES;
@@ -154,14 +161,14 @@
 #pragma mark - lazyLoad 
 - (NSArray *)titleArray {
     if (!_titleArray) {
-        _titleArray = @[@"相册",@"钱包",@"意见",@"设置"];
+        _titleArray = @[@"相册",@"钱包",@"收藏",@"意见",@"设置"];
     }
     return _titleArray;
 }
 
 - (NSArray *)imageArray {
     if (!_imageArray) {
-        _imageArray = @[@"PersonalCenter_Album",@"Personal_MyMoney",@"PersonalCenter_Suggest",@"PersonalCenter_Setting"];
+        _imageArray = @[@"PersonalCenter_Album",@"Personal_MyMoney",@"PersonalCenter_Album",@"PersonalCenter_Suggest",@"PersonalCenter_Setting"];
     }
     return _imageArray;
 }

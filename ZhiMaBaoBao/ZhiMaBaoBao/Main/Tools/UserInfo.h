@@ -7,6 +7,8 @@
 //  用户数据本地存储
 
 #import <Foundation/Foundation.h>
+#import "MainViewController.h"
+#import "ConversationController.h"
 @interface UserInfo : NSObject<NSCoding>
 
  /** 用户已经登录过app*/
@@ -70,6 +72,33 @@
 
  /** 未读好友请求数量*/
 @property (nonatomic, assign) NSInteger unReadInvited;
+
+ /** tabbar控制器*/
+@property (nonatomic, strong) MainViewController *mainVC;
+
+ /** 会话控制器*/
+@property (nonatomic, strong) ConversationController *conversationVC;
+
+ /** 网络不可用*/
+@property (nonatomic, assign) BOOL networkUnReachable;
+
+#pragma mark - 消息通知提示
+/**
+ *  新消息通知
+ */
+@property (nonatomic, assign) BOOL newMessageNotify;
+
+/**
+ *  新消息声音通知
+ */
+@property (nonatomic, assign) BOOL newMessageVoiceNotify;
+
+/**
+ *  新消息震动通知
+ */
+@property (nonatomic, assign) BOOL newMessageShakeNotify;
+
+
 
 
 /**

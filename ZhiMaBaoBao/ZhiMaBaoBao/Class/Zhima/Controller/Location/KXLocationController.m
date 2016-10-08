@@ -226,6 +226,7 @@
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"area" andChangeValue:location block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
+            [LCProgressHUD showFailureText:responseData.msg];
             return ;
         }
         

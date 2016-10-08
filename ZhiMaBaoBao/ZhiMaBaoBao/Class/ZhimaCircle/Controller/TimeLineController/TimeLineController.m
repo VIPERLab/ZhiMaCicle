@@ -24,6 +24,7 @@
     int _unReadCount;
     NSString *_unReadHeadphoto;
     NSString *_circleheadphoto;
+    UILabel *_unReadLabel;
     
 }
 
@@ -81,6 +82,8 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         cell.unReadCount = _unReadCount;
         cell.unReadImage = _circleheadphoto;
+    } else {
+        cell.unReadImage = @"";
     }
     
     
@@ -167,6 +170,13 @@
     
     [_tableView reloadData];
     NSLog(@"未读消息数:%zd  ----- 未读消息头像 %@",unReadCount,headphoto);
+    UITabBarItem *tabBar = [self.tabBarController.tabBar.items objectAtIndex:3];
+    if (unReadCount == 0) {
+        tabBar.badgeValue = nil;
+    } else {
+        tabBar.badgeValue = [NSString stringWithFormat:@"%zd",unReadCount];
+    }
+    
 }
 
 #pragma mark - 未读朋友圈

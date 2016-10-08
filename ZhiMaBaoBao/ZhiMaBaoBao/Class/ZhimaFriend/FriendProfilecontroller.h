@@ -13,6 +13,5 @@
 @interface FriendProfilecontroller : BaseViewController
 
 @property (nonatomic, copy) NSString *userId;           //用户id
-@property (nonatomic, assign) FriendType friendType;    //好友类型
 
 @end

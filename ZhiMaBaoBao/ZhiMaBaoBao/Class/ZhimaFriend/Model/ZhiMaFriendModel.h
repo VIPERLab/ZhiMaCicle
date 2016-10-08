@@ -41,6 +41,8 @@ typedef NS_OPTIONS(NSUInteger, FriendType) {
 
  /** 显示名称 （有备注显示备注，无备注显示昵称）*/
 @property (nonatomic, copy) NSString *displayName;
+ /** 服务器返回大写首字母*/
+@property (nonatomic, copy) NSString *headchar;
  /** 显示名称的大写拼音缩写*/
 @property (nonatomic, copy) NSString *pinyin;
  /** 手机号码*/
@@ -63,4 +65,7 @@ typedef NS_OPTIONS(NSUInteger, FriendType) {
 @property (nonatomic, copy) NSString *album2;
  /** 相册第三张*/
 @property (nonatomic, copy) NSString *album3;
+
+ /** 被选中为群聊  （发起群聊时用到该属性）*/
+@property (nonatomic, assign) BOOL selectedGroup;
 @end

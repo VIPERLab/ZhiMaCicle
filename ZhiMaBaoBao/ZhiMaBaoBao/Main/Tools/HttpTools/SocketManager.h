@@ -15,7 +15,7 @@ typedef NS_OPTIONS(NSUInteger, RequestType) {
     RequestTypeHeart,          //心跳包
     RequestTypeMessage,        //接收，发送普通消息
     RequestTypeUndo,           //撤销消息
-    RequestTypeCreateGroup      //建群
+    RequestTypeCreateGroup     //建群
 };
 
 //群操作类型  --  用来生成发送给socket数据包

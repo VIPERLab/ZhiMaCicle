@@ -7,6 +7,7 @@
 //
 
 #import "ConverseCell.h"
+#import "UIImageView+WebCache.h"
 #import "NSDate+TimeCategory.h"
 
 @implementation ConverseCell {
@@ -16,6 +17,7 @@
     UILabel *_timeLabel;
     UILabel *_unReadCountLabel;
     UIView *_bottomLineView;
+    UIImageView *_disturbIcon;
     BOOL hasSubViews;
 }
 
@@ -70,26 +72,45 @@
     _bottomLineView.backgroundColor = [UIColor colorFormHexRGB:@"d9d9d9"];
     [self addSubview:_bottomLineView];
     
+    
+    _disturbIcon = [UIImageView new];
+    _disturbIcon.image = [UIImage imageNamed:@"Image_placeHolder"];
+    [self addSubview:_disturbIcon];
+    
     hasSubViews = YES;
 }
 
 
 - (void)setModel:(ConverseModel *)model {
     _model = model;
-//    _iconView.image = [UIImage imageNamed:model.converseHead_photo];
+    
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.converseHead_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
     
     _converseLabel.text = model.converseName;
     
     _lastConverseLabel.text = model.lastConverse;
     
     if (model.unReadCount > 99) {
+        _unReadCountLabel.hidden = NO;
         _unReadCountLabel.text = [NSString stringWithFormat:@"99"];
+    } else if (model.unReadCount == 0) {
+        _unReadCountLabel.hidden = YES;
     } else {
+        _unReadCountLabel.hidden = NO;
         _unReadCountLabel.text = [NSString stringWithFormat:@"%zd",model.unReadCount];
+    }
+    
+    if (model.unReadCount < 1) {
+        _unReadCountLabel.hidden = YES;
+    }else{
+        _unReadCountLabel.hidden = NO;
     }
     
     _timeLabel.text = [NSString timeStringChangeToZMTimeString:[NSDate dateStrFromCstampTime:model.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
     hasSubViews = YES;
+    
+    _disturbIcon.hidden = !model.disturb;
+    
     [self setNeedsDisplay];
     
 }
@@ -116,12 +137,6 @@
         CGFloat nameH = 30;
         _converseLabel.frame = CGRectMake(nameX, nameY, nameW, nameH);
         
-        CGFloat lastX = nameX;
-        CGFloat lastY = CGRectGetMaxY(_converseLabel.frame);
-        CGFloat lastW = CGRectGetWidth(self.frame) - lastX - 20;
-        CGFloat lastH = 20;
-        _lastConverseLabel.frame = CGRectMake(lastX, lastY, lastW, lastH);
-        
         CGFloat countWidth = 20;
         CGFloat countHight = countWidth;
         CGFloat countX = CGRectGetMaxX(_iconView.frame) - countWidth * 0.5;
@@ -129,6 +144,18 @@
         _unReadCountLabel.frame = CGRectMake(countX, countY, countWidth, countHight);
 
         _bottomLineView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - 0.5, CGRectGetWidth(self.frame), 0.5);
+        
+        CGFloat disturbW = 30;
+        CGFloat disturbH = 30;
+        CGFloat disturX = CGRectGetWidth(self.frame) - disturbW - 20;
+        CGFloat disturY = CGRectGetMaxY(_iconView.frame) - disturbH;
+        _disturbIcon.frame = CGRectMake(disturX, disturY, disturbW, disturbH);
+        
+        CGFloat lastX = nameX;
+        CGFloat lastY = CGRectGetMaxY(_converseLabel.frame);
+        CGFloat lastW = CGRectGetWidth(self.frame) - lastX - CGRectGetWidth(_disturbIcon.frame) - 20;
+        CGFloat lastH = 20;
+        _lastConverseLabel.frame = CGRectMake(lastX, lastY, lastW, lastH);
         
         hasSubViews = NO;
         

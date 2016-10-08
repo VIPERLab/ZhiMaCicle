@@ -88,8 +88,8 @@
     _iconView.sd_layout
     .topSpaceToView(self,5)
     .leftSpaceToView(self,0)
-    .widthIs(40)
-    .heightIs(40);
+    .widthIs(35)
+    .heightIs(35);
     
     CGFloat timeWidth = [model.create_time sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(MAXFLOAT, 15)].width;
     

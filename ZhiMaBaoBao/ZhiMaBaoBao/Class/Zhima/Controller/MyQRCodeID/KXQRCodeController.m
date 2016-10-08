@@ -48,7 +48,7 @@
 - (void)setupView {
     self.view.backgroundColor = [UIColor colorFormHexRGB:@"2e3132"];
     
-    UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, (ScreenHeight - 400 + 64) * 0.5, ScreenWidth - 60, 400)];
+    UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, 392)];
     centerView.backgroundColor = [UIColor whiteColor];
     centerView.layer.cornerRadius = 10;
     self.centerView = centerView;
@@ -73,20 +73,18 @@
     locationLabel.font = [UIFont systemFontOfSize:13];
     locationLabel.textColor = [UIColor colorFormHexRGB:@"353535"];
     self.locationLabel = locationLabel;
-    self.locationLabel.text = @"广东省 深圳市";
-//    self.locationLabel.text = USERINFO.location;
+    self.locationLabel.text = USERINFO.area;
     [self.centerView addSubview:locationLabel];
     
     
-    UIImageView *BJImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(userIcon.frame) + 10, CGRectGetWidth(centerView.frame) - 20, CGRectGetWidth(centerView.frame) / 2 + 100)];
+    UIImageView *BJImage = [[UIImageView alloc] initWithFrame:CGRectMake(19, CGRectGetMaxY(userIcon.frame) + 10, CGRectGetWidth(self.centerView.frame) - 38 , 260)];
     BJImage.image = [UIImage imageNamed:@"QRCodeBackground"];
     [self.centerView addSubview:BJImage];
     
-    
-    CGFloat imageW = CGRectGetWidth(centerView.frame) / 2 + 60;
+    CGFloat imageW = 200;
     CGFloat imageH = imageW;
-    CGFloat imageX = self.centerView.boundsCenter.x - imageW * 0.5;
-    CGFloat imageY = self.centerView.boundsCenter.y - imageW * 0.5 - 10;
+    CGFloat imageX = (CGRectGetWidth(self.centerView.frame) - imageW) * 0.5;
+    CGFloat imageY = (CGRectGetHeight(self.centerView.frame) - imageH) * 0.5;
     UIView *QRCodeView = [[UIView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     QRCodeView.backgroundColor = [UIColor whiteColor];
     [self.centerView addSubview:QRCodeView];

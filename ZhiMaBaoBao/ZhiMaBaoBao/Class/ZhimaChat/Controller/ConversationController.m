@@ -30,22 +30,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     netWorkStatus = YES;
-    
+    UserInfo *userInfo = [UserInfo shareInstance];
+    userInfo.conversationVC = self;
     [self setCustomRightItems];
     [self setupView];
-    [self getDataFormSqlist];
-    
-    
+
     [self notification];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self getDataFormSqlist];
 }
 
 
 - (void)notification {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kRecieveNewMessage object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageSuccess object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageStateCall object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRecovery) name:K_NetworkRecoveryNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withoutNetwork) name:K_WithoutNetWorkNotification object:nil];
 }
+
 
 // 没有网的情况
 - (void)withoutNetwork {
@@ -120,52 +125,66 @@
         return cell;
     }
     
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"123"];
-    cell.textLabel.text = @"没有网啊";
+    ConverseWithouNetworkCell *cell = [tableView dequeueReusableCellWithIdentifier:ConverseWithoutNetworkCellReusedID forIndexPath:indexPath];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 75;
+    if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
+        return 75;
+    }
+    return 45;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 0.5;
 }
 
-
+- (CGFloat)tableView:(UITableView *)tableView  heightForFooterInSection:(NSInteger)section {
+    return 0.5;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
         ConverseModel *model = self.dataArray[indexPath.row];
         ChatController *vc = [[ChatController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
         vc.conversionId = model.converseId;
         vc.conversionName = model.converseName;
+        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
+        
+        //清除未读消息
+        model.unReadCount = -1;
+        [FMDBShareManager saveConverseListDataWithDataArray:@[model]];
+        
+        //发送更新未读消息通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateUnReadMessage object:nil];
     }
     
     // 点击了没有网络
-    
     
 }
 
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
+    if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source.
-        ConverseModel *model = self.dataArray[indexPath.row];
-        //数据库删除该条会话
-        [FMDBShareManager deleteConverseWithConverseId:model.converseId];
-        
-        [self getDataFormSqlist];
-        
+    if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
+        if (editingStyle == UITableViewCellEditingStyleDelete) {
+            // Delete the row from the data source.
+            ConverseModel *model = self.dataArray[indexPath.row];
+            //数据库删除该条会话
+            [FMDBShareManager deleteConverseWithConverseId:model.converseId];
+            
+            [self getDataFormSqlist];
+            
+        }
     }
 }
 

@@ -12,11 +12,18 @@
 #import "InfoContentCell.h"
 #import "LGPhotosView.h"
 #import "SetupFriendInfoController.h"   //设置好友资料
+#import "ChatController.h"
+#import "SocketManager.h"
+#import "LGCallingController.h"
+#import "PesonalDiscoverController.h"
 
 @interface FriendProfilecontroller ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ZhiMaFriendModel *friend;
 @property (nonatomic, strong) NSMutableArray *photosUrl;    //存放个人相册图片url
+@property (nonatomic, assign) FriendType friendType;        //好友类型
+@property (nonatomic, assign) BOOL hasRequestData;          //标记已经请求数据
+
 
 @end
 static NSString *const headerIdentifier = @"headerIdentifier";
@@ -29,9 +36,11 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    
-    [self requestFriendProfile];
     [self addAllSubviews];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [self requestFriendProfile];
 }
 
 - (void)addAllSubviews{
@@ -44,20 +53,23 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     [tableView registerNib:[UINib nibWithNibName:@"InfoContentCell" bundle:nil] forCellReuseIdentifier:textIdentifier];
     [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:btnIdentifier];
     [self.view addSubview:tableView];
+    self.tableView = tableView;
 }
 
-//根据好友类型设置导航栏右侧按钮
+//如果是好友设置导航栏右侧按钮
 - (void)setupNavRightItem{
     UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 40)];
     [rightBtn setImage:[UIImage imageNamed:@"nav_more"] forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(setupFriendInfo) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    if (self.friendType == FriendTypeFriends) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    }
 }
 
 //设置好友资料
 - (void)setupFriendInfo{
     SetupFriendInfoController *vc = [[SetupFriendInfoController alloc] init];
-    vc.friendModel = self.friend;
+    vc.userId = self.userId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -65,10 +77,16 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 - (void)requestFriendProfile{
     [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
+            self.hasRequestData = YES;
             self.friend = [ZhiMaFriendModel mj_objectWithKeyValues:responseData.data];
+            self.friendType = self.friend.friend_type;
+
+            if ([self.friend.user_Id isEqualToString:USERINFO.userID]) {
+                self.friendType = FriendTypeSelf;
+            }
             //生成好友相册
             [self generateAlbums];
-            self.friendType = self.friend.friend_type;
+            [self setupNavRightItem];
             [self.tableView reloadData];
         }else{
             [LCProgressHUD showText:responseData.msg];
@@ -137,6 +155,17 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    //点击跳转到朋友圈
+    if (indexPath.section == 2 && indexPath.row == 2) {
+        PesonalDiscoverController *vc = [[PesonalDiscoverController alloc] init];
+        vc.sessionID = USERINFO.sessionId;
+        vc.userID = self.friend.user_Id;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
         return 90;
@@ -166,7 +195,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 - (UIView *)setupLastSectionView{
     
     UIView *footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 135)];
-    footerView.backgroundColor = BGCOLOR;
+    footerView.backgroundColor = self.tableView.backgroundColor;
     
     UIButton *sendMsg = [[UIButton alloc] initWithFrame:CGRectMake(14, 0, DEVICEWITH - 28, 48)];
     sendMsg.backgroundColor = THEMECOLOR;
@@ -175,6 +204,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     [sendMsg setTitleColor:WHITECOLOR forState:UIControlStateNormal];
     [sendMsg addTarget:self action:@selector(sendMsgAction) forControlEvents:UIControlEventTouchUpInside];
     [footerView addSubview:sendMsg];
+    sendMsg.hidden = YES;
     
     UIButton *callBtn = [[UIButton alloc] initWithFrame:CGRectMake(14, 63, DEVICEWITH - 28, 48)];
     callBtn.backgroundColor = WHITECOLOR;
@@ -185,22 +215,24 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     [callBtn setTitleColor:BLACKCOLOR forState:UIControlStateNormal];
     [callBtn addTarget:self action:@selector(callBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [footerView addSubview:callBtn];
+    callBtn.hidden = YES;
     
     if (self.friendType == FriendTypeBlack) {   //黑名单
-        callBtn.hidden = YES;
+        sendMsg.hidden = NO;
         [sendMsg setTitle:@"移出黑名单" forState:UIControlStateNormal];
     }
-    else if (self.friendType == FriendTypeNotFriend){   //不是好友
-        callBtn.hidden = YES;
+    else if ((self.friendType == FriendTypeNotFriend || self.friendType == FriendTypeNew) && self.hasRequestData){   //不是好友
+        sendMsg.hidden = NO;
         [sendMsg setTitle:@"添加到通讯录" forState:UIControlStateNormal];
     }
     else if (self.friendType == FriendTypeFriends){     //好友
+        sendMsg.hidden = NO;
+        callBtn.hidden = NO;
         [sendMsg setTitle:@"发消息" forState:UIControlStateNormal];
         [callBtn setTitle:@"拨号" forState:UIControlStateNormal];
     }
-    else if (self.friendType == FriendTypeSelf){    //用户自己
-        callBtn.hidden = YES;
-        sendMsg.hidden = YES;
+    else {    //用户自己
+        
     }
     
     return footerView;
@@ -210,14 +242,48 @@ static NSString *const btnIdentifier = @"btnIdentifier";
  *  底部第一个按钮点击方法 根据好友类型判断
  */
 - (void)sendMsgAction{
-    
+    if (self.friendType == FriendTypeBlack) {   //黑名单 -> 移出黑名单
+        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
+            if (responseData.code == 0) {
+                //重新加载数据 -> 刷新
+                [self requestFriendProfile];
+            }else{
+                [LCProgressHUD showText:responseData.msg];
+            }
+        }];
+    }
+    else if (self.friendType == FriendTypeNotFriend || self.friendType == FriendTypeNew){   //不是好友 -> 添加到通讯录
+        SocketManager *manager = [SocketManager shareInstance];
+        [manager addFriend:self.friend.user_Id];
+        [LCProgressHUD showSuccessText:@"请求发送成功"];
+    }
+    else if (self.friendType == FriendTypeFriends){     //好友 -> 发消息
+        //先pop到跟控制器。然后切换到会话控制器。然后push到聊天
+        UserInfo *userInfo = [UserInfo shareInstance];
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
+        
+        ChatController *vc = [[ChatController alloc] init];
+        vc.conversionId = self.friend.user_Id;
+        vc.conversionName = self.friend.displayName;
+        vc.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:vc animated:YES];
+        ConversationController *conversationVC = userInfo.conversationVC;
+        [conversationVC.navigationController pushViewController:vc animated:YES];
+        
+    }
+
 }
 
 /**
  *  拨号
  */
 - (void)callBtnAction{
-    
+    LGCallingController *vc = [[LGCallingController alloc] init];
+    vc.name = self.friend.displayName;
+    vc.phoneNum = self.friend.uphone;
+    vc.avtarUrl = self.friend.user_Head_photo;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 

@@ -240,6 +240,10 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 {
     _model = model;
     
+    if ([model.userId isEqualToString:USERINFO.userID]) {
+        [_complainButton setTitle:@"删除" forState:UIControlStateNormal];
+    }
+    
     if (_copyView) {
         [_copyView removeFromSuperview];
         _copyView = nil;
@@ -301,7 +305,12 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
         bottomView = _commentView;
     }
     
-    _operationMenu.isLike = model.liked;
+    for (SDTimeLineCellLikeItemModel *model in _model.likeItemsArray) {
+        if ([model.userId isEqualToString:USERINFO.userID]) {
+            _operationMenu.isLike = YES;
+        }
+    }
+    
     [self setupAutoHeightWithBottomView:bottomView bottomMargin:15];
     
     
@@ -352,7 +361,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 - (void)longPressContentLabel:(UIGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
             
-        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverLongPressContentNotification object:nil userInfo:@{@"contentLabel":_contentLabel}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverLongPressContentNotification object:nil userInfo:@{@"contentLabel":_contentLabel,@"cell":self}];
 
         
     }

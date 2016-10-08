@@ -10,51 +10,20 @@
 #import "LGSearchResultController.h"
 #import "LGSearchResultCell.h"
 #import "pinyin.h"
+#import "ZhiMaFriendModel.h"
+#import "AvtarAndNameCell.h"
 
 @interface LGSearchController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic,strong) NSMutableArray *nameAry;       //排序好的总好友数据
-@property (nonatomic,strong) NSMutableArray *sectionAry;    //存放匹配的好友数据
-@property (nonatomic,strong) NSMutableArray *numberAry;
-@property (nonatomic,strong) NSMutableArray *dataArr;
-
+@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *containArray;     //拷贝一份数据源，用作搜索匹配
 @end
 
+static NSString *const reuseIdentifier = @"searchResultCell";
 @implementation LGSearchController
-
-- (NSMutableArray *)dataArr{
-    if (!_dataArr) {
-        _dataArr = [NSMutableArray array];
-    }
-    return _dataArr;
-}
-
-- (NSMutableArray *)nameAry{
-    
-    if (!_nameAry) {
-        _nameAry = [NSMutableArray array];
-    }
-    return _nameAry;
-}
-
-- (NSMutableArray *)sectionAry{
-    
-    if (!_sectionAry) {
-        _sectionAry = [NSMutableArray array];
-    }
-    return _sectionAry;
-}
-
-- (NSMutableArray *)numberAry{
-    
-    if (!_numberAry) {
-        _numberAry = [NSMutableArray array];
-    }
-    return _numberAry;
-}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -71,21 +40,13 @@
     [super viewDidLoad];
     self.view.backgroundColor = WHITECOLOR;
     [self setUI];
-    
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 70, DEVICEWITH, DEVICEHIGHT - 70) style:UITableViewStylePlain];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.backgroundColor = WHITECOLOR;
-    [self.view addSubview:self.tableView];
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChange:) name:UITextFieldTextDidChangeNotification object:nil];
-    
+    [self getDataFormSqlist];
     [self.view becomeFirstResponder];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged) name:UITextFieldTextDidChangeNotification object:nil];
 }
 
-//设置顶部搜索框UI
+//设置UI
 - (void)setUI{
     UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, DEVICEWITH, 50)];
     topView.backgroundColor = BGCOLOR;
@@ -114,6 +75,62 @@
     [cancelBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     [topView addSubview:cancelBtn];
     [cancelBtn addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 70, DEVICEWITH, DEVICEHIGHT - 70) style:UITableViewStylePlain];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.tableFooterView = [[UIView alloc] init];
+    self.tableView.backgroundColor = WHITECOLOR;
+    [self.tableView registerNib:[UINib nibWithNibName:@"AvtarAndNameCell" bundle:nil] forCellReuseIdentifier:reuseIdentifier];
+    [self.view addSubview:self.tableView];
+}
+
+//从数据库获取好友列表
+- (void)getDataFormSqlist {
+    
+    self.containArray = [[FMDBShareManager getAllUserMessageInArray] mutableCopy];
+}
+
+
+#pragma mark - tableView delegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    return self.dataArray.count;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    AvtarAndNameCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    ZhiMaFriendModel *friendModel = self.dataArray[indexPath.row];
+    cell.friendModel = friendModel;
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    //跳转到聊天
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 53;
+}
+
+#pragma mark - 功能实现方法
+//搜索框匹配
+- (void)textChanged{
+    [self.dataArray removeAllObjects];
+    if (!self.textField.hasText) {
+        [self.dataArray removeAllObjects];
+    }else{
+        for (ZhiMaFriendModel *friendModel in self.containArray) {
+            if ([friendModel.displayName containsString:self.textField.text] || [friendModel.pinyin containsString:[self.textField.text uppercaseString]]) {
+                [self.dataArray addObject:friendModel];
+            }
+        }
+    }
+    [self.tableView reloadData];
 }
 
 //搜索好友
@@ -124,38 +141,26 @@
 //好友排序
 - (void)setSequenceOfAgentName{
     
-
+    
 }
-
 
 - (void)cancelAction{
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
-    return self.sectionAry.count;
-}
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    LGSearchResultCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
-    if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:@"LGSearchResultCell" owner:nil options:nil] firstObject];
+#pragma mark - lazy
+- (NSMutableArray *)dataArray{
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
     }
-    
-    return cell;
+    return _dataArray;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+- (NSMutableArray *)containArray{
+    if (!_containArray) {
+        _containArray = [NSMutableArray array];
+    }
+    return _containArray;
 }
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 53;
-}
-
-
-
 @end

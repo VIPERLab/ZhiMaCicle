@@ -19,6 +19,9 @@
 #import "IMMorePictureTableViewCell.h"
 #import "IMChatVoiceTableViewCell.h"
 
+#import "ChatRoomInfoController.h" // 聊天室详情
+#import "GroupChatRoomInfoController.h" // 群聊天室详情
+
 #import "SocketManager.h"
 
 //语音相关头文件
@@ -30,6 +33,11 @@
 #import "MLAudioMeterObserver.h"
 #import "MLAudioPlayer.h"
 #import "AmrPlayerReader.h"
+
+#import "ForwardMsgController.h"    //消息转发控制器
+#import "BaseNavigationController.h"
+#import "FriendProfilecontroller.h"
+#import "ConverseModel.h"   //会话模型
 
 
 @interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate>
@@ -68,14 +76,46 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self setCustomTitle:self.conversionName];
+    
+    [self setupNavRightItem];
     [self addSubviews];
     //初始化录音
     [self initAudioRecorder];
     [self requestChatRecord];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage:) name:kRecieveNewMessage object:nil];
+    //监听消息发送状态回调
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMsgStatuescall:) name:kSendMessageStateCall object:nil];
+}
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    //通过id查数据库最新会话名->设置为标题
+    //1.先通过id查会话
+    ConverseModel *convesion = [FMDBShareManager searchConverseWithConverseID:self.conversionId];
+    [self setCustomTitle:convesion.converseName];
+
+}
+
+//设置导航栏右侧按钮
+- (void)setupNavRightItem{
+    UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 40)];
+    [rightBtn setImage:[UIImage imageNamed:@"redContant"] forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(lookConversionInfo) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+}
+
+//查看会话详情 ->
+- (void)lookConversionInfo{
+//    ChatRoomInfoController *vc = [[ChatRoomInfoController alloc] init];
+//    vc.userId = self.conversionId;
+//    vc.displayName = self.conversionName;
+//    [self.navigationController pushViewController:vc animated:YES];
+    GroupChatRoomInfoController *vc = [[GroupChatRoomInfoController alloc] init];
+    vc.groupAmount = 12;
+    vc.converseId = self.conversionId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 /**
@@ -95,6 +135,12 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
     }
+}
+//消息发送状态回调
+- (void)sendMsgStatuescall:(NSNotification *)notification{
+    NSDictionary *userInfo = notification.userInfo;
+    LGMessage *message  = userInfo[@"message"];
+    
 }
 
 - (void)addSubviews{
@@ -697,6 +743,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)userIconTappedWithIndexPath:(NSIndexPath *)indexPath
 {
+    FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
+    LGMessage * message = [self.messages objectAtIndex:indexPath.row];
+    vc.userId = message.fromUid;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)deleteButtonTappedWithIndexPath:(NSIndexPath *)indexPath
@@ -767,11 +817,16 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
     }
     
-        [self initAudioPlayAndReader];
+    [self initAudioPlayAndReader];
+    
+    LGMessage *message = [self.messages objectAtIndex:ip.row];
+    self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
+    [self.player startPlaying];
+    
+    if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
+        message.is_read = YES;
         
-        LGMessage *message = [self.messages objectAtIndex:ip.row];
-        self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
-        [self.player startPlaying];
+        [FMDBShareManager upDataMessageStatusWithMessage:message];
         
         if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
             message.is_read = 1;
@@ -782,6 +837,9 @@ static NSString *const reuseIdentifier = @"messageCell";
             [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
             
         }
+        [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+    }
 
     
     self.currentPlayAudioIndexPath = ip;
@@ -968,6 +1026,13 @@ static NSString *const reuseIdentifier = @"messageCell";
 {
     return [FaceSourceManager loadFaceSource];
 }
+
+
+- (void)backAction {
+    [FMDBShareManager setConverseUnReadCountZero:self.conversionId];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 - (void)dealloc{
     //音谱检测关联着录音类，录音类要停止了。所以要设置其audioQueue为nil

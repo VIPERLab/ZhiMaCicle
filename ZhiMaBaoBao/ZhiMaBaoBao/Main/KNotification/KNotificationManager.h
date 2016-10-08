@@ -50,7 +50,7 @@
 #define KCommentOtherNotification @"KCommentOtherNotification"
 
 // ---- 朋友圈长按文字文本通知
-// info :  @"contentLabel" : 文本控件
+// info :  @"contentLabel" : 文本控件 、 @"cell" : 当前文本所在的cell
 #define KDiscoverLongPressContentNotification @"KDiscoverLongPressContentNotification"
 #define KDiscoverDisLongPressContentNotificaion @"KDiscoverDisLongPressContentNotificaion"
 
@@ -81,13 +81,16 @@
 //                    ------ 消息通知 --------
 //相同的用户登录
 #define kOtherLogin @"kOtherLogin"
-//发送消息成功
-#define kSendMessageSuccess @"kSendMessageSuccess"
+//发送消息状态回调通知
+#define kSendMessageStateCall @"kSendMessageStateCall"
 //收到新消息
 #define kRecieveNewMessage @"kRecieveNewMessage"
 //新的好友请求
 #define kNewFriendRequest @"kNewFriendRequest"
 //消息发送成功
+
+//更新未读消息
+#define kUpdateUnReadMessage @"kUpdateUnReadMessage"
 
 
 

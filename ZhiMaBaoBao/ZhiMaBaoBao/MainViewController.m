@@ -16,8 +16,9 @@
 #import "LGGuideController.h"
 #import "BaseNavigationController.h"
 #import "SocketManager.h"
-
+#import <AudioToolbox/AudioToolbox.h>
 #import "RHSocketService.h"
+#import "ConverseModel.h"
 //#import "RHSocketUtils.h"
 
 @interface MainViewController ()<SocketManagerDelegate>
@@ -26,8 +27,28 @@
 
 @implementation MainViewController
 
+//-(void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    self.tabBar.hidden = NO;
+//    NSLog(@"tabbar frame1 : %@",NSStringFromCGRect(self.tabBar.frame));
+//}
+//-(void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear:animated];
+//    self.tabBar.hidden = YES;
+//    NSLog(@"tabbar frame2 : %@",NSStringFromCGRect(self.tabBar.frame));
+//
+//}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    NSLog(@"tabbar frame3 : %@",NSStringFromCGRect(self.tabBar.frame));
+
+    
+    UserInfo *userInfo = [UserInfo shareInstance];
+    userInfo.mainVC = self;
     
     self.tabBar.barTintColor = [UIColor whiteColor];
     
@@ -45,12 +66,18 @@
     NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
     
     [self addNotifications];
+    
+    //更新未读消息
+    [self updateUnread];
 }
 
 - (void)addNotifications{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doOtherLogin) name:kOtherLogin object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMessageRecieved:) name:kRecieveNewMessage object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUnread) name:kUpdateUnReadMessage object:nil];
 }
 
+#pragma mark - socket 通知回调
 //用户在其他地方登录
 - (void)doOtherLogin{
     //断开socket
@@ -70,11 +97,24 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-#pragma mark - socket接收到消息 
-- (void)recievedMessage:(LGMessage *)message{
-    NSLog(@"message : %@",message);
+//收到新消息
+- (void)newMessageRecieved:(NSNotification *)notification{
+    
+    LGMessage *message = notification.userInfo[@"message"];
+    //播放系统消息提示音
+    [self playSystemAudio];
+    
+    //更新未读消息
+    [self updateUnread];
+    
+    //根据id查询发消息用户的用户昵称,和最后一条消息内容
+    ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid];
+    NSString *content = [NSString stringWithFormat:@"%@: %@",conversionModel.converseName,conversionModel.lastConverse];
+    
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        [self sendLocalNotification:content];
+    }
 }
-
 
 //添加子控制器
 - (void)addChildVc:(BaseViewController *)childVc title:(NSString *)title image:(NSString *)image selectedImage:(NSString *)selectedImage
@@ -91,7 +131,7 @@
     [childVc.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor grayColor]} forState:UIControlStateNormal];
     [childVc.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName : THEMECOLOR} forState:UIControlStateSelected];
     childVc.tabBarItem.title = title;
-    //    childVc.view.backgroundColor = RandomColor; // 这句代码会自动加载主页，消息，发现，我四个控制器的view，但是view要在我们用的时候去提前加载
+    childVc.view.backgroundColor = BGCOLOR; // 这句代码会自动加载主页，消息，发现，我四个控制器的view，但是view要在我们用的时候去提前加载
     
     // 为子控制器包装导航控制器
     BaseNavigationController *navigationVc = [[BaseNavigationController alloc] initWithRootViewController:childVc];
@@ -99,6 +139,76 @@
     [self addChildViewController:navigationVc];
 }
 
+//播放消息提示音
+- (void)playSystemAudio{
+    AudioServicesPlaySystemSound(1007);
+}
+
+//发送本地通知
+- (void)sendLocalNotification:(NSString *)content{
+    // 初始化本地通知对象
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    if (notification) {
+        // 设置通知的提醒时间
+        NSDate *currentDate   = [NSDate date];
+        notification.timeZone = [NSTimeZone defaultTimeZone]; // 使用本地时区
+        notification.fireDate = [currentDate dateByAddingTimeInterval:0.f];
+        
+        // 设置重复间隔
+        notification.repeatInterval = kCFCalendarUnitDay;
+        
+        // 设置提醒的文字内容
+        notification.alertBody   = content;
+//        notification.alertAction = NSLocalizedString(@"起床了", nil);
+        
+        // 通知提示音 使用默认的
+        notification.soundName= UILocalNotificationDefaultSoundName;
+        
+        // 设置应用程序右上角的提醒个数
+        notification.applicationIconBadgeNumber = [self updateUnread];
+        
+        // 将通知添加到系统中
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+}
+
+//获取未读消息提示
+- (NSInteger)updateUnread{
+    //获取所有会话列表
+    NSArray *conversions = [FMDBShareManager getChatConverseDataInArray];
+    
+    //遍历所有会话
+    NSInteger unRead = 0;
+    for (ConverseModel *conversion in conversions) {
+        unRead += conversion.unReadCount;
+    }
+    
+    //tabbar显示所有未读消息条数
+    if (unRead > 99) {
+        [[self.tabBar.items objectAtIndex:0] setBadgeValue:@"99+"];
+//        [UIApplication sharedApplication].applicationIconBadgeNumber = 99;
+        
+    }else if(unRead > 0){
+        [[self.tabBar.items objectAtIndex:0] setBadgeValue:[NSString stringWithFormat:@"%ld", (long)unRead]];
+//        [UIApplication sharedApplication].applicationIconBadgeNumber = unRead;
+    }else {
+        [[self.tabBar.items objectAtIndex:0] setBadgeValue:nil];
+    }
+    
+    return unRead;
+}
+
+#pragma mark - 状态栏高度改变时，修改tabbar的Y值
+- (void)adapterstatusBarHeight{
+    
+    CGRect statusBarRect = [[UIApplication sharedApplication] statusBarFrame];
+    int shouldBeSubtractionHeight = 0;
+    if (statusBarRect.size.height == 40) {
+        shouldBeSubtractionHeight = 20;
+    }
+    
+    self.tabBar.frame = CGRectMake(0, DEVICEHIGHT - 49 - shouldBeSubtractionHeight, DEVICEWITH, 49);
+}
 
 - (void)dealloc{
     

@@ -49,9 +49,9 @@
 
 
 // 创建朋友圈图片 --- 字段名
-#define CirCle_PicField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, img_url TEXT NOT NULL, bigimg_url TEXT NOT NULL, circle_ID TEXT NOT NULL)"
+#define CirCle_PicField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, img_url TEXT NOT NULL, bigimg_url TEXT NOT NULL, circle_ID TEXT NOT NULL, weuser_id TEXT NOT NULL)"
 // 取朋友圈图片 -- 字段
-#define CirCle_PicFields_Name @"img_url, bigimg_url, circle_ID"
+#define CirCle_PicFields_Name @"img_url, bigimg_url, circle_ID,weuser_id"
 
 
 // 创建朋友圈点赞 ----- 字段名
@@ -67,7 +67,7 @@
 
 // 创建 消息表 字段
 #define Chat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, msgid TEXT NOT NULL, type INTEGER, fromUid TEXT NOT NULL, toUidOrGroupId TEXT NOT NULL, time INTEGER, text TEXT NOT NULL, isGroup INTEGER, converseId TEXT NOT NULL, is_read INTEGER, sendStatus INTEGER)"
-#define Chat_MessageFields_name @"msgid,type,fromUid,toUidOrGroupId,time,text,isGroup,converseId, is_read, sendStatus"
+#define Chat_MessageFields_name @"msgid,type,fromUid,toUidOrGroupId,time,text,isGroup,converseId,is_read,sendStatus"
 
 
 // 用户表

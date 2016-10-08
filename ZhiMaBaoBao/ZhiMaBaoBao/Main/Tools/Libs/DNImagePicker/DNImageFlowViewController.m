@@ -207,7 +207,9 @@ static NSString* const dnAssetsViewCellReuseIdentifier = @"DNAssetsViewCell";
     if (imagePicker && [imagePicker.imagePickerDelegate respondsToSelector:@selector(dnImagePickerController:sendImages:isFullImage:)]) {
         [imagePicker.imagePickerDelegate dnImagePickerController:imagePicker sendImages:[self seletedDNAssetArray] isFullImage:self.isFullImage];
     }
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];}
+    
+//    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void)browserPhotoAsstes:(NSArray *)assets pageIndex:(NSInteger)page
 {
