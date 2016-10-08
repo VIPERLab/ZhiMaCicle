@@ -276,7 +276,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - 群聊信息表
 //                    ------------   群聊信息表  ----------------
-//- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
+- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
 
 
 #pragma mark - 群成员信息表
