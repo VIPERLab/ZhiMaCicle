@@ -113,6 +113,13 @@ static SocketManager *manager = nil;
     //处理过后的发送给socket的message
     LGMessage *sendMsg = [[LGMessage alloc] init];
     
+    //通过消息的发送状态判断是否为重发的消息
+    if (!message.sendStatus) {
+        
+    }else{      //正常发送消息 -->发送socket消息、插入新消息到数据库
+        
+    }
+    
     //语音消息 -- 发送base64到socket服务器，存语音路径到本地数据库
     if (message.type == MessageTypeAudio) {
         
@@ -275,10 +282,74 @@ static SocketManager *manager = nil;
 }
 
 #pragma mark - 封装消息操作指令
+/**
+ *  重新发送消息 -->发送socket消息 、更新数据库该条消息数据
+ */
+- (void)reSendMessage:(LGMessage *)message{
+    
+    //处理过后的发送给socket的message
+    LGMessage *sendMsg = [[LGMessage alloc] init];
+    
+    
+    //语音消息 -- 发送base64到socket服务器，存语音路径到本地数据库
+    if (message.type == MessageTypeAudio) {
+        
+        //通过路径拿到音频文件
+        NSString *sandboxPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *path = [NSString stringWithFormat:@"%@/%@",sandboxPath,message.text];
+        NSData *data = [NSData dataWithContentsOfFile:path];
+        
+        //转换成base64编码
+        NSString *base64 = [data base64EncodedStringWithOptions:0];
+        
+        //将text转换为base64 发送给socket
+        sendMsg.toUidOrGroupId = message.toUidOrGroupId;
+        sendMsg.fromUid = message.fromUid;
+        sendMsg.type = message.type;
+        sendMsg.msgid = message.msgid;
+        sendMsg.isGroup = message.isGroup;
+        sendMsg.timeStamp = message.timeStamp;
+        sendMsg.text = base64;
+        
+    }
+    //文本消息
+    else if (message.type == MessageTypeText){
+        sendMsg = message;
+    }
+    
+    //根据网络状态-- 标记消息发送状态
+    UserInfo *userInfo = [UserInfo shareInstance];
+    if (userInfo.networkUnReachable) {
+        message.sendStatus = NO;
+    }else{
+        message.sendStatus = YES;
+    }
+    
+    //更新数据库该条消息 、socket发送消息
+    BOOL success = [FMDBShareManager upDataMessageStatusWithMessage:message];
+    if (success) {
+        
+        //发送消息状态回调通知
+        NSDictionary *infoDic = @{@"message":message};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageStateCall object:nil userInfo:infoDic];
+        
+        //插入数据库成功 - socket发送消息
+        //根据消息模型生成固定格式数据包
+        NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:sendMsg];
+        RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+        req.object = data;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+        
+    }
+
+}
+
 
 //删除消息
 - (void)deleteMessage:(LGMessage *)message{
-    
+    if (message) {
+        [FMDBShareManager deleteMessageFormMessageTableByMessageID:message.msgid];
+    }
 }
 
 //撤销消息 
@@ -287,6 +358,17 @@ static SocketManager *manager = nil;
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+    
+    //插入系统消息:"你撤回了一条消息"到数据库
+    LGMessage *systemMsg = [[LGMessage alloc] init];
+    systemMsg.text = @"你撤回了一条消息";
+    systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
+    systemMsg.fromUid = USERINFO.userID;
+    systemMsg.type = MessageTypeSystem;
+    systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+    systemMsg.isGroup = message.isGroup;
+    systemMsg.timeStamp = [NSDate currentTimeStamp];
+    
 }
 
 //建群
@@ -561,6 +643,23 @@ static SocketManager *manager = nil;
     request[@"data"] = dataDic;
     //请求包转换成json字符串
     return [[request mj_JSONString] dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+/** 生成随机messageID */
+- (NSString *)generateMessageID
+{
+    static int kNumber = 8;
+    
+    NSString *sourceStr = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    NSMutableString *resultStr = [[NSMutableString alloc] init];
+    srand((unsigned int)time(0));
+    for (int i = 0; i < kNumber; i++)
+    {
+        unsigned index = rand() % [sourceStr length];
+        NSString *oneStr = [sourceStr substringWithRange:NSMakeRange(index, 1)];
+        [resultStr appendString:oneStr];
+    }
+    return resultStr;
 }
 
 - (void)dealloc{

@@ -21,8 +21,9 @@ typedef NS_OPTIONS(NSUInteger, ActType) {
 //普通消息类型
 typedef NS_OPTIONS(NSUInteger, MessageType) {
     MessageTypeText  = 0,   //文本消息
-    MessageTypeImage,         //图片
-    MessageTypeAudio          //语音
+    MessageTypeImage,       //图片
+    MessageTypeAudio,       //语音
+    MessageTypeSystem       //系统消息
 };
 
 //发送状态
@@ -75,6 +76,11 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
 @property (nonatomic, assign) BOOL is_read;
  /** 消息发送状态 0 发送失败  1 发送成功*/
 @property (nonatomic,assign) BOOL sendStatus;
+
+// 是否正在发送中
+@property (nonatomic, assign) BOOL isSending;
+
+
 
  /** 单元格高度*/
 @property (nonatomic, assign) CGFloat cellHeight;

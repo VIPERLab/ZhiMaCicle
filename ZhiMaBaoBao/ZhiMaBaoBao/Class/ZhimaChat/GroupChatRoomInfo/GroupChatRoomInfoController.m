@@ -37,7 +37,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupAmount]];
+    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
     // 获取会话模型
     self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId];
     [self setupView];
@@ -157,14 +157,14 @@
 
 - (NSArray *)titleArray {
     if (!_titleArray) {
-        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupAmount]],@[@"群聊名称",@"群二维码",@"群公告"],@[@"消息免打扰",@"置顶聊天",@"保存到通讯录"],@[@"我在本群的昵称",@"显示群成员昵称"],@[@"清空聊天记录"]];
+        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码",@"群公告"],@[@"消息免打扰",@"置顶聊天",@"保存到通讯录"],@[@"我在本群的昵称",@"显示群成员昵称"],@[@"清空聊天记录"]];
     }
     return _titleArray;
 }
 
 - (NSArray *)subTitleArray {
     if (!_subTitleArray) {
-        _subTitleArray = @[@[@"",@""],@[@"群的名称",@"QRCode",@"群公告内容"],@[@"",@"",@""],@[@"我在群的名称",@""],@[@""]];
+        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode",self.groupModel.notice],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@""]];
     }
     return _subTitleArray;
 }

@@ -357,15 +357,14 @@
     manager.requestSerializer.timeoutInterval = 30.f;
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
     
-#warning TODO:查询账户余额
     
-    NSString *sign = [NSString stringWithFormat:@"openfireaccount=%@&apikey=%@",USERINFO.userID,RECHAPPKEY];
+    NSString *sign = [NSString stringWithFormat:@"uid=%@&apikey=%@",USERINFO.userID,RECHAPPKEY];
     NSString *md5Sign = [NSString md5:sign];
     
     md5Sign = [md5Sign uppercaseString];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"openfireaccount"] = USERINFO.userID;
+    params[@"uid"] = USERINFO.userID;
     params[@"sign"] = md5Sign;
     
     

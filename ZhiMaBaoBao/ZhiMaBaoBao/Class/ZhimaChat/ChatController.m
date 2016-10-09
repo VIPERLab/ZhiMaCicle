@@ -113,7 +113,6 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    vc.displayName = self.conversionName;
 //    [self.navigationController pushViewController:vc animated:YES];
     GroupChatRoomInfoController *vc = [[GroupChatRoomInfoController alloc] init];
-    vc.groupAmount = 12;
     vc.converseId = self.conversionId;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -140,6 +139,31 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)sendMsgStatuescall:(NSNotification *)notification{
     NSDictionary *userInfo = notification.userInfo;
     LGMessage *message  = userInfo[@"message"];
+    message.isSending = NO;
+    NSInteger row = 100000;
+    
+    for (LGMessage *msg  in self.messages) {
+        if ([msg.msgid isEqualToString:message.msgid]) {
+            row = [self.messages indexOfObject:message];
+        }
+    }
+    
+    if (row != 100000) {
+        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:row inSection:0];
+        NSArray *indexPaths = @[indexpath];
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+    }else{
+        [self.messages addObject:message];
+        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+        NSArray *indexPaths = @[indexpath];
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+
+//    NSInteger row = [self.messages indexOfObject:message];
+
+//
+
     
 }
 
@@ -545,36 +569,28 @@ static NSString *const reuseIdentifier = @"messageCell";
         textChatCell.delegate = self;
         textChatCell.indexPath = indexPath;
         
-        //  以下内容判断是否发送失败
-        if (message.sendStatus == IMRequestFaile) {
-            textChatCell.sendAgain.hidden = NO;
-            [textChatCell.sending stopAnimating];
-            textChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
-                
-                LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
-                chat.sendStatus = IMRequesting;
-                [self.messages replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
-//                NSString *messageId = chat.timestamp;
-//                NSIndexPath *indexPath = theCell.indexPath;
-//                
-//                [self chat_updateTableView:@[indexPath] pattern:1];
-//                
-//                [DataBaseManager updateChatColumnValueByID:StringFromInt(DVRequesting) column:@"messageSendStatus" messageId:messageId];
-//                
-//                [[XMPPManager defaultInstance] sendMessageToUser:self.chatFriend
-//                                                            body:chat.message
-//                                                          myInfo:[GlobalCommen CurrentUser]
-//                                                         content:nil
-//                                                         subject:kFileText
-//                                                       messageId:messageId
-//                 
-//                 ];
-            };
-        } else {
+        if (message.isSending && isMe) {
+            [textChatCell.sending startAnimating];
             textChatCell.sendAgain.hidden = YES;
-            if (message.sendStatus == IMRequesting) {
-                [textChatCell.sending startAnimating];
+            
+        }else{
+            
+            //  以下内容判断是否发送失败
+            if (message.sendStatus == 0) {
+                textChatCell.sendAgain.hidden = NO;
+                [textChatCell.sending stopAnimating];
+                textChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
+                    
+                    LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
+                    chat.isSending = YES;
+                    [self.messages replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
+                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    
+                    SocketManager* socket = [SocketManager shareInstance];
+                    [socket sendMessage:chat];
+                };
             } else {
+                textChatCell.sendAgain.hidden = YES;
                 [textChatCell.sending stopAnimating];
             }
         }
@@ -858,19 +874,19 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     message.isGroup = NO;
     message.timeStamp = [NSDate currentTimeStamp];
+    message.isSending = YES;
     
-    [self.messages addObject:message];
-    
-
+//    [self.messages addObject:message];
+//    
+//    
+//    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+//    NSArray *indexPaths = @[indexpath];
+//    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+//    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
     SocketManager* socket = [SocketManager shareInstance];
     [socket sendMessage:message];
-    
-    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
-    NSArray *indexPaths = @[indexpath];
-//    [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
 
     
 }
@@ -935,6 +951,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     message.isGroup = NO;
     message.timeStamp = [NSDate currentTimeStamp];
+    message.isSending = YES;
     
     [self.messages addObject:message];
     
