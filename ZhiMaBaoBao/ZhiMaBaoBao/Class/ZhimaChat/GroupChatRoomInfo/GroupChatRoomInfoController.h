@@ -10,10 +10,7 @@
 #import "GroupChatModel.h"
 
 @interface GroupChatRoomInfoController : BaseViewController
-/**
- *  群聊人数
- */
-@property (nonatomic, assign) int groupAmount;
+
 
 @property (nonatomic, copy) NSString *converseId;
 

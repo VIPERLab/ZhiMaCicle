@@ -21,8 +21,9 @@ typedef NS_OPTIONS(NSUInteger, ActType) {
 //普通消息类型
 typedef NS_OPTIONS(NSUInteger, MessageType) {
     MessageTypeText  = 0,   //文本消息
-    MessageTypeImage,         //图片
-    MessageTypeAudio          //语音
+    MessageTypeImage,       //图片
+    MessageTypeAudio,       //语音
+    MessageTypeSystem       //系统消息
 };
 
 //发送状态
