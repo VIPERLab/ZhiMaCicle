@@ -1464,7 +1464,8 @@
 - (NSArray <LGMessage *> *)getMessageDataWithConverseID:(NSString *)converseID andPageNumber:(int)pageNumber {
     NSMutableArray *dataArray = [NSMutableArray array];
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
-    NSString *option = [NSString stringWithFormat:@"converseId = %@ order by time desc LIMIT (%zd-1)*20,20",converseID,pageNumber];
+//    NSString *option = [NSString stringWithFormat:@"converseId = %@ order by time desc LIMIT (%zd-1)*20,20",converseID,pageNumber];
+    NSString *option = [NSString stringWithFormat:@"id > 0 order by id desc LIMIT (%zd-1)*20,20",pageNumber];
     NSString *opeartionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Message_Table withOption:option];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:opeartionStr];
@@ -1675,7 +1676,6 @@
         //查询是否存在该条群成员信息
         BOOL isExist = [FMDBShareManager isGroupMemberWithGroupChatId:groupChatId andMemberId:model.userId];
         
-//#define GroupChat_MemberFields_Name @"converseId, memberId, memberName, memberNameInGroup, memberHeader_Photo"
         NSString *opeartionStr;
         if (isExist) {
             NSLog(@"存在成员信息");

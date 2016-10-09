@@ -183,7 +183,7 @@
 
 - (NSArray *)subTitleArray {
     if (!_subTitleArray) {
-        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode",@"群公告"],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@""]];
+        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode",self.groupModel.notice],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@""]];
     }
     return _subTitleArray;
 }
