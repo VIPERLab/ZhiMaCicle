@@ -178,7 +178,7 @@
         NSLog(@"修改群名称");
         GroupChatChangeGroupNameController *changeGroupName = [[GroupChatChangeGroupNameController alloc] init];
         changeGroupName.groupModel = self.groupModel;
-        [self.navigationController pushViewController:changeGroupName animated:YES];
+        [self.navigationController pushViewCbontroller:changeGroupName animated:YES];
     } else if (indexPath.section == 1 && indexPath.row == 1) {
         // 群公告
         NSLog(@"修改群公告");
