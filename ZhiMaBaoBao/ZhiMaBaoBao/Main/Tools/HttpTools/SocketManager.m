@@ -275,7 +275,10 @@ static SocketManager *manager = nil;
             systemMsg.text = [NSString stringWithFormat:@"\"%@\"撤回了一条消息",model.user_Name];
             systemMsg.toUidOrGroupId =  resDic[@"toUidOrGroupId"];
             systemMsg.fromUid = fromUid;
-            systemMsg.type = MessageTypeSystem;
+#warning 以后修改为系统消息
+//            systemMsg.type = MessageTypeSystem;
+            systemMsg.type = MessageTypeText;
+
             systemMsg.msgid = resDic[@"msgid"];
             systemMsg.isGroup = [resDic[@"isGroup"] boolValue];
             systemMsg.timeStamp = [NSDate currentTimeStamp];
@@ -399,12 +402,17 @@ static SocketManager *manager = nil;
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
     
+    //先从数据库删除该条消息
+    
+    
+    
     //插入系统消息:"你撤回了一条消息"到数据库
     LGMessage *systemMsg = [[LGMessage alloc] init];
     systemMsg.text = @"你撤回了一条消息";
     systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
     systemMsg.fromUid = USERINFO.userID;
-    systemMsg.type = MessageTypeSystem;
+    systemMsg.type = MessageTypeText;
+#warning 以后将type修改成系统消息类型
     systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     systemMsg.isGroup = message.isGroup;
     systemMsg.timeStamp = [NSDate currentTimeStamp];

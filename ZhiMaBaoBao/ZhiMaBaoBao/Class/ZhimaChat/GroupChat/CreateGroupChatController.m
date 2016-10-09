@@ -382,7 +382,11 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 }
 
 - (void)cancelAction{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.isPushFromTrans) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 //刷新imagesView 的frame

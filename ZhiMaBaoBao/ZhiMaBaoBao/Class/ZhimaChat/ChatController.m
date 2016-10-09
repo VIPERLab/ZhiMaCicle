@@ -93,8 +93,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     //通过id查数据库最新会话名->设置为标题
     //1.先通过id查会话
-    ConverseModel *convesion = [FMDBShareManager searchConverseWithConverseID:self.conversionId];
-    [self setCustomTitle:convesion.converseName];
+    ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
+    [self setCustomTitle:friendModel.displayName];
 
 }
 
@@ -754,7 +754,11 @@ static NSString *const reuseIdentifier = @"messageCell";
 #pragma mark - 消息转发、撤回、删除等操作
 //转发
 - (void)transMessageWithIndexPath:(NSIndexPath *)indexPath{
-    
+    LGMessage *message = self.messages[indexPath.row];
+    ForwardMsgController *vc = [[ForwardMsgController alloc] init];
+    vc.message = message;
+    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 //收藏
@@ -773,7 +777,16 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 //撤回
 - (void)undoMessageWithIndexPath:(NSIndexPath *)indecPath{
+    [LCProgressHUD showLoadingText:@"消息撤回中..."];
+    //socket发送消息撤回
+    LGMessage *message = self.messages[indecPath.row];
+    [[SocketManager shareInstance] undoMessage:message];
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [LCProgressHUD hide];
+        //从数据库删除该条消息
+        [self deleteMessageWithIndexPath:indecPath];
+    });
 }
 
 #pragma mark - tableview delegate
