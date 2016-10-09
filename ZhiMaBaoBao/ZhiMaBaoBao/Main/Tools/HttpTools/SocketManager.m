@@ -146,6 +146,10 @@ static SocketManager *manager = nil;
     else if (message.type == MessageTypeText){
         sendMsg = message;
     }
+    //图片消息
+    else if (message.type == MessageTypeImage){
+        sendMsg = message;
+    }
     
     //根据网络状态-- 标记消息发送状态
     UserInfo *userInfo = [UserInfo shareInstance];
@@ -237,6 +241,18 @@ static SocketManager *manager = nil;
                     userInfo[@"message"] = message;
                     [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
 
+                }
+            }
+            
+            else if (message.type == MessageTypeImage){
+                //将消息插入数据库，并更新会话列表
+                BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
+                
+                if (success) {
+                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                    userInfo[@"message"] = message;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                    
                 }
             }
             
