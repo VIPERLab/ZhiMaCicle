@@ -108,10 +108,15 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 //查看会话详情 ->
 - (void)lookConversionInfo{
-//    ChatRoomInfoController *vc = [[ChatRoomInfoController alloc] init];
-//    vc.userId = self.conversionId;
-//    vc.displayName = self.conversionName;
-//    [self.navigationController pushViewController:vc animated:YES];
+    if (!self.converseType) {  // 单聊
+        ChatRoomInfoController *vc = [[ChatRoomInfoController alloc] init];
+        vc.userId = self.conversionId;
+        vc.displayName = self.conversionName;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    
+    // 群聊
     GroupChatRoomInfoController *vc = [[GroupChatRoomInfoController alloc] init];
     vc.converseId = self.conversionId;
     [self.navigationController pushViewController:vc animated:YES];

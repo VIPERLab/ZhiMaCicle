@@ -1574,7 +1574,6 @@
 - (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID {
     __block BOOL isSuccess = YES;
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
-    //#define GroupChat_MessageFields_name @"groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
     
     // 查询是否存在该群表
     __block BOOL isExist = NO;
@@ -1601,9 +1600,10 @@
         opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMessage_Table];
     }
     
+    //#define GroupChat_MessageFields_name @"groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
     // 创建/更新 群信息表
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:opeartionStr,model.groupId,model.groupName,model.notice,model,@(model.topChat),@(model.disturb),@(model.saveToMailList),model.myGroupName,@(model.saveToMailList)];
+        BOOL success = [db executeUpdate:opeartionStr,model.groupId,model.groupName,model.notice,@(model.topChat),@(model.disturb),@(model.saveToMailList),model.myGroupName,@(model.saveToMailList)];
         if (success) {
             NSLog(@"创建/更新 群信息表成功");
         }else {
@@ -1630,6 +1630,32 @@
     
     
     return isSuccess;
+}
+
+
+
+// 根据群ID 获取群消息
+- (GroupChatModel *)getGroupChatMessageByGroupId:(NSString *)groupId {
+    GroupChatModel *model = [[GroupChatModel alloc] init];
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
+    NSString *searchOption = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = '%@'",groupId]];
+//    @"groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:searchOption];
+        while ([result next]) {
+            model.groupId = [result stringForColumn:@"groupId"];
+            model.groupName = [result stringForColumn:@"groupName"];
+            model.notice = [result stringForColumn:@"notice"];
+            model.disturb = [result intForColumn:@"disturb"];
+            model.saveToMailList = [result intForColumn:@"saveToMailList"];
+            model.myGroupName = [result stringForColumn:@"myGroupName"];
+            model.showMemberName = [result intForColumn:@"showMemberName"];
+        }
+    }];
+    
+    model.groupUserVos = [FMDBShareManager getAllGroupMenberWithGroupId:groupId];
+    
+    return model;
 }
 
 

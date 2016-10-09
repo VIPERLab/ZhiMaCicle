@@ -61,13 +61,7 @@
 //正式网络环境
 //#define DFAPIURL @"http://app.zhima11.com:8080"
 //#define DFAPIURLTEST @"http://wx.zhima11.com"
-<<<<<<< HEAD
-=======
 
-//测试支付，打电话余额
-#define DFAPIURLTEST @"http://zm.yihezhai.cc"
-
->>>>>>> developer
 
 //常用头文件
 #import "AFNetworking.h"

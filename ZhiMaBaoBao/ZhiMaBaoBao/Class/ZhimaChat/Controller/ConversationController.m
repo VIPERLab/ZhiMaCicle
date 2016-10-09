@@ -151,6 +151,7 @@
         ChatController *vc = [[ChatController alloc] init];
         vc.conversionId = model.converseId;
         vc.conversionName = model.converseName;
+        vc.converseType = model.converseType;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         

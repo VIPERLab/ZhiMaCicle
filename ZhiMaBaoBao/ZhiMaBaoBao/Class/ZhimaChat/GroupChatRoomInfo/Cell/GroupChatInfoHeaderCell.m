@@ -7,7 +7,8 @@
 //
 
 #import "GroupChatInfoHeaderCell.h"
-#import "ZhiMaFriendModel.h"
+#import "UIButton+WebCache.h"
+#import "GroupChatModel.h"
 
 @implementation GroupChatInfoHeaderCell {
     UIView *_bottomLineView;
@@ -26,7 +27,7 @@
 }
 
 
-- (void)setModelArray:(NSArray<ZhiMaFriendModel *> *)modelArray {
+- (void)setModelArray:(NSArray<GroupUserModel *> *)modelArray {
     _modelArray = modelArray;
     [self setupView];
 }
@@ -73,12 +74,13 @@
         if (index == self.modelArray.count) {
             // 最后一个
             [iconView setBackgroundImage:[UIImage imageNamed:@"NewDiscover_AddPhoto"] forState:UIControlStateNormal];
+            iconView.tag = 1000;
         } else {
-            ZhiMaFriendModel *model = self.modelArray[index];
-            titleLabel.text = model.displayName;
-            [iconView setBackgroundImage:[UIImage imageNamed:model.head_photo] forState:UIControlStateNormal];
+            iconView.tag = index;
+            GroupUserModel *model = self.modelArray[index];
+            titleLabel.text = model.friend_nick;
+            [iconView sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head_photo]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
         }
-        
     }
     
     _bottomLineView = [UIView new];
@@ -87,7 +89,19 @@
 }
 
 - (void)buttonDidClick:(UIButton *)sender {
-    
+    if (sender.tag == 1000) {
+        // 点击了新增好友
+        if ([self.delegate respondsToSelector:@selector(GroupChatInfoHeaderCellDelegateDidClickAddMember)]) {
+            [self.delegate GroupChatInfoHeaderCellDelegateDidClickAddMember];
+        }
+        
+    } else {
+        GroupUserModel *model = self.modelArray[sender.tag];
+        // 点击了好友头像
+        if ([self.delegate respondsToSelector:@selector(GroupChatInfoHeaderCellDidClickMemberIcon:)]) {
+            [self.delegate GroupChatInfoHeaderCellDidClickMemberIcon:model.userId];
+        }
+    }
 }
 
 
