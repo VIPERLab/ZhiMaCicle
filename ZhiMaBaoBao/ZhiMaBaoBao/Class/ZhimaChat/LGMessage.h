@@ -76,6 +76,11 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
  /** 消息发送状态 0 发送失败  1 发送成功*/
 @property (nonatomic,assign) BOOL sendStatus;
 
+// 是否正在发送中
+@property (nonatomic, assign) BOOL isSending;
+
+
+
  /** 单元格高度*/
 @property (nonatomic, assign) CGFloat cellHeight;
 

@@ -162,9 +162,9 @@
         [_bubble setFrameOriginXLeftOfView:_userIcon offset:DEFAULT_CHAT_CELL_H_PADDING];
 //暂时不要此功能，所以注释掉。不要删除此代码
 //        [_sending setFrameOriginXLeftOfView:_bubble offset:10];
-        [_sendAgain setFrameOriginXLeftOfView:_bubble offset:10];
+        [_sendAgain setFrameOriginXLeftOfView:_bubble offset:0];
     }
-    else
+    else                                                                                                                                                                         
     {
         [_bubble setFrameOriginXRightOfView:_userIcon offset:DEFAULT_CHAT_CELL_H_PADDING];
 //暂时不要此功能，所以注释掉。不要删除此代码
