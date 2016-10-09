@@ -17,7 +17,7 @@
 @property (nonatomic, copy) NSString *head_photo;
 
  /** 群成员uid*/
-@property (nonatomic, copy) NSString *uid;
+@property (nonatomic, copy) NSString *groupId;
 
  /** 群成员userId*/
 @property (nonatomic, copy) NSString *userId;

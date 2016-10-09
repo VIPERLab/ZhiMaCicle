@@ -113,7 +113,6 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    vc.displayName = self.conversionName;
 //    [self.navigationController pushViewController:vc animated:YES];
     GroupChatRoomInfoController *vc = [[GroupChatRoomInfoController alloc] init];
-    vc.groupAmount = 12;
     vc.converseId = self.conversionId;
     [self.navigationController pushViewController:vc animated:YES];
 }

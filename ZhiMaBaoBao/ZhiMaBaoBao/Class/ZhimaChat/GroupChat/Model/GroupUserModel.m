@@ -10,4 +10,8 @@
 
 @implementation GroupUserModel
 
++ (NSDictionary *)replacedKeyFromPropertyName{
+    return @{@"groupId":@"uid"};
+}
+
 @end
