@@ -14,6 +14,6 @@
 
 @property (nonatomic, copy) NSString *converseId;
 
-@property (nonatomic, strong) GroupChatModel *groupModel;   //群聊信息数据模型
+
 
 @end

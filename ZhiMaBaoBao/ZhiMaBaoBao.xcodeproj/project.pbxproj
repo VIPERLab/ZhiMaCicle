@@ -24,6 +24,8 @@
 		04787AF11D9E07FF000A0DB5 /* hud_success.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF01D9E07FF000A0DB5 /* hud_success.png */; };
 		04787AF31D9E0896000A0DB5 /* hud_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF21D9E0896000A0DB5 /* hud_error.png */; };
 		04787AF61D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */; };
+		047F13F01DAA4BDE00684881 /* GroupChatChangeGroupNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */; };
+		047F13F31DAA60EF00684881 /* GroupChatChangeNoticeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F21DAA60EF00684881 /* GroupChatChangeNoticeController.m */; };
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
@@ -630,6 +632,10 @@
 		04787AF21D9E0896000A0DB5 /* hud_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_error.png; sourceTree = "<group>"; };
 		04787AF41D9E13FB000A0DB5 /* ConverseWithouNetworkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseWithouNetworkCell.h; sourceTree = "<group>"; };
 		04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseWithouNetworkCell.m; sourceTree = "<group>"; };
+		047F13EE1DAA4BDE00684881 /* GroupChatChangeGroupNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatChangeGroupNameController.h; sourceTree = "<group>"; };
+		047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatChangeGroupNameController.m; sourceTree = "<group>"; };
+		047F13F11DAA60EF00684881 /* GroupChatChangeNoticeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatChangeNoticeController.h; sourceTree = "<group>"; };
+		047F13F21DAA60EF00684881 /* GroupChatChangeNoticeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatChangeNoticeController.m; sourceTree = "<group>"; };
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
@@ -1859,6 +1865,18 @@
 				041750B11DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		047F13ED1DAA4BAF00684881 /* GroupChatInfoChange(修改群聊信息内页) */ = {
+			isa = PBXGroup;
+			children = (
+				047F13EE1DAA4BDE00684881 /* GroupChatChangeGroupNameController.h */,
+				047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */,
+				047F13F11DAA60EF00684881 /* GroupChatChangeNoticeController.h */,
+				047F13F21DAA60EF00684881 /* GroupChatChangeNoticeController.m */,
+			);
+			name = "GroupChatInfoChange(修改群聊信息内页)";
+			path = GroupChatInfoChange;
 			sourceTree = "<group>";
 		};
 		0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */ = {
@@ -4364,6 +4382,7 @@
 		31B7C70B1D8E96A100F1883A /* ZhimaChat(芝麻聊) */ = {
 			isa = PBXGroup;
 			children = (
+				047F13ED1DAA4BAF00684881 /* GroupChatInfoChange(修改群聊信息内页) */,
 				041750A71DA4C97100DCD7A9 /* GroupChatRoomInfo(群聊详情页) */,
 				041750911DA4950800DCD7A9 /* ChatRoomInfo(单聊详情页) */,
 				319EA00A1DA4D8A0000EE216 /* Forward(转发) */,
@@ -5078,6 +5097,7 @@
 				04EA7DC51D912872005E5425 /* ZXByQuadrantReader.m in Sources */,
 				04EA7D951D912872005E5425 /* ZXByteArray.m in Sources */,
 				04F57AB21D9280BD002A6471 /* SDTimeLineTableViewController.m in Sources */,
+				047F13F01DAA4BDE00684881 /* GroupChatChangeGroupNameController.m in Sources */,
 				04EA7E031D912872005E5425 /* ZXPDF417BoundingBox.m in Sources */,
 				04EA7DF81D912872005E5425 /* ZXUPCEANExtension2Support.m in Sources */,
 				04EA7E001D912872005E5425 /* ZXPDF417ECErrorCorrection.m in Sources */,
@@ -5296,6 +5316,7 @@
 				04EA7D941D912872005E5425 /* ZXBoolArray.m in Sources */,
 				31B7C78C1D8FE71100F1883A /* LGQueryResModel.m in Sources */,
 				04EA7D891D912872005E5425 /* ZXImage.m in Sources */,
+				047F13F31DAA60EF00684881 /* GroupChatChangeNoticeController.m in Sources */,
 				D5C8B3AD1D9A08A9007D6B5C /* TQRichTextEmojiRun.m in Sources */,
 				04EA7DB91D912872005E5425 /* ZXDataMatrixErrorCorrection.m in Sources */,
 				319EA0111DA4E13D000EE216 /* AvtarAndNameCell.m in Sources */,

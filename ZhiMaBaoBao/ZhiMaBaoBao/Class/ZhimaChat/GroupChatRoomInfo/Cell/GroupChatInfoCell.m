@@ -66,6 +66,7 @@
 }
 
 - (void)setSubTitle:(NSString *)subTitle {
+    _subTitle = subTitle;
     _subTitleLabel.hidden = NO;
     _subTitleLabel.text = subTitle;
     _subImageView.hidden = YES;
@@ -166,11 +167,13 @@
     CGFloat titleW = [_titleLabel.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, 15)].width;
     _titleLabel.frame = CGRectMake(titleX, titleY, titleW, titleH);
     
-    CGFloat subTitleW = [_subTitleLabel.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, 15)].width;
+    CGFloat subTitleW = [_subTitleLabel.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth * 0.5 , 15)].width;
     CGFloat subTitleH = CGRectGetHeight(self.frame);
     CGFloat subTitleX = CGRectGetWidth(self.frame) - subTitleW - 20;
     CGFloat subTitleY = 0;
     _subTitleLabel.frame = CGRectMake(subTitleX, subTitleY, subTitleW, subTitleH);
+    
+
     
     CGFloat imageW = 20;
     CGFloat imageH = imageW;

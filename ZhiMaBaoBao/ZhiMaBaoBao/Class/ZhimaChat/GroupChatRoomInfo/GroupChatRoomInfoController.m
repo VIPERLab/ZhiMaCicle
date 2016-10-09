@@ -17,9 +17,12 @@
 
 #import "KXActionSheet.h"
 #import "SocketManager.h"
+#import "NSDate+TimeCategory.h"
 
 #import "FriendProfilecontroller.h"  //用户详情
 #import "CreateGroupChatController.h"  //创建群聊
+#import "GroupChatChangeGroupNameController.h" //修改群名称
+#import "GroupChatChangeNoticeController.h" // 修改群公告
 
 #define GroupChatRoomInfoCellReusedID @"GroupChatRoomInfoCellReusedID"
 #define GroupChatRoomInfoHeaderCellReusedID @"GroupChatRoomInfoHeaderCellReusedID"
@@ -31,6 +34,8 @@
 
 @property (nonatomic, strong) NSArray <GroupUserModel *>*groupMenberArray;
 
+@property (nonatomic, strong) GroupChatModel *groupModel;   //群聊信息数据模型
+
 @end
 
 @implementation GroupChatRoomInfoController {
@@ -41,18 +46,29 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    // 获取会话模型
-    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId];
-    self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
-    
-    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
-    
     [self setupView];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)getDataFormSQL {
+    // 获取会话模型
+    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId];
+    self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
+    
+    self.groupModel.create_time = [NSDate dateStrFromCstampTime:self.converseModel.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    self.groupModel.topChat = self.converseModel.topChat;
+    self.groupModel.disturb = self.converseModel.disturb;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self getDataFormSQL];
+     [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
+    [_tableView reloadData];
 }
 
 - (void)setupView {
@@ -100,8 +116,11 @@
     cell.indexPath = indexPath;
     cell.subTitle = subTitleArray[indexPath.row];
     cell.converseId = self.converseId;
+    
     if (indexPath.section == 1 && indexPath.row == 1) {
-        cell.imageName = subTitleArray[indexPath.row];
+        if ([subTitleArray[indexPath.row] isEqualToString:@""]) {
+            cell.subTitle = @"未设置";
+        }
     }
     
     if (indexPath.section == 2 || (indexPath.section == 3 && indexPath.row == 1)) {
@@ -132,6 +151,8 @@
             temp++;
         }
         return ((iconW + 45) * temp + 15);
+    } else if (indexPath.section == 1 && indexPath.row == 2) {
+        return [self.groupModel.notice sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth - 40, 55)].height;
     }
     return 45;
 }
@@ -145,6 +166,33 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 0.1;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        //全部成员
+        NSLog(@"全部群成员");
+        
+    } else if (indexPath.section == 1 && indexPath.row == 0) {
+        // 群聊名称
+        NSLog(@"修改群名称");
+        GroupChatChangeGroupNameController *changeGroupName = [[GroupChatChangeGroupNameController alloc] init];
+        changeGroupName.groupModel = self.groupModel;
+        [self.navigationController pushViewController:changeGroupName animated:YES];
+    } else if (indexPath.section == 1 && indexPath.row == 1) {
+        // 群公告
+        NSLog(@"修改群公告");
+        GroupChatChangeNoticeController *changeNotice = [[GroupChatChangeNoticeController alloc] init];
+        changeNotice.groupModel = self.groupModel;
+        [self.navigationController pushViewController:changeNotice animated:YES];
+        
+    } else if (indexPath.section == 3 && indexPath.row == 0) {
+        // 我在本群的名称
+        NSLog(@"修改我在本群的昵称");
+        
+        
+        
+    }
 }
 
 
@@ -181,15 +229,13 @@
 
 - (NSArray *)titleArray {
     if (!_titleArray) {
-        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码",@"群公告"],@[@"消息免打扰",@"置顶聊天",@"保存到通讯录"],@[@"我在本群的昵称",@"显示群成员昵称"],@[@"清空聊天记录"]];
+        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群公告"],@[@"新消息提醒",@"置顶聊天",@"保存到通讯录"],@[@"我在本群的昵称",@"显示群成员昵称"],@[@"清空聊天记录"]];
     }
     return _titleArray;
 }
 
 - (NSArray *)subTitleArray {
-    if (!_subTitleArray) {
-        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode",self.groupModel.notice],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@""]];
-    }
+    _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,self.groupModel.notice],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@""]];
     return _subTitleArray;
 }
 
