@@ -12,4 +12,6 @@
 
 @property (nonatomic, weak) GroupChatModel *groupModel;
 
+@property (nonatomic, copy) NSString *tipsTitle;
+
 @end

@@ -48,7 +48,7 @@
     UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 64 + 20, 100, 14)];
     [self.view addSubview:tipsLabel];
     tipsLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
-    tipsLabel.text = @"群聊名称";
+    tipsLabel.text = self.tipsTitle;
     tipsLabel.font = [UIFont systemFontOfSize:13];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tipsLabel.frame) + 5, ScreenWidth, 40)];
