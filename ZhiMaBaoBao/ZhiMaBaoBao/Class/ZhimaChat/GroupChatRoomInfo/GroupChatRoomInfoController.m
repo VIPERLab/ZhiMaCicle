@@ -26,7 +26,7 @@
 
 #define GroupChatRoomInfoCellReusedID @"GroupChatRoomInfoCellReusedID"
 #define GroupChatRoomInfoHeaderCellReusedID @"GroupChatRoomInfoHeaderCellReusedID"
-@interface GroupChatRoomInfoController () <UITableViewDelegate,UITableViewDataSource,GroupChatInfoFooterViewDelegate,KXActionSheetDelegate,GroupChatInfoHeaderCellDelegate>
+@interface GroupChatRoomInfoController () <UITableViewDelegate,UITableViewDataSource,GroupChatInfoFooterViewDelegate,KXActionSheetDelegate,GroupChatInfoHeaderCellDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, strong) NSArray *subTitleArray;
@@ -178,6 +178,9 @@
         NSLog(@"修改群名称");
         GroupChatChangeGroupNameController *changeGroupName = [[GroupChatChangeGroupNameController alloc] init];
         changeGroupName.groupModel = self.groupModel;
+        changeGroupName.tipsTitle = @"群聊名称";
+        changeGroupName.titleName = @"群聊名称";
+        changeGroupName.type = 0;
         [self.navigationController pushViewController:changeGroupName animated:YES];
     } else if (indexPath.section == 1 && indexPath.row == 1) {
         // 群公告
@@ -189,9 +192,17 @@
     } else if (indexPath.section == 3 && indexPath.row == 0) {
         // 我在本群的名称
         NSLog(@"修改我在本群的昵称");
+        GroupChatChangeGroupNameController *changeGroupName = [[GroupChatChangeGroupNameController alloc] init];
+        changeGroupName.groupModel = self.groupModel;
+        changeGroupName.tipsTitle = @"我在本群的昵称";
+        changeGroupName.titleName = @"我在本群的昵称";
+        changeGroupName.type = 1;
+        [self.navigationController pushViewController:changeGroupName animated:YES];
         
-        
-        
+    } else if (indexPath.section == 4 && indexPath.row == 1) {
+        NSLog(@"清空聊天记录");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定要清除聊天记录吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        [alert show];
     }
 }
 
@@ -212,6 +223,13 @@
     }
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1) {
+        [FMDBShareManager deleteMessageFormMessageTableByConverseID:self.converseId];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+
 
 - (void)GroupChatInfoHeaderCellDidClickMemberIcon:(NSString *)memberId {
     NSLog(@"点击了用户头像");
@@ -228,14 +246,12 @@
 
 
 - (NSArray *)titleArray {
-    if (!_titleArray) {
-        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群公告"],@[@"新消息提醒",@"置顶聊天",@"保存到通讯录"],@[@"我在本群的昵称",@"显示群成员昵称"],@[@"清空聊天记录"]];
-    }
+    _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群公告"],@[@"新消息提醒",@"置顶聊天",@"保存到通讯录"],@[@"我在本群的昵称",@"显示群成员昵称"],@[@"显示聊天记录",@"清空聊天记录"]];
     return _titleArray;
 }
 
 - (NSArray *)subTitleArray {
-    _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,self.groupModel.notice],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@""]];
+    _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,self.groupModel.notice],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@"",@""]];
     return _subTitleArray;
 }
 

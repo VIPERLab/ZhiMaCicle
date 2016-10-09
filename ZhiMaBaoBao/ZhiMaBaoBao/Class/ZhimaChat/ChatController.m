@@ -108,8 +108,14 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     //通过id查数据库最新会话名->设置为标题
     //1.先通过id查会话
-    ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
-    [self setCustomTitle:friendModel.displayName];
+    if (!self.converseType) {
+        ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
+        [self setCustomTitle:friendModel.displayName];
+    } else {
+        GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
+        [self setCustomTitle:groupModel.groupName];
+    }
+    
 
 }
 

@@ -12,4 +12,11 @@
 
 @property (nonatomic, weak) GroupChatModel *groupModel;
 
+@property (nonatomic, copy) NSString *tipsTitle;
+
+@property (nonatomic, copy) NSString *titleName;
+
+// 0 是修改群名称  1 是修改自己在本群的昵称
+@property (nonatomic, assign) BOOL type;
+
 @end

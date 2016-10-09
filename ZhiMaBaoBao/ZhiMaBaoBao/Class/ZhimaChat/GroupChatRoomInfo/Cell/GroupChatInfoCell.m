@@ -121,9 +121,13 @@
     }];
 }
 
-//(void)setupGroup:(NSString *)sessionId groupId:(NSString *)groupId functionName:(NSString *)functionName value:(NSString *)value success:(SuccessfulBlock)success failure:(FailureBlock)failure;
+
 //  保存通讯录接口
 - (void)saveToMailListRequest:(int)value {
+    
+    NSString * option1 = [NSString stringWithFormat:@"saveToMailList = '%zd'",value];
+    [self setupOptionInGroupMessageTable:option1];
+    
     [LGNetWorking setupGroup:USERINFO.sessionId groupId:self.converseId functionName:@"save_to_contacts" value:[NSString stringWithFormat:@"%zd",value] success:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
@@ -131,9 +135,9 @@
             return ;
         }
         
+//        NSString * option1 = [NSString stringWithFormat:@"saveToMailList = '%zd'",value];
+//        [self setupOptionInGroupMessageTable:option1];
         
-        NSString * option1 = [NSString stringWithFormat:@"saveToMailList = '%zd'",value];
-        [self setupOptionInGroupMessageTable:option1];
         
     } failure:^(ErrorData *error) {
         
