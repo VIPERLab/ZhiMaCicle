@@ -121,4 +121,35 @@
     }];
     
 }
+
++ (void)chatGetImage:(NSString *)url params:(NSDictionary *)params formData:(NSData *)data success:(void (^)(NSDictionary *json))success failure:(void (^)(NSError *))errorblock {
+
+
+    NSString *murl = @"http://172.16.0.247/Api/pic/upfile";
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    [manager POST:murl parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        if (data) {
+            [formData appendPartWithFileData:data name:@"file" fileName:@"photo.png" mimeType:@"image/jpeg"];
+        }
+    } progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            //封装返回数据
+            NSDictionary *data = responseObject;
+//            NSLog(@"responseData:%@",data.data);
+            
+            success(data);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (error) {
+            
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            errorblock(error);
+        }
+    }];
+    
+}
 @end

@@ -35,9 +35,6 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
     FriendActTypeUpdate         //好友资料更新
 };
 
-//生成签名的apikey
-#define APIKEY @"apikey=yihezhaizhima20162018"
-
 
 #import <Foundation/Foundation.h>
 #import "GCDAsyncSocket.h"

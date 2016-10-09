@@ -79,8 +79,8 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
 
 // 是否正在发送中
 @property (nonatomic, assign) BOOL isSending;
-
-
+/** 图片本地路径*/
+@property (nonatomic, copy) NSURL *picUrl;
 
  /** 单元格高度*/
 @property (nonatomic, assign) CGFloat cellHeight;
