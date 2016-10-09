@@ -55,10 +55,12 @@
 
 //测试环境
 #define DFAPIURL @"http://zhimachat.yihezhai.cc"
+#define DFAPIURLTEST @"http://zm.yihezhai.cc"
+
 
 //正式网络环境
 //#define DFAPIURL @"http://app.zhima11.com:8080"
-#define DFAPIURLTEST @"http://wx.zhima11.com"
+//#define DFAPIURLTEST @"http://wx.zhima11.com"
 
 //常用头文件
 #import "AFNetworking.h"

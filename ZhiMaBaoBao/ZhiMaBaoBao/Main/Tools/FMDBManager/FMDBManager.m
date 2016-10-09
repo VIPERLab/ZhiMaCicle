@@ -1148,7 +1148,6 @@
             model.status = [result intForColumn:@"status"];
             [dataArray addObject:model];
         }
-        
     }];
     return [dataArray copy];
 }
