@@ -35,7 +35,7 @@
 }
 
 - (void)setupNav {
-    [self setCustomTitle:@"群聊名称"];
+    [self setCustomTitle:self.titleName];
     
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(saveGroupName)];
     self.navigationItem.rightBarButtonItem = rightBarButton;
@@ -60,7 +60,13 @@
     textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     textField.textAlignment = NSTextAlignmentLeft;
     textField.font = [UIFont systemFontOfSize:17];
-    textField.text = self.groupModel.groupName;
+    
+    if (self.type) {
+        textField.text = self.groupModel.myGroupName;
+    } else {
+        textField.text = self.groupModel.groupName;
+    }
+    
     [view addSubview:textField];
     
 }
@@ -68,12 +74,17 @@
 
 - (void)saveGroupName {
     if ([self.textField.text isEqualToString:@""]) {
-        NSLog(@"名字不能为空");
+        NSLog(@"不能为空");
         return;
     }
     
     // 更新数据库
-    self.groupModel.groupName = self.textField.text;
+    if (self.type) {
+        self.groupModel.myGroupName = self.textField.text;
+    } else {
+        self.groupModel.groupName = self.textField.text;
+    }
+    
     [FMDBShareManager saveGroupChatMessage:self.groupModel andConverseID:self.groupModel.groupId];
     
     [self.navigationController popViewControllerAnimated:YES];

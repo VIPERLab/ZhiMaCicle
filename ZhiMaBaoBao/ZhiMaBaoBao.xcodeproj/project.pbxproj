@@ -456,6 +456,7 @@
 		310B83331D8E7B0100A0F408 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 310B83311D8E7B0100A0F408 /* LaunchScreen.storyboard */; };
 		310B833E1D8E7B0100A0F408 /* ZhiMaBaoBaoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B833D1D8E7B0100A0F408 /* ZhiMaBaoBaoTests.m */; };
 		310B83491D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83481D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m */; };
+		310E67381DAA347E008DD15C /* TransPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 310E67371DAA347E008DD15C /* TransPopView.m */; };
 		311CEF281D91639700BBB1F9 /* PlaySounds.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF271D91639700BBB1F9 /* PlaySounds.m */; };
 		311CEF2B1D91653C00BBB1F9 /* CallSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF2A1D91653C00BBB1F9 /* CallSettingController.m */; };
 		311CEF2F1D92185D00BBB1F9 /* ChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF2E1D92185D00BBB1F9 /* ChatController.m */; };
@@ -1485,6 +1486,8 @@
 		310B83441D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZhiMaBaoBaoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		310B83481D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZhiMaBaoBaoUITests.m; sourceTree = "<group>"; };
 		310B834A1D8E7B0100A0F408 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		310E67361DAA347E008DD15C /* TransPopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransPopView.h; sourceTree = "<group>"; };
+		310E67371DAA347E008DD15C /* TransPopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransPopView.m; sourceTree = "<group>"; };
 		311CEF261D91639700BBB1F9 /* PlaySounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaySounds.h; sourceTree = "<group>"; };
 		311CEF271D91639700BBB1F9 /* PlaySounds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaySounds.m; sourceTree = "<group>"; };
 		311CEF291D91653C00BBB1F9 /* CallSettingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallSettingController.h; sourceTree = "<group>"; };
@@ -4230,6 +4233,8 @@
 			children = (
 				319EA00B1DA4DA09000EE216 /* ForwardMsgController.h */,
 				319EA00C1DA4DA09000EE216 /* ForwardMsgController.m */,
+				310E67361DAA347E008DD15C /* TransPopView.h */,
+				310E67371DAA347E008DD15C /* TransPopView.m */,
 				319EA00E1DA4E13D000EE216 /* AvtarAndNameCell.h */,
 				319EA00F1DA4E13D000EE216 /* AvtarAndNameCell.m */,
 				319EA0101DA4E13D000EE216 /* AvtarAndNameCell.xib */,
@@ -5105,6 +5110,7 @@
 				31B7C78A1D8FE71100F1883A /* LGCallRecordModel.m in Sources */,
 				04EA7DBF1D912872005E5425 /* ZXDataMatrixReader.m in Sources */,
 				04EA7E241D912872005E5425 /* ZXQRCodeFinderPattern.m in Sources */,
+				310E67381DAA347E008DD15C /* TransPopView.m in Sources */,
 				04EA7DAA1D912872005E5425 /* ZXResult.m in Sources */,
 				04EA7B611D91282E005E5425 /* LBXScanResult.m in Sources */,
 				04EA7E1F1D912872005E5425 /* ZXQRCodeMode.m in Sources */,

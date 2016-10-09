@@ -9,8 +9,10 @@
 #import "ForwardMsgController.h"
 #import "AvtarAndNameCell.h"
 #import "CreateGroupChatController.h"
+#import "TransPopView.h"
+#import "SocketManager.h"
 
-@interface ForwardMsgController ()<UITableViewDelegate,UITableViewDataSource>
+@interface ForwardMsgController ()<UITableViewDelegate,UITableViewDataSource,TransPopViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -104,6 +106,18 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     [self.tableView reloadData];
 }
 
+//转发消息
+- (void)transformMessage:(LGMessage *)message toUserId:(NSString *)userId{
+    //更新转发消息 发送时间 和发送对象
+    message.timeStamp = [NSDate currentTimeStamp];
+    message.toUidOrGroupId = userId;
+    [[SocketManager shareInstance] sendMessage:message];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [LCProgressHUD showSuccessText:@"发送成功"];
+    }];
+}
+
 #pragma mark - tableView delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 2;
@@ -136,11 +150,15 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {   //跳转到选择好友控制器
         CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+        vc.isPushFromTrans = YES;
+        vc.hideFirstSection = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }else{  //转发消息
-        
+        ConverseModel *conversion = self.dataArray[indexPath.row];
+        TransPopView *popView = [[TransPopView alloc] initWithMessage:self.message toUserId:conversion.converseId];
+        popView.delegate = self;
+        [popView show];
     }
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
