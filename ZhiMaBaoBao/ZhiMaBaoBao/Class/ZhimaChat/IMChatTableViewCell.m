@@ -100,32 +100,6 @@
     return [super canPerformAction:action withSender:sender];
 }
 
-//复制
-//- (void)copyItemClicked:(id)sender{
-//    [super copyItemClicked:sender];
-//}
-
-//转发
-//- (void)transItemClicked:(id)sender{
-//    
-//}
-
-//收藏
-//- (void)keepItemClicked:(id)sender{
-//    
-//}
-
-//删除
-//- (void)deleteItemClicked:(id)sender{
-//    
-//}
-
-//撤回
-//- (void)undoItemClicked:(id)sender{
-//    
-//}
-
-
 #pragma mark 实现成为第一响应者方法
 
 -(BOOL)canBecomeFirstResponder{

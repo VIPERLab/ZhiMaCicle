@@ -38,6 +38,7 @@
 #import "BaseNavigationController.h"
 #import "FriendProfilecontroller.h"
 #import "ConverseModel.h"   //会话模型
+#import "KXActionSheet.h"
 
 //相册相关头文件
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -46,7 +47,8 @@
 #import "NSURL+DNIMagePickerUrlEqual.h"
 
 
-@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate>
+@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,KXActionSheetDelegate>
+
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ChatKeyBoard *keyboard;
 
@@ -73,7 +75,11 @@
 
 @property (nonatomic, assign)int currentPage;
 
+
 @property (nonatomic, strong) NSMutableArray *imagesArray; // 选择的图片数组
+
+
+@property (nonatomic, strong) NSIndexPath *selectedIndexPath;   //保存选中行
 
 
 @end
@@ -755,44 +761,57 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 //删除
 - (void)deleteMessageWithIndexPath:(NSIndexPath *)indexPath{
-    LGMessage *message = self.messages[indexPath.row];
+    self.selectedIndexPath = indexPath;
+    
+    
+    KXActionSheet *actionSheet = [[KXActionSheet alloc] initWithTitle:@"是否删除该条消息?" cancellTitle:@"取消" andOtherButtonTitles:@[@"确定"]];
+    actionSheet.delegate = self;
+    [actionSheet show];
+    
 
-    //从数据库删除该条消息
-    [[SocketManager shareInstance] deleteMessage:message];
     
-    BOOL isLast = NO;
-    
-    if (indexPath.row + 1 == self.messages.count) {
-        isLast = YES;
-    }
-    
-    if (isLast) {
-        NSString *lastConverseText = [NSString string];
-        if (indexPath.row - 1 >= 0) {
-            LGMessage *lastMessage = self.messages[indexPath.row - 1];
-            lastConverseText = lastMessage.text;
-        } else {
-            lastConverseText = @" ";
+}
+
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index;{
+    if (index == 0) {
+        LGMessage *message = self.messages[self.selectedIndexPath.row];
+        
+        //从数据库删除该条消息
+        [[SocketManager shareInstance] deleteMessage:message];
+        
+        BOOL isLast = NO;
+        
+        if (self.selectedIndexPath.row + 1 == self.messages.count) {
+            isLast = YES;
         }
         
-        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-        NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",lastConverseText];
-        NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",self.conversionId]];
-        [queue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:upDataStr];
-            if (success) {
-                NSLog(@"更新会话成功");
+        if (isLast) {
+            NSString *lastConverseText = [NSString string];
+            if (self.selectedIndexPath.row - 1 >= 0) {
+                LGMessage *lastMessage = self.messages[self.selectedIndexPath.row - 1];
+                lastConverseText = lastMessage.text;
             } else {
-                NSLog(@"更新会话失败");
+                lastConverseText = @" ";
             }
-        }];
+            
+            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+            NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",lastConverseText];
+            NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",self.conversionId]];
+            [queue inDatabase:^(FMDatabase *db) {
+                BOOL success = [db executeUpdate:upDataStr];
+                if (success) {
+                    NSLog(@"更新会话成功");
+                } else {
+                    NSLog(@"更新会话失败");
+                }
+            }];
+        }
+        
+        
+        [self.messages removeObjectAtIndex:self.selectedIndexPath.row];
+        //    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+        [self.tableView reloadData];
     }
-    
-    
-    
-//    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
-    [self.messages removeObjectAtIndex:indexPath.row];
-    [self.tableView reloadData];
 }
 
 //撤回
