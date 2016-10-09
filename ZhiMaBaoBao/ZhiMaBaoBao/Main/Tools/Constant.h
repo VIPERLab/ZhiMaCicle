@@ -62,6 +62,18 @@
 //#define DFAPIURL @"http://app.zhima11.com:8080"
 //#define DFAPIURLTEST @"http://wx.zhima11.com"
 
+//测试支付，打电话余额
+#define DFAPIURLTEST @"http://zm.yihezhai.cc"
+
+//生成签名的apikey
+#define APIKEY @"apikey=yihezhaizhima20162018"
+
+//请将下面的KEY修改成自己申请的七牛相关信息
+#define ACCESSKEY @"iPbM0LbSWcdj9p1PgXk0CEAQIKup1LNiDTyGJMF7"
+#define BUBBULE @"ikantech"
+#define BUBBLUE_URL @"http://ikantech.qiniudn.com/"
+#define SECRETKEY @"TpsPj9dMHqVj6V9wAOukhJ-eeKXJlFKJPVW0L89O"
+
 
 //常用头文件
 #import "AFNetworking.h"

@@ -7,6 +7,8 @@
 //
 
 #import "LGNetWorking.h"
+#import "NSString+MD5.h"
+
 
 @implementation LGNetWorking
 
@@ -183,6 +185,26 @@
     
         
     }];
+    
+}
+
++ (void)chatUploadPhoto:(NSString *)sessindId image:(id)imageData fileName:(NSString *)fileName andFuctionName:(NSString *)functionName block:(ChatSuccessfulBlock)block failure:(ChatFailureBlock)FailureBlock{
+    
+    NSString* str = [NSString stringWithFormat:@"fileName=%@&%@",fileName,APIKEY];
+    NSString *sign = [[str md5Encrypt] uppercaseString];
+
+    [HttpTool chatGetImage:nil
+                    params:@{@"sign":sign,
+                             @"fileName":fileName}
+                  formData:imageData
+                   success:^(NSDictionary *json) {
+                  
+                  block(json);
+              } failure:^(NSError *error) {
+                  
+                  FailureBlock(error);
+                  
+              }];
     
 }
 

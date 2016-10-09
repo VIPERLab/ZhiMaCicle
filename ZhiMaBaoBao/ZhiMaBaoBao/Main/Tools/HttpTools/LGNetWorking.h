@@ -83,6 +83,7 @@
  *  @param block
  */
 + (void)uploadPhoto:(NSString *)sessindId image:(id)imageData fileName:(NSString *)fileName andFuctionName:(NSString *)functionName block:(SuccessfulBlock)block;
++ (void)chatUploadPhoto:(NSString *)sessindId image:(id)imageData fileName:(NSString *)fileName andFuctionName:(NSString *)functionName block:(ChatSuccessfulBlock)block failure:(ChatFailureBlock)FailureBlock;
 
 /**
  *  获取所有通话记录

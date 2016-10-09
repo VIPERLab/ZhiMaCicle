@@ -13,6 +13,8 @@
 typedef void(^SuccessfulBlock)(ResponseData *responseData);
 typedef void(^FailureBlock)(ErrorData *error);
 
+typedef void(^ChatSuccessfulBlock)(NSDictionary *responseData);
+typedef void(^ChatFailureBlock)(NSError *error);
 
 @interface HttpTool : AFHTTPSessionManager
 // 单例
@@ -25,4 +27,5 @@ typedef void(^FailureBlock)(ErrorData *error);
 
 
 + (void)getImage:(NSString *)url params:(NSDictionary *)params formData:(NSData *)data success:(void (^)(ResponseData *json))success failure:(void (^)(ErrorData *json))error;
++ (void)chatGetImage:(NSString *)url params:(NSDictionary *)params formData:(NSData *)data success:(void (^)(NSDictionary *json))success failure:(void (^)(NSError *))errorblock;
 @end

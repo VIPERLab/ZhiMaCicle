@@ -7,6 +7,7 @@
 //
 
 #import "IMMorePictureTableViewCell.h"
+#import <AssetsLibrary/AssetsLibrary.h>
 
 
 @implementation IMMorePictureTableViewCell
@@ -48,7 +49,19 @@
 {
     
     _isMe = isMySelf;
-    [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text]];
+    
+    if (chat.picUrl) {
+        ALAssetsLibrary *lib = [ALAssetsLibrary new];
+        [lib assetForURL:chat.picUrl resultBlock:^(ALAsset *asset) {
+            UIImage *image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationUp];
+            [_picturesView setImage:image];
+            
+        } failureBlock:^(NSError *error) {
+            
+        }];
+    }else{
+        [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text]];
+    }
     
     UITapGestureRecognizer*tap = [[UITapGestureRecognizer alloc]initWithTarget:target action:action];
     [_picturesView addGestureRecognizer:tap];
