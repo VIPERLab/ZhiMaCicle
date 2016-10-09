@@ -266,6 +266,17 @@ static SocketManager *manager = nil;
         }
         else if ([actType isEqualToString:@"undomsg"]){   //撤销消息
             
+            //插入系统消息:"你撤回了一条消息"到数据库
+//            LGMessage *systemMsg = [[LGMessage alloc] init];
+//            systemMsg.text = @"你撤回了一条消息";
+//            systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
+//            systemMsg.fromUid = USERINFO.userID;
+//            systemMsg.type = MessageTypeSystem;
+//            systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+//            systemMsg.isGroup = message.isGroup;
+//            systemMsg.timeStamp = [NSDate currentTimeStamp];
+//            
+//            [FMDBShareManager saveMessage:systemMsg toConverseID:message.toUidOrGroupId];
         }
         else if ([actType isEqualToString:@"updategroupuser"]){ //群用户修改群昵称
             
@@ -369,6 +380,7 @@ static SocketManager *manager = nil;
     systemMsg.isGroup = message.isGroup;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
     
+    [FMDBShareManager saveMessage:systemMsg toConverseID:message.toUidOrGroupId];
 }
 
 //建群
