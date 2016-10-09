@@ -189,7 +189,7 @@
 }
 
 
-- (NSArray<GroupChatModel *> *)groupMenberArray {
+- (NSArray<GroupUserModel *> *)groupMenberArray {
     if (!_groupMenberArray) {
         _groupMenberArray = self.groupModel.groupUserVos;
     }
