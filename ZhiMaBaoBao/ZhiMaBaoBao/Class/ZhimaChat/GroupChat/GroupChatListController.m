@@ -27,6 +27,9 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     [self setNavRightItem];
     [self addNodataView];
     [self requestGroupList];
+    
+    UserInfo *userinfo = [UserInfo shareInstance];
+    userinfo.groupChatVC = self;
 }
 
 //没有数据时的view

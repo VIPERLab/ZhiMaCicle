@@ -41,7 +41,7 @@
     
     NSString *name = _friendModel.displayName;
     CGFloat width = [name sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].width;
-    self.widthConstraints.constant = width;
+    self.widthConstraints.constant = width + 5;
 }
 
 //单击头像

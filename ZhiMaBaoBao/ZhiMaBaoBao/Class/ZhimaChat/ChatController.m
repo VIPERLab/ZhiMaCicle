@@ -587,7 +587,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                     
                     SocketManager* socket = [SocketManager shareInstance];
-                    [socket sendMessage:chat];
+                    [socket reSendMessage:chat];
                 };
             } else {
                 textChatCell.sendAgain.hidden = YES;
@@ -732,6 +732,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
     
 //    baseChatCell.backgroundColor = indexPath.row%2 == 0 ? [UIColor orangeColor]:[UIColor lightGrayColor];
+    baseChatCell.message = message;
+    baseChatCell.delegate = self;
     
         return baseChatCell;
 }
@@ -742,6 +744,31 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     LGMessage * chat = [self.messages objectAtIndex:indexPath.row];
     return [self calculateRowHeightAccordingChat:chat indexPath:indexPath];
+}
+
+#pragma mark - 消息转发、撤回、删除等操作
+//转发
+- (void)transMessageWithIndexPath:(NSIndexPath *)indexPath{
+    
+}
+
+//收藏
+- (void)keepMessageWithIndexPath:(NSIndexPath *)indecPath{
+    
+}
+
+//删除
+- (void)deleteMessageWithIndexPath:(NSIndexPath *)indexPath{
+    LGMessage *message = self.messages[indexPath.row];
+    [self.messages removeObjectAtIndex:indexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+    //从数据库删除该条消息
+    [[SocketManager shareInstance] deleteMessage:message];
+}
+
+//撤回
+- (void)undoMessageWithIndexPath:(NSIndexPath *)indecPath{
+    
 }
 
 #pragma mark - tableview delegate
