@@ -7,7 +7,9 @@
 //
 
 #import "BaseViewController.h"
+#import "LGMessage.h"
 
 @interface ForwardMsgController : BaseViewController
 
+@property (nonatomic, strong) LGMessage *message;
 @end
