@@ -1581,7 +1581,7 @@
  */
 - (void)deleteMessageFormMessageTableByMessageID:(NSString *)messageID {
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
-    NSString *option = [NSString stringWithFormat:@"msgid = %@",messageID];
+    NSString *option = [NSString stringWithFormat:@"msgid = '%@'",messageID];
     NSString *detOpeartionStr = [FMDBShareManager deletedTableData:ZhiMa_Chat_Message_Table withOption:option];
     [messageQueue inDatabase:^(FMDatabase *db) {
         BOOL success = [db executeUpdate:detOpeartionStr];

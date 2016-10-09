@@ -33,7 +33,7 @@
         [_bubble addSubview:_chatMessageView];
         
         //添加长按手势
-        UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction)];
+        UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
         [_bubble addGestureRecognizer:longGesture];
     }
     return self;
@@ -45,7 +45,7 @@
 }
 
 //长按弹出功能栏
-- (void)longPressAction{
+- (void)longPressAction:(UIGestureRecognizer *)gesture{
 
 //    CGRect frame = 
 //    KXCopyView *copyView = [[KXCopyView alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)];
@@ -53,7 +53,7 @@
 //    [copyView setImage:[UIImage imageNamed:@"Discovre_Copy"] andInsets:UIEdgeInsetsMake(30, 40, 30, 40)];
 //    copyView.delegate = self;
 //    [copyView showAnimation];
-    
+    if (gesture.state == UIGestureRecognizerStateBegan) {
     [self becomeFirstResponder];
     
     UIMenuController *menu = [UIMenuController sharedMenuController];
@@ -69,6 +69,7 @@
     [menu setTargetRect:_bubble.frame inView:self];
     
     [menu setMenuVisible:YES animated:YES];
+    }
 }
 
 

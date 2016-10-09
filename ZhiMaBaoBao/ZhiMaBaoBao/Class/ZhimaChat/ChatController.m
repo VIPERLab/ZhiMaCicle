@@ -768,6 +768,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.messages removeObjectAtIndex:indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
     //从数据库删除该条消息
+    [FMDBShareManager deleteMessageFormMessageTableByMessageID:message.msgid];
     [[SocketManager shareInstance] deleteMessage:message];
 }
 
