@@ -1250,7 +1250,7 @@
  *
  *  @return 返回一个ConverseModel数组
  */
-- (NSArray *)getChatConverseDataInArray {
+- (NSArray <ConverseModel *>*)getChatConverseDataInArray {
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     NSMutableArray *dataArray = [NSMutableArray array];
     NSLog(@"开始查会话表");
@@ -1274,6 +1274,31 @@
             [dataArray addObject:model];
         }
     }];
+    
+    //置顶的model数组
+    NSMutableArray *topModelArray = [NSMutableArray array];
+    // 把模型数组中，置顶的放到最前面
+    for (ConverseModel *model in dataArray) {
+        
+        if (model.topChat) {
+            [topModelArray addObject:model];
+        }
+    }
+    
+    
+    for (ConverseModel *model in topModelArray) {
+        [dataArray removeObject:model];
+    }
+    
+    
+    
+    // 在按顺序把置顶模型放到数组顶部
+    for (NSInteger index = 1; index < topModelArray.count + 1; index++) {
+        ConverseModel *model = topModelArray[index - 1];
+        [dataArray insertObject:model atIndex:index - 1];
+    }
+    
+    
     return dataArray;
 }
 
@@ -1635,7 +1660,12 @@
 
 
 
-// 根据群ID 获取群消息
+/**
+ *  根据群id 获取当前群的所有信息
+ *
+ *  @param groupId   群id
+ *
+ */
 - (GroupChatModel *)getGroupChatMessageByGroupId:(NSString *)groupId {
     GroupChatModel *model = [[GroupChatModel alloc] init];
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];

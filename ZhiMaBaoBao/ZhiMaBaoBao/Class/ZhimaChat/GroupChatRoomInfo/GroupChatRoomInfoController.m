@@ -18,6 +18,9 @@
 #import "KXActionSheet.h"
 #import "SocketManager.h"
 
+#import "FriendProfilecontroller.h"  //用户详情
+#import "CreateGroupChatController.h"  //创建群聊
+
 #define GroupChatRoomInfoCellReusedID @"GroupChatRoomInfoCellReusedID"
 #define GroupChatRoomInfoHeaderCellReusedID @"GroupChatRoomInfoHeaderCellReusedID"
 @interface GroupChatRoomInfoController () <UITableViewDelegate,UITableViewDataSource,GroupChatInfoFooterViewDelegate,KXActionSheetDelegate,GroupChatInfoHeaderCellDelegate>
@@ -164,14 +167,16 @@
 
 - (void)GroupChatInfoHeaderCellDidClickMemberIcon:(NSString *)memberId {
     NSLog(@"点击了用户头像");
+    FriendProfilecontroller *friendProfile = [[FriendProfilecontroller alloc] init];
+    friendProfile.userId = memberId;
+    [self.navigationController pushViewController:friendProfile animated:YES];
 }
 
 - (void)GroupChatInfoHeaderCellDelegateDidClickAddMember {
     NSLog(@"点击了添加好友");
+    CreateGroupChatController *group = [[CreateGroupChatController alloc] init];
+    [self presentViewController:group animated:group completion:nil];
 }
-
-
-
 
 
 - (NSArray *)titleArray {
