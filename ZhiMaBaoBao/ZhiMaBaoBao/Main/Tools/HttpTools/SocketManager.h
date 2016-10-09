@@ -30,7 +30,7 @@ typedef NS_OPTIONS(NSUInteger, GroupActType) {
 //好友操作类型  --  用来生成发送给socket数据包
 typedef NS_OPTIONS(NSUInteger, FriendActType) {
     FriendActTypeAdd   = 0,     //添加好友
-    FriendActTypeDel,           //删除好友
+//    FriendActTypeDel,           //删除好友
     FriendActTypeBlack,         //加入黑名单
     FriendActTypeUpdate         //好友资料更新
 };
@@ -73,6 +73,11 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  *  @param message 消息数据模型
  */
 - (void)sendMessage:(LGMessage *)message;
+
+/**
+ *  重新发送消息
+ */
+- (void)reSendMessage:(LGMessage *)message;
 
 /**
  *  删除消息
@@ -129,12 +134,13 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  */
 - (void)addFriend:(NSString *)friendId;
 
-/**
- *  删除好友
- *
- *  @param friendId 好友id
- */
-- (void)delFriend:(NSString *)friendId;
+//直接调用https接口
+///**
+// *  删除好友
+// *
+// *  @param friendId 好友id
+// */
+//- (void)delFriend:(NSString *)friendId;
 
 /**
  *  加入黑名单

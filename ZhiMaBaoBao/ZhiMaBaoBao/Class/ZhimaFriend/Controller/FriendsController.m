@@ -29,8 +29,17 @@
 static NSString * const reuseIdentifier = @"friendListcell";
 @implementation FriendsController
 
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        [self requestFriendsList];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     [self setCustomRightItems];
     [self addSubviews];
     

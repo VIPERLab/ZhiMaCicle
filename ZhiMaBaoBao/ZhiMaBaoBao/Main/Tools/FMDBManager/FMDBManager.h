@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
-@class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel;
+@class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel,GroupUserModel;
 @class SDTimeLineCellModel,SDTimeLineCellCommentItemModel,SDTimeLineCellLikeItemModel;
 
 typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
@@ -29,7 +29,7 @@ typedef enum : NSUInteger {
     ZhiMa_NewFriend_Message_Table,     //新好友表
     
     /* ----   群聊相关 ----  */
-//    ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
+    ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
     ZhiMa_GroupChat_GroupMenber_Table              //群成员表
 } ZhiMaSqliteTableType;
 
@@ -276,7 +276,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - 群聊信息表
 //                    ------------   群聊信息表  ----------------
-//- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
+- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
 
 
 #pragma mark - 群成员信息表
@@ -288,7 +288,7 @@ typedef enum : NSUInteger {
  *  @param groupId 群聊id
  *
  */
-- (void)saveAllGroupMemberWithArray:(NSArray <ZhiMaFriendModel *> *)array andGroupChatId:(NSString *)groupId;
+- (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupId;
 
 /**
  *  根据群id 和用户id 查询群成员表是否有这个人
@@ -307,6 +307,6 @@ typedef enum : NSUInteger {
  *
  *  @return 群成员数组
  */
-- (NSArray <ZhiMaFriendModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId;
+- (NSArray <GroupUserModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId;
 
 @end

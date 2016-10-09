@@ -47,9 +47,11 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     
     if (!self.friendsArr.count) {
         [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
-            self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
-            [self.tableView reloadData];
-            [FMDBShareManager saveNewFirendsWithArray:self.friendsArr andUserId:USERINFO.userID];
+            if (responseData.code == 0) {
+                self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+                [self.tableView reloadData];
+                [FMDBShareManager saveNewFirendsWithArray:self.friendsArr andUserId:USERINFO.userID];
+            }
         } failure:^(ErrorData *error) {
             [LCProgressHUD showFailureText:@"网络好像出错了哦[^_^]"];
         }];

@@ -14,6 +14,7 @@
 #import "RealReachability.h"
 #import "SocketManager.h"
 #import "ConverseModel.h"
+#import "LYVoIP.h"
 //临时用
 #import "ZhiMaFriendModel.h"
 
@@ -66,6 +67,9 @@
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
         [application registerUserNotificationSettings:settings];
     }
+    
+    //注册voipSDK
+    [[LYVoIP shareInstance]voipConfigWithID:@"6560" Key:@"rXk6stbTRTFMdDcyKbsfe8PZrcx8m8Za" model:LYVoIPModelAPPReView];
     
     
     return YES;
@@ -132,6 +136,7 @@
     [FMDBShareManager creatTableWithTableType:ZhiMa_NewFriend_Message_Table];
     
     //群聊相关的表
+    [FMDBShareManager creatTableWithTableType:ZhiMa_GroupChat_GroupMessage_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_GroupChat_GroupMenber_Table];
 }
 

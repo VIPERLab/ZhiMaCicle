@@ -36,15 +36,12 @@
     
     BMKLocationService *locationService = [[BMKLocationService alloc]init];
     _locationService = locationService;
-    
-    
+    [_locationService startUserLocationService];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    [LCProgressHUD showLoadingText:@"正在加载附近的人..."];
     _geocodesearch.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     _locationService.delegate = self;
-    [_locationService startUserLocationService];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -64,7 +61,7 @@
 
 - (void)loadNearByMessageData:(CLLocationCoordinate2D)locationCoordinate2D {
     //请求附近的人
-    
+    [LCProgressHUD showLoadingText:@"正在加载附近的人..."];
     [LGNetWorking changeUserLocation:USERINFO.sessionId langtitude:locationCoordinate2D.latitude longtitude:locationCoordinate2D.longitude near:@"near" block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
@@ -115,8 +112,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NearByModel *model = self.dataArr[indexPath.row];
-
-    
+    FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
+    vc.userId = model.uid;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

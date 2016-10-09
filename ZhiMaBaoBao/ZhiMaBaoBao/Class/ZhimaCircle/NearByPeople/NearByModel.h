@@ -15,7 +15,7 @@
 @property (nonatomic, copy) NSString *head_photo;
 @property (nonatomic, copy) NSString *yuan_head_photo;
 
-@property (nonatomic, copy) NSString *openfireaccount;
+@property (nonatomic, copy) NSString *uid;
 
 @property (nonatomic, copy) NSString *sex;
 
