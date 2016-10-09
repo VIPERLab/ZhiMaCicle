@@ -54,6 +54,7 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [self customInit];
     
     self.userInteractionEnabled = YES;
@@ -69,23 +70,23 @@
 
 #pragma mark override
 
-- (BOOL)canBecomeFirstResponder
-{
-    return YES;
-}
-
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
-{
-    return (action == @selector(delete:));
-}
-
-- (void)delete:(id)sender
-{
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(deleteButtonTappedWithIndexPath:)]) {
-        
-        [self.delegate deleteButtonTappedWithIndexPath:self.indexPath];
-    }
-}
+//- (BOOL)canBecomeFirstResponder
+//{
+//    return YES;
+//}
+//
+//- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+//{
+//    return (action == @selector(delete:));
+//}
+//
+//- (void)delete:(id)sender
+//{
+//    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(deleteButtonTappedWithIndexPath:)]) {
+//        
+//        [self.delegate deleteButtonTappedWithIndexPath:self.indexPath];
+//    }
+//}
 
 - (void)layoutSubviews
 {
@@ -305,6 +306,41 @@
             [self.delegate userIconTappedWithIndexPath:self.indexPath];
         }
 //    }
+}
+
+#pragma mark - 复制、转发等功能方法
+//复制
+- (void)copyItemClicked:(id)sender{
+    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    pboard.string = self.message.text;
+}
+
+//转发
+- (void)transItemClicked:(id)sender{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(transMessageWithIndexPath:)]) {
+        [self.delegate transMessageWithIndexPath:self.indexPath];
+    }
+}
+
+//收藏
+- (void)keepItemClicked:(id)sender{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keepMessageWithIndexPath:)]) {
+        [self.delegate keepMessageWithIndexPath:self.indexPath];
+    }
+}
+
+//删除
+- (void)deleteItemClicked:(id)sender{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(deleteMessageWithIndexPath:)]) {
+        [self.delegate deleteMessageWithIndexPath:self.indexPath];
+    }
+}
+
+//撤回
+- (void)undoItemClicked:(id)sender{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(undoMessageWithIndexPath:)]) {
+        [self.delegate undoMessageWithIndexPath:self.indexPath];
+    }
 }
 
 @end

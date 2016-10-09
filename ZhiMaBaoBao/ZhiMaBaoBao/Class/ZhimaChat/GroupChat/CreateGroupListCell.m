@@ -23,6 +23,11 @@
     self.selectFlagBtn.selected = friendModel.selectedGroup;
 }
 
+- (IBAction)flagBtnClick:(UIButton *)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(selectGroupMember:indexPath:)]) {
+        [self.delegate selectGroupMember:self.tableView indexPath:self.indexPath];
+    }
+}
 
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
