@@ -340,6 +340,10 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                          };
             }];
             self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+
+            //新建一个群会话，插入数据库
+            [FMDBShareManager saveGroupChatMessage:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+            
             //通过socket创建群聊
             [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:userIds];
         }

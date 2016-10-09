@@ -84,7 +84,7 @@
 #define GroupChat_MessageFields_name @"groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
 
 //群成员表
-#define GroupChat_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, converseId TEXT NOT NULL, memberId TEXT NOT NULL, memberName TEXT NOT NULL, memberNameInGroup TEXT NOT NULL, memberHeader_Photo TEXT NOT NULL)"
-#define GroupChat_MemberFields_Name @"converseId, memberId, memberName, memberNameInGroup, memberHeader_Photo"
+#define GroupChat_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, converseId TEXT NOT NULL, memberId TEXT NOT NULL, memberName TEXT NOT NULL, memberHeader_Photo TEXT NOT NULL)"
+#define GroupChat_MemberFields_Name @"converseId, memberId, memberName, memberHeader_Photo"
 
 #endif /* FMDBManagerHeader_h */

@@ -16,6 +16,7 @@
 #import "ZhiMaFriendModel.h"
 
 #import "KXActionSheet.h"
+#import "SocketManager.h"
 
 #define GroupChatRoomInfoCellReusedID @"GroupChatRoomInfoCellReusedID"
 #define GroupChatRoomInfoHeaderCellReusedID @"GroupChatRoomInfoHeaderCellReusedID"
@@ -147,8 +148,9 @@
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
     if (index == 0) {
-#warning 退出前需要删除 消息数据库 以及 对应的会话列表
-        
+        [[SocketManager shareInstance] delGroup:self.groupModel.groupId uid:USERINFO.userID];
+        [FMDBShareManager deleteMessageFormMessageTableByConverseID:self.groupModel.groupId];
+        [FMDBShareManager deleteConverseWithConverseId:self.groupModel.groupId];
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }

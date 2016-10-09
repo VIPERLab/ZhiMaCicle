@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
-@class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel;
+@class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel,GroupUserModel;
 @class SDTimeLineCellModel,SDTimeLineCellCommentItemModel,SDTimeLineCellLikeItemModel;
 
 typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
@@ -288,7 +288,7 @@ typedef enum : NSUInteger {
  *  @param groupId 群聊id
  *
  */
-- (void)saveAllGroupMemberWithArray:(NSArray <ZhiMaFriendModel *> *)array andGroupChatId:(NSString *)groupId;
+- (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupId;
 
 /**
  *  根据群id 和用户id 查询群成员表是否有这个人
@@ -307,6 +307,6 @@ typedef enum : NSUInteger {
  *
  *  @return 群成员数组
  */
-- (NSArray <ZhiMaFriendModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId;
+- (NSArray <GroupUserModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId;
 
 @end

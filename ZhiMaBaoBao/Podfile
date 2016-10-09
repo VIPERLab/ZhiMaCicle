@@ -15,5 +15,6 @@ pod 'SDWebImage', '~> 3.8.1’
 pod 'AliPay'
 pod 'RealReachability'
 pod 'RHSocketKit'
+pod 'pop', '~> 1.0'
 
 end
