@@ -12,6 +12,7 @@
 #import "pinyin.h"
 #import "ZhiMaFriendModel.h"
 #import "AvtarAndNameCell.h"
+#import "ChatController.h"
 
 @interface LGSearchController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
@@ -109,8 +110,18 @@ static NSString *const reuseIdentifier = @"searchResultCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    ZhiMaFriendModel *friendModel = self.dataArray[indexPath.row];
+
     //跳转到聊天
+    [self dismissViewControllerAnimated:NO completion:nil];
+    UserInfo *userinfo = [UserInfo shareInstance];
+    userinfo.mainVC.selectedViewController = userinfo.mainVC.viewControllers[0];
+    
+    ChatController *vc = [[ChatController alloc] init];
+    vc.conversionId = friendModel.user_Id;
+    vc.hidesBottomBarWhenPushed = YES;
+    ConversationController *conversationVC = userinfo.conversationVC;
+    [conversationVC.navigationController pushViewController:vc animated:YES];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

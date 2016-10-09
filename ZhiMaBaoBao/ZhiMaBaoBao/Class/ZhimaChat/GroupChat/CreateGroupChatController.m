@@ -11,9 +11,9 @@
 #import "pinyin.h"
 #import "GroupChatModel.h"
 #import "SocketManager.h"
+#import "ChatController.h"
 
-
-@interface CreateGroupChatController ()<UITableViewDelegate,UITableViewDataSource>
+@interface CreateGroupChatController ()<UITableViewDelegate,UITableViewDataSource,GreateGroupListCellDelegate>
 @property (nonatomic, strong) NSMutableArray *friends;              //好友列表数组
 @property (nonatomic, strong) NSMutableArray *friendsAfterSort;     //排序后的好友列表数组
 @property (nonatomic, strong) NSMutableArray *sectionsArr;             //排序后好友名称首字母
@@ -163,12 +163,18 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             
             ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
             cell.friendModel = friend;
+            cell.delegate = self;
+            cell.indexPath = indexPath;
+            cell.tableView = tableView;
             return cell;
         }
     }else{
         CreateGroupListCell *cell = [tableView dequeueReusableCellWithIdentifier:listReuseIdentifier];
         ZhiMaFriendModel *friend = self.searchResultArr[indexPath.row];
         cell.friendModel = friend;
+        cell.delegate = self;
+        cell.indexPath = indexPath;
+        cell.tableView = tableView;
         return cell;
     }
 }
@@ -296,6 +302,11 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     [self.textField resignFirstResponder];
 }
 
+#pragma mark - cell delegate
+- (void)selectGroupMember:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath{
+    [self tableView:tableView didSelectRowAtIndexPath:indexPath];
+}
+
 #pragma mark - 自定义方法
 //匹配搜索结果
 - (void)searchFriends:(NSNotification *)notify{
@@ -346,11 +357,28 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             
             //通过socket创建群聊
             [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:userIds];
+            
+            //跳转到群聊天页面
+            [self jumpGroupChat];
         }
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:error.msg];
     }];
     
+}
+
+- (void)jumpGroupChat{
+    [self dismissViewControllerAnimated:NO completion:nil];
+    UserInfo *userinfo = [UserInfo shareInstance];
+    [userinfo.groupChatVC.navigationController popToRootViewControllerAnimated:NO];
+    
+    userinfo.mainVC.selectedViewController = userinfo.mainVC.viewControllers[0];
+    
+    ChatController *vc = [[ChatController alloc] init];
+    vc.conversionId = self.groupChatModel.groupId;
+    vc.hidesBottomBarWhenPushed = YES;
+    ConversationController *conversationVC = userinfo.conversationVC;
+    [conversationVC.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)cancelAction{

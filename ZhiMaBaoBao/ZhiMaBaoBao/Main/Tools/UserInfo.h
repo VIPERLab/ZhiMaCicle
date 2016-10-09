@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MainViewController.h"
 #import "ConversationController.h"
+#import "GroupChatListController.h"
 @interface UserInfo : NSObject<NSCoding>
 
  /** 用户已经登录过app*/
@@ -78,6 +79,9 @@
 
  /** 会话控制器*/
 @property (nonatomic, strong) ConversationController *conversationVC;
+
+ /** 群聊列表控制器*/
+@property (nonatomic, strong) GroupChatListController *groupChatVC;
 
  /** 网络不可用*/
 @property (nonatomic, assign) BOOL networkUnReachable;

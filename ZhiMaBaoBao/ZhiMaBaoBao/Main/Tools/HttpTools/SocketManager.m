@@ -56,8 +56,8 @@ static SocketManager *manager = nil;
     connectParam.host = HOST;
     connectParam.port = PORT;
     
-    //设置心跳定时器间隔5秒
-    connectParam.heartbeatInterval = 5;
+    //设置心跳定时器间隔30秒
+    connectParam.heartbeatInterval = 30;
     
     //设置短线后是否自动重连
     connectParam.autoReconnect = YES;
@@ -265,16 +265,56 @@ static SocketManager *manager = nil;
             
         }
         else if ([actType isEqualToString:@"undomsg"]){   //撤销消息
+            NSDictionary *resDic = responceData[@"data"];
+            NSString *fromUid = resDic[@"fromUid"];
+            //根据uid拿到用户名
+            ZhiMaFriendModel *model = [FMDBShareManager getUserMessageByUserID:fromUid];
             
+            //插入系统消息:"『用户名』撤回了一条消息"到数据库
+            LGMessage *systemMsg = [[LGMessage alloc] init];
+            systemMsg.text = [NSString stringWithFormat:@"\"%@\"撤回了一条消息",model.user_Name];
+            systemMsg.toUidOrGroupId =  resDic[@"toUidOrGroupId"];
+            systemMsg.fromUid = fromUid;
+            systemMsg.type = MessageTypeSystem;
+            systemMsg.msgid = resDic[@"msgid"];
+            systemMsg.isGroup = [resDic[@"isGroup"] boolValue];
+            systemMsg.timeStamp = [NSDate currentTimeStamp];
+            
+            [FMDBShareManager saveMessage:systemMsg toConverseID:fromUid];
         }
         else if ([actType isEqualToString:@"updategroupuser"]){ //群用户修改群昵称
+#warning 更新数据库群成员列表
             
         }
         else if ([actType isEqualToString:@"nofriend"]){ //对方把你删除好友，
             //插入一条系统消息"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天。"到数据库
+            NSDictionary *resDic = responceData[@"data"];
+            NSString *toUid = resDic[@"toUidOrGroupId"];
+            LGMessage *systemMsg = [[LGMessage alloc] init];
+            systemMsg.text = @"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天。";
+            systemMsg.fromUid = toUid;
+            systemMsg.toUidOrGroupId = USERINFO.userID;
+            systemMsg.type = MessageTypeSystem;
+            systemMsg.msgid = resDic[@"msgid"];
+            systemMsg.isGroup = NO;
+            systemMsg.timeStamp = [NSDate currentTimeStamp];
+            [FMDBShareManager saveMessage:systemMsg toConverseID:toUid];
+
         }
         else if ([actType isEqualToString:@"inblacklist"]){ //对方把你设为黑名单
-            
+            //插入一条系统消息"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天。"到数据库
+            NSDictionary *resDic = responceData[@"data"];
+            NSString *toUid = resDic[@"toUidOrGroupId"];
+            LGMessage *systemMsg = [[LGMessage alloc] init];
+            systemMsg.text = @"消息已成功发送，但被对方拒绝。";
+            systemMsg.fromUid = toUid;
+            systemMsg.toUidOrGroupId = USERINFO.userID;
+            systemMsg.type = MessageTypeSystem;
+            systemMsg.msgid = resDic[@"msgid"];
+            systemMsg.isGroup = NO;
+            systemMsg.timeStamp = [NSDate currentTimeStamp];
+            [FMDBShareManager saveMessage:systemMsg toConverseID:toUid];
+
         }
         
         
@@ -369,6 +409,7 @@ static SocketManager *manager = nil;
     systemMsg.isGroup = message.isGroup;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
     
+    [FMDBShareManager saveMessage:systemMsg toConverseID:message.toUidOrGroupId];
 }
 
 //建群

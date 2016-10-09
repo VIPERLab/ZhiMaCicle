@@ -9,10 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "ZhiMaFriendModel.h"
 
+@protocol GreateGroupListCellDelegate <NSObject>
+
+- (void)selectGroupMember:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
+
+@end
+
 @interface CreateGroupListCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *selectFlagBtn;
 @property (weak, nonatomic) IBOutlet UIImageView *avtar;
 @property (weak, nonatomic) IBOutlet UILabel *name;
-
+@property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ZhiMaFriendModel *friendModel;
+@property (nonatomic, assign) id<GreateGroupListCellDelegate> delegate;
 @end
