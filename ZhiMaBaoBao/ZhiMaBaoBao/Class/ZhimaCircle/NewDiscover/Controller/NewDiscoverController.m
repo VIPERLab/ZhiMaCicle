@@ -106,7 +106,7 @@
     
     //图片点击通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClick:) name:K_NewDiscoverPhotoPickerNotifcation object:nil];
-    
+         
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClickButton:) name:K_NewDiscoverPhotoClickNotifcation object:nil];
     
     self.view.backgroundColor = [UIColor whiteColor];
