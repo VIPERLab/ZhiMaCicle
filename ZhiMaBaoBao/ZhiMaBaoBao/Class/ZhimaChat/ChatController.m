@@ -1201,7 +1201,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         LGMessage *message = self.messages[num];
         message.isSending = NO;
         
-        
         if ([obj[@"code"] integerValue] == 8888) {
             message.sendStatus = 1;
             message.text = obj[@"url"];
