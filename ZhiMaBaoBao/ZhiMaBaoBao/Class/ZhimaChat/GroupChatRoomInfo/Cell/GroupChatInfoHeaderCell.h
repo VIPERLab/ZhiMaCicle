@@ -7,9 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-@class ZhiMaFriendModel;
+@class GroupUserModel;
+
+@protocol GroupChatInfoHeaderCellDelegate <NSObject>
+
+- (void)GroupChatInfoHeaderCellDidClickMemberIcon:(NSString *)menberId;
+
+- (void)GroupChatInfoHeaderCellDelegateDidClickAddMember;
+
+@end
+
+
 @interface GroupChatInfoHeaderCell : UITableViewCell
 
-@property (nonatomic, strong) NSArray <ZhiMaFriendModel *>* modelArray;
+@property (nonatomic, strong) NSArray <GroupUserModel *>* modelArray;
+
+
+@property (nonatomic, weak) id <GroupChatInfoHeaderCellDelegate> delegate;
 
 @end

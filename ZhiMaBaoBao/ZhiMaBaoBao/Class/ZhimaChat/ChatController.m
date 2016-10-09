@@ -102,8 +102,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     //通过id查数据库最新会话名->设置为标题
     //1.先通过id查会话
-    ConverseModel *convesion = [FMDBShareManager searchConverseWithConverseID:self.conversionId];
-    [self setCustomTitle:convesion.converseName];
+    ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
+    [self setCustomTitle:friendModel.displayName];
 
 }
 
@@ -117,10 +117,15 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 //查看会话详情 ->
 - (void)lookConversionInfo{
-//    ChatRoomInfoController *vc = [[ChatRoomInfoController alloc] init];
-//    vc.userId = self.conversionId;
-//    vc.displayName = self.conversionName;
-//    [self.navigationController pushViewController:vc animated:YES];
+    if (!self.converseType) {  // 单聊
+        ChatRoomInfoController *vc = [[ChatRoomInfoController alloc] init];
+        vc.userId = self.conversionId;
+        vc.displayName = self.conversionName;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    
+    // 群聊
     GroupChatRoomInfoController *vc = [[GroupChatRoomInfoController alloc] init];
     vc.converseId = self.conversionId;
     [self.navigationController pushViewController:vc animated:YES];
@@ -596,7 +601,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                     
                     SocketManager* socket = [SocketManager shareInstance];
-                    [socket sendMessage:chat];
+                    [socket reSendMessage:chat];
                 };
             } else {
                 textChatCell.sendAgain.hidden = YES;
@@ -719,6 +724,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
     
 //    baseChatCell.backgroundColor = indexPath.row%2 == 0 ? [UIColor orangeColor]:[UIColor lightGrayColor];
+    baseChatCell.message = message;
+    baseChatCell.delegate = self;
     
         return baseChatCell;
 }
@@ -729,6 +736,77 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     LGMessage * chat = [self.messages objectAtIndex:indexPath.row];
     return [self calculateRowHeightAccordingChat:chat indexPath:indexPath];
+}
+
+#pragma mark - 消息转发、撤回、删除等操作
+//转发
+- (void)transMessageWithIndexPath:(NSIndexPath *)indexPath{
+    LGMessage *message = self.messages[indexPath.row];
+    ForwardMsgController *vc = [[ForwardMsgController alloc] init];
+    vc.message = message;
+    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
+//收藏
+- (void)keepMessageWithIndexPath:(NSIndexPath *)indecPath{
+    
+}
+
+//删除
+- (void)deleteMessageWithIndexPath:(NSIndexPath *)indexPath{
+    LGMessage *message = self.messages[indexPath.row];
+
+    //从数据库删除该条消息
+    [[SocketManager shareInstance] deleteMessage:message];
+    
+    BOOL isLast = NO;
+    
+    if (indexPath.row + 1 == self.messages.count) {
+        isLast = YES;
+    }
+    
+    if (isLast) {
+        NSString *lastConverseText = [NSString string];
+        if (indexPath.row - 1 >= 0) {
+            LGMessage *lastMessage = self.messages[indexPath.row - 1];
+            lastConverseText = lastMessage.text;
+        } else {
+            lastConverseText = @" ";
+        }
+        
+        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+        NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",lastConverseText];
+        NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",self.conversionId]];
+        [queue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:upDataStr];
+            if (success) {
+                NSLog(@"更新会话成功");
+            } else {
+                NSLog(@"更新会话失败");
+            }
+        }];
+    }
+    
+    
+    
+//    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+    [self.messages removeObjectAtIndex:indexPath.row];
+    [self.tableView reloadData];
+}
+
+//撤回
+- (void)undoMessageWithIndexPath:(NSIndexPath *)indecPath{
+    [LCProgressHUD showLoadingText:@"消息撤回中..."];
+    //socket发送消息撤回
+    LGMessage *message = self.messages[indecPath.row];
+    [[SocketManager shareInstance] undoMessage:message];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [LCProgressHUD hide];
+        //从数据库删除该条消息
+        [self deleteMessageWithIndexPath:indecPath];
+    });
 }
 
 #pragma mark - tableview delegate

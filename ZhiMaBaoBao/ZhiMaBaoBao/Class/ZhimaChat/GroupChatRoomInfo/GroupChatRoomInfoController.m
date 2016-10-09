@@ -17,16 +17,24 @@
 
 #import "KXActionSheet.h"
 #import "SocketManager.h"
+#import "NSDate+TimeCategory.h"
+
+#import "FriendProfilecontroller.h"  //用户详情
+#import "CreateGroupChatController.h"  //创建群聊
+#import "GroupChatChangeGroupNameController.h" //修改群名称
+#import "GroupChatChangeNoticeController.h" // 修改群公告
 
 #define GroupChatRoomInfoCellReusedID @"GroupChatRoomInfoCellReusedID"
 #define GroupChatRoomInfoHeaderCellReusedID @"GroupChatRoomInfoHeaderCellReusedID"
-@interface GroupChatRoomInfoController () <UITableViewDelegate,UITableViewDataSource,GroupChatInfoFooterViewDelegate,KXActionSheetDelegate>
+@interface GroupChatRoomInfoController () <UITableViewDelegate,UITableViewDataSource,GroupChatInfoFooterViewDelegate,KXActionSheetDelegate,GroupChatInfoHeaderCellDelegate>
 
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, strong) NSArray *subTitleArray;
 @property (nonatomic, strong) ConverseModel *converseModel;
 
-@property (nonatomic, strong) NSArray <ZhiMaFriendModel *>*groupMenberArray;
+@property (nonatomic, strong) NSArray <GroupUserModel *>*groupMenberArray;
+
+@property (nonatomic, strong) GroupChatModel *groupModel;   //群聊信息数据模型
 
 @end
 
@@ -37,15 +45,30 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
-    // 获取会话模型
-    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId];
+    
     [self setupView];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)getDataFormSQL {
+    // 获取会话模型
+    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId];
+    self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
+    
+    self.groupModel.create_time = [NSDate dateStrFromCstampTime:self.converseModel.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    self.groupModel.topChat = self.converseModel.topChat;
+    self.groupModel.disturb = self.converseModel.disturb;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self getDataFormSQL];
+     [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
+    [_tableView reloadData];
 }
 
 - (void)setupView {
@@ -81,6 +104,7 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         GroupChatInfoHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:GroupChatRoomInfoHeaderCellReusedID forIndexPath:indexPath];
         cell.modelArray = self.groupMenberArray;
+        cell.delegate = self;
         return cell;
     }
     
@@ -92,8 +116,11 @@
     cell.indexPath = indexPath;
     cell.subTitle = subTitleArray[indexPath.row];
     cell.converseId = self.converseId;
+    
     if (indexPath.section == 1 && indexPath.row == 1) {
-        cell.imageName = subTitleArray[indexPath.row];
+        if ([subTitleArray[indexPath.row] isEqualToString:@""]) {
+            cell.subTitle = @"未设置";
+        }
     }
     
     if (indexPath.section == 2 || (indexPath.section == 3 && indexPath.row == 1)) {
@@ -105,9 +132,10 @@
             cell.statusSwitch.on = self.converseModel.topChat;
         } else if (indexPath.section == 2 && indexPath.row == 2) {
             // 保存到通讯录
+            cell.statusSwitch.on = self.groupModel.saveToMailList;
         } else if (indexPath.section == 3 && indexPath.row == 1) {
             // 显示群成员名称
-            
+            cell.statusSwitch.on = self.groupModel.showMemberName;
         }
         cell.showStatuSwitch = YES;
     }
@@ -123,6 +151,8 @@
             temp++;
         }
         return ((iconW + 45) * temp + 15);
+    } else if (indexPath.section == 1 && indexPath.row == 2) {
+        return [self.groupModel.notice sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth - 40, 55)].height;
     }
     return 45;
 }
@@ -136,6 +166,33 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 0.1;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        //全部成员
+        NSLog(@"全部群成员");
+        
+    } else if (indexPath.section == 1 && indexPath.row == 0) {
+        // 群聊名称
+        NSLog(@"修改群名称");
+        GroupChatChangeGroupNameController *changeGroupName = [[GroupChatChangeGroupNameController alloc] init];
+        changeGroupName.groupModel = self.groupModel;
+        [self.navigationController pushViewController:changeGroupName animated:YES];
+    } else if (indexPath.section == 1 && indexPath.row == 1) {
+        // 群公告
+        NSLog(@"修改群公告");
+        GroupChatChangeNoticeController *changeNotice = [[GroupChatChangeNoticeController alloc] init];
+        changeNotice.groupModel = self.groupModel;
+        [self.navigationController pushViewController:changeNotice animated:YES];
+        
+    } else if (indexPath.section == 3 && indexPath.row == 0) {
+        // 我在本群的名称
+        NSLog(@"修改我在本群的昵称");
+        
+        
+        
+    }
 }
 
 
@@ -155,27 +212,37 @@
     }
 }
 
+
+- (void)GroupChatInfoHeaderCellDidClickMemberIcon:(NSString *)memberId {
+    NSLog(@"点击了用户头像");
+    FriendProfilecontroller *friendProfile = [[FriendProfilecontroller alloc] init];
+    friendProfile.userId = memberId;
+    [self.navigationController pushViewController:friendProfile animated:YES];
+}
+
+- (void)GroupChatInfoHeaderCellDelegateDidClickAddMember {
+    NSLog(@"点击了添加好友");
+    CreateGroupChatController *group = [[CreateGroupChatController alloc] init];
+    [self presentViewController:group animated:group completion:nil];
+}
+
+
 - (NSArray *)titleArray {
     if (!_titleArray) {
-        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码",@"群公告"],@[@"消息免打扰",@"置顶聊天",@"保存到通讯录"],@[@"我在本群的昵称",@"显示群成员昵称"],@[@"清空聊天记录"]];
+        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群公告"],@[@"新消息提醒",@"置顶聊天",@"保存到通讯录"],@[@"我在本群的昵称",@"显示群成员昵称"],@[@"清空聊天记录"]];
     }
     return _titleArray;
 }
 
 - (NSArray *)subTitleArray {
-    if (!_subTitleArray) {
-        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode",self.groupModel.notice],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@""]];
-    }
+    _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,self.groupModel.notice],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@""]];
     return _subTitleArray;
 }
 
 
-- (NSArray<ZhiMaFriendModel *> *)groupMenberArray {
+- (NSArray<GroupUserModel *> *)groupMenberArray {
     if (!_groupMenberArray) {
-        ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
-        model.user_Name = @"小明";
-        model.head_photo = @"userIcon";
-        _groupMenberArray = @[model,model,model,model,model,model,model,model,model,model,model,model];
+        _groupMenberArray = self.groupModel.groupUserVos;
     }
     return _groupMenberArray;
 }

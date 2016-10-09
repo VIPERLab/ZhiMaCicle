@@ -168,7 +168,7 @@
 
 - (NSArray *)imageArray {
     if (!_imageArray) {
-        _imageArray = @[@"PersonalCenter_Album",@"Personal_MyMoney",@"PersonalCenter_Album",@"PersonalCenter_Suggest",@"PersonalCenter_Setting"];
+        _imageArray = @[@"PersonalCenter_Album",@"Personal_MyMoney",@"ZhiMa_Collection_Icon",@"PersonalCenter_Suggest",@"PersonalCenter_Setting"];
     }
     return _imageArray;
 }

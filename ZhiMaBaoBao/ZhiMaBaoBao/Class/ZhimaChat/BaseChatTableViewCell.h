@@ -8,14 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "Constant.h"
+#import "LGMessage.h"
 
 @protocol BaseChatTableViewCellDelegate <NSObject>
 
 @optional
 
-- (void)userIconTappedWithIndexPath:(NSIndexPath *)indexPath;
-- (void)deleteButtonTappedWithIndexPath:(NSIndexPath *)indexPath;
-- (void)copyButtonTappedWithIndexPath:(NSIndexPath *)indexPath;
+- (void)userIconTappedWithIndexPath:(NSIndexPath *)indexPath;   //点击头像
+- (void)deleteMessageWithIndexPath:(NSIndexPath *)indexPath;    //删除
+- (void)transMessageWithIndexPath:(NSIndexPath *)indexPath;     //转发
+- (void)keepMessageWithIndexPath:(NSIndexPath *)indecPath;      //收藏
+- (void)undoMessageWithIndexPath:(NSIndexPath *)indecPath;      //撤回
 
 @end
 
@@ -38,6 +41,7 @@ typedef void (^ResendBlock)(BaseChatTableViewCell *cell);
     CGFloat _bubbleOffsetY;
 }
 
+@property (nonatomic, strong) LGMessage *message;               //消息时间戳
 @property (nonatomic, strong) UIImageView *bubble;              //气泡
 @property (nonatomic, strong) UILabel *topLabel;                //顶部的label，如时间
 @property (nonatomic, strong) UILabel *nickLabel;               //昵称
@@ -60,5 +64,20 @@ typedef void (^ResendBlock)(BaseChatTableViewCell *cell);
 + (CGFloat)getBaseHeightTopText:(NSString *)topText nick:(NSString *)nick;
 + (CGFloat)getBaseHeightTopText:(NSString *)topText nick:(NSString *)nick contentHeight:(CGFloat)contentHeight; //获取cell高度
 + (CGFloat)getBaseHeightTopText:(NSString *)topText nick:(NSString *)nick contentHeight:(CGFloat)contentHeight bubbleEdgeInset:(UIEdgeInsets)edgeInset;
+
+//复制
+- (void)copyItemClicked:(id)sender;
+
+//转发
+- (void)transItemClicked:(id)sender;
+
+//收藏
+- (void)keepItemClicked:(id)sender;
+
+//删除
+- (void)deleteItemClicked:(id)sender;
+
+//撤回
+- (void)undoItemClicked:(id)sender;
 
 @end

@@ -11,6 +11,8 @@
 @interface ChatController : BaseViewController
 
 @property (nonatomic, copy) NSString *conversionId;
+
+@property (nonatomic, assign) BOOL converseType;
 /**
  *  会话名称
  */

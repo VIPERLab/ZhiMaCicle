@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15A2301" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,27 +12,27 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                <frame key="frameInset" width="320" height="50"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xJW-En-F05">
-                        <rect key="frame" x="14" y="12" width="25" height="25"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="N1R-4S-zvo"/>
                             <constraint firstAttribute="width" constant="25" id="ymN-Qb-jPU"/>
                         </constraints>
                         <state key="normal" image="select_friend"/>
                         <state key="selected" image="select_friend_high"/>
+                        <connections>
+                            <action selector="flagBtnClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="qxQ-bZ-Ihy"/>
+                        </connections>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oWA-q7-Y6t">
-                        <rect key="frame" x="49" y="5" width="40" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="c71-94-EbT"/>
                             <constraint firstAttribute="width" constant="40" id="n11-xY-4ef"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sbW-QV-7Nn">
-                        <rect key="frame" x="99" y="14" width="207" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="7LO-d3-zfi"/>
                         </constraints>
@@ -55,6 +56,7 @@
                 <outlet property="name" destination="sbW-QV-7Nn" id="9HU-eT-LHb"/>
                 <outlet property="selectFlagBtn" destination="xJW-En-F05" id="hdA-qX-z2N"/>
             </connections>
+            <point key="canvasLocation" x="96" y="56"/>
         </tableViewCell>
     </objects>
     <resources>

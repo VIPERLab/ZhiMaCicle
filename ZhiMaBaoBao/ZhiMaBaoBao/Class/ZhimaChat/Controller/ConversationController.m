@@ -70,6 +70,7 @@
     [self.dataArray removeAllObjects];
     
     NSArray *dataArray = [FMDBShareManager getChatConverseDataInArray];
+    
     self.dataArray = [dataArray mutableCopy];
     [_tableView reloadData];
 }
@@ -133,7 +134,7 @@
     if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
         return 75;
     }
-    return 45;
+    return 43;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -151,6 +152,7 @@
         ChatController *vc = [[ChatController alloc] init];
         vc.conversionId = model.converseId;
         vc.conversionName = model.converseName;
+        vc.converseType = model.converseType;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         

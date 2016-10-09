@@ -52,12 +52,13 @@
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;
-    params[@"openfireaccount"] = userID;
+    params[@"userId"] = userID;
     params[@"friend_type"] = @"3";
     [manager POST:url parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         ResponseData *data = [ResponseData mj_objectWithKeyValues:responseObject];
         if (data.code != 0) {
+            [LCProgressHUD showFailureText:data.msg];
             return ;
         }
         
@@ -98,7 +99,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KXBlackListCell *cell = [tableView dequeueReusableCellWithIdentifier:KXBlackListTableCellReusedID forIndexPath:indexPath];
-    
     KXBlackListModel *model = self.dataArray[indexPath.row];
     cell.model = model;
     return cell;

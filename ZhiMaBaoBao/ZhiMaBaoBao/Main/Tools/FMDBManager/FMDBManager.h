@@ -276,7 +276,22 @@ typedef enum : NSUInteger {
 
 #pragma mark - 群聊信息表
 //                    ------------   群聊信息表  ----------------
+/**
+ *  保存群信息
+ *
+ *  @param array   群信息模型
+ *  @param groupId 会话ID = 群ID
+ *
+ */
 - (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
+
+/**
+ *  根据群id 获取当前群的所有信息
+ *
+ *  @param groupId   群id
+ *
+ */
+- (GroupChatModel *)getGroupChatMessageByGroupId:(NSString *)groupId;
 
 
 #pragma mark - 群成员信息表

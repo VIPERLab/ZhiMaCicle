@@ -9,11 +9,12 @@
 #import "IMChatTableViewCell.h"
 #import "TQRichTextView.h"
 #import "UIImageView+WebCache.h"
+#import "KXCopyView.h"
 
 #define DEFAULT_CHAT_FONT_SIZE      14  //聊天cell中默认的字体为14
 #define DEFAULT_CHAT_MESSAGE_MAX_WIDTH      150.0 //聊天cell,文字内容最大宽度
 
-@interface IMChatTableViewCell() {
+@interface IMChatTableViewCell()<KXCopyViewDelegate> {
 
 }
 
@@ -30,6 +31,10 @@
         _chatMessageView.font = SUBFONT;
         _chatMessageView.textColor = [UIColor blackColor];
         [_bubble addSubview:_chatMessageView];
+        
+        //添加长按手势
+        UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
+        [_bubble addGestureRecognizer:longGesture];
     }
     return self;
 }
@@ -38,6 +43,97 @@
 {
     [super setSelected:selected animated:animated];
 }
+
+//长按弹出功能栏
+- (void)longPressAction:(UIGestureRecognizer *)gesture{
+
+//    CGRect frame = 
+//    KXCopyView *copyView = [[KXCopyView alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)];
+//    copyView.titleArray = @[@"复制",@"转发",@"收藏",@"撤回",@"删除"];
+//    [copyView setImage:[UIImage imageNamed:@"Discovre_Copy"] andInsets:UIEdgeInsetsMake(30, 40, 30, 40)];
+//    copyView.delegate = self;
+//    [copyView showAnimation];
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+    [self becomeFirstResponder];
+    
+    UIMenuController *menu = [UIMenuController sharedMenuController];
+    
+    UIMenuItem *copyItem = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(copyItemClicked:)];
+    UIMenuItem *transItem = [[UIMenuItem alloc] initWithTitle:@"转发" action:@selector(transItemClicked:)];
+    UIMenuItem *keepItem = [[UIMenuItem alloc] initWithTitle:@"收藏" action:@selector(keepItemClicked:)];
+    UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:@"删除" action:@selector(deleteItemClicked:)];
+    UIMenuItem *undoItem = [[UIMenuItem alloc] initWithTitle:@"撤回" action:@selector(undoItemClicked:)];
+    
+    [menu setMenuItems:[NSArray arrayWithObjects:copyItem,transItem,keepItem,deleteItem,undoItem,nil]];
+    
+    [menu setTargetRect:_bubble.frame inView:self];
+    
+    [menu setMenuVisible:YES animated:YES];
+    }
+}
+
+
+#pragma mark 处理action事件
+
+//返回什么方法，则显示什么按钮
+-(BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    
+    if(action ==@selector(copyItemClicked:)){
+        return YES;
+        
+    }else if (action==@selector(transItemClicked:)){
+        return YES;
+    }
+    else if (action == @selector(keepItemClicked:)){
+        return YES;
+    }
+    else if (action == @selector(deleteItemClicked:)){
+        return YES;
+    }
+    else if (action == @selector(undoItemClicked:)){   //撤回 - 是我发的消息（时间间隔不超过两分钟）时展示撤回按钮
+        //判断是不是两分钟之内
+        NSInteger currentStamp = [NSDate currentTimeStamp];
+        BOOL canUndo = (currentStamp - self.message.timeStamp) < 120;
+        return self.isMe && canUndo;
+    }
+    
+    return [super canPerformAction:action withSender:sender];
+}
+
+//复制
+//- (void)copyItemClicked:(id)sender{
+//    [super copyItemClicked:sender];
+//}
+
+//转发
+//- (void)transItemClicked:(id)sender{
+//    
+//}
+
+//收藏
+//- (void)keepItemClicked:(id)sender{
+//    
+//}
+
+//删除
+//- (void)deleteItemClicked:(id)sender{
+//    
+//}
+
+//撤回
+//- (void)undoItemClicked:(id)sender{
+//    
+//}
+
+
+#pragma mark 实现成为第一响应者方法
+
+-(BOOL)canBecomeFirstResponder{
+    
+    return YES;
+    
+}
+
 
 - (void)prepareForReuse
 {
@@ -61,18 +157,18 @@
 
 #pragma mark override
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
-{
-    return (action == @selector(copy:) || action == @selector(delete:));
-}
-
-- (void)copy:(id)sender
-{
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(copyButtonTappedWithIndexPath:)])
-    {
-        [self.delegate copyButtonTappedWithIndexPath:self.indexPath];
-    }
-}
+//- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+//{
+//    return (action == @selector(copy:) || action == @selector(delete:));
+//}
+//
+//- (void)copy:(id)sender
+//{
+//    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(copyButtonTappedWithIndexPath:)])
+//    {
+//        [self.delegate copyButtonTappedWithIndexPath:self.indexPath];
+//    }
+//}
 
 - (void)layoutSubviews
 {

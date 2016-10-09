@@ -98,7 +98,7 @@
 }
 
 - (void)setupNav {
-    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发布" style:UIBarButtonItemStylePlain target:self action:@selector(ReleaseButtonDidClick)];
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(ReleaseButtonDidClick)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
 }
 
