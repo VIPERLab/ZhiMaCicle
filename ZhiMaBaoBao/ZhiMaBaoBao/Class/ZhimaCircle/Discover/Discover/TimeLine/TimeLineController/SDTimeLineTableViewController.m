@@ -256,14 +256,22 @@
             
             [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
                 if (responseData.code != 0) {
-                    // 失败则展示数据库中下一页的数据
-                    NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
-                    if (newDataArray.count != 0) {
-                        [self.dataArray addObjectsFromArray:newDataArray];
-                        [self.tableView.mj_footer endRefreshing];
-                        [self.tableView reloadData];
-                        [self.tableView reloadDataWithExistedHeightCache];
-                    }
+                    // 失败则展示数据库中下一页的数据  异步获取下一页数据
+                    dispatch_async(dispatch_queue_create(0, 0), ^{
+                        //存数据到朋友圈表
+                        NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (newDataArray.count != 0) {
+                                [self.dataArray addObjectsFromArray:newDataArray];
+                                [self.tableView.mj_footer endRefreshing];
+                                [self.tableView reloadData];
+                                [self.tableView reloadDataWithExistedHeightCache];
+                            }
+                        });
+                        
+                    });
+                    
                     return;
                 }
                 
@@ -271,7 +279,6 @@
                 
                 if (dataArray.count) {
                     [self.dataArray addObjectsFromArray:dataArray];
-                    //                    self.pageNumber++;
                 } else {
                     self.tableView.mj_footer.state = MJRefreshStateNoMoreData;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
