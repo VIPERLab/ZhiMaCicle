@@ -376,6 +376,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     ChatController *vc = [[ChatController alloc] init];
     vc.conversionId = self.groupChatModel.groupId;
+    vc.converseType = YES;
     vc.hidesBottomBarWhenPushed = YES;
     ConversationController *conversationVC = userinfo.conversationVC;
     [conversationVC.navigationController pushViewController:vc animated:YES];

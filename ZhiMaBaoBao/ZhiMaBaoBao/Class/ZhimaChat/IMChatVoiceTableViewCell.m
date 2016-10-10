@@ -54,9 +54,72 @@
         playVoiceBtn.backgroundColor = ClearColor;
         [playVoiceBtn addTarget:self action:@selector(playVoiceAction:) forControlEvents:UIControlEventTouchUpInside];
         [_bubble addSubview:playVoiceBtn];
+        
+        //添加长按手势
+        UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
+        [_bubble addGestureRecognizer:longGesture];
     }
     return self;
 }
+
+//长按弹出功能栏
+- (void)longPressAction:(UIGestureRecognizer *)gesture{
+    
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        [self becomeFirstResponder];
+        
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        
+        UIMenuItem *copyItem = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(copyItemClicked:)];
+        UIMenuItem *transItem = [[UIMenuItem alloc] initWithTitle:@"转发" action:@selector(transItemClicked:)];
+        UIMenuItem *keepItem = [[UIMenuItem alloc] initWithTitle:@"收藏" action:@selector(keepItemClicked:)];
+        UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:@"删除" action:@selector(deleteItemClicked:)];
+        UIMenuItem *undoItem = [[UIMenuItem alloc] initWithTitle:@"撤回" action:@selector(undoItemClicked:)];
+        
+        [menu setMenuItems:[NSArray arrayWithObjects:copyItem,transItem,keepItem,deleteItem,undoItem,nil]];
+        
+        [menu setTargetRect:_bubble.frame inView:self];
+        
+        [menu setMenuVisible:YES animated:YES];
+    }
+}
+
+#pragma mark 处理action事件
+
+//返回什么方法，则显示什么按钮
+-(BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    
+    if(action ==@selector(copyItemClicked:)){
+        return NO;
+        
+    }else if (action==@selector(transItemClicked:)){
+        return NO;
+    }
+    else if (action == @selector(keepItemClicked:)){
+        return YES;
+    }
+    else if (action == @selector(deleteItemClicked:)){
+        return YES;
+    }
+    else if (action == @selector(undoItemClicked:)){   //撤回 - 是我发的消息（时间间隔不超过两分钟）时展示撤回按钮
+        //判断是不是两分钟之内
+        NSInteger currentStamp = [NSDate currentTimeStamp];
+        BOOL canUndo = (currentStamp - self.message.timeStamp) < 120;
+        return self.isMe && canUndo;
+    }
+    
+    return [super canPerformAction:action withSender:sender];
+}
+
+#pragma mark 实现成为第一响应者方法
+
+-(BOOL)canBecomeFirstResponder{
+    
+    return YES;
+    
+}
+
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {

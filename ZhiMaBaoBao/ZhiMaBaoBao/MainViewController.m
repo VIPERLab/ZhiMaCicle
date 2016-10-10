@@ -101,14 +101,18 @@
 - (void)newMessageRecieved:(NSNotification *)notification{
     
     LGMessage *message = notification.userInfo[@"message"];
-    //播放系统消息提示音
-    [self playSystemAudio];
+    
+    //判断对发消息用户是否开启了新消息提醒 -> 播放系统消息提示音
+    //1.数据库查会话模型，拿出对该用户设置的的新消息提醒 如果是yes 播放声音
+    ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid];
+    if (!conversionModel.disturb) {
+        [self playSystemAudio];
+    }
     
     //更新未读消息
     [self updateUnread];
     
     //根据id查询发消息用户的用户昵称,和最后一条消息内容
-    ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid];
     NSString *content = [NSString stringWithFormat:@"%@: %@",conversionModel.converseName,conversionModel.lastConverse];
     
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {

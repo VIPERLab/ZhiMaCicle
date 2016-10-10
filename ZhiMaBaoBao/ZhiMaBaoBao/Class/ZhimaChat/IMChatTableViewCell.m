@@ -47,12 +47,6 @@
 //长按弹出功能栏
 - (void)longPressAction:(UIGestureRecognizer *)gesture{
 
-//    CGRect frame = 
-//    KXCopyView *copyView = [[KXCopyView alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)];
-//    copyView.titleArray = @[@"复制",@"转发",@"收藏",@"撤回",@"删除"];
-//    [copyView setImage:[UIImage imageNamed:@"Discovre_Copy"] andInsets:UIEdgeInsetsMake(30, 40, 30, 40)];
-//    copyView.delegate = self;
-//    [copyView showAnimation];
     if (gesture.state == UIGestureRecognizerStateBegan) {
     [self becomeFirstResponder];
     

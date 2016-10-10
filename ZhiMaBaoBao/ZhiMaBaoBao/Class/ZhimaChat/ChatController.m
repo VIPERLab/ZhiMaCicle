@@ -108,7 +108,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     //通过id查数据库最新会话名->设置为标题
     //1.先通过id查会话
-    if (!self.converseType) {
+    if (!self.converseType) {   //单聊
         ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
         [self setCustomTitle:friendModel.displayName];
     } else {
@@ -168,23 +168,28 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.isSending = NO;
     NSInteger row = 100000;
     
-    for (LGMessage *msg  in self.messages) {
-        if ([msg.msgid isEqualToString:message.msgid]) {
-            row = [self.messages indexOfObject:message];
+    //通过判断，排除转发给他人的消息插入数据源
+    if ([message.fromUid isEqualToString:self.conversionId] || [message.toUidOrGroupId isEqualToString:self.conversionId]) {
+        for (LGMessage *msg  in self.messages) {
+            if ([msg.msgid isEqualToString:message.msgid]) {
+                row = [self.messages indexOfObject:message];
+            }
+        }
+        
+        if (row != 100000) {
+            NSIndexPath *indexpath = [NSIndexPath indexPathForRow:row inSection:0];
+            NSArray *indexPaths = @[indexpath];
+            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        }else{
+            [self.messages addObject:message];
+            NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+            NSArray *indexPaths = @[indexpath];
+            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
     }
     
-    if (row != 100000) {
-        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:row inSection:0];
-        NSArray *indexPaths = @[indexpath];
-        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-    }else{
-        [self.messages addObject:message];
-        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
-        NSArray *indexPaths = @[indexpath];
-        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }
+
 
 //    NSInteger row = [self.messages indexOfObject:message];
 
@@ -768,14 +773,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 //删除
 - (void)deleteMessageWithIndexPath:(NSIndexPath *)indexPath{
     self.selectedIndexPath = indexPath;
-    
-    
+
     KXActionSheet *actionSheet = [[KXActionSheet alloc] initWithTitle:@"是否删除该条消息?" cancellTitle:@"取消" andOtherButtonTitles:@[@"确定"]];
     actionSheet.delegate = self;
     [actionSheet show];
-    
-
-    
 }
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index;{
@@ -962,7 +963,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = NO;
+    message.isGroup = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     
