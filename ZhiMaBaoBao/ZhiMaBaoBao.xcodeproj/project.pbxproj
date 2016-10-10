@@ -26,6 +26,9 @@
 		04787AF61D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */; };
 		047F13F01DAA4BDE00684881 /* GroupChatChangeGroupNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */; };
 		047F13F31DAA60EF00684881 /* GroupChatChangeNoticeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F21DAA60EF00684881 /* GroupChatChangeNoticeController.m */; };
+		047F13F61DAB253300684881 /* GroupChatMessageDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F51DAB253300684881 /* GroupChatMessageDetailController.m */; };
+		047F13F91DAB25C500684881 /* GroupChatAllMembersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F81DAB25C500684881 /* GroupChatAllMembersController.m */; };
+		047F13FD1DAB2A2400684881 /* GroupAllMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13FC1DAB2A2400684881 /* GroupAllMemberCell.m */; };
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
@@ -638,6 +641,12 @@
 		047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatChangeGroupNameController.m; sourceTree = "<group>"; };
 		047F13F11DAA60EF00684881 /* GroupChatChangeNoticeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatChangeNoticeController.h; sourceTree = "<group>"; };
 		047F13F21DAA60EF00684881 /* GroupChatChangeNoticeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatChangeNoticeController.m; sourceTree = "<group>"; };
+		047F13F41DAB253300684881 /* GroupChatMessageDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatMessageDetailController.h; sourceTree = "<group>"; };
+		047F13F51DAB253300684881 /* GroupChatMessageDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatMessageDetailController.m; sourceTree = "<group>"; };
+		047F13F71DAB25C500684881 /* GroupChatAllMembersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatAllMembersController.h; sourceTree = "<group>"; };
+		047F13F81DAB25C500684881 /* GroupChatAllMembersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatAllMembersController.m; sourceTree = "<group>"; };
+		047F13FB1DAB2A2400684881 /* GroupAllMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupAllMemberCell.h; sourceTree = "<group>"; };
+		047F13FC1DAB2A2400684881 /* GroupAllMemberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupAllMemberCell.m; sourceTree = "<group>"; };
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
@@ -1876,13 +1885,27 @@
 		047F13ED1DAA4BAF00684881 /* GroupChatInfoChange(修改群聊信息内页) */ = {
 			isa = PBXGroup;
 			children = (
+				047F13FA1DAB2A0F00684881 /* Cell */,
 				047F13EE1DAA4BDE00684881 /* GroupChatChangeGroupNameController.h */,
 				047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */,
 				047F13F11DAA60EF00684881 /* GroupChatChangeNoticeController.h */,
 				047F13F21DAA60EF00684881 /* GroupChatChangeNoticeController.m */,
+				047F13F41DAB253300684881 /* GroupChatMessageDetailController.h */,
+				047F13F51DAB253300684881 /* GroupChatMessageDetailController.m */,
+				047F13F71DAB25C500684881 /* GroupChatAllMembersController.h */,
+				047F13F81DAB25C500684881 /* GroupChatAllMembersController.m */,
 			);
 			name = "GroupChatInfoChange(修改群聊信息内页)";
 			path = GroupChatInfoChange;
+			sourceTree = "<group>";
+		};
+		047F13FA1DAB2A0F00684881 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				047F13FB1DAB2A2400684881 /* GroupAllMemberCell.h */,
+				047F13FC1DAB2A2400684881 /* GroupAllMemberCell.m */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */ = {
@@ -4937,6 +4960,7 @@
 				04EA7DB01D912872005E5425 /* ZXDataMatrixDecoder.m in Sources */,
 				04EA7E131D912872005E5425 /* ZXPDF417Common.m in Sources */,
 				04EA79E01D90E9F7005E5425 /* KXMoneyController.m in Sources */,
+				047F13F91DAB25C500684881 /* GroupChatAllMembersController.m in Sources */,
 				04EA7D921D912872005E5425 /* ZXBitMatrix.m in Sources */,
 				04F57AA51D9280BD002A6471 /* ChooseWhoCanSeeController.m in Sources */,
 				04F862141D94DB3000DCC6FE /* NewDiscoverHeaderView.m in Sources */,
@@ -5199,6 +5223,7 @@
 				04EA7DCB1D912872005E5425 /* ZXAI01393xDecoder.m in Sources */,
 				04EA7DCE1D912872005E5425 /* ZXAI01AndOtherAIs.m in Sources */,
 				04F862961D94FC7900DCC6FE /* ChatToolBar.m in Sources */,
+				047F13F61DAB253300684881 /* GroupChatMessageDetailController.m in Sources */,
 				04F862501D94FC6D00DCC6FE /* NSString+MLLabel.m in Sources */,
 				04EA7DBE1D912872005E5425 /* ZXDataMatrixX12Encoder.m in Sources */,
 				04EA79761D8FB95B005E5425 /* KXSettingController.m in Sources */,
@@ -5273,6 +5298,7 @@
 				04EA7D8E1D912872005E5425 /* ZXGenericGFPoly.m in Sources */,
 				04EA7B601D91282E005E5425 /* LBXScanNetAnimation.m in Sources */,
 				04EA7DBD1D912872005E5425 /* ZXDataMatrixTextEncoder.m in Sources */,
+				047F13FD1DAB2A2400684881 /* GroupAllMemberCell.m in Sources */,
 				04EA7E191D912872005E5425 /* ZXQRCodeDataMask.m in Sources */,
 				04F57AE61D9280BD002A6471 /* SDWaitingView.m in Sources */,
 				04EA7DD71D912872005E5425 /* ZXRSSExpandedDecodedObject.m in Sources */,

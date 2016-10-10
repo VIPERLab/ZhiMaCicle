@@ -795,7 +795,13 @@ static NSString *const reuseIdentifier = @"messageCell";
             NSString *lastConverseText = [NSString string];
             if (self.selectedIndexPath.row - 1 >= 0) {
                 LGMessage *lastMessage = self.messages[self.selectedIndexPath.row - 1];
-                lastConverseText = lastMessage.text;
+                if (lastMessage.type == 0 || lastMessage.type == MessageTypeSystem) {
+                    lastConverseText = lastMessage.text;
+                } else if (lastMessage.type == MessageTypeImage) {
+                    lastConverseText = @"[图片]";
+                } else if (lastMessage.type == MessageTypeAudio) {
+                    lastConverseText = @"[语音]";
+                }
             } else {
                 lastConverseText = @" ";
             }

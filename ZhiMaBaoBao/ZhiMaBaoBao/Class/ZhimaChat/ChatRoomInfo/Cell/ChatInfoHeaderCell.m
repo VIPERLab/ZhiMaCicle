@@ -41,7 +41,7 @@
 
 
 - (void)setupView {
-    
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
     for (NSInteger index = 0; index < 2; index++) {
         UIButton *iconView = [[UIButton alloc] init];
         [self addSubview:iconView];

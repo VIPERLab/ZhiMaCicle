@@ -95,6 +95,7 @@
 #import "UIImageView+WebCache.h"
 #import "BaseViewController.h"
 #import "NSDate+TimeCategory.h"
+#import "BaseNavigationController.h"
 
 #import "KXActionSheet.h"
 

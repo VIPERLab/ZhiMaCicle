@@ -17,7 +17,7 @@
 #import "UserMessageController.h" //个人消息
 #import "DiscoverDetailController.h"  //朋友圈详情
 #import "NewDiscoverController.h"  //发布新的说说
-//#import "YiUserInfoViewController.h" //详情
+#import "FriendProfilecontroller.h" //详情
 
 @interface PesonalDiscoverController () <UITableViewDelegate,UITableViewDataSource,SDTimeLineTableHeaderViewDelegate,PersonalDiscoverCellDelegate,DiscoverDetailControllerDelegate>
 
@@ -245,9 +245,9 @@
 
 #pragma mark - headerViewClick
 - (void)SDTimeLineTableHeaderViewHeaderViewDidClick:(SDTimeLineTableHeaderView *)headerView {
-//    YiUserInfoViewController *info = [[YiUserInfoViewController alloc] init];
-//    info.jid = [NSString stringWithFormat:@"%@@localhost",self.openFirAccount];
-//    [self.navigationController pushViewController:info animated:YES];
+    FriendProfilecontroller *friendProfile = [[FriendProfilecontroller alloc] init];
+    friendProfile.userId = self.userID;
+    [self.navigationController pushViewController:friendProfile animated:YES];
 }
 
 

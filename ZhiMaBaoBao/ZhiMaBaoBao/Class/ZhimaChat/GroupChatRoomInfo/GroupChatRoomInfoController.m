@@ -22,7 +22,9 @@
 #import "FriendProfilecontroller.h"  //用户详情
 #import "CreateGroupChatController.h"  //创建群聊
 #import "GroupChatChangeGroupNameController.h" //修改群名称
-#import "GroupChatChangeNoticeController.h" // 修改群公告
+#import "GroupChatChangeNoticeController.h"    //修改群公告
+#import "GroupChatMessageDetailController.h"   //聊天记录
+#import "GroupChatAllMembersController.h"      //全部群成员
 
 #define GroupChatRoomInfoCellReusedID @"GroupChatRoomInfoCellReusedID"
 #define GroupChatRoomInfoHeaderCellReusedID @"GroupChatRoomInfoHeaderCellReusedID"
@@ -172,6 +174,9 @@
     if (indexPath.section == 0 && indexPath.row == 1) {
         //全部成员
         NSLog(@"全部群成员");
+        GroupChatAllMembersController *members = [[GroupChatAllMembersController alloc] init];
+        members.membersArray = self.groupModel.groupUserVos;
+        [self.navigationController pushViewController:members animated:YES];
         
     } else if (indexPath.section == 1 && indexPath.row == 0) {
         // 群聊名称
@@ -199,7 +204,14 @@
         changeGroupName.type = 1;
         [self.navigationController pushViewController:changeGroupName animated:YES];
         
+    } else if (indexPath.section == 4 && indexPath.row == 0) {
+        //显示聊天消息
+        GroupChatMessageDetailController *detail = [[GroupChatMessageDetailController alloc] init];
+        detail.groupId = self.converseId;
+        [self.navigationController pushViewController:detail animated:YES];
+        
     } else if (indexPath.section == 4 && indexPath.row == 1) {
+        //显示聊天消息
         NSLog(@"清空聊天记录");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定要清除聊天记录吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         [alert show];
@@ -240,8 +252,9 @@
 
 - (void)GroupChatInfoHeaderCellDelegateDidClickAddMember {
     NSLog(@"点击了添加好友");
-    CreateGroupChatController *group = [[CreateGroupChatController alloc] init];
-    [self presentViewController:group animated:group completion:nil];
+    CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 

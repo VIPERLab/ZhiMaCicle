@@ -13,6 +13,7 @@
 #import "ConverseModel.h"
 
 #import "FriendProfilecontroller.h" // 好友详情
+#import "CreateGroupChatController.h"
 
 
 #define CharRoomInfoHeaderCellReusedID @"CharRoomInfoHeaderCellReusedID"
@@ -120,7 +121,9 @@
         [self.navigationController pushViewController:vc animated:YES];
     } else {
         // 新建群聊
-        
+        CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+        BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+        [self presentViewController:nav animated:YES completion:nil];
     }
     
 }
