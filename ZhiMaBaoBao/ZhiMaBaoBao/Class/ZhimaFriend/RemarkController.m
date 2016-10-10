@@ -70,6 +70,11 @@
             convesion.converseName = self.textField.text;
             //3.更新数据库会话表
             [FMDBShareManager saveConverseListDataWithDataArray:@[convesion]];
+            //4.更新好友表
+            ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.userId];
+            friendModel.user_NickName = self.textField.text;
+            [FMDBShareManager upDataUserMessage:friendModel];
+            
             
             [self.navigationController popViewControllerAnimated:YES];
         }else{

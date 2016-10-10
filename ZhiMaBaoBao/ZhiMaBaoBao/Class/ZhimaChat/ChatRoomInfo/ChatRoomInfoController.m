@@ -33,9 +33,16 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setCustomTitle:@"聊天信息"];
+    [self setupView];
+
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
     // 取出该条会话的模型
     self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.userId];
-    [self setupView];
+    [_tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,7 +79,7 @@
     if (indexPath.section == 0) {
         ChatInfoHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:CharRoomInfoHeaderCellReusedID forIndexPath:indexPath];
         cell.delegate = self;
-        cell.userName = self.displayName;
+        cell.userName = self.converseModel.converseName;
         cell.iconName = self.avtarUrl;
         
         return cell;
