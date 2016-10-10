@@ -184,10 +184,22 @@ static NSString * const reuseIdentifier = @"friendListcell";
     ZhiMaFriendModel *friend = userDic[@"friend"];
     //插入数据库，显示未读角标
     [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
-    
+    self.unReadLabel.hidden = NO;
     self.unReadLabel.text = [NSString stringWithFormat:@"%d",USERINFO.unReadCount];
     if (USERINFO.unReadCount == 0) {
         self.unReadLabel.hidden = YES;
+    }
+    
+    
+    //显示tabbar角标
+    //tabbar显示所有未读消息条数
+    if (USERINFO.unReadCount > 99) {
+        [[self.tabBarController.tabBar.items objectAtIndex:1] setBadgeValue:@"99+"];
+        
+    }else if(USERINFO.unReadCount > 0){
+        [[self.tabBarController.tabBar.items objectAtIndex:1] setBadgeValue:[NSString stringWithFormat:@"%ld", (long)USERINFO.unReadCount]];
+    }else {
+        [[self.tabBarController.tabBar.items objectAtIndex:1] setBadgeValue:nil];
     }
 }
 
