@@ -42,22 +42,23 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 
 //请求新的好友列表数据 - 如果没有从网络加载
 - (void)requestNewFriendsList{
-    self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
-    [self.tableView reloadData];
+//    self.friendsArr = (NSMutableArray *)[[[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] reverseObjectEnumerator] allObjects];
+//    self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
+//    [self.tableView reloadData];
     
-    if (!self.friendsArr.count) {
-        [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
-            if (responseData.code == 0) {
-                self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
-                [self.tableView reloadData];
-                [FMDBShareManager saveNewFirendsWithArray:self.friendsArr andUserId:USERINFO.userID];
-            }
-        } failure:^(ErrorData *error) {
-            [LCProgressHUD showFailureText:@"网络好像出错了哦[^_^]"];
-        }];
- 
-    }
-}
+    //从数据库加载新的好友
+    [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+            [FMDBShareManager saveNewFirendsWithArray:self.friendsArr andUserId:USERINFO.userID];
+            self.friendsArr = (NSMutableArray *)[[[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] reverseObjectEnumerator] allObjects];
+            [self.tableView reloadData];
+            
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:@"网络好像出错了哦[^_^]"];
+    }];
+ }
 
 /**
  *  搜索栏代理方法 -- 搜索新的好友
@@ -93,10 +94,12 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
-            //添加好友成功 -- 更新数据库
+            //添加好友成功 -- 更新数据库 新的好友表  和好友表
             friend.status = YES;
             [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
+            [FMDBShareManager saveUserMessageWithMessageArray:@[friend]];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            
             
         }else{
             [LCProgressHUD showText:responseData.msg];

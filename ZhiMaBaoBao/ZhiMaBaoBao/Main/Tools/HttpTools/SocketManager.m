@@ -16,6 +16,7 @@
 #import "ConverseModel.h"
 #import "NSData+Base64.h"
 #import "ZhiMaFriendModel.h"
+#import "GroupChatModel.h"
 
 @interface SocketManager ()
 
@@ -240,8 +241,9 @@ static SocketManager *manager = nil;
             
             //将消息插入数据库，并更新会话列表  (根据是否为群聊，插入不同的表)
             BOOL success = NO;
-            if (message.isGroup) {
-                success = [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+            if (message.isGroup) {  //如果是群消息 先从http请求群信息 加入本地数据库
+
+                success = [self addGroupMessage:message groupId:message.toUidOrGroupId];
             } else {
                 success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
             }
@@ -334,6 +336,33 @@ static SocketManager *manager = nil;
         
         
     }
+}
+
+//插入一条群消息到本地数据库
+- (BOOL)addGroupMessage:(LGMessage *)message groupId:(NSString *)groupId{
+    //加载群信息
+    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            //生成群聊数据模型
+            [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                return @{
+                         @"groupUserVos":@"GroupUserModel"
+                         };
+            }];
+            GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+            groupChatModel.myGroupName = USERINFO.username;
+            //新建一个群会话，插入数据库
+            [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
+            
+            //保存群消息到数据库
+            [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+            
+        }
+    } failure:^(ErrorData *error) {
+        
+    }];
+    
+    return YES;
 }
 
 #pragma mark - 封装消息操作指令

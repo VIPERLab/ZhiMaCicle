@@ -88,6 +88,12 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             [self generateAlbums];
             [self setupNavRightItem];
             [self.tableView reloadData];
+            
+            //插入好友到数据库
+            //添加好友成功 -- 更新数据库 新的好友表  和好友表
+            self.friend.status = YES;
+            [FMDBShareManager upDataNewFriendsMessageByFriendModel:self.friend];
+            [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend]];
         }else{
             [LCProgressHUD showText:responseData.msg];
         }
@@ -221,7 +227,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         sendMsg.hidden = NO;
         [sendMsg setTitle:@"移出黑名单" forState:UIControlStateNormal];
     }
-    else if ((self.friendType == FriendTypeNotFriend || self.friendType == FriendTypeNew) && self.hasRequestData){   //不是好友
+    else if (self.friendType == FriendTypeNotFriend && self.hasRequestData){   //不是好友
         sendMsg.hidden = NO;
         [sendMsg setTitle:@"添加到通讯录" forState:UIControlStateNormal];
     }
@@ -231,8 +237,9 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         [sendMsg setTitle:@"发消息" forState:UIControlStateNormal];
         [callBtn setTitle:@"拨号" forState:UIControlStateNormal];
     }
-    else {    //用户自己
-        
+    else if (self.friendType == FriendTypeNew){    //新的好友
+        sendMsg.hidden = NO;
+        [sendMsg setTitle:@"通过验证" forState:UIControlStateNormal];
     }
     
     return footerView;
@@ -252,7 +259,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             }
         }];
     }
-    else if (self.friendType == FriendTypeNotFriend || self.friendType == FriendTypeNew){   //不是好友 -> 添加到通讯录
+    else if (self.friendType == FriendTypeNotFriend){   //不是好友 -> 添加到通讯录
         SocketManager *manager = [SocketManager shareInstance];
         [manager addFriend:self.friend.user_Id];
         [LCProgressHUD showSuccessText:@"请求发送成功"];
@@ -271,6 +278,16 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         ConversationController *conversationVC = userInfo.conversationVC;
         [conversationVC.navigationController pushViewController:vc animated:YES];
         
+    }
+    else if (self.friendType == FriendTypeNew){     //同意好友请求
+        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
+            if (responseData.code == 0) {
+                //重新加载数据 -> 刷新
+                [self requestFriendProfile];
+            }else{
+                [LCProgressHUD showText:responseData.msg];
+            }
+        }];
     }
 
 }
