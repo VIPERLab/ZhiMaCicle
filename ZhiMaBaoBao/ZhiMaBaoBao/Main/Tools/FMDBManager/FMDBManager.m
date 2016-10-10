@@ -1309,12 +1309,12 @@
  *
  *  @return 会话模型
  */
-- (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID {
+- (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID andConverseType:(BOOL)conversetType{
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     ConverseModel *model = [[ConverseModel alloc] init];
     [queue inDatabase:^(FMDatabase *db) {
         
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = '%@'",converseID]];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = '%@' and converseType = '%zd'",converseID,conversetType]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         
         while ([result next]) {
@@ -1445,7 +1445,7 @@
         //更新这个会话
         NSLog(@"会话存在,更新会话");
         //取出这个会话
-        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID];
+        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID andConverseType:message.isGroup];
         //设置更新内容
         if (![message.fromUid isEqualToString:USERINFO.userID]) {
             converseModel.unReadCount ++;
@@ -1553,7 +1553,7 @@
         //更新这个会话
         NSLog(@"会话存在,更新会话");
         //取出这个会话
-        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID];
+        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID andConverseType:message.isGroup];
         //设置更新内容
         if (![message.fromUid isEqualToString:USERINFO.userID]) {
             converseModel.unReadCount ++;

@@ -65,7 +65,7 @@
             //修改成功 -> 更新数据库会话表的会话名
             
             //1.先通过id查会话
-            ConverseModel *convesion = [FMDBShareManager searchConverseWithConverseID:self.userId];
+            ConverseModel *convesion = [FMDBShareManager searchConverseWithConverseID:self.userId andConverseType:NO];
             //2.修改会话模型的会话名
             convesion.converseName = self.textField.text;
             //3.更新数据库会话表

@@ -34,7 +34,7 @@
     // Do any additional setup after loading the view.
     [self setCustomTitle:@"聊天信息"];
     // 取出该条会话的模型
-    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.userId];
+    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.userId andConverseType:NO];
     [self setupView];
 }
 

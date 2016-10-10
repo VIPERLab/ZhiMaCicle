@@ -108,7 +108,7 @@
     [self updateUnread];
     
     //根据id查询发消息用户的用户昵称,和最后一条消息内容
-    ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid];
+    ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.isGroup];
     NSString *content = [NSString stringWithFormat:@"%@: %@",conversionModel.converseName,conversionModel.lastConverse];
     
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {

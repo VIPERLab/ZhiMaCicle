@@ -59,7 +59,7 @@
 
 - (void)getDataFormSQL {
     // 获取会话模型
-    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId];
+    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
     self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
     
     self.groupModel.create_time = [NSDate dateStrFromCstampTime:self.converseModel.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
