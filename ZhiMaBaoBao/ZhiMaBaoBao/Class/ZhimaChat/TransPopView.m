@@ -84,18 +84,42 @@
     separtor.frame = CGRectMake(pop_margin, CGRectGetMaxY(avtar.frame) + padding *2, self.containerView.width - pop_margin *2, 0.5);
     [self.containerView addSubview:separtor];
     
+    //存放转发内容的试图
+    UIView *contentView = [[UIView alloc] init];
+    contentView.backgroundColor = [UIColor clearColor];
+    contentView.x = 0;
+    contentView.y = CGRectGetMaxY(separtor.frame);
+    contentView.width = DEVICEWITH;
+    [self.containerView addSubview:contentView];
+    if (message.type == MessageTypeText) {
+        //消息内容文本
+        UILabel *contentLabel = [[UILabel alloc] init];
+        contentLabel.text = message.text;
+        contentLabel.numberOfLines = 2;
+        contentLabel.textColor = GRAYCOLOR;
+        contentLabel.font = [UIFont systemFontOfSize:15];
+        contentLabel.frame = CGRectMake(pop_margin, 0, self.containerView.width - pop_margin *2, 60);
+        [contentView addSubview:contentLabel];
+        contentView.height = CGRectGetMaxY(contentLabel.frame);
+
+    }else if (message.type == MessageTypeImage){
+        //图片
+        UIImageView *imageview = [[UIImageView alloc] init];
+        imageview.layer.cornerRadius = 5.f;
+        imageview.contentMode = UIViewContentModeScaleAspectFill;
+        imageview.clipsToBounds = YES;
+        [imageview sd_setImageWithURL:[NSURL URLWithString:message.text]];
+        imageview.size = CGSizeMake(100, 100);
+        imageview.x = (self.containerView.width - 100)/2;
+        imageview.y = 10;
+        [contentView addSubview:imageview];
+        contentView.height = CGRectGetMaxY(imageview.frame);
+    }
     
-    //消息内容文本
-    UILabel *contentLabel = [[UILabel alloc] init];
-    contentLabel.text = message.text;
-    contentLabel.textColor = GRAYCOLOR;
-    contentLabel.font = [UIFont systemFontOfSize:15];
-    contentLabel.frame = CGRectMake(pop_margin, CGRectGetMaxY(separtor.frame), self.containerView.width - pop_margin *2, 60);
-    [self.containerView addSubview:contentLabel];
     
     UIView *separtor1 = [[UIView alloc] init];
     separtor1.backgroundColor = SEPARTORCOLOR;
-    separtor1.frame = CGRectMake(0, CGRectGetMaxY(contentLabel.frame), self.containerView.width, .5);
+    separtor1.frame = CGRectMake(0, CGRectGetMaxY(contentView.frame)+10, self.containerView.width, .5);
     [self.containerView addSubview:separtor1];
     
     //取消、发送按钮
