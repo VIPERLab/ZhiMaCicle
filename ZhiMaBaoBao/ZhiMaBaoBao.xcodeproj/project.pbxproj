@@ -469,7 +469,6 @@
 		311CEF771D921F9F00BBB1F9 /* LGQueryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF761D921F9F00BBB1F9 /* LGQueryCell.m */; };
 		311CEF7A1D921FDA00BBB1F9 /* LGNetWorking.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF791D921FDA00BBB1F9 /* LGNetWorking.m */; };
 		311CEF7C1D92219200BBB1F9 /* FakeData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 311CEF7B1D92219200BBB1F9 /* FakeData.plist */; };
-		311CEF801D92246A00BBB1F9 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF7F1D92246A00BBB1F9 /* MessageCell.m */; };
 		311CEF841D92252000BBB1F9 /* LGMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF831D92252000BBB1F9 /* LGMessage.m */; };
 		311CEFA91D937BE700BBB1F9 /* AmrPlayerReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF8E1D937BE700BBB1F9 /* AmrPlayerReader.m */; };
 		311CEFAA1D937BE700BBB1F9 /* MLAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF901D937BE700BBB1F9 /* MLAudioPlayer.m */; };
@@ -1515,8 +1514,6 @@
 		311CEF781D921FDA00BBB1F9 /* LGNetWorking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGNetWorking.h; sourceTree = "<group>"; };
 		311CEF791D921FDA00BBB1F9 /* LGNetWorking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGNetWorking.m; sourceTree = "<group>"; };
 		311CEF7B1D92219200BBB1F9 /* FakeData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = FakeData.plist; sourceTree = "<group>"; };
-		311CEF7E1D92246A00BBB1F9 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
-		311CEF7F1D92246A00BBB1F9 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
 		311CEF821D92252000BBB1F9 /* LGMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGMessage.h; sourceTree = "<group>"; };
 		311CEF831D92252000BBB1F9 /* LGMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGMessage.m; sourceTree = "<group>"; };
 		311CEF8D1D937BE700BBB1F9 /* AmrPlayerReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmrPlayerReader.h; sourceTree = "<group>"; };
@@ -4009,8 +4006,6 @@
 				D5C8B3B81D9A1A6D007D6B5C /* IMMorePictureTableViewCell.m */,
 				D5DC485E1D9A4AE9005E8766 /* IMChatVoiceTableViewCell.h */,
 				D5DC485F1D9A4AE9005E8766 /* IMChatVoiceTableViewCell.m */,
-				311CEF7E1D92246A00BBB1F9 /* MessageCell.h */,
-				311CEF7F1D92246A00BBB1F9 /* MessageCell.m */,
 				311CEFB61D93D98700BBB1F9 /* BuddleView.h */,
 				311CEFB71D93D98700BBB1F9 /* BuddleView.m */,
 			);
@@ -5043,7 +5038,6 @@
 				31B7C75D1D8FB33E00F1883A /* LGRegisterController.m in Sources */,
 				04EA7D9C1D912872005E5425 /* ZXHybridBinarizer.m in Sources */,
 				31B7C7A01D8FE71F00F1883A /* LGPhoneNumberCell.m in Sources */,
-				311CEF801D92246A00BBB1F9 /* MessageCell.m in Sources */,
 				319069D61D9CE56100D1D6D2 /* FriendProfilecontroller.m in Sources */,
 				04F57AFE1D928154002A6471 /* ComplainSubViewController.m in Sources */,
 				04EA7ACF1D910F89005E5425 /* DNAssetsViewCell.m in Sources */,

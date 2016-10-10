@@ -182,16 +182,14 @@
 - (void)repositionContentView:(UIView *)contentView
 {
     CGFloat offsetX = self.isMe ? _margin.left : _margin.right;
-    
     contentView.frame = CGRectMake(offsetX, _margin.top, contentView.frame.size.width, contentView.frame.size.height);
 }
 
 // 图片的上下间距
 - (void)repositionContentViewTypePic:(UIView *)contentView
 {
-    CGFloat offsetX = self.isMe ? _margin.left : _margin.right+1;
-    
-    contentView.frame = CGRectMake(offsetX, _margin.top-5, contentView.frame.size.width, contentView.frame.size.height+8);
+    CGFloat offsetX = self.isMe ? _margin.left+1 : _margin.right+1;
+    contentView.frame = CGRectMake(offsetX-2, _margin.top-5-2, contentView.frame.size.width+4, contentView.frame.size.height+8+4);
 }
 
 + (CGFloat)getBaseHeightTopText:(NSString *)topText nick:(NSString *)nick
