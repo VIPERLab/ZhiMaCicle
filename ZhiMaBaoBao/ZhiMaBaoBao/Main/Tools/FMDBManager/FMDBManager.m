@@ -1161,7 +1161,26 @@
 - (void)saveNewFirendsWithArray:(NSArray <ZhiMaFriendModel *>*)dataArray andUserId:(NSString *)userId {
     for (ZhiMaFriendModel *model in dataArray) {
         FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_NewFriend_Message_Table];
-        NSString *optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_NewFriend_Message_Table];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_NewFriend_Message_Table withOption:[NSString stringWithFormat:@"userId = '%@' and user_Id = '%@'",userId,model.user_Id]];
+        __block BOOL isExist = NO;
+        [queue inDatabase:^(FMDatabase *db) {
+            FMResultSet *result = [db executeQuery:searchOptionStr];
+            while ([result next]) {
+                isExist = YES;
+            }
+        }];
+        
+        NSString *optionStr = [NSString string];
+        if (isExist) {
+            NSLog(@"存在新好友，需要更新");
+            
+            continue;
+            
+        } else {
+            NSLog(@"不存在新好友，需要插入");
+            optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_NewFriend_Message_Table];
+        }
+        
         [queue inDatabase:^(FMDatabase *db) {
             BOOL success = [db executeUpdate:optionStr,model.user_Name,model.user_Id,model.user_Head_photo,@(model.status),userId];
             if (success) {
