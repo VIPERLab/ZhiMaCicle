@@ -954,6 +954,11 @@ static NSString *const reuseIdentifier = @"messageCell";
 //发送文本
 - (void)chatKeyBoardSendText:(NSString *)text{
     
+    if ([text isBlankString]) {
+        [LCProgressHUD showFailureText:@"不能发送空白消息"];
+        return;
+    }
+    
     LGMessage *message = [[LGMessage alloc] init];
     message.text = text;
 //    message.toUidOrGroupId =  @"12790";//self.conversionId;

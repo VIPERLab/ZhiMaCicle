@@ -8,6 +8,7 @@
 
 #import "CreateGroupListCell.h"
 
+
 @implementation CreateGroupListCell
 
 - (void)awakeFromNib {

@@ -289,10 +289,7 @@ static SocketManager *manager = nil;
             systemMsg.text = [NSString stringWithFormat:@"\"%@\"撤回了一条消息",model.user_Name];
             systemMsg.toUidOrGroupId =  resDic[@"toUidOrGroupId"];
             systemMsg.fromUid = fromUid;
-#warning 以后修改为系统消息
-//            systemMsg.type = MessageTypeSystem;
-            systemMsg.type = MessageTypeText;
-
+            systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = resDic[@"msgid"];
             systemMsg.isGroup = [resDic[@"isGroup"] boolValue];
             systemMsg.timeStamp = [NSDate currentTimeStamp];
@@ -331,10 +328,7 @@ static SocketManager *manager = nil;
             systemMsg.isGroup = NO;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             [FMDBShareManager saveMessage:systemMsg toConverseID:toUid];
-
         }
-        
-        
     }
 }
 

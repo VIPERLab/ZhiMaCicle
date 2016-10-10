@@ -167,7 +167,8 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     if (indexPath.section == 0) {   //跳转到选择好友控制器
         CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
         vc.isPushFromTrans = YES;
-        vc.hideFirstSection = YES;
+        vc.hideFlagBtn = YES;
+        vc.transMsg = self.message;
         [self.navigationController pushViewController:vc animated:YES];
     }else{  //转发消息
         ConverseModel *conversion = self.dataArray[indexPath.row];

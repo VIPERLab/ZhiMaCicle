@@ -53,10 +53,11 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="avtar" destination="oWA-q7-Y6t" id="y4e-pZ-um0"/>
+                <outlet property="avtarLeftMargin" destination="0b9-cK-DAe" id="5dt-Ml-1bC"/>
                 <outlet property="name" destination="sbW-QV-7Nn" id="9HU-eT-LHb"/>
                 <outlet property="selectFlagBtn" destination="xJW-En-F05" id="hdA-qX-z2N"/>
             </connections>
-            <point key="canvasLocation" x="96" y="56"/>
+            <point key="canvasLocation" x="-125" y="75"/>
         </tableViewCell>
     </objects>
     <resources>

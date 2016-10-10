@@ -19,7 +19,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "RHSocketService.h"
 #import "ConverseModel.h"
-//#import "RHSocketUtils.h"
+#import "ChatController.h"
 
 @interface MainViewController ()<SocketManagerDelegate>
 
@@ -27,25 +27,8 @@
 
 @implementation MainViewController
 
-//-(void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    self.tabBar.hidden = NO;
-//    NSLog(@"tabbar frame1 : %@",NSStringFromCGRect(self.tabBar.frame));
-//}
-//-(void)viewWillDisappear:(BOOL)animated
-//{
-//    [super viewWillDisappear:animated];
-//    self.tabBar.hidden = YES;
-//    NSLog(@"tabbar frame2 : %@",NSStringFromCGRect(self.tabBar.frame));
-//
-//}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-//    NSLog(@"tabbar frame3 : %@",NSStringFromCGRect(self.tabBar.frame));
-
     
     UserInfo *userInfo = [UserInfo shareInstance];
     userInfo.mainVC = self;
@@ -67,6 +50,11 @@
     
     [self addNotifications];
     
+
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     //更新未读消息
     [self updateUnread];
 }
@@ -101,11 +89,12 @@
 - (void)newMessageRecieved:(NSNotification *)notification{
     
     LGMessage *message = notification.userInfo[@"message"];
+    UserInfo *userinfo = [UserInfo shareInstance];
     
     //判断对发消息用户是否开启了新消息提醒 -> 播放系统消息提示音
     //1.数据库查会话模型，拿出对该用户设置的的新消息提醒 如果是yes 播放声音
     ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.isGroup];
-    if (!conversionModel.disturb) {
+    if (!conversionModel.disturb && ![userinfo.currentVC isKindOfClass:[ChatController class]]) {    //不在当前控制器
         [self playSystemAudio];
     }
     
@@ -190,11 +179,8 @@
     //tabbar显示所有未读消息条数
     if (unRead > 99) {
         [[self.tabBar.items objectAtIndex:0] setBadgeValue:@"99+"];
-//        [UIApplication sharedApplication].applicationIconBadgeNumber = 99;
-        
     }else if(unRead > 0){
         [[self.tabBar.items objectAtIndex:0] setBadgeValue:[NSString stringWithFormat:@"%ld", (long)unRead]];
-//        [UIApplication sharedApplication].applicationIconBadgeNumber = unRead;
     }else {
         [[self.tabBar.items objectAtIndex:0] setBadgeValue:nil];
     }
