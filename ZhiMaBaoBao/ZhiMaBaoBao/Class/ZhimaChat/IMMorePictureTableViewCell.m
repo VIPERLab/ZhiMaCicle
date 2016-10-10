@@ -50,17 +50,13 @@
     
     _isMe = isMySelf;
     
-    if (chat.picUrl) {
-        ALAssetsLibrary *lib = [ALAssetsLibrary new];
-        [lib assetForURL:chat.picUrl resultBlock:^(ALAsset *asset) {
-            UIImage *image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationUp];
-            [_picturesView setImage:image];
-            
-        } failureBlock:^(NSError *error) {
-            
-        }];
-    }else{
+    if (chat.text) {
+        
         [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text]];
+
+    }else{
+        _picturesView.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.picUrl]];
+
     }
     
     UITapGestureRecognizer*tap = [[UITapGestureRecognizer alloc]initWithTarget:target action:action];

@@ -68,7 +68,7 @@
 
 
 @property (nonatomic, strong) NSMutableArray *messages;  //聊天消息
-@property (nonatomic, strong) NSMutableArray *subviews;  //所有的imageView
+@property (nonatomic, strong) NSMutableArray *subviews;  //所有的imageView（浏览图片时用）
 @property (nonatomic, copy) NSString * audioName;         //最新语音文件后缀名
 
 @property (nonatomic, assign)BOOL isTimeOut; //录音时间超过60秒
@@ -76,10 +76,10 @@
 @property (nonatomic, assign)int currentPage;
 
 
-@property (nonatomic, strong) NSMutableArray *imagesArray; // 选择的图片数组
-
+@property (nonatomic, strong) NSMutableArray *imagesArray; // 选择的图片数组（发送图片用）
 
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;   //保存选中行
+@property (nonatomic, strong) NSString *currentPicUrl;   //当前选中的图片浏览路径
 
 
 @end
@@ -215,6 +215,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     MJRefreshNormalHeader*header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshAction)];
     header.stateLabel.text = @"Loading";
     header.lastUpdatedTimeLabel.hidden = YES;
+    [header setTitle:@"下拉加载更多" forState:MJRefreshStateIdle];
+    [header setTitle:@"松开立即加载" forState:MJRefreshStatePulling];
     self.tableView.mj_header = header;
 
 }
@@ -407,68 +409,16 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.tableView.mj_header endRefreshing];
 }
 
-
-
-//加载聊天数据
+/**
+ *  读取消息列表
+ */
 - (void)requestChatRecord{
-    
-    /**
-     *  读取消息列表
-     */
+
     FMDBManager* shareManager = [FMDBManager shareManager];
 //    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
     self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
     self.messages = (NSMutableArray *)[[self.messages reverseObjectEnumerator] allObjects];
     
-//    for (int i=0; i<7; i++) {
-//        LGMessage*msg = [[LGMessage alloc]init];
-//        
-//        switch (i) {
-//            case 0:
-//                msg.type = MessageTypeText;
-//                msg.text = @"😄可是房价会更😄😄😄😄快的房价回归😄😄😄考试辅导和公司开发😄😄😄的受到法国开发的计划过";
-//                msg.fromUid = USERINFO.userID;
-//
-//                break;
-//            case 1:
-//                msg.type = MessageTypeAudio;
-//                msg.text = @"额锐鳄鱼肉贴如意贴一个的房间号公开";
-//                msg.fromUid = @"1234";
-//                msg.is_read = @"1";
-//                break;
-//            case 2:
-//                msg.type = MessageTypeImage;
-//                msg.text = @"http://app.zhima11.com:8080/upload/headPhoto/headPhoto1474962299468.jpg";
-//                msg.fromUid = USERINFO.userID;
-//                break;
-//            case 3:
-//                msg.type = MessageTypeText;
-//                msg.text = @"是否客观合理分工合理的开发规划及类似的风格及婚礼上的开发规划了深刻的分工合理的恢复过来看大家分工合理开发和公司的来访客户给老师";
-//                msg.fromUid = @"1234";
-//                break;
-//            case 4:
-//                msg.type = MessageTypeText;
-//                msg.text = @"SD卡付款时间都符合双方";
-//                msg.fromUid = USERINFO.userID;
-//                break;
-//            case 5:
-//                msg.type = MessageTypeImage;
-//                msg.text = @"http://app.zhima11.com:8080//upload/headPhoto/headPhoto1473843925435.jpg";
-//                msg.fromUid = @"1234";
-//                break;
-//            case 6:
-//                msg.type = MessageTypeImage;
-//                msg.text = @"http://app.zhima11.com:8080/upload/headPhoto/headPhoto1474950185153.jpg";
-//                msg.fromUid = USERINFO.userID;
-//                break;
-//                
-//            default:
-//                break;
-//        }
-//        
-//        [self.messages addObject:msg];
-//        
-//    }
     [self.tableView reloadData];
     // tableview 滑到底端
     if (self.tableView.contentSize.height > self.tableView.bounds.size.height+64) {
@@ -539,6 +489,14 @@ static NSString *const reuseIdentifier = @"messageCell";
     NSLog(@"图片点击");
     [self.subviews removeAllObjects];
     UIView *imageView = grz.view;
+    
+    LGMessage *msg = self.messages[imageView.tag];
+    if (msg.text) {
+        self.currentPicUrl = [msg.text stringByReplacingOccurrencesOfString:@"s_" withString:@""];
+    }else{
+        self.currentPicUrl = nil;
+    }
+    
     [self.subviews addObject:imageView];
     SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
     browser.currentImageIndex = 0;
@@ -553,8 +511,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index
 {
-    LGMessage *msg = self.messages[index];
-    NSURL *url = [NSURL URLWithString:msg.text];
+//    LGMessage *msg = self.messages[index];
+//    NSString*urlStr = [msg.text stringByReplacingOccurrencesOfString:@"s_" withString:@""];
+    NSURL *url = [NSURL URLWithString:self.currentPicUrl];
     return url;
 }
 
@@ -608,12 +567,13 @@ static NSString *const reuseIdentifier = @"messageCell";
                 textChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
                     
                     LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
-                    chat.isSending = YES;
-                    [self.messages replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
-                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    
                     SocketManager* socket = [SocketManager shareInstance];
                     [socket reSendMessage:chat];
+                    
+                    //                    chat.isSending = YES;
+                    //                    [self.messages replaceObjectAtIndex:theCell.indexPath.row withObject:chat];
+                    //                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    
                 };
             } else {
                 textChatCell.sendAgain.hidden = YES;
@@ -637,6 +597,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         picChatCell.isMe = isMe;
         picChatCell.delegate=self;
         picChatCell.indexPath = indexPath;
+        picChatCell.picturesView.tag = indexPath.row;
     
         [picChatCell reloadData:message isMySelf:isMe chousePicTarget:self action:@selector(chat_browseChoosePicture:)];
         
@@ -652,6 +613,19 @@ static NSString *const reuseIdentifier = @"messageCell";
                 picChatCell.sendAgain.hidden = NO;
                 [picChatCell.sending stopAnimating];
                 picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
+                    
+                    LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
+                    
+                    if (chat.text) { // 推送失败的情况
+                        SocketManager* socket = [SocketManager shareInstance];
+                        [socket reSendMessage:chat];
+                        
+                    }else{  // 图片发送服务器失败的情况
+                    
+                        //重新发送图片给服务器
+                    
+                    }
+
                     
                 };
             } else {
@@ -686,6 +660,25 @@ static NSString *const reuseIdentifier = @"messageCell";
                 voiceChatCell.isReadVoice = NO;
             }
 
+            
+        }else{
+        
+            //  以下内容判断是否发送失败
+            if (message.sendStatus == 0) {
+                voiceChatCell.sendAgain.hidden = NO;
+                [voiceChatCell.sending stopAnimating];
+                voiceChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
+                    
+                    LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
+                    SocketManager* socket = [SocketManager shareInstance];
+                    [socket reSendMessage:chat];
+                    
+                };
+            } else {
+                voiceChatCell.sendAgain.hidden = YES;
+                [voiceChatCell.sending stopAnimating];
+            }
+            
         }
         
     }
@@ -1146,38 +1139,46 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 
 
-// ----   调整图片角度
+// 读取拍照图片
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = info[@"UIImagePickerControllerOriginalImage"];
     UIImageOrientation imageOrientation=image.imageOrientation;
     if(imageOrientation!=UIImageOrientationUp) {
-        // 原始图片可以根据照相时的角度来显示，但UIImage无法判定，于是出现获取的图片会向左转９０度的现象。
-        // 以下为调整图片角度的部分
+
         UIGraphicsBeginImageContext(image.size);
         [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
         image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         // 调整图片角度完毕
     }
-//    NSData *data = UIImageJPEGRepresentation(image, 0.5);
-//    image = [UIImage imageWithData:data];
-    NSString*url = info[@"UIImagePickerControllerMediaMetadata"];
-    NSLog(@"url = %@",url);
+
 
     [self.imagesArray addObject:image];
-    [self sendImages:url];
+
+    [self sendImages:[self getImageSavePath:image]];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
+// 发送图片前先保存到沙盒
+- (NSString*)getImageSavePath:(UIImage*)image{
+
+    NSString*photoName = [NSString stringWithFormat:@"/%ld",[NSDate currentTimeStamp]];
+    NSString *imageDocPath = [AUDIOPATH stringByAppendingPathComponent:photoName];
+    
+    NSData *data = UIImageJPEGRepresentation(image, 1);
+    [[NSFileManager defaultManager] createFileAtPath:imageDocPath contents:data attributes:nil];
+    
+    return photoName;
+
+}
+
 #pragma mark - 发送图片
 
-- (void)sendImages:(NSURL*)imageUrl
+- (void)sendImages:(NSString*)imagePath
 {
-    NSLog(@"self.imagesArray = %@",self.imagesArray);
     
     UIImage *image = self.imagesArray[0];
-    NSLog(@"image = %@",image);
     
     LGMessage *message = [[LGMessage alloc] init];
     message.toUidOrGroupId = self.conversionId;
@@ -1187,7 +1188,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.isGroup = NO;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
-    message.picUrl = imageUrl;
+    message.picUrl = imagePath;
     [self.messages addObject:message];
     
     static NSInteger num;
@@ -1198,9 +1199,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
-//    UIImage *image = array[imageCount];
+    //图片压缩
     NSData *imageData = UIImageJPEGRepresentation(image, 0.3);
     
+    //上传图片到服务器  获取返回的图片路径然后socket推送出去
     [LGNetWorking chatUploadPhoto:nil image:imageData fileName:[NSString stringWithFormat:@"%ld",[NSDate currentTimeStamp]] andFuctionName:nil block:^(NSDictionary *obj) {
 
         NSLog(@"obj ===== %@",obj);
@@ -1212,38 +1214,25 @@ static NSString *const reuseIdentifier = @"messageCell";
             message.text = obj[@"url"];
             SocketManager* socket = [SocketManager shareInstance];
             [socket sendMessage:message];
+            
+            [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@",AUDIOPATH,message.picUrl] error:nil];
 
         }else{
+            // 发送报错
             message.sendStatus = 0;
 
         }
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:num inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
 
     }failure:^(NSError *error) {
-        NSLog(@"error ===== %@",error);
+        
+        // 发送失败
         LGMessage *message = self.messages[num];
         message.isSending = NO;
         message.sendStatus = 0;
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:num inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
         
     }];
-
-}
-
-- (UIImage*)getImageWithUrl:(NSURL*)url
-{
-    ALAssetsLibrary *lib = [ALAssetsLibrary new];
-    static UIImage *image = nil;
-    
-    [lib assetForURL:url resultBlock:^(ALAsset *asset) {
-        
-        image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationUp];
-        
-    } failureBlock:^(NSError *error) {
-        
-    }];
-    
-    return image;
 
 }
 
@@ -1262,18 +1251,27 @@ static NSString *const reuseIdentifier = @"messageCell";
             if (fullImage) {
                 image = [UIImage imageWithCGImage:asset.thumbnail];
             } else {
-                //                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
+
                 image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationUp];
             }
             
             if (self.imagesArray.count > 8) {
                 return ;
             }
+            
+            // 调整图片方向
+            UIImageOrientation imageOrientation=image.imageOrientation;
+            if(imageOrientation!=UIImageOrientationUp) {
+                UIGraphicsBeginImageContext(image.size);
+                [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
+                image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+            }
          
             [self.imagesArray removeAllObjects];
             [self.imagesArray addObject:image];
           
-            [self sendImages:dnasset.url];
+            [self sendImages:[self getImageSavePath:image]];
             
         } failureBlock:^(NSError *error) {
             
