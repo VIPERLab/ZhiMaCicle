@@ -304,6 +304,9 @@ typedef enum : NSUInteger {
  */
 - (GroupChatModel *)getGroupChatMessageByGroupId:(NSString *)groupId;
 
+//是否存在这个群
+- (BOOL)isGroupChatExist:(NSString *)groupId;
+
 
 
 

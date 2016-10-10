@@ -1833,6 +1833,22 @@
 }
 
 
+//是否存在这个群
+- (BOOL)isGroupChatExist:(NSString *)groupId {
+    __block BOOL success = NO;
+    
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
+    [queue inDatabase:^(FMDatabase *db) {
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = %@",groupId]];
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        while ([result next]) {
+            NSLog(@"查表成功");
+            success = YES;
+        }
+    }];
+    return success;
+}
+
 #pragma mark - 群成员信息表
 //                    ------------   群成员信息表  ----------------
 /**
