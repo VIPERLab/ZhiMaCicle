@@ -29,6 +29,9 @@
 		047F13F61DAB253300684881 /* GroupChatMessageDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F51DAB253300684881 /* GroupChatMessageDetailController.m */; };
 		047F13F91DAB25C500684881 /* GroupChatAllMembersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F81DAB25C500684881 /* GroupChatAllMembersController.m */; };
 		047F13FD1DAB2A2400684881 /* GroupAllMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13FC1DAB2A2400684881 /* GroupAllMemberCell.m */; };
+		047F14011DAB359700684881 /* jpush-ios-2.1.9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 047F13FF1DAB359700684881 /* jpush-ios-2.1.9.a */; };
+		047F14021DAB35EF00684881 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A871D91031D005E5425 /* libz.tbd */; };
+		047F14041DAB35F900684881 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 047F14031DAB35F900684881 /* UserNotifications.framework */; };
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
@@ -647,6 +650,10 @@
 		047F13F81DAB25C500684881 /* GroupChatAllMembersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatAllMembersController.m; sourceTree = "<group>"; };
 		047F13FB1DAB2A2400684881 /* GroupAllMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupAllMemberCell.h; sourceTree = "<group>"; };
 		047F13FC1DAB2A2400684881 /* GroupAllMemberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupAllMemberCell.m; sourceTree = "<group>"; };
+		047F13FF1DAB359700684881 /* jpush-ios-2.1.9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-ios-2.1.9.a"; sourceTree = "<group>"; };
+		047F14001DAB359700684881 /* JPUSHService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUSHService.h; sourceTree = "<group>"; };
+		047F14031DAB35F900684881 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		047F14051DAB362700684881 /* ZhiMaBaoBao.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ZhiMaBaoBao.entitlements; sourceTree = "<group>"; };
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
@@ -1729,18 +1736,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D541D3571DAA1AA800FF21F3 /* libresolv.tbd in Frameworks */,
-				311CEFBD1D94D9C000BBB1F9 /* CFNetwork.framework in Frameworks */,
-				048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */,
+				047F14041DAB35F900684881 /* UserNotifications.framework in Frameworks */,
+				047F14021DAB35EF00684881 /* libz.tbd in Frameworks */,
 				04EA7AF11D9120D8005E5425 /* Security.framework in Frameworks */,
-				04F578891D927C76002A6471 /* libsqlite3.tbd in Frameworks */,
-				04EA7AEF1D9120CD005E5425 /* CoreTelephony.framework in Frameworks */,
+				04EA7AF71D91210A005E5425 /* UIKit.framework in Frameworks */,
+				04EA7AF81D912110005E5425 /* Foundation.framework in Frameworks */,
 				04EA7AEE1D9120C6005E5425 /* CoreGraphics.framework in Frameworks */,
+				04EA7AF61D912103005E5425 /* SystemConfiguration.framework in Frameworks */,
+				04EA7AEF1D9120CD005E5425 /* CoreTelephony.framework in Frameworks */,
+				048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */,
+				311CEFBD1D94D9C000BBB1F9 /* CFNetwork.framework in Frameworks */,
+				D541D3571DAA1AA800FF21F3 /* libresolv.tbd in Frameworks */,
+				047F14011DAB359700684881 /* jpush-ios-2.1.9.a in Frameworks */,
+				04F578891D927C76002A6471 /* libsqlite3.tbd in Frameworks */,
 				04EA7AFA1D91214D005E5425 /* libsqlite3.0.tbd in Frameworks */,
 				04EA7AEC1D9120B4005E5425 /* MessageUI.framework in Frameworks */,
-				04EA7AF81D912110005E5425 /* Foundation.framework in Frameworks */,
-				04EA7AF71D91210A005E5425 /* UIKit.framework in Frameworks */,
-				04EA7AF61D912103005E5425 /* SystemConfiguration.framework in Frameworks */,
 				311CEFB11D937BE700BBB1F9 /* lame.framework in Frameworks */,
 				04EA7AF51D9120E9005E5425 /* CoreLocation.framework in Frameworks */,
 				04EA7AF31D9120E1005E5425 /* OpenGLES.framework in Frameworks */,
@@ -1906,6 +1916,15 @@
 				047F13FC1DAB2A2400684881 /* GroupAllMemberCell.m */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		047F13FE1DAB359700684881 /* JPush */ = {
+			isa = PBXGroup;
+			children = (
+				047F13FF1DAB359700684881 /* jpush-ios-2.1.9.a */,
+				047F14001DAB359700684881 /* JPUSHService.h */,
+			);
+			path = JPush;
 			sourceTree = "<group>";
 		};
 		0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */ = {
@@ -3932,6 +3951,7 @@
 		310B83221D8E7B0100A0F408 /* ZhiMaBaoBao */ = {
 			isa = PBXGroup;
 			children = (
+				047F14051DAB362700684881 /* ZhiMaBaoBao.entitlements */,
 				31B7C6CB1D8E89D700F1883A /* Class */,
 				31B7C6CC1D8E89DE00F1883A /* Main */,
 				310B83261D8E7B0100A0F408 /* AppDelegate.h */,
@@ -4560,6 +4580,7 @@
 		31B7C7A51D8FE91A00F1883A /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				047F13FE1DAB359700684881 /* JPush */,
 				04F8629A1D94FC8900DCC6FE /* SDAutoLayout */,
 				04F8625B1D94FC7900DCC6FE /* DiscoverKeyBoard */,
 				04F862251D94FC6D00DCC6FE /* MLEmojiLabel */,
@@ -4642,6 +4663,7 @@
 		F8838AFF61B5D250B9C12805 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				047F14031DAB35F900684881 /* UserNotifications.framework */,
 				D541D3561DAA1AA800FF21F3 /* libresolv.tbd */,
 				311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */,
 				0485935F1D9656A700DB3FCD /* CoreFoundation.framework */,
@@ -5562,6 +5584,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CLANG_CXX_LIBRARY = "libstdc++";
+				CODE_SIGN_ENTITLEMENTS = ZhiMaBaoBao/ZhiMaBaoBao.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = C74GJQS7VJ;
@@ -5583,6 +5606,7 @@
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/WXPay",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Class/ZhimaChat/MLAudioRecorder/amr_en_de/lib",
+					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/JPush",
 				);
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
@@ -5600,6 +5624,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CLANG_CXX_LIBRARY = "libstdc++";
+				CODE_SIGN_ENTITLEMENTS = ZhiMaBaoBao/ZhiMaBaoBao.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = C74GJQS7VJ;
@@ -5621,6 +5646,7 @@
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/WXPay",
 					"$(PROJECT_DIR)/ZhiMaBaoBao/Class/ZhimaChat/MLAudioRecorder/amr_en_de/lib",
+					"$(PROJECT_DIR)/ZhiMaBaoBao/Main/Tools/Libs/JPush",
 				);
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;

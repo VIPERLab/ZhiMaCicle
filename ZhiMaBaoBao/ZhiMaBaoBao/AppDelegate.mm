@@ -15,11 +15,17 @@
 #import "SocketManager.h"
 #import "ConverseModel.h"
 #import "LYVoIP.h"
+
+#import "JPUSHService.h"
+#import <AdSupport/AdSupport.h>
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+#import <UserNotifications/UserNotifications.h>
+#endif
 //临时用
 #import "ZhiMaFriendModel.h"
 
 
-@interface AppDelegate ()
+@interface AppDelegate () <JPUSHRegisterDelegate>
 
 @end
 
@@ -72,6 +78,9 @@
     [[LYVoIP shareInstance]voipConfigWithID:@"6560" Key:@"rXk6stbTRTFMdDcyKbsfe8PZrcx8m8Za" model:LYVoIPModelAPPReView];
     
     
+    [self regiestJPush:launchOptions];
+    
+    
     return YES;
 }
 
@@ -118,6 +127,49 @@
     
 }
 
+// 极光推送
+- (void)regiestJPush:(NSDictionary *)launchOptions {
+    // 极光推送注册
+    NSString *advertisingId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+        JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
+        entity.types = UNAuthorizationOptionAlert|UNAuthorizationOptionBadge|UNAuthorizationOptionSound;
+        [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
+#endif
+    } else if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+        //可以添加自定义categories
+        [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
+                                                          UIUserNotificationTypeSound |
+                                                          UIUserNotificationTypeAlert)
+                                              categories:nil];
+    } else {
+        //categories 必须为nil
+        [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                          UIRemoteNotificationTypeSound |
+                                                          UIRemoteNotificationTypeAlert)
+                                              categories:nil];
+    }
+    
+    
+    //如不需要使用IDFA，advertisingIdentifier 可为nil
+    
+    
+    [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) {
+        if(resCode == 0){
+            NSLog(@"registrationID获取成功：%@",registrationID);
+            
+        }
+        else{
+            NSLog(@"registrationID获取失败，code：%d",resCode);
+        }
+    }];
+    
+    [JPUSHService setupWithOption:launchOptions appKey:appKey
+                          channel:channel
+                 apsForProduction:isProduction
+            advertisingIdentifier:advertisingId];
+}
 
 //创建数据库表
 - (void)creatMySQL {
@@ -188,6 +240,8 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
+
+
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
