@@ -251,29 +251,29 @@
             self.pageNumber++;
             NSString *pageNumber = [NSString stringWithFormat:@"%zd",self.pageNumber];
             
-            NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
-            if (newDataArray.count != 0) {
-                [self.dataArray addObjectsFromArray:newDataArray];
-                [self.tableView.mj_footer endRefreshing];
-                [self.tableView reloadData];
-                [self.tableView reloadDataWithExistedHeightCache];
-            }
-            
             NSString *sectionID = USERINFO.sessionId;
             NSString *userID = USERINFO.userID;
             
             [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
                 
-                
-                if (responseData == nil) {
+                NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
+                if (responseData.code != 0) {
+                    
+                    if (newDataArray.count != 0) {
+                        [self.dataArray addObjectsFromArray:newDataArray];
+                        [self.tableView.mj_footer endRefreshing];
+                        [self.tableView reloadData];
+                        [self.tableView reloadDataWithExistedHeightCache];
+                    }
                     return;
+                    
                 }
                 
                 NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:NO];
                 
                 if (dataArray.count) {
                     [self.dataArray addObjectsFromArray:dataArray];
-                    self.pageNumber++;
+//                    self.pageNumber++;
                 } else {
                     self.tableView.mj_footer.state = MJRefreshStateNoMoreData;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
@@ -285,12 +285,9 @@
                 dispatch_async(dispatch_queue_create(0, 0), ^{
                     //存数据到朋友圈表
                     [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+                    
                 });
                 
-#warning 这里有可能会造成刷新不及时的原因
-                if (newDataArray.count) {
-                    return;
-                }
                 
                 [self.tableView.mj_footer endRefreshing];
                 [self.tableView reloadData];
