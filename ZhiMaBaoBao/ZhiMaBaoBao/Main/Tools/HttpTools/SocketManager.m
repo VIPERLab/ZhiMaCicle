@@ -160,7 +160,13 @@ static SocketManager *manager = nil;
     }
     
     //插入消息数据库
-    BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
+    BOOL success = NO;
+    if (message.isGroup) {
+        success = [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+    } else {
+        success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
+    }
+    
     if (success) {
         
         //发送消息状态回调通知

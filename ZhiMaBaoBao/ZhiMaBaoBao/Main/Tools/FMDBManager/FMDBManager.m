@@ -1406,7 +1406,7 @@
     NSLog(@"开始查会话表");
     __block BOOL isExist = NO;
     [queue inDatabase:^(FMDatabase *db) {
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@",converseID]];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@ and converseType = '%zd'",converseID,message.isGroup]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         while ([result next]) {
             NSLog(@"存在这个会话");
@@ -1447,7 +1447,9 @@
         //取出这个会话
         converseModel = [FMDBShareManager searchConverseWithConverseID:converseID];
         //设置更新内容
-        converseModel.unReadCount ++;
+        if (![message.fromUid isEqualToString:USERINFO.userID]) {
+            converseModel.unReadCount ++;
+        }
         converseModel.time = message.timeStamp;
         converseModel.lastConverse = message.text;
         converseModel.converseHead_photo = userModel.user_Head_photo;
@@ -1478,6 +1480,116 @@
     
     return success;
 }
+
+
+/**
+ *  插入一个新消息到消息列表 （群专用）
+ *
+ *  @param groupId   群id
+ *
+ */
+- (BOOL)saveGroupChatMessage:(LGMessage *)message andConverseId:(NSString *)converseID {
+    
+    __block BOOL success = YES;   //消息是否插入成功
+    
+    //先把消息插入到消息表
+    FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
+    NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
+    [messageQueue inDatabase:^(FMDatabase *db) {
+        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID,@(message.is_read),@(message.sendStatus)];
+        if (successFul) {
+            NSLog(@"插入消息成功");
+        } else {
+            NSLog(@"插入消息失败");
+        }
+    }];
+    
+    
+    //查询这个消息对应的会话是否存在
+    // converseID = userID 根据这个id 取出用户表对应的用户数据
+    GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:converseID];
+    
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSLog(@"开始查会话表");
+    __block BOOL isExist = NO;
+    [queue inDatabase:^(FMDatabase *db) {
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@",converseID]];
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        while ([result next]) {
+            NSLog(@"存在这个会话");
+            isExist = YES;
+        }
+    }];
+
+    
+    //更新会话模型
+    ConverseModel *converseModel = [[ConverseModel alloc] init];
+    converseModel.time = message.timeStamp;
+    converseModel.converseHead_photo = groupModel.groupAvtar;
+    converseModel.converseName = groupModel.groupName;
+    
+    if (message.type == MessageTypeText) {
+        converseModel.lastConverse = message.text;
+    }else if (message.type == MessageTypeImage){
+        converseModel.lastConverse = @"[图片]";
+    }else if (message.type == MessageTypeAudio){
+        converseModel.lastConverse = @"[语音]";
+    }
+    
+    NSString *opeartionStr = [NSString string];
+    if (!isExist) {
+        //不存在会话列表 ->  创建这个会话
+        NSLog(@"会话不存在，需要创建");
+        
+        converseModel.converseId = converseID;
+        converseModel.disturb = NO;
+        converseModel.topChat = NO;
+        converseModel.unReadCount = 1;
+        converseModel.converseType = message.isGroup;
+        
+        opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
+        
+    } else {
+        //更新这个会话
+        NSLog(@"会话存在,更新会话");
+        //取出这个会话
+        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID];
+        //设置更新内容
+        if (![message.fromUid isEqualToString:USERINFO.userID]) {
+            converseModel.unReadCount ++;
+        }
+        converseModel.time = message.timeStamp;
+        converseModel.lastConverse = message.text;
+        converseModel.converseHead_photo = groupModel.groupAvtar;
+        converseModel.converseName = groupModel.groupName;
+        if (message.type == MessageTypeText) {
+            converseModel.lastConverse = message.text;
+        }else if (message.type == MessageTypeImage){
+            converseModel.lastConverse = @"[图片]";
+        }else if (message.type == MessageTypeAudio){
+            converseModel.lastConverse = @"[语音]";
+        }
+        
+        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseHead_photo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];
+        NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",converseModel.converseId];
+        
+        opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
+    }
+
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL successFul = [db executeUpdate:opeartionStr,@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+        if (successFul) {
+            NSLog(@"插入会话成功");
+        } else {
+            NSLog(@"插入会话失败");
+            success = NO;
+        }
+    }];
+    
+    return success;
+
+}
+
 
 /**
  *  根据会话id和页数 获取消息列表
@@ -1631,7 +1743,7 @@
 #pragma mark - 群聊信息表
 //                    ------------   群聊信息表  ----------------
 // 根据群model 保存到群表 和群成员表
-- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID {
+- (BOOL)saveGroupChatInfo:(GroupChatModel *)model andConverseID:(NSString *)converseID {
     __block BOOL isSuccess = YES;
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
     

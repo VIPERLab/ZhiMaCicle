@@ -241,6 +241,17 @@ typedef enum : NSUInteger {
  */
 - (BOOL)saveMessage:(LGMessage *)message toConverseID:(NSString *)converseID;
 
+
+
+/**
+ *  插入一个新消息到消息列表 （群专用）
+ *
+ *  @param groupId   群id
+ *
+ */
+- (BOOL)saveGroupChatMessage:(LGMessage *)message andConverseId:(NSString *)converseId;
+
+
 /**
  *  根据会话id 获取消息列表
  *
@@ -283,7 +294,7 @@ typedef enum : NSUInteger {
  *  @param groupId 会话ID = 群ID
  *
  */
-- (BOOL)saveGroupChatMessage:(GroupChatModel *)model andConverseID:(NSString *)converseID;
+- (BOOL)saveGroupChatInfo:(GroupChatModel *)model andConverseID:(NSString *)converseID;
 
 /**
  *  根据群id 获取当前群的所有信息
@@ -292,6 +303,8 @@ typedef enum : NSUInteger {
  *
  */
 - (GroupChatModel *)getGroupChatMessageByGroupId:(NSString *)groupId;
+
+
 
 
 #pragma mark - 群成员信息表

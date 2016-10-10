@@ -85,7 +85,7 @@
         self.groupModel.groupName = self.textField.text;
     }
     
-    [FMDBShareManager saveGroupChatMessage:self.groupModel andConverseID:self.groupModel.groupId];
+    [FMDBShareManager saveGroupChatInfo:self.groupModel andConverseID:self.groupModel.groupId];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
