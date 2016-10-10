@@ -366,7 +366,7 @@
 }
 
 //加载我的朋友圈内容接口
-+ (void)loadMyDiscoverWithSectionID:(NSString *)sectionID andMyCheatAcount:(NSString *)userId andPageCount:(NSString *)pageNumber block:(SuccessfulBlock)block {
++ (void)loadMyDiscoverWithSectionID:(NSString *)sectionID andMyCheatAcount:(NSString *)userId andPageCount:(NSString *)pageNumber block:(SuccessfulBlock)block failure:(FailureBlock)failure {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sectionID;
     params[@"userId"] = userId;
@@ -376,6 +376,8 @@
         block(json);
         
     } failure:^(ErrorData *error) {
+        
+        failure(error);
         
     }];
 }

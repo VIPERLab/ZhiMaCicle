@@ -154,7 +154,7 @@
 
 #pragma mark - 朋友圈内容
 //------                   加载我的朋友圈内容接口
-+ (void)loadMyDiscoverWithSectionID:(NSString *)sectionID andMyCheatAcount:(NSString *)userId andPageCount:(NSString *)pageNumber block:(SuccessfulBlock)block;
++ (void)loadMyDiscoverWithSectionID:(NSString *)sectionID andMyCheatAcount:(NSString *)userId andPageCount:(NSString *)pageNumber block:(SuccessfulBlock)block failure:(FailureBlock)failure;
 
 
 //朋友圈详情接口

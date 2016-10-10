@@ -198,8 +198,8 @@
             NSString *pageNumber = [NSString stringWithFormat:@"%zd",weakSelf.pageNumber];
             NSString *sectionID = USERINFO.sessionId;
             NSString *userID = USERINFO.userID;
+            
             [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
-                
                 if (responseData == nil || responseData.data == nil) {
                     return ;
                 }
@@ -232,11 +232,10 @@
                     });
                     
                 });
-                
-                
+ 
+            } failure:^(ErrorData *error) {
                 
             }];
-
         }];
         //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
         if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
@@ -254,11 +253,11 @@
             NSString *sectionID = USERINFO.sessionId;
             NSString *userID = USERINFO.userID;
             
+            
             [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
-                
-                NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
                 if (responseData.code != 0) {
-                    
+                    // 失败则展示数据库中下一页的数据
+                    NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
                     if (newDataArray.count != 0) {
                         [self.dataArray addObjectsFromArray:newDataArray];
                         [self.tableView.mj_footer endRefreshing];
@@ -266,14 +265,13 @@
                         [self.tableView reloadDataWithExistedHeightCache];
                     }
                     return;
-                    
                 }
                 
                 NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:NO];
                 
                 if (dataArray.count) {
                     [self.dataArray addObjectsFromArray:dataArray];
-//                    self.pageNumber++;
+                    //                    self.pageNumber++;
                 } else {
                     self.tableView.mj_footer.state = MJRefreshStateNoMoreData;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
@@ -292,7 +290,21 @@
                 [self.tableView.mj_footer endRefreshing];
                 [self.tableView reloadData];
                 [self.tableView reloadDataWithExistedHeightCache];
+                
+            } failure:^(ErrorData *error) {
+                // 失败则展示数据库中下一页的数据
+                NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
+                if (newDataArray.count != 0) {
+                    [self.dataArray addObjectsFromArray:newDataArray];
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                    [self.tableView reloadDataWithExistedHeightCache];
+                }
+                return;
+                
             }];
+
+            
         }];
     }
 }
