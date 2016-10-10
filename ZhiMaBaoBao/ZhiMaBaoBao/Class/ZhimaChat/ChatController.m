@@ -115,7 +115,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
         [self setCustomTitle:groupModel.groupName];
     }
-    
 
 }
 
