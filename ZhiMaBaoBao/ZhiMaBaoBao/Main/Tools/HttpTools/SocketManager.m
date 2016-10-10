@@ -222,15 +222,6 @@ static SocketManager *manager = nil;
                 message.text = fileName;
                 if ([audioData writeToFile:path atomically:YES]) {
                     NSLog(@"语音写入沙盒成功");
-                    //将消息插入数据库，并更新会话列表
-                    BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
-                    
-                    if (success) {
-                        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                        userInfo[@"message"] = message;
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
-                        
-                    }
 
                 }else{
                     NSLog(@"语音写入沙盒失败");
@@ -239,27 +230,26 @@ static SocketManager *manager = nil;
             }
             //文本消息 -> 插入数据库
             else if (message.type == MessageTypeText){
-                //将消息插入数据库，并更新会话列表
-                BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
-                
-                if (success) {
-                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                    userInfo[@"message"] = message;
-                    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+#warning 留着进行相关扩展操作
 
-                }
             }
             
             else if (message.type == MessageTypeImage){
-                //将消息插入数据库，并更新会话列表
-                BOOL success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
-                
-                if (success) {
-                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                    userInfo[@"message"] = message;
-                    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
-                    
-                }
+
+            }
+            
+            //将消息插入数据库，并更新会话列表  (根据是否为群聊，插入不同的表)
+            BOOL success = NO;
+            if (message.isGroup) {
+                success = [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+            } else {
+                success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
+            }
+            
+            if (success) {
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                userInfo[@"message"] = message;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
             }
             
         }
@@ -379,6 +369,10 @@ static SocketManager *manager = nil;
     }
     //文本消息
     else if (message.type == MessageTypeText){
+        sendMsg = message;
+    }
+    //图片消息
+    else if (message.type == MessageTypeImage){
         sendMsg = message;
     }
     
