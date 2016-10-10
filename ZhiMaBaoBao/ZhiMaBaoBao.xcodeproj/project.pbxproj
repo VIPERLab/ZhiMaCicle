@@ -571,6 +571,7 @@
 		31B7C7B81D90031D00F1883A /* YiKeyBoardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C7B61D90031D00F1883A /* YiKeyBoardView.xib */; };
 		31B7C7BC1D900A6F00F1883A /* CallBottombar.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7BB1D900A6F00F1883A /* CallBottombar.m */; };
 		9D4903A7551EC331016D9D3A /* Pods_ZhiMaBaoBao.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF1AD7B94550139D0811527 /* Pods_ZhiMaBaoBao.framework */; };
+		D540F3CF1DAB99FA00FF5239 /* SystemChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D540F3CE1DAB99FA00FF5239 /* SystemChatCell.m */; };
 		D541D3571DAA1AA800FF21F3 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D541D3561DAA1AA800FF21F3 /* libresolv.tbd */; };
 		D5C8B3971D9A0059007D6B5C /* BaseChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5C8B3961D9A0059007D6B5C /* BaseChatTableViewCell.m */; };
 		D5C8B39A1D9A0293007D6B5C /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D5C8B3991D9A0293007D6B5C /* UIView+Helpers.m */; };
@@ -1692,6 +1693,8 @@
 		31B7C7BA1D900A6F00F1883A /* CallBottombar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallBottombar.h; sourceTree = "<group>"; };
 		31B7C7BB1D900A6F00F1883A /* CallBottombar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallBottombar.m; sourceTree = "<group>"; };
 		7AF1AD7B94550139D0811527 /* Pods_ZhiMaBaoBao.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZhiMaBaoBao.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D540F3CD1DAB99FA00FF5239 /* SystemChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemChatCell.h; sourceTree = "<group>"; };
+		D540F3CE1DAB99FA00FF5239 /* SystemChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemChatCell.m; sourceTree = "<group>"; };
 		D541D3561DAA1AA800FF21F3 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		D5C8B3951D9A0059007D6B5C /* BaseChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseChatTableViewCell.h; sourceTree = "<group>"; };
 		D5C8B3961D9A0059007D6B5C /* BaseChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseChatTableViewCell.m; sourceTree = "<group>"; };
@@ -4006,6 +4009,8 @@
 				D5C8B3B81D9A1A6D007D6B5C /* IMMorePictureTableViewCell.m */,
 				D5DC485E1D9A4AE9005E8766 /* IMChatVoiceTableViewCell.h */,
 				D5DC485F1D9A4AE9005E8766 /* IMChatVoiceTableViewCell.m */,
+				D540F3CD1DAB99FA00FF5239 /* SystemChatCell.h */,
+				D540F3CE1DAB99FA00FF5239 /* SystemChatCell.m */,
 				311CEFB61D93D98700BBB1F9 /* BuddleView.h */,
 				311CEFB71D93D98700BBB1F9 /* BuddleView.m */,
 			);
@@ -5085,6 +5090,7 @@
 				04EA7E051D912872005E5425 /* ZXPDF417CodewordDecoder.m in Sources */,
 				31B7C74D1D8FB0D900F1883A /* ResponseData.m in Sources */,
 				04F576101D922533002A6471 /* ModifySignController.m in Sources */,
+				D540F3CF1DAB99FA00FF5239 /* SystemChatCell.m in Sources */,
 				04EA79BB1D90E8C2005E5425 /* LGFeedBackViewController.m in Sources */,
 				31B7C7601D8FB33E00F1883A /* LGSetNickNameController.m in Sources */,
 				04EA79E51D90E9F7005E5425 /* TelephoneBillViewController.m in Sources */,

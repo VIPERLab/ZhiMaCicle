@@ -68,26 +68,6 @@
 
 }
 
-#pragma mark override
-
-//- (BOOL)canBecomeFirstResponder
-//{
-//    return YES;
-//}
-//
-//- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
-//{
-//    return (action == @selector(delete:));
-//}
-//
-//- (void)delete:(id)sender
-//{
-//    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(deleteButtonTappedWithIndexPath:)]) {
-//        
-//        [self.delegate deleteButtonTappedWithIndexPath:self.indexPath];
-//    }
-//}
-
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -95,6 +75,7 @@
     _topLabel.lineBreakMode = NSLineBreakByCharWrapping;
     [_topLabel sizeToFit];
     _topLabel.width += 10;
+    _topLabel.height += 3;
     [_topLabel centerAlignHorizontalForSuperView];
     
     _isSetTopLabel  = ![_topLabel.text isBlank];
@@ -245,7 +226,7 @@
     _topLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _topLabel.textColor = [UIColor whiteColor];
     _topLabel.font = SUBFONT;
-    _topLabel.backgroundColor= GRAYCOLOR;
+    _topLabel.backgroundColor= RGB(206, 206, 206);
     _topLabel.textAlignment = 1;
 
     _nickLabel = [[UILabel alloc] initWithFrame:CGRectZero];
