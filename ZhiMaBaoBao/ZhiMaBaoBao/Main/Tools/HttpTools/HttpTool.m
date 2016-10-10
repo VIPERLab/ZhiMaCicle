@@ -79,7 +79,7 @@
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [LCProgressHUD hide];
+//        [LCProgressHUD hide];
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         NSLog(@"请求掉起失败：%@",error.description);
         if (error) {

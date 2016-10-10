@@ -83,14 +83,14 @@
  *                appSystem手机系统类型:ios	android
 
  */
-+ (void)loginWithPhone:(NSString *)phone password:(NSString *)password success:(SuccessfulBlock)success failure:(void (^)(ErrorData *json))error {
++ (void)loginWithPhone:(NSString *)phone password:(NSString *)password success:(SuccessfulBlock)success failure:(FailureBlock)failure {
     
     [HttpTool POST:@"/moblie/user_login.do" params:@{@"phone":phone,@"password":password,@"version":@(2.0),@"appSystem":@"ios"} success:^(ResponseData *json) {
         
         success(json);
                 
     } failure:^(ErrorData *error) {
-//        failure(error);
+        failure(error);
         
     }];
 }

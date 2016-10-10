@@ -294,7 +294,7 @@ typedef enum : NSUInteger {
  *  @param groupId 会话ID = 群ID
  *
  */
-- (BOOL)saveGroupChatInfo:(GroupChatModel *)model andConverseID:(NSString *)converseID;
+- (BOOL)saveGroupChatInfo:(GroupChatModel *)model andConverseID:(NSString *)groupId;
 
 /**
  *  根据群id 获取当前群的所有信息
@@ -304,7 +304,12 @@ typedef enum : NSUInteger {
  */
 - (GroupChatModel *)getGroupChatMessageByGroupId:(NSString *)groupId;
 
-//是否存在这个群
+/**
+ *  是否存在群
+ *
+ *  @param groupId   群id
+ *
+ */
 - (BOOL)isGroupChatExist:(NSString *)groupId;
 
 
