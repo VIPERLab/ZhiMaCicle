@@ -183,7 +183,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
     NSDictionary *userDic = notify.userInfo;
     ZhiMaFriendModel *friend = userDic[@"friend"];
     //插入数据库，显示未读角标
-    [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
+//    [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
     self.unReadLabel.hidden = NO;
     self.unReadLabel.text = [NSString stringWithFormat:@"%d",USERINFO.unReadCount];
     if (USERINFO.unReadCount == 0) {
@@ -309,6 +309,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
             userInfo.unReadCount = 0;
             [userInfo save];
             self.unReadLabel.hidden = YES;
+            [[self.tabBarController.tabBar.items objectAtIndex:1] setBadgeValue:nil];
         }else if (indexPath.row == 1){  //群组
             GroupChatListController *vc = [[GroupChatListController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;

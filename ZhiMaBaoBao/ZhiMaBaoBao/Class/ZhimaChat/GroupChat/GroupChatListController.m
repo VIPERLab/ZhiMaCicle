@@ -76,6 +76,7 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
 //发起群聊
 - (void)createGroupChat{
     CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+    vc.hideFirstSection = YES;
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
 }

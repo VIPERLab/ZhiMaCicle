@@ -12,8 +12,11 @@
 #import "GroupChatModel.h"
 #import "SocketManager.h"
 #import "ChatController.h"
+#import "TransPopView.h"
+#import "NSString+MsgId.h"
+#import "GroupChatListController.h"
 
-@interface CreateGroupChatController ()<UITableViewDelegate,UITableViewDataSource,GreateGroupListCellDelegate>
+@interface CreateGroupChatController ()<UITableViewDelegate,UITableViewDataSource,GreateGroupListCellDelegate,TransPopViewDelegate>
 @property (nonatomic, strong) NSMutableArray *friends;              //好友列表数组
 @property (nonatomic, strong) NSMutableArray *friendsAfterSort;     //排序后的好友列表数组
 @property (nonatomic, strong) NSMutableArray *sectionsArr;             //排序后好友名称首字母
@@ -56,6 +59,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 }
 
 - (void)setNavItem{
+    
     UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
     rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [rightBtn setTitle:@"确定" forState:UIControlStateNormal];
@@ -63,6 +67,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     rightBtn.titleLabel.font = MAINFONT;
     [rightBtn addTarget:self action:@selector(createGroupChatAction) forControlEvents:UIControlEventTouchUpInside];
     self.rightBtn = rightBtn;
+
     
     UIButton *leftBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -70,9 +75,11 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     [leftBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     leftBtn.titleLabel.font = MAINFONT;
     [leftBtn addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
+    
+    if (!self.hideFlagBtn) {     //点击直接转发消息  隐藏右侧确定按钮
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    }
 }
 
 - (void)addAllSubviews{
@@ -126,7 +133,11 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     if (tableView == self.tableView) {
-        return self.sectionsArr.count + 1;
+        if (self.hideFirstSection) {    //不显示选择一个群
+            return self.sectionsArr.count;
+        }else{
+            return self.sectionsArr.count + 1;
+        }
     }else{
         return 1;
     }
@@ -134,11 +145,16 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (tableView == self.tableView) {
-        if (section == 0) {
-            return 1;
-        }else{
+        if (self.hideFirstSection) {    //不显示"选择一个群"
             //取到是哪一组，返回该数组中的个数
-            return [[self.countOfSectionArr objectAtIndex:section - 1] integerValue];
+            return [[self.countOfSectionArr objectAtIndex:section] integerValue];
+        }else{
+            if (section == 0) {
+                return 1;
+            }else{
+                //取到是哪一组，返回该数组中的个数
+                return [[self.countOfSectionArr objectAtIndex:section - 1] integerValue];
+            }
         }
     }else{
         return self.searchResultArr.count;
@@ -147,15 +163,10 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (tableView == self.tableView) {
-        if (indexPath.section == 0) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:headerReuseIdentifier];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.textLabel.text = @"选择一个群";
-            return cell;
-        }else{
+        if (self.hideFirstSection) {    //不显示"选择一个群"
             CreateGroupListCell *cell = [tableView dequeueReusableCellWithIdentifier:listReuseIdentifier];
             NSInteger rowNum = 0;
-            for (int i = 0; i < indexPath.section - 1; i++) {
+            for (int i = 0; i < indexPath.section; i++) {
                 
                 rowNum = [[self.countOfSectionArr objectAtIndex:i] intValue] + rowNum;
             }
@@ -166,8 +177,39 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             cell.delegate = self;
             cell.indexPath = indexPath;
             cell.tableView = tableView;
+            
             return cell;
+
+        }else{
+            if (indexPath.section == 0) {
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:headerReuseIdentifier];
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.textLabel.text = @"选择群聊";
+                return cell;
+            }else{
+                CreateGroupListCell *cell = [tableView dequeueReusableCellWithIdentifier:listReuseIdentifier];
+                NSInteger rowNum = 0;
+                for (int i = 0; i < indexPath.section - 1; i++) {
+                    
+                    rowNum = [[self.countOfSectionArr objectAtIndex:i] intValue] + rowNum;
+                }
+                rowNum += indexPath.row;
+                
+                ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
+                cell.friendModel = friend;
+                cell.delegate = self;
+                cell.indexPath = indexPath;
+                cell.tableView = tableView;
+                
+                if (self.hideFlagBtn) {
+                    //隐藏选择按钮，头像左移
+                    cell.selectFlagBtn.hidden = YES;
+                    cell.avtarLeftMargin.constant = -25;
+                }
+                return cell;
+            }
         }
+
     }else{
         CreateGroupListCell *cell = [tableView dequeueReusableCellWithIdentifier:listReuseIdentifier];
         ZhiMaFriendModel *friend = self.searchResultArr[indexPath.row];
@@ -182,11 +224,10 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView == self.tableView) {
-        if (indexPath.section == 0) {   //选择一个群
-            
-        }else{  //添加群成员
+        if (self.hideFirstSection) {   //不显示"选择一个群"
+
             NSInteger rowNum = 0;
-            for (int i = 0; i < indexPath.section - 1; i++) {
+            for (int i = 0; i < indexPath.section; i++) {
                 
                 rowNum = [[self.countOfSectionArr objectAtIndex:i] intValue] + rowNum;
             }
@@ -210,8 +251,48 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             
             //更新顶栏试图 imagesView 的frame
             [self refreshImagesViewFrame];
+        }else{
+            if (indexPath.section == 0) {   //选择群聊  ->   跳转到群列表
+                GroupChatListController *vc = [[GroupChatListController alloc] init];
+                [self.navigationController pushViewController:vc animated:YES];
+                
+            }else{  //添加群成员
+                NSInteger rowNum = 0;
+                for (int i = 0; i < indexPath.section - 1; i++) {
+                    
+                    rowNum = [[self.countOfSectionArr objectAtIndex:i] intValue] + rowNum;
+                }
+                rowNum += indexPath.row;
+                
+                ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
+                
+                if (self.hideFlagBtn) {     //选择好友 ，转发消息
+                    TransPopView *popView = [[TransPopView alloc] initWithMessage:self.transMsg toUserId:friend.user_Id];
+                    popView.delegate = self;
+                    [popView show];
+                }else{      //选择群成员
+
+                    //设置选中属性
+                    friend.selectedGroup = !friend.selectedGroup;
+                    
+                    //刷新选中行
+                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    
+                    //如果是选中状态，加入数组 如果是非选中状态移出数组
+                    if (friend.selectedGroup) {
+                        [self.selectedFriends addObject:friend];
+                    }else{
+                        if ([self.selectedFriends containsObject:friend]) {
+                            [self.selectedFriends removeObject:friend];
+                        }
+                    }
+                    
+                    //更新顶栏试图 imagesView 的frame
+                    [self refreshImagesViewFrame];
+                }
+            }
         }
- 
+
     }else{
         ZhiMaFriendModel *friend = self.searchResultArr[indexPath.row];
         
@@ -248,10 +329,14 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (section == 0) {
-        return 0.1f;
-    }else{
+    if (self.hideFirstSection) {
         return 20;
+    }else{
+        if (section == 0) {
+            return 0.1f;
+        }else{
+            return 20;
+        }
     }
 }
 
@@ -260,20 +345,33 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if (section == 0) {
-        
-        return [UIView new];
-    }else{
+    if (self.hideFirstSection) {
         UIView *headerView  = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICEWITH, 20)];
         headerView.backgroundColor = RGB(229, 229, 229);
         
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(14, 0, DEVICEWITH - 14, 20)];
-        titleLabel.text = [self.sectionsArr objectAtIndex:section - 1];
+        titleLabel.text = [self.sectionsArr objectAtIndex:section];
         titleLabel.font = [UIFont systemFontOfSize:16.0];
         titleLabel.textColor = RGB(147, 147, 147);
         titleLabel.backgroundColor = [UIColor clearColor];
         [headerView addSubview:titleLabel];
         return headerView;
+    }else{
+        if (section == 0) {
+            
+            return [UIView new];
+        }else{
+            UIView *headerView  = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICEWITH, 20)];
+            headerView.backgroundColor = RGB(229, 229, 229);
+            
+            UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(14, 0, DEVICEWITH - 14, 20)];
+            titleLabel.text = [self.sectionsArr objectAtIndex:section - 1];
+            titleLabel.font = [UIFont systemFontOfSize:16.0];
+            titleLabel.textColor = RGB(147, 147, 147);
+            titleLabel.backgroundColor = [UIColor clearColor];
+            [headerView addSubview:titleLabel];
+            return headerView;
+        }
     }
 }
 
@@ -412,7 +510,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         self.imagesView.width = width;
         self.textField.x = CGRectGetMaxX(self.imagesView.frame) + margin;
         //更新导航栏右侧按钮显示
-        [self.rightBtn setTitle:[NSString stringWithFormat:@"确定(%d)",count] forState:UIControlStateNormal];
+        [self.rightBtn setTitle:[NSString stringWithFormat:@"确定(%ld)",(long)count] forState:UIControlStateNormal];
         [self.rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     }
     
@@ -508,6 +606,33 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         }
     }
     [self.tableView reloadData];
+}
+
+#pragma mark - 转发消息
+//转发消息
+- (void)transformMessage:(LGMessage *)message toUserId:(NSString *)userId{
+    //生成一个新的消息模型
+    LGMessage *newMsg = [self generateNewMessage:message to:userId];
+    [[SocketManager shareInstance] sendMessage:newMsg];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [LCProgressHUD showSuccessText:@"发送成功"];
+    }];
+}
+
+//生成一个新的消息模型 -> 用来转发
+- (LGMessage *)generateNewMessage:(LGMessage *)message to:(NSString *)userId{
+    LGMessage *newMsg = [[LGMessage alloc] init];
+    newMsg.type = message.type;
+    newMsg.fromUid = USERINFO.userID;
+    //如果转发自己的消息，那么touid为旧消息的touid 如果转发的别人的消息，那么to
+    newMsg.toUidOrGroupId = userId;
+    newMsg.timeStamp = [NSDate currentTimeStamp];
+    newMsg.isGroup = message.isGroup;
+    newMsg.text = message.text;
+    newMsg.msgid = [NSString generateMessageID];
+    newMsg.picUrl = message.picUrl;
+    return newMsg;
 }
 
 

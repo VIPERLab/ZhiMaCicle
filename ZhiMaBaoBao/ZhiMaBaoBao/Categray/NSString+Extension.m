@@ -131,6 +131,20 @@
     return date;
 }
 
+
+- (BOOL)isBlankString{
+    if (self == nil || self == NULL) {
+        return YES;
+    }
+    if ([self isKindOfClass:[NSNull class]]) {
+        return YES;
+    }
+    if ([[self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length]==0) {
+        return YES;
+    }
+    return NO;
+}
+
 /**
  *  自己写得方法来求字符串的size
  *
