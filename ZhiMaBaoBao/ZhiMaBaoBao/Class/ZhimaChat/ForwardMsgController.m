@@ -11,6 +11,7 @@
 #import "CreateGroupChatController.h"
 #import "TransPopView.h"
 #import "SocketManager.h"
+#import "NSString+MsgId.h"
 
 @interface ForwardMsgController ()<UITableViewDelegate,UITableViewDataSource,TransPopViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -106,16 +107,31 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     [self.tableView reloadData];
 }
 
+#pragma mark - popView delegate
 //转发消息
 - (void)transformMessage:(LGMessage *)message toUserId:(NSString *)userId{
-    //更新转发消息 发送时间 和发送对象
-    message.timeStamp = [NSDate currentTimeStamp];
-    message.toUidOrGroupId = userId;
-    [[SocketManager shareInstance] sendMessage:message];
+    //生成一个新的消息模型
+    LGMessage *newMsg = [self generateNewMessage:message to:userId];
+    [[SocketManager shareInstance] sendMessage:newMsg];
     
     [self dismissViewControllerAnimated:YES completion:^{
         [LCProgressHUD showSuccessText:@"发送成功"];
     }];
+}
+
+//生成一个新的消息模型 -> 用来转发
+- (LGMessage *)generateNewMessage:(LGMessage *)message to:(NSString *)userId{
+    LGMessage *newMsg = [[LGMessage alloc] init];
+    newMsg.type = message.type;
+    newMsg.fromUid = USERINFO.userID;
+    //如果转发自己的消息，那么touid为旧消息的touid 如果转发的别人的消息，那么to
+    newMsg.toUidOrGroupId = userId;
+    newMsg.timeStamp = [NSDate currentTimeStamp];
+    newMsg.isGroup = message.isGroup;
+    newMsg.text = message.text;
+    newMsg.msgid = [NSString generateMessageID];
+    newMsg.picUrl = message.picUrl;
+    return newMsg;
 }
 
 #pragma mark - tableView delegate

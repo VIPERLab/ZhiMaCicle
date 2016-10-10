@@ -166,7 +166,7 @@ static SocketManager *manager = nil;
     } else {
         success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
     }
-    
+
     if (success) {
         
         //发送消息状态回调通知
