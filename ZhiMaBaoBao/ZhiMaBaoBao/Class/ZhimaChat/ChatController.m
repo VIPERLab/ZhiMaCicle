@@ -67,8 +67,10 @@
 @property (nonatomic, strong) NSIndexPath *currentPlayAudioIndexPath; //当前下在播放语音的cell indexpath;
 
 
-@property (nonatomic, strong) NSMutableArray *messages;  //聊天消息
-@property (nonatomic, strong) NSMutableArray *subviews;  //所有的imageView（浏览图片时用）
+@property (nonatomic, strong) NSMutableArray *messages;       //聊天消息
+@property (nonatomic, strong) NSMutableArray *subviews;       //所有的imageView（浏览图片时用）
+@property (nonatomic, strong) NSMutableArray *allImagesInfo;  //界面加载出来了的所有的图片信息（浏览图片时用）
+
 @property (nonatomic, copy) NSString * audioName;         //最新语音文件后缀名
 
 @property (nonatomic, assign)BOOL isTimeOut; //录音时间超过60秒
@@ -123,7 +125,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     if (!self.converseType) {   //单聊
         ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
         [self setCustomTitle:friendModel.displayName];
-        self.friendHeadPic = friendModel.head_photo;
+        self.friendHeadPic = friendModel.user_Head_photo;
     } else {
         GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
         [self setCustomTitle:groupModel.groupName];
@@ -404,27 +406,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
     self.messages = (NSMutableArray *)[[self.messages reverseObjectEnumerator] allObjects];
     
-//    for (int i=0; i<3; i++) {
-//        LGMessage *message  = [[LGMessage alloc]init];
-//        switch (i) {
-//            case 0:
-//                message.text = @"您刚刚撤回一条消息您刚刚撤回一条消息您刚刚撤回一条消息您刚刚撤回一条消息您刚刚撤回一条消息您刚刚撤回一条消息您刚刚撤回一条消息您刚刚撤回一条消息您刚刚撤回一条消息";
-//
-//                break;
-//            case 1:
-//                message.text = @"刘刚刘刚刘刚刘刚 邀请 大雄 加入了群聊";
-//                
-//                break;
-//            case 2:
-//                message.text = @"你撤回了一条消息";
-//                
-//                break;
-//                
-//            default:
-//                break;
-//        }
-//        message.type = MessageTypeSystem;
-//        [self.messages addObject:message];
+//    for (int i=0; i<marr.count; i++) {
+//        [self.messages insertObject:marr[i] atIndex:0];
 //    }
 
     [self.tableView reloadData];
@@ -497,7 +480,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 #pragma mark - ——----------浏览图片
 - (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
 {
-    NSLog(@"图片点击");
+   // 显示单张图片
     [self.subviews removeAllObjects];
     UIView *imageView = grz.view;
     
@@ -739,12 +722,15 @@ static NSString *const reuseIdentifier = @"messageCell";
             [baseChatCell.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]]];
             
         }else{
+            
             if (!self.converseType) {
                 
-                [baseChatCell.userIcon sd_setImageWithURL:[NSURL URLWithString:self.friendHeadPic]];
+                [baseChatCell.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.friendHeadPic]]];
                 
             } else {
-                //            GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
+//                GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
+//                NSArray*groupArr = groupModel.groupUserVos;
+                
             }
         }
         
@@ -1332,15 +1318,8 @@ static NSString *const reuseIdentifier = @"messageCell";
         DNAsset *dnasset = imageAssets[index];
         [lib assetForURL:dnasset.url resultBlock:^(ALAsset *asset) {
             
-            UIImage *image;
-            
-            if (fullImage) {
-                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage];
-            } else {
+            UIImage *image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage];
 
-                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationRight];
-            }
-         
             if (self.imagesArray.count > 8) {
                 return ;
             }
@@ -1368,83 +1347,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     [imagePickerController dismissViewControllerAnimated:YES completion:^{
         self.tabBarController.tabBar.hidden = YES;
     }];
-}
-
-- (UIImage *)fixOrientation:(UIImage *)aImage {
-    
-    // No-op if the orientation is already correct
-    if (aImage.imageOrientation == UIImageOrientationUp)
-        return aImage;
-    
-    // We need to calculate the proper transformation to make the image upright.
-    // We do it in 2 steps: Rotate if Left/Right/Down, and then flip if Mirrored.
-    CGAffineTransform transform = CGAffineTransformIdentity;
-    
-    switch (aImage.imageOrientation) {
-        case UIImageOrientationDown:
-        case UIImageOrientationDownMirrored:
-            transform = CGAffineTransformTranslate(transform, aImage.size.width, aImage.size.height);
-            transform = CGAffineTransformRotate(transform, M_PI);
-            break;
-            
-        case UIImageOrientationLeft:
-        case UIImageOrientationLeftMirrored:
-            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
-            transform = CGAffineTransformRotate(transform, M_PI_2);
-            break;
-            
-        case UIImageOrientationRight:
-        case UIImageOrientationRightMirrored:
-            transform = CGAffineTransformTranslate(transform, 0, aImage.size.height);
-            transform = CGAffineTransformRotate(transform, -M_PI_2);
-            break;
-        default:
-            break;
-    }
-    
-    switch (aImage.imageOrientation) {
-        case UIImageOrientationUpMirrored:
-        case UIImageOrientationDownMirrored:
-            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
-            transform = CGAffineTransformScale(transform, -1, 1);
-            break;
-            
-        case UIImageOrientationLeftMirrored:
-        case UIImageOrientationRightMirrored:
-            transform = CGAffineTransformTranslate(transform, aImage.size.height, 0);
-            transform = CGAffineTransformScale(transform, -1, 1);
-            break;
-        default:
-            break;
-    }
-    
-    // Now we draw the underlying CGImage into a new context, applying the transform
-    // calculated above.
-    CGContextRef ctx = CGBitmapContextCreate(NULL, aImage.size.width, aImage.size.height,
-                                             CGImageGetBitsPerComponent(aImage.CGImage), 0,
-                                             CGImageGetColorSpace(aImage.CGImage),
-                                             CGImageGetBitmapInfo(aImage.CGImage));
-    CGContextConcatCTM(ctx, transform);
-    switch (aImage.imageOrientation) {
-        case UIImageOrientationLeft:
-        case UIImageOrientationLeftMirrored:
-        case UIImageOrientationRight:
-        case UIImageOrientationRightMirrored:
-            // Grr...
-            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.height,aImage.size.width), aImage.CGImage);
-            break;
-            
-        default:
-            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.width,aImage.size.height), aImage.CGImage);
-            break;
-    }
-    
-    // And now we just create a new UIImage from the drawing context
-    CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
-    UIImage *img = [UIImage imageWithCGImage:cgimg];
-    CGContextRelease(ctx);
-    CGImageRelease(cgimg);
-    return img;
 }
 
 - (void)dnImagePickerControllerDidCancel:(DNImagePickerController *)imagePicker {
@@ -1554,5 +1456,11 @@ static NSString *const reuseIdentifier = @"messageCell";
     return _imagesArray;
 }
 
+- (NSMutableArray *)allImagesInfo {
+    if (!_allImagesInfo) {
+        _allImagesInfo = [NSMutableArray array];
+    }
+    return _allImagesInfo;
+}
 
 @end
