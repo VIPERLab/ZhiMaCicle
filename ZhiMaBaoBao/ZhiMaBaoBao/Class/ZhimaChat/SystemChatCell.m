@@ -43,7 +43,7 @@
 {
     _systemLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, DEVICEWITH - 120, 20)];
     _systemLabel.backgroundColor = RGB(206, 206, 206);
-    _systemLabel.font = [UIFont systemFontOfSize:13];;
+    _systemLabel.font = [UIFont systemFontOfSize:13];
     _systemLabel.textColor = WHITECOLOR;
     _systemLabel.textAlignment = 1;
     _systemLabel.numberOfLines = 0;

@@ -27,8 +27,9 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self) {
         
-        _btnBg=[UIButton buttonWithType:UIButtonTypeCustom];
-        [_btnBg addTarget:self action:@selector(onBtn:) forControlEvents:UIControlEventTouchUpInside];
+//        _btnBg=[UIButton buttonWithType:UIButtonTypeCustom];
+//        [_btnBg addTarget:self action:@selector(onBtn:) forControlEvents:UIControlEventTouchUpInside];
+        _btnBg = [[UIImageView alloc]init];
         _btnBg.frame=CGRectZero;
         [_bubble addSubview:_btnBg];
         
@@ -134,12 +135,19 @@
     UIImage  *imgVoice=nil;
     UIEdgeInsets imageViewEdgeInsets;
     
+    NSArray* arr = [NSArray array];
+    
     //如果是自己
     if(isMe) {
         
         imgVoice=[UIImage imageNamed:[NSString stringWithFormat:@"%@",DEFAULT_CHAT_CELL_VOICE_PLAY_IMAGE_PRE_OTHER]];
         
-        self.btnBg.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        UIImage*image1 = [UIImage imageNamed:[NSString stringWithFormat:@"%@1",DEFAULT_CHAT_CELL_VOICE_PLAY_IMAGE_PRE_OTHER]];
+        UIImage*image2 = [UIImage imageNamed:[NSString stringWithFormat:@"%@2",DEFAULT_CHAT_CELL_VOICE_PLAY_IMAGE_PRE_OTHER]];
+        
+        arr = @[imgVoice,image1,image2];
+        
+//        self.btnBg.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         imageViewEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         
         self.voiceLengthLabel.textColor = GRAYCOLOR;
@@ -148,15 +156,22 @@
     } else {
         
         imgVoice=[UIImage imageNamed:[NSString stringWithFormat:@"%@",DEFAULT_CHAT_CELL_VOICE_PLAY_IMAGE_PRE_MINE]];
-        self.btnBg.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+//        self.btnBg.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         imageViewEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+        
+        UIImage*image1 = [UIImage imageNamed:[NSString stringWithFormat:@"%@1",DEFAULT_CHAT_CELL_VOICE_PLAY_IMAGE_PRE_MINE]];
+        UIImage*image2 = [UIImage imageNamed:[NSString stringWithFormat:@"%@2",DEFAULT_CHAT_CELL_VOICE_PLAY_IMAGE_PRE_MINE]];
+        
+        arr = @[imgVoice,image1,image2];
         
         self.voiceLengthLabel.textColor = GRAYCOLOR;
         self.voiceLengthLabel.textAlignment = NSTextAlignmentLeft;
     }
-    
-    [self.btnBg setImage:imgVoice forState:UIControlStateNormal];
-    [self.btnBg setImageEdgeInsets:imageViewEdgeInsets];
+    self.btnBg.image             = imgVoice;
+    self.btnBg.animationImages   = arr;
+    self.btnBg.animationDuration = 1;
+//    [self.btnBg setImage:imgVoice forState:UIControlStateNormal];
+//    [self.btnBg setImageEdgeInsets:imageViewEdgeInsets];
 }
 
 - (void)setVoiceTimeLength:(NSString *)voiceTimeLength
@@ -221,7 +236,7 @@
     
     [self repositionContentView:_btnBg];
     
-    self.bubble.frameSizeHeight += 2; // 因为高度低于9切片之前的高度，下边有点切边  所以加2
+//    self.bubble.frameSizeHeight += 2; // 因为高度低于9切片之前的高度，下边有点切边  所以加2
 
     NSLog(@"self.bubble.frameSizeHeight = %f",self.bubble.frameSizeHeight);
     self.bubble.frameSizeWidth = bubbleWidth;
@@ -234,7 +249,7 @@
     if (self.isMe) {
         
         self.bubble.frameOriginX = self.userIcon.frameOriginX - 10/2 - self.bubble.frameSizeWidth;
-        self.btnBg.frameOriginX = self.bubble.frameSizeWidth - (10 + 26 + 26)/2;
+        self.btnBg.frameOriginX = self.bubble.frameSizeWidth - (10 + 26 + 26)/2 - 5;
         
         //_bubble.frameOriginY + (_bubble.frameSizeHeight - self.voiceLengthLabel.frameSizeHeight)
         self.voiceLengthLabel.frameOrigin = CGPointMake(_bubble.frameOriginX - self.voiceLengthLabel.frameSizeWidth - 10/2, _bubble.frameMaxY - self.voiceLengthLabel.frameSizeHeight);
@@ -247,7 +262,7 @@
     {
         //_bubble.frameOriginY + (_bubble.frameSizeHeight - self.voiceLengthLabel.frameSizeHeight)/2
         self.voiceLengthLabel.frameOrigin = CGPointMake(_bubble.frameMaxX + 10/2, _bubble.frameMaxY - self.voiceLengthLabel.frameSizeHeight);
-        
+        self.btnBg.frameOriginX += 6;
         
         //_badgedView.hidden = NO;
         

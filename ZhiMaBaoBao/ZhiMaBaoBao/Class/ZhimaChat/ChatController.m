@@ -331,7 +331,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     MLAudioPlayer *player = [[MLAudioPlayer alloc]init];
     AmrPlayerReader *amrReader = [[AmrPlayerReader alloc]init];
-    
+    __weak __typeof(self)weakSelf = self;
+
     player.fileReaderDelegate = amrReader;
     player.receiveErrorBlock = ^(NSError *error){
         
@@ -339,6 +340,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     };
     player.receiveStoppedBlock = ^{
         NSLog(@"收到语音播放完成回调");
+        IMChatVoiceTableViewCell *cell = (IMChatVoiceTableViewCell*)[weakSelf.tableView cellForRowAtIndexPath:weakSelf.currentPlayAudioIndexPath];
+        [cell.btnBg stopAnimating];
+
     };
     self.player = player;
     self.amrReader = amrReader;
@@ -419,7 +423,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
     [self.tableView reloadData];
     // tableview 滑到底端
-    if (self.tableView.contentSize.height > self.tableView.bounds.size.height+64) {
+    if (self.tableView.contentSize.height > self.tableView.bounds.size.height-64) {
         [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
     }
 
@@ -960,21 +964,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     if([self.player isPlaying]) {
         
         [self.player stopPlaying];
-//        [myTimer invalidate];
-        
         NSIndexPath *index = self.currentPlayAudioIndexPath;
         
         IMChatVoiceTableViewCell *cell = (IMChatVoiceTableViewCell*)[self.tableView cellForRowAtIndexPath:index];
-        
-        NSString *imageName;
-
-        if (cell.isMe) {
-            imageName = [NSString stringWithFormat:@"chat_voice_sender"];
-        }else{
-            imageName = [NSString stringWithFormat:@"chat_voice_reciever"];
-        }
-        [cell.btnBg setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-        
+        [cell.btnBg stopAnimating];
         //如果当前cell 的语音正在播放，那么结束播放
         if (self.currentPlayAudioIndexPath.row == ip.row) {
             return;
@@ -986,12 +979,12 @@ static NSString *const reuseIdentifier = @"messageCell";
     LGMessage *message = [self.messages objectAtIndex:ip.row];
     self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
     [self.player startPlaying];
+    [currentCell.btnBg startAnimating];
     
     if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
         message.is_read = YES;
-//        message.sendStatus = YES;
-        [FMDBShareManager upDataMessageStatusWithMessage:message];
 
+        [FMDBShareManager upDataMessageStatusWithMessage:message];
         [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
         
     }

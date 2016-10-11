@@ -488,7 +488,6 @@
 		311CEFB11D937BE700BBB1F9 /* lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEFA61D937BE700BBB1F9 /* lame.framework */; };
 		311CEFB21D937BE700BBB1F9 /* Mp3RecordWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFA81D937BE700BBB1F9 /* Mp3RecordWriter.m */; };
 		311CEFB51D938EF200BBB1F9 /* RecordingHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFB41D938EF200BBB1F9 /* RecordingHUD.m */; };
-		311CEFB81D93D98700BBB1F9 /* BuddleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFB71D93D98700BBB1F9 /* BuddleView.m */; };
 		311CEFBB1D93F55000BBB1F9 /* SocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFBA1D93F55000BBB1F9 /* SocketManager.m */; };
 		311CEFBD1D94D9C000BBB1F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */; };
 		3138F4051DA795990042D100 /* CallKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3138F4041DA795990042D100 /* CallKeyboardController.m */; };
@@ -1562,8 +1561,6 @@
 		311CEFA81D937BE700BBB1F9 /* Mp3RecordWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mp3RecordWriter.m; sourceTree = "<group>"; };
 		311CEFB31D938EF200BBB1F9 /* RecordingHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingHUD.h; sourceTree = "<group>"; };
 		311CEFB41D938EF200BBB1F9 /* RecordingHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingHUD.m; sourceTree = "<group>"; };
-		311CEFB61D93D98700BBB1F9 /* BuddleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuddleView.h; sourceTree = "<group>"; };
-		311CEFB71D93D98700BBB1F9 /* BuddleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuddleView.m; sourceTree = "<group>"; };
 		311CEFB91D93F55000BBB1F9 /* SocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketManager.h; path = HttpTools/SocketManager.h; sourceTree = "<group>"; };
 		311CEFBA1D93F55000BBB1F9 /* SocketManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SocketManager.m; path = HttpTools/SocketManager.m; sourceTree = "<group>"; };
 		311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -4084,8 +4081,6 @@
 				D5DC485F1D9A4AE9005E8766 /* IMChatVoiceTableViewCell.m */,
 				D540F3CD1DAB99FA00FF5239 /* SystemChatCell.h */,
 				D540F3CE1DAB99FA00FF5239 /* SystemChatCell.m */,
-				311CEFB61D93D98700BBB1F9 /* BuddleView.h */,
-				311CEFB71D93D98700BBB1F9 /* BuddleView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -5015,7 +5010,6 @@
 				04F57AEB1D9280BD002A6471 /* KXCurrentLocationCell.m in Sources */,
 				04F57AB31D9280BD002A6471 /* SDTimeLineCell.m in Sources */,
 				04EA797A1D8FBA0C005E5425 /* KXWebViewController.m in Sources */,
-				311CEFB81D93D98700BBB1F9 /* BuddleView.m in Sources */,
 				04EA7D901D912872005E5425 /* ZXReedSolomonEncoder.m in Sources */,
 				041750991DA4950900DCD7A9 /* LGGroupChatInfoController.m in Sources */,
 				04F862521D94FC6D00DCC6FE /* MLTextAttachment.m in Sources */,

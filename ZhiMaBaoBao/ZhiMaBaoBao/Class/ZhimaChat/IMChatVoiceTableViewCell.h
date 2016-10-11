@@ -19,7 +19,7 @@
 
 @interface IMChatVoiceTableViewCell : BaseChatTableViewCell
 
-@property (nonatomic, retain) UIButton  *btnBg;
+@property (nonatomic, retain) UIImageView  *btnBg;
 @property (nonatomic, retain) UILabel   *lblTime;
 @property (nonatomic, retain) NSString  *lblDownloadAdd;
 @property (nonatomic, retain) NSString  *lblPlayAdd;

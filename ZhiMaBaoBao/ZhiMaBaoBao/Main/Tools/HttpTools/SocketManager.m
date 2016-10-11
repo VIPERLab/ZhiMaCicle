@@ -321,10 +321,14 @@ static SocketManager *manager = nil;
             systemMsg.isGroup = NO;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             [FMDBShareManager saveMessage:systemMsg toConverseID:toUid];
+            
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo[@"message"] = systemMsg;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
 
         }
         else if ([actType isEqualToString:@"inblacklist"]){ //对方把你设为黑名单
-            //插入一条系统消息"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天。"到数据库
+            //插入一条系统消息"消息已成功发送，但被对方拒绝。"到数据库
             NSDictionary *resDic = responceData[@"data"];
             NSString *toUid = resDic[@"toUidOrGroupId"];
             LGMessage *systemMsg = [[LGMessage alloc] init];
@@ -336,6 +340,10 @@ static SocketManager *manager = nil;
             systemMsg.isGroup = NO;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             [FMDBShareManager saveMessage:systemMsg toConverseID:toUid];
+            
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo[@"message"] = systemMsg;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
         }
     }
 }
