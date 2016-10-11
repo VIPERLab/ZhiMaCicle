@@ -17,6 +17,7 @@
 #import "NSData+Base64.h"
 #import "ZhiMaFriendModel.h"
 #import "GroupChatModel.h"
+#import "NSString+MsgId.h"
 
 @interface SocketManager ()
 
@@ -249,6 +250,7 @@ static SocketManager *manager = nil;
             }
             
             if (success) {
+                //发送通知
                 NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
                 userInfo[@"message"] = message;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
@@ -286,15 +288,19 @@ static SocketManager *manager = nil;
             
             //插入系统消息:"『用户名』撤回了一条消息"到数据库
             LGMessage *systemMsg = [[LGMessage alloc] init];
+            systemMsg.actType = ActTypeUndomsg;
             systemMsg.text = [NSString stringWithFormat:@"\"%@\"撤回了一条消息",model.user_Name];
             systemMsg.toUidOrGroupId =  resDic[@"toUidOrGroupId"];
             systemMsg.fromUid = fromUid;
             systemMsg.type = MessageTypeSystem;
-            systemMsg.msgid = resDic[@"msgid"];
+            systemMsg.msgid = [NSString generateMessageID];
+            systemMsg.undoMsgid = resDic[@"msgid"];
             systemMsg.isGroup = [resDic[@"isGroup"] boolValue];
             systemMsg.timeStamp = [NSDate currentTimeStamp];
-            
             [FMDBShareManager saveMessage:systemMsg toConverseID:fromUid];
+            
+            //发送撤销消息通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
         }
         else if ([actType isEqualToString:@"updategroupuser"]){ //群用户修改群昵称
 #warning 更新数据库群成员列表
@@ -450,8 +456,7 @@ static SocketManager *manager = nil;
     systemMsg.text = @"你撤回了一条消息";
     systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
     systemMsg.fromUid = USERINFO.userID;
-    systemMsg.type = MessageTypeText;
-#warning 以后将type修改成系统消息类型
+    systemMsg.type = MessageTypeSystem;
     systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     systemMsg.isGroup = message.isGroup;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
