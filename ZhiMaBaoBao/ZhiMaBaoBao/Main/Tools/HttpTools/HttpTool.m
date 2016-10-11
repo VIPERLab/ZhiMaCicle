@@ -125,7 +125,7 @@
 + (void)chatGetImage:(NSString *)url params:(NSDictionary *)params formData:(NSData *)data success:(void (^)(NSDictionary *json))success failure:(void (^)(NSError *))errorblock {
 
 
-    NSString *murl = @"http://172.16.0.247/Api/pic/upfile";
+    NSString *murl = [NSString stringWithFormat:@"%@/Api/pic/upfile",CHATPICURL];//@"http://172.16.0.247/Api/pic/upfile";
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

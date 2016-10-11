@@ -16,6 +16,7 @@ typedef NS_OPTIONS(NSUInteger, ActType) {
     ActTypeDeluserfromgroup,    //从群组删除用户
     ActTypeRenamegroup,         //修改群名片，所有群成员都会同步修改
     ActTypeUndomsg              //撤销消息，收到消息的用户都将删除消息
+
 };
 
 //普通消息类型
