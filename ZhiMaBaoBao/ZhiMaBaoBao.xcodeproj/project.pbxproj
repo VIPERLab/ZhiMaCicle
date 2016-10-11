@@ -12,7 +12,6 @@
 		040FE2741DA7763100EF435F /* ZhiMaCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FE2731DA7763100EF435F /* ZhiMaCollectionCell.m */; };
 		040FE2781DA77EDA00EF435F /* ZhiMaCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FE2771DA77EDA00EF435F /* ZhiMaCollectionHeaderView.m */; };
 		040FE27B1DA78A2000EF435F /* ZhiMaCollectionDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FE27A1DA78A2000EF435F /* ZhiMaCollectionDetailController.m */; };
-		041750991DA4950900DCD7A9 /* LGGroupChatInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750961DA4950800DCD7A9 /* LGGroupChatInfoController.m */; };
 		0417509C1DA4952D00DCD7A9 /* ChatRoomInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417509B1DA4952D00DCD7A9 /* ChatRoomInfoController.m */; };
 		041750A01DA499B600DCD7A9 /* ChatInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417509F1DA499B600DCD7A9 /* ChatInfoCell.m */; };
 		041750A61DA4A06400DCD7A9 /* ChatInfoHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750A51DA4A06400DCD7A9 /* ChatInfoHeaderCell.m */; };
@@ -619,8 +618,6 @@
 		040FE2771DA77EDA00EF435F /* ZhiMaCollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCollectionHeaderView.m; sourceTree = "<group>"; };
 		040FE2791DA78A2000EF435F /* ZhiMaCollectionDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaCollectionDetailController.h; sourceTree = "<group>"; };
 		040FE27A1DA78A2000EF435F /* ZhiMaCollectionDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCollectionDetailController.m; sourceTree = "<group>"; };
-		041750951DA4950800DCD7A9 /* LGGroupChatInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGGroupChatInfoController.h; sourceTree = "<group>"; };
-		041750961DA4950800DCD7A9 /* LGGroupChatInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGGroupChatInfoController.m; sourceTree = "<group>"; };
 		0417509A1DA4952D00DCD7A9 /* ChatRoomInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomInfoController.h; sourceTree = "<group>"; };
 		0417509B1DA4952D00DCD7A9 /* ChatRoomInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatRoomInfoController.m; sourceTree = "<group>"; };
 		0417509E1DA499B600DCD7A9 /* ChatInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatInfoCell.h; sourceTree = "<group>"; };
@@ -1843,8 +1840,6 @@
 			isa = PBXGroup;
 			children = (
 				0417509D1DA4998B00DCD7A9 /* Cell */,
-				041750951DA4950800DCD7A9 /* LGGroupChatInfoController.h */,
-				041750961DA4950800DCD7A9 /* LGGroupChatInfoController.m */,
 				0417509A1DA4952D00DCD7A9 /* ChatRoomInfoController.h */,
 				0417509B1DA4952D00DCD7A9 /* ChatRoomInfoController.m */,
 			);
@@ -4966,7 +4961,6 @@
 				04EA797A1D8FBA0C005E5425 /* KXWebViewController.m in Sources */,
 				311CEFB81D93D98700BBB1F9 /* BuddleView.m in Sources */,
 				04EA7D901D912872005E5425 /* ZXReedSolomonEncoder.m in Sources */,
-				041750991DA4950900DCD7A9 /* LGGroupChatInfoController.m in Sources */,
 				04F862521D94FC6D00DCC6FE /* MLTextAttachment.m in Sources */,
 				04EA7AD51D910F89005E5425 /* DNUnAuthorizedTipsView.m in Sources */,
 				04EA7D931D912872005E5425 /* ZXBitSource.m in Sources */,

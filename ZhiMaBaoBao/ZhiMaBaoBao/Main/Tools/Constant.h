@@ -55,7 +55,8 @@
 
 
 //测试环境
-#define DFAPIURL @"http://zhimachat.yihezhai.cc"
+//#define DFAPIURL @"http://zhimachat.yihezhai.cc"
+#define DFAPIURL @"http://120.76.246.128"
 #define DFAPIURLTEST @"http://zm.yihezhai.cc"
 
 

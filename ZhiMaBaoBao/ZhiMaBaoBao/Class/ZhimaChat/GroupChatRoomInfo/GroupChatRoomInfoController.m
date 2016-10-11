@@ -250,9 +250,19 @@
     [self.navigationController pushViewController:friendProfile animated:YES];
 }
 
+//邀请好友加入群聊
 - (void)GroupChatInfoHeaderCellDelegateDidClickAddMember {
-    NSLog(@"点击了添加好友");
+    
+    //将已有用户id,存入数组
+    NSMutableArray *originUserIds = [NSMutableArray array];
+    for (GroupUserModel *model in self.groupMenberArray) {
+        [originUserIds addObject:model.userId];
+    }
+    
     CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+    vc.fartherVC = self;
+    vc.hideFirstSection = self;
+    vc.selectedMembers = originUserIds;
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
 }

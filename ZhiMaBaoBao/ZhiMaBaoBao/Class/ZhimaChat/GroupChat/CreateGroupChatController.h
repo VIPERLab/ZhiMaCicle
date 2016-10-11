@@ -16,4 +16,8 @@
 @property (nonatomic, assign) BOOL hideFlagBtn;     //是否隐藏左侧选择框
 
 @property (nonatomic, strong) LGMessage *transMsg;      //待转发的message
+
+@property (nonatomic, strong) NSArray *selectedMembers; //已选的群成员 userid。 （从聊天消息->建群聊）
+
+@property (nonatomic, strong) BaseViewController *fartherVC;    
 @end

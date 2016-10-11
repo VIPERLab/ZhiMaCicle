@@ -264,7 +264,9 @@
     if (buttonIndex == 0) {   //转发给朋友
         int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
         UIImageView *currentImageView = _scrollView.subviews[index];
-        [[NSNotificationCenter defaultCenter] postNotificationName:K_ForwardPhotoNotifation object:nil userInfo:@{@"imageContent":currentImageView.image}];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"imageUrl"] = [[self highQualityImageURLForIndex:index] absoluteString];
+        [[NSNotificationCenter defaultCenter] postNotificationName:K_ForwardPhotoNotifation object:nil userInfo:params];
     } else if (buttonIndex == 1) { // 收藏图片
         [self saveImage];
     } else if (buttonIndex == 2) { // 保存图片

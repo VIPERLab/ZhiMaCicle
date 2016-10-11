@@ -83,7 +83,7 @@
 @property (nonatomic, copy) NSString *friendHeadPic;   //单聊好友头像路径
 
 
-
+@property (nonatomic, strong) UIWindow *topWindow;
 
 @end
 
@@ -104,6 +104,13 @@ static NSString *const reuseIdentifier = @"messageCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage:) name:kRecieveNewMessage object:nil];
     //监听消息发送状态回调
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMsgStatuescall:) name:kSendMessageStateCall object:nil];
+    
+    //监听大图转发
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomekeyWindow:) name:UIWindowDidBecomeKeyNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resignkeyWindow:) name:UIWindowDidResignKeyNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -786,6 +793,45 @@ static NSString *const reuseIdentifier = @"messageCell";
     KXActionSheet *actionSheet = [[KXActionSheet alloc] initWithTitle:@"是否删除该条消息?" cancellTitle:@"取消" andOtherButtonTitles:@[@"确定"]];
     actionSheet.delegate = self;
     [actionSheet show];
+}
+
+//收到转发大图通知
+- (void)bigImageTransform:(NSNotification *)notify{
+    NSDictionary *userInfo = notify.userInfo;
+    NSString *imageUrl = userInfo[@"imageUrl"];
+    
+    //生成一条消息模型
+    LGMessage *message = [[LGMessage alloc] init];
+    message.text = imageUrl;
+    message.type = MessageTypeImage;
+    
+    
+    UserInfo *info = [UserInfo shareInstance];
+    info.keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    ForwardMsgController *vc = [[ForwardMsgController alloc] init];
+    vc.message = message;
+    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+    
+    UIWindow *topWindow = [[UIWindow alloc] init];
+    vc.topWindow = topWindow;
+    topWindow.backgroundColor = THEMECOLOR;
+    topWindow.windowLevel = UIWindowLevelNormal;
+    topWindow.rootViewController = nav;
+    [topWindow makeKeyAndVisible];
+    self.topWindow = topWindow;
+}
+
+- (void)becomekeyWindow:(NSNotification *)notify{
+    NSDictionary *userInfo = notify.userInfo;
+    
+    NSLog(@"\n ----2 %@ \n",userInfo);
+}
+
+- (void)resignkeyWindow:(NSNotification *)notify{
+    NSDictionary *userInfo = notify.userInfo;
+    
+    NSLog(@"\n ----1 %@ \n",userInfo);
 }
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index;{

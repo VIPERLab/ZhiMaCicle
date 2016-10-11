@@ -12,4 +12,6 @@
 @interface ForwardMsgController : BaseViewController
 
 @property (nonatomic, strong) LGMessage *message;
+
+@property (nonatomic, strong) UIWindow *topWindow;  //最上层window
 @end

@@ -91,6 +91,8 @@
  /** 网络不可用*/
 @property (nonatomic, assign) BOOL networkUnReachable;
 
+@property (nonatomic, strong) UIWindow *keyWindow;
+
 #pragma mark - 消息通知提示
 /**
  *  新消息通知

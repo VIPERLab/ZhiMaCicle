@@ -16,6 +16,7 @@
 @end
 
 @interface CreateGroupListCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *avtarLeftMargin;
 @property (weak, nonatomic) IBOutlet UIButton *selectFlagBtn;
 @property (weak, nonatomic) IBOutlet UIImageView *avtar;
@@ -24,4 +25,6 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ZhiMaFriendModel *friendModel;
 @property (nonatomic, assign) id<GreateGroupListCellDelegate> delegate;
+
+@property (nonatomic, strong) NSArray *selectedMembers;     //新建群聊时已选成员 userID
 @end

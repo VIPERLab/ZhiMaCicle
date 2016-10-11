@@ -68,4 +68,7 @@ typedef NS_OPTIONS(NSUInteger, FriendType) {
 
  /** 被选中为群聊  （发起群聊时用到该属性）*/
 @property (nonatomic, assign) BOOL selectedGroup;
+
+ /** 默认选中成员  （聊天页面发起群聊时用到该属性）*/
+@property (nonatomic, assign) BOOL originalUser;
 @end
