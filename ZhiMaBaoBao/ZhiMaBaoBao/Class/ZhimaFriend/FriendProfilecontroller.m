@@ -40,7 +40,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    [self requestFriendProfile];
+    [self requestFriendProfile:NO];
 }
 
 - (void)addAllSubviews{
@@ -74,7 +74,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 }
 
 //请求好友详细资料
-- (void)requestFriendProfile{
+- (void)requestFriendProfile:(BOOL)addSqlit{
     [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             self.hasRequestData = YES;
@@ -89,11 +89,14 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             [self setupNavRightItem];
             [self.tableView reloadData];
             
-            //插入好友到数据库
-            //添加好友成功 -- 更新数据库 新的好友表  和好友表
-            self.friend.status = YES;
-            [FMDBShareManager upDataNewFriendsMessageByFriendModel:self.friend];
-            [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend]];
+            if (addSqlit) {
+                //插入好友到数据库
+                //添加好友成功 -- 更新数据库 新的好友表  和好友表
+                self.friend.status = YES;
+                [FMDBShareManager upDataNewFriendsMessageByFriendModel:self.friend];
+                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend]];
+            }
+
         }else{
             [LCProgressHUD showText:responseData.msg];
         }
@@ -103,7 +106,6 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 }
 
 #pragma mark - tableview 代理方法
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 4;
 }
@@ -125,7 +127,9 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     else if (indexPath.section == 1){   //手机号
         InfoContentCell *cell = [tableView dequeueReusableCellWithIdentifier:textIdentifier];
         cell.cellTitle.text = @"手机号";
-        cell.cellContent.text = self.friend.uphone;
+        if (!self.friendType) { //不是好友，不显示手机号码
+           cell.cellContent.text = self.friend.uphone;
+        }
         cell.separtor.hidden = YES;
         return cell;
     }
@@ -253,7 +257,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 //重新加载数据 -> 刷新
-                [self requestFriendProfile];
+                [self requestFriendProfile:YES];
             }else{
                 [LCProgressHUD showText:responseData.msg];
             }
@@ -283,7 +287,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 //重新加载数据 -> 刷新
-                [self requestFriendProfile];
+                [self requestFriendProfile:YES];
             }else{
                 [LCProgressHUD showText:responseData.msg];
             }

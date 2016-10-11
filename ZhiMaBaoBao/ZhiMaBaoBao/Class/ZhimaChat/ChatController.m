@@ -162,9 +162,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 {
     NSDictionary *userInfo = notification.userInfo;
     LGMessage *message  = userInfo[@"message"];
-    
+        
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
-    if ([message.fromUid isEqualToString:self.conversionId]) {
+    //
+    if ([message.fromUid isEqualToString:self.conversionId] || ([message.toUidOrGroupId isEqualToString:self.conversionId] && message.isGroup)) {
         if (message.actType == ActTypeUndomsg) {
             NSMutableArray*marr = [self.messages mutableCopy];
             for (LGMessage*msg in marr) {
@@ -173,7 +174,6 @@ static NSString *const reuseIdentifier = @"messageCell";
                     [self.messages replaceObjectAtIndex:index withObject:message];
 
                     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-
 
                 }
             }
@@ -1069,7 +1069,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     SocketManager* socket = [SocketManager shareInstance];
     [socket sendMessage:message];
 
-
     
 }
 
@@ -1131,7 +1130,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeAudio;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = NO;
+    message.isGroup = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.audioLength = [AmrPlayerReader durationOfAmrFilePath:[NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text]];

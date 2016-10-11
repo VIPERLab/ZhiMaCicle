@@ -19,6 +19,14 @@
     return NO;
 }
 
+//默认发送给安卓的时间为0，语音消息手动赋值
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        self.audioLength = 0;
+    }
+    return self;
+}
 
 
 //计算消息内容高度
@@ -44,43 +52,4 @@
     self.timeStamp = stamp;
 }
 
-
-/*
-//将消息模型中的时间 字符串 转换为 时间戳
-- (LGMessage *)messageTransToSamp{
-
-    NSInteger stamp = [NSDate cTimestampFromString:self.msgtime format:@"yyyy-MM-dd HH:mm:ss"];
-    self.msgtime = [NSString stringWithFormat:@"%d",stamp];
-    return self;
-}
-//将消息模型中的 时间戳 转换为 字符串
-- (LGMessage *)messageTransToStr{
-    NSInteger stamp = [self.msgtime integerValue];
-    NSString *timeStr = [NSDate dateStrFromCstampTime:stamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    
-    LGMessage *message = [[LGMessage alloc] init];
-    message.msgid = self.msgid;
-    message.type = self.type;
-    message.fromUid = self.fromUid;
-    message.isGroup = self.isGroup;
-    message.toUidOrGroupId = self.toUidOrGroupId;
-    message.text = self.text;
-    message.is_read = self.is_read;
-    message.msgtime = timeStr;
-    return message;
-}
-
-//+ (LGMessage *)transMsgtimeToStr:(LGMessage *)message{
-//    LGMessage *newMessage = [[LGMessage alloc] init];
-//    newMessage.msgid
-//
-//}
-
-//计算时间的宽高
-//- (void)setTime:(NSString *)time{
-//    _time = time;
-//    
-//    self.timeWH = [time sizeWithFont:MSG_TIME_FONT maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-//}
- */
 @end

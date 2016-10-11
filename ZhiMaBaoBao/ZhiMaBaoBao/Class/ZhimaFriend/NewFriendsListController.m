@@ -26,6 +26,10 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     [super viewDidLoad];
     
     [self addSubViews];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self requestNewFriendsList];
 }
 
@@ -42,18 +46,19 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 
 //请求新的好友列表数据 - 如果没有从网络加载
 - (void)requestNewFriendsList{
-//    self.friendsArr = (NSMutableArray *)[[[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] reverseObjectEnumerator] allObjects];
-//    self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
-//    [self.tableView reloadData];
     
     //从数据库加载新的好友
     [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
             [FMDBShareManager saveNewFirendsWithArray:self.friendsArr andUserId:USERINFO.userID];
-            self.friendsArr = (NSMutableArray *)[[[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] reverseObjectEnumerator] allObjects];
+            self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
             [self.tableView reloadData];
             
+        }else{
+            //如果没有数据，直接从数据课拉取
+            self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
+            [self.tableView reloadData];
         }
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:@"网络好像出错了哦[^_^]"];
@@ -99,7 +104,6 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
             [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
             [FMDBShareManager saveUserMessageWithMessageArray:@[friend]];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            
             
         }else{
             [LCProgressHUD showText:responseData.msg];
