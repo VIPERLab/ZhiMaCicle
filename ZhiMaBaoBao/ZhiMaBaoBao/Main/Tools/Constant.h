@@ -57,6 +57,7 @@
 //测试环境
 //#define DFAPIURL @"http://zhimachat.yihezhai.cc"
 #define DFAPIURL @"http://120.76.246.128:8080/"
+
 #define DFAPIURLTEST @"http://zm.yihezhai.cc"
 #define CHATPICURL  @"http://120.76.246.128"
 
