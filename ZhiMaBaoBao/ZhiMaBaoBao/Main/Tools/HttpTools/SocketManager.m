@@ -300,6 +300,8 @@ static SocketManager *manager = nil;
             [FMDBShareManager saveMessage:systemMsg toConverseID:fromUid];
             
             //发送撤销消息通知
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo[@"message"] = systemMsg;
             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
         }
         else if ([actType isEqualToString:@"updategroupuser"]){ //群用户修改群昵称
