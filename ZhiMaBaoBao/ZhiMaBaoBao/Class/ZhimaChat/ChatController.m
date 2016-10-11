@@ -104,6 +104,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recievedNewMessage:) name:kRecieveNewMessage object:nil];
     //监听消息发送状态回调
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMsgStatuescall:) name:kSendMessageStateCall object:nil];
+    
+    [self changeProximityMonitorEnableState:YES];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -986,18 +989,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
         message.is_read = YES;
-        
+//        message.sendStatus = YES;
         [FMDBShareManager upDataMessageStatusWithMessage:message];
-        
-        if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
-            message.is_read = 1;
-            
-            FMDBManager* shareManager = [FMDBManager shareManager];
-            [shareManager upDataMessageStatusWithMessage:message];
-            
-            [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
-            
-        }
+
         [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
         
     }
@@ -1102,14 +1096,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.isGroup = NO;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
-    
-    [self.messages addObject:message];
-    
-    NSLog(@"发送的时间2 = %@",self.audioName);
-    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
-    NSArray *indexPaths = @[indexpath];
-    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    message.audioLength = [AmrPlayerReader durationOfAmrFilePath:[NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text]];
     
     SocketManager* socket = [SocketManager shareInstance];
     [socket sendMessage:message];
@@ -1469,8 +1456,42 @@ static NSString *const reuseIdentifier = @"messageCell";
     //音谱检测关联着录音类，录音类要停止了。所以要设置其audioQueue为nil
     self.meterObserver.audioQueue = nil;
     [self.recorder stopRecording];
-    
+    [self changeProximityMonitorEnableState:NO];
     [self.player stopPlaying];
+}
+
+#pragma mark - 近距离传感器
+
+- (void)changeProximityMonitorEnableState:(BOOL)enable {
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    if ([UIDevice currentDevice].proximityMonitoringEnabled == YES) {
+        if (enable) {
+            //添加近距离事件监听，添加前先设置为YES，如果设置完后还是NO的读话，说明当前设备没有近距离传感器
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:) name:UIDeviceProximityStateDidChangeNotification object:nil];
+            
+        } else {
+            
+            //删除近距离事件监听
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
+            [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+        }
+    }
+}
+
+- (void)sensorStateChange:(NSNotificationCenter *)notification {
+    //如果此时手机靠近面部放在耳朵旁，那么声音将通过听筒输出，并将屏幕变暗
+    if ([[UIDevice currentDevice] proximityState] == YES) {
+        //黑屏
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        
+    } else {
+        //没黑屏幕
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+        if (!_player || !_player.isPlaying) {
+            //没有播放了，也没有在黑屏状态下，就可以把距离传感器关了
+            [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+        }
+    }
 }
 
 #pragma mark - lazy

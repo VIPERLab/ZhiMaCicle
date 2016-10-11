@@ -67,6 +67,10 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
  /** 消息发送时间时间戳*/
 @property (nonatomic, assign) NSInteger timeStamp;
 
+
+/** 语音时长 给安卓用的*/
+@property (nonatomic, assign) NSInteger audioLength;
+
  /** 消息内容*/
 @property (nonatomic, copy) NSString *text;
  /** 签名*/

@@ -223,7 +223,7 @@
     
     self.bubble.frameSizeHeight += 2; // 因为高度低于9切片之前的高度，下边有点切边  所以加2
 
-    
+    NSLog(@"self.bubble.frameSizeHeight = %f",self.bubble.frameSizeHeight);
     self.bubble.frameSizeWidth = bubbleWidth;
     
     

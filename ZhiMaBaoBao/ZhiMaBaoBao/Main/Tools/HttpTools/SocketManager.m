@@ -293,11 +293,11 @@ static SocketManager *manager = nil;
             systemMsg.toUidOrGroupId =  resDic[@"toUidOrGroupId"];
             systemMsg.fromUid = fromUid;
             systemMsg.type = MessageTypeSystem;
-            systemMsg.msgid = [NSString generateMessageID];
+            systemMsg.msgid = resDic[@"msgid"];
             systemMsg.undoMsgid = resDic[@"msgid"];
             systemMsg.isGroup = [resDic[@"isGroup"] boolValue];
             systemMsg.timeStamp = [NSDate currentTimeStamp];
-            [FMDBShareManager saveMessage:systemMsg toConverseID:fromUid];
+            [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
             
             //发送撤销消息通知
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
