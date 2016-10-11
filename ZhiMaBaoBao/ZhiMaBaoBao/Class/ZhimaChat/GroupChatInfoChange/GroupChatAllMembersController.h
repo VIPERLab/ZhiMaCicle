@@ -12,4 +12,6 @@
 
 @property (nonatomic, strong) NSArray *membersArray;
 
+@property (nonatomic, assign) BOOL isDeletedMembers;
+
 @end

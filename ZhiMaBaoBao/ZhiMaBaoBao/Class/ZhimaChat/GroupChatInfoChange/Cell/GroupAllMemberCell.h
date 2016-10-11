@@ -13,4 +13,8 @@
 
 @property (nonatomic, weak) GroupUserModel *model;
 
+// 是否是删除样式
+@property (nonatomic, assign) BOOL isDeletedMembers;
+
+
 @end

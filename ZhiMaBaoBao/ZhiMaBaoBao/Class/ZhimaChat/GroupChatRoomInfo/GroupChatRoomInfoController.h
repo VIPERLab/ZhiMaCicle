@@ -11,9 +11,6 @@
 
 @interface GroupChatRoomInfoController : BaseViewController
 
-
 @property (nonatomic, copy) NSString *converseId;
-
-
 
 @end

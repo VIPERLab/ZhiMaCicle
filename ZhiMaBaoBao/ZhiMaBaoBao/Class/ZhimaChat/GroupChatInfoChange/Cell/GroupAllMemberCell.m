@@ -13,6 +13,7 @@
     UIImageView *_iconView;
     UILabel *_nameLabel;
     UIView *_bottomLineView;
+    UIButton *_deletedButton;
 }
 
 - (void)awakeFromNib {
@@ -43,6 +44,15 @@
     _bottomLineView = [UIView new];
     _bottomLineView.backgroundColor = [UIColor colorFormHexRGB:@"dedede"];
     [self addSubview:_bottomLineView];
+    
+    _deletedButton = [UIButton new];
+    [_deletedButton setImage:[UIImage imageNamed:@"DelGroupMember_button"] forState:UIControlStateNormal];
+    [self addSubview:_deletedButton];
+}
+
+- (void)setIsDeletedMembers:(BOOL)isDeletedMembers {
+    _isDeletedMembers = isDeletedMembers;
+    _deletedButton.hidden = !isDeletedMembers;
 }
 
 
@@ -63,12 +73,17 @@
     CGFloat iconY = (CGRectGetHeight(self.frame) - iconH) * 0.5;
     _iconView.frame = CGRectMake(iconX, iconY, iconW, iconH);
     
-    
     CGFloat nameX = CGRectGetMaxX(_iconView.frame) + 10;
     CGFloat nameY = 0;
     CGFloat nameW = CGRectGetWidth(self.frame) - nameX;
     CGFloat nameH = CGRectGetHeight(self.frame);
     _nameLabel.frame = CGRectMake(nameX, nameY, nameW, nameH);
+    
+    CGFloat deletedW = 30;
+    CGFloat deletedH = deletedW;
+    CGFloat deletedX = ScreenWidth - deletedW - 30;
+    CGFloat deletedY = (CGRectGetHeight(self.frame) - deletedH) * 0.5;
+    _deletedButton.frame = CGRectMake(deletedX, deletedY, deletedW, deletedH);
     
     _bottomLineView.frame = CGRectMake(10, CGRectGetHeight(self.frame) - 0.5, ScreenWidth - 10, 0.5);
     

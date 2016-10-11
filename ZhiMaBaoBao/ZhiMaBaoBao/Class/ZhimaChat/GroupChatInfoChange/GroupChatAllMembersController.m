@@ -16,6 +16,8 @@
 #define GroupChatMembersCellReusedID @"GroupChatMembersCellReusedID"
 @interface GroupChatAllMembersController () <UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic, weak) UIButton *rightBtn;
+
 @end
 
 @implementation GroupChatAllMembersController {
@@ -36,8 +38,27 @@
 }
 
 - (void)setupNav {
-    [self setCustomTitle:[NSString stringWithFormat:@"群成员(%zd)",self.membersArray.count]];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addGroupMembers)];
+    
+    UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
+    rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    
+    rightBtn.titleLabel.font = MAINFONT;
+    self.rightBtn = rightBtn;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    
+    if (self.isDeletedMembers) {
+        [self setCustomTitle:@"删除成员"];
+        [rightBtn setTitle:@"删除" forState:UIControlStateNormal];
+        [rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
+        [rightBtn addTarget:self action:@selector(delGroupMembers) forControlEvents:UIControlEventTouchUpInside];
+        
+    } else {
+        [self setCustomTitle:[NSString stringWithFormat:@"群成员(%zd)",self.membersArray.count]];
+        [rightBtn setTitle:@"添加" forState:UIControlStateNormal];
+        [rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+        [rightBtn addTarget:self action:@selector(addGroupMembers) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
 }
 
 - (void)setupView {
@@ -77,6 +98,7 @@
     GroupUserModel *model = self.membersArray[indexPath.row];
     GroupAllMemberCell *cell = [tableView dequeueReusableCellWithIdentifier:GroupChatMembersCellReusedID forIndexPath:indexPath];
     cell.model = model;
+    cell.isDeletedMembers = self.isDeletedMembers;
     return cell;
 }
 
@@ -95,6 +117,12 @@
     CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
+}
+
+
+// 删除群成员
+- (void)delGroupMembers {
+    
 }
 
 @end

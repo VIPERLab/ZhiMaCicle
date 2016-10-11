@@ -12,7 +12,9 @@
 #import "LBXScanVideoZoomView.h"
 
 #import "KXCodingManager.h"
+
 #import "FriendProfilecontroller.h"
+#import "GroupChatGetInsideController.h"
 
 @interface ScanQRCodeController () <UIAlertViewDelegate>
 @property (nonatomic, strong) LBXScanVideoZoomView *zoomView;
@@ -266,6 +268,17 @@
         FriendProfilecontroller *friend = [[FriendProfilecontroller alloc] init];
         friend.userId = jid;
         [self.navigationController pushViewController:friend animated:YES];
+    }
+    
+    
+    //如果没有jid 就尝试解析groupid
+    NSRange groupRange = [AESDecodingStr rangeOfString:@"groupId="];
+    NSString *groupId = [AESDecodingStr substringFrom:groupRange.location + 8 to:jidRange.location - 1];
+    NSLog(@"groupId = %@",groupId);
+    if (groupId.length) {
+        GroupChatGetInsideController *group = [[GroupChatGetInsideController alloc] init];
+        group.groupId = groupId;
+        [self.navigationController pushViewController:group animated:YES];
     }
     
 }

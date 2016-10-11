@@ -25,6 +25,7 @@
 #import "GroupChatChangeNoticeController.h"    //修改群公告
 #import "GroupChatMessageDetailController.h"   //聊天记录
 #import "GroupChatAllMembersController.h"      //全部群成员
+#import "GroupQRCodeController.h"              //群二维码
 
 #define GroupChatRoomInfoCellReusedID @"GroupChatRoomInfoCellReusedID"
 #define GroupChatRoomInfoHeaderCellReusedID @"GroupChatRoomInfoHeaderCellReusedID"
@@ -38,6 +39,7 @@
 
 @property (nonatomic, strong) GroupChatModel *groupModel;   //群聊信息数据模型
 
+@property (nonatomic, assign) BOOL isGroupCreater;
 @end
 
 @implementation GroupChatRoomInfoController {
@@ -47,7 +49,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    [self dataRequst];
     [self setupView];
     
 }
@@ -55,6 +57,19 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+// 拉取网络上最新的数据
+- (void)dataRequst {
+    
+    // 判断当前用户是否为群主
+    [self isGroupCreater:USERINFO.userID];
+}
+
+- (void)isGroupCreater:(NSString *)GrouperID {
+    if ([GrouperID isEqualToString:USERINFO.userID]) {
+        self.isGroupCreater = YES;
+    }
 }
 
 - (void)getDataFormSQL {
@@ -105,8 +120,10 @@
     // 第一个cell 特殊处理
     if (indexPath.section == 0 && indexPath.row == 0) {
         GroupChatInfoHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:GroupChatRoomInfoHeaderCellReusedID forIndexPath:indexPath];
+        cell.isGroupCreater = self.isGroupCreater;
         cell.modelArray = self.groupMenberArray;
         cell.delegate = self;
+        
         return cell;
     }
     
@@ -120,15 +137,16 @@
     cell.converseId = self.converseId;
     
     if (indexPath.section == 1 && indexPath.row == 1) {
-        if ([subTitleArray[indexPath.row] isEqualToString:@""]) {
-            cell.subTitle = @"未设置";
-        }
+//        if ([subTitleArray[indexPath.row] isEqualToString:@""]) {
+//            cell.subTitle = @"未设置";
+//        }
+        cell.imageName = subTitleArray[indexPath.row];
     }
     
     if (indexPath.section == 2 || (indexPath.section == 3 && indexPath.row == 1)) {
         if (indexPath.section == 2 && indexPath.row == 0) {
             // 是否消息免打扰
-            cell.statusSwitch.on = !self.converseModel.disturb;
+            cell.statusSwitch.on = self.converseModel.disturb;
         } else if (indexPath.section == 2 && indexPath.row == 1) {
             // 是否置顶
             cell.statusSwitch.on = self.converseModel.topChat;
@@ -147,14 +165,18 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0 && indexPath.row == 0) {
         CGFloat iconW = (ScreenWidth - 20 * 5) / 4;
-        CGFloat line = (self.groupMenberArray.count + 1) / 4.0;
+        CGFloat line;
+        if (self.isGroupCreater) {
+            line = (self.groupMenberArray.count + 2) / 4.0;
+        } else {
+            line = (self.groupMenberArray.count + 1) / 4.0;
+        }
+        
         int temp = (int)line;
         if (temp < line) {
             temp++;
         }
         return ((iconW + 45) * temp + 15);
-    } else if (indexPath.section == 1 && indexPath.row == 2) {
-        return [self.groupModel.notice sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth - 40, 55)].height;
     }
     return 45;
 }
@@ -188,29 +210,40 @@
         changeGroupName.type = 0;
         [self.navigationController pushViewController:changeGroupName animated:YES];
     } else if (indexPath.section == 1 && indexPath.row == 1) {
+        
+        // 群聊二维码
+        NSLog(@"群聊二维码");
+        GroupQRCodeController *qrcode = [[GroupQRCodeController alloc] init];
+        qrcode.model = self.groupModel;
+        [self.navigationController pushViewController:qrcode animated:YES];
+#warning 暂时隐藏
         // 群公告
-        NSLog(@"修改群公告");
-        GroupChatChangeNoticeController *changeNotice = [[GroupChatChangeNoticeController alloc] init];
-        changeNotice.groupModel = self.groupModel;
-        [self.navigationController pushViewController:changeNotice animated:YES];
+//        NSLog(@"修改群公告"); -> 暂时隐藏
+//        GroupChatChangeNoticeController *changeNotice = [[GroupChatChangeNoticeController alloc] init];
+//        changeNotice.groupModel = self.groupModel;
+//        [self.navigationController pushViewController:changeNotice animated:YES];
         
-    } else if (indexPath.section == 3 && indexPath.row == 0) {
-        // 我在本群的名称
-        NSLog(@"修改我在本群的昵称");
-        GroupChatChangeGroupNameController *changeGroupName = [[GroupChatChangeGroupNameController alloc] init];
-        changeGroupName.groupModel = self.groupModel;
-        changeGroupName.tipsTitle = @"我在本群的昵称";
-        changeGroupName.titleName = @"我在本群的昵称";
-        changeGroupName.type = 1;
-        [self.navigationController pushViewController:changeGroupName animated:YES];
-        
-    } else if (indexPath.section == 4 && indexPath.row == 0) {
-        //显示聊天消息
-        GroupChatMessageDetailController *detail = [[GroupChatMessageDetailController alloc] init];
-        detail.groupId = self.converseId;
-        [self.navigationController pushViewController:detail animated:YES];
-        
-    } else if (indexPath.section == 4 && indexPath.row == 1) {
+    }
+#warning 暂时隐藏
+//    else if (indexPath.section == 3 && indexPath.row == 0) {
+//        // 我在本群的名称 -> 暂时隐藏
+//        NSLog(@"修改我在本群的昵称");
+//        GroupChatChangeGroupNameController *changeGroupName = [[GroupChatChangeGroupNameController alloc] init];
+//        changeGroupName.groupModel = self.groupModel;
+//        changeGroupName.tipsTitle = @"我在本群的昵称";
+//        changeGroupName.titleName = @"我在本群的昵称";
+//        changeGroupName.type = 1;
+//        [self.navigationController pushViewController:changeGroupName animated:YES];
+//        
+//    }
+#warning 暂时隐藏
+//    else if (indexPath.section == 4 && indexPath.row == 0) {
+        //显示聊天消息 -> 暂时隐藏
+//        GroupChatMessageDetailController *detail = [[GroupChatMessageDetailController alloc] init];
+//        detail.groupId = self.converseId;
+//        [self.navigationController pushViewController:detail animated:YES];
+//    }
+    else if (indexPath.section == 3 && indexPath.row == 0) {
         //显示聊天消息
         NSLog(@"清空聊天记录");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定要清除聊天记录吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -242,7 +275,7 @@
     }
 }
 
-
+#pragma mark - cellDelegate
 - (void)GroupChatInfoHeaderCellDidClickMemberIcon:(NSString *)memberId {
     NSLog(@"点击了用户头像");
     FriendProfilecontroller *friendProfile = [[FriendProfilecontroller alloc] init];
@@ -257,14 +290,22 @@
     [self presentViewController:nav animated:YES completion:nil];
 }
 
+- (void)GroupChatInfoHeaderCellDelegateDidClickDeletedMembers {
+    NSLog(@"点击了删除好友");
+    GroupChatAllMembersController *members = [[GroupChatAllMembersController alloc] init];
+    members.membersArray = self.groupModel.groupUserVos;
+    members.isDeletedMembers = YES;
+    [self.navigationController pushViewController:members animated:YES];
+}
 
+#pragma mark - lazyLoad
 - (NSArray *)titleArray {
-    _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群公告"],@[@"新消息提醒",@"置顶聊天",@"保存到通讯录"],@[@"我在本群的昵称",@"显示群成员昵称"],@[@"显示聊天记录",@"清空聊天记录"]];
+    _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
     return _titleArray;
 }
 
 - (NSArray *)subTitleArray {
-    _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,self.groupModel.notice],@[@"",@"",@""],@[self.groupModel.myGroupName,@""],@[@"",@""]];
+    _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode"],@[@"",@""],@[@""]];
     return _subTitleArray;
 }
 

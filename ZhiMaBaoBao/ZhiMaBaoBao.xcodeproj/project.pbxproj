@@ -38,10 +38,12 @@
 		047F142D1DAC850400684881 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F14291DAC850400684881 /* Order.m */; };
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
+		04AB88431DACBF330087502C /* GroupQRCodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB88421DACBF330087502C /* GroupQRCodeController.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
 		04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5051D99427B00CBB609 /* ConverseModel.m */; };
 		04CBF5091D9A695500CBB609 /* ZhiMaFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */; };
 		04CBF50E1D9BE64700CBB609 /* GroupChatModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF50D1D9BE64700CBB609 /* GroupChatModel.m */; };
+		04DD49E61DACD6050027256E /* GroupChatGetInsideController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DD49E51DACD6050027256E /* GroupChatGetInsideController.m */; };
 		04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */; };
 		04EA79701D8F8F49005E5425 /* NSString+FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */; };
 		04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796D1D8F8F49005E5425 /* NSString+MD5.m */; };
@@ -670,6 +672,8 @@
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
+		04AB88411DACBF330087502C /* GroupQRCodeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupQRCodeController.h; sourceTree = "<group>"; };
+		04AB88421DACBF330087502C /* GroupQRCodeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupQRCodeController.m; sourceTree = "<group>"; };
 		04CBF5001D99228200CBB609 /* ConverseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseCell.h; sourceTree = "<group>"; };
 		04CBF5011D99228200CBB609 /* ConverseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseCell.m; sourceTree = "<group>"; };
 		04CBF5041D99427B00CBB609 /* ConverseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseModel.h; sourceTree = "<group>"; };
@@ -678,6 +682,8 @@
 		04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaFriendModel.m; sourceTree = "<group>"; };
 		04CBF50C1D9BE64700CBB609 /* GroupChatModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatModel.h; sourceTree = "<group>"; };
 		04CBF50D1D9BE64700CBB609 /* GroupChatModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatModel.m; sourceTree = "<group>"; };
+		04DD49E41DACD6050027256E /* GroupChatGetInsideController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatGetInsideController.h; sourceTree = "<group>"; };
+		04DD49E51DACD6050027256E /* GroupChatGetInsideController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatGetInsideController.m; sourceTree = "<group>"; };
 		04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZhiMaImage.xcassets; sourceTree = "<group>"; };
 		04EA796A1D8F8F49005E5425 /* NSString+FontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontSize.h"; sourceTree = "<group>"; };
 		04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontSize.m"; sourceTree = "<group>"; };
@@ -1971,6 +1977,16 @@
 			path = ChangeSex;
 			sourceTree = "<group>";
 		};
+		04AB88401DACBEB30087502C /* GroupQRCode(群二维码) */ = {
+			isa = PBXGroup;
+			children = (
+				04AB88411DACBF330087502C /* GroupQRCodeController.h */,
+				04AB88421DACBF330087502C /* GroupQRCodeController.m */,
+			);
+			name = "GroupQRCode(群二维码)";
+			path = GroupQRCode;
+			sourceTree = "<group>";
+		};
 		04CBF4FF1D99226700CBB609 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -2014,6 +2030,16 @@
 				319EA0171DA62A44000EE216 /* GroupUserModel.m */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		04DD49E31DACD5E70027256E /* GroupChatGetInside(扫码进群) */ = {
+			isa = PBXGroup;
+			children = (
+				04DD49E41DACD6050027256E /* GroupChatGetInsideController.h */,
+				04DD49E51DACD6050027256E /* GroupChatGetInsideController.m */,
+			);
+			name = "GroupChatGetInside(扫码进群)";
+			path = GroupChatGetInside;
 			sourceTree = "<group>";
 		};
 		04EA79631D8F85E8005E5425 /* PersonalCenter(用户中心) */ = {
@@ -4460,6 +4486,8 @@
 		31B7C70B1D8E96A100F1883A /* ZhimaChat(芝麻聊) */ = {
 			isa = PBXGroup;
 			children = (
+				04DD49E31DACD5E70027256E /* GroupChatGetInside(扫码进群) */,
+				04AB88401DACBEB30087502C /* GroupQRCode(群二维码) */,
 				047F13ED1DAA4BAF00684881 /* GroupChatInfoChange(修改群聊信息内页) */,
 				041750A71DA4C97100DCD7A9 /* GroupChatRoomInfo(群聊详情页) */,
 				041750911DA4950800DCD7A9 /* ChatRoomInfo(单聊详情页) */,
@@ -5102,6 +5130,7 @@
 				04F57AB71D9280BD002A6471 /* SDTimeLineCellOperationMenu.m in Sources */,
 				04F862591D94FC6D00DCC6FE /* README.md in Sources */,
 				04EA7D971D912872005E5425 /* ZXDecoderResult.m in Sources */,
+				04DD49E61DACD6050027256E /* GroupChatGetInsideController.m in Sources */,
 				041750B21DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m in Sources */,
 				04EA7AC51D910F89005E5425 /* DNImageFlowViewController.m in Sources */,
 				04EA7E251D912872005E5425 /* ZXQRCodeFinderPatternFinder.m in Sources */,
@@ -5274,6 +5303,7 @@
 				04EA7DF91D912872005E5425 /* ZXUPCEANExtension5Support.m in Sources */,
 				04EA7D8A1D912872005E5425 /* ZXMathUtils.m in Sources */,
 				04EA7DCB1D912872005E5425 /* ZXAI01393xDecoder.m in Sources */,
+				04AB88431DACBF330087502C /* GroupQRCodeController.m in Sources */,
 				04EA7DCE1D912872005E5425 /* ZXAI01AndOtherAIs.m in Sources */,
 				04F862961D94FC7900DCC6FE /* ChatToolBar.m in Sources */,
 				047F13F61DAB253300684881 /* GroupChatMessageDetailController.m in Sources */,

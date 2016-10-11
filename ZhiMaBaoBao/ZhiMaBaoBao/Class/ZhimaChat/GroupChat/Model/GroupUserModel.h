@@ -22,4 +22,6 @@
  /** 群成员userId*/
 @property (nonatomic, copy) NSString *userId;
 
+
+
 @end

@@ -151,6 +151,7 @@
     browser.sourceImagesContainerView = self;
     browser.imageCount = self.picPathStringsArray.count;
     browser.delegate = self;
+    UserInfo *info = [UserInfo shareInstance];
     [browser show];
 }
 

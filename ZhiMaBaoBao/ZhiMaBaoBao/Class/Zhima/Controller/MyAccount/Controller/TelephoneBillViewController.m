@@ -43,7 +43,6 @@
 
 - (void)setupNav {
     [self setCustomTitle:@"话费卡充值"];
-    
 }
 
 - (void)setupView {

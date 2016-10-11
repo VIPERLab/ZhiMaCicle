@@ -15,6 +15,8 @@
 
 - (void)GroupChatInfoHeaderCellDelegateDidClickAddMember;
 
+- (void)GroupChatInfoHeaderCellDelegateDidClickDeletedMembers;
+
 @end
 
 
@@ -22,6 +24,7 @@
 
 @property (nonatomic, strong) NSArray <GroupUserModel *>* modelArray;
 
+@property (nonatomic, assign) BOOL isGroupCreater;
 
 @property (nonatomic, weak) id <GroupChatInfoHeaderCellDelegate> delegate;
 
