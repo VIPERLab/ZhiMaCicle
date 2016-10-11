@@ -71,16 +71,18 @@
 
     CGSize size = [_systemLabel sizeThatFits:CGSizeMake(_systemLabel.frame.size.width, MAXFLOAT)];
     _systemLabel.frame = CGRectMake(_systemLabel.frame.origin.x, _systemLabel.frame.origin.y, _systemLabel.frame.size.width, size.height);
+    
+    if (_topLabel.text) {
+        [_systemLabel setFrameOriginYBelowView:_topLabel offset:10];
+    }else{
+        _systemLabel.frame = CGRectMake(_systemLabel.frame.origin.x, 10, _systemLabel.frame.size.width, size.height);
+    }
+    
     [_systemLabel centerAlignHorizontalForSuperView];
     [_systemLabel sizeToFit];
     _systemLabel.width += 10;
     _systemLabel.height += 10;
     [_systemLabel centerAlignHorizontalForSuperView];
-    
-    if (_topLabel.text) {
-        [_systemLabel setFrameOriginYBelowView:_topLabel offset:10];
-
-    }
     
     _systemLabel.layer.cornerRadius = 3;
     _systemLabel.layer.masksToBounds = YES;

@@ -156,11 +156,25 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
     if ([message.fromUid isEqualToString:self.conversionId]) {
-        [self.messages addObject:message];
-        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
-        NSArray *indexPaths = @[indexpath];
-        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        if (message.actType == ActTypeUndomsg) {
+            NSMutableArray*marr = [self.messages mutableCopy];
+            for (LGMessage*msg in marr) {
+                if ([msg.msgid isEqualToString:message.undoMsgid]) {
+                    NSInteger index = [self.messages indexOfObject:msg];
+                    [self.messages replaceObjectAtIndex:index withObject:message];
+
+                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+
+
+                }
+            }
+        }else{
+            [self.messages addObject:message];
+            NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+            NSArray *indexPaths = @[indexpath];
+            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        }
 
     }
     
