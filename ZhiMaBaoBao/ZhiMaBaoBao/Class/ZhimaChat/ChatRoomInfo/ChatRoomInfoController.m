@@ -52,13 +52,10 @@
 }
 
 - (void)setupView {
-    
-    
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
     
     [_tableView registerClass:[ChatInfoHeaderCell class] forCellReuseIdentifier:CharRoomInfoHeaderCellReusedID];
     [_tableView registerClass:[ChatInfoCell class] forCellReuseIdentifier:CharRoomInfoCellReusedID];
@@ -93,7 +90,7 @@
         cell.showSwitch = YES;
         cell.indexPath = indexPath;
         if (indexPath.row == 0) {
-            cell.statusSwitch.on = !self.converseModel.disturb;
+            cell.statusSwitch.on = self.converseModel.disturb;
         } else {
             cell.statusSwitch.on = self.converseModel.topChat;
         }
@@ -158,7 +155,7 @@
 #pragma mark - lazyLoad
 - (NSArray *)titleArray {
     if (!_titleArray) {
-        _titleArray = @[@[@""],@[@"新消息提醒",@"置顶聊天"],@[@"清空聊天记录"]];
+        _titleArray = @[@[@""],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
     }
     return _titleArray;
 }

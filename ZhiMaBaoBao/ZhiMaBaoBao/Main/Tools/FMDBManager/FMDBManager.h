@@ -199,6 +199,14 @@ typedef enum : NSUInteger {
  */
 - (NSArray <ConverseModel *> *)getChatConverseDataInArray;
 
+
+/**
+ *  获取所有的群聊列表
+ *
+ *  @return 返回一个ConverseModel数组
+ */
+- (NSArray <ConverseModel *> *)getAllGroupChatDataInArray;
+
 /**
  *  保存会话列表数据
  *
@@ -344,5 +352,15 @@ typedef enum : NSUInteger {
  *  @return 群成员数组
  */
 - (NSArray <GroupUserModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId;
+
+
+/**
+ *  根据 用户id 查询群成员表是否有这个人
+ *
+ *  @param memberId 用户id
+ *
+ *  @return 群成员模型
+ */
+- (GroupUserModel *)getGroupMemberWithMemberId:(NSString *)memberId andConverseId:(NSString *)converseId;
 
 @end

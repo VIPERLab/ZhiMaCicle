@@ -118,7 +118,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
             self.matchArr = [NSMutableArray arrayWithArray:self.dataArr];
             [self.tableView reloadData];
         }else{
-            [LCProgressHUD showText:responseData.msg];
+//            [LCProgressHUD showText:responseData.msg];
         }
     }];
 

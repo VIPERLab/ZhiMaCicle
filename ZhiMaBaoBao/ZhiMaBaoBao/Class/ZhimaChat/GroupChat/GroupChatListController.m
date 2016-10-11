@@ -24,9 +24,9 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     [super viewDidLoad];
     
     [self setCustomTitle:@"我的群聊"];
+    [self getGroupDataFormSQL];
     [self setNavRightItem];
-    [self addNodataView];
-    [self requestGroupList];
+    
     
     UserInfo *userinfo = [UserInfo shareInstance];
     userinfo.groupChatVC = self;
@@ -50,20 +50,33 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
 }
 
 - (void)addAllSubviews{
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     tableView.delegate = self;
     tableView.dataSource = self;
     [tableView registerNib:[UINib nibWithNibName:@"AvtarAndNameCell" bundle:nil] forCellReuseIdentifier:reuseIdentifier];
     [self.view addSubview:tableView];
+    tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     self.tableView = tableView;
 
+}
+
+- (void)getGroupDataFormSQL {
+    self.dataArr = [[FMDBShareManager getAllGroupChatDataInArray] mutableCopy];
+    if (_dataArr.count) {
+        if (self.tableView) {
+            [self addAllSubviews];
+        }
+        [self.tableView reloadData];
+        return;
+    }
+    [self addNodataView];
 }
 
 //获取群聊列表
 - (void)requestGroupList{
     [LGNetWorking getGroupList:USERINFO.sessionId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
-            [self addAllSubviews];
+            
             self.dataArr = [GroupChatModel mj_objectArrayWithKeyValuesArray:responseData.data];
         }else{
 //            [LCProgressHUD showFailureText:responseData.msg];

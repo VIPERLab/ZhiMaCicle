@@ -10,7 +10,7 @@
 #import "LGSetPasswordController.h"
 #import "RegexKitLite.h"
 
-//#import "KXWebViewController.h"
+#import "KXWebViewController.h"
 @interface LGRegisterController ()
 
 @property (nonatomic, strong) UITextField *phoneField;
@@ -281,9 +281,9 @@
 
 #pragma mark - 跳转用户注册协议
 - (void)httpButtonDidClick {
-//    KXWebViewController *webVC = [[KXWebViewController alloc] init];
-//    webVC.navTitleName = @"用户注册协议";
-//    webVC.htmlURL = [NSString stringWithFormat:@"%@/agreement_user.html",DFAPIURL];
-//    [self.navigationController pushViewController:webVC animated:YES];
+    KXWebViewController *webVC = [[KXWebViewController alloc] init];
+    webVC.navTitleName = @"用户注册协议";
+    webVC.htmlURL = [NSString stringWithFormat:@"%@/agreement_user.html",DFAPIURL];
+    [self.navigationController pushViewController:webVC animated:YES];
 }
 @end

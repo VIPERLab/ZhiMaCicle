@@ -1172,7 +1172,7 @@
         
         NSString *optionStr = [NSString string];
         if (isExist) {
-            NSLog(@"存在新好友，需要更新");
+            NSLog(@"存在新好友");
             
             continue;
             
@@ -1263,6 +1263,42 @@
         
     }
 }
+
+
+/**
+ *  获取所有的群聊列表
+ *
+ *  @return 返回一个ConverseModel数组
+ */
+- (NSArray <ConverseModel *> *)getAllGroupChatDataInArray {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSMutableArray *dataArray = [NSMutableArray array];
+    NSLog(@"开始查会话表");
+    [queue inDatabase:^(FMDatabase *db) {
+        
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:@"time > 0 and converseType = '1' order by time desc"];
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        
+        while ([result next]) {
+            NSLog(@"查表成功");
+            ConverseModel *model = [[ConverseModel alloc] init];
+            model.unReadCount = [result intForColumn:@"unReadCount"];
+            model.converseName = [result stringForColumn:@"converseName"];
+            model.lastConverse = [result stringForColumn:@"converseContent"];
+            model.converseHead_photo = [result stringForColumn:@"converseHead_photo"];
+            model.converseId = [result stringForColumn:@"converseId"];
+            model.converseType = [result intForColumn:@"converseType"];
+            model.time = [result intForColumn:@"time"];
+            model.topChat = [result intForColumn:@"topChat"];
+            model.disturb = [result intForColumn:@"disturb"];
+            [dataArray addObject:model];
+        }
+    }];
+    return dataArray;
+}
+
+
+
 
 /**
  *  获取会话列表
@@ -1955,6 +1991,31 @@
         }
     }];
     return dataArray;
+}
+
+
+/**
+ *  根据 用户id 查询群成员表是否有这个人
+ *
+ *  @param memberId 用户id
+ *
+ *  @return 群成员模型
+ */
+- (GroupUserModel *)getGroupMemberWithMemberId:(NSString *)memberId andConverseId:(NSString *)converseId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"memberId = %@ and converseId = %@",memberId,converseId]];
+    GroupUserModel *model = [[GroupUserModel alloc] init];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:optionStr];
+        while ([result next]) {
+            NSLog(@"查询群聊成员成功");
+            model.userId = [result stringForColumn:@"memberId"];
+            model.friend_nick = [result stringForColumn:@"memberName"];
+            model.head_photo = [result stringForColumn:@"memberHeader_Photo"];
+            model.groupId = [result stringForColumn:@"converseId"];
+        }
+    }];
+    return model;
 }
 
 @end
