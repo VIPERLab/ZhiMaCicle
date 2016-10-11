@@ -450,8 +450,7 @@ static SocketManager *manager = nil;
     systemMsg.text = @"你撤回了一条消息";
     systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
     systemMsg.fromUid = USERINFO.userID;
-    systemMsg.type = MessageTypeText;
-#warning 以后将type修改成系统消息类型
+    systemMsg.type = MessageTypeSystem;
     systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     systemMsg.isGroup = message.isGroup;
     systemMsg.timeStamp = [NSDate currentTimeStamp];

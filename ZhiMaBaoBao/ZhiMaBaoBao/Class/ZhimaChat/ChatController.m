@@ -373,7 +373,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)requestChatRecord{
 
     FMDBManager* shareManager = [FMDBManager shareManager];
-//    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
+    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
     self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
     self.messages = (NSMutableArray *)[[self.messages reverseObjectEnumerator] allObjects];
     
@@ -788,51 +788,56 @@ static NSString *const reuseIdentifier = @"messageCell";
     [actionSheet show];
 }
 
+- (void)deleteAction:(NSInteger)index
+{
+    LGMessage *message = self.messages[self.selectedIndexPath.row];
+    
+    //从数据库删除该条消息
+    [[SocketManager shareInstance] deleteMessage:message];
+    
+    BOOL isLast = NO;
+    
+    if (self.selectedIndexPath.row + 1 == self.messages.count) {
+        isLast = YES;
+    }
+    
+    if (isLast) {
+        NSString *lastConverseText = [NSString string];
+        if (self.selectedIndexPath.row - 1 >= 0) {
+            LGMessage *lastMessage = self.messages[self.selectedIndexPath.row - 1];
+            if (lastMessage.type == 0 || lastMessage.type == MessageTypeSystem) {
+                lastConverseText = lastMessage.text;
+            } else if (lastMessage.type == MessageTypeImage) {
+                lastConverseText = @"[图片]";
+            } else if (lastMessage.type == MessageTypeAudio) {
+                lastConverseText = @"[语音]";
+            }
+        } else {
+            lastConverseText = @" ";
+        }
+        
+        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+        NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",lastConverseText];
+        NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",self.conversionId]];
+        [queue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:upDataStr];
+            if (success) {
+                NSLog(@"更新会话成功");
+            } else {
+                NSLog(@"更新会话失败");
+            }
+        }];
+    }
+    
+    [self.messages removeObjectAtIndex:self.selectedIndexPath.row];
+//    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:self.selectedIndexPath,nil] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadData];
+}
+
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index;{
     if (index == 0) {
-        LGMessage *message = self.messages[self.selectedIndexPath.row];
-        
-        //从数据库删除该条消息
-        [[SocketManager shareInstance] deleteMessage:message];
-        
-        BOOL isLast = NO;
-        
-        if (self.selectedIndexPath.row + 1 == self.messages.count) {
-            isLast = YES;
-        }
-        
-        if (isLast) {
-            NSString *lastConverseText = [NSString string];
-            if (self.selectedIndexPath.row - 1 >= 0) {
-                LGMessage *lastMessage = self.messages[self.selectedIndexPath.row - 1];
-                if (lastMessage.type == 0 || lastMessage.type == MessageTypeSystem) {
-                    lastConverseText = lastMessage.text;
-                } else if (lastMessage.type == MessageTypeImage) {
-                    lastConverseText = @"[图片]";
-                } else if (lastMessage.type == MessageTypeAudio) {
-                    lastConverseText = @"[语音]";
-                }
-            } else {
-                lastConverseText = @" ";
-            }
-            
-            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-            NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",lastConverseText];
-            NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",self.conversionId]];
-            [queue inDatabase:^(FMDatabase *db) {
-                BOOL success = [db executeUpdate:upDataStr];
-                if (success) {
-                    NSLog(@"更新会话成功");
-                } else {
-                    NSLog(@"更新会话失败");
-                }
-            }];
-        }
-        
-        
-        [self.messages removeObjectAtIndex:self.selectedIndexPath.row];
-        //    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
-        [self.tableView reloadData];
+
+        [self deleteAction:index];
     }
 }
 
@@ -845,8 +850,28 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [LCProgressHUD hide];
-        //从数据库删除该条消息
-        [self deleteMessageWithIndexPath:indecPath];
+        
+        LGMessage *systemMsg = [[LGMessage alloc] init];
+        systemMsg.text = @"你撤回了一条消息";
+        systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
+        systemMsg.fromUid = USERINFO.userID;
+        systemMsg.type = MessageTypeSystem;
+        systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+        systemMsg.isGroup = message.isGroup;
+        systemMsg.timeStamp = [NSDate currentTimeStamp];
+        
+        NSInteger num = indecPath.row+1;
+
+        [self.messages insertObject:systemMsg atIndex:num];
+        
+        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
+        NSArray *indexPaths = @[indexpath];
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
+        self.selectedIndexPath = indecPath;
+        [self deleteAction:indecPath.row];
+
     });
 }
 
