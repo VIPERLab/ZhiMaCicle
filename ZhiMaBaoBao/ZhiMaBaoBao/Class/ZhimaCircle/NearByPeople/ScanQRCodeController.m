@@ -12,6 +12,7 @@
 #import "LBXScanVideoZoomView.h"
 
 #import "KXCodingManager.h"
+#import "FriendProfilecontroller.h"
 
 @interface ScanQRCodeController () <UIAlertViewDelegate>
 @property (nonatomic, strong) LBXScanVideoZoomView *zoomView;
@@ -261,33 +262,11 @@
     
     NSLog(@"jid = %@",jid);
     
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:str]]) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    if (jid.length) {
+        FriendProfilecontroller *friend = [[FriendProfilecontroller alloc] init];
+        friend.userId = jid;
+        [self.navigationController pushViewController:friend animated:YES];
     }
-    
-//    YiXmppVCard * vcard = [[YiXmppVCard alloc] init];
-//
-//    if (![subString isEqualToString:@""]) {
-//        [vcard load:jid forceIntenet:YES success:^{
-//            if ([vcard exist]) {
-//                _vcard = vcard;
-//                [self performSegueWithIdentifier:@"YiUserinfo" sender:nil];
-//            }
-//        } failed:^{
-//            _vcard = nil;
-//            
-//            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:str]]) {
-//                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-//            }
-//            else {
-//                UIAlertView * alertView = [[UIAlertView alloc] initWithTitle: @"警告" message: [NSString stringWithFormat: @"%@:%@", @"无法解析的二维码", str] delegate: nil cancelButtonTitle: @"确定" otherButtonTitles: nil];
-//                [alertView show];
-//            }
-//        }];
-//    }
-    
-    
-    
     
 }
 

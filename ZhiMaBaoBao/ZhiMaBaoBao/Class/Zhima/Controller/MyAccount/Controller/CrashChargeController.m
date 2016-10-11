@@ -12,16 +12,22 @@
 #import <AlipaySDK/AlipaySDK.h>
 #import "Order.h"
 #import "APAuthV2Info.h"
-//#import "WXApi.h"
+#import "WXApi.h"
 #import "LCProgressHUD.h"
 
 #import "KXCrashChargeCell.h"
 #import "UIColor+My.h"
 
+#import "chargeMomeyMdoel.h"
+
 #define CrashChargeTableViewCellReusedID @"CrashChargeTableViewCellReusedID"
-@interface CrashChargeController () <UITableViewDelegate,UITableViewDataSource>
+@interface CrashChargeController () <UITableViewDelegate,UITableViewDataSource,KXCrashChargeCellDelegate>
+
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @property (nonatomic, weak) UITableView *tableView;
+
+@property (nonatomic, weak) KXCrashChargeCell *currentCell;
 
 @end
 
@@ -89,19 +95,18 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KXCrashChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:CrashChargeTableViewCellReusedID forIndexPath:indexPath];
+    chargeMomeyMdoel *model = self.dataArray[indexPath.row];
+    cell.model = model;
+    cell.indexPath = indexPath;
+    cell.delegate = self;
     
-    if (indexPath.row == 0 && indexPath.section == 0) {
-        cell.iconName = @"AliPay";
-        cell.titleName = @"支付宝支付";
-        cell.isSelected = YES;
-    } else if (indexPath.row == 1 && indexPath.section == 0) {
-        cell.iconName = @"WXPay";
-        cell.titleName = @"微信支付";
+    if (indexPath.row == 0 && !self.currentCell) {
+        self.currentCell = cell;
     }
     
     return cell;
@@ -156,13 +161,13 @@
     [manager POST:@"http://120.76.239.173/Api/Index/getpay" parameters:parms progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if ([responseObject[@"code"] intValue] != 8888) {
-            [LCProgressHUD showFailureText:@"操作失败"];
+//            [LCProgressHUD showFailureText:@"支付失败"];
+//            return ;
         }
-    
         if (type) {
             [self AliPay:responseObject];
         } else {
-//            [self WXPay:responseObject];
+            [self WXPay:responseObject];
         }
         
         
@@ -172,23 +177,39 @@
 
 }
 
+- (void)KXCrashChargeCellTickDidClick:(KXCrashChargeCell *)cell {
+    chargeMomeyMdoel *model = self.dataArray[cell.indexPath.row];
+    model.isSelected = !model.isSelected;
+    
+    if (cell.indexPath.row == 0) {
+        chargeMomeyMdoel *model = self.dataArray[1];
+        model.isSelected = NO;
+    } else if (cell.indexPath.row == 1) {
+        chargeMomeyMdoel *model = self.dataArray[0];
+        model.isSelected = NO;
+    }
+    
+    self.currentCell = cell;
+    [self.tableView reloadData];
+}
+
 
 - (void)AliPay:(id)responseObject {
     NSString *order = responseObject[@"data"];
-    NSString *appScheme = @"ZhiMaCicle";
+    NSString *appScheme = @"ZhiMaBaoBao";
     // NOTE: 调用支付结果开始支付
     [[AlipaySDK defaultService] payOrder:order fromScheme:appScheme callback:^(NSDictionary *resultDic) {
         NSLog(@"reslut = %@",resultDic);
         if ([resultDic[@"resultStatus"] integerValue] == 4000) {
-            [LCProgressHUD showInfoText:@"订单支付失败"];
+            [LCProgressHUD showFailureText:@"订单支付失败"];
         } else if ([resultDic[@"resultStatus"] integerValue] == 6001) {
-            [LCProgressHUD showInfoText:@"用户取消支付"];
+            [LCProgressHUD showFailureText:@"用户取消支付"];
         } else if ([resultDic[@"resultStatus"] integerValue] == 6001) {
-            [LCProgressHUD showInfoText:@"网络连接出错"];
+            [LCProgressHUD showFailureText:@"网络连接出错"];
         } else if ([resultDic[@"resultStatus"] integerValue] == 8000) {
-            [LCProgressHUD showInfoText:@"正在处理中"];
+            [LCProgressHUD showFailureText:@"正在处理中"];
         } else if ([resultDic[@"resultStatus"] integerValue] == 9000) {
-            [LCProgressHUD showInfoText:@"支付成功"];
+            [LCProgressHUD showSuccessText:@"支付成功"];
             [self.navigationController popViewControllerAnimated:YES];
         }
         
@@ -196,18 +217,18 @@
 }
 
 //微信支付
-//- (void)WXPay:(id)responseObject {
-//    NSMutableString *stamp  = [responseObject objectForKey:@"timestamp"];
-//    //调起微信支付
-//    PayReq* req             = [[PayReq alloc] init];
-//    req.partnerId           = [responseObject objectForKey:@"partnerid"];
-//    req.prepayId            = [responseObject objectForKey:@"prepayid"];
-//    req.nonceStr            = [responseObject objectForKey:@"noncestr"];
-//    req.timeStamp           = stamp.intValue;
-//    req.package             = [responseObject objectForKey:@"package"];
-//    req.sign                = [responseObject objectForKey:@"sign"];
-//    [WXApi sendReq:req];
-//}
+- (void)WXPay:(id)responseObject {
+    NSMutableString *stamp  = [responseObject objectForKey:@"timestamp"];
+    //调起微信支付
+    PayReq* req             = [[PayReq alloc] init];
+    req.partnerId           = [responseObject objectForKey:@"partnerid"];
+    req.prepayId            = [responseObject objectForKey:@"prepayid"];
+    req.nonceStr            = [responseObject objectForKey:@"noncestr"];
+    req.timeStamp           = stamp.intValue;
+    req.package             = [responseObject objectForKey:@"package"];
+    req.sign                = [responseObject objectForKey:@"sign"];
+    [WXApi sendReq:req];
+}
 
 - (void)WXPayFailed {
     [LCProgressHUD showFailureText:@"支付失败"];
@@ -220,18 +241,42 @@
 }
 
 - (void)bottomButtonDidClick {
-    [self payMoenyByType:1];
+    chargeMomeyMdoel *model = self.currentCell.model;
+    if (model.isSelected == NO) {
+        [LCProgressHUD showFailureText:@"请选择支付方式"];
+        return;
+    }
+    
+    int type;
+    if (self.currentCell.indexPath.row == 0) {
+        type = 1;
+    } else {
+        type = 0;
+    }
+    
+    [self payMoenyByType:type];
 }
 
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (NSMutableArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+        for (NSInteger index = 0; index < 2; index++) {
+            chargeMomeyMdoel *model = [[chargeMomeyMdoel alloc] init];
+            if (index == 0) {
+                model.iconName = @"AliPay";
+                model.titleName = @"支付宝支付";
+                model.isSelected = YES;
+            } else {
+                model.iconName = @"WXPay";
+                model.titleName = @"微信支付";
+                model.isSelected = NO;
+            }
+            [_dataArray addObject:model];
+        }
+    }
+    return _dataArray;
 }
-*/
+
 
 @end

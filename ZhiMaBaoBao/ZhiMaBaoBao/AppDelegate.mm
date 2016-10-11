@@ -10,11 +10,16 @@
 #import "MainViewController.h"
 #import "LGGuideController.h"
 #import "FMDBManager.h"
-#import <AlipaySDK/AlipaySDK.h>
+
+#import "AlipaySDK/AlipaySDK.h"
+
 #import "RealReachability.h"
 #import "SocketManager.h"
 #import "ConverseModel.h"
 #import "LYVoIP.h"
+
+
+
 
 #import "JPUSHService.h"
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
@@ -76,6 +81,8 @@
     //注册voipSDK
     [[LYVoIP shareInstance]voipConfigWithID:@"6560" Key:@"rXk6stbTRTFMdDcyKbsfe8PZrcx8m8Za" model:LYVoIPModelAPPReView];
     
+    //注册微信支付
+    [WXApi registerApp:@"wx99f59e21dc05108b" withDescription:@"ZhiMaBaoBao"];
     
     [self regiestJPush:launchOptions];
     
@@ -204,10 +211,17 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     //如果极简 SDK 不可用,会跳转支付宝钱包进行支付,需要将支付宝钱包的支付结果回传给 SDK if ([url.host isEqualToString:@"safepay"]) {
-    [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-        NSLog(@"result = %@",resultDic);
-    }];
-    return YES;
+    if ([url.host isEqualToString:@"safepay"]) {
+        // 支付跳转支付宝钱包进行支付，处理支付结果
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+            NSLog(@"result = %@",resultDic);
+        }];
+    }
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return  [WXApi handleOpenURL:url delegate:self];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -318,6 +332,24 @@
     LGGuideController *vc = [[LGGuideController alloc] init];
     UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = guideVC;
+}
+
+#pragma mark - 微信支付回调
+- (void)onResp:(BaseResp *)resp {
+    if([resp isKindOfClass:[PayResp class]]){
+        //支付返回结果，实际支付结果需要去微信服务器端查询
+        switch (resp.errCode) {
+            case WXSuccess:
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WXPaySuccess" object:@"success"];
+                NSLog(@"支付成功－PaySuccess，retcode = %d", resp.errCode);
+                break;
+                
+            default:
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WXPayFailed" object:@"fail"];
+                NSLog(@"错误，retcode = %d, retstr = %@", resp.errCode,resp.errStr);
+                break;
+        }
+    }
 }
 
 #pragma mark - 百度地图回调

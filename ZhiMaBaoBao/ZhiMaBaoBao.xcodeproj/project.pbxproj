@@ -32,6 +32,10 @@
 		047F14011DAB359700684881 /* jpush-ios-2.1.9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 047F13FF1DAB359700684881 /* jpush-ios-2.1.9.a */; };
 		047F14021DAB35EF00684881 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A871D91031D005E5425 /* libz.tbd */; };
 		047F14041DAB35F900684881 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 047F14031DAB35F900684881 /* UserNotifications.framework */; };
+		047F140B1DAB9D6300684881 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 047F14071DAB9D6300684881 /* libWeChatSDK.a */; };
+		047F14221DABADAD00684881 /* chargeMomeyMdoel.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F14211DABADAD00684881 /* chargeMomeyMdoel.m */; };
+		047F142C1DAC850400684881 /* APAuthV2Info.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F14271DAC850400684881 /* APAuthV2Info.m */; };
+		047F142D1DAC850400684881 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F14291DAC850400684881 /* Order.m */; };
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
@@ -79,8 +83,6 @@
 		04EA7A761D90EBB3005E5425 /* NJKWebViewProgress.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A6C1D90EBB3005E5425 /* NJKWebViewProgress.framework */; };
 		04EA7A771D90EBB3005E5425 /* RegexKitLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A6D1D90EBB3005E5425 /* RegexKitLite.framework */; };
 		04EA7A781D90EBB3005E5425 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA7A6E1D90EBB3005E5425 /* SDWebImage.framework */; };
-		04EA7A8C1D91079A005E5425 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7A8B1D91079A005E5425 /* Order.m */; };
-		04EA7A8F1D9107C0005E5425 /* APAuthV2Info.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7A8E1D9107C0005E5425 /* APAuthV2Info.m */; };
 		04EA7AC31D910F89005E5425 /* DNAlbumTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7A9B1D910F89005E5425 /* DNAlbumTableViewController.m */; };
 		04EA7AC41D910F89005E5425 /* DNAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7A9D1D910F89005E5425 /* DNAsset.m */; };
 		04EA7AC51D910F89005E5425 /* DNImageFlowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7A9F1D910F89005E5425 /* DNImageFlowViewController.m */; };
@@ -655,6 +657,16 @@
 		047F14001DAB359700684881 /* JPUSHService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUSHService.h; sourceTree = "<group>"; };
 		047F14031DAB35F900684881 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		047F14051DAB362700684881 /* ZhiMaBaoBao.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ZhiMaBaoBao.entitlements; sourceTree = "<group>"; };
+		047F14071DAB9D6300684881 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		047F14081DAB9D6300684881 /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
+		047F14091DAB9D6300684881 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		047F140A1DAB9D6300684881 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		047F14201DABADAD00684881 /* chargeMomeyMdoel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chargeMomeyMdoel.h; sourceTree = "<group>"; };
+		047F14211DABADAD00684881 /* chargeMomeyMdoel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = chargeMomeyMdoel.m; sourceTree = "<group>"; };
+		047F14261DAC850400684881 /* APAuthV2Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APAuthV2Info.h; sourceTree = "<group>"; };
+		047F14271DAC850400684881 /* APAuthV2Info.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APAuthV2Info.m; sourceTree = "<group>"; };
+		047F14281DAC850400684881 /* Order.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Order.h; sourceTree = "<group>"; };
+		047F14291DAC850400684881 /* Order.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order.m; sourceTree = "<group>"; };
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
@@ -746,10 +758,6 @@
 		04EA7A831D91030E005E5425 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		04EA7A851D910316005E5425 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		04EA7A871D91031D005E5425 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		04EA7A8A1D91079A005E5425 /* Order.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Order.h; sourceTree = "<group>"; };
-		04EA7A8B1D91079A005E5425 /* Order.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order.m; sourceTree = "<group>"; };
-		04EA7A8D1D9107C0005E5425 /* APAuthV2Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APAuthV2Info.h; sourceTree = "<group>"; };
-		04EA7A8E1D9107C0005E5425 /* APAuthV2Info.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APAuthV2Info.m; sourceTree = "<group>"; };
 		04EA7A9A1D910F89005E5425 /* DNAlbumTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAlbumTableViewController.h; sourceTree = "<group>"; };
 		04EA7A9B1D910F89005E5425 /* DNAlbumTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAlbumTableViewController.m; sourceTree = "<group>"; };
 		04EA7A9C1D910F89005E5425 /* DNAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAsset.h; sourceTree = "<group>"; };
@@ -1756,6 +1764,7 @@
 				04EA7AEC1D9120B4005E5425 /* MessageUI.framework in Frameworks */,
 				311CEFB11D937BE700BBB1F9 /* lame.framework in Frameworks */,
 				04EA7AF51D9120E9005E5425 /* CoreLocation.framework in Frameworks */,
+				047F140B1DAB9D6300684881 /* libWeChatSDK.a in Frameworks */,
 				04EA7AF31D9120E1005E5425 /* OpenGLES.framework in Frameworks */,
 				04EA7AED1D9120BC005E5425 /* QuartzCore.framework in Frameworks */,
 				04EA7AD81D910FA8005E5425 /* AssetsLibrary.framework in Frameworks */,
@@ -1928,6 +1937,28 @@
 				047F14001DAB359700684881 /* JPUSHService.h */,
 			);
 			path = JPush;
+			sourceTree = "<group>";
+		};
+		047F14061DAB9D6300684881 /* WXPay */ = {
+			isa = PBXGroup;
+			children = (
+				047F14071DAB9D6300684881 /* libWeChatSDK.a */,
+				047F14081DAB9D6300684881 /* WechatAuthSDK.h */,
+				047F14091DAB9D6300684881 /* WXApi.h */,
+				047F140A1DAB9D6300684881 /* WXApiObject.h */,
+			);
+			path = WXPay;
+			sourceTree = "<group>";
+		};
+		047F14231DAC850400684881 /* AliPay */ = {
+			isa = PBXGroup;
+			children = (
+				047F14261DAC850400684881 /* APAuthV2Info.h */,
+				047F14271DAC850400684881 /* APAuthV2Info.m */,
+				047F14281DAC850400684881 /* Order.h */,
+				047F14291DAC850400684881 /* Order.m */,
+			);
+			path = AliPay;
 			sourceTree = "<group>";
 		};
 		0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */ = {
@@ -2220,17 +2251,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		04EA7A891D91079A005E5425 /* AliPay */ = {
-			isa = PBXGroup;
-			children = (
-				04EA7A8D1D9107C0005E5425 /* APAuthV2Info.h */,
-				04EA7A8E1D9107C0005E5425 /* APAuthV2Info.m */,
-				04EA7A8A1D91079A005E5425 /* Order.h */,
-				04EA7A8B1D91079A005E5425 /* Order.m */,
-			);
-			path = AliPay;
-			sourceTree = "<group>";
-		};
 		04EA7A901D910963005E5425 /* MyAccount(我的账户) */ = {
 			isa = PBXGroup;
 			children = (
@@ -2267,6 +2287,8 @@
 				04EA79C31D90E9F7005E5425 /* CrashChargeController.m */,
 				04EA79C41D90E9F7005E5425 /* KXCrashChargeCell.h */,
 				04EA79C51D90E9F7005E5425 /* KXCrashChargeCell.m */,
+				047F14201DABADAD00684881 /* chargeMomeyMdoel.h */,
+				047F14211DABADAD00684881 /* chargeMomeyMdoel.m */,
 			);
 			name = "CrashCharge(现金充值)";
 			sourceTree = "<group>";
@@ -4585,6 +4607,8 @@
 		31B7C7A51D8FE91A00F1883A /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				047F14231DAC850400684881 /* AliPay */,
+				047F14061DAB9D6300684881 /* WXPay */,
 				047F13FE1DAB359700684881 /* JPush */,
 				04F8629A1D94FC8900DCC6FE /* SDAutoLayout */,
 				04F8625B1D94FC7900DCC6FE /* DiscoverKeyBoard */,
@@ -4598,7 +4622,6 @@
 				04EA7B291D9126BE005E5425 /* Security */,
 				04EA7AE21D911FD2005E5425 /* BDSDK */,
 				04EA7A991D910F89005E5425 /* DNImagePicker */,
-				04EA7A891D91079A005E5425 /* AliPay */,
 				31B7C7AD1D8FFCBE00F1883A /* LYVoIP */,
 				31B7C7A61D8FE91A00F1883A /* pinyin */,
 			);
@@ -4898,7 +4921,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		819B31C6B685388A18C609E2 /* [CP] Embed Pods Frameworks */ = {
@@ -4998,6 +5021,7 @@
 				04F862A01D94FC8900DCC6FE /* UITableView+SDAutoTableViewCellHeight.m in Sources */,
 				04EA79E91D90E9F7005E5425 /* TelephoneBillCell.m in Sources */,
 				04F862871D94FC7900DCC6FE /* NSString+Emoji.m in Sources */,
+				047F142D1DAC850400684881 /* Order.m in Sources */,
 				04EA7DFB1D912872005E5425 /* ZXUPCEANReader.m in Sources */,
 				04F862181D94DE7100DCC6FE /* NearByPeopleCell.m in Sources */,
 				04F57AEC1D9280BD002A6471 /* DiscoverCurrentLocationController.m in Sources */,
@@ -5041,6 +5065,7 @@
 				04F5760C1D922125002A6471 /* ChangeUerNameController.m in Sources */,
 				04EA7B681D91282E005E5425 /* ZXingWrapper.m in Sources */,
 				04EA79DE1D90E9F7005E5425 /* CrashChargeController.m in Sources */,
+				047F14221DABADAD00684881 /* chargeMomeyMdoel.m in Sources */,
 				04EA7DEA1D912872005E5425 /* ZXCode93Reader.m in Sources */,
 				04EA7E321D912872005E5425 /* ZXMultiFormatWriter.m in Sources */,
 				04EA7D8D1D912872005E5425 /* ZXGenericGF.m in Sources */,
@@ -5065,6 +5090,7 @@
 				311CEF771D921F9F00BBB1F9 /* LGQueryCell.m in Sources */,
 				316957561D90E63100140126 /* LGAddFriendCell.m in Sources */,
 				311CEF2F1D92185D00BBB1F9 /* ChatController.m in Sources */,
+				047F142C1DAC850400684881 /* APAuthV2Info.m in Sources */,
 				31B7C75C1D8FB33E00F1883A /* LGLoginController.m in Sources */,
 				319EA01B1DA65214000EE216 /* RemarkController.m in Sources */,
 				31B7C75D1D8FB33E00F1883A /* LGRegisterController.m in Sources */,
@@ -5081,7 +5107,6 @@
 				04EA7AC51D910F89005E5425 /* DNImageFlowViewController.m in Sources */,
 				04EA7E251D912872005E5425 /* ZXQRCodeFinderPatternFinder.m in Sources */,
 				04EA7DA81D912872005E5425 /* ZXLuminanceSource.m in Sources */,
-				04EA7A8C1D91079A005E5425 /* Order.m in Sources */,
 				04EA7ACD1D910F89005E5425 /* UIViewController+DNImagePicker.m in Sources */,
 				04EA7DEE1D912872005E5425 /* ZXEAN8Writer.m in Sources */,
 				04EA7D831D912872005E5425 /* ZXVINParsedResult.m in Sources */,
@@ -5334,7 +5359,6 @@
 				31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */,
 				3138F4051DA795990042D100 /* CallKeyboardController.m in Sources */,
 				04F862531D94FC6D00DCC6FE /* NSAttributedString+MLExpression.m in Sources */,
-				04EA7A8F1D9107C0005E5425 /* APAuthV2Info.m in Sources */,
 				04EA7E301D912872005E5425 /* ZXQRCodeWriter.m in Sources */,
 				04EA7D791D912872005E5425 /* ZXSMSTOMMSTOResultParser.m in Sources */,
 				04EA7DF31D912872005E5425 /* ZXMultiFormatUPCEANReader.m in Sources */,
@@ -5603,6 +5627,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZhiMaBaoBao/Zhimabaobao.pch;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"/Users/mac/Desktop/未命名文件夹/ZhiMaCicle/ZhiMaBaoBao/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
+				);
 				INFOPLIST_FILE = ZhiMaBaoBao/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -5643,6 +5672,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZhiMaBaoBao/Zhimabaobao.pch;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"/Users/mac/Desktop/未命名文件夹/ZhiMaCicle/ZhiMaBaoBao/ZhiMaBaoBao/Main/Tools/Libs/AliPay",
+				);
 				INFOPLIST_FILE = ZhiMaBaoBao/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

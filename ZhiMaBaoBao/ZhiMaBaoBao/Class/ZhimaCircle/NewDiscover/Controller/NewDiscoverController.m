@@ -500,7 +500,7 @@
             operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Pic_Table];
             [picQueue inDatabase:^(FMDatabase *db) {
                 
-                BOOL success = [db executeUpdate:operationStr,picModel.img_url,picModel.bigimg_url,fcid];
+                BOOL success = [db executeUpdate:operationStr,picModel.img_url,picModel.bigimg_url,fcid,USERINFO.userID];
                 if (success) {
                     NSLog(@"插入图片成功");
                 } else {

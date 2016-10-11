@@ -52,7 +52,7 @@
     inputView.userInteractionEnabled = NO;
     
     UIView *bottomLineView = [[UIView alloc] init];
-    bottomLineView.backgroundColor = [UIColor lightGrayColor];
+    bottomLineView.backgroundColor = [UIColor colorFormHexRGB:@"dedede"];
     self.bottomLineView = bottomLineView;
     [self addSubview:bottomLineView];
     
@@ -90,13 +90,13 @@
     
     CGFloat titleX = 10;
     CGFloat titleY = 0;
-    CGFloat titleW = 60;
+    CGFloat titleW = [self.titleLabel.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth * 0.5, 15)].width;
     CGFloat titleH = CGRectGetHeight(self.frame);
     self.titleLabel.frame = CGRectMake(titleX, titleY, titleW, titleH);
     
-    CGFloat inputX = CGRectGetMaxX(self.titleLabel.frame);
+    CGFloat inputX = CGRectGetMaxX(self.titleLabel.frame) + 30;
     CGFloat inputY = 0;
-    CGFloat inputW = CGRectGetWidth(self.frame) - inputX - 10;
+    CGFloat inputW = CGRectGetWidth(self.frame) - inputX - 15;
     CGFloat inputH = CGRectGetHeight(self.frame);
     self.inputView.frame = CGRectMake(inputX, inputY, inputW, inputH);
     
@@ -105,8 +105,5 @@
     CGFloat bottomW = CGRectGetWidth(self.frame) - 20;
     CGFloat bottomH = 0.5;
     self.bottomLineView.frame = CGRectMake(bottomX, bottomY, bottomW, bottomH);
-    
-    
-    
 }
 @end

@@ -199,7 +199,7 @@
     md5Sign = [md5Sign uppercaseString];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"openfireaccount"] = USERINFO.userID;
+    params[@"uid"] = USERINFO.userID;
     params[@"sign"] = md5Sign;
     
     [manager POST:[NSString stringWithFormat:@"%@/Api/Index/getuser",DFAPIURLTEST] parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

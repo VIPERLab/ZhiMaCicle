@@ -7,13 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "chargeMomeyMdoel.h"
+@class KXCrashChargeCell;
+@protocol KXCrashChargeCellDelegate <NSObject>
+
+- (void)KXCrashChargeCellTickDidClick:(KXCrashChargeCell *)cell;
+
+@end
 
 @interface KXCrashChargeCell : UITableViewCell
+@property (nonatomic, weak) NSIndexPath *indexPath;
 
-@property (nonatomic, copy) NSString *titleName;
+@property (nonatomic, weak) chargeMomeyMdoel *model;
 
-@property (nonatomic, copy) NSString *iconName;
-
-@property (nonatomic, assign) BOOL isSelected;
+@property (nonatomic, weak) id <KXCrashChargeCellDelegate> delegate;
 
 @end
