@@ -105,9 +105,4 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
  /** 用户自身*/
 @property (nonatomic, assign, readonly, getter=isUser) BOOL user;
 
-//将消息模型中的时间 字符串 转换为 时间戳
-- (LGMessage *)messageTransToSamp;
-
-//将消息模型中的 时间戳 转换为 字符串
-- (LGMessage *)messageTransToStr;
 @end

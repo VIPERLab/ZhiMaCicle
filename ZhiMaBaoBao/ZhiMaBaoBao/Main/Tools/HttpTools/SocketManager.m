@@ -142,6 +142,7 @@ static SocketManager *manager = nil;
         sendMsg.isGroup = message.isGroup;
         sendMsg.timeStamp = message.timeStamp;
         sendMsg.text = base64;
+        sendMsg.audioLength = message.audioLength;
         
         
     }
@@ -351,28 +352,34 @@ static SocketManager *manager = nil;
 
 //插入一条群消息到本地数据库
 - (BOOL)addGroupMessage:(LGMessage *)message groupId:(NSString *)groupId{
-    //加载群信息
-    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
-        if (responseData.code == 0) {
-            //生成群聊数据模型
-            [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
-                return @{
-                         @"groupUserVos":@"GroupUserModel"
-                         };
-            }];
-            GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-            groupChatModel.myGroupName = USERINFO.username;
-            //新建一个群会话，插入数据库
-            [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
-            
-            //保存群消息到数据库
-            [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-            
-        }
-    } failure:^(ErrorData *error) {
-        
-    }];
     
+    //判断数据库是否存在该群会话 -> 不存在 从网络加载数据  存到数据库
+    if (![FMDBShareManager isGroupChatExist:groupId]) {
+        //加载群信息
+        [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
+            if (responseData.code == 0) {
+                //生成群聊数据模型
+                [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                    return @{
+                             @"groupUserVos":@"GroupUserModel"
+                             };
+                }];
+                GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+                groupChatModel.myGroupName = USERINFO.username;
+                //新建一个群会话，插入数据库
+                [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
+                
+                //保存群消息到数据库
+                [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+                
+            }
+        } failure:^(ErrorData *error) {
+            
+        }];
+    }else{
+        //保存群消息到数据库
+        [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+    }
     return YES;
 }
 
@@ -587,7 +594,7 @@ static SocketManager *manager = nil;
             request[@"controller_name"] = @"MessageController";
             request[@"method_name"] = @"sendmsg";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&fromUid=%@&isGroup=%d&msgid=%@&text=%@&time=0&toUidOrGroupId=%@&type=%zd&%@",message.fromUid,message.isGroup,message.msgid,message.text,message.toUidOrGroupId,message.type,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&fromUid=%@&isGroup=%d&msgid=%@&text=%@&time=%ld&toUidOrGroupId=%@&type=%zd&%@",message.fromUid,message.isGroup,message.msgid,message.text,(long)message.audioLength,message.toUidOrGroupId,message.type,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //拼接消息
             NSInteger isgroup = message.isGroup;
@@ -597,7 +604,7 @@ static SocketManager *manager = nil;
             dataDic[@"fromUid"] = message.fromUid;
             dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
             dataDic[@"text"] = message.text;
-            dataDic[@"time"] = @"0";
+            dataDic[@"time"] = @(message.audioLength);
             dataDic[@"sign"] = sign;
             
         }

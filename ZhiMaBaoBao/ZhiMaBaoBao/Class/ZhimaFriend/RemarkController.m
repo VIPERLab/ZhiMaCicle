@@ -38,11 +38,19 @@
 }
 
 - (void)addAllSubviews{
-    UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(20, 80, DEVICEWITH - 40, 40)];
-    textfield.text = self.nickName;
-    textfield.borderStyle = UITextBorderStyleRoundedRect;
-    [self.view addSubview:textfield];
-    self.textField = textfield;
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake( 0 , 64 + 20, ScreenWidth, 40)];
+    view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:view];
+    
+    
+    UITextField *textField = [[UITextField alloc] init];
+    textField.frame = CGRectMake( 10 , 0, ScreenWidth - 20 , 40);
+    textField.text = self.nickName;
+    textField.backgroundColor = [UIColor whiteColor];
+    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [view addSubview:textField];
+    self.textField = textField;
 }
 
 //有文字输入，更改按钮状态

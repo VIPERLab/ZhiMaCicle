@@ -45,7 +45,7 @@
     
     UIImageView *avatarImage = [[UIImageView alloc] init];
     avatarImage.userInteractionEnabled = YES;
-    avatarImage.image = [UIImage imageNamed:@"拍照"];
+    avatarImage.image = [UIImage imageNamed:@"select_avtar"];
     avatarImage.layer.cornerRadius = 5.f;
     [self.view addSubview:avatarImage];
     self.avtarImage = avatarImage;
