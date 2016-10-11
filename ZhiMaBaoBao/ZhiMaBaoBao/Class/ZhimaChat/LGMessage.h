@@ -72,6 +72,9 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
  /** 签名*/
 //@property (nonatomic, copy) NSString *sign;
 
+ /** 被撤销消息的id (这个字段在socket收到撤销消息时使用) */
+@property (nonatomic, copy) NSString *undoMsgid;
+
  /** 阅读状态（0未读，1已读'*/
 @property (nonatomic, assign) BOOL is_read;
  /** 消息发送状态 0 发送失败  1 发送成功*/

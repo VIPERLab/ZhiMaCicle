@@ -49,4 +49,7 @@
 //获取字符串的size: 求长度就固定高度，就高度就固定长度
 - (CGSize)sizeGwWithFont:(UIFont *)font Size:(CGSize)size;
 
+//是否为空字符串 （空格也算空字符串）
+- (BOOL)isBlankString;
+
 @end

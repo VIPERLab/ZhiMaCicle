@@ -51,10 +51,10 @@
     
     _setBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     _setBtn.frame = _sendBtn.frame;
-    [_setBtn setTitle:@"设置" forState:UIControlStateNormal];
+    [_setBtn setTitle:@"发送" forState:UIControlStateNormal];
     [_setBtn setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
     _setBtn.hidden = YES;
-    [_setBtn addTarget:self action:@selector(setBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_setBtn addTarget:self action:@selector(sendBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_setBtn];
 }
 

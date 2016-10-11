@@ -41,6 +41,9 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self getDataFormSqlist];
+    
+    //发送更新未读消息通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateUnReadMessage object:nil];
 }
 
 
@@ -159,9 +162,7 @@
         //清除未读消息
         model.unReadCount = -1;
         [FMDBShareManager saveConverseListDataWithDataArray:@[model]];
-        
-        //发送更新未读消息通知
-        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateUnReadMessage object:nil];
+
     }
     
     // 点击了没有网络

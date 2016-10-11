@@ -16,6 +16,7 @@
 @end
 
 @interface CreateGroupListCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *avtarLeftMargin;
 @property (weak, nonatomic) IBOutlet UIButton *selectFlagBtn;
 @property (weak, nonatomic) IBOutlet UIImageView *avtar;
 @property (weak, nonatomic) IBOutlet UILabel *name;
