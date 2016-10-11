@@ -17,5 +17,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (nonatomic, strong) ConverseModel *conversion;
 @property (nonatomic, strong) ZhiMaFriendModel *friendModel;
-@property (nonatomic, strong) GroupChatModel *groupModel;
+@property (nonatomic, strong) ConverseModel *groupModel;
 @end

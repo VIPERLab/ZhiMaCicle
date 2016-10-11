@@ -61,9 +61,34 @@
 
 // 拉取网络上最新的数据
 - (void)dataRequst {
+    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.converseId success:^(ResponseData *responseData) {
+        
+        if (responseData.code != 0) {
+            [LCProgressHUD showFailureText:responseData.msg];
+        }
+        
+        //生成群聊数据模型
+        [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+            return @{
+                     @"groupUserVos":@"GroupUserModel"
+                     };
+        }];
+        GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+        self.groupModel = groupChatModel;
+        self.groupModel.myGroupName = USERINFO.username;
+        
+        [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
+        if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
+            self.isGroupCreater = YES;
+        }
+//        [self setupView];
+        [_tableView reloadData];
+        
+    } failure:^(ErrorData *error) {
+        
+    }];
     
-    // 判断当前用户是否为群主
-    [self isGroupCreater:USERINFO.userID];
+    
 }
 
 - (void)isGroupCreater:(NSString *)GrouperID {
@@ -83,9 +108,13 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self getDataFormSQL];
-     [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
-    [_tableView reloadData];
+//    [self getDataFormSQL];
+    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
+    if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
+        self.isGroupCreater = YES;
+    }
+    
+//    [_tableView reloadData];
 }
 
 - (void)setupView {
@@ -310,12 +339,16 @@
 
 #pragma mark - lazyLoad
 - (NSArray *)titleArray {
-    _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
+    if (self.groupModel) {
+        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
+    }
     return _titleArray;
 }
 
 - (NSArray *)subTitleArray {
-    _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode"],@[@"",@""],@[@""]];
+    if (self.groupModel) {
+        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode"],@[@"",@""],@[@""]];
+    }
     return _subTitleArray;
 }
 

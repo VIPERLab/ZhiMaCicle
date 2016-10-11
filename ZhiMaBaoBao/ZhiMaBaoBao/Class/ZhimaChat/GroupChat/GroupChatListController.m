@@ -63,7 +63,7 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
 - (void)getGroupDataFormSQL {
     self.dataArr = [[FMDBShareManager getAllGroupChatDataInArray] mutableCopy];
     if (_dataArr.count) {
-        if (self.tableView) {
+        if (!self.tableView) {
             [self addAllSubviews];
         }
         [self.tableView reloadData];
@@ -102,9 +102,26 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     AvtarAndNameCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-    GroupChatModel *groupModel = self.dataArr[indexPath.row];
+    ConverseModel *groupModel = self.dataArr[indexPath.row];
     cell.groupModel = groupModel;
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 55;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.1;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
 
