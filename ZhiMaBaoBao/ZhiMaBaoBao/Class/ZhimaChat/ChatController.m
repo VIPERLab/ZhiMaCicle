@@ -382,6 +382,11 @@ static NSString *const reuseIdentifier = @"messageCell";
 
     for (int i=0; i<marr.count; i++) {
         [self.messages insertObject:marr[i] atIndex:0];
+//        LGMessage*message = marr[i];
+//        if (message.type == MessageTypeImage) {
+//            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",(long)(self.currentPage*20 + i)],@"url":message.text};
+//            [self.allImagesInfo addObject:dic];
+//        }
     }
     [self.tableView reloadData];
     
@@ -403,11 +408,18 @@ static NSString *const reuseIdentifier = @"messageCell";
 
     FMDBManager* shareManager = [FMDBManager shareManager];
 //    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
-    self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
-    self.messages = (NSMutableArray *)[[self.messages reverseObjectEnumerator] allObjects];
+    
+    NSMutableArray*marr =  [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
+    self.messages = (NSMutableArray *)[[marr reverseObjectEnumerator] allObjects];
     
 //    for (int i=0; i<marr.count; i++) {
-//        [self.messages insertObject:marr[i] atIndex:0];
+//        LGMessage*message = marr[i];
+//        [self.messages insertObject:message atIndex:0];
+//        
+//        if (message.type == MessageTypeImage) {
+//            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",(long)i],@"url":message.text};
+//            [self.allImagesInfo addObject:dic];
+//        }
 //    }
 
     [self.tableView reloadData];
@@ -499,15 +511,42 @@ static NSString *const reuseIdentifier = @"messageCell";
     browser.delegate = self;
     [browser show];
     
+    //多张图片浏览
+//    for (UIImageView*iv in self.subviews) {
+//        [iv removeFromSuperview];
+//    }
+//    
+//    [self.subviews removeAllObjects];
+//    NSUInteger index = 0;
+//    
+//    for (int i=0; i<self.allImagesInfo.count; i++) {
+//        NSDictionary*dic = self.allImagesInfo[i];
+//        UIImageView*iv = [[UIImageView alloc]initWithFrame:CGRectMake(0, -100, 20, 20)];
+//        [iv sd_setImageWithURL:dic[@"url"]];
+//        [self.view addSubview:iv];
+//        [self.subviews addObject:iv];
+//        
+//        if (grz.view.tag == [dic[@"index"] integerValue]) {
+//            index = i;
+//        }
+//    }
+//    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
+//    browser.currentImageIndex = index;
+//    browser.sourceImagesContainerView = self.view;
+//    browser.imageCount = self.subviews.count;
+//    browser.delegate = self;
+//    [browser show];
+    
 }
 
 #pragma mark - SDPhotoBrowserDelegate
 
 - (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index
 {
-//    LGMessage *msg = self.messages[index];
-//    NSString*urlStr = [msg.text stringByReplacingOccurrencesOfString:@"s_" withString:@""];
-    NSURL *url = [NSURL URLWithString:self.currentPicUrl];
+//    NSDictionary *msg = self.allImagesInfo[index];
+//    NSString*urlStr = [msg[@"url"] stringByReplacingOccurrencesOfString:@"s_" withString:@""];
+    NSString*urlStr = self.currentPicUrl;
+    NSURL *url = [NSURL URLWithString:urlStr];
     return url;
 }
 
@@ -719,17 +758,17 @@ static NSString *const reuseIdentifier = @"messageCell";
         //头像
         if (baseChatCell.isMe){
             
-            [baseChatCell.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]]];
+            [baseChatCell.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
             
         }else{
             
             if (!self.converseType) {
                 
-                [baseChatCell.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.friendHeadPic]]];
+                [baseChatCell.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.friendHeadPic]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
                 
             } else {
-//                GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
-//                NSArray*groupArr = groupModel.groupUserVos;
+                GroupUserModel *groupModel = [FMDBShareManager getGroupMemberWithMemberId:message.fromUid andConverseId:self.conversionId];
+                [baseChatCell.userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,groupModel.head_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
                 
             }
         }
