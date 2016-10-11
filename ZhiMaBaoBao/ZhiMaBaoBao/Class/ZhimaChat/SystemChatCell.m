@@ -70,12 +70,12 @@
     [_topLabel centerAlignHorizontalForSuperView];
 
     CGSize size = [_systemLabel sizeThatFits:CGSizeMake(_systemLabel.frame.size.width, MAXFLOAT)];
-    _systemLabel.frame = CGRectMake(_systemLabel.frame.origin.x, _systemLabel.frame.origin.y, _systemLabel.frame.size.width, size.height);
+    _systemLabel.frame = CGRectMake(_systemLabel.frame.origin.x, _systemLabel.frame.origin.y, DEVICEWITH - 120, size.height);
     
     if (_topLabel.text) {
         [_systemLabel setFrameOriginYBelowView:_topLabel offset:10];
     }else{
-        _systemLabel.frame = CGRectMake(_systemLabel.frame.origin.x, 10, _systemLabel.frame.size.width, size.height);
+        _systemLabel.frame = CGRectMake(_systemLabel.frame.origin.x, 10,  DEVICEWITH - 120, size.height);
     }
     
     [_systemLabel centerAlignHorizontalForSuperView];
