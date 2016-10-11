@@ -1653,8 +1653,8 @@
     __block BOOL isSuccess = NO;
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
 //     is_read, sendStatus
-    NSString *option1 = [NSString stringWithFormat:@"is_read = '%@', sendStatus = '%@'",@(message.is_read),@(message.sendStatus)];
-    NSString *option2 = [NSString stringWithFormat:@"msgid = %@",message.msgid];
+    NSString *option1 = [NSString stringWithFormat:@"is_read = '%@', sendStatus = '%@',type = '%@', text = '%@'",@(message.is_read),@(message.sendStatus),@(message.type),message.text];
+    NSString *option2 = [NSString stringWithFormat:@"msgid = '%@'",message.msgid];
     NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Message_Table withOpton1:option1 andOption2:option2];
     [queue inDatabase:^(FMDatabase *db) {
 //        @"msgid,type,fromUid,toUidOrGroupId,time,text,isGroup,converseId,is_read,sendStatus"
