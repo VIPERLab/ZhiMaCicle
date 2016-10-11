@@ -373,7 +373,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)requestChatRecord{
 
     FMDBManager* shareManager = [FMDBManager shareManager];
-    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
+//    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
     self.messages = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
     self.messages = (NSMutableArray *)[[self.messages reverseObjectEnumerator] allObjects];
     
