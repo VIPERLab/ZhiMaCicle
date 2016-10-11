@@ -143,6 +143,7 @@ static SocketManager *manager = nil;
         sendMsg.timeStamp = message.timeStamp;
         sendMsg.text = base64;
         
+        
     }
     //文本消息
     else if (message.type == MessageTypeText){
@@ -586,7 +587,7 @@ static SocketManager *manager = nil;
             request[@"controller_name"] = @"MessageController";
             request[@"method_name"] = @"sendmsg";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&fromUid=%@&isGroup=%d&msgid=%@&text=%@&toUidOrGroupId=%@&type=%zd&%@",message.fromUid,message.isGroup,message.msgid,message.text,message.toUidOrGroupId,message.type,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&fromUid=%@&isGroup=%d&msgid=%@&text=%@&time=0&toUidOrGroupId=%@&type=%zd&%@",message.fromUid,message.isGroup,message.msgid,message.text,message.toUidOrGroupId,message.type,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //拼接消息
             NSInteger isgroup = message.isGroup;
@@ -596,6 +597,7 @@ static SocketManager *manager = nil;
             dataDic[@"fromUid"] = message.fromUid;
             dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
             dataDic[@"text"] = message.text;
+            dataDic[@"time"] = @"0";
             dataDic[@"sign"] = sign;
             
         }
@@ -607,7 +609,7 @@ static SocketManager *manager = nil;
             request[@"controller_name"] = @"MessageController";
             request[@"method_name"] = @"undo";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=undo&fromUid=%@&isGroup=%d&msgid=%@&toUidOrGroupId=%@&type=%d&%@",message.fromUid,message.isGroup,message.msgid,message.toUidOrGroupId,message.type,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=undo&fromUid=%@&isGroup=%d&msgid=%@&toUidOrGroupId=%@&type=%lu&%@",message.fromUid,message.isGroup,message.msgid,message.toUidOrGroupId,(unsigned long)message.type,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //拼接消息
             dataDic[@"msgid"] = message.msgid;

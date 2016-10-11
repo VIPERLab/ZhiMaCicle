@@ -130,6 +130,9 @@
     } else {
         // 新建群聊
         CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+        vc.selectedMembers = @[self.userId];
+        vc.fartherVC = self;
+        vc.hideFirstSection = YES;
         BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
         [self presentViewController:nav animated:YES completion:nil];
     }

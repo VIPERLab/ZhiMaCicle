@@ -42,7 +42,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setCustomTitle:@"选择联系人"];
+    [self setCustomTitle:@"发起群聊"];
     [self setNavItem];
     [self addAllSubviews];
     [self requestFriendsList];
@@ -200,6 +200,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                 cell.delegate = self;
                 cell.indexPath = indexPath;
                 cell.tableView = tableView;
+                cell.selectedMembers = self.selectedMembers;
                 
                 if (self.hideFlagBtn) {
                     //隐藏选择按钮，头像左移
@@ -232,9 +233,15 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                 rowNum = [[self.countOfSectionArr objectAtIndex:i] intValue] + rowNum;
             }
             rowNum += indexPath.row;
-            
             ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
-            //设置选中属性
+            
+            //如果是已选成员，直接return
+            for (NSString *userId in self.selectedMembers) {
+                if ([friend.user_Id isEqualToString:userId]) {
+                    return;
+                }
+            }
+            
             friend.selectedGroup = !friend.selectedGroup;
             
             //刷新选中行
@@ -271,7 +278,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     popView.delegate = self;
                     [popView show];
                 }else{      //选择群成员
-
+                    
+                    
                     //设置选中属性
                     friend.selectedGroup = !friend.selectedGroup;
                     
@@ -295,6 +303,12 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
     }else{
         ZhiMaFriendModel *friend = self.searchResultArr[indexPath.row];
+        //如果是已选成员，直接return
+        for (NSString *userId in self.selectedMembers) {
+            if ([friend.user_Id isEqualToString:userId]) {
+                return;
+            }
+        }
         
         //找到在friendsAfterSort数组里面与之对应的模型，设置模型的选中属性
         for (ZhiMaFriendModel *friend1 in self.friendsAfterSort) {
@@ -430,45 +444,61 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     if (self.selectedFriends.count == 0) {
         return;
     }
+    
     //拼接自己的userId和好友userId
     NSMutableArray *userIdArr = [NSMutableArray array];
     [userIdArr addObject:USERINFO.userID];
     for (ZhiMaFriendModel *model in self.selectedFriends) {
         [userIdArr addObject:model.user_Id];
     }
-    NSString *userIds = [userIdArr componentsJoinedByString:@","];
-
-    [LCProgressHUD showLoadingText:@"准备开始群聊..."];
-    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds success:^(ResponseData *responseData) {
-        if (responseData.code == 0) {
-            [LCProgressHUD hide];
-            //生成群聊数据模型
-            [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
-                return @{
-                         @"groupUserVos":@"GroupUserModel"
-                         };
-            }];
-            self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-            self.groupChatModel.myGroupName = USERINFO.username;
-            //新建一个群会话，插入数据库
-            [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
-            
-            //通过socket创建群聊
-            [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:userIds];
-            
-            //跳转到群聊天页面
-            [self jumpGroupChat];
+    
+    //如果有已选择群成员。 且已选群成员只有一个：代表是单聊发起群聊 -> 新建新群聊   如果有多个已选群成员 -> 拉人进群
+    if (self.selectedMembers.count == 1) {
+        [userIdArr addObjectsFromArray:self.selectedMembers];
+        
+        NSString *userIds = [userIdArr componentsJoinedByString:@","];
+        
+        [LCProgressHUD showLoadingText:@"准备开始群聊..."];
+        [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds success:^(ResponseData *responseData) {
+            if (responseData.code == 0) {
+                [LCProgressHUD hide];
+                //生成群聊数据模型
+                [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                    return @{
+                             @"groupUserVos":@"GroupUserModel"
+                             };
+                }];
+                self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+                self.groupChatModel.myGroupName = USERINFO.username;
+                //新建一个群会话，插入数据库
+                [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+                
+                //通过socket创建群聊
+                [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:userIds];
+                
+                //跳转到群聊天页面
+                [self jumpGroupChat];
+            }
+        } failure:^(ErrorData *error) {
+            [LCProgressHUD showFailureText:error.msg];
+        }];
+    }else{      //拉人进去
+        //拼接选择好友userId
+        NSMutableArray *userIdArr = [NSMutableArray array];
+        for (ZhiMaFriendModel *model in self.selectedFriends) {
+            [userIdArr addObject:model.user_Id];
         }
-    } failure:^(ErrorData *error) {
-        [LCProgressHUD showFailureText:error.msg];
-    }];
+        NSString *userIds = [userIdArr componentsJoinedByString:@","];
+        
+#warning 调用http 和socket接口 拉人进群  更新数据库
+    }
     
 }
 
 - (void)jumpGroupChat{
     [self dismissViewControllerAnimated:NO completion:nil];
     UserInfo *userinfo = [UserInfo shareInstance];
-    [userinfo.groupChatVC.navigationController popToRootViewControllerAnimated:NO];
+    [self.fartherVC.navigationController popToRootViewControllerAnimated:NO];
     
     userinfo.mainVC.selectedViewController = userinfo.mainVC.viewControllers[0];
     
@@ -606,6 +636,17 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         }
     }
     [self.tableView reloadData];
+    
+     //如果有已选群成员， 设置模型属性 originalUser  为 YES
+    if (self.selectedMembers.count) {
+        for (ZhiMaFriendModel *model in self.friendsAfterSort) {
+            for (NSString *userId in self.selectedMembers) {
+                if ([model.user_Id isEqualToString:userId]) {
+                    model.originalUser = YES;
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - 转发消息

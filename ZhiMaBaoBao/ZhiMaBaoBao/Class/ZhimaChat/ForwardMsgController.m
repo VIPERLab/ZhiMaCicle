@@ -114,9 +114,17 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     LGMessage *newMsg = [self generateNewMessage:message to:userId];
     [[SocketManager shareInstance] sendMessage:newMsg];
     
-    [self dismissViewControllerAnimated:YES completion:^{
+    if (self.topWindow) {
+        [self.topWindow resignKeyWindow];
+        UserInfo *info = [UserInfo shareInstance];
+        [info.keyWindow makeKeyAndVisible];
         [LCProgressHUD showSuccessText:@"发送成功"];
-    }];
+
+    }else{
+        [self dismissViewControllerAnimated:YES completion:^{
+            [LCProgressHUD showSuccessText:@"发送成功"];
+        }];
+    }
 }
 
 //生成一个新的消息模型 -> 用来转发
@@ -127,6 +135,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     //如果转发自己的消息，那么touid为旧消息的touid 如果转发的别人的消息，那么to
     newMsg.toUidOrGroupId = userId;
     newMsg.timeStamp = [NSDate currentTimeStamp];
+#warning 这里的是否为群聊 ，要根据转发的情况来判断
     newMsg.isGroup = message.isGroup;
     newMsg.text = message.text;
     newMsg.msgid = [NSString generateMessageID];
@@ -168,6 +177,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
         CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
         vc.isPushFromTrans = YES;
         vc.hideFlagBtn = YES;
+        vc.fartherVC = self;
         vc.transMsg = self.message;
         [self.navigationController pushViewController:vc animated:YES];
     }else{  //转发消息
@@ -217,7 +227,13 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
 }
 
 - (void)navBackAction{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.topWindow) {
+        [self.topWindow resignKeyWindow];
+        UserInfo *info = [UserInfo shareInstance];
+        [info.keyWindow makeKeyAndVisible];
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - lazy

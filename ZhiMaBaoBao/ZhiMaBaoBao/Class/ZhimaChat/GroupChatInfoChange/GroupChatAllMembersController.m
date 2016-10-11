@@ -115,6 +115,7 @@
 // 新增群成员
 - (void)addGroupMembers {
     CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+    vc.fartherVC = self;
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
 }

@@ -91,6 +91,13 @@
  /** 网络不可用*/
 @property (nonatomic, assign) BOOL networkUnReachable;
 
+ /** 程序主窗口*/
+@property (nonatomic, strong) UIWindow *keyWindow;
+
+ /** 转发大图窗口*/
+@property (nonatomic, strong) UIWindow *transWindow;
+
+
 #pragma mark - 消息通知提示
 /**
  *  新消息通知

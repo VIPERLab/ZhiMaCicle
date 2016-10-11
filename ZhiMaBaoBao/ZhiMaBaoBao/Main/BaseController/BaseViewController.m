@@ -23,11 +23,17 @@
     self.view.backgroundColor = BGCOLOR;
     self.navigationController.navigationBar.tintColor = THEMECOLOR;
     
-    UserInfo *userinfo = [UserInfo shareInstance];
-    userinfo.currentVC = self;
+
     
     // 进去前台通知
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteryForground) name:KEnteryForeground_Notification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    UserInfo *userinfo = [UserInfo shareInstance];
+    userinfo.currentVC = self;
 }
 
 
