@@ -53,12 +53,15 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+            for (ZhiMaFriendModel *model in self.friendsArr) {  //从网络拉取的新的好友，status 设置为NO
+                model.status = NO;
+            }
             [FMDBShareManager saveNewFirendsWithArray:self.friendsArr andUserId:USERINFO.userID];
             self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
             [self.tableView reloadData];
             
         }else{
-            //如果没有数据，直接从数据课拉取
+            //如果没有数据，直接从数据拉取
             self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
             [self.tableView reloadData];
         }
