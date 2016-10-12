@@ -337,6 +337,7 @@
     vc.fartherVC = self;
     vc.hideFirstSection = self;
     vc.selectedMembers = originUserIds;
+    vc.groupId = self.groupModel.groupId;
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
 }

@@ -401,10 +401,11 @@
  *  @param sessionId sessionId
  *  @param userIds   朋友的userId(可以是以逗号隔开的字符串)
  */
-+ (void)addUserToGroup:(NSString *)sessionId userIds:(NSString *)userIds success:(SuccessfulBlock)success failure:(FailureBlock)failure{
++ (void)addUserToGroup:(NSString *)sessionId userIds:(NSString *)userIds groupId:(NSString *)groupId success:(SuccessfulBlock)success failure:(FailureBlock)failure{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"sessionId"] = sessionId;
     param[@"userId_s"] = userIds;
+    param[@"groupid"] = groupId;
     [HttpTool POST:@"/moblie/addusertoGroup.do" params:param success:^(ResponseData *responseData) {
         success(responseData);
     } failure:^(ErrorData *error) {

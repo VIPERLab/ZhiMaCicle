@@ -104,6 +104,7 @@
 #import "BaseNavigationController.h"
 
 #import "KXActionSheet.h"
+#import "SocketManager.h"
 
 
 //FMDB管理头文件

@@ -166,8 +166,9 @@
  *
  *  @param sessionId sessionId
  *  @param userIds   朋友的userId(可以是以逗号隔开的字符串)
+ *  @param groupId   如果是拉人进群需要传群id  , 新建群传空
  */
-+ (void)addUserToGroup:(NSString *)sessionId userIds:(NSString *)userIds success:(SuccessfulBlock)success failure:(FailureBlock)failure;
++ (void)addUserToGroup:(NSString *)sessionId userIds:(NSString *)userIds groupId:(NSString *)groupId success:(SuccessfulBlock)success failure:(FailureBlock)failure;
 
 /**
  *  查看群组列表
