@@ -31,6 +31,8 @@
 
 @interface SDWeiXinPhotoContainerView : UIView
 
+@property (nonatomic, copy) NSString *userId;
+
 @property (nonatomic, strong) NSArray *picPathStringsArray;
 
 @end
