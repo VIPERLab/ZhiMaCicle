@@ -80,7 +80,7 @@
 #define NewFriend_MessageFields_Name @"user_Name, user_Id, user_Head_photo, status, userId"
 
 //群聊信息表
-#define GroupChat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER, groupAvtar TEXT)"
+#define GroupChat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER, groupAvtar TEXT NOT NULL)"
 #define GroupChat_MessageFields_name @"groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName, groupAvtar"
 
 //群成员表

@@ -1923,6 +1923,7 @@
             model.saveToMailList = [result intForColumn:@"saveToMailList"];
             model.myGroupName = [result stringForColumn:@"myGroupName"];
             model.showMemberName = [result intForColumn:@"showMemberName"];
+            model.groupAvtar = [result stringForColumn:@"groupAvtar"];
             
         }
     }];

@@ -94,7 +94,7 @@
 
 // 收藏图片
 - (void)collectionImage {
-    if (self.userId.length) {
+    if (!self.userId.length) {
         [LCProgressHUD showFailureText:@"请把用户id传进来"];
         return;
     }
