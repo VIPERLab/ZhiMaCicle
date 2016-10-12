@@ -227,11 +227,18 @@
     _saveButton.hidden = YES;
     
     [UIView animateWithDuration:SDPhotoBrowserHideImageAnimationDuration animations:^{
-        tempView.frame = targetTemp;
+        if (self.isChat) {
+            tempView.frame = CGRectMake(ScreenWidth/2, ScreenHeight/2, 0, 0);
+        }else{
+            tempView.frame = targetTemp;
+        }
         self.backgroundColor = [UIColor clearColor];
         _indexLabel.alpha = 0.1;
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
+        if (self.isChat && [self.delegate respondsToSelector:@selector(finishedWatch)]) {
+            [self.delegate finishedWatch];
+        }
     }];
 }
 

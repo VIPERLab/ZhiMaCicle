@@ -17,9 +17,12 @@
 
 - (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index;
 
+- (void)finishedWatch;
+
 @optional
 
 - (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index;
+
 
 @end
 
@@ -30,6 +33,8 @@
 @property (nonatomic, assign) NSInteger currentImageIndex;
 @property (nonatomic, assign) NSInteger imageCount;
 @property (nonatomic, copy) NSString *userId;
+@property (nonatomic, assign) BOOL isChat;
+
 
 @property (nonatomic, weak) id<SDPhotoBrowserDelegate> delegate;
 
