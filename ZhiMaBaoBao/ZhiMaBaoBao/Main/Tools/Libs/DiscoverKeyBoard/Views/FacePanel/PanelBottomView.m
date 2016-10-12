@@ -39,6 +39,7 @@
     [self addSubview:_addBtn];
     
     _facePickerView = [[UIScrollView alloc] initWithFrame:CGRectMake(kFacePanelBottomToolBarHeight, 0, kScreenWidth-2*kFacePanelBottomToolBarHeight, kFacePanelBottomToolBarHeight)];
+//    _facePickerView.backgroundColor = GRAYCOLOR;
     [self addSubview:_facePickerView];
     
     _sendBtn = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -71,7 +72,7 @@
         [btn setTitle:themeM.themeDecribe forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor purpleColor] forState:UIControlStateSelected];
         [btn addTarget:self action:@selector(subjectPicBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        btn.frame = CGRectMake(i*kFacePanelBottomToolBarHeight, 0, kFacePanelBottomToolBarHeight, kFacePanelBottomToolBarHeight);
+        btn.frame = CGRectMake(10+i*kFacePanelBottomWidth, 0, kFacePanelBottomWidth, kFacePanelBottomToolBarHeight);
         [_facePickerView addSubview:btn];
         
         if (i == pickerSource.count - 1) {
@@ -83,7 +84,7 @@
 
 - (void)changeFaceSubjectIndex:(NSInteger)subjectIndex
 {
-    [_facePickerView setContentOffset:CGPointMake(subjectIndex*kFacePanelBottomToolBarHeight, 0) animated:YES];
+//    [_facePickerView setContentOffset:CGPointMake(subjectIndex*kFacePanelBottomWidth, 0) animated:YES];
     
     for (UIView *sub in _facePickerView.subviews) {
         if ([sub isKindOfClass:[UIButton class]]) {

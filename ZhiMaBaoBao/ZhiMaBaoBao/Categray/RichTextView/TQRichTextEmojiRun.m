@@ -7,6 +7,7 @@
 //
 
 #import "TQRichTextEmojiRun.h"
+#import "FaceThemeModel.h"
 
 @implementation TQRichTextEmojiRun
 
@@ -23,9 +24,15 @@
 - (BOOL)drawRunWithRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    NSString * emotionImageName=[self.originalText stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"[]"]];
-    NSString *emojiString = [NSString stringWithFormat:@"%@.png",emotionImageName];
+//    NSString * emotionImageName=[self.originalText stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"[]"]];
+//    NSString *emojiString = [NSString stringWithFormat:@"%@.png",emotionImageName];
     
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"face" ofType:@"plist"];
+    NSDictionary *faceDic = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+    NSString*faceName = [faceDic objectForKey:self.originalText];
+  
+    NSString *emojiString = [NSString stringWithFormat:@"%@.png",faceName];
+
     UIImage *image = [UIImage imageNamed:emojiString];
     if (image)
     {
@@ -74,16 +81,26 @@
                     [emojiStr appendString:c];
                 }
                 
-                NSString * tmpEmotionResult = [emojiStr itemForPatter:[TQRichTextEmojiRun matchPattern]];
-                if (tmpEmotionResult.length>0)
+//                NSString * tmpEmotionResult = [emojiStr itemForPatter:[TQRichTextEmojiRun matchPattern]];
+//                if (tmpEmotionResult.length>0)
+//                {
+//                    if (*runArray)
+//                    {
+//                        TQRichTextEmojiRun *emoji = [[TQRichTextEmojiRun alloc] init];
+//                        emoji.range = NSMakeRange(i + 1 - emojiStr.length - offsetIndex, 1);
+//                        emoji.originalText = emojiStr;
+//                        [*runArray addObject:emoji];
+//                    }
+//                    [newString appendString:@" "];
+//                    
+//                    offsetIndex += emojiStr.length - 1;
+//                }
+                if ([[TQRichTextEmojiRun emojiStringArray] containsObject:emojiStr])
                 {
-                    if (*runArray)
-                    {
-                        TQRichTextEmojiRun *emoji = [[TQRichTextEmojiRun alloc] init];
-                        emoji.range = NSMakeRange(i + 1 - emojiStr.length - offsetIndex, 1);
-                        emoji.originalText = emojiStr;
-                        [*runArray addObject:emoji];
-                    }
+                    TQRichTextEmojiRun *emoji = [[TQRichTextEmojiRun alloc] init];
+                    emoji.range = NSMakeRange(i + 1 - emojiStr.length - offsetIndex, 1);
+                    emoji.originalText = emojiStr;
+                    [*runArray addObject:emoji];
                     [newString appendString:@" "];
                     
                     offsetIndex += emojiStr.length - 1;
@@ -105,5 +122,25 @@
     return newString;
 }
 
++ (NSArray *) emojiStringArray
+{
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"face" ofType:@"plist"];
+    NSDictionary *faceDic = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+    NSArray *allkeys = faceDic.allKeys;
+    
+//    FaceThemeModel *themeM = [[FaceThemeModel alloc] init];
 
+    NSMutableArray *modelsArr = [NSMutableArray array];
+    
+    for (int i = 0; i < allkeys.count; ++i) {
+        NSString *name = allkeys[i];
+        FaceModel *fm = [[FaceModel alloc] init];
+        fm.faceTitle = name;
+//        fm.faceIcon = [faceDic objectForKey:name];
+        [modelsArr addObject:fm.faceTitle];
+    }
+
+    
+    return modelsArr;//[NSArray arrayWithObjects:@"[smile]",@"[cry]",nil];
+}
 @end
