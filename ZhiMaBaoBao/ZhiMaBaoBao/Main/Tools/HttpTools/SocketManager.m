@@ -18,6 +18,8 @@
 #import "ZhiMaFriendModel.h"
 #import "GroupChatModel.h"
 #import "NSString+MsgId.h"
+#import <AudioToolbox/AudioToolbox.h>
+
 
 @interface SocketManager ()
 
@@ -347,7 +349,52 @@ static SocketManager *manager = nil;
             userInfo[@"message"] = systemMsg;
             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
         }
+        else if ([actType isEqualToString:@"dofriend"]){    //对方同意我的好友请求
+            
+            NSDictionary *resDic = responceData[@"data"];
+            NSString *friendId = resDic[@"frienduid"];
+            
+            //从网络加载新好友资料，存入数据库好友表  ->  然后添加系统消息 "xx通过了你的朋友验证请求,现在可以开始聊天了。" 到数据库
+            [self addNewFriendToSqilt:friendId];
+        }
     }
+}
+
+//从网络加载新好友资料，存入数据库好友表  ->  然后添加系统消息 "xx通过了你的朋友验证请求,现在可以开始聊天了。" 到数据库
+- (void)addNewFriendToSqilt:(NSString *)friendId{
+    [LGNetWorking getFriendInfo:USERINFO.sessionId userId:friendId block:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            ZhiMaFriendModel *friend = [ZhiMaFriendModel mj_objectWithKeyValues:responseData.data];
+            
+            //插入好友到数据库
+            [FMDBShareManager saveUserMessageWithMessageArray:@[friend]];
+            
+            //添加系统消息
+            [self addSystemMsgToSqlite:friend];
+            
+            [self playSystemAudio];
+            
+        }else{
+            [LCProgressHUD showText:responseData.msg];
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showText:error.msg];
+    }];
+
+}
+
+//添加系统消息"xx通过了你的朋友验证请求,现在可以开始聊天了。"
+- (void)addSystemMsgToSqlite:(ZhiMaFriendModel *)friend{
+    
+    LGMessage *systemMsg = [[LGMessage alloc] init];
+    systemMsg.text = [NSString stringWithFormat:@"%@通过了你的朋友验证请求,现在可以开始聊天了。",friend.user_Name];
+    systemMsg.fromUid = USERINFO.userID;
+    systemMsg.toUidOrGroupId = friend.user_Id;
+    systemMsg.type = MessageTypeSystem;
+    systemMsg.msgid = [NSString generateMessageID];
+    systemMsg.isGroup = NO;
+    systemMsg.timeStamp = [NSDate currentTimeStamp];
+    [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
 }
 
 //插入一条群消息到本地数据库
@@ -530,13 +577,13 @@ static SocketManager *manager = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
-////删除好友
-//- (void)delFriend:(NSString *)friendId{
-//    NSData *data = [self generateFriendActType:FriendActTypeDel friendId:friendId];
-//    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-//    req.object = data;
-//    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-//}
+//同意好友请求
+- (void)agreeFriendRequest:(NSString *)friendId{
+    NSData *data = [self generateFriendActType:FriendActTypeAgreee friendId:friendId];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
 
 //加入黑名单
 - (void)dragToBlack:(NSString *)friendId{
@@ -717,9 +764,9 @@ static SocketManager *manager = nil;
         }
             
             break;
-//        case FriendActTypeDel:{     //删除好友
-//            methodName = @"delFriend";
-//        }
+        case FriendActTypeAgreee:{     //同意好友请求
+            methodName = @"doFriend";
+        }
             
             break;
         case FriendActTypeBlack:{   //加入黑名单
@@ -744,12 +791,21 @@ static SocketManager *manager = nil;
     NSString *str = nil;
     if (type == FriendActTypeUpdate) {
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&uid=%@&%@",controllerName,methodName,USERINFO.userID,APIKEY];
-    }else{
+        dataDic[@"uid"] = USERINFO.userID;
+
+    }
+//    else if (type == FriendActTypeAgreee){
+//        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&uid=%@&%@",controllerName,methodName,USERINFO.userID,friendId,APIKEY];
+//        dataDic[@"frienduid"] = USERINFO.userID;
+//        dataDic[@"uid"] = friendId;
+//    }
+    else{
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&uid=%@&%@",controllerName,methodName,friendId,USERINFO.userID,APIKEY];
         dataDic[@"frienduid"] = friendId;
+        dataDic[@"uid"] = USERINFO.userID;
+
     }
     NSString *sign = [[str md5Encrypt] uppercaseString];
-    dataDic[@"uid"] = USERINFO.userID;
     dataDic[@"sign"] = sign;
     //拼接完整的request包
     request[@"data"] = dataDic;
@@ -772,6 +828,11 @@ static SocketManager *manager = nil;
         [resultStr appendString:oneStr];
     }
     return resultStr;
+}
+
+//播放消息提示音
+- (void)playSystemAudio{
+    AudioServicesPlaySystemSound(1007);
 }
 
 - (void)dealloc{

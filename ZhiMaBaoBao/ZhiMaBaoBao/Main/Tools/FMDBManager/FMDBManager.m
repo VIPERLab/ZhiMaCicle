@@ -1474,7 +1474,7 @@
     converseModel.time = message.timeStamp;
     converseModel.converseHead_photo = userModel.user_Head_photo;
     converseModel.converseName = userModel.displayName;
-    if (message.type == MessageTypeText) {
+    if (message.type == MessageTypeText || message.type == MessageTypeSystem) {
         converseModel.lastConverse = message.text;
     }else if (message.type == MessageTypeImage){
         converseModel.lastConverse = @"[图片]";

@@ -26,7 +26,7 @@
 - (void)setFriendModel:(ZhiMaFriendModel *)friendModel{
     _friendModel = friendModel;
     
-    [self.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,friendModel.head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
+    [self.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,friendModel.user_Head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
     self.name.text = friendModel.displayName;
     self.nickName.text = [NSString stringWithFormat:@"昵称：%@",friendModel.user_Name];
     if ([friendModel.sex isEqualToString:@"男"]) {
@@ -56,13 +56,11 @@
 
 #pragma mark -- SDPhotoBrowser代理方法
 - (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index{
-    NSString * avatarPath = @"";
-    
-    if ([avatarPath length]) {
-        return [UIImage imageWithContentsOfFile:avatarPath];
-    }else{
-        return [UIImage imageNamed:@"defaultUserIcon"];
-    }
+    return self.avtar.image;
+}
+
+- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index{
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.friendModel.user_Head_photo]];
 }
 
 @end

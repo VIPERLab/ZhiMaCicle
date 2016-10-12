@@ -15,6 +15,8 @@
 #import "FriendProfilecontroller.h"
 #import "ConversationController.h"
 #import "GroupChatListController.h"
+#import <AudioToolbox/AudioToolbox.h>
+
 
 @interface FriendsController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -45,6 +47,8 @@ static NSString * const reuseIdentifier = @"friendListcell";
     
     //监听新的好友请求消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveFriendRequest:) name:kNewFriendRequest object:nil];
+    //我发送的好友请求对方已经同意
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestHasAgreed) name:kOtherAgreeMyFrendRequest object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -83,7 +87,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
         }
         
     } failure:^(ErrorData *error) {
-        [LCProgressHUD showFailureText:@"网络好像有点差哦[^_^]"];
+        [LCProgressHUD showFailureText:error.msg];
     }];
 }
 
@@ -175,6 +179,9 @@ static NSString * const reuseIdentifier = @"friendListcell";
  *  @param notify 好友信息字典
  */
 - (void)recieveFriendRequest:(NSNotification *)notify{
+    
+    [self playSystemAudio];
+    
     //本地存储好友请求数量
     UserInfo *userInfo = [UserInfo read];
     userInfo.unReadCount ++;
@@ -201,6 +208,22 @@ static NSString * const reuseIdentifier = @"friendListcell";
     }else {
         [[self.tabBarController.tabBar.items objectAtIndex:1] setBadgeValue:nil];
     }
+}
+
+//对方同意我的好友请求。网络加载数据，刷新表
+- (void)requestHasAgreed{
+    [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
+        
+        self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+        
+        //更新数据库，然后刷新列表
+        [FMDBShareManager saveUserMessageWithMessageArray:self.friends];
+
+        [self friendsListSort];
+
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:error.msg];
+    }];
 }
 
 #pragma mark - tableview 代理
@@ -378,5 +401,10 @@ static NSString * const reuseIdentifier = @"friendListcell";
 
     }
     return _unReadLabel;
+}
+
+//播放消息提示音
+- (void)playSystemAudio{
+    AudioServicesPlaySystemSound(1007);
 }
 @end

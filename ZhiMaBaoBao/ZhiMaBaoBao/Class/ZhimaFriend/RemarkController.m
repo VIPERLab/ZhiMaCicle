@@ -55,20 +55,25 @@
 
 //有文字输入，更改按钮状态
 - (void)changeSureBtnState{
-    if (self.textField.hasText) {
-        [self.rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
-    }else{
-        [self.rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
-    }
+//    if (self.textField.hasText) {
+//        [self.rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+//    }else{
+//        [self.rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
+//    }
+    
+    [self.rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+
 }
 
 //修改备注
 - (void)sureAcion{
-    if (!self.textField.hasText) {
-        return;
-    }
     
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_nick" value:self.textField.text openfireAccount:self.userId block:^(ResponseData *responseData) {
+    NSString *nickName = self.textField.text;
+    if (!self.textField.hasText) {
+        nickName = @" ";
+    }
+
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_nick" value:nickName openfireAccount:self.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             //修改成功 -> 更新数据库会话表的会话名
             

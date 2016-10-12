@@ -263,6 +263,9 @@
 //查询手机联系人是否开通芝麻
 + (void)queryContacts:(NSString *)sessionId phone:(NSString *)phone success:(SuccessfulBlock)success failure:(FailureBlock)failure;
 
+//删除好友
++ (void)deleteFriend:(NSString *)sessionId friendId:(NSString *)friendId success:(SuccessfulBlock)success failure:(FailureBlock)failure;
+
 /**
  *  获取好友列表
  *  @param type      好友类型
