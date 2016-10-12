@@ -94,6 +94,10 @@
         
         [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
         
+        // 设置尾部
+        GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
+        footer.delegate = self;
+        _tableView.tableFooterView = footer;
         [_tableView reloadData];
         
 //        [self getDataFormSQL];
@@ -136,10 +140,10 @@
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    // 设置尾部
-    GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
-    footer.delegate = self;
-    _tableView.tableFooterView = footer;
+//    // 设置尾部
+//    GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
+//    footer.delegate = self;
+//    _tableView.tableFooterView = footer;
     
     // 注册cell
     [_tableView registerClass:[GroupChatInfoCell class] forCellReuseIdentifier:GroupChatRoomInfoCellReusedID];

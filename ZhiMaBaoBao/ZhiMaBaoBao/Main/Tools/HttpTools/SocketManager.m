@@ -409,6 +409,10 @@ static SocketManager *manager = nil;
     systemMsg.isGroup = NO;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
     [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    userInfo[@"message"] = systemMsg;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
 }
 
 //插入一条群消息到本地数据库

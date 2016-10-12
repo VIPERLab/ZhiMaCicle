@@ -463,7 +463,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         NSString *userIds = [userIdArr componentsJoinedByString:@","];
         
         [LCProgressHUD showLoadingText:@"准备开始群聊..."];
-        [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"" success:^(ResponseData *responseData) {
+        [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 [LCProgressHUD hide];
                 //生成群聊数据模型
@@ -495,7 +495,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             NSString *userIds = [userIdArr componentsJoinedByString:@","];
             
             [LCProgressHUD showLoadingText:@"准备开始群聊..."];
-            [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"" success:^(ResponseData *responseData) {
+            [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
                 if (responseData.code == 0) {
                     [LCProgressHUD hide];
                     //生成群聊数据模型

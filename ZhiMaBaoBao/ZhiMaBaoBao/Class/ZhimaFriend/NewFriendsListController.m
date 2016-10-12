@@ -107,13 +107,15 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
             [FMDBShareManager saveUserMessageWithMessageArray:@[friend]];
             [[SocketManager shareInstance] agreeFriendRequest:friend.user_Id];
             
+            ZhiMaFriendModel *userModel = [FMDBShareManager getUserMessageByUserID:friend.user_Id];
+
+            
             //添加系统消息"你已添加了xx,现在可以开始聊天了"
             [self addSystemMsgToSqlite:friend];
 
             //添加好友成功 -- 更新数据库 新的好友表  和好友表
             friend.status = YES;
             [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
-            [FMDBShareManager saveUserMessageWithMessageArray:@[friend]];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             
         }else{
@@ -133,6 +135,10 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     systemMsg.isGroup = NO;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
     [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    userInfo[@"message"] = systemMsg;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
 }
 
 #pragma mark - tableView 代理方法

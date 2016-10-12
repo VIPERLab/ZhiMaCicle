@@ -314,7 +314,12 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     systemMsg.msgid = [NSString generateMessageID];
     systemMsg.isGroup = NO;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
+    
     [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    userInfo[@"message"] = systemMsg;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
 }
 
 /**

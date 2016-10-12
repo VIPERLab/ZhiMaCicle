@@ -95,6 +95,8 @@
 //对方同意我的好友请求
 #define kOtherAgreeMyFrendRequest @"kOtherAgreeMyFrendRequest"
 
+#define kRefreshConversionList @"kRefreshConversionList"
+
 
 
 #endif /* KNotificationManager_h */

@@ -113,7 +113,7 @@
                 // 删除该会话
                 [FMDBShareManager deleteConverseWithConverseId:self.userId];
                 // 删除该好友
-//                [FMDBShareManager deleteUserMessageByUserID:self.userId];
+                [FMDBShareManager deleteUserMessageByUserID:self.userId];
             }else{
                 [LCProgressHUD showText:responseData.msg];
             }
