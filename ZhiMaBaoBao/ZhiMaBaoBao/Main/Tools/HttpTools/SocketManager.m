@@ -287,13 +287,20 @@ static SocketManager *manager = nil;
         else if ([actType isEqualToString:@"undomsg"]){   //撤销消息
             NSDictionary *resDic = responceData[@"data"];
             NSString *fromUid = resDic[@"fromUid"];
+            NSString *groupId = resDic[@"toUidOrGroupId"];
             //根据uid拿到用户名
             ZhiMaFriendModel *model = [FMDBShareManager getUserMessageByUserID:fromUid];
+            NSString *userName = model.user_Name;
+            //如果不是好友, 从群表查群用户
+            if (!model.user_Id) {
+                GroupUserModel *groupUserModel = [FMDBShareManager getGroupMemberWithMemberId:fromUid andConverseId:groupId];
+                userName = groupUserModel.friend_nick;
+            }
             
             //插入系统消息:"『用户名』撤回了一条消息"到数据库
             LGMessage *systemMsg = [[LGMessage alloc] init];
             systemMsg.actType = ActTypeUndomsg;
-            systemMsg.text = [NSString stringWithFormat:@"\"%@\"撤回了一条消息",model.user_Name];
+            systemMsg.text = [NSString stringWithFormat:@"\"%@\"撤回了一条消息",userName];
             systemMsg.toUidOrGroupId =  resDic[@"toUidOrGroupId"];
             systemMsg.fromUid = fromUid;
             systemMsg.type = MessageTypeSystem;
@@ -301,7 +308,14 @@ static SocketManager *manager = nil;
             systemMsg.undoMsgid = resDic[@"msgid"];
             systemMsg.isGroup = [resDic[@"isGroup"] boolValue];
             systemMsg.timeStamp = [NSDate currentTimeStamp];
-            [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
+            
+//            [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
+            //群消息和单聊消息 分开进行更新消息表操作(主要是会话列表展示)
+            if (systemMsg.isGroup) {
+                [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:systemMsg.toUidOrGroupId];
+            }else{
+                [FMDBShareManager saveMessage:systemMsg toConverseID:systemMsg.toUidOrGroupId];
+            }
             
             //发送撤销消息通知
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
@@ -401,7 +415,7 @@ static SocketManager *manager = nil;
 - (BOOL)addGroupMessage:(LGMessage *)message groupId:(NSString *)groupId{
     
     //判断数据库是否存在该群会话 -> 不存在 从网络加载数据  存到数据库
-    if (![FMDBShareManager isGroupChatExist:groupId]) {
+    if (![FMDBShareManager isConverseIsExist:groupId]) {
         //加载群信息
         [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
@@ -418,6 +432,11 @@ static SocketManager *manager = nil;
                 
                 //保存群消息到数据库
                 [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+                
+                //发送通知，刷新会话列表
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                userInfo[@"message"] = message;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
                 
             }
         } failure:^(ErrorData *error) {
@@ -515,7 +534,6 @@ static SocketManager *manager = nil;
     //先从数据库删除该条消息
     
     
-    
     //插入系统消息:"你撤回了一条消息"到数据库
     LGMessage *systemMsg = [[LGMessage alloc] init];
     systemMsg.text = @"你撤回了一条消息";
@@ -526,7 +544,11 @@ static SocketManager *manager = nil;
     systemMsg.isGroup = message.isGroup;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
     
-    [FMDBShareManager saveMessage:systemMsg toConverseID:message.toUidOrGroupId];
+    if (message.isGroup) {  //群消息和单聊消息 分开进行更新消息表操作(主要是会话列表展示)
+        [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:message.toUidOrGroupId];
+    }else{
+        [FMDBShareManager saveMessage:systemMsg toConverseID:message.toUidOrGroupId];
+    }
 }
 
 //建群
@@ -595,7 +617,7 @@ static SocketManager *manager = nil;
 
 //用户修改资料
 - (void)updateProfile{
-    NSData *data = [self generateFriendActType:FriendActTypeUpdate friendId:0];
+    NSData *data = [self generateFriendActType:FriendActTypeUpdate friendId:USERINFO.userID];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
