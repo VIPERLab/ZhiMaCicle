@@ -162,7 +162,7 @@
             
             
             
-            [JPUSHService setAlias:USERINFO.userID callbackSelector:nil object:nil];
+            [JPUSHService setTags:[NSSet setWithObject:userInfo.userID] alias:userInfo.userID callbackSelector:nil object:nil];
             
             
             
