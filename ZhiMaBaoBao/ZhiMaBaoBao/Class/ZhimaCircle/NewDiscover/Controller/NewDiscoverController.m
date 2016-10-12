@@ -389,8 +389,8 @@
             if (fullImage) {
                 image = [UIImage imageWithCGImage:asset.thumbnail];
             } else {
-//                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
-                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationUp];
+                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
+//                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationUp];
             }
             
             if (self.imagesArray.count > 8) {
