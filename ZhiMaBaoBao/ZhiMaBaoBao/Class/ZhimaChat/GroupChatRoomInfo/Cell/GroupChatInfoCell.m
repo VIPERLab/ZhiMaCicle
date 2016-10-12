@@ -94,6 +94,7 @@
     if (self.indexPath.section == 2 && self.indexPath.row == 0) {
         // 设置消息免打扰
         option1 = [NSString stringWithFormat:@"disturb = '%zd'",statusSwitch.on];
+        [self valueChangeActionWithFunctionName:@"new_msg_tip" andValut:statusSwitch.on];
     } else if (self.indexPath.section == 2 && self.indexPath.row == 1) {
         // 设置消息置顶
         option1 = [NSString stringWithFormat:@"topChat = '%zd'",statusSwitch.on];
@@ -118,6 +119,21 @@
         } else {
             NSLog(@"修改会话失败");
         }
+    }];
+}
+
+
+- (void)valueChangeActionWithFunctionName:(NSString *)functionName andValut:(int)value {
+    [LGNetWorking setGroupInfoMessageWithFunctionName:functionName andSessionId:USERINFO.sessionId andValue:[NSString stringWithFormat:@"%zd",value] andGroupId:_converseId success:^(ResponseData *responseData) {
+        
+        if (responseData.code != 0) {
+            return ;
+        }
+        
+        NSLog(@"%@",responseData.data);
+        
+    } failure:^(ErrorData *error) {
+        
     }];
 }
 

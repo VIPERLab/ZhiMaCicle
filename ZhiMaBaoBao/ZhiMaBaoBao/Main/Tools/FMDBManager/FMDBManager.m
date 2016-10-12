@@ -1949,7 +1949,7 @@
         if (isExist) {
             NSLog(@"存在成员信息");
             NSString *option1 = [NSString stringWithFormat:@"memberName = '%@', memberHeader_Photo = '%@'",model.friend_nick,model.head_photo];
-            NSString *option2 = [NSString stringWithFormat:@"converseId = %@ and userId = %@",groupChatId, model.userId];
+            NSString *option2 = [NSString stringWithFormat:@"converseId = %@ and memberId = %@",groupChatId, model.userId];
             opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMenber_Table withOpton1:option1 andOption2:option2];
         } else {
             NSLog(@"不存在成员信息");

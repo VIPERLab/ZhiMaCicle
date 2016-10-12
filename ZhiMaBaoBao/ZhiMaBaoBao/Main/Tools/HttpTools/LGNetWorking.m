@@ -847,4 +847,18 @@
 }
 
 
++ (void)setGroupInfoMessageWithFunctionName:(NSString *)functionName andSessionId:(NSString *)sessionId andValue:(NSString *)value andGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = sessionId;
+    params[@"roomid"] = groupId;
+    params[@"functionName"] = functionName;
+    params[@"value"] = value;
+    [HttpTool POST:@"/moblie/setGroupRoomTop.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
+
 @end
