@@ -115,7 +115,13 @@
     NSInteger value = sender.on;
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:[NSString stringWithFormat:@"%zd",value] openfireAccount:self.model.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
-            
+            //通知对方用户删除我的朋友圈
+            if (sender.on) { // 如果设置为YES
+//                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                    [FMDBShareManager deletedCircleWithUserId:self.model.userId];
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataCircleDataNotification object:nil];
+//                });
+            }
         }else{
             [LCProgressHUD showText:responseData.msg];
             
@@ -129,6 +135,13 @@
     NSInteger value = sender.on;
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:[NSString stringWithFormat:@"%zd",value] openfireAccount:self.model.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
+            // 删除朋友圈数据库中关于他的朋友圈
+            if (sender.on) { // 如果设置为YES
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                    [FMDBShareManager deletedCircleWithUserId:self.model.userId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataCircleDataNotification object:nil];
+                });
+            }
             
         }else{
             [LCProgressHUD showText:responseData.msg];

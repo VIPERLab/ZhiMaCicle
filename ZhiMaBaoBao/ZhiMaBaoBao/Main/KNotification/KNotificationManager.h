@@ -40,6 +40,10 @@
 
 
 //                    ------ 朋友圈消息通知 --------
+// 更新朋友圈通知
+#define K_UpDataCircleDataNotification @"KUpDataCircleDataNotification"
+
+
 /**
  *  点击了点赞人的名字的通知  富文本通知
  *  info @{openFirAccount : 点击点赞人的openFirAccount}

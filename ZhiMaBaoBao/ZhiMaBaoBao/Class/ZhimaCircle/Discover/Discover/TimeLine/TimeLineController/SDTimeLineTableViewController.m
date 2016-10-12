@@ -166,6 +166,9 @@
     
     //接收未读消息通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(upLoadUnReadMessage:) name:K_UpDataUnReadCountNotification object:nil];
+    
+    //更新朋友圈数据通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDataFromSQL) name:K_UpDataCircleDataNotification object:nil];
 }
 
 
@@ -340,6 +343,7 @@
         //返回主线程更新ui
         dispatch_async(dispatch_get_main_queue(), ^{
             // 获取所有朋友圈的数据
+            
             [self setupKeyBoardAndRefreshHeader];
             
             [self.tableView reloadDataWithExistedHeightCache];

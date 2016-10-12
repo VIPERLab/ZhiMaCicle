@@ -871,6 +871,26 @@
     }];
 }
 
+
+/**
+ *  不看某个用户的朋友圈
+ *
+ *  @return 某个用户的id
+ */
+- (void)deletedCircleWithUserId:(NSString *)userId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
+    NSString *searchOption = [FMDBShareManager SearchTable:ZhiMa_Circle_Table withOption:[NSString stringWithFormat:@"userID = '%@'",userId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:searchOption];
+        while ([result next]) {
+            NSString *circleId = [result stringForColumn:@"circle_ID"];
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                [FMDBShareManager deleteCircleDataWithCircleID:circleId];
+            });
+        }
+    }];
+}
+
 // 根据某条朋友圈的id 去删除其对应的数据
 - (BOOL)deleteCircleDataWithCircleID:(NSString *)circleID {
     __block BOOL successFul = YES;
@@ -1003,7 +1023,7 @@
         NSString *opeartionStr = [NSString string];
         if (isExist) {
             NSLog(@"存在用户,需要更新");
-            NSString *option1 = [NSString stringWithFormat:@"user_Name = '%@', user_Head_photo = '%@', user_NickName = '%@'",model.user_Name,model.user_Head_photo,model.user_NickName];
+            NSString *option1 = [NSString stringWithFormat:@"user_Name = '%@', user_Head_photo = '%@', user_NickName = %@",model.user_Name,model.user_Head_photo,model.user_NickName];
             NSString *option2 = [NSString stringWithFormat:@"user_Id = '%@'",model.user_Id];
             opeartionStr = [FMDBShareManager alterTable:ZhiMa_User_Message_Table withOpton1:option1 andOption2:option2];
         } else {
@@ -1843,7 +1863,7 @@
     if (isExist) {
         // 存在群表 ->  更新群信息表
         NSLog(@"存在群表，需要更新");
-        NSString *option1 = [NSString stringWithFormat:@"groupName = '%@', notice = '%@', myGroupName = '%@',showMemberName = '%@'",model.groupName,model.notice,model.myGroupName,@(model.showMemberName)];
+        NSString *option1 = [NSString stringWithFormat:@"groupName = '%@', notice = '%@', myGroupName = '%@',showMemberName = '%@' groupAvtar = '%@'",model.groupName,model.notice,model.myGroupName,@(model.showMemberName),model.groupAvtar];
         NSString *option2 = [NSString stringWithFormat:@"groupId = '%@'",converseID];
         opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMessage_Table withOpton1:option1 andOption2:option2];
     } else {
@@ -1855,7 +1875,7 @@
     //#define GroupChat_MessageFields_name @"groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
     // 创建/更新 群信息表
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:opeartionStr,model.groupId,model.groupName,model.notice,@(model.topChat),@(model.disturb),@(model.saveToMailList),model.myGroupName,@(model.saveToMailList)];
+        BOOL success = [db executeUpdate:opeartionStr,model.groupId,model.groupName,model.notice,@(model.topChat),@(model.disturb),@(model.saveToMailList),model.myGroupName,@(model.saveToMailList),model.groupAvtar];
         if (success) {
             NSLog(@"创建/更新 群信息表成功");
         }else {
