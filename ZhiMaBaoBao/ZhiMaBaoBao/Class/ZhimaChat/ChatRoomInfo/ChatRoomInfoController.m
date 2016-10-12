@@ -78,7 +78,7 @@
         ChatInfoHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:CharRoomInfoHeaderCellReusedID forIndexPath:indexPath];
         cell.delegate = self;
         cell.userName = self.converseModel.converseName;
-        cell.iconName = self.avtarUrl;
+        cell.iconName = self.converseModel.converseHead_photo;
         
         return cell;
     }

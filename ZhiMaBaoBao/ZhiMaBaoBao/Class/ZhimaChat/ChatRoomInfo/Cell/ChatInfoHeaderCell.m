@@ -45,7 +45,7 @@
     for (NSInteger index = 0; index < 2; index++) {
         UIButton *iconView = [[UIButton alloc] init];
         [self addSubview:iconView];
-        iconView.layer.cornerRadius = 10;
+        iconView.layer.cornerRadius = 5;
         iconView.clipsToBounds = YES;
         iconView.tag = index;
         CGFloat iconW = 55;
@@ -64,7 +64,7 @@
         [self addSubview:titleLabel];
         
         if (index == 1) {
-            [iconView setBackgroundImage:[UIImage imageNamed:@"NewDiscover_AddPhoto"] forState:UIControlStateNormal];
+            [iconView setBackgroundImage:[UIImage imageNamed:@"ChatAddMember"] forState:UIControlStateNormal];
             titleLabel.hidden = YES;
         }
 #warning 临时用着而已

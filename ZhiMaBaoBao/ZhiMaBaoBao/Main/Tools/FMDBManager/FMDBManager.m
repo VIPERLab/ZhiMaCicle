@@ -1173,8 +1173,9 @@
         NSString *optionStr = [NSString string];
         if (isExist) {
             NSLog(@"存在新好友");
-            
-            continue;
+            NSString *option1 = [NSString stringWithFormat:@"user_Name = '%@', user_Head_photo = '%@', status = '%@'",model.user_Name,model.user_Head_photo,@(model.status)];
+            NSString *option2 = [NSString stringWithFormat:@"user_Id = '%@'",model.user_Id];
+            optionStr = [FMDBShareManager alterTable:ZhiMa_NewFriend_Message_Table withOpton1:option1 andOption2:option2];
             
         } else {
             NSLog(@"不存在新好友，需要插入");
@@ -1184,9 +1185,9 @@
         [queue inDatabase:^(FMDatabase *db) {
             BOOL success = [db executeUpdate:optionStr,model.user_Name,model.user_Id,model.user_Head_photo,@(model.status),userId];
             if (success) {
-                NSLog(@"插入新好友成功");
+                NSLog(@"插入/更新 新好友成功");
             } else {
-                NSLog(@"插入新好友失败");
+                NSLog(@"插入/更新 新好友失败");
             }
         }];
     }

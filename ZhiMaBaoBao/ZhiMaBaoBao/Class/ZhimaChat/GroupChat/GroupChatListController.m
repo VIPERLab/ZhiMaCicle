@@ -11,6 +11,7 @@
 #import "AvtarAndNameCell.h"
 #import "CreateGroupChatController.h"
 #import "BaseNavigationController.h"
+#import "ChatController.h"
 
 @interface GroupChatListController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -121,6 +122,19 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    ConverseModel *groupModel = self.dataArr[indexPath.row];
+    
+    UserInfo *userInfo = [UserInfo shareInstance];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
+    
+    ChatController *vc = [[ChatController alloc] init];
+    vc.conversionId = groupModel.converseId;
+    vc.conversionName = groupModel.converseName;
+    vc.converseType = groupModel.converseType;
+    vc.hidesBottomBarWhenPushed = YES;
+    ConversationController *conversationVC = userInfo.conversationVC;
+    [conversationVC.navigationController pushViewController:vc animated:YES];
     
 }
 
