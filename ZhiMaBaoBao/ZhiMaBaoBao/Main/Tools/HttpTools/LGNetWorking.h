@@ -286,4 +286,7 @@
 + (void)collectionCircleListWithCollectionType:(int)collectionType andSessionId:(NSString *)sessionId andConent:(NSString *)content andSmallImg:(NSString *)smallImg andSource:(NSString *)source andAccount:(NSString *)account success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
 
+// 设置群信息
++ (void)setGroupInfoMessageWithFunctionName:(NSString *)functionName andSessionId:(NSString *)seccessId andValue:(NSString *)value andGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
 @end

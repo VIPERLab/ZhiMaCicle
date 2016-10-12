@@ -84,8 +84,8 @@
 
 - (void)setModel:(ConverseModel *)model {
     _model = model;
-    
-    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.converseHead_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+    NSString *urlStr = [NSString stringWithFormat:@"%@%@",DFAPIURL,model.converseHead_photo];
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
     
     _converseLabel.text = model.converseName;
     

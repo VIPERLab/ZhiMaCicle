@@ -54,6 +54,18 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+//    [self getDataFormSQL];
+    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
+    if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
+        self.isGroupCreater = YES;
+    }
+    
+    [self dataRequst];
+    
+    [_tableView reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -82,7 +94,9 @@
         
         [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
         
-        [self getDataFormSQL];
+        [_tableView reloadData];
+        
+//        [self getDataFormSQL];
         
     } failure:^(ErrorData *error) {
         
@@ -110,20 +124,10 @@
         self.isGroupCreater = YES;
     }
     
-    [_tableView reloadData];
+//    [_tableView reloadData];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [self getDataFormSQL];
-    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
-    if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
-        self.isGroupCreater = YES;
-    }
-    
-    [self dataRequst];
-    
-    [_tableView reloadData];
-}
+
 
 - (void)setupView {
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
