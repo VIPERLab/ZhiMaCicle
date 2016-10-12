@@ -1391,6 +1391,30 @@
 
 
 /**
+ *  是否存在这个会话
+ *
+ *  @param 会话id
+ */
+- (BOOL)isConverseIsExist:(NSString *)converseId {
+    __block BOOL isExist = NO;
+    
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSString *searchOption = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = '%@'",converseId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:searchOption];
+        while ([result next]) {
+            isExist = YES;
+        }
+        
+    }];
+    
+    
+    return isExist;
+}
+
+
+
+/**
  *  设置会话的未读数量为0
  *
  *  @param converseId 会话id

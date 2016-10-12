@@ -216,6 +216,14 @@ typedef enum : NSUInteger {
 
 
 /**
+ *  是否存在这个会话
+ *
+ *  @param 会话id
+ */
+- (BOOL)isConverseIsExist:(NSString *)converseId;
+
+
+/**
  *  根据会话id查询会话模型
  *
  *  @param converseID 会话id
