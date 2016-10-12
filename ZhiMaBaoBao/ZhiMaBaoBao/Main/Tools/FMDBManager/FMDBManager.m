@@ -1978,7 +1978,7 @@
         }
         
         [queuq inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:opeartionStr,model.groupId,model.userId,model.friend_nick,model.head_photo];
+            BOOL success = [db executeUpdate:opeartionStr,groupChatId,model.userId,model.friend_nick,model.head_photo];
             if (success) {
                 NSLog(@"插入群成员成功");
             } else {
@@ -2023,7 +2023,7 @@
 - (NSArray <GroupUserModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId {
     NSMutableArray *dataArray = [NSMutableArray array];
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = %@",groupId]];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@'",groupId]];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
