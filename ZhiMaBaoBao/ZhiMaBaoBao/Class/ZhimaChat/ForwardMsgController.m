@@ -116,6 +116,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     
     if (self.topWindow) {
         [self.topWindow resignKeyWindow];
+        self.topWindow = nil;
         UserInfo *info = [UserInfo shareInstance];
         [info.keyWindow makeKeyAndVisible];
         [LCProgressHUD showSuccessText:@"发送成功"];
@@ -229,6 +230,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
 - (void)navBackAction{
     if (self.topWindow) {
         [self.topWindow resignKeyWindow];
+        self.topWindow = nil;
         UserInfo *info = [UserInfo shareInstance];
         [info.keyWindow makeKeyAndVisible];
     }else{

@@ -127,7 +127,7 @@
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender{
     
     if(action ==@selector(copyItemClicked:)){
-        return YES;
+        return NO;
         
     }else if (action==@selector(transItemClicked:)){
         return YES;
