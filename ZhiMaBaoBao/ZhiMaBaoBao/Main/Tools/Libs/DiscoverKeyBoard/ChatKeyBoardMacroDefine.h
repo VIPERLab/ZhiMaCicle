@@ -27,6 +27,7 @@
 //表情模块高度
 #define kFacePanelHeight                216
 #define kFacePanelBottomToolBarHeight   40
+#define kFacePanelBottomWidth   50
 #define kUIPageControllerHeight         25
 
 //拍照、发视频等更多功能模块的面板的高度
