@@ -18,6 +18,8 @@
 
 @property (nonatomic, copy) NSString *head_photo;
 
+@property (nonatomic, copy) NSString *userId;
+
 @property (nonatomic, copy) NSString *username; //用户名字
 
 @end

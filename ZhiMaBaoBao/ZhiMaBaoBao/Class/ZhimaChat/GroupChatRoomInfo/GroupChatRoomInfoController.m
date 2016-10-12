@@ -49,7 +49,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self dataRequst];
+    
     [self setupView];
     
 }
@@ -77,12 +77,12 @@
         self.groupModel = groupChatModel;
         self.groupModel.myGroupName = USERINFO.username;
         
+        // 更新群信息内容
+        [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:self.converseId];
+        
         [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
-        if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
-            self.isGroupCreater = YES;
-        }
-//        [self setupView];
-        [_tableView reloadData];
+        
+        [self getDataFormSQL];
         
     } failure:^(ErrorData *error) {
         
@@ -105,16 +105,24 @@
     self.groupModel.create_time = [NSDate dateStrFromCstampTime:self.converseModel.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     self.groupModel.topChat = self.converseModel.topChat;
     self.groupModel.disturb = self.converseModel.disturb;
+    
+    if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
+        self.isGroupCreater = YES;
+    }
+    
+    [_tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-//    [self getDataFormSQL];
+    [self getDataFormSQL];
     [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
     if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
         self.isGroupCreater = YES;
     }
     
-//    [_tableView reloadData];
+    [self dataRequst];
+    
+    [_tableView reloadData];
 }
 
 - (void)setupView {

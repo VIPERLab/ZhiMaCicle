@@ -110,7 +110,10 @@
     if (sender.on) {
         [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"3" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
-
+                // 删除该会话
+                [FMDBShareManager deleteConverseWithConverseId:self.userId];
+                // 删除该好友
+//                [FMDBShareManager deleteUserMessageByUserID:self.userId];
             }else{
                 [LCProgressHUD showText:responseData.msg];
             }

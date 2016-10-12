@@ -10,6 +10,8 @@
 #import "MainViewController.h"
 #import "LGRessetPassController.h"
 
+#import "JPUSHService.h"
+
 @interface LGLoginController ()
 @property (nonatomic, strong) UITextField *phoneField;
 @property (nonatomic, strong) UITextField *passField;
@@ -160,6 +162,7 @@
             
             
             
+            [JPUSHService setAlias:USERINFO.userID callbackSelector:nil object:nil];
             
             
             
