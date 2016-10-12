@@ -124,7 +124,7 @@
     if (status == RealStatusViaWiFi)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
         UserInfo *userInfo = [UserInfo shareInstance];
         userInfo.networkUnReachable = NO;
     }
@@ -132,7 +132,7 @@
     if (status == RealStatusViaWWAN)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
         UserInfo *userInfo = [UserInfo shareInstance];
         userInfo.networkUnReachable = NO;
     }
