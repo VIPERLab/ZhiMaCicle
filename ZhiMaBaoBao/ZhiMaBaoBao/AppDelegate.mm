@@ -38,7 +38,7 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSLog(@"%@",NSHomeDirectory());
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpMainController) name:LOGIN_SUCCESS object:nil];
     
@@ -389,13 +389,21 @@
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
     /// Required - 注册 DeviceToken
-    [JPUSHService registerDeviceToken:deviceToken];
+    if (USERINFO.userID) {
+        NSLog(@"%@",USERINFO.userID);
+        [JPUSHService setAlias:USERINFO.userID callbackSelector:@selector(setAliasCallBack) object:self];
+        [JPUSHService registerDeviceToken:deviceToken];
+    }
 }
 
 // APNS 注册失败回调
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     //Optional
     NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
+}
+
+- (void)setAliasCallBack {
+    
 }
 
 
@@ -408,7 +416,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
     }
-    completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
+    completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionBadge); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
 }
 
 // iOS 10 Support

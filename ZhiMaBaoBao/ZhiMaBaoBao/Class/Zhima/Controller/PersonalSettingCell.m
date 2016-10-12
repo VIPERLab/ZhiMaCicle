@@ -34,6 +34,7 @@
     hasSubViews = YES;
     _iconView = [UIImageView new];
     _iconView.layer.cornerRadius = 5;
+    _iconView.clipsToBounds = YES;
     [self addSubview:_iconView];
     
     _titleLabel = [UILabel new];
@@ -101,7 +102,7 @@
         if (_showImage) {
             //要展示图片
             CGFloat iconX = 10;
-            CGFloat iconW = 80;
+            CGFloat iconW = 70;
             CGFloat iconH = iconW;
             CGFloat iconY = (CGRectGetHeight(self.frame) - iconH) * 0.5;
             _iconView.frame = CGRectMake(iconX, iconY, iconW, iconH);
