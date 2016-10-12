@@ -454,10 +454,16 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     //直接拉群
     if (self.selectedMembers.count == 0) {
+        
+        if (self.selectedFriends.count < 2) {   //群成员少于2个人 ， 不让建群
+            [LCProgressHUD showFailureText:@"请至少选择两个好友！"];
+            return;
+        }
+        
         NSString *userIds = [userIdArr componentsJoinedByString:@","];
         
         [LCProgressHUD showLoadingText:@"准备开始群聊..."];
-        [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds success:^(ResponseData *responseData) {
+        [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"" success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 [LCProgressHUD hide];
                 //生成群聊数据模型
@@ -489,7 +495,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             NSString *userIds = [userIdArr componentsJoinedByString:@","];
             
             [LCProgressHUD showLoadingText:@"准备开始群聊..."];
-            [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds success:^(ResponseData *responseData) {
+            [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"" success:^(ResponseData *responseData) {
                 if (responseData.code == 0) {
                     [LCProgressHUD hide];
                     //生成群聊数据模型
@@ -514,17 +520,38 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             }];
         }else{      //拉人进去
             //拼接选择好友userId
-            NSMutableArray *userIdArr = [NSMutableArray array];
+            NSMutableArray *userIdArray = [NSMutableArray array];
             for (ZhiMaFriendModel *model in self.selectedFriends) {
-                [userIdArr addObject:model.user_Id];
+                [userIdArray addObject:model.user_Id];
             }
-            NSString *userIds = [userIdArr componentsJoinedByString:@","];
+            NSString *userIds = [userIdArray componentsJoinedByString:@","];
             
-#warning 调用http 和socket接口 拉人进群  更新数据库
-        }
+            [LCProgressHUD showLoadingText:@"准备开始群聊..."];
+            [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:self.groupId success:^(ResponseData *responseData) {
+                if (responseData.code == 0) {
+                    [LCProgressHUD hide];
+                    //生成群聊数据模型
+                    [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                        return @{
+                                 @"groupUserVos":@"GroupUserModel"
+                                 };
+                    }];
+                    self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+                    self.groupChatModel.myGroupName = USERINFO.username;
+                    //保存群会话信息，插入数据库
+                    [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
 
+                    //通过socket拉人进群
+                    [[SocketManager shareInstance] addUserToGroup:self.groupChatModel.groupId uids:userIds];
+                    
+                    //跳转到群聊天页面
+                    [self jumpGroupChat];
+                }
+            } failure:^(ErrorData *error) {
+                [LCProgressHUD showFailureText:error.msg];
+            }];
+        }
     }
-    
 }
 
 - (void)jumpGroupChat{

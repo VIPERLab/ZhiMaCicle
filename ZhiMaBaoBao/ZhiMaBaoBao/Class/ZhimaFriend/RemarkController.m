@@ -33,7 +33,7 @@
     UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [rightBtn setTitle:@"保存" forState:UIControlStateNormal];
-    [rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
+    [rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     rightBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     [rightBtn addTarget:self action:@selector(sureAcion) forControlEvents:UIControlEventTouchUpInside];
     self.rightBtn = rightBtn;
@@ -71,7 +71,7 @@
 //        [self.rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
 //    }
     
-    [self.rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+//    [self.rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
 
 }
 
@@ -80,23 +80,27 @@
     
     NSString *nickName = self.textField.text;
     if (!self.textField.hasText) {
-        nickName = @" ";
+        nickName = @"";
     }
 
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_nick" value:nickName openfireAccount:self.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             //修改成功 -> 更新数据库会话表的会话名
             
-            //1.先通过id查会话
-            ConverseModel *convesion = [FMDBShareManager searchConverseWithConverseID:self.userId andConverseType:NO];
-            //2.修改会话模型的会话名
-            convesion.converseName = self.textField.text;
-            //3.更新数据库会话表
-            [FMDBShareManager saveConverseListDataWithDataArray:@[convesion]];
-            //4.更新好友表
+            //1.更新好友表
             ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.userId];
             friendModel.user_NickName = self.textField.text;
             [FMDBShareManager upDataUserMessage:friendModel];
+            
+            //2.先通过id查会话
+            ConverseModel *convesion = [FMDBShareManager searchConverseWithConverseID:self.userId andConverseType:NO];
+            //3.修改会话模型的会话名
+            convesion.converseName = self.textField.text;
+            if (!self.textField.hasText) {
+                convesion.converseName = friendModel.user_Name;
+            }
+            //4.更新数据库会话表
+            [FMDBShareManager saveConverseListDataWithDataArray:@[convesion]];
             
             
             [self.navigationController popViewControllerAnimated:YES];

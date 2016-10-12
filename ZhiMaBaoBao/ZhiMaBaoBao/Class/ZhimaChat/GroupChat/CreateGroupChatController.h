@@ -19,5 +19,7 @@
 
 @property (nonatomic, strong) NSArray *selectedMembers; //已选的群成员 userid。 （从聊天消息->建群聊）
 
-@property (nonatomic, strong) BaseViewController *fartherVC;    
+@property (nonatomic, strong) BaseViewController *fartherVC;
+
+@property (nonatomic, copy) NSString *groupId;  //已有的群拉新人进群 （旧群id）
 @end

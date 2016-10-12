@@ -64,6 +64,7 @@
         info.username = self.textField.text;
         [info save];
         [LCProgressHUD showSuccessText:@"修改成功"];
+        [[SocketManager shareInstance] updateProfile];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [LCProgressHUD hide];
             [self.navigationController popViewControllerAnimated:YES];

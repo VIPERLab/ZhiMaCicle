@@ -1534,7 +1534,7 @@
         converseModel.lastConverse = message.text;
         converseModel.converseHead_photo = userModel.user_Head_photo;
         converseModel.converseName = userModel.displayName;
-        if (message.type == MessageTypeText) {
+        if (message.type == MessageTypeText || message.type == MessageTypeSystem) {
             converseModel.lastConverse = message.text;
         }else if (message.type == MessageTypeImage){
             converseModel.lastConverse = @"[图片]";
@@ -1608,7 +1608,7 @@
     converseModel.converseHead_photo = groupModel.groupAvtar;
     converseModel.converseName = groupModel.groupName;
     
-    if (message.type == MessageTypeText) {
+    if (message.type == MessageTypeText || message.type == MessageTypeSystem) {
         converseModel.lastConverse = message.text;
     }else if (message.type == MessageTypeImage){
         converseModel.lastConverse = @"[图片]";
@@ -1642,7 +1642,7 @@
         converseModel.lastConverse = message.text;
         converseModel.converseHead_photo = groupModel.groupAvtar;
         converseModel.converseName = groupModel.groupName;
-        if (message.type == MessageTypeText) {
+        if (message.type == MessageTypeText || message.type == MessageTypeSystem) {
             converseModel.lastConverse = message.text;
         }else if (message.type == MessageTypeImage){
             converseModel.lastConverse = @"[图片]";
