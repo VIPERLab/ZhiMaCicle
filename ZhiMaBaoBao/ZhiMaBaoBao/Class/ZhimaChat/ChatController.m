@@ -47,7 +47,7 @@
 #import "NSURL+DNIMagePickerUrlEqual.h"
 
 
-@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,KXActionSheetDelegate>
+@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, pictureCellDelegate,CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,KXActionSheetDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ChatKeyBoard *keyboard;
@@ -185,6 +185,11 @@ static NSString *const reuseIdentifier = @"messageCell";
             NSArray *indexPaths = @[indexpath];
             [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            
+            if (message.type == MessageTypeImage) {
+                NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":message.text,@"fromUid":message.fromUid};
+                [self.allImagesInfo addObject:dic];
+            }
         }
 
     }
@@ -382,11 +387,11 @@ static NSString *const reuseIdentifier = @"messageCell";
 
     for (int i=0; i<marr.count; i++) {
         [self.messages insertObject:marr[i] atIndex:0];
-//        LGMessage*message = marr[i];
-//        if (message.type == MessageTypeImage) {
-//            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",(long)(self.currentPage*20 + i)],@"url":message.text};
-//            [self.allImagesInfo addObject:dic];
-//        }
+        LGMessage*message = marr[i];
+        if (message.type == MessageTypeImage) {
+            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",(long)(self.currentPage*20 + i)],@"url":message.text,@"fromUid":message.fromUid};
+            [self.allImagesInfo insertObject:dic atIndex:0];
+        }
     }
     [self.tableView reloadData];
     
@@ -410,17 +415,17 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
     
     NSMutableArray*marr =  [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
-    self.messages = (NSMutableArray *)[[marr reverseObjectEnumerator] allObjects];
+//    self.messages = (NSMutableArray *)[[marr reverseObjectEnumerator] allObjects];
     
-//    for (int i=0; i<marr.count; i++) {
-//        LGMessage*message = marr[i];
-//        [self.messages insertObject:message atIndex:0];
-//        
-//        if (message.type == MessageTypeImage) {
-//            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",(long)i],@"url":message.text};
-//            [self.allImagesInfo addObject:dic];
-//        }
-//    }
+    for (int i=0; i<marr.count; i++) {
+        LGMessage*message = marr[i];
+        [self.messages insertObject:message atIndex:0];
+        
+        if (message.type == MessageTypeImage) {
+            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",(long)i],@"url":message.text,@"fromUid":message.fromUid};
+            [self.allImagesInfo insertObject:dic atIndex:0];
+        }
+    }
 
     [self.tableView reloadData];
     // tableview 滑到底端
@@ -469,7 +474,8 @@ static NSString *const reuseIdentifier = @"messageCell";
 
         case MessageTypeImage : {
 //            rowHeight = [IMMorePictureTableViewCell getHeightWithChat:ch TopText:time nickName:nil];
-            rowHeight = needShowTime ? 140+20 : 140;
+            rowHeight = needShowTime ? 160+20 : 160;
+            
             break;
         }
         case MessageTypeAudio: {
@@ -509,34 +515,40 @@ static NSString *const reuseIdentifier = @"messageCell";
     browser.sourceImagesContainerView = grz.view.superview;
     browser.imageCount = self.subviews.count;
     browser.delegate = self;
+    browser.userId = msg.fromUid;
     [browser show];
     
     //多张图片浏览
-//    for (UIImageView*iv in self.subviews) {
-//        [iv removeFromSuperview];
-//    }
-//    
-//    [self.subviews removeAllObjects];
 //    NSUInteger index = 0;
-//    
+//    NSLog(@"grz.view.tag = %ld",grz.view.tag);
 //    for (int i=0; i<self.allImagesInfo.count; i++) {
 //        NSDictionary*dic = self.allImagesInfo[i];
-//        UIImageView*iv = [[UIImageView alloc]initWithFrame:CGRectMake(0, -100, 20, 20)];
+//        UIImageView*iv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 1, 1)];
 //        [iv sd_setImageWithURL:dic[@"url"]];
-//        [self.view addSubview:iv];
+//        [grz.view.superview addSubview:iv];
 //        [self.subviews addObject:iv];
-//        
+//        NSLog(@"grz.view.tag = %ld",[dic[@"index"] integerValue]);
+//
 //        if (grz.view.tag == [dic[@"index"] integerValue]) {
-//            index = i;
+//            index = self.allImagesInfo.count - i -1;
 //        }
 //    }
 //    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
 //    browser.currentImageIndex = index;
-//    browser.sourceImagesContainerView = self.view;
+//    browser.sourceImagesContainerView = grz.view.superview;
 //    browser.imageCount = self.subviews.count;
 //    browser.delegate = self;
+//    browser.isChat = YES;
 //    [browser show];
     
+}
+
+- (void)finishedWatch
+{
+    for (UIImageView*iv in self.subviews) {
+        [iv removeFromSuperview];
+    }
+    [self.subviews removeAllObjects];
 }
 
 #pragma mark - SDPhotoBrowserDelegate
@@ -546,6 +558,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    NSDictionary *msg = self.allImagesInfo[index];
 //    NSString*urlStr = [msg[@"url"] stringByReplacingOccurrencesOfString:@"s_" withString:@""];
     NSString*urlStr = self.currentPicUrl;
+//    browser.userId = msg[@"fromUid"];
     NSURL *url = [NSURL URLWithString:urlStr];
     return url;
 }
@@ -628,6 +641,8 @@ static NSString *const reuseIdentifier = @"messageCell";
             if (message.isSending && isMe) {
                 [textChatCell.sending startAnimating];
                 textChatCell.sendAgain.hidden = YES;
+                textChatCell.bubble.userInteractionEnabled = NO;
+
                 
             }else{
                 
@@ -635,6 +650,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                 if (message.sendStatus == 0) {
                     textChatCell.sendAgain.hidden = NO;
                     [textChatCell.sending stopAnimating];
+                    textChatCell.bubble.userInteractionEnabled = YES;
+
                     textChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
                         
                         LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
@@ -649,6 +666,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                 } else {
                     textChatCell.sendAgain.hidden = YES;
                     [textChatCell.sending stopAnimating];
+                    textChatCell.bubble.userInteractionEnabled = YES;
+
                 }
             }
             
@@ -666,7 +685,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             baseChatCell = picChatCell;
             
             picChatCell.isMe = isMe;
-            picChatCell.delegate=self;
+            picChatCell.pDelegate=self;
             picChatCell.indexPath = indexPath;
             picChatCell.picturesView.tag = indexPath.row;
             
@@ -676,6 +695,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             if (message.isSending && isMe) {
                 [picChatCell.sending startAnimating];
                 picChatCell.sendAgain.hidden = YES;
+                picChatCell.bubble.userInteractionEnabled = NO;
                 
             }else{
                 
@@ -683,6 +703,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                 if (message.sendStatus == 0) {
                     picChatCell.sendAgain.hidden = NO;
                     [picChatCell.sending stopAnimating];
+                    picChatCell.bubble.userInteractionEnabled = NO;
+
                     picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
                         
                         LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
@@ -703,6 +725,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                 } else {
                     picChatCell.sendAgain.hidden = YES;
                     [picChatCell.sending stopAnimating];
+                    picChatCell.bubble.userInteractionEnabled = YES;
+
                 }
             }
             
@@ -724,6 +748,8 @@ static NSString *const reuseIdentifier = @"messageCell";
             voiceChatCell.voiceTimeLength = [NSString stringWithFormat:@"%.2f",[AmrPlayerReader durationOfAmrFilePath:[NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text]]];
             voiceChatCell.indexPath = indexPath;
             
+            voiceChatCell.bubble.userInteractionEnabled = YES;
+
             if(!isMe) {
                 
                 if (message.is_read) {
@@ -987,29 +1013,15 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)deleteButtonTappedWithIndexPath:(NSIndexPath *)indexPath
-{
-
-}
-
 - (void)deleteTextComplete
 {
 
 }
 
-- (void)copyButtonTappedWithIndexPath:(NSIndexPath *)indexPath
+- (void)pictureCellHeightChange:(CGFloat)height indexPath:(NSIndexPath *)index
 {
+//    [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
 
-}
-
-- (void)showMyDetailsInfo:(id)sender
-{
-    
-}
-
-- (void)showUserInfoWithDixinNumber:(NSString *)dixinNumber
-{
-    
 }
 
 #pragma mark - 声音cell代理_________________________IMChatVoiceCell delegate
@@ -1306,7 +1318,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     UIImage *image = self.imagesArray[0];
     [self sendPicToServerWithImage:image index:num];
-    
 
 }
 
@@ -1325,6 +1336,9 @@ static NSString *const reuseIdentifier = @"messageCell";
             message.text = obj[@"url"];
             SocketManager* socket = [SocketManager shareInstance];
             [socket sendMessage:message];
+            
+            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":message.text,@"fromUid":message.fromUid};
+            [self.allImagesInfo addObject:dic];
             
             [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@",AUDIOPATH,message.picUrl] error:nil];
             
@@ -1356,7 +1370,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         DNAsset *dnasset = imageAssets[index];
         [lib assetForURL:dnasset.url resultBlock:^(ALAsset *asset) {
             
-            UIImage *image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage];
+            UIImage *image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
 
             if (self.imagesArray.count > 8) {
                 return ;
@@ -1372,6 +1386,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                 // 调整图片角度完毕
             }
 
+            image = [self fixOrientation:image];
+            
             [self.imagesArray removeAllObjects];
             [self.imagesArray addObject:image];
           
@@ -1385,6 +1401,77 @@ static NSString *const reuseIdentifier = @"messageCell";
     [imagePickerController dismissViewControllerAnimated:YES completion:^{
         self.tabBarController.tabBar.hidden = YES;
     }];
+}
+
+//调整照片方向
+- (UIImage *)fixOrientation:(UIImage *)aImage {
+    
+    if (aImage.imageOrientation == UIImageOrientationUp)
+        return aImage;
+    
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationDown:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+            
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformRotate(transform, M_PI_2);
+            break;
+            
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, 0, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, -M_PI_2);
+            break;
+        default:
+            break;
+    }
+    
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationUpMirrored:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+            
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.height, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+        default:
+            break;
+    }
+    
+    CGContextRef ctx = CGBitmapContextCreate(NULL, aImage.size.width, aImage.size.height,
+                                             CGImageGetBitsPerComponent(aImage.CGImage), 0,
+                                             CGImageGetColorSpace(aImage.CGImage),
+                                             CGImageGetBitmapInfo(aImage.CGImage));
+    CGContextConcatCTM(ctx, transform);
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            // Grr...
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.height,aImage.size.width), aImage.CGImage);
+            break;
+            
+        default:
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.width,aImage.size.height), aImage.CGImage);
+            break;
+    }
+    CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
+    UIImage *img = [UIImage imageWithCGImage:cgimg];
+    CGContextRelease(ctx);
+    CGImageRelease(cgimg);
+    return img;
 }
 
 - (void)dnImagePickerControllerDidCancel:(DNImagePickerController *)imagePicker {

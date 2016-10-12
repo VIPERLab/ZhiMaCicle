@@ -9,6 +9,12 @@
 #import "BaseChatTableViewCell.h"
 #import "LGMessage.h"
 
+@protocol pictureCellDelegate <NSObject>
+
+- (void)pictureCellHeightChange:(CGFloat)height indexPath:(NSIndexPath*)index;
+
+@end
+
 @interface IMMorePictureTableViewCell : BaseChatTableViewCell{
     BOOL _isMe;
 }
@@ -16,6 +22,8 @@
 @property (nonatomic, strong) UIButton      *mainView;
 @property (nonatomic, strong) UIImageView   *picturesView;
 @property (nonatomic, strong) UILabel       *botLabel;
+
+@property (nonatomic, weak)id<pictureCellDelegate>pDelegate;
 
 //聊天界面1V1
 - (void)reloadData:(LGMessage *)chat isMySelf:(BOOL)isMySelf chousePicTarget:(id)target action:(SEL)action;

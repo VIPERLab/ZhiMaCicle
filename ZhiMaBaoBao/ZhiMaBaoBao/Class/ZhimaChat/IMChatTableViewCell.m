@@ -123,21 +123,6 @@
     _chatMessageView.textColor = textColor;
 }
 
-#pragma mark override
-
-//- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
-//{
-//    return (action == @selector(copy:) || action == @selector(delete:));
-//}
-//
-//- (void)copy:(id)sender
-//{
-//    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(copyButtonTappedWithIndexPath:)])
-//    {
-//        [self.delegate copyButtonTappedWithIndexPath:self.indexPath];
-//    }
-//}
-
 - (void)layoutSubviews
 {
     [super layoutSubviews];

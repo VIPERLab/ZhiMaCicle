@@ -53,27 +53,62 @@
     if (chat.text) {
         
         [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text]];
+//        [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//            
+//            _picturesView.frameSize = [self pictureSizeToImage:_picturesView.image];
+//            [self.picturesView centerAlignHorizontalForSuperView];
+//            [self resizeBubbleView:_picturesView.frame.size];
+//            [self repositionContentViewTypePic:_picturesView];
+//            
+//            if (self.pDelegate && [self.pDelegate respondsToSelector:@selector(pictureCellHeightChange:indexPath:)]) {
+//                [self.pDelegate pictureCellHeightChange:_picturesView.frameSize.height indexPath:self.indexPath];
+//            }
+//
+//        }];
 
     }else{
         _picturesView.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.picUrl]];
+//        _picturesView.frameSize = [self pictureSizeToImage:_picturesView.image];
+//        [self.picturesView centerAlignHorizontalForSuperView];
+//        [self resizeBubbleView:_picturesView.frame.size];
+//        [self repositionContentViewTypePic:_picturesView];
+        
+//        if (self.pDelegate && [self.pDelegate respondsToSelector:@selector(pictureCellHeightChange:indexPath:)]) {
+//            [self.pDelegate pictureCellHeightChange:_picturesView.frameSize.height indexPath:self.indexPath];
+//        }
 
     }
+    
+    [self.picturesView centerAlignHorizontalForSuperView];
+    [self resizeBubbleView:_picturesView.frame.size];
+    [self repositionContentViewTypePic:_picturesView];
     
     UITapGestureRecognizer*tap = [[UITapGestureRecognizer alloc]initWithTarget:target action:action];
     [_picturesView addGestureRecognizer:tap];
     
-    [self.picturesView centerAlignHorizontalForSuperView];
+}
+
+- (CGSize)pictureSizeToImage:(UIImage*)image
+{
+
+    CGSize  imageViewSize = CGSizeMake(120, 120);
+    CGSize imgSize = image.size;
+    if (imgSize.width >= imgSize.height) {
+        
+        imageViewSize.height = 100 * imgSize.height/imgSize.width;
+    }else{
+        imageViewSize.width = 100 * imgSize.width/imgSize.height;
+
+    }
     
-    [self resizeBubbleView:_picturesView.frame.size];
-    [self repositionContentViewTypePic:_picturesView];
-    
+    return imageViewSize;
 }
 
 
 - (void)createCustomViews
 {
     //    _picturesView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth - kMainDWidth - kSpace * 2, 150)];
-    _picturesView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    _picturesView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
     _picturesView.backgroundColor = [UIColor lightGrayColor];
     _picturesView.userInteractionEnabled = YES;
     _picturesView.contentMode =  UIViewContentModeScaleAspectFill;
