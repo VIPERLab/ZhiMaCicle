@@ -268,6 +268,7 @@
         FriendProfilecontroller *friend = [[FriendProfilecontroller alloc] init];
         friend.userId = jid;
         [self.navigationController pushViewController:friend animated:YES];
+        return;
     }
     
     

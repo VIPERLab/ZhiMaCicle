@@ -38,6 +38,7 @@
     
     _userIcon = [[UIImageView alloc] init];
     _userIcon.layer.cornerRadius = 5;
+    _userIcon.clipsToBounds = YES;
     [self addSubview:_userIcon];
     
     _sexImage = [UIImageView new];

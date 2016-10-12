@@ -42,8 +42,8 @@
 - (void)setupView {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     _iconView = [UIImageView new];
-    _iconView.layer.cornerRadius = 10;
-    _iconView.image = [UIImage imageNamed:@"userIcon"];
+    _iconView.layer.cornerRadius = 5;
+    _iconView.clipsToBounds = YES;
     [self addSubview:_iconView];
     
     _converseLabel = [UILabel new];
