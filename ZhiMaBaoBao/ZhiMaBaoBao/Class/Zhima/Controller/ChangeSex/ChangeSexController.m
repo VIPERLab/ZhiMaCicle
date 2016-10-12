@@ -69,6 +69,7 @@
     } else {
         value = @"女";
     }
+    
     [LCProgressHUD showLoadingText:@"正在修改性别"];
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"sex" andChangeValue:value block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
