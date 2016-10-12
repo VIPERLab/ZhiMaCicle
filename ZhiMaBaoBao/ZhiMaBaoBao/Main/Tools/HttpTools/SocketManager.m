@@ -436,7 +436,7 @@ static SocketManager *manager = nil;
                 
                 //保存群消息到数据库
                 [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-                
+                                
                 //发送通知，刷新会话列表
                 NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
                 userInfo[@"message"] = message;

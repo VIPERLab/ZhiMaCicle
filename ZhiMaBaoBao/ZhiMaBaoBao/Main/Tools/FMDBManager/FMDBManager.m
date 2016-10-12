@@ -1964,7 +1964,7 @@
     for (GroupUserModel *model in array) {
         
         //查询是否存在该条群成员信息
-        BOOL isExist = [FMDBShareManager isGroupMemberWithGroupChatId:model.groupId andMemberId:model.userId];
+        BOOL isExist = [FMDBShareManager isGroupMemberWithGroupChatId:groupChatId andMemberId:model.userId];
         
         NSString *opeartionStr;
         if (isExist) {
