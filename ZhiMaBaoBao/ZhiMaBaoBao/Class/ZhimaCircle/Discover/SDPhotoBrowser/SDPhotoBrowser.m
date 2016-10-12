@@ -94,6 +94,10 @@
 
 // 收藏图片
 - (void)collectionImage {
+    if (self.userId.length) {
+        [LCProgressHUD showFailureText:@"请把用户id传进来"];
+        return;
+    }
     int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
     NSURL *url = [self highQualityImageURLForIndex:index];
     NSString *str = url.absoluteString;
@@ -267,9 +271,9 @@
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         params[@"imageUrl"] = [[self highQualityImageURLForIndex:index] absoluteString];
         [[NSNotificationCenter defaultCenter] postNotificationName:K_ForwardPhotoNotifation object:nil userInfo:params];
-    } else if (buttonIndex == 1) { // 收藏图片
+    } else if (buttonIndex == 1) { // 保存图片
         [self saveImage];
-    } else if (buttonIndex == 2) { // 保存图片
+    } else if (buttonIndex == 2) { // 收藏图片
         [self collectionImage];
     } else if (buttonIndex == 3) { // 取消
         

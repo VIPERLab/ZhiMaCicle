@@ -439,7 +439,7 @@
     param[@"sessionId"] = sessionId;
     param[@"groupid"] = groupId;
 
-    [HttpTool POST:@"/moblie/getGroupDetail.do" params:param success:^(ResponseData *json) {
+    [HttpTool POST:@"moblie/getGroupDetail.do" params:param success:^(ResponseData *json) {
         success(json);
     } failure:^(ErrorData *error) {
         failure(error);
@@ -838,7 +838,7 @@
     params[@"content"] = content;
     params[@"small_img"] = smallImg;
     params[@"source"] = source;
-    params[@"account"] = account;
+    params[@"oppositeId"] = account;
     
     [HttpTool POST:@"/moblie/addLoveCollection.do" params:params success:^(ResponseData *responseData) {
         successBlock(responseData);
@@ -851,7 +851,7 @@
 + (void)setGroupInfoMessageWithFunctionName:(NSString *)functionName andSessionId:(NSString *)sessionId andValue:(NSString *)value andGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;
-    params[@"roomid"] = groupId;
+    params[@"groupid"] = groupId;
     params[@"functionName"] = functionName;
     params[@"value"] = value;
     [HttpTool POST:@"/moblie/setGroupRoomTop.do" params:params success:^(ResponseData *responseData) {

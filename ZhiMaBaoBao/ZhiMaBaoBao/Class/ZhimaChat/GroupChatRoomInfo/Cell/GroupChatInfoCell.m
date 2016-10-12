@@ -94,7 +94,7 @@
     if (self.indexPath.section == 2 && self.indexPath.row == 0) {
         // 设置消息免打扰
         option1 = [NSString stringWithFormat:@"disturb = '%zd'",statusSwitch.on];
-        [self valueChangeActionWithFunctionName:@"new_msg_tip" andValut:statusSwitch.on];
+        
     } else if (self.indexPath.section == 2 && self.indexPath.row == 1) {
         // 设置消息置顶
         option1 = [NSString stringWithFormat:@"topChat = '%zd'",statusSwitch.on];
@@ -131,6 +131,10 @@
         }
         
         NSLog(@"%@",responseData.data);
+        
+        if ([functionName isEqualToString:@"new_msg_tip"]) {
+            [self valueChangeActionWithFunctionName:@"new_msg_tip" andValut:value];
+        }
         
     } failure:^(ErrorData *error) {
         
