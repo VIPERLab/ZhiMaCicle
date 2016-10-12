@@ -1918,12 +1918,12 @@
     for (GroupUserModel *model in array) {
         
         //查询是否存在该条群成员信息
-        BOOL isExist = [FMDBShareManager isGroupMemberWithGroupChatId:groupChatId andMemberId:model.userId];
+        BOOL isExist = [FMDBShareManager isGroupMemberWithGroupChatId:model.groupId andMemberId:model.userId];
         
         NSString *opeartionStr;
         if (isExist) {
             NSLog(@"存在成员信息");
-            NSString *option1 = [NSString stringWithFormat:@"memberNameInGroup = '%@', memberHeader_Photo = '%@'",model.friend_nick,model.head_photo];
+            NSString *option1 = [NSString stringWithFormat:@"memberName = '%@', memberHeader_Photo = '%@'",model.friend_nick,model.head_photo];
             NSString *option2 = [NSString stringWithFormat:@"converseId = %@ and userId = %@",groupChatId, model.userId];
             opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMenber_Table withOpton1:option1 andOption2:option2];
         } else {
@@ -1997,7 +1997,8 @@
 /**
  *  根据 用户id 查询群成员表是否有这个人
  *
- *  @param memberId 用户id
+ *  @param memberId 用户在群组的id
+ *  @param conversed 群组id
  *
  *  @return 群成员模型
  */

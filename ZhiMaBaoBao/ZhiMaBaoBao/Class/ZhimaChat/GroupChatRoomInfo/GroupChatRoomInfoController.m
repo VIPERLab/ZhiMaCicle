@@ -81,11 +81,8 @@
         [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:self.converseId];
         
         [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
-        if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
-            self.isGroupCreater = YES;
-        }
-//        [self setupView];
-        [_tableView reloadData];
+        
+        [self getDataFormSQL];
         
     } failure:^(ErrorData *error) {
         
@@ -108,6 +105,12 @@
     self.groupModel.create_time = [NSDate dateStrFromCstampTime:self.converseModel.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     self.groupModel.topChat = self.converseModel.topChat;
     self.groupModel.disturb = self.converseModel.disturb;
+    
+    if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
+        self.isGroupCreater = YES;
+    }
+    
+    [_tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
