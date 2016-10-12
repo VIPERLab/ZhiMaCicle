@@ -33,19 +33,20 @@
 
 - (void)initSubViews
 {
-    _addBtn = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    _addBtn.frame = CGRectMake(0, 0, kFacePanelBottomToolBarHeight, kFacePanelBottomToolBarHeight);
-    [_addBtn addTarget:self action:@selector(addBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_addBtn];
+    //添加按钮 暂时隐藏。 显示出来的时候记得改下面_facePickerView的frame
+//    _addBtn = [UIButton buttonWithType:UIButtonTypeContactAdd];
+//    _addBtn.frame = CGRectMake(0, 0, kFacePanelBottomToolBarHeight, kFacePanelBottomToolBarHeight);
+//    [_addBtn addTarget:self action:@selector(addBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [self addSubview:_addBtn];
     
-    _facePickerView = [[UIScrollView alloc] initWithFrame:CGRectMake(kFacePanelBottomToolBarHeight, 0, kScreenWidth-2*kFacePanelBottomToolBarHeight, kFacePanelBottomToolBarHeight)];
-//    _facePickerView.backgroundColor = GRAYCOLOR;
+//    _facePickerView = [[UIScrollView alloc] initWithFrame:CGRectMake(kFacePanelBottomToolBarHeight, 0, kScreenWidth-2*kFacePanelBottomToolBarHeight, kFacePanelBottomToolBarHeight)];
+    _facePickerView = [[UIScrollView alloc] initWithFrame:CGRectMake(5, 0, kScreenWidth-kFacePanelBottomToolBarHeight-5, kFacePanelBottomToolBarHeight)];
     [self addSubview:_facePickerView];
     
     _sendBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     _sendBtn.frame = CGRectMake(kScreenWidth-kFacePanelBottomToolBarHeight, 0, kFacePanelBottomToolBarHeight, kFacePanelBottomToolBarHeight);
     [_sendBtn setTitle:@"发送" forState:UIControlStateNormal];
-    [_sendBtn setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
+    [_sendBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     [_sendBtn addTarget:self action:@selector(sendBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_sendBtn];
     
@@ -53,7 +54,7 @@
     _setBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     _setBtn.frame = _sendBtn.frame;
     [_setBtn setTitle:@"发送" forState:UIControlStateNormal];
-    [_setBtn setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
+    [_setBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     _setBtn.hidden = YES;
     [_setBtn addTarget:self action:@selector(sendBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_setBtn];
@@ -70,7 +71,11 @@
         }
         btn.tag = i+100;
         [btn setTitle:themeM.themeDecribe forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor purpleColor] forState:UIControlStateSelected];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        [btn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+        [btn setTintColor:THEMECOLOR];
+
+
         [btn addTarget:self action:@selector(subjectPicBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         btn.frame = CGRectMake(10+i*kFacePanelBottomWidth, 0, kFacePanelBottomWidth, kFacePanelBottomToolBarHeight);
         [_facePickerView addSubview:btn];
