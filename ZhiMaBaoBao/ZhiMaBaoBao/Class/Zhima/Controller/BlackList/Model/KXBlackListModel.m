@@ -10,4 +10,10 @@
 
 @implementation KXBlackListModel
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
+    return @{
+             @"userId" : @"id"
+             };
+}
+
 @end

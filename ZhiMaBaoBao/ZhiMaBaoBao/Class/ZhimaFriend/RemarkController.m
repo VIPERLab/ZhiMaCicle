@@ -9,7 +9,7 @@
 #import "RemarkController.h"
 #import "ConverseModel.h"
 
-@interface RemarkController ()
+@interface RemarkController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIButton *rightBtn;
 @property (nonatomic, strong) UITextField *textField;
 @end
@@ -22,7 +22,10 @@
     [self setCustomTitle:@"设置备注"];
     [self setNavRightItem];
     [self addAllSubviews];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeSureBtnState) name:UITextFieldTextDidChangeNotification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self.textField becomeFirstResponder];
 }
 
 //设置导航栏右侧按钮
@@ -47,10 +50,17 @@
     UITextField *textField = [[UITextField alloc] init];
     textField.frame = CGRectMake( 10 , 0, ScreenWidth - 20 , 40);
     textField.text = self.nickName;
+    textField.delegate = self;
     textField.backgroundColor = [UIColor whiteColor];
-    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    textField.clearButtonMode = UITextFieldViewModeAlways;
     [view addSubview:textField];
     self.textField = textField;
+}
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    [self.rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+    return YES;
 }
 
 //有文字输入，更改按钮状态

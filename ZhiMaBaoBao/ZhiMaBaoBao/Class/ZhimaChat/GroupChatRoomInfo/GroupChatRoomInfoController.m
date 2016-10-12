@@ -49,7 +49,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self dataRequst];
+    
     [self setupView];
     
 }
@@ -76,6 +76,9 @@
         GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
         self.groupModel = groupChatModel;
         self.groupModel.myGroupName = USERINFO.username;
+        
+        // 更新群信息内容
+        [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:self.converseId];
         
         [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
         if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
@@ -108,13 +111,15 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-//    [self getDataFormSQL];
+    [self getDataFormSQL];
     [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
     if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
         self.isGroupCreater = YES;
     }
     
-//    [_tableView reloadData];
+    [self dataRequst];
+    
+    [_tableView reloadData];
 }
 
 - (void)setupView {

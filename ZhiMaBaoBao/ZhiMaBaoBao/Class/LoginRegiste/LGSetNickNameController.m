@@ -11,9 +11,10 @@
 #define EMAIL_REGEX @"^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$"
 
 #import "LGSetNickNameController.h"
+#import "KXActionSheet.h"
 #import "LGLoginController.h"
 
-@interface LGSetNickNameController ()<UITextFieldDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface LGSetNickNameController ()<UITextFieldDelegate,KXActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (nonatomic, strong) UITextField *nickNameField;
 @property (nonatomic, strong) UITextField *codeField;
 @property (nonatomic, strong) UIButton *nextBtn;
@@ -148,7 +149,7 @@
  *  下一步按钮点击方法 -- 登录
  */
 - (void)nextAction{
-    
+    [self.view endEditing:YES];
     if (!self.nickNameField.hasText) {
         [LCProgressHUD showText:@"请填写昵称"];
 
@@ -175,32 +176,29 @@
  *  选择图片上传头像
  */
 - (void)selectAvtar{
-    UIActionSheet *sheet;
+    KXActionSheet *sheet;
     // 判断是否支持相机
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
     {
-        sheet  = [[UIActionSheet alloc] initWithTitle:@"选择操作"
-                                             delegate:self
-                                    cancelButtonTitle:@"取消"
-                               destructiveButtonTitle:nil
-                                    otherButtonTitles:@"拍照上传", @"从相册选择", nil];
+        sheet  = [[KXActionSheet alloc] initWithTitle:@"选择操作" cancellTitle:@"取消" andOtherButtonTitles:@[@"拍照上传",@"从相册选择"]];
+//                  initWithTitle:@"选择操作"
+//                                             delegate:self
+//                                    cancelButtonTitle:@"取消"
+//                               destructiveButtonTitle:nil
+//                                    otherButtonTitles:@"拍照上传", @"从相册选择", nil];
     }
     else {
-        sheet = [[UIActionSheet alloc] initWithTitle:@"选择操作"
-                                            delegate:self
-                                   cancelButtonTitle:@"取消"
-                              destructiveButtonTitle:nil
-                                   otherButtonTitles:@"从相册选择", nil];
+        sheet  = [[KXActionSheet alloc] initWithTitle:@"选择操作" cancellTitle:@"取消" andOtherButtonTitles:@[@"从相册选择"]];
     }
     sheet.tag = 200;
-    [sheet showInView:self.view];
+    sheet.delegate = self;
+    [sheet show];
 
 }
 
 #pragma mark - action sheet delegte
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet.tag == 200) {
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)buttonIndex {
+    if (sheet.tag == 200) {
         
         NSUInteger sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         // 判断是否支持相机
@@ -235,8 +233,7 @@
     }
 }
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -253,7 +250,7 @@
     UserInfo *userInfo = [UserInfo read];
 
     [LGNetWorking uploadPhoto:userInfo.sessionId image:imageData fileName:@"headPhoto" andFuctionName:@"headPhoto" block:^(ResponseData *obj) {
-        [LCProgressHUD hide];
+//        [LCProgressHUD hide];
         if (obj.code == 0) {
             //上传成功 ，保存图片路径
             userInfo.head_photo = obj.data;

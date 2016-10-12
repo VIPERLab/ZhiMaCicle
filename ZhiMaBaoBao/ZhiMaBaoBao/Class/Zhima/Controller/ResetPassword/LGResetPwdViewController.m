@@ -187,6 +187,11 @@
         return;
     }
     
+    if ([self.oldPassword.text isEqualToString:self.password.text]) {
+        [LCProgressHUD showText:@"新旧密码不能一致"];
+        return;
+    }
+    
     [LGNetWorking resetPassword:USERINFO.sessionId phone:USERINFO.uphone oldPass:titleF newPass:onepwd reNewpass:twoPsw block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD showText:@"修改成功"];

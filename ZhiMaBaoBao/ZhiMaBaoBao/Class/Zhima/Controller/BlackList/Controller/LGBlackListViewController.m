@@ -8,7 +8,7 @@
 
 #import "LGBlackListViewController.h"
 #import "KXBlackListModel.h"
-//#import "YiUserInfoViewController.h"
+#import "FriendProfilecontroller.h"
 #import "KXBlackListCell.h"
 
 
@@ -42,9 +42,8 @@
         [self.dataArray removeAllObjects];
     }
     
-    NSString *url = [NSString stringWithFormat:@"%@/moblie/getfriendByuserId_type.do",DFAPIURL];
+    NSString *url = [NSString stringWithFormat:@"%@/moblie/getFirendListByfriend_type.do",DFAPIURL];
     NSString *sessionId = USERINFO.sessionId;
-    NSString *userID = USERINFO.userID;
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer.timeoutInterval = 30.f;
@@ -52,17 +51,24 @@
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;
-    params[@"userId"] = userID;
     params[@"friend_type"] = @"3";
     [manager POST:url parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         ResponseData *data = [ResponseData mj_objectWithKeyValues:responseObject];
-        if (data.code != 0) {
+        
+        if (data.code == 23) {  // 没有数据
+            [self.dataArray removeAllObjects];
+            [self.tableView reloadData];
+            return ;
+        }
+        
+        if (data.code != 0) { // 请求失败
             [LCProgressHUD showFailureText:data.msg];
             return ;
         }
         
         NSArray *dataArray = [KXBlackListModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"]];
+        
         
         for (KXBlackListModel *model in dataArray) {
             if (model.friend_type == 3) {
@@ -112,7 +118,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 30;
+        return 20;
     }
     return 0;
 }
@@ -120,12 +126,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    KXBlackListModel *model = self.dataArray[indexPath.row];
-//    NSString *jid = [NSString stringWithFormat:@"%@@localhost",model.openfireaccount];
-//    YiUserInfoViewController *info = [[YiUserInfoViewController alloc] init];
-//    info.jid = jid;
-//    info.fromBlackList = YES;
-//    [self.navigationController pushViewController:info animated:YES];
+    KXBlackListModel *model = self.dataArray[indexPath.row];
+    
+    FriendProfilecontroller *friend = [[FriendProfilecontroller alloc] init];
+    friend.userId = model.userId;
+    [self.navigationController pushViewController:friend animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
