@@ -24,6 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self hiddenBackBtn];
     [self setUI];
 }
 
@@ -159,13 +160,13 @@
     UserInfo *userInfo = [UserInfo read];
     //保存昵称，头像，邀请码
     [LGNetWorking saveUserInfo:userInfo.sessionId headUrl:userInfo.head_photo nickName:self.nickNameField.text inviteCode:self.codeField.text block:^(ResponseData *obj) {
-        [LCProgressHUD hide];
         if (obj.code == 0) {
+            [LCProgressHUD hide];
             //跳转到登录页面
             LGLoginController *vc = [[LGLoginController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         }else{
-            [LCProgressHUD showText:obj.msg];
+            [LCProgressHUD showFailureText:obj.msg];
         }
     }];
    
@@ -253,14 +254,14 @@
     UserInfo *userInfo = [UserInfo read];
 
     [LGNetWorking uploadPhoto:userInfo.sessionId image:imageData fileName:@"headPhoto" andFuctionName:@"headPhoto" block:^(ResponseData *obj) {
-        [LCProgressHUD hide];
         if (obj.code == 0) {
+            [LCProgressHUD hide];
             //上传成功 ，保存图片路径
             userInfo.head_photo = obj.data;
             [userInfo save];
             self.avtarImage.image = image;
         }else{
-            [LCProgressHUD showText:obj.msg];
+            [LCProgressHUD showFailureText:obj.msg];
         }
     }];
     

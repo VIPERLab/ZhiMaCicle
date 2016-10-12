@@ -32,7 +32,7 @@ typedef NS_OPTIONS(NSUInteger, GroupActType) {
 //好友操作类型  --  用来生成发送给socket数据包
 typedef NS_OPTIONS(NSUInteger, FriendActType) {
     FriendActTypeAdd   = 0,     //添加好友
-//    FriendActTypeDel,           //删除好友
+    FriendActTypeAgreee,        //同意好友请求
     FriendActTypeBlack,         //加入黑名单
     FriendActTypeUpdate         //好友资料更新
 };
@@ -132,6 +132,13 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  *  @param friendId 好友id
  */
 - (void)addFriend:(NSString *)friendId;
+
+/**
+ *  同意好友请求
+ *
+ *  @param friendId 好友id
+ */
+- (void)agreeFriendRequest:(NSString *)friendId;
 
 //直接调用https接口
 ///**

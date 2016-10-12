@@ -86,11 +86,11 @@
     if (buttonIndex == 1) {
         //删除好友 删除会话 清除聊天记录
         [LCProgressHUD showLoadingText:@"请稍等..."];
-        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"0" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+        [LGNetWorking deleteFriend:USERINFO.sessionId friendId:self.friendInfo.user_Id success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 [LCProgressHUD hide];
+                
                 //从数据库删除会话 -- 删除好友列表
-//                [[SocketManager shareInstance] delFriend:self.friendInfo.user_Id];
                 [FMDBShareManager deleteConverseWithConverseId:self.friendInfo.user_Id];
                 [FMDBShareManager deleteUserMessageByUserID:self.friendInfo.user_Id];
                 [self.navigationController popToRootViewControllerAnimated:YES];
@@ -98,6 +98,9 @@
             }else{
                 [LCProgressHUD showFailureText:responseData.msg];
             }
+
+        } failure:^(ErrorData *error) {
+            [LCProgressHUD showFailureText:error.msg];
         }];
     }
 }

@@ -682,6 +682,20 @@
     }];
 }
 
+//删除好友
++ (void)deleteFriend:(NSString *)sessionId friendId:(NSString *)friendId success:(SuccessfulBlock)success failure:(FailureBlock)failure{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"sessionId"] = sessionId;
+    param[@"friendid"] = friendId;
+
+    [HttpTool POST:@"/moblie/detelefriend.do" params:param success:^(ResponseData *json) {
+        success(json);
+    } failure:^(ErrorData *error) {
+        failure(error);
+    }];
+
+}
+
 /**
  *   查询手机联系人是否开通活芝麻、 或已添加
  *

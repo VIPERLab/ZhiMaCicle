@@ -92,6 +92,9 @@
 //更新未读消息
 #define kUpdateUnReadMessage @"kUpdateUnReadMessage"
 
+//对方同意我的好友请求
+#define kOtherAgreeMyFrendRequest @"kOtherAgreeMyFrendRequest"
+
 
 
 #endif /* KNotificationManager_h */

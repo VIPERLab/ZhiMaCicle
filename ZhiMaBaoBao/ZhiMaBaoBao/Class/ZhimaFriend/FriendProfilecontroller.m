@@ -16,6 +16,7 @@
 #import "SocketManager.h"
 #import "LGCallingController.h"
 #import "PesonalDiscoverController.h"
+#import "NSString+MsgId.h"
 
 @interface FriendProfilecontroller ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -89,6 +90,9 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             [self setupNavRightItem];
             [self.tableView reloadData];
             
+            //更新好友表
+            [FMDBShareManager upDataUserMessage:self.friend];
+            
             if (addSqlit) {
                 //插入好友到数据库
                 //添加好友成功 -- 更新数据库 新的好友表  和好友表
@@ -127,7 +131,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     else if (indexPath.section == 1){   //手机号
         InfoContentCell *cell = [tableView dequeueReusableCellWithIdentifier:textIdentifier];
         cell.cellTitle.text = @"手机号";
-        if (!self.friendType) { //不是好友，不显示手机号码
+        if (self.friendType) { //不是好友，不显示手机号码
            cell.cellContent.text = self.friend.uphone;
         }
         cell.separtor.hidden = YES;
@@ -286,6 +290,10 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     else if (self.friendType == FriendTypeNew){     //同意好友请求
         [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
+                //将好友加入数据库好友列表
+                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend]];
+                [[SocketManager shareInstance] agreeFriendRequest:self.userId];
+                [self addSystemMsgToSqlite:self.friend];
                 //重新加载数据 -> 刷新
                 [self requestFriendProfile:YES];
             }else{
@@ -294,6 +302,19 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         }];
     }
 
+}
+
+//添加系统消息"你已添加了xx,现在可以开始聊天了"
+- (void)addSystemMsgToSqlite:(ZhiMaFriendModel *)friend{
+    LGMessage *systemMsg = [[LGMessage alloc] init];
+    systemMsg.text = [NSString stringWithFormat:@"你已添加了%@,现在可以开始聊天了。",friend.user_Name];
+    systemMsg.fromUid = USERINFO.userID;
+    systemMsg.toUidOrGroupId = friend.user_Id;
+    systemMsg.type = MessageTypeSystem;
+    systemMsg.msgid = [NSString generateMessageID];
+    systemMsg.isGroup = NO;
+    systemMsg.timeStamp = [NSDate currentTimeStamp];
+    [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
 }
 
 /**

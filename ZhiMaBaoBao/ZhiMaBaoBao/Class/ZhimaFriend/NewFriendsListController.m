@@ -12,6 +12,8 @@
 #import "NewFriendListHeadCell.h"
 #import "LGSearchResultController.h"
 #import "FriendProfilecontroller.h"
+#import "SocketManager.h"
+#import "NSString+MsgId.h"
 
 @interface NewFriendsListController ()<UITableViewDelegate,UITableViewDataSource,LGSearchBarDelegate,NewFriendsListCellDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -99,6 +101,12 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
+            [FMDBShareManager saveUserMessageWithMessageArray:@[friend]];
+            [[SocketManager shareInstance] agreeFriendRequest:friend.user_Id];
+            
+            //添加系统消息"你已添加了xx,现在可以开始聊天了"
+            [self addSystemMsgToSqlite:friend];
+
             //添加好友成功 -- 更新数据库 新的好友表  和好友表
             friend.status = YES;
             [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
@@ -109,6 +117,19 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
             [LCProgressHUD showText:responseData.msg];
         }
     }];
+}
+
+//添加系统消息"你已添加了xx,现在可以开始聊天了"
+- (void)addSystemMsgToSqlite:(ZhiMaFriendModel *)friend{
+    LGMessage *systemMsg = [[LGMessage alloc] init];
+    systemMsg.text = [NSString stringWithFormat:@"你已添加了%@,现在可以开始聊天了。",friend.user_Name];
+    systemMsg.fromUid = USERINFO.userID;
+    systemMsg.toUidOrGroupId = friend.user_Id;
+    systemMsg.type = MessageTypeSystem;
+    systemMsg.msgid = [NSString generateMessageID];
+    systemMsg.isGroup = NO;
+    systemMsg.timeStamp = [NSDate currentTimeStamp];
+    [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
 }
 
 #pragma mark - tableView 代理方法
