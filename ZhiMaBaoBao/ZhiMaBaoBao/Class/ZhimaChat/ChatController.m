@@ -163,7 +163,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)recievedNewMessage:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo;
-    LGMessage *message  = userInfo[@"message"];
+    LGMessage *message = userInfo[@"message"];
         
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
     //
@@ -190,10 +190,14 @@ static NSString *const reuseIdentifier = @"messageCell";
                 NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":message.text,@"fromUid":message.fromUid};
                 [self.allImagesInfo addObject:dic];
             }
+            
+            //如果是更新群名称，即使更新群名称
+            if (message.actType == ActTypeRenamegroup) {
+                NSString *groupName = userInfo[@"otherMsg"];
+                [self setCustomTitle:groupName];
+            }
         }
-
     }
-    
 }
 //消息发送状态回调
 - (void)sendMsgStatuescall:(NSNotification *)notification{

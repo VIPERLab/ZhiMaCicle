@@ -122,5 +122,11 @@
 //通知头文件
 #import "KNotificationManager.h"
 
+#ifndef __OPTIMIZE__
+#define NSLog(...)  NSLog(__VA_ARGS__)
+#else
+#define NSLog(...) {}
+#endif
+
 
 #endif /* Constant_h */

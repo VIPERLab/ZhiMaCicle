@@ -395,11 +395,11 @@ static SocketManager *manager = nil;
 - (void)deleteGroupUser:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
     LGMessage *systemMsg = [[LGMessage alloc] init];
     //从群表去用户数据
-    GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uids andConverseId:groupId];
     if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
+        GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uids andConverseId:groupId];
         systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移出了群聊",model.friend_nick];
     }else{
-
+        GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
         systemMsg.text = [NSString stringWithFormat:@"你被\"%@\"移出了群聊",model.friend_nick];
     }
     
@@ -511,6 +511,7 @@ static SocketManager *manager = nil;
                 //发送通知，即时更新相应的页面
                 NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
                 userInfo[@"message"] = systemMsg;
+                userInfo[@"otherMsg"] = groupName;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
                 
             }
@@ -541,6 +542,7 @@ static SocketManager *manager = nil;
         //发送通知，即时更新相应的页面
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         userInfo[@"message"] = systemMsg;
+        userInfo[@"otherMsg"] = groupName;
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
     }
 }
