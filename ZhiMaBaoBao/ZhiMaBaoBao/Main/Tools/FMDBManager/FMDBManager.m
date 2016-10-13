@@ -1887,16 +1887,22 @@
     
     [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
     
+    
     // 更新会话
-    ConverseModel *converseModel = [[ConverseModel alloc] init];
-    converseModel.time = [NSDate cTimestampFromString:model.create_time format:@"yyyy-MM-dd HH:mm:ss"];
-    converseModel.converseType = 1;
-    converseModel.converseId = model.groupId;
-    converseModel.unReadCount = 0;
-    converseModel.converseName = model.groupName;
-    converseModel.converseHead_photo = model.groupAvtar;
-    converseModel.lastConverse = @" ";
-    [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel]];
+    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:1];
+    if (converseModel.time) {
+        converseModel.converseName = model.groupName;
+    } else {
+        converseModel.time = [NSDate cTimestampFromString:model.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+        converseModel.converseType = 1;
+        converseModel.converseId = model.groupId;
+        converseModel.unReadCount = 0;
+        converseModel.converseName = model.groupName;
+        converseModel.converseHead_photo = model.groupAvtar;
+        converseModel.lastConverse = @" ";
+
+    }
+        [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel]];
     return isSuccess;
 }
 

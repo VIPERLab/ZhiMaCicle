@@ -101,7 +101,7 @@
         footer.delegate = self;
         _tableView.tableFooterView = footer;
         [_tableView reloadData];
-        
+     
 //        [self getDataFormSQL];
         
     } failure:^(ErrorData *error) {
@@ -119,8 +119,6 @@
     footer.delegate = self;
     _tableView.tableFooterView = footer;
     [_tableView reloadData];
-    
-    
 }
 
 - (void)isGroupCreater:(NSString *)GrouperID {
@@ -142,7 +140,7 @@
         self.isGroupCreater = YES;
     }
     
-//    [_tableView reloadData];
+    [_tableView reloadData];
 }
 
 
@@ -154,10 +152,10 @@
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-//    // 设置尾部
-//    GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
-//    footer.delegate = self;
-//    _tableView.tableFooterView = footer;
+    // 设置尾部
+    GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
+    footer.delegate = self;
+    _tableView.tableFooterView = footer;
     
     // 注册cell
     [_tableView registerClass:[GroupChatInfoCell class] forCellReuseIdentifier:GroupChatRoomInfoCellReusedID];
@@ -370,16 +368,12 @@
 
 #pragma mark - lazyLoad
 - (NSArray *)titleArray {
-    if (self.groupModel) {
-        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
-    }
+    _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
     return _titleArray;
 }
 
 - (NSArray *)subTitleArray {
-    if (self.groupModel) {
-        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode"],@[@"",@""],@[@""]];
-    }
+    _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode"],@[@"",@""],@[@""]];
     return _subTitleArray;
 }
 

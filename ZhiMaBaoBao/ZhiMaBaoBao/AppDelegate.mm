@@ -242,9 +242,6 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    
     // 关闭sorket
     [[SocketManager shareInstance] disconnect];
     // 进入后台时，注册极光推送
@@ -257,6 +254,8 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+    // 开启sorket
+    [[SocketManager shareInstance] connect];
     
     //计算是否超过设置邀请码的有效期
     if (USERINFO.sessionId && ![USERINFO.create_time isEqualToString:@""] && USERINFO.create_time!= nil) {
