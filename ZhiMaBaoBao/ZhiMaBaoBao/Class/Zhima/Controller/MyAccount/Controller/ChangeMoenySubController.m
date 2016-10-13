@@ -51,7 +51,7 @@
     
     CGFloat titleX = 10;
     CGFloat titleH = 30;
-    CGFloat titleW = 60;
+    CGFloat titleW = 80;
     CGFloat titleY =( CGRectGetHeight(view1.frame) - titleH )* 0.5;
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleX, titleY, titleW, titleH)];
     titleLabel.text = @"提现微信";

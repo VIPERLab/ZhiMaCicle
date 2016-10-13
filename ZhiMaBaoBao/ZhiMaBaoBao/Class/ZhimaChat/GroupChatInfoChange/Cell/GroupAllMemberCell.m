@@ -35,6 +35,7 @@
 }
 
 - (void)setupView {
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
     _iconView = [UIImageView new];
     [self addSubview:_iconView];
     
@@ -46,6 +47,7 @@
     [self addSubview:_bottomLineView];
     
     _deletedButton = [UIButton new];
+    [_deletedButton addTarget:self action:@selector(deletedButtonDidClick) forControlEvents:UIControlEventTouchUpInside];
     [_deletedButton setImage:[UIImage imageNamed:@"DelGroupMember_button"] forState:UIControlStateNormal];
     [self addSubview:_deletedButton];
 }
@@ -65,6 +67,13 @@
     
 }
 
+
+- (void)deletedButtonDidClick {
+    if ([self.delegate respondsToSelector:@selector(GroupAllMemberCellDelegateDeletedButtonDidClick:andCell:)]) {
+        [self.delegate GroupAllMemberCellDelegateDeletedButtonDidClick:self.model andCell:self];
+    }
+}
+
 - (void)layoutSubviews {
     
     CGFloat iconX = 20;
@@ -79,7 +88,7 @@
     CGFloat nameH = CGRectGetHeight(self.frame);
     _nameLabel.frame = CGRectMake(nameX, nameY, nameW, nameH);
     
-    CGFloat deletedW = 30;
+    CGFloat deletedW = 25;
     CGFloat deletedH = deletedW;
     CGFloat deletedX = ScreenWidth - deletedW - 30;
     CGFloat deletedY = (CGRectGetHeight(self.frame) - deletedH) * 0.5;

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "GroupUserModel.h"
+@class GroupUserModel,GroupAllMemberCell;
+@protocol GroupAllMemberCellDelegate <NSObject>
+
+- (void)GroupAllMemberCellDelegateDeletedButtonDidClick:(GroupUserModel *)model andCell:(GroupAllMemberCell *)cell;
+
+@end
 
 @interface GroupAllMemberCell : UITableViewCell
 
@@ -15,6 +21,8 @@
 
 // 是否是删除样式
 @property (nonatomic, assign) BOOL isDeletedMembers;
+
+@property (nonatomic, weak) id <GroupAllMemberCellDelegate> delegate;
 
 
 @end

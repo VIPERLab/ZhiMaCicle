@@ -252,7 +252,7 @@
         //全部成员
         NSLog(@"全部群成员");
         GroupChatAllMembersController *members = [[GroupChatAllMembersController alloc] init];
-        members.membersArray = self.groupModel.groupUserVos;
+        members.membersArray = [self.groupModel.groupUserVos mutableCopy];
         [self.navigationController pushViewController:members animated:YES];
         
     } else if (indexPath.section == 1 && indexPath.row == 0) {
@@ -369,7 +369,7 @@
 - (void)GroupChatInfoHeaderCellDelegateDidClickDeletedMembers {
     NSLog(@"点击了删除好友");
     GroupChatAllMembersController *members = [[GroupChatAllMembersController alloc] init];
-    members.membersArray = self.groupModel.groupUserVos;
+    members.membersArray = [self.groupModel.groupUserVos mutableCopy];
     members.isDeletedMembers = YES;
     [self.navigationController pushViewController:members animated:YES];
 }
