@@ -1863,7 +1863,7 @@
     if (isExist) {
         // 存在群表 ->  更新群信息表
         NSLog(@"存在群表，需要更新");
-        NSString *option1 = [NSString stringWithFormat:@"groupName = '%@', notice = '%@', myGroupName = '%@',showMemberName = '%@' groupAvtar = '%@'",model.groupName,model.notice,model.myGroupName,@(model.showMemberName),model.groupAvtar];
+        NSString *option1 = [NSString stringWithFormat:@"groupName = '%@', notice = '%@', myGroupName = '%@', showMemberName = '%@', groupAvtar = '%@'",model.groupName,model.notice,model.myGroupName,@(model.showMemberName),model.groupAvtar];
         NSString *option2 = [NSString stringWithFormat:@"groupId = '%@'",converseID];
         opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMessage_Table withOpton1:option1 andOption2:option2];
     } else {
