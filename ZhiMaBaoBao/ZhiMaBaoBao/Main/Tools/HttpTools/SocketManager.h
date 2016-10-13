@@ -155,9 +155,5 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  */
 - (void)dragToBlack:(NSString *)friendId;
 
-/**
- *  用户修改资料，只能用于更新自己的资料
- */
-- (void)updateProfile;
 
 @end

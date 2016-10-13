@@ -285,10 +285,11 @@ static SocketManager *manager = nil;
         }
         else if ([actType isEqualToString:@"deluserfromgroup"]){   //从群组中删除用户
             NSDictionary *resDic = responceData[@"data"];
-            NSString *uids = resDic[@"uids"];
+            NSString *uids = resDic[@"uids"];   //移除好友的uid
             NSString *groupId = resDic[@"groupid"];
+            NSString *actUid = resDic[@"actuid"];   //操作者uid
             
-//            [self deleteGroupUser];
+            [self deleteGroupUser:groupId actUid:actUid uids:uids];
         }
         else if ([actType isEqualToString:@"renamegroup"]){   //重命名群组
             //更新数据库群名称，添加一条系统消息"xx修改群名为"xxx""
@@ -389,6 +390,36 @@ static SocketManager *manager = nil;
         }
     }
 }
+
+//收到从群组删除用户 actuid:操作者id   uids:被删除用户的id
+- (void)deleteGroupUser:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
+    LGMessage *systemMsg = [[LGMessage alloc] init];
+    //从群表去用户数据
+    GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uids andConverseId:groupId];
+    if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
+        systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移出了群聊",model.friend_nick];
+    }else{
+
+        systemMsg.text = [NSString stringWithFormat:@"你被\"%@\"移出了群聊",model.friend_nick];
+    }
+    
+    //发送系统消息 你邀请"xx"加入群聊
+    systemMsg.actType = ActTypeDeluserfromgroup;
+    systemMsg.fromUid = USERINFO.userID;
+    systemMsg.toUidOrGroupId = groupId;
+    systemMsg.type = MessageTypeSystem;
+    systemMsg.msgid = [NSString generateMessageID];
+    systemMsg.isGroup = YES;
+    systemMsg.timeStamp = [NSDate currentTimeStamp];
+    [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
+    
+    //发送通知，即时更新相应的页面
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    userInfo[@"message"] = systemMsg;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+
+}
+
 
 //收到拉人进群消息  actuid:操作者id   uids:被邀请用户的id
 - (void)updateGroupNumber:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
@@ -901,7 +932,7 @@ static SocketManager *manager = nil;
         dataDic[@"uid"] = USERINFO.userID;
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&groupname=%@&uid=%@&%@",controllerName,methodName,groupId,uids,USERINFO.userID,APIKEY];
     }
-    else if (type == GroupActTypeAddUser || type == GroupActTypeCreate){
+    else if (type == GroupActTypeAddUser || type == GroupActTypeCreate || type == GroupActTypeDelUser){
         dataDic[@"uids"]= uids;
         dataDic[@"actuid"] = USERINFO.userID; //操作者的uid
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&actuid=%@&groupid=%@&uids=%@&%@",controllerName,methodName,USERINFO.userID,groupId,uids,APIKEY];
