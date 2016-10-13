@@ -243,6 +243,9 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     
     if ([model.userId isEqualToString:USERINFO.userID]) {
         [_complainButton setTitle:@"删除" forState:UIControlStateNormal];
+    }else{
+        [_complainButton setTitle:@"投诉" forState:UIControlStateNormal];
+
     }
     
     if (_copyView) {

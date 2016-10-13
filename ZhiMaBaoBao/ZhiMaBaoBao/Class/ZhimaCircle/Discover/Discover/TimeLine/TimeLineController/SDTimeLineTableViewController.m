@@ -270,7 +270,11 @@
                                 [self.tableView.mj_footer endRefreshing];
                                 [self.tableView reloadData];
                                 [self.tableView reloadDataWithExistedHeightCache];
+                            }else{
+                                [self.tableView.mj_footer endRefreshing];
+                                self.tableView.mj_footer.state = MJRefreshStateNoMoreData;
                             }
+
                         });
                         
                     });

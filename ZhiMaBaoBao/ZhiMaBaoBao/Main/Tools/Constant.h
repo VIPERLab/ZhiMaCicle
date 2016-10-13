@@ -23,9 +23,11 @@
 #define BLACKCOLOR      RGB(0,0,0)
 #define THEMECOLOR      RGB(249,80,87)
 #define SEPARTORCOLOR   RGB(228, 229, 230)
-#define BGCOLOR         RGB(230, 230, 230)
+#define BGCOLOR         htmlColor(@"efeff4")//RGB(230, 230, 230)
 #define GRAYCOLOR       RGB(154,154,154)
 #define ClearColor      [UIColor clearColor]
+
+#define htmlColor(x)       [UIColor colorWithHexString:x]
 
 
 //字体宏定义
@@ -95,6 +97,7 @@
 #import "UIView+Helpers.h"
 #import "NSString+Helpers.h"
 #import "NSString+Extension.h"
+#import "UIColor+HtmlColorConvert.h"
 
 #import "KXCodingManager.h"
 
