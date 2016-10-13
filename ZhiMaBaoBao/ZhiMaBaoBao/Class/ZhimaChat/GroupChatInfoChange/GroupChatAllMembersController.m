@@ -59,7 +59,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     
     if (self.isDeletedMembers) {
-//        [self setCustomTitle:@"删除成员"];
+        [self setCustomTitle:@"删除成员"];
 //        [rightBtn setTitle:@"删除" forState:UIControlStateNormal];
 //        [rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
 //        [rightBtn addTarget:self action:@selector(delGroupMembers) forControlEvents:UIControlEventTouchUpInside];
@@ -80,6 +80,7 @@
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [_tableView registerClass:[GroupAllMemberCell class] forCellReuseIdentifier:GroupChatMembersCellReusedID];
     

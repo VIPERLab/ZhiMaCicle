@@ -32,16 +32,20 @@
 
 - (void)setModelArray:(NSArray<GroupUserModel *> *)modelArray {
     _modelArray = modelArray;
+    
     [self setupView];
 }
 
 - (void)setupView {
     
+    for (UIView *view in self.subviews) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            [view removeFromSuperview];
+        }
+    }
+    
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    if (self.subviews.count > 1) {
-        return;
-    }
     
     CGFloat iconW = (ScreenWidth - 20 * 5) / 4;
     CGFloat iconH = iconW;
