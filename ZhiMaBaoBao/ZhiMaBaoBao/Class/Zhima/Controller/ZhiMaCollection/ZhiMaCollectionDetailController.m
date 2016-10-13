@@ -11,6 +11,8 @@
 #import "SDWebImageManager.h"
 #import "KXActionSheet.h"
 
+#import "ForwardMsgController.h"
+
 @interface ZhiMaCollectionDetailController () <KXActionSheetDelegate>
 
 @end
@@ -121,7 +123,22 @@
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
     if (index == 0) {
         // 发给朋友
+        LGMessage *message = [[LGMessage alloc] init];
+        message.msgid = [NSString generateMessageID];
         
+        if (self.model.content.length) {
+            message.type = MessageTypeText;
+            message.text = self.model.content;
+        } else {
+            message.type = MessageTypeImage;
+            message.text = [NSString stringWithFormat:@"%@%@",DFAPIURL,self.model.photoUrl];
+            message.picUrl = [NSString stringWithFormat:@"%@%@",DFAPIURL,self.model.photoUrl];
+        }
+        
+        ForwardMsgController *vc = [[ForwardMsgController alloc] init];
+        vc.message = message;
+        BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+        [self presentViewController:nav animated:YES completion:nil];
     } else if (index == 1) {
         // 删除
         [LGNetWorking deletedCircleCollectionWithSessionId:USERINFO.sessionId andCollectionId:self.model.ID success:^(ResponseData *responseData) {
