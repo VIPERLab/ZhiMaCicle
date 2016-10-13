@@ -35,6 +35,7 @@
 }
 
 - (void)setupView {
+    self.backgroundColor = [UIColor whiteColor];
     _userIcon = [UIImageView new];
     [self addSubview:_userIcon];
     
@@ -54,6 +55,8 @@
     [self addSubview:_timeLabel];
     
     _picImageView = [UIImageView new];
+    _picImageView.contentMode = UIViewContentModeScaleAspectFill;
+    _picImageView.clipsToBounds = YES;
     [self addSubview:_picImageView];
     
 }
@@ -61,7 +64,7 @@
 - (void)setModel:(ZhiMaCollectionModel *)model {
     _model = model;
     
-    _userIcon.image = [UIImage imageNamed:model.head];
+    [_userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
     _userName.text = model.name;
     _timeLabel.text = model.time;
     
@@ -71,10 +74,10 @@
         _contentLabel.hidden = NO;
         _contentLabel.text = model.content;
         
-    } else if (model.type == 2) { // 纯图片
+    } else if (model.type == 3) { // 纯图片
         _contentLabel.hidden = YES;
         _picImageView.hidden = NO;
-        _picImageView.image = [UIImage imageNamed:model.pic_name];
+        [_picImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.pic_name]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
         
     }
 }

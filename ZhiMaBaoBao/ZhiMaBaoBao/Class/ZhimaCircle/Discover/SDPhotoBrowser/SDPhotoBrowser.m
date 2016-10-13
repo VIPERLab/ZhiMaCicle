@@ -102,14 +102,13 @@
     NSURL *url = [self highQualityImageURLForIndex:index];
     NSString *str = url.absoluteString;
     str = [str substringFromIndex:DFAPIURL.length];
-    [LGNetWorking collectionCircleListWithCollectionType:3 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:str andSource:@"" andAccount:self.userId success:^(ResponseData *responseData) {
+    [LGNetWorking collectionCircleListWithCollectionType:1 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:@"" andBigImage:@"" andSource:@"" andAccount:self.userId success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:responseData.msg];
+            [LCProgressHUD showFailureText:@"收藏失败"];
             return ;
         }
         
         [LCProgressHUD showSuccessText:@"收藏成功"];
-        
     } failure:^(ErrorData *error) {
         
     }];

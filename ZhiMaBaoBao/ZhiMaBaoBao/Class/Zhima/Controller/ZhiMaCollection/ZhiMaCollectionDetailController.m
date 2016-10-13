@@ -16,6 +16,7 @@
 @end
 
 @implementation ZhiMaCollectionDetailController {
+    UIScrollView *_scrollView;
     UIView *_bottomLineView;
     UIImageView *_picView;
 }
@@ -40,40 +41,45 @@
 }
 
 - (void)setupView {
-    self.view.backgroundColor = [UIColor colorFormHexRGB:@"efeff4"];
+    _scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:_scrollView];
+    _scrollView.backgroundColor = [UIColor colorFormHexRGB:@"efeff4"];
     
-    UIImageView *iconView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 64 + 18, 45, 45)];
-    iconView.layer.cornerRadius = 10;
-    iconView.image = [UIImage imageNamed:self.model.head];
-    [self.view addSubview:iconView];
+    UIImageView *iconView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 18, 45, 45)];
+    iconView.layer.cornerRadius = 5;
+    iconView.clipsToBounds = YES;
+    [iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.model.head]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+    [_scrollView addSubview:iconView];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconView.frame) + 8, CGRectGetMinY(iconView.frame) + 3, ScreenWidth - CGRectGetMaxX(iconView.frame) - 8, 20)];
     nameLabel.text = self.model.name;
     nameLabel.font = [UIFont systemFontOfSize:17];
-    [self.view addSubview:nameLabel];
+    [_scrollView addSubview:nameLabel];
     
     UIView *bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(iconView.frame) + 11, ScreenWidth - 40, 0.5)];
     bottomLineView.backgroundColor = [UIColor colorFormHexRGB:@"d9d9d9"];
     _bottomLineView = bottomLineView;
-    [self.view addSubview:bottomLineView];
+    [_scrollView addSubview:bottomLineView];
     
     UIView *lastView;
     if (self.model.type == 1) { // 纯文字
         
-        UILabel *contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(bottomLineView.frame) + 15, ScreenWidth - 20, [self.model.content sizeWithFont:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(ScreenWidth - 40, MAXFLOAT)].height)];
+        UILabel *contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(bottomLineView.frame) + 11, ScreenWidth - 20, [self.model.content sizeWithFont:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(ScreenWidth - 40, MAXFLOAT)].height)];
         contentLabel.text = self.model.content;
         contentLabel.numberOfLines = 0;
-        [self.view addSubview:contentLabel];
+        [_scrollView addSubview:contentLabel];
         lastView = contentLabel;
         
         UILabel *collectionLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(lastView.frame) + 20, ScreenWidth - 40, 30)];
         collectionLabel.textColor = [UIColor colorFormHexRGB:@"bcbcbc"];
         collectionLabel.font = [UIFont systemFontOfSize:15];
         collectionLabel.text = [NSString stringWithFormat:@"收藏于%@",self.model.time];
-        [self.view addSubview:collectionLabel];
-    } else if (self.model.type == 2) { // 图片
+        [_scrollView addSubview:collectionLabel];
+        _scrollView.contentSize = CGSizeMake(ScreenWidth, CGRectGetMaxY(collectionLabel.frame));
+    } else if (self.model.type == 3) { // 图片
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        [manager downloadImageWithURL:[NSURL URLWithString:@"http://images.17173.com/2012/news/2012/07/02/gxy0702dp05s.jpg"] options:0 progress:0 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        //http://images.17173.com/2012/news/2012/07/02/gxy0702dp05s.jpg
+        [manager downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.model.pic_name]] options:0 progress:0 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             [self setupPicWithImage:image];
         }];
         
@@ -89,9 +95,9 @@
     CGFloat picW = image.size.width > (ScreenWidth - 40) ? (ScreenWidth - 40) : image.size.width;
     CGFloat picH = image.size.height / scale;
     CGFloat picX = 20;
-    CGFloat picY = CGRectGetMaxY(_bottomLineView.frame) + 20;
+    CGFloat picY = CGRectGetMaxY(_bottomLineView.frame) + 11;
     UIImageView *picView = [[UIImageView alloc] initWithFrame:CGRectMake(picX, picY, picW, picH)];
-    [self.view addSubview:picView];
+    [_scrollView addSubview:picView];
     picView.image = image;
     _picView = picView;
     
@@ -99,7 +105,10 @@
     collectionLabel.textColor = [UIColor colorFormHexRGB:@"bcbcbc"];
     collectionLabel.font = [UIFont systemFontOfSize:15];
     collectionLabel.text = [NSString stringWithFormat:@"收藏于%@",self.model.time];
-    [self.view addSubview:collectionLabel];
+    [_scrollView addSubview:collectionLabel];
+    
+    CGFloat height = CGRectGetMaxY(collectionLabel.frame) > ScreenHeight ? CGRectGetMaxY(collectionLabel.frame) : (ScreenHeight - 64);
+    _scrollView.contentSize = CGSizeMake(ScreenWidth, height);
 }
 
 
@@ -108,6 +117,29 @@
     sheet.delegate = self;
     [sheet show];
 }
+
+
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
+    if (index == 0) {
+        // 发给朋友
+        
+    } else if (index == 1) {
+        // 删除
+        [LGNetWorking deletedCircleCollectionWithSessionId:USERINFO.sessionId andCollectionId:self.model.ID success:^(ResponseData *responseData) {
+            
+            if (responseData.code != 0) {
+                return ;
+            }
+            
+            [LCProgressHUD showSuccessText:@"删除成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+            
+        } failure:^(ErrorData *error) {
+            
+        }];
+    }
+}
+
 
 
 @end

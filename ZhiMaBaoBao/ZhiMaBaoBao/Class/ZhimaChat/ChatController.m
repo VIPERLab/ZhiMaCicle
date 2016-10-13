@@ -853,8 +853,36 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 
 //收藏
-- (void)keepMessageWithIndexPath:(NSIndexPath *)indecPath{
-    
+- (void)keepMessageWithIndexPath:(NSIndexPath *)indexPath{
+    LGMessage *message = self.messages[indexPath.row];
+    int type;
+    NSString *content;
+    NSString *smallImg;
+    NSString *collectionId;
+    if (message.type == MessageTypeText) {
+        type = 1;
+        content = message.text;
+        smallImg = @"";
+    } else if (message.type == MessageTypeImage) {
+        type = 3;
+        smallImg = message.text;
+        content = @"";
+    }
+    if ([message.fromUid isEqualToString:USERINFO.userID]) {
+        collectionId = USERINFO.userID;
+    } else {
+        collectionId = message.fromUid;
+    }
+    [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:content andSmallImg:smallImg andBigImage:@"" andSource:@"" andAccount:collectionId success:^(ResponseData *responseData) {
+        if (responseData.code != 0) {
+            [LCProgressHUD showFailureText:responseData.msg];
+            return ;
+        }
+        
+        [LCProgressHUD showSuccessText:@"收藏成功"];
+    } failure:^(ErrorData *error) {
+        NSLog(@"%@",error.msg);
+    }];
 }
 
 //删除

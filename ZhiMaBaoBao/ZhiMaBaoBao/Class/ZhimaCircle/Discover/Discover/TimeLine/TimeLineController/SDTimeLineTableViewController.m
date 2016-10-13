@@ -848,15 +848,14 @@
         NSLog(@"点击了收藏");
         // 调用收藏接口
         SDTimeLineCellModel *model = self.dataArray[self.currentEditingIndexthPath.row];
-        [LGNetWorking collectionCircleListWithCollectionType:1 andSessionId:USERINFO.sessionId andConent:self.contentLabel.text andSmallImg:@"" andSource:@"" andAccount:model.userId success:^(ResponseData *responseData) {
-            
+        NSLog(@"%@",self.contentLabel.text);
+        [LGNetWorking collectionCircleListWithCollectionType:1 andSessionId:USERINFO.sessionId andConent:self.contentLabel.text andSmallImg:@"" andBigImage:@"" andSource:@"" andAccount:model.userId success:^(ResponseData *responseData) {
             if (responseData.code != 0) {
                 [LCProgressHUD showFailureText:@"收藏失败"];
                 return ;
             }
             
             [LCProgressHUD showSuccessText:@"收藏成功"];
-            
         } failure:^(ErrorData *error) {
             
         }];

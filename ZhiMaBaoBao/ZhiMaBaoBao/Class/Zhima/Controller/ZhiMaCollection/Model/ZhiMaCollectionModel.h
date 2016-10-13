@@ -18,6 +18,8 @@
 
 @property (nonatomic, copy) NSString *content;
 
+@property (nonatomic, copy) NSString *ID;
+
 @property (nonatomic, assign) int type;
 
 @property (nonatomic, copy) NSString *pic_name;

@@ -831,12 +831,13 @@
  *  @param source         来源 目前给nil
  *  @param account        被收藏者的userID
  */
-+ (void)collectionCircleListWithCollectionType:(int)collectionType andSessionId:(NSString *)sessionId andConent:(NSString *)content andSmallImg:(NSString *)smallImg andSource:(NSString *)source andAccount:(NSString *)account success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
++ (void)collectionCircleListWithCollectionType:(int)collectionType andSessionId:(NSString *)sessionId andConent:(NSString *)content andSmallImg:(NSString *)smallImg andBigImage:(NSString *)big_img andSource:(NSString *)source andAccount:(NSString *)account success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;
     params[@"collection_type"] = [NSString stringWithFormat:@"%zd",collectionType];
     params[@"content"] = content;
     params[@"small_img"] = smallImg;
+    params[@"big_img"] = big_img;
     params[@"source"] = source;
     params[@"oppositeId"] = account;
     
@@ -847,7 +848,30 @@
     }];
 }
 
+// 获取收藏列表接口
++ (void)getCollectionListWithSessionId:(NSString *)sessionId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = sessionId;
+    [HttpTool POST:@"/moblie/getLoveCollectionByUserId.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
 
+// 删除收藏接口
++ (void)deletedCircleCollectionWithSessionId:(NSString *)sessionId andCollectionId:(NSString *)collectionId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = sessionId;
+    params[@"collectionId"] = collectionId;
+    [HttpTool POST:@"/moblie/deleteLoveCollectionByCollectionId.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
+// 群组信息
 + (void)setGroupInfoMessageWithFunctionName:(NSString *)functionName andSessionId:(NSString *)sessionId andValue:(NSString *)value andGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;

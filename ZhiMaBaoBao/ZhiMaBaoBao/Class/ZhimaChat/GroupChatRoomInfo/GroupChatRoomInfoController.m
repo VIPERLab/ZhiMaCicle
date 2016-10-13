@@ -89,10 +89,19 @@
         self.groupModel = groupChatModel;
         self.groupModel.myGroupName = USERINFO.username;
         
+        NSLog(@"%@",responseData.data[@"groupRoom"][@"new_msg_tip"]);
+        self.groupModel.disturb = responseData.data[@"groupRoom"][@"new_msg_tip"];
+        self.converseModel.disturb = responseData.data[@"groupRoom"][@"new_msg_tip"];
+        self.converseModel.topChat = responseData.data[@"groupRoom"][@"set_chat_top"];
+        
         // 更新群信息内容
         [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:self.converseId];
         
         [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
+        
+        if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
+            self.isGroupCreater = YES;
+        }
         
         // 设置尾部
         GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];

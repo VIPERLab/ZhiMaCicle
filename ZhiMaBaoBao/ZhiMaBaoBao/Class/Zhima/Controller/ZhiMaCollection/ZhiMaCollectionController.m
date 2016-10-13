@@ -26,11 +26,33 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setupView];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self getResponData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)getResponData {
+    [LGNetWorking getCollectionListWithSessionId:USERINFO.sessionId success:^(ResponseData *responseData) {
+        
+        if (responseData.code != 0) {
+            return ;
+        }
+        
+        self.dataArray = [ZhiMaCollectionModel mj_objectArrayWithKeyValuesArray:responseData.data];
+        
+        
+        [_tableView reloadData];
+        
+    } failure:^(ErrorData *error) {
+        
+    }];
 }
 
 - (void)setupView {
@@ -89,22 +111,7 @@
 
 - (NSArray *)dataArray {
     if (!_dataArray) {
-        ZhiMaCollectionModel *model = [[ZhiMaCollectionModel alloc] init];
-        model.head = @"userIcon";
-        model.name = @"小明";
-        model.content = @"哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈";
-        model.time = @"123213";
-        model.cellHeight = [model.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth - 60, MAXFLOAT)].height + 75;
-        model.type = 1;
-        
-        ZhiMaCollectionModel *model2 = [[ZhiMaCollectionModel alloc] init];
-        model2.head = @"userIcon";
-        model2.name = @"小明";
-        model2.time = @"12-12";
-        model2.type = 2;
-        model2.cellHeight = 140 + 75;
-        model2.pic_name = @"Image_placeHolder";
-        _dataArray = @[model,model2,model,model2,model,model2,model,model2,model,model2];
+        _dataArray = [NSArray array];
     }
     return _dataArray;
 }
