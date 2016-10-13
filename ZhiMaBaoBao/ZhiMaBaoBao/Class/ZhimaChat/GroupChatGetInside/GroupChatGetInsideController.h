@@ -12,4 +12,6 @@
 
 @property (nonatomic, copy) NSString *groupId;
 
+@property (nonatomic, copy) NSString *sessionId;
+
 @end

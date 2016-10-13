@@ -1023,7 +1023,7 @@
         NSString *opeartionStr = [NSString string];
         if (isExist) {
             NSLog(@"存在用户,需要更新");
-            NSString *option1 = [NSString stringWithFormat:@"user_Name = '%@', user_Head_photo = '%@', user_NickName = %@",model.user_Name,model.user_Head_photo,model.user_NickName];
+            NSString *option1 = [NSString stringWithFormat:@"user_Name = '%@', user_Head_photo = '%@', user_NickName = '%@'",model.user_Name,model.user_Head_photo,model.user_NickName];
             NSString *option2 = [NSString stringWithFormat:@"user_Id = '%@'",model.user_Id];
             opeartionStr = [FMDBShareManager alterTable:ZhiMa_User_Message_Table withOpton1:option1 andOption2:option2];
         } else {
@@ -1085,9 +1085,9 @@
     [queue inDatabase:^(FMDatabase *db) {
         BOOL success = [db executeUpdate:opeartionStr,userMessage.user_Name,userMessage.user_Head_photo,userMessage.user_NickName];
         if (success) {
-            NSLog(@"插入朋友圈成功");
+            NSLog(@"更新用户信息成功");
         } else {
-            NSLog(@"插入朋友圈失败");
+            NSLog(@"更新用户信息失败");
             isSuccess = NO;
         }
         

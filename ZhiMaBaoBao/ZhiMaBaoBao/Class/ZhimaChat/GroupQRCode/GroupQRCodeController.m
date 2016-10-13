@@ -64,7 +64,7 @@
     UIImageView *userIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 45, 45)];
     self.userIcon = userIcon;
     userIcon.layer.cornerRadius = 10;
-    [userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+    [userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.model.groupAvtar]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
     [self.centerView addSubview:userIcon];
     
     

@@ -20,18 +20,16 @@
              @"pic_name" : @"big_img"
              };
 }
-//@property (nonatomic, copy) NSString *head;
-//
-//@property (nonatomic, copy) NSString *name;
-//
-//@property (nonatomic, copy) NSString *time;
-//
-//@property (nonatomic, copy) NSString *content;
-//
-//@property (nonatomic, assign) int type;
-//
-//@property (nonatomic, copy) NSString *pic_name;
 
+
+- (NSString *)photoUrl {
+    if (self.small_img.length) {
+        return self.small_img;
+    } else if (self.pic_name.length) {
+        return self.pic_name;
+    }
+    return @"";
+}
 
 -(CGFloat)cellHeight {
     if (self.type == 1) { // 纯文字

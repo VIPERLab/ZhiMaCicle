@@ -112,8 +112,12 @@
     
     self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
     
-    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
+    // 设置群聊的置顶、免打扰
+    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
+    self.groupModel.topChat = self.converseModel.topChat;
+    self.groupModel.disturb = self.converseModel.disturb;
     
+    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
     // 设置尾部
     GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
     footer.delegate = self;
@@ -129,12 +133,11 @@
 
 - (void)getDataFormSQL {
     // 获取会话模型
-    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
+    
     self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
     
     self.groupModel.create_time = [NSDate dateStrFromCstampTime:self.converseModel.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    self.groupModel.topChat = self.converseModel.topChat;
-    self.groupModel.disturb = self.converseModel.disturb;
+    
     
     if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
         self.isGroupCreater = YES;

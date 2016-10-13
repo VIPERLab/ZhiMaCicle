@@ -72,14 +72,13 @@
         
         UILabel *collectionLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(lastView.frame) + 20, ScreenWidth - 40, 30)];
         collectionLabel.textColor = [UIColor colorFormHexRGB:@"bcbcbc"];
-        collectionLabel.font = [UIFont systemFontOfSize:15];
+        collectionLabel.font = [UIFont systemFontOfSize:12];
         collectionLabel.text = [NSString stringWithFormat:@"收藏于%@",self.model.time];
         [_scrollView addSubview:collectionLabel];
         _scrollView.contentSize = CGSizeMake(ScreenWidth, CGRectGetMaxY(collectionLabel.frame));
     } else if (self.model.type == 3) { // 图片
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        //http://images.17173.com/2012/news/2012/07/02/gxy0702dp05s.jpg
-        [manager downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.model.pic_name]] options:0 progress:0 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        [manager downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.model.photoUrl]] options:0 progress:0 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             [self setupPicWithImage:image];
         }];
         

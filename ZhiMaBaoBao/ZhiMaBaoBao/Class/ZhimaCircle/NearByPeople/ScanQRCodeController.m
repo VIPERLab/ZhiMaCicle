@@ -258,7 +258,7 @@
     NSString *AESDecodingStr = [manager AESDecoding:subString];
     NSLog(@"AES解密之后的内容: %@",AESDecodingStr);
     
-    //做处理
+    //解析jid
     NSRange jidRange = [AESDecodingStr rangeOfString:@"jid="];
     NSString *jid = [AESDecodingStr substringFromIndex:jidRange.location + 4];
     
@@ -271,6 +271,11 @@
         return;
     }
     
+    //解析sessionId
+    NSRange sessionRange = [AESDecodingStr rangeOfString:@"sessionId="];
+    NSRange codeRange = [AESDecodingStr rangeOfString:@"&"];
+    NSString *sessionId = [AESDecodingStr substringFrom:sessionRange.location + 10 to:codeRange.location];
+    NSLog(@"%@",sessionId);
     
     //如果没有jid 就尝试解析groupid
     NSRange groupRange = [AESDecodingStr rangeOfString:@"groupId="];
@@ -279,6 +284,7 @@
     if (groupId.length) {
         GroupChatGetInsideController *group = [[GroupChatGetInsideController alloc] init];
         group.groupId = groupId;
+        group.sessionId = sessionId;
         [self.navigationController pushViewController:group animated:YES];
     }
     

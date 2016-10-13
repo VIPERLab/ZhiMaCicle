@@ -41,7 +41,7 @@
     
     _userName = [UILabel new];
     _userName.font = [UIFont systemFontOfSize:15];
-    _userName.textColor = [UIColor colorFormHexRGB:@"888888"];
+//    _userName.textColor = [UIColor colorFormHexRGB:@"888888"];
     [self addSubview:_userName];
     
     _contentLabel = [UILabel new];
@@ -51,7 +51,8 @@
     
     _timeLabel = [UILabel new];
     _timeLabel.textColor = [UIColor colorFormHexRGB:@"bcbcbc"];
-    _timeLabel.font = [UIFont systemFontOfSize:15];
+    _timeLabel.font = [UIFont systemFontOfSize:12];
+    _timeLabel.textAlignment = NSTextAlignmentRight;
     [self addSubview:_timeLabel];
     
     _picImageView = [UIImageView new];
@@ -77,7 +78,7 @@
     } else if (model.type == 3) { // 纯图片
         _contentLabel.hidden = YES;
         _picImageView.hidden = NO;
-        [_picImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.pic_name]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+        [_picImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.photoUrl]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
         
     }
 }

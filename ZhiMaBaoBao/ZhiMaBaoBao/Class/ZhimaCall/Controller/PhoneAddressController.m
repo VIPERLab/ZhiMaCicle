@@ -493,14 +493,13 @@
     }
 }
 
-#warning TODO:添加聊天好友
-/*
 - (void)addNewFriend:(NSInteger)row{
     LGQueryResModel *model = self.nameAry[row];
-    NSString *jid = [NSString stringWithFormat:@"%@@localhost",model.openfireaccount];
-    [LCProgressHUD showText:@"请求发送成功"];
+    SocketManager *manager = [SocketManager shareInstance];
+    [manager addFriend:model.userId];
+    [LCProgressHUD showSuccessText:@"请求发送成功"];
 }
- */
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -512,10 +511,8 @@
             rowNum = [[self.numberAry objectAtIndex:i] intValue] + rowNum;
         }
         LGQueryResModel *model = self.nameAry[rowNum + indexPath.row];
-        
-#warning TODO:跳转到好友详情
         FriendProfilecontroller *vc = [[FriendProfilecontroller alloc] init];
-        vc.userId = model.openfireaccount;
+        vc.userId = model.userId;
         [self.navigationController pushViewController:vc animated:YES];
 
     }

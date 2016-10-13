@@ -54,7 +54,7 @@
     [self.flagBtn setBackgroundColor:THEMECOLOR];
     [self.flagBtn setTitleColor:WHITECOLOR forState:UIControlStateNormal];
     self.flagBtn.layer.cornerRadius = 5.f;
-    self.flagBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+    self.flagBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     [self.flagBtn addTarget:self action:@selector(addBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.flagBtn setTitle:@"已添加" forState:UIControlStateSelected];
     [self.flagBtn setTitleColor:GRAYCOLOR forState:UIControlStateSelected];

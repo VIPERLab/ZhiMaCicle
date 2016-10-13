@@ -24,6 +24,10 @@
 
 @property (nonatomic, copy) NSString *pic_name;
 
+@property (nonatomic, copy) NSString *small_img;
+
+@property (nonatomic, copy) NSString *photoUrl;
+
 @property (nonatomic, assign) CGFloat cellHeight;
 
 @end

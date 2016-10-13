@@ -15,5 +15,6 @@
 @property (nonatomic, copy) NSString *phonename;
 @property (nonatomic, assign) NSInteger isadd;
 @property (nonatomic, copy) NSString *pinyin;
+@property (nonatomic, copy) NSString *userId;
 @property (nonatomic, copy) NSString *openfireaccount;
 @end

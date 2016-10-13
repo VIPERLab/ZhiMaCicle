@@ -7,7 +7,10 @@
 //
 
 #import "GroupChatGetInsideController.h"
+
+#import "ChatController.h"
 #import "GroupChatModel.h"
+#import "ConverseModel.h"
 
 
 @interface GroupChatGetInsideController ()
@@ -100,9 +103,50 @@
 
 
 - (void)addToGroup {
-    
+    [LCProgressHUD showLoadingText:@"准备开始群聊..."];
+    [LGNetWorking addUserToGroup:self.sessionId userIds:USERINFO.userID groupId:self.groupId success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            [LCProgressHUD hide];
+            //生成群聊数据模型
+            [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                return @{
+                         @"groupUserVos":@"GroupUserModel"
+                         };
+            }];
+            self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+            self.groupChatModel.myGroupName = USERINFO.username;
+            //保存群会话信息，插入数据库
+            [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+            
+            //通过socket拉人进群
+            [[SocketManager shareInstance] addUserToGroup:self.groupChatModel.groupId uids:USERINFO.userID];
+            
+            //跳转到群聊天页面
+            [self jumpGroupChat];
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:error.msg];
+    }];
 }
 
+
+- (void)jumpGroupChat {
+    
+    ConverseModel *groupModel = [FMDBShareManager searchConverseWithConverseID:self.groupId andConverseType:YES];
+    
+    UserInfo *userInfo = [UserInfo shareInstance];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
+    
+    ChatController *vc = [[ChatController alloc] init];
+    vc.conversionId = groupModel.converseId;
+    vc.conversionName = groupModel.converseName;
+    vc.converseType = groupModel.converseType;
+    vc.hidesBottomBarWhenPushed = YES;
+    
+    ConversationController *conversationVC = userInfo.conversationVC;
+    [conversationVC.navigationController pushViewController:vc animated:YES];
+}
 
 
 /*

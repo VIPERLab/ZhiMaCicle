@@ -418,7 +418,7 @@ static SocketManager *manager = nil;
                 systemMsg.toUidOrGroupId = groupId;
                 systemMsg.type = MessageTypeSystem;
                 systemMsg.msgid = [NSString generateMessageID];
-                systemMsg.isGroup = NO;
+                systemMsg.isGroup = YES;
                 systemMsg.timeStamp = [NSDate currentTimeStamp];
                 [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
                 
@@ -448,7 +448,7 @@ static SocketManager *manager = nil;
         systemMsg.toUidOrGroupId = groupId;
         systemMsg.type = MessageTypeSystem;
         systemMsg.msgid = [NSString generateMessageID];
-        systemMsg.isGroup = NO;
+        systemMsg.isGroup = YES;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
         [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
         

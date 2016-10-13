@@ -192,6 +192,10 @@
         return;
     }
     
+//    if (self.oldPassword.text isEqualToString:USERINFO.old) {
+//        <#statements#>
+//    }
+    
     [LGNetWorking resetPassword:USERINFO.sessionId phone:USERINFO.uphone oldPass:titleF newPass:onepwd reNewpass:twoPsw block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD showText:@"修改成功"];
@@ -201,6 +205,8 @@
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self.navigationController popToRootViewControllerAnimated:YES];
             });
+        } else {
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     }];
     

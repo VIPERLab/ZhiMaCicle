@@ -8,11 +8,19 @@
 
 #import "AvtarAndNameCell.h"
 
+@interface AvtarAndNameCell ()
+
+@property (weak, nonatomic) IBOutlet UIView *bottomLineView;
+
+@end
+
 @implementation AvtarAndNameCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.bottomLineView.height = 0.5;
+    self.bottomLineView.backgroundColor = [UIColor colorFormHexRGB:@"dedede"];
 }
 
 - (void)setConversion:(ConverseModel *)conversion{

@@ -55,7 +55,13 @@
 
 //初始化数据
 - (void)setupProfile{
-    self.nickName.text = self.friendInfo.displayName;
+    
+    if (self.friendInfo.user_NickName.length) {
+        self.nickName.text = self.friendInfo.user_NickName;
+    } else {
+        self.nickName.text = @"";
+    }
+    
     
     [self.myCircle setOn:self.friendInfo.notread_my_cricles];
     [self.otherCircle setOn:self.friendInfo.notread_his_cricles];
