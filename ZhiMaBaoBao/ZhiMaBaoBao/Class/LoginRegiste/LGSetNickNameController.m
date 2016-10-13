@@ -13,6 +13,8 @@
 #import "LGSetNickNameController.h"
 #import "KXActionSheet.h"
 #import "LGLoginController.h"
+#import "JPUSHService.h"
+
 
 @interface LGSetNickNameController ()<UITextFieldDelegate,KXActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (nonatomic, strong) UITextField *nickNameField;
@@ -162,15 +164,60 @@
     //保存昵称，头像，邀请码
     [LGNetWorking saveUserInfo:userInfo.sessionId headUrl:userInfo.head_photo nickName:self.nickNameField.text inviteCode:self.codeField.text block:^(ResponseData *obj) {
         if (obj.code == 0) {
-            [LCProgressHUD hide];
-            //跳转到登录页面
-            LGLoginController *vc = [[LGLoginController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
+            
+            [self loginAction];
+            
+//            [LCProgressHUD hide];
+//            //跳转到登录页面
+//            LGLoginController *vc = [[LGLoginController alloc] init];
+//            [self.navigationController pushViewController:vc animated:YES];
         }else{
             [LCProgressHUD showFailureText:obj.msg];
         }
     }];
    
+}
+
+- (void)loginAction{
+    [self.view endEditing:YES];
+//    [LCProgressHUD showLoadingText:LODINGTEXT];
+    [LGNetWorking loginWithPhone:self.phoneNumber password:self.password success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            //登录成功
+            [LCProgressHUD hide];
+            UserInfo *userInfo = [UserInfo mj_objectWithKeyValues:responseData.data];
+            userInfo.hasLogin = YES;
+            
+            if ([userInfo.area isEqualToString:@""] || userInfo.area == nil) {
+                userInfo.area = @"";
+            }
+            
+            // 旧的数据
+            UserInfo *oldInfo = [UserInfo read];
+            
+            if ([userInfo.userID isEqualToString:oldInfo.userID]) {
+                // 有旧数据
+                userInfo.newMessageVoiceNotify = oldInfo.newMessageVoiceNotify;
+                userInfo.newMessageShakeNotify = oldInfo.newMessageShakeNotify;
+                userInfo.newMessageNotify = oldInfo.newMessageNotify;
+            } else {
+                // 无旧数据 -  默认打开
+                userInfo.newMessageNotify = YES;
+                userInfo.newMessageShakeNotify = YES;
+                userInfo.newMessageVoiceNotify = YES;
+            }
+            
+            [JPUSHService setTags:[NSSet setWithObject:userInfo.userID] alias:userInfo.userID callbackSelector:nil object:nil];
+            [userInfo save];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
+            
+        }else{
+            [LCProgressHUD showFailureText:responseData.msg];
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:error.msg];
+    }];
 }
 
 /**

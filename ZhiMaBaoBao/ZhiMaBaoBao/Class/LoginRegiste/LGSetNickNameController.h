@@ -8,4 +8,7 @@
 
 @interface LGSetNickNameController : LogResBaseController
 
+@property (nonatomic, copy) NSString *phoneNumber;
+@property (nonatomic, copy) NSString *password;
+
 @end
