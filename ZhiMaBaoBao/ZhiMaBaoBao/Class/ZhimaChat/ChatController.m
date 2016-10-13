@@ -434,6 +434,10 @@ static NSString *const reuseIdentifier = @"messageCell";
             [self.allImagesInfo insertObject:dic atIndex:0];
         }
     }
+    
+    if (marr.count<20) {
+        self.tableView.mj_header = nil;
+    }
 
     [self.tableView reloadData];
     // tableview 滑到底端
@@ -713,7 +717,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                 if (message.sendStatus == 0) {
                     picChatCell.sendAgain.hidden = NO;
                     [picChatCell.sending stopAnimating];
-                    picChatCell.bubble.userInteractionEnabled = NO;
+                    picChatCell.bubble.userInteractionEnabled = YES;
 
                     picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
                         

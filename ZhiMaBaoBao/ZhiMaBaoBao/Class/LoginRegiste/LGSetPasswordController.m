@@ -150,6 +150,8 @@
             //连接xmpp -- 进行xmpp注册
             
             LGSetNickNameController *vc = [[LGSetNickNameController alloc] init];
+            vc.phoneNumber = self.phoneNumber;
+            vc.password    = self.passField.text;
             [self.navigationController pushViewController:vc animated:YES];
         }else{
             [LCProgressHUD showText:obj.msg];
