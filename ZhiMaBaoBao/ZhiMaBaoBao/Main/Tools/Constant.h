@@ -105,7 +105,7 @@
 
 #import "KXActionSheet.h"
 #import "SocketManager.h"
-
+#import "NSString+MsgId.h"
 
 //FMDB管理头文件
 #import "FMDBManager.h"
