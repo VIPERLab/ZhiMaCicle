@@ -99,9 +99,13 @@ static SocketManager *manager = nil;
         req.object = loginData;
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
         
+        UserInfo *userInfo = [UserInfo shareInstance];
+        userInfo.networkUnReachable = NO;
+        
     } else {
-        //
-    }//if
+        UserInfo *userInfo = [UserInfo shareInstance];
+        userInfo.networkUnReachable = YES;
+    }
 }
 
 
@@ -876,9 +880,15 @@ static SocketManager *manager = nil;
             //拼接消息
             dataDic[@"msgid"] = message.msgid;
             dataDic[@"type"] = @(message.type);
-            dataDic[@"isGroup"] = @(message.isGroup);
+            if (message.isGroup) {
+                dataDic[@"isGroup"] = @"1";
+            }else{
+                dataDic[@"isGroup"] = @"0";
+            }
+//            dataDic[@"isGroup"] = @(message.isGroup);
             dataDic[@"fromUid"] = message.fromUid;
             dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
+            dataDic[@"sign"] = sign;
         }
             break;
             
