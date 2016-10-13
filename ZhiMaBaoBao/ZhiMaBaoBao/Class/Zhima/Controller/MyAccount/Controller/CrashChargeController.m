@@ -143,6 +143,10 @@
 
 //支付接口 -  type =0 微信支付  type = 1 支付宝支付
 - (void)payMoenyByType:(int)type {
+    if (1) {
+        [LCProgressHUD showFailureText:@"正在开发中"];
+        return;
+    }
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer.timeoutInterval = 30.f;
     manager.responseSerializer.acceptableContentTypes = nil;//[NSSet setWithObject:@"text/plain"];

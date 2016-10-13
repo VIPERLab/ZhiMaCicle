@@ -14,10 +14,12 @@
 #import "CreateGroupChatController.h"
 
 #define GroupChatMembersCellReusedID @"GroupChatMembersCellReusedID"
-@interface GroupChatAllMembersController () <UITableViewDelegate,UITableViewDataSource>
+@interface GroupChatAllMembersController () <UITableViewDelegate,UITableViewDataSource,GroupAllMemberCellDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, weak) UIButton *rightBtn;
 
+@property (nonatomic, weak) GroupUserModel *currentModel;
+@property (nonatomic, weak) GroupAllMemberCell *currentCell;
 @end
 
 @implementation GroupChatAllMembersController {
@@ -27,6 +29,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self setCustomTitle:@""];
+    
+    if (self.isDeletedMembers) {
+        for (GroupUserModel *model in self.membersArray) {
+            if ([model.userId isEqualToString:USERINFO.userID]) {
+                [self.membersArray removeObject:model];
+                break;
+            }
+        }
+    }
     
     [self setupNav];
     [self setupView];
@@ -47,10 +59,10 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     
     if (self.isDeletedMembers) {
-        [self setCustomTitle:@"删除成员"];
-        [rightBtn setTitle:@"删除" forState:UIControlStateNormal];
-        [rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
-        [rightBtn addTarget:self action:@selector(delGroupMembers) forControlEvents:UIControlEventTouchUpInside];
+//        [self setCustomTitle:@"删除成员"];
+//        [rightBtn setTitle:@"删除" forState:UIControlStateNormal];
+//        [rightBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
+//        [rightBtn addTarget:self action:@selector(delGroupMembers) forControlEvents:UIControlEventTouchUpInside];
         
     } else {
         [self setCustomTitle:[NSString stringWithFormat:@"群成员(%zd)",self.membersArray.count]];
@@ -98,6 +110,7 @@
     GroupUserModel *model = self.membersArray[indexPath.row];
     GroupAllMemberCell *cell = [tableView dequeueReusableCellWithIdentifier:GroupChatMembersCellReusedID forIndexPath:indexPath];
     cell.model = model;
+    cell.delegate = self;
     cell.isDeletedMembers = self.isDeletedMembers;
     return cell;
 }
@@ -105,6 +118,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.isDeletedMembers) {
+        return;
+    }
     GroupUserModel *model = self.membersArray[indexPath.row];
     FriendProfilecontroller *friendProfile = [[FriendProfilecontroller alloc] init];
     friendProfile.userId = model.userId;
@@ -122,8 +138,23 @@
 
 
 // 删除群成员
-- (void)delGroupMembers {
-    
+- (void)GroupAllMemberCellDelegateDeletedButtonDidClick:(GroupUserModel *)model andCell:(GroupAllMemberCell *)cell {
+    self.currentModel = model;
+    self.currentCell = cell;
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"确定删除群成员%@",model.friend_nick] message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alertView show];
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSLog(@"%zd",buttonIndex);
+    if (buttonIndex == 1) {
+        //删除好友
+        [[SocketManager shareInstance] delUserFromGroup:self.groupId uids:self.currentCell.model.userId];
+        NSIndexPath *indexPath = [_tableView indexPathForCell:self.currentCell];
+        [self.membersArray removeObject:self.currentCell.model];
+        [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
 }
 
 @end

@@ -10,7 +10,9 @@
 
 @interface GroupChatAllMembersController : BaseViewController
 
-@property (nonatomic, strong) NSArray *membersArray;
+@property (nonatomic, strong) NSMutableArray *membersArray;
+
+@property (nonatomic, copy) NSString *groupId;
 
 @property (nonatomic, assign) BOOL isDeletedMembers;
 
