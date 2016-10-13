@@ -276,7 +276,12 @@ static SocketManager *manager = nil;
             
         }
         else if ([actType isEqualToString:@"updategroupnum"]){   //更新群用户数
-            
+            NSDictionary *resDic = responceData[@"data"];
+            NSString *groupId = resDic[@"groupid"];
+            NSString *actuid = resDic[@"actuid"];
+            NSString *uids = resDic[@"uids"];
+            //拉人进群相关操作
+            [self updateGroupNumber:groupId actUid:actuid uids:uids];
         }
         else if ([actType isEqualToString:@"deluserfromgroup"]){   //从群组中删除用户
             
@@ -381,6 +386,42 @@ static SocketManager *manager = nil;
     }
 }
 
+//收到拉人进群消息  actuid:操作者id   uids:被邀请用户的id
+- (void)updateGroupNumber:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
+    NSArray *uidsArr = [uids componentsSeparatedByString:@","];
+    NSMutableArray *namesArr = [NSMutableArray array];
+    for (NSString *userId in uidsArr) {
+        ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:userId];
+        [namesArr addObject:friend.user_Name];
+    }
+    ZhiMaFriendModel *actUserModel = [FMDBShareManager getUserMessageByUserID:actUid];
+    LGMessage *systemMsg = [[LGMessage alloc] init];
+    //拼接被邀请者的姓名
+    NSString *userNames = nil;
+    if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
+        userNames = [namesArr componentsJoinedByString:@","];
+        systemMsg.text = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",userNames];
+    }else{
+        userNames = actUserModel.user_Name;
+        systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请你加入了群聊",userNames];
+    }
+    
+    //发送系统消息 你邀请"xx"加入群聊 
+    systemMsg.actType = ActTypeUpdategroupnum;
+    systemMsg.fromUid = USERINFO.userID;
+    systemMsg.toUidOrGroupId = groupId;
+    systemMsg.type = MessageTypeSystem;
+    systemMsg.msgid = [NSString generateMessageID];
+    systemMsg.isGroup = YES;
+    systemMsg.timeStamp = [NSDate currentTimeStamp];
+    [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
+    
+    //发送通知，即时更新相应的页面
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    userInfo[@"message"] = systemMsg;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+}
+
 //收到socket消息，更新群名称  userId : 修改群名的用户id
 - (void)updateGroupName:(NSString *)groupName groupId:(NSString *)groupId userId:(NSString *)userId{
     
@@ -413,7 +454,7 @@ static SocketManager *manager = nil;
                 
                 LGMessage *systemMsg = [[LGMessage alloc] init];
                 systemMsg.actType = ActTypeRenamegroup;
-                systemMsg.text = [NSString stringWithFormat:@"%@通过了你的朋友验证请求,现在可以开始聊天了。",userName];
+                systemMsg.text = [NSString stringWithFormat:@"%@修改群名为\"%@\"",userName,groupName];
                 systemMsg.fromUid = USERINFO.userID;
                 systemMsg.toUidOrGroupId = groupId;
                 systemMsg.type = MessageTypeSystem;
@@ -443,7 +484,7 @@ static SocketManager *manager = nil;
         
         LGMessage *systemMsg = [[LGMessage alloc] init];
         systemMsg.actType = ActTypeRenamegroup;
-        systemMsg.text = [NSString stringWithFormat:@"%@修改群名为\"%@\"。",userName,groupName];
+        systemMsg.text = [NSString stringWithFormat:@"%@修改群名为\"%@\"",userName,groupName];
         systemMsg.fromUid = USERINFO.userID;
         systemMsg.toUidOrGroupId = groupId;
         systemMsg.type = MessageTypeSystem;
@@ -642,7 +683,7 @@ static SocketManager *manager = nil;
 
 //建群
 - (void)createGtoup:(NSString *)groupId uids:(NSString *)uids{
-    NSData *data = [self generateGroupActType:GroupActTypeCreate groupId:groupId uids:uids];
+    NSData *data = [self generateGroupActType:GroupActTypeAddUser groupId:groupId uids:uids];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
@@ -830,7 +871,6 @@ static SocketManager *manager = nil;
             methodName = @"renameGroup";
             
         }
-            
             break;
         default:
             break;
@@ -846,7 +886,17 @@ static SocketManager *manager = nil;
         dataDic[@"groupname"] = uids;
         dataDic[@"uid"] = USERINFO.userID;
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&groupname=%@&uid=%@&%@",controllerName,methodName,groupId,uids,USERINFO.userID,APIKEY];
-    }else{
+    }
+    else if (type == GroupActTypeAddUser || type == GroupActTypeCreate){
+        dataDic[@"uids"]= uids;
+        dataDic[@"actuid"] = USERINFO.userID; //操作者的uid
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&actuid=%@&groupid=%@&uids=%@&%@",controllerName,methodName,USERINFO.userID,groupId,uids,APIKEY];
+    }
+    else if (type == GroupActTypeDelGroup){
+        dataDic[@"uid"] = uids;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&uid=%@&%@",controllerName,methodName,groupId,uids,APIKEY];
+    }
+    else{
         dataDic[@"uids"]= uids;
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&uids=%@&%@",controllerName,methodName,groupId,uids,APIKEY];
     }
@@ -858,7 +908,6 @@ static SocketManager *manager = nil;
     request[@"data"] = dataDic;
     //请求包转换成json字符串
     return [[request mj_JSONString] dataUsingEncoding:NSUTF8StringEncoding];
-
 }
 
 //生成好友操作相关的消息数据包
