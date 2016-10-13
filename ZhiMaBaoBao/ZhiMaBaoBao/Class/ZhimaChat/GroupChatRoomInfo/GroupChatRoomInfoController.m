@@ -65,7 +65,7 @@
 
 // 拉取网络上最新的数据
 - (void)dataRequst {
-    /*
+    
     [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.converseId success:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
@@ -82,10 +82,10 @@
         self.groupModel = groupChatModel;
         self.groupModel.myGroupName = USERINFO.username;
         
-        NSLog(@"%@",responseData.data[@"groupRoom"][@"new_msg_tip"]);
-        self.groupModel.disturb = responseData.data[@"groupRoom"][@"new_msg_tip"];
-        self.converseModel.disturb = responseData.data[@"groupRoom"][@"new_msg_tip"];
-        self.converseModel.topChat = responseData.data[@"groupRoom"][@"set_chat_top"];
+        // 设置群聊的置顶、免打扰
+        self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
+        self.groupModel.topChat = self.converseModel.topChat;
+        self.groupModel.disturb = self.converseModel.disturb;
         
         // 更新群信息内容
         [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:self.converseId];
@@ -108,7 +108,7 @@
         
     }];
     
-    */
+    /*
     
     self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
     
@@ -123,6 +123,8 @@
     footer.delegate = self;
     _tableView.tableFooterView = footer;
     [_tableView reloadData];
+     
+     */
 }
 
 - (void)isGroupCreater:(NSString *)GrouperID {
@@ -146,19 +148,12 @@
     [_tableView reloadData];
 }
 
-
-
 - (void)setupView {
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    // 设置尾部
-    GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
-    footer.delegate = self;
-    _tableView.tableFooterView = footer;
     
     // 注册cell
     [_tableView registerClass:[GroupChatInfoCell class] forCellReuseIdentifier:GroupChatRoomInfoCellReusedID];
@@ -381,12 +376,16 @@
 
 #pragma mark - lazyLoad
 - (NSArray *)titleArray {
-    _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
+    if (self.groupModel) {
+        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
+    }
     return _titleArray;
 }
 
 - (NSArray *)subTitleArray {
-    _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode"],@[@"",@""],@[@""]];
+    if (self.groupModel) {
+        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode"],@[@"",@""],@[@""]];
+    }
     return _subTitleArray;
 }
 
