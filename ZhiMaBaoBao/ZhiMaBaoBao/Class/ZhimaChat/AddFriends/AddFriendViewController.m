@@ -11,6 +11,7 @@
 #import "LGSearchResultController.h"
 #import "PhoneAddressController.h"
 #import "ScanQRCodeController.h"
+#import "CreateGroupChatController.h"
 
 @interface AddFriendViewController ()<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
 {
@@ -63,9 +64,12 @@
     if (indexPath.row == 0) {
         cell.iconImg.image = [UIImage imageNamed:@"联系人"];
         cell.desLabel.text = @"添加手机联系人";
-    }else{
+    }else if(indexPath.row == 1){
         cell.iconImg.image = [UIImage imageNamed:@"saoyisao"];
         cell.desLabel.text = @"扫一扫";
+    }else{
+        cell.iconImg.image = [UIImage imageNamed:@"group_chat"];
+        cell.desLabel.text = @"发起群聊";
     }
 
     return cell;
@@ -162,8 +166,8 @@
         vc.isAddPhoneFriend = YES;
         [self.navigationController pushViewController:vc animated:YES];
         
-    }else{
-        //跳转到扫一扫页面
+    }else if (indexPath.row == 1){ //跳转到扫一扫页面
+        
         //扫一扫
         ScanQRCodeController *QRCode = [[ScanQRCodeController alloc] init];
         
@@ -201,6 +205,13 @@
         
         QRCode.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:QRCode animated:YES];
+    }else{ //发起群聊
+        CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+        vc.hideFirstSection = YES;
+        vc.fartherVC = self;
+        BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+        [self presentViewController:nav animated:YES completion:nil];
+
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

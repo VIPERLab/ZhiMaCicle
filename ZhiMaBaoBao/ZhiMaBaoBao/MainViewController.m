@@ -99,18 +99,15 @@
     //1.数据库查会话模型，拿出对该用户设置的的新消息提醒 如果是yes 播放声音
     ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.isGroup];
     if (!conversionModel.disturb && ![userinfo.currentVC isKindOfClass:[ChatController class]]) {    //不在当前控制器
-        [self playSystemAudio];
+        
+        if (message.type != MessageTypeSystem) {    //系统消息不播放提示音
+            [self playSystemAudio];
+
+        }
     }
     
     //更新未读消息
     [self updateUnread];
-    
-    //根据id查询发消息用户的用户昵称,和最后一条消息内容
-    NSString *content = [NSString stringWithFormat:@"%@: %@",conversionModel.converseName,conversionModel.lastConverse];
-    
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        [self sendLocalNotification:content];
-    }
 }
 
 //添加子控制器
@@ -136,38 +133,33 @@
     [self addChildViewController:navigationVc];
 }
 
-//播放消息提示音
-- (void)playSystemAudio{
-    AudioServicesPlaySystemSound(1007);
-}
-
-//发送本地通知
-- (void)sendLocalNotification:(NSString *)content{
-    // 初始化本地通知对象
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    if (notification) {
-        // 设置通知的提醒时间
-        NSDate *currentDate   = [NSDate date];
-        notification.timeZone = [NSTimeZone defaultTimeZone]; // 使用本地时区
-        notification.fireDate = [currentDate dateByAddingTimeInterval:0.f];
-        
-        // 设置重复间隔
-        notification.repeatInterval = kCFCalendarUnitDay;
-        
-        // 设置提醒的文字内容
-        notification.alertBody   = content;
-//        notification.alertAction = NSLocalizedString(@"起床了", nil);
-        
-        // 通知提示音 使用默认的
-        notification.soundName= UILocalNotificationDefaultSoundName;
-        
-        // 设置应用程序右上角的提醒个数
-        notification.applicationIconBadgeNumber = [self updateUnread];
-        
-        // 将通知添加到系统中
-        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-    }
-}
+////发送本地通知
+//- (void)sendLocalNotification:(NSString *)content{
+//    // 初始化本地通知对象
+//    UILocalNotification *notification = [[UILocalNotification alloc] init];
+//    if (notification) {
+//        // 设置通知的提醒时间
+//        NSDate *currentDate   = [NSDate date];
+//        notification.timeZone = [NSTimeZone defaultTimeZone]; // 使用本地时区
+//        notification.fireDate = [currentDate dateByAddingTimeInterval:0.f];
+//        
+//        // 设置重复间隔
+//        notification.repeatInterval = kCFCalendarUnitDay;
+//        
+//        // 设置提醒的文字内容
+//        notification.alertBody   = content;
+////        notification.alertAction = NSLocalizedString(@"起床了", nil);
+//        
+//        // 通知提示音 使用默认的
+//        notification.soundName= UILocalNotificationDefaultSoundName;
+//        
+//        // 设置应用程序右上角的提醒个数
+//        notification.applicationIconBadgeNumber = [self updateUnread];
+//        
+//        // 将通知添加到系统中
+//        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+//    }
+//}
 
 //获取未读消息提示
 - (NSInteger)updateUnread{
@@ -202,6 +194,19 @@
     }
     
     self.tabBar.frame = CGRectMake(0, DEVICEHIGHT - 49 - shouldBeSubtractionHeight, DEVICEWITH, 49);
+}
+
+//播放消息提示音(已经判断是声音还是振动提醒)
+- (void)playSystemAudio{
+    if (USERINFO.newMessageNotify) {    //开启了接受信息消息通知
+        if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
+            AudioServicesPlaySystemSound(1007);
+        }else{
+            if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+        }
+    }
 }
 
 - (void)dealloc{

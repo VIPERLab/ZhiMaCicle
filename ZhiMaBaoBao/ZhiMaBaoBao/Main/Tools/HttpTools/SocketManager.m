@@ -284,7 +284,11 @@ static SocketManager *manager = nil;
             [self updateGroupNumber:groupId actUid:actuid uids:uids];
         }
         else if ([actType isEqualToString:@"deluserfromgroup"]){   //从群组中删除用户
+            NSDictionary *resDic = responceData[@"data"];
+            NSString *uids = resDic[@"uids"];
+            NSString *groupId = resDic[@"groupid"];
             
+//            [self deleteGroupUser];
         }
         else if ([actType isEqualToString:@"renamegroup"]){   //重命名群组
             //更新数据库群名称，添加一条系统消息"xx修改群名为"xxx""
@@ -388,20 +392,30 @@ static SocketManager *manager = nil;
 
 //收到拉人进群消息  actuid:操作者id   uids:被邀请用户的id
 - (void)updateGroupNumber:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
-    NSArray *uidsArr = [uids componentsSeparatedByString:@","];
-    NSMutableArray *namesArr = [NSMutableArray array];
-    for (NSString *userId in uidsArr) {
-        ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:userId];
-        [namesArr addObject:friend.user_Name];
-    }
-    ZhiMaFriendModel *actUserModel = [FMDBShareManager getUserMessageByUserID:actUid];
+
     LGMessage *systemMsg = [[LGMessage alloc] init];
     //拼接被邀请者的姓名
     NSString *userNames = nil;
     if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
+        NSArray *copyArr = [uids componentsSeparatedByString:@","];     //拷贝一份
+        NSMutableArray *uidsArr = [copyArr mutableCopy];
+        
+        NSMutableArray *namesArr = [NSMutableArray array];
+        //剔除自己的id
+        for (NSString *userid in copyArr) {
+            if ([userid isEqualToString:USERINFO.userID]) {
+                [uidsArr removeObject:userid];
+            }
+        }
+        //拼接被邀请者名字
+        for (NSString *userId in uidsArr) {
+            ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:userId];
+            [namesArr addObject:friend.user_Name];
+        }
         userNames = [namesArr componentsJoinedByString:@","];
         systemMsg.text = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",userNames];
     }else{
+        ZhiMaFriendModel *actUserModel = [FMDBShareManager getUserMessageByUserID:actUid];
         userNames = actUserModel.user_Name;
         systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请你加入了群聊",userNames];
     }
@@ -991,9 +1005,17 @@ static SocketManager *manager = nil;
     return resultStr;
 }
 
-//播放消息提示音
+//播放消息提示音(已经判断是声音还是振动提醒)
 - (void)playSystemAudio{
-    AudioServicesPlaySystemSound(1007);
+    if (USERINFO.newMessageNotify) {    //开启了接受信息消息通知
+        if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
+            AudioServicesPlaySystemSound(1007);
+        }else{
+            if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+        }
+    }
 }
 
 - (void)dealloc{

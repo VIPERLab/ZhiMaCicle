@@ -9,6 +9,7 @@
 #import "BaseViewController.h"
 #import "LGSearchController.h"
 #import "AddFriendViewController.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface BaseViewController ()
 
@@ -97,6 +98,19 @@
 //        NSLog(@"进入前台通知 !!!!");
 //        manager.entry_Foreground = NO;
 //    }
+}
+
+//播放消息提示音(已经判断是声音还是振动提醒)
+- (void)playSystemAudio{
+    if (USERINFO.newMessageNotify) {    //开启了接受信息消息通知
+        if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
+            AudioServicesPlaySystemSound(1007);
+        }else{
+            if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+        }
+    }
 }
 
 // 清除子类未消除的通知

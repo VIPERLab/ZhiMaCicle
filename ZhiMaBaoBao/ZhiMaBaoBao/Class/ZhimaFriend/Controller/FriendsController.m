@@ -403,8 +403,4 @@ static NSString * const reuseIdentifier = @"friendListcell";
     return _unReadLabel;
 }
 
-//播放消息提示音
-- (void)playSystemAudio{
-    AudioServicesPlaySystemSound(1007);
-}
 @end
