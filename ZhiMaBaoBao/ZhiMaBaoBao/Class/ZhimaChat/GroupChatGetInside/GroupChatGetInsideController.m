@@ -109,21 +109,46 @@
         if (responseData.code == 0) {
             [LCProgressHUD hide];
             //生成群聊数据模型
+            [LCProgressHUD hide];
             [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
                 return @{
                          @"groupUserVos":@"GroupUserModel"
                          };
             }];
-            self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-            self.groupChatModel.myGroupName = USERINFO.username;
+            GroupChatModel *model  = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+            self.groupChatModel = model;
+            model.myGroupName = USERINFO.username;
             //保存群会话信息，插入数据库
-            [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+            [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupId];
             
             //通过socket拉人进群
             [[SocketManager shareInstance] addUserToGroup:self.groupChatModel.groupId uids:USERINFO.userID];
             
             //跳转到群聊天页面
             [self jumpGroupChat];
+        } else if (responseData.code == 78) {
+            //跳转到会话列表
+            [LCProgressHUD hide];
+            
+            
+            GroupChatModel *model = [FMDBShareManager getGroupChatMessageByGroupId:self.groupId];
+            
+            // 创建/ 更新会话
+            [FMDBShareManager saveGroupChatInfo:model andConverseID:self.groupId];
+            
+            UserInfo *userInfo = [UserInfo shareInstance];
+            [self.navigationController popToRootViewControllerAnimated:NO];
+            userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
+            
+            ChatController *vc = [[ChatController alloc] init];
+            vc.conversionId = model.groupId;
+            vc.conversionName = model.groupName;
+            vc.converseType = YES;
+            vc.hidesBottomBarWhenPushed = YES;
+            ConversationController *conversationVC = userInfo.conversationVC;
+            [conversationVC.navigationController pushViewController:vc animated:YES];
+            
+            
         }
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:error.msg];
