@@ -445,7 +445,16 @@ static SocketManager *manager = nil;
         }
         userNames = [namesArr componentsJoinedByString:@","];
         systemMsg.text = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",userNames];
-    }else{
+    }
+    else if ([actUid isEqualToString:uids]){   //通过扫描二维码进群
+        if ([actUid isEqualToString:USERINFO.userID]) { //自己
+            systemMsg.text = [NSString stringWithFormat:@"你通过扫描二维码加入了群聊"];
+        }else{
+            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
+            systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描二维码加入了群聊",model.friend_nick];
+        }
+    }
+    else{
         ZhiMaFriendModel *actUserModel = [FMDBShareManager getUserMessageByUserID:actUid];
         userNames = actUserModel.user_Name;
         systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请你加入了群聊",userNames];

@@ -33,8 +33,8 @@
 
 -(CGFloat)cellHeight {
     if (self.type == 1) { // 纯文字
-        CGFloat contentHeight = [self.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth - 30, MAXFLOAT)].height;
-        return contentHeight + 70;
+        CGFloat contentHeight = [self.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth - 60, MAXFLOAT)].height;
+        return contentHeight + 80;
     } else if (self.type == 3) { // 纯图片
         return 220;
     }

@@ -1895,7 +1895,7 @@
     } else {
         converseModel.time = [NSDate cTimestampFromString:model.create_time format:@"yyyy-MM-dd HH:mm:ss"];
         converseModel.converseType = 1;
-        converseModel.converseId = model.groupId;
+        converseModel.converseId = converseID;
         converseModel.unReadCount = 0;
         converseModel.converseName = model.groupName;
         converseModel.converseHead_photo = model.groupAvtar;
