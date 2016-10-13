@@ -624,7 +624,6 @@
     [HttpTool POST:@"/moblie/savePersonInfo.do" params:params success:^(ResponseData *json) {
         block(json);
     } failure:^(ErrorData *error) {
-    
         
     }];
 }

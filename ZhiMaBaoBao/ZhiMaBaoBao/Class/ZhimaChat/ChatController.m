@@ -315,7 +315,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
             self.isTimeOut = YES;
             [RecordingHUD dismiss];
-            [weakSelf.keyboard setButtonStateWithNormal];
+//            [weakSelf.keyboard setButtonStateWithNormal];
             [weakSelf sendAudioMessage];
 //            [weakSelf chatKeyBoardDidFinishRecoding:weakSelf.keyboard];
         }else{
@@ -384,12 +384,21 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     FMDBManager* shareManager = [FMDBManager shareManager];
     NSMutableArray*marr = [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
+    
+    NSMutableArray*marrImageInfo = [self.allImagesInfo mutableCopy];
+    for (int i=0; i<marrImageInfo.count; i++) {
+        NSDictionary*dic = marrImageInfo[i];
+        NSString*index = dic[@"index"];
+        NSDictionary*nDic = @{@"index":[NSString stringWithFormat:@"%ld",[index integerValue] + marr.count],@"url":dic[@"url"],@"fromUid":dic[@"fromUid"]};
+        [self.allImagesInfo removeObjectAtIndex:i];
+        [self.allImagesInfo insertObject:nDic atIndex:i];
+    }
 
     for (int i=0; i<marr.count; i++) {
         [self.messages insertObject:marr[i] atIndex:0];
         LGMessage*message = marr[i];
         if (message.type == MessageTypeImage) {
-            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",(long)(self.currentPage*20 + i)],@"url":message.text,@"fromUid":message.fromUid};
+            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",marr.count-1-(long)i],@"url":message.text,@"fromUid":message.fromUid};
             [self.allImagesInfo insertObject:dic atIndex:0];
         }
     }
@@ -422,7 +431,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.messages insertObject:message atIndex:0];
         
         if (message.type == MessageTypeImage) {
-            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",(long)i],@"url":message.text,@"fromUid":message.fromUid};
+            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",marr.count-1-(long)i],@"url":message.text,@"fromUid":message.fromUid};
             [self.allImagesInfo insertObject:dic atIndex:0];
         }
     }
@@ -499,47 +508,47 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
 {
    // 显示单张图片
-    [self.subviews removeAllObjects];
-    UIView *imageView = grz.view;
-    
-    LGMessage *msg = self.messages[imageView.tag];
-    if (msg.text) {
-        self.currentPicUrl = [msg.text stringByReplacingOccurrencesOfString:@"s_" withString:@""];
-    }else{
-        self.currentPicUrl = nil;
-    }
-    
-    [self.subviews addObject:imageView];
-    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-    browser.currentImageIndex = 0;
-    browser.sourceImagesContainerView = grz.view.superview;
-    browser.imageCount = self.subviews.count;
-    browser.delegate = self;
-    browser.userId = msg.fromUid;
-    [browser show];
-    
-    //多张图片浏览
-//    NSUInteger index = 0;
-//    NSLog(@"grz.view.tag = %ld",grz.view.tag);
-//    for (int i=0; i<self.allImagesInfo.count; i++) {
-//        NSDictionary*dic = self.allImagesInfo[i];
-//        UIImageView*iv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 1, 1)];
-//        [iv sd_setImageWithURL:dic[@"url"]];
-//        [grz.view.superview addSubview:iv];
-//        [self.subviews addObject:iv];
-//        NSLog(@"grz.view.tag = %ld",[dic[@"index"] integerValue]);
-//
-//        if (grz.view.tag == [dic[@"index"] integerValue]) {
-//            index = self.allImagesInfo.count - i -1;
-//        }
+//    [self.subviews removeAllObjects];
+//    UIView *imageView = grz.view;
+//    
+//    LGMessage *msg = self.messages[imageView.tag];
+//    if (msg.text) {
+//        self.currentPicUrl = [msg.text stringByReplacingOccurrencesOfString:@"s_" withString:@""];
+//    }else{
+//        self.currentPicUrl = nil;
 //    }
+//    
+//    [self.subviews addObject:imageView];
 //    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-//    browser.currentImageIndex = index;
+//    browser.currentImageIndex = 0;
 //    browser.sourceImagesContainerView = grz.view.superview;
 //    browser.imageCount = self.subviews.count;
 //    browser.delegate = self;
-//    browser.isChat = YES;
+//    browser.userId = msg.fromUid;
 //    [browser show];
+    
+    //多张图片浏览
+    NSUInteger index = 0;
+    NSLog(@"grz.view.tag = %ld",grz.view.tag);
+    for (int i=0; i<self.allImagesInfo.count; i++) {
+        NSDictionary*dic = self.allImagesInfo[i];
+        UIImageView*iv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 1, 1)];
+        [iv sd_setImageWithURL:dic[@"url"]];
+        [grz.view.superview addSubview:iv];
+        [self.subviews addObject:iv];
+        NSLog(@"index = %ld",[dic[@"index"] integerValue]);
+
+        if (grz.view.tag == [dic[@"index"] integerValue]) {
+            index = i;
+        }
+    }
+    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
+    browser.currentImageIndex = index;
+    browser.sourceImagesContainerView = grz.view.superview;
+    browser.imageCount = self.subviews.count;
+    browser.delegate = self;
+    browser.isChat = YES;
+    [browser show];
     
 }
 
@@ -555,10 +564,12 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index
 {
-//    NSDictionary *msg = self.allImagesInfo[index];
-//    NSString*urlStr = [msg[@"url"] stringByReplacingOccurrencesOfString:@"s_" withString:@""];
-    NSString*urlStr = self.currentPicUrl;
-//    browser.userId = msg[@"fromUid"];
+    
+    //    NSString*urlStr = self.currentPicUrl;
+
+    NSDictionary *msg = self.allImagesInfo[index];
+    NSString*urlStr = [msg[@"url"] stringByReplacingOccurrencesOfString:@"s_" withString:@""];
+    browser.userId = msg[@"fromUid"];
     NSURL *url = [NSURL URLWithString:urlStr];
     return url;
 }

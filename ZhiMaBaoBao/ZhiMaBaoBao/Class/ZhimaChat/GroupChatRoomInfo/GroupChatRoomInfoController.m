@@ -56,23 +56,16 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 //    [self getDataFormSQL];
-    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
     if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
         self.isGroupCreater = YES;
     }
     
     [self dataRequst];
-    
-    [_tableView reloadData];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 // 拉取网络上最新的数据
 - (void)dataRequst {
+    /*
     [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.converseId success:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
@@ -114,6 +107,18 @@
     } failure:^(ErrorData *error) {
         
     }];
+    
+    */
+    
+    self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
+    
+    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
+    
+    // 设置尾部
+    GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
+    footer.delegate = self;
+    _tableView.tableFooterView = footer;
+    [_tableView reloadData];
     
     
 }
