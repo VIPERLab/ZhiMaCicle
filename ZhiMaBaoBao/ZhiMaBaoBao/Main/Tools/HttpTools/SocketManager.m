@@ -282,12 +282,19 @@ static SocketManager *manager = nil;
             
         }
         else if ([actType isEqualToString:@"renamegroup"]){   //重命名群组
-            
+            //更新数据库群名称，添加一条系统消息"xx修改群名为"xxx""
+            NSDictionary *resDic = responceData[@"data"];
+            NSString *groupName = resDic[@"groupname"];
+            NSString *groupId = resDic[@"groupid"];
+            //修改群名的用户的ID
+            NSString *userId = resDic[@"uid"];
+            [self updateGroupName:groupName groupId:groupId userId:userId];
         }
         else if ([actType isEqualToString:@"undomsg"]){   //撤销消息
             NSDictionary *resDic = responceData[@"data"];
             NSString *fromUid = resDic[@"fromUid"];
             NSString *groupId = resDic[@"toUidOrGroupId"];
+            
             //根据uid拿到用户名
             ZhiMaFriendModel *model = [FMDBShareManager getUserMessageByUserID:fromUid];
             NSString *userName = model.user_Name;
@@ -371,6 +378,84 @@ static SocketManager *manager = nil;
             //从网络加载新好友资料，存入数据库好友表  ->  然后添加系统消息 "xx通过了你的朋友验证请求,现在可以开始聊天了。" 到数据库
             [self addNewFriendToSqilt:friendId];
         }
+    }
+}
+
+//收到socket消息，更新群名称  userId : 修改群名的用户id
+- (void)updateGroupName:(NSString *)groupName groupId:(NSString *)groupId userId:(NSString *)userId{
+    
+    //如果这个时候，本地还没有生成群成员表  先从网络加载群信息  存到本地
+    if (![FMDBShareManager isConverseIsExist:groupId]) {
+        //加载群信息
+        [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
+            if (responseData.code == 0) {
+                //生成群聊数据模型
+                [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                    return @{
+                             @"groupUserVos":@"GroupUserModel"
+                             };
+                }];
+                
+                //新建一个群会话，插入数据库  (直接修改群名称)
+                GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+                groupChatModel.myGroupName = USERINFO.username;
+                groupChatModel.groupName = groupName;
+                [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
+                
+                //保存系统消息到数据库
+                GroupChatModel *chatModel = [FMDBShareManager getGroupChatMessageByGroupId:groupId];
+                chatModel.groupName = groupName;
+                [FMDBShareManager saveGroupChatInfo:chatModel andConverseID:groupId];
+                
+                //根据userId,查到修改群名称的用户名
+                GroupUserModel *groupUserModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
+                NSString *userName = groupUserModel.friend_nick;
+                
+                LGMessage *systemMsg = [[LGMessage alloc] init];
+                systemMsg.actType = ActTypeRenamegroup;
+                systemMsg.text = [NSString stringWithFormat:@"%@通过了你的朋友验证请求,现在可以开始聊天了。",userName];
+                systemMsg.fromUid = USERINFO.userID;
+                systemMsg.toUidOrGroupId = groupId;
+                systemMsg.type = MessageTypeSystem;
+                systemMsg.msgid = [NSString generateMessageID];
+                systemMsg.isGroup = NO;
+                systemMsg.timeStamp = [NSDate currentTimeStamp];
+                [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
+                
+                //发送通知，即时更新相应的页面
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                userInfo[@"message"] = systemMsg;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                
+            }
+        } failure:^(ErrorData *error) {
+            
+        }];
+    }else{
+        //已经有群信息，直接更新群名称  然后插入系统消息到数据库
+        GroupChatModel *chatModel = [FMDBShareManager getGroupChatMessageByGroupId:groupId];
+        chatModel.groupName = groupName;
+        [FMDBShareManager saveGroupChatInfo:chatModel andConverseID:groupId];
+        
+        //根据userId,查到修改群名称的用户名
+        GroupUserModel *groupUserModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
+        NSString *userName = groupUserModel.friend_nick;
+        
+        LGMessage *systemMsg = [[LGMessage alloc] init];
+        systemMsg.actType = ActTypeRenamegroup;
+        systemMsg.text = [NSString stringWithFormat:@"%@修改群名为\"%@\"。",userName,groupName];
+        systemMsg.fromUid = USERINFO.userID;
+        systemMsg.toUidOrGroupId = groupId;
+        systemMsg.type = MessageTypeSystem;
+        systemMsg.msgid = [NSString generateMessageID];
+        systemMsg.isGroup = NO;
+        systemMsg.timeStamp = [NSDate currentTimeStamp];
+        [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
+        
+        //发送通知，即时更新相应的页面
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        userInfo[@"message"] = systemMsg;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
     }
 }
 
@@ -759,7 +844,8 @@ static SocketManager *manager = nil;
     //拼接消息 (如果是群重命名 dataDic拼接"groupname" ，其他拼接"uids"）
     if (type == GroupActTypeReName) {
         dataDic[@"groupname"] = uids;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&groupname=%@&%@",controllerName,methodName,groupId,uids,APIKEY];
+        dataDic[@"uid"] = USERINFO.userID;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&groupname=%@&uid=%@&%@",controllerName,methodName,groupId,uids,USERINFO.userID,APIKEY];
     }else{
         dataDic[@"uids"]= uids;
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&uids=%@&%@",controllerName,methodName,groupId,uids,APIKEY];

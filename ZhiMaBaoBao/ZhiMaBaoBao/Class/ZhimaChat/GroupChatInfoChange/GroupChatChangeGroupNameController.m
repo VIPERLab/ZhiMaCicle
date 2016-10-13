@@ -71,7 +71,6 @@
     
 }
 
-
 - (void)saveGroupName {
     if ([self.textField.text isEqualToString:@""]) {
         NSLog(@"不能为空");
@@ -86,6 +85,28 @@
     }
     
     [FMDBShareManager saveGroupChatInfo:self.groupModel andConverseID:self.groupModel.groupId];
+    
+    
+    //socket发送"修改群名"消息,通知群用户修改群名称  -> 插入一条系统消息到数据库
+    [[SocketManager shareInstance] renameGroup:self.groupModel.groupId name:self.groupModel.groupName];
+    
+    LGMessage *systemMsg = [[LGMessage alloc] init];
+    systemMsg.actType = ActTypeRenamegroup;
+    systemMsg.text = [NSString stringWithFormat:@"你修改群名为\"%@\"。",self.groupModel.groupName];
+    systemMsg.fromUid = USERINFO.userID;
+    systemMsg.toUidOrGroupId = self.groupModel.groupId;
+    systemMsg.type = MessageTypeSystem;
+    systemMsg.msgid = [NSString generateMessageID];
+    systemMsg.isGroup = NO;
+    systemMsg.timeStamp = [NSDate currentTimeStamp];
+    [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:self.groupModel.groupId];
+    
+    //发送通知，即时更新相应的页面
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    userInfo[@"message"] = systemMsg;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+
+    
     
     [self.navigationController popViewControllerAnimated:YES];
 }
