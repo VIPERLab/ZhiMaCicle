@@ -371,6 +371,7 @@
     GroupChatAllMembersController *members = [[GroupChatAllMembersController alloc] init];
     members.membersArray = [self.groupModel.groupUserVos mutableCopy];
     members.isDeletedMembers = YES;
+    members.groupId = self.groupModel.groupId;
     [self.navigationController pushViewController:members animated:YES];
 }
 
