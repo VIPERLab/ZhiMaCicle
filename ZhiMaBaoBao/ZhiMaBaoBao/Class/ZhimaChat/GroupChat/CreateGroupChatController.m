@@ -518,7 +518,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             } failure:^(ErrorData *error) {
                 [LCProgressHUD showFailureText:error.msg];
             }];
-        }else{      //拉人进去
+        }else{      //拉人进群
             //拼接选择好友userId
             NSMutableArray *userIdArray = [NSMutableArray array];
             for (ZhiMaFriendModel *model in self.selectedFriends) {

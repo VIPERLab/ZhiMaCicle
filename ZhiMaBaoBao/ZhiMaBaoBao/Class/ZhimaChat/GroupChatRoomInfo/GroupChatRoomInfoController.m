@@ -321,10 +321,20 @@
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
     if (index == 0) {
-        [[SocketManager shareInstance] delGroup:self.groupModel.groupId uid:USERINFO.userID];
-        [FMDBShareManager deleteMessageFormMessageTableByConverseID:self.groupModel.groupId];
-        [FMDBShareManager deleteConverseWithConverseId:self.groupModel.groupId];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        //调用http接口
+        [LGNetWorking setupGroup:USERINFO.sessionId groupId:self.groupModel.groupId functionName:@"quit_group" value:@"1" success:^(ResponseData *responseData) {
+            if (responseData.code == 0) {
+                [[SocketManager shareInstance] delGroup:self.groupModel.groupId uid:USERINFO.userID];
+                [FMDBShareManager deleteMessageFormMessageTableByConverseID:self.groupModel.groupId];
+                [FMDBShareManager deleteConverseWithConverseId:self.groupModel.groupId];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }else{
+                [LCProgressHUD showFailureText:responseData.msg];
+            }
+            
+        } failure:^(ErrorData *error) {
+            [LCProgressHUD showFailureText:error.msg];
+        }];
     }
 }
 

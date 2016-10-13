@@ -12,7 +12,7 @@ typedef NS_OPTIONS(NSUInteger, ActType) {
     ActTypeNormal,              //普通消息
     ActTypeAddfriend,           //好友请求
     ActTypeUpdatefriend,        //更新好友数据
-    ActTypeUpdategroupnum,      //更新群用户数
+    ActTypeUpdategroupnum,      //更新群用户数 （拉人进群）
     ActTypeDeluserfromgroup,    //从群组删除用户
     ActTypeRenamegroup,         //修改群名片，所有群成员都会同步修改
     ActTypeUndomsg              //撤销消息，收到消息的用户都将删除消息

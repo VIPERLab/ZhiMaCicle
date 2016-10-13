@@ -167,7 +167,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
     //
-    if ([message.fromUid isEqualToString:self.conversionId] || ([message.toUidOrGroupId isEqualToString:self.conversionId] && message.isGroup)) {
+    if ([message.fromUid isEqualToString:self.conversionId] || ([message.toUidOrGroupId isEqualToString:self.conversionId])) {
         if (message.actType == ActTypeUndomsg) {
             NSMutableArray*marr = [self.messages mutableCopy];
             for (LGMessage*msg in marr) {
@@ -411,7 +411,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     if (marr.count<20) {
         self.tableView.mj_header = nil;
     }
-
 
 }
 
