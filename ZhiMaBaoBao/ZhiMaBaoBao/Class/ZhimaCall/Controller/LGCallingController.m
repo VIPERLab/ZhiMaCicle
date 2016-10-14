@@ -313,10 +313,12 @@
                 }];
             }
             else{
-                [LCProgressHUD showFailureText:responseModel.msg];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self dismissViewControllerAnimated:YES completion:nil];
-                });
+//                [LCProgressHUD showFailureText:responseModel.msg];
+//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self dismissViewControllerAnimated:YES completion:^{
+                         [LCProgressHUD showFailureText:responseModel.msg];
+                    }];
+//                });
             }
             
             //添加本地通话日志

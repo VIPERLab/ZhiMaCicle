@@ -20,6 +20,8 @@
 @end
 
 @interface YiKeyBoardView : UIView
+@property (weak, nonatomic) IBOutlet UIButton *setBtn;
+@property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
 
 + (instancetype)keyBoardView;
 - (IBAction)btn1Click:(id)sender;

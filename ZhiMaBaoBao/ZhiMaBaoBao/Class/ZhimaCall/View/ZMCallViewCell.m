@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *distruct;
 
 @property (weak, nonatomic) IBOutlet UIButton *moreInfoBtn;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *callStateIV;
 
 @end
 
@@ -29,7 +31,8 @@
 
 - (void)setModel:(LGCallRecordModel *)model{
     _model = model;
-    
+    self.timeLabel.text =  [NSString timeStringChangeToZMTimeString: model.update_time];
+
     //来电
     if (model.call_type == 2) {
         self.phoneNum.text = model.from_phone;
@@ -39,6 +42,7 @@
             //没有名字显示归属地
             self.distruct.text = model.from_phone;
         }
+        self.callStateIV.image = [UIImage imageNamed:@"icon-callIn"];
     }
     //去电
     else if (model.call_type == 1){
@@ -49,6 +53,13 @@
             self.distruct.text = model.to_phone;
         }
         self.phoneNum.text = model.to_phone;
+        self.callStateIV.image = [UIImage imageNamed:@"icon-callOut"];
+    }
+}
+- (IBAction)infoAction:(id)sender {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(checkDetailInfoWithModel:)]) {
+        [self.delegate checkDetailInfoWithModel:self.model];
     }
 }
 

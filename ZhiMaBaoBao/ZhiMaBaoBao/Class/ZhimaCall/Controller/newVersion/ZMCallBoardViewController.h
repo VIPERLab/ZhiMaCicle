@@ -10,4 +10,7 @@
 
 @interface ZMCallBoardViewController : BaseViewController
 
+@property (nonatomic, strong) NSArray *contactsArr;  //筛选结果数组
+
+
 @end
