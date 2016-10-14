@@ -105,4 +105,6 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
  /** 用户自身*/
 @property (nonatomic, assign, readonly, getter=isUser) BOOL user;
 
+@property (nonatomic, assign) BOOL errorMsg; //错误信息 （被踢出群后标记为yes）
+
 @end

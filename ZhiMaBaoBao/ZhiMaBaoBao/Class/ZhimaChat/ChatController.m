@@ -225,6 +225,13 @@ static NSString *const reuseIdentifier = @"messageCell";
             }
         }
     }
+    
+    //自己被剔除群，加入标记
+    if (message.actType == ActTypeDeluserfromgroup) {
+        //根据群聊id,去除对应群表中自己的群成员数据 （判断是否已被剔除群聊）
+        GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:self.conversionId];
+        self.notInGroup = userModel.memberGroupState;
+    }
 }
 //消息发送状态回调
 - (void)sendMsgStatuescall:(NSNotification *)notification{
@@ -699,6 +706,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 
                     textChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
                         
+                        if (self.notInGroup) {  
+                            return ;
+                        }
+                        
                         LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
                         SocketManager* socket = [SocketManager shareInstance];
                         [socket reSendMessage:chat];
@@ -753,6 +764,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                     picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
                         
                         LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
+                        chat.errorMsg = self.notInGroup;    //新增错误信息标记
                         
                         if (chat.text) { // 推送失败的情况
                             SocketManager* socket = [SocketManager shareInstance];
@@ -813,6 +825,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                     voiceChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
                         
                         LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
+                        chat.errorMsg = self.notInGroup;    //新增错误信息标记
                         SocketManager* socket = [SocketManager shareInstance];
                         [socket reSendMessage:chat];
                         
@@ -1177,6 +1190,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
     SocketManager* socket = [SocketManager shareInstance];
+    message.errorMsg = self.notInGroup;    //新增错误信息标记
     [socket sendMessage:message];
 
     
@@ -1244,7 +1258,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.audioLength = [AmrPlayerReader durationOfAmrFilePath:[NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text]];
-    
+    message.errorMsg = self.notInGroup;    //新增错误信息标记
+
     SocketManager* socket = [SocketManager shareInstance];
     [socket sendMessage:message];
 
@@ -1407,6 +1422,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         if ([obj[@"code"] integerValue] == 8888) {
             message.sendStatus = 1;
             message.text = obj[@"url"];
+            message.errorMsg = self.notInGroup;    //新增错误信息标记
             SocketManager* socket = [SocketManager shareInstance];
             [socket sendMessage:message];
             
@@ -1659,6 +1675,14 @@ static NSString *const reuseIdentifier = @"messageCell";
         _allImagesInfo = [NSMutableArray array];
     }
     return _allImagesInfo;
+}
+
+- (void)setNotInGroup:(BOOL)notInGroup{     //如果被踢出群聊，隐藏右侧群详情按钮
+    _notInGroup = notInGroup;
+    
+    if (notInGroup) {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
 }
 
 @end

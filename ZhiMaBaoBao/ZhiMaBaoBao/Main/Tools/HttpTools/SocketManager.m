@@ -121,11 +121,15 @@ static SocketManager *manager = nil;
     //处理过后的发送给socket的message
     LGMessage *sendMsg = [[LGMessage alloc] init];
     
-    //通过消息的发送状态判断是否为重发的消息
-    if (!message.sendStatus) {
-        
-    }else{      //正常发送消息 -->发送socket消息、插入新消息到数据库
-        
+    //是错误信息 （在被踢出的群里发信息）
+    if (message.errorMsg) {
+        //直接发送 失败通知
+        message.sendStatus = NO;
+        [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+        //发送消息状态回调通知
+        NSDictionary *infoDic = @{@"message":message};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageStateCall object:nil userInfo:infoDic];
+        return;
     }
     
     //语音消息 -- 发送base64到socket服务器，存语音路径到本地数据库
@@ -163,11 +167,7 @@ static SocketManager *manager = nil;
     
     //根据网络状态-- 标记消息发送状态
     UserInfo *userInfo = [UserInfo shareInstance];
-    if (userInfo.networkUnReachable) {
-        message.sendStatus = NO;
-    }else{
-        message.sendStatus = YES;
-    }
+    message.sendStatus = !userInfo.networkUnReachable;
     
     //插入消息数据库
     BOOL success = NO;
@@ -427,8 +427,8 @@ static SocketManager *manager = nil;
         GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
         systemMsg.text = [NSString stringWithFormat:@"你被\"%@\"移出了群聊",model.friend_nick];
         
-        //将自己状态改为 被剔出群
-        model.memberGroupState = YES;
+        //将状态改为 被剔出群
+        selfModel.memberGroupState = YES;
         [FMDBShareManager saveAllGroupMemberWithArray:@[selfModel] andGroupChatId:groupId];
     }
     
@@ -484,10 +484,10 @@ static SocketManager *manager = nil;
         }
     }
     else{
-//        ZhiMaFriendModel *actUserModel = [FMDBShareManager getUserMessageByUserID:actUid];
+        ZhiMaFriendModel *actUserModel = [FMDBShareManager getUserMessageByUserID:actUid];
         //修改为从群表查用户资料
-        GroupUserModel *actUserModel = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
-        userNames = actUserModel.friend_nick;
+//        GroupUserModel *actUserModel = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
+        userNames = actUserModel.user_Name;
         systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请你加入了群聊",userNames];
     }
     
