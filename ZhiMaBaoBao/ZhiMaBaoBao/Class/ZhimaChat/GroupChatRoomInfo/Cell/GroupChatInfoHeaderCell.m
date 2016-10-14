@@ -39,9 +39,7 @@
 - (void)setupView {
     
     for (UIView *view in self.subviews) {
-        if ([view isKindOfClass:[UIButton class]]) {
-            [view removeFromSuperview];
-        }
+        [view removeFromSuperview];
     }
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;

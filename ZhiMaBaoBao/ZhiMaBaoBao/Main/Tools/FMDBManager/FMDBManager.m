@@ -2050,7 +2050,7 @@
 - (NSArray <GroupUserModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId {
     NSMutableArray *dataArray = [NSMutableArray array];
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@' and memberGroupState = '0'",groupId]];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@'",groupId]];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
@@ -2080,6 +2080,7 @@
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
     NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"memberId = %@ and converseId = %@",memberId,converseId]];
     GroupUserModel *model = [[GroupUserModel alloc] init];
+    NSLog(@"-----");
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
@@ -2091,6 +2092,7 @@
             model.memberGroupState = [result intForColumn:@"memberGroupState"];
         }
     }];
+    NSLog(@"-----");
     return model;
 }
 

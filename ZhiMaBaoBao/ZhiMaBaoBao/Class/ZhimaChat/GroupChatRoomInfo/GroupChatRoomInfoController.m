@@ -182,7 +182,7 @@
         GroupChatInfoHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:GroupChatRoomInfoHeaderCellReusedID forIndexPath:indexPath];
         cell.isGroupCreater = self.isGroupCreater;
         cell.MaxCount = self.MaxCount;
-        cell.modelArray = self.groupMenberArray;
+        cell.modelArray = self.groupModel.groupUserVos;
         
         cell.delegate = self;
         
@@ -229,9 +229,9 @@
         CGFloat iconW = (ScreenWidth - 20 * 5) / 4;
         CGFloat line;
         if (self.isGroupCreater) {
-            line = (self.groupMenberArray.count + 2) / 4.0;
+            line = (self.groupModel.groupUserVos.count + 2) / 4.0;
         } else {
-            line = (self.groupMenberArray.count + 1) / 4.0;
+            line = (self.groupModel.groupUserVos.count + 1) / 4.0;
         }
         
         int temp = (int)line;
