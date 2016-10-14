@@ -342,7 +342,7 @@ static SocketManager *manager = nil;
             NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];
             NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",conversionId]];
             [queue inDatabase:^(FMDatabase *db) {
-                BOOL success = [db executeUpdate:upDataStr];
+                [db executeUpdate:upDataStr];
 
             }];
             
@@ -353,6 +353,12 @@ static SocketManager *manager = nil;
         }
         else if ([actType isEqualToString:@"updategroupuser"]){ //群用户修改群昵称
 #warning 更新数据库群成员列表
+            NSDictionary *resDic = responceData[@"data"];
+            NSString *userId = resDic[@"uid"];
+            NSString *groupId = resDic[@"groupid"];
+            NSString *name = resDic[@"group_user_nick"];
+            
+            
             
         }
         else if ([actType isEqualToString:@"nofriend"]){ //对方把你删除好友，

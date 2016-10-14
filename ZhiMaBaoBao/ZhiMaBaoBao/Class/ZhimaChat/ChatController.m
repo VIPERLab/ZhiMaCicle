@@ -126,6 +126,17 @@ static NSString *const reuseIdentifier = @"messageCell";
         ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
         [self setCustomTitle:friendModel.displayName];
         self.friendHeadPic = friendModel.user_Head_photo;
+        //即时更新用户头像
+        NSMutableArray *indexPaths = [NSMutableArray array];
+        for (int i = 0; i < self.messages.count; i ++) {
+            LGMessage *message = self.messages[i];
+            if (![message.fromUid isEqualToString:USERINFO.userID]) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                [indexPaths addObject:indexPath];
+            }
+        }
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+
     } else {
         GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
         [self setCustomTitle:groupModel.groupName];
