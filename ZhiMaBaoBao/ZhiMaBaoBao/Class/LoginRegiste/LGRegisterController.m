@@ -176,14 +176,14 @@
     //判断手机号是否正确
     if (self.phoneField.text.length <= 0)
     {
-        [LCProgressHUD showText:@"请输入手机号"];
+        [LCProgressHUD showFailureText:@"请输入手机号"];
         self.getCodeBtn.enabled = YES;
         return;
     }
     
     if (![self.phoneField.text isMatchedByRegex:@"^(13|15|17|18|14)\\d{9}$"])
     {
-        [LCProgressHUD showText:@"请输入正确的手机号码"];
+        [LCProgressHUD showFailureText:@"请输入正确的手机号码"];
         self.getCodeBtn.enabled = YES;
         return;
     }
@@ -246,19 +246,19 @@
     
     if (self.phoneField.text.length <= 0)
     {
-        [LCProgressHUD showText:@"请输入手机号码"];
+        [LCProgressHUD showFailureText:@"请输入手机号码"];
         return;
     }
     
     if (![self.phoneField.text isMatchedByRegex:@"^(13|15|17|18|14)\\d{9}$"])
     {
-        [LCProgressHUD showText:@"请输入正确的手机号码"];
+        [LCProgressHUD showFailureText:@"请输入正确的手机号码"];
         return;
     }
 
 
     if (![self.VerField hasText]) {
-        [LCProgressHUD showText:@"请输入短信验证码"];
+        [LCProgressHUD showFailureText:@"请输入短信验证码"];
         return;
     }
     

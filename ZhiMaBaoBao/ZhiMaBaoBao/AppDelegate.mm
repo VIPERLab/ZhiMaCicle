@@ -251,11 +251,11 @@
 }
 
 
-
-
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // 开启sorket
     [[SocketManager shareInstance] connect];
+    
+    [JPUSHService setBadge:0];
     
     //计算是否超过设置邀请码的有效期
     if (USERINFO.sessionId && ![USERINFO.create_time isEqualToString:@""] && USERINFO.create_time!= nil) {

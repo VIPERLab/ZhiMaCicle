@@ -78,7 +78,7 @@
     } else if (model.type == 3) { // 纯图片
         _contentLabel.hidden = YES;
         _picImageView.hidden = NO;
-        [_picImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.photoUrl]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+        [_picImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.photoUrl]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
         
     }
 }

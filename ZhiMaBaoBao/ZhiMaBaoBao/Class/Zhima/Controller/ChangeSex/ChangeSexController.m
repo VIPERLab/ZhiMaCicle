@@ -7,6 +7,7 @@
 //
 
 #import "ChangeSexController.h"
+#import "ChangeSexCell.h"
 
 @interface ChangeSexController () <UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSArray *sexArray;
@@ -34,7 +35,7 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
-    [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"sexCell"];
+    [_tableView registerClass:[ChangeSexCell class] forCellReuseIdentifier:@"sexCell"];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -48,21 +49,40 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = self.sexArray[indexPath.row];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"sexCell" forIndexPath:indexPath];
-    cell.textLabel.text = title;
-    
-    if ([title isEqualToString:self.selectedSex]) {
-        //打钩
-        UIImageView *tickImage = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth - 15 - 20, (40 - 15) * 0.5, 15, 15)];
-        tickImage.image = [UIImage imageNamed:@"Sex_Tick"];
-        [cell addSubview:tickImage];
+    ChangeSexCell *cell = [tableView dequeueReusableCellWithIdentifier:@"sexCell" forIndexPath:indexPath];
+    cell.titleName = title;
+    if (indexPath.row == 0) {
+        if ([self.selectedSex isEqualToString:@"男"]) {
+            cell.isSelected = YES;
+        }
+    } else if (indexPath.row == 1) {
+        if ([self.selectedSex isEqualToString:@"女"]) {
+            cell.isSelected = YES;
+        }
     }
+    
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row == 0) {
+        ChangeSexCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        cell.isSelected = YES;
+        
+        ChangeSexCell *cell2 = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+        cell2.isSelected = NO;
+    } else {
+        ChangeSexCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        cell.isSelected = NO;
+        
+        ChangeSexCell *cell2 = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+        cell2.isSelected = YES;
+    }
+    
+    
+    
     NSString *value = [NSString string];
     if (indexPath.row == 0) {
         value = @"男";
@@ -70,7 +90,7 @@
         value = @"女";
     }
     
-    [LCProgressHUD showLoadingText:@"正在修改性别"];
+    
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"sex" andChangeValue:value block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
         if (responseData.code != 0) {

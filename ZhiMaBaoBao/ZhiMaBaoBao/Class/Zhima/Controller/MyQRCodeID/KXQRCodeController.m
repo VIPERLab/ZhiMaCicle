@@ -7,15 +7,14 @@
 //
 
 #import "KXQRCodeController.h"
-//#import "YiUserInfo.h"
-//#import "YiIMSDK.h"
+#import "KXActionSheet.h"
 #import "UIImage+YiExtension.h"
 #import "SDWebImageManager.h"
 
 #import "SecurityUtil.h"
 #import "GTMBase64.h"
 
-@interface KXQRCodeController ()
+@interface KXQRCodeController () <KXActionSheetDelegate>
 
 @property (nonatomic, weak) UIView *centerView;
 @property (nonatomic, weak) UIImageView *imageView; //二维码
@@ -26,9 +25,7 @@
 @end
 
 @implementation KXQRCodeController
-//{
-//    YiXmppVCard *vcard;
-//}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -91,6 +88,9 @@
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, imageW - 40, imageH - 40)];
     self.imageView = imageView;
+    imageView.userInteractionEnabled = YES;
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressDidClick:)];
+    [imageView addGestureRecognizer:longPress];
     [QRCodeView addSubview:imageView];
     
     
@@ -197,30 +197,57 @@
 
 
 #pragma mark - upDataVCard
-//-(void)updateVCard {
-//    YiUserInfo * userInfo = [YiUserInfo defaultUserInfo];
-//    
-//    NSString * avatarPath = [YiXmppVCard getAvatarPathByJid:[userInfo getJid]];
-//    if ([avatarPath length]) {
-//        [self.userIcon setImage:[UIImage imageWithContentsOfFile:avatarPath]];
-//    }
-//    
-//}
-//
-//-(void)updateNickNames {
-//    if ([vcard.nickname length]) {
-//        self.nameLabel.text = vcard.nickname;
-//    }
-//}
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)longPressDidClick:(UILongPressGestureRecognizer *)longPress {
+    
+    if (longPress.state == UIGestureRecognizerStateBegan) {
+        KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"保存图片"]];
+        sheet.delegate = self;
+        [sheet show];
+    }
+    
 }
-*/
+
+
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
+    if (index == 0) {
+        [self saveImage];
+    }
+}
+
+// 保存图片
+- (void)saveImage
+{
+    UIImageWriteToSavedPhotosAlbum(self.imageView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] init];
+    indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    [[UIApplication sharedApplication].keyWindow addSubview:indicator];
+    [indicator startAnimating];
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo;
+{
+    
+    UILabel *label = [[UILabel alloc] init];
+    label.textColor = [UIColor whiteColor];
+    label.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
+    label.layer.cornerRadius = 5;
+    label.clipsToBounds = YES;
+    label.bounds = CGRectMake(0, 0, 150, 30);
+    label.center = self.imageView.center;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont boldSystemFontOfSize:17];
+    [[UIApplication sharedApplication].keyWindow addSubview:label];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:label];
+    if (error) {
+        [LCProgressHUD showSuccessText:@"图片保存失败"];
+    }   else {
+        [LCProgressHUD showSuccessText:@"图片保存成功"];
+    }
+    [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
+}
+
+
 
 @end

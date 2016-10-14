@@ -10,4 +10,8 @@
 
 @interface ChangeSexCell : UITableViewCell
 
+@property (nonatomic, copy) NSString *titleName;
+
+@property (nonatomic, assign) BOOL isSelected;
+
 @end

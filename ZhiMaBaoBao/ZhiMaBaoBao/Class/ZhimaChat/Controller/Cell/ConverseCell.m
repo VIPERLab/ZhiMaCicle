@@ -18,6 +18,7 @@
     UILabel *_unReadCountLabel;
     UIView *_bottomLineView;
     UIImageView *_disturbIcon;
+    int _unReadWidth;
     BOOL hasSubViews;
 }
 
@@ -40,7 +41,9 @@
 }
 
 - (void)setupView {
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+//    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     _iconView = [UIImageView new];
     _iconView.layer.cornerRadius = 5;
     _iconView.clipsToBounds = YES;
@@ -62,7 +65,6 @@
     
     _unReadCountLabel = [UILabel new];
     _unReadCountLabel.backgroundColor = THEMECOLOR;
-    _unReadCountLabel.layer.cornerRadius = 10;
     _unReadCountLabel.textAlignment = NSTextAlignmentCenter;
     _unReadCountLabel.font = [UIFont systemFontOfSize:13];
     _unReadCountLabel.textColor = [UIColor whiteColor];
@@ -91,20 +93,34 @@
     
     _lastConverseLabel.text = model.lastConverse;
     
-    if (model.unReadCount > 99) {
-        _unReadCountLabel.hidden = NO;
-        _unReadCountLabel.text = [NSString stringWithFormat:@"99"];
-    } else if (model.unReadCount == 0) {
-        _unReadCountLabel.hidden = YES;
-    } else {
-        _unReadCountLabel.hidden = NO;
-        _unReadCountLabel.text = [NSString stringWithFormat:@"%zd",model.unReadCount];
-    }
-    
     if (model.unReadCount < 1) {
         _unReadCountLabel.hidden = YES;
     }else{
         _unReadCountLabel.hidden = NO;
+    }
+    
+    if (!model.disturb) {
+        // 如果不是免打扰
+        if (model.unReadCount > 99) {
+            _unReadCountLabel.hidden = NO;
+            _unReadCountLabel.text = [NSString stringWithFormat:@"99"];
+        } else if (model.unReadCount == 0) {
+            _unReadCountLabel.hidden = YES;
+        } else {
+            _unReadCountLabel.hidden = NO;
+            _unReadCountLabel.text = [NSString stringWithFormat:@"%zd",model.unReadCount];
+        }
+        
+        
+        _unReadWidth = 20;
+    } else {
+        // 如果是免打扰
+        hasSubViews = YES;
+        _unReadWidth = 10;
+        _unReadCountLabel.text = @"";
+        
+        
+        [self setNeedsLayout];
     }
     
     if (model.topChat) {
@@ -144,10 +160,11 @@
         CGFloat nameH = 30;
         _converseLabel.frame = CGRectMake(nameX, nameY, nameW, nameH);
         
-        CGFloat countWidth = 20;
+        CGFloat countWidth = _unReadWidth;
         CGFloat countHight = countWidth;
         CGFloat countX = CGRectGetMaxX(_iconView.frame) - countWidth * 0.5;
         CGFloat countY = CGRectGetMinY(_iconView.frame) - countHight * 0.5 + 3;
+        _unReadCountLabel.layer.cornerRadius = _unReadWidth * 0.5;
         _unReadCountLabel.frame = CGRectMake(countX, countY, countWidth, countHight);
 
         _bottomLineView.frame = CGRectMake(10, CGRectGetHeight(self.frame) - 0.5, CGRectGetWidth(self.frame), 0.5);

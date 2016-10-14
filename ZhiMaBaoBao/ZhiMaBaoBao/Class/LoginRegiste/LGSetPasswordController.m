@@ -8,7 +8,7 @@
 
 #import "LGSetPasswordController.h"
 #import "LGSetNickNameController.h"
-
+#import "RegexKitLite.h"
 @interface LGSetPasswordController ()
 
 @property (nonatomic, strong) UITextField *passField;
@@ -127,17 +127,28 @@
  */
 - (void)registerAction{
     [self.view endEditing:YES];
+    
+    if (![self.passField.text isMatchedByRegex:@"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$"]) {
+        [LCProgressHUD showFailureText:@"请输入数字和字母组成的密码"];
+        return;
+    }
+    
+    if (self.passField.text.length < 6 || self.passField.text.length > 18) {
+        [LCProgressHUD showFailureText:@"请输入6-18位密码"];
+        return;
+    }
+    
     if (!self.passField.hasText) {
-        [LCProgressHUD showText:@"请输入密码"];
+        [LCProgressHUD showFailureText:@"请输入密码"];
         return;
     }
     if (!self.confirmPassField.hasText) {
-        [LCProgressHUD showText:@"请再次输入密码"];
+        [LCProgressHUD showFailureText:@"请再次输入密码"];
 
         return;
     }
     if (![self.passField.text isEqualToString:self.confirmPassField.text]) {
-        [LCProgressHUD showText:@"密码输入不一致"];
+        [LCProgressHUD showFailureText:@"密码输入不一致"];
 
         return;
     }
