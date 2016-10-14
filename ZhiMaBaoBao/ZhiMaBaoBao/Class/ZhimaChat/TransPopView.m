@@ -12,6 +12,7 @@
 #import "TransPopView.h"
 #import "ZhiMaFriendModel.h"
 #import "POP.h"
+#import "ConverseModel.h"
 
 @interface TransPopView ()
 @property (nonatomic, strong) LGMessage *transMsg;  //转发消息
@@ -21,7 +22,7 @@
 
 @implementation TransPopView
 
-- (instancetype)initWithMessage:(LGMessage *)message toUserId:(NSString *)userId{
+- (instancetype)initWithMessage:(LGMessage *)message toUserId:(NSString *)userId isGroup:(BOOL)isGroup{
     
     
     self = [[TransPopView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -48,14 +49,30 @@
     self.containerView = containerView;
     
     //设置所有子试图
-    [self setupSubviews:message toUserId:userId];
+    [self setupSubviews:message toUserId:userId isGroup:isGroup];
     return self;
 }
 
-- (void)setupSubviews:(LGMessage *)message toUserId:(NSString *)userId{
+- (void)setupSubviews:(LGMessage *)message toUserId:(NSString *)userId isGroup:(BOOL)isGroup{
     
-    //通过uid查询好友资料
-    ZhiMaFriendModel *model = [FMDBShareManager getUserMessageByUserID:userId];
+    //头像url
+    NSString *avtarUrl = nil;
+    //好友昵称或者群名称
+    NSString *name = nil;
+    
+    if (isGroup) {
+        //从会话列表拿群会话
+        ConverseModel *groupModel = [FMDBShareManager searchConverseWithConverseID:userId andConverseType:YES];
+        avtarUrl = groupModel.converseHead_photo;
+        name = groupModel.converseName;
+    }else{
+        //通过uid查询好友资料
+        ZhiMaFriendModel *model = [FMDBShareManager getUserMessageByUserID:userId];
+        avtarUrl = model.user_Head_photo;
+        name = model.displayName;
+    }
+    
+
     CGFloat avtarS = 40;    //头像大小
     CGFloat padding = 10;    //内边距
     
@@ -67,16 +84,16 @@
     [self.containerView addSubview:titleLabel];
     
     UIImageView *avtar = [[UIImageView alloc] init];
-    [avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
+    [avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,avtarUrl]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
     avtar.size = CGSizeMake(avtarS, avtarS);
     avtar.x = pop_margin;
     avtar.y = CGRectGetMaxY(titleLabel.frame) + padding;
     [self.containerView addSubview:avtar];
     
     UILabel *nameLabel = [[UILabel alloc] init];
-    nameLabel.text = model.displayName;
+    nameLabel.text = name;
     nameLabel.font = MAINFONT;
-    nameLabel.frame = CGRectMake(pop_margin + avtarS + padding, avtar.y, 200, avtarS);
+    nameLabel.frame = CGRectMake(pop_margin + avtarS + padding, avtar.y, self.containerView.width - pop_margin*2 + avtarS + padding, avtarS);
     [self.containerView addSubview:nameLabel];
     
     UIView *separtor = [[UIView alloc] init];

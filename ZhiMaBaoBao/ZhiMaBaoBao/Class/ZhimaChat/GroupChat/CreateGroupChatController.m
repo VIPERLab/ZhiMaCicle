@@ -42,7 +42,11 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setCustomTitle:@"发起群聊"];
+    if (self.hideFirstSection) {
+        [self setCustomTitle:@"发起群聊"];
+    }else{
+        [self setCustomTitle:@"选择联系人"];
+    }
     [self setNavItem];
     [self addAllSubviews];
     [self requestFriendsList];
@@ -261,6 +265,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         }else{
             if (indexPath.section == 0) {   //选择群聊  ->   跳转到群列表
                 GroupChatListController *vc = [[GroupChatListController alloc] init];
+                vc.isBigImageTrans = self.isPushFromTrans;  //标记是否为大图转发
+                vc.transMsg = self.transMsg;
                 [self.navigationController pushViewController:vc animated:YES];
                 
             }else{  //添加群成员
@@ -274,7 +280,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                 ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
                 
                 if (self.hideFlagBtn) {     //选择好友 ，转发消息
-                    TransPopView *popView = [[TransPopView alloc] initWithMessage:self.transMsg toUserId:friend.user_Id];
+                    TransPopView *popView = [[TransPopView alloc] initWithMessage:self.transMsg toUserId:friend.user_Id isGroup:NO];
                     popView.delegate = self;
                     [popView show];
                 }else{      //选择群成员
@@ -715,9 +721,17 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     LGMessage *newMsg = [self generateNewMessage:message to:userId];
     [[SocketManager shareInstance] sendMessage:newMsg];
     
-    [self dismissViewControllerAnimated:YES completion:^{
+    UserInfo *info = [UserInfo shareInstance];
+    if (info.topWindow) {
+        [info.topWindow resignKeyWindow];
+        info.topWindow = nil;
+        [info.keyWindow makeKeyAndVisible];
         [LCProgressHUD showSuccessText:@"发送成功"];
-    }];
+
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [LCProgressHUD showSuccessText:@"发送成功"];
+    }
 }
 
 //生成一个新的消息模型 -> 用来转发

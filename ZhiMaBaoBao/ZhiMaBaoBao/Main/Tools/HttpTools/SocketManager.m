@@ -489,6 +489,18 @@ static SocketManager *manager = nil;
 //        GroupUserModel *actUserModel = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
         userNames = actUserModel.user_Name;
         systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请你加入了群聊",userNames];
+        
+        //标记出席了当前群
+        GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
+        usermodel.memberGroupState = NO;
+        [FMDBShareManager saveAllGroupMemberWithArray:@[usermodel] andGroupChatId:groupId];
+        
+        //发送通知，即时标记出席了当前群
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        LGMessage *tempMsg = [[LGMessage alloc] init];
+        tempMsg.actType = ActTypeDeluserfromgroup;
+        userInfo[@"message"] = tempMsg;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
     }
     
     //发送系统消息 你邀请"xx"加入群聊 

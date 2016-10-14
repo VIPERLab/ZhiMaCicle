@@ -98,7 +98,7 @@
 @property (nonatomic, strong) UIWindow *keyWindow;
 
  /** 转发大图窗口*/
-@property (nonatomic, strong) UIWindow *transWindow;
+@property (nonatomic, strong) UIWindow *topWindow;
 
 
 #pragma mark - 消息通知提示
