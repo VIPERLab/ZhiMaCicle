@@ -9,7 +9,7 @@
 #import "LGResetPwdViewController.h"
 #import "LGPhoneUpTableViewCell.h"
 #import "HttpTool.h"
-
+#import "RegexKitLite.h"
 
 #define ResetPasswordCellReusedID @"ResetPasswordCellReusedID"
 
@@ -178,12 +178,21 @@
         return;
     }
     
+    if (![self.oldPassword.text isMatchedByRegex:@"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$"]) {
+        [LCProgressHUD showFailureText:@"请输入数字和字母组成的密码"];
+        return;
+    }
+    
+    if (self.oldPassword.text.length < 6 || self.oldPassword.text.length > 18) {
+        [LCProgressHUD showFailureText:@"请输入6-18位密码"];
+        return;
+    }
+    
     NSString *titleF = self.oldPassword.text;
     NSString *onepwd = self.password.text;
     NSString *twoPsw = self.password2.text;
     if (![onepwd isEqualToString:twoPsw]) {
         [LCProgressHUD showText:@"输入的新密码不一致"];
-    
         return;
     }
     
@@ -192,16 +201,10 @@
         return;
     }
     
-//    if (self.oldPassword.text isEqualToString:USERINFO.old) {
-//        <#statements#>
-//    }
-    
+
     [LGNetWorking resetPassword:USERINFO.sessionId phone:USERINFO.uphone oldPass:titleF newPass:onepwd reNewpass:twoPsw block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD showText:@"修改成功"];
-//            YiUserInfo *userInfo = [YiUserInfo defaultUserInfo];
-//            userInfo.password = self.twopwd;
-//            [userInfo persist];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self.navigationController popToRootViewControllerAnimated:YES];
             });

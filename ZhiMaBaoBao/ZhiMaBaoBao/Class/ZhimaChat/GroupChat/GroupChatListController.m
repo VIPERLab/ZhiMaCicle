@@ -36,7 +36,7 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
 //没有数据时的view
 - (void)addNodataView{
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(30, 300, DEVICEWITH - 60, 50)];
-    label.text = @"你可以通过群聊中的\"保存通讯录\"选项，将其保存到这里";
+    label.text = @"你可以通过右上角创建群聊，将其保存到这里";
     label.numberOfLines = 0;
     label.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:label];
@@ -69,6 +69,8 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
         }
         [self.tableView reloadData];
         return;
+    } else {
+        [self.tableView removeFromSuperview];
     }
     [self addNodataView];
 }
@@ -137,6 +139,24 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     [conversationVC.navigationController pushViewController:vc animated:YES];
     
 }
+
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source.
+        ConverseModel *model = self.dataArr[indexPath.row];
+        //数据库删除该条会话
+        [FMDBShareManager deleteConverseWithConverseId:model.converseId];
+        
+        [self getGroupDataFormSQL];
+        
+    }
+}
+
 
 
 #pragma mark - lazy

@@ -783,7 +783,6 @@
 + (void)ComplainsUserWithSessionID:(NSString *)sessionID andTheOpenFireAccount:(NSString *)openfirAccount andComplainsReason:(NSString *)reason andComplainFriendCicle:(NSString *)firendCicle block:(SuccessfulBlock)block {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     dic[@"sessionId"] = sessionID;
-    dic[@"openfireaccount"] = openfirAccount;
     dic[@"reason"] = reason;
     dic[@"friendcircleid"] = firendCicle;
     dic[@"appSystem"] = @"ios";
