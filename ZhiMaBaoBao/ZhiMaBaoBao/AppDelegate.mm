@@ -210,7 +210,6 @@
     [self creatMySQL];
     MainViewController *mainVC = [[MainViewController alloc] init];
     self.window.rootViewController = mainVC;
-
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {

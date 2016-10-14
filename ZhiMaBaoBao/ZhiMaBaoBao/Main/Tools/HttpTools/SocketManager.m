@@ -440,6 +440,7 @@ static SocketManager *manager = nil;
     systemMsg.msgid = [NSString generateMessageID];
     systemMsg.isGroup = YES;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
+    
     [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
     
     //发送通知，即时更新相应的页面
@@ -499,11 +500,12 @@ static SocketManager *manager = nil;
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         LGMessage *tempMsg = [[LGMessage alloc] init];
         tempMsg.actType = ActTypeDeluserfromgroup;
+        tempMsg.type = MessageTypeSystem;
         userInfo[@"message"] = tempMsg;
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
     }
     
-    //发送系统消息 你邀请"xx"加入群聊 
+    //发送系统消息 你邀请"xx"加入群聊
     systemMsg.actType = ActTypeUpdategroupnum;
     systemMsg.fromUid = USERINFO.userID;
     systemMsg.toUidOrGroupId = groupId;
