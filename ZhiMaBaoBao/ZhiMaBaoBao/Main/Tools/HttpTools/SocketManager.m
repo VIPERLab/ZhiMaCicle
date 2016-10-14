@@ -121,11 +121,15 @@ static SocketManager *manager = nil;
     //处理过后的发送给socket的message
     LGMessage *sendMsg = [[LGMessage alloc] init];
     
-    //通过消息的发送状态判断是否为重发的消息
-    if (!message.sendStatus) {
-        
-    }else{      //正常发送消息 -->发送socket消息、插入新消息到数据库
-        
+    //是错误信息 （在被踢出的群里发信息）
+    if (message.errorMsg) {
+        //直接发送 失败通知
+        message.sendStatus = NO;
+        [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+        //发送消息状态回调通知
+        NSDictionary *infoDic = @{@"message":message};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageStateCall object:nil userInfo:infoDic];
+        return;
     }
     
     //语音消息 -- 发送base64到socket服务器，存语音路径到本地数据库
@@ -163,11 +167,7 @@ static SocketManager *manager = nil;
     
     //根据网络状态-- 标记消息发送状态
     UserInfo *userInfo = [UserInfo shareInstance];
-    if (userInfo.networkUnReachable) {
-        message.sendStatus = NO;
-    }else{
-        message.sendStatus = YES;
-    }
+    message.sendStatus = !userInfo.networkUnReachable;
     
     //插入消息数据库
     BOOL success = NO;
@@ -358,8 +358,6 @@ static SocketManager *manager = nil;
             NSString *groupId = resDic[@"groupid"];
             NSString *name = resDic[@"group_user_nick"];
             
-            
-            
         }
         else if ([actType isEqualToString:@"nofriend"]){ //对方把你删除好友，
             //插入一条系统消息"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天。"到数据库
@@ -419,13 +417,19 @@ static SocketManager *manager = nil;
 //收到从群组删除用户 actuid:操作者id   uids:被删除用户的id
 - (void)deleteGroupUser:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
     LGMessage *systemMsg = [[LGMessage alloc] init];
-    //从群表去用户数据
+    //从群表cha用户数据
+    //
+    GroupUserModel *selfModel = [FMDBShareManager getGroupMemberWithMemberId:uids andConverseId:groupId];
+
     if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
-        GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uids andConverseId:groupId];
-        systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移出了群聊",model.friend_nick];
+        systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移出了群聊",selfModel.friend_nick];
     }else{
         GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
         systemMsg.text = [NSString stringWithFormat:@"你被\"%@\"移出了群聊",model.friend_nick];
+        
+        //将状态改为 被剔出群
+        selfModel.memberGroupState = YES;
+        [FMDBShareManager saveAllGroupMemberWithArray:@[selfModel] andGroupChatId:groupId];
     }
     
     //发送系统消息 你邀请"xx"加入群聊
@@ -475,15 +479,15 @@ static SocketManager *manager = nil;
         if ([actUid isEqualToString:USERINFO.userID]) { //自己
             systemMsg.text = [NSString stringWithFormat:@"你通过扫描二维码加入了群聊"];
         }else{
-            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
-            systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描你分享的二维码加入了群聊",model.friend_nick];
+            ZhiMaFriendModel *model = [FMDBShareManager getUserMessageByUserID:actUid];
+            systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描你分享的二维码加入了群聊",model.user_Name];
         }
     }
     else{
-//        ZhiMaFriendModel *actUserModel = [FMDBShareManager getUserMessageByUserID:actUid];
+        ZhiMaFriendModel *actUserModel = [FMDBShareManager getUserMessageByUserID:actUid];
         //修改为从群表查用户资料
-        GroupUserModel *actUserModel = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
-        userNames = actUserModel.friend_nick;
+//        GroupUserModel *actUserModel = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
+        userNames = actUserModel.user_Name;
         systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请你加入了群聊",userNames];
     }
     
@@ -936,7 +940,7 @@ static SocketManager *manager = nil;
             request[@"controller_name"] = @"MessageController";
             request[@"method_name"] = @"noAllowFriendCircle";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=noAllowFriendCircle&fromUid=%@&toUid=%@",USERINFO.userID,uid];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=noAllowFriendCircle&fromUid=%@&toUid=%@&%@",USERINFO.userID,uid,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             dataDic[@"fromUid"] = USERINFO.userID;
             dataDic[@"toUid"] = uid;
