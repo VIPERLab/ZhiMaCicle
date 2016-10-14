@@ -405,7 +405,7 @@ static SocketManager *manager = nil;
             NSString *friendId = resDic[@"delUid"];
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
             userInfo[@"deleteUid"] = friendId;
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotLookMyCircle object:nil userInfo:userInfo];
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_NotLookMyCircleNotification object:nil userInfo:userInfo];
         }
     }
 }

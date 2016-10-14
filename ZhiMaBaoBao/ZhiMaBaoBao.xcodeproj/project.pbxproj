@@ -3376,10 +3376,10 @@
 		04F579C31D9280BD002A6471 /* ZhimaCircle(芝麻圈) */ = {
 			isa = PBXGroup;
 			children = (
+				04F579CE1D9280BD002A6471 /* Controller(根控制器) */,
 				04F862C51D9554AA00DCC6FE /* MyMessage */,
 				04F8621C1D94FB1E00DCC6FE /* ScranQRCode(扫一扫) */,
 				04F862021D94DA4D00DCC6FE /* NearByPeople(附近的人) */,
-				04F579CE1D9280BD002A6471 /* Controller(根控制器) */,
 				04F579C41D9280BD002A6471 /* ChooseWhoCanSee(可看范围) */,
 				04F579CB1D9280BD002A6471 /* ComplainController(投诉) */,
 				04F579D41D9280BD002A6471 /* Discover(朋友圈) */,

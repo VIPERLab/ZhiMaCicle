@@ -117,10 +117,7 @@
         if (responseData.code == 0) {
             //通知对方用户删除我的朋友圈
             if (sender.on) { // 如果设置为YES
-//                dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//                    [FMDBShareManager deletedCircleWithUserId:self.model.userId];
-//                    [[NSNotificationCenter defaultCenter] postNotificationName:K_UpDataCircleDataNotification object:nil];
-//                });
+                [[SocketManager shareInstance] notAllowFriendCircle:self.model.userId];
             }
         }else{
             [LCProgressHUD showText:responseData.msg];

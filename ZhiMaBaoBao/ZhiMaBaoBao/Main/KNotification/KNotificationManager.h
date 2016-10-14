@@ -38,10 +38,18 @@
  */
 #define K_UpDataHeaderPhotoNotification @"KUpDataHeaderPhotoNotification"
 
+/* 不让对方看自己的朋友圈
+ * info @{deleteUid : 需要删除的朋友圈}
+ */
+#define K_NotLookMyCircleNotification @"KNotLookMyCircleNotification"
+
+
 
 //                    ------ 朋友圈消息通知 --------
 // 更新朋友圈通知
 #define K_UpDataCircleDataNotification @"KUpDataCircleDataNotification"
+
+
 
 
 /**
@@ -101,8 +109,7 @@
 
 #define kRefreshConversionList @"kRefreshConversionList"
 
-//不让对方看自己的朋友圈
-#define kNotLookMyCircle @"kNotLookMyCircle"
+
 
 
 

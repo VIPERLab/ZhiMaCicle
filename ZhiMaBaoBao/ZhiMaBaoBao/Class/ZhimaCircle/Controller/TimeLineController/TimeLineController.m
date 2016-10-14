@@ -47,7 +47,11 @@
 - (void)notification {
     //未读消息数
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unReadCount:) name:K_UpDataUnReadCountNotification object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unReadCircle:) name:K_UpDataHeaderPhotoNotification object:nil];
+    
+    // 某人不让我看他朋友圈通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noReadHisCircle:) name:K_NotLookMyCircleNotification object:nil];
 }
 
 
@@ -185,6 +189,15 @@
     _circleheadphoto = circleheadphoto;
     [_tableView reloadData];
     NSLog(@"未读朋友圈头像 %@",circleheadphoto);
+}
+
+// 某人不让我看他朋友圈通知
+- (void)noReadHisCircle:(NSNotification *)notification {
+    
+    NSString *deletedUID =  notification.userInfo[@"deleteUid"];
+    
+    [FMDBShareManager deletedCircleWithUserId:deletedUID];
+    
 }
 
 #pragma mark - lazyLoad
