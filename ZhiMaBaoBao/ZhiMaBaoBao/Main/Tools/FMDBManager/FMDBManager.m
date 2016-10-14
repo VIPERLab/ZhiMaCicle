@@ -2104,9 +2104,11 @@
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
     NSString *deletedStr = [FMDBShareManager deletedTableData:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@'",groupId]];
     [queue inDatabase:^(FMDatabase *db) {
-        FMResultSet *set = [db executeQuery:deletedStr];
-        while (set.next) {
+        BOOL success = [db executeUpdate:deletedStr];
+        if (success) {
             NSLog(@"删除群成员成功");
+        } else {
+            NSLog(@"删除群成员失败");
         }
     }];
 }
