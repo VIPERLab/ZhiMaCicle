@@ -20,7 +20,7 @@
 @property (nonatomic, assign) id<TransPopViewDelegate> delegate;
 
 //初始化popView
-- (instancetype)initWithMessage:(LGMessage *)message toUserId:(NSString *)userId;
+- (instancetype)initWithMessage:(LGMessage *)message toUserId:(NSString *)userId isGroup:(BOOL)isGroup;
 
 - (void)show;
 

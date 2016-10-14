@@ -128,19 +128,19 @@ static RecordingHUD *recordHUD = nil;
         NSInteger count = 1;
         if (volum < 0.1) {
             count = 1;
-        }else if (volum >= 0.1 && volum < 0.2){
+        }else if (volum >= 0.1 && volum < 0.15){
             count = 2;
-        }else if (volum >= 0.2 && volum < 0.3){
+        }else if (volum >= 0.15 && volum < 0.3){
             count = 3;
         }else if (volum >= 0.3 && volum < 0.4){
             count = 4;
-        }else if (volum >= 0.4 && volum < 0.5){
+        }else if (volum >= 0.4 && volum < 0.55){
             count = 5;
-        }else if (volum >= 0.5 && volum < 0.6){
+        }else if (volum >= 0.55 && volum < 0.6){
             count = 6;
-        }else if (volum >= 0.6 && volum < 0.8){
+        }else if (volum >= 0.6 && volum < 0.7){
             count = 7;
-        }else if (volum >= 0.8 && volum <=1.0){
+        }else if (volum >= 0.7 && volum <=1.0){
             count = 8;
         }
         

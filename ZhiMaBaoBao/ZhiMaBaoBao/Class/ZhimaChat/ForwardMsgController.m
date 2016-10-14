@@ -114,10 +114,10 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     LGMessage *newMsg = [self generateNewMessage:message to:userId];
     [[SocketManager shareInstance] sendMessage:newMsg];
     
-    if (self.topWindow) {
-        [self.topWindow resignKeyWindow];
-        self.topWindow = nil;
-        UserInfo *info = [UserInfo shareInstance];
+    UserInfo *info = [UserInfo shareInstance];
+    if (info.topWindow) {
+        [info.topWindow resignKeyWindow];
+        info.topWindow = nil;
         [info.keyWindow makeKeyAndVisible];
         [LCProgressHUD showSuccessText:@"发送成功"];
 
@@ -184,7 +184,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
         [self.navigationController pushViewController:vc animated:YES];
     }else{  //转发消息
         ConverseModel *conversion = self.dataArray[indexPath.row];
-        TransPopView *popView = [[TransPopView alloc] initWithMessage:self.message toUserId:conversion.converseId];
+        TransPopView *popView = [[TransPopView alloc] initWithMessage:self.message toUserId:conversion.converseId isGroup:conversion.converseType];
         popView.delegate = self;
         [popView show];
     }
@@ -229,15 +229,16 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
 }
 
 - (void)navBackAction{
-    if (self.topWindow) {
-        [self.topWindow resignKeyWindow];
-        self.topWindow = nil;
-        UserInfo *info = [UserInfo shareInstance];
-        [info.keyWindow makeKeyAndVisible];
+    UserInfo *info = [UserInfo shareInstance];
+    if (info.topWindow) {
+        [info.topWindow resignKeyWindow];
+        info.topWindow = nil;
+        [info.keyWindow makeKeyWindow];
     }else{
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
+
 
 #pragma mark - lazy
 - (NSMutableArray *)dataArray{

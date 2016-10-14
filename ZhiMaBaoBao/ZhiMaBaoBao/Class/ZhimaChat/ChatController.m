@@ -117,7 +117,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomekeyWindow:) name:UIWindowDidBecomeKeyNotification object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resignkeyWindow:) name:UIWindowDidResignKeyNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -160,6 +159,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     UserInfo *info = [UserInfo shareInstance];
     info.currentConversionId = nil;
+    
+    [self.player stopPlaying];
 }
 
 //设置导航栏右侧按钮
@@ -1036,26 +1037,23 @@ static NSString *const reuseIdentifier = @"messageCell";
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     
     UIWindow *topWindow = [[UIWindow alloc] init];
-    vc.topWindow = topWindow;
-    topWindow.backgroundColor = THEMECOLOR;
+    info.topWindow = topWindow;
     topWindow.windowLevel = UIWindowLevelNormal;
     topWindow.rootViewController = nav;
     [topWindow makeKeyAndVisible];
-    self.topWindow = topWindow;
 }
 
 - (void)becomekeyWindow:(NSNotification *)notify{
-    NSDictionary *userInfo = notify.userInfo;
+    UserInfo *info = [UserInfo shareInstance];
+    UIWindow *window = notify.object;
     
-    NSLog(@"\n ----2 %@ \n",userInfo);
+    if (window == info.topWindow) {
+        info.topWindow.y = DEVICEHIGHT;
+        [UIView animateWithDuration:.3f animations:^{
+            info.topWindow.y = 0;
+        }];
+    }
 }
-
-- (void)resignkeyWindow:(NSNotification *)notify{
-    NSDictionary *userInfo = notify.userInfo;
-    
-    NSLog(@"\n ----1 %@ \n",userInfo);
-}
-
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index;{
     if (index == 0) {
@@ -1718,6 +1716,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     if (notInGroup) {
         self.navigationItem.rightBarButtonItem = nil;
+    }else{
+        [self setupNavRightItem];
     }
 }
 
