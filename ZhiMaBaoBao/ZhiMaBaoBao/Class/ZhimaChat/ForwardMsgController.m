@@ -233,11 +233,12 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     if (info.topWindow) {
         [info.topWindow resignKeyWindow];
         info.topWindow = nil;
-        [info.keyWindow makeKeyAndVisible];
+        [info.keyWindow makeKeyWindow];
     }else{
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
+
 
 #pragma mark - lazy
 - (NSMutableArray *)dataArray{
