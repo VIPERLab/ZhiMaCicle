@@ -168,6 +168,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
         AvtarAndNameCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
         ConverseModel *conversion = self.dataArray[indexPath.row];
         cell.conversion = conversion;
+        cell.separtor.hidden = YES;
         return cell;
     }
 }

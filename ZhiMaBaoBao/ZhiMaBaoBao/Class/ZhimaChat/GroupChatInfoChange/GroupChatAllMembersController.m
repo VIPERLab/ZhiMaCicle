@@ -132,7 +132,17 @@
 // 新增群成员
 - (void)addGroupMembers {
     CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
+    
+    //取出所有群成员id
+    NSMutableArray *membersUids = [NSMutableArray array];
+    for (GroupUserModel *model in self.membersArray) {
+        [membersUids addObject:model.userId];
+    }
+    
     vc.fartherVC = self;
+    vc.hideFirstSection = self;
+    vc.selectedMembers = membersUids;
+    vc.groupId = self.groupId;
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
 }

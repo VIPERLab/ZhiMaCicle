@@ -261,6 +261,7 @@
         NSLog(@"全部群成员");
         GroupChatAllMembersController *members = [[GroupChatAllMembersController alloc] init];
         members.membersArray = [self.groupModel.groupUserVos mutableCopy];
+        members.groupId = self.groupModel.groupId;
         [self.navigationController pushViewController:members animated:YES];
         
     } else if (indexPath.section == 1 && indexPath.row == 0) {

@@ -87,6 +87,9 @@
 
 @property (nonatomic, strong) UIWindow *topWindow;
 
+@property (nonatomic, assign)BOOL notInGroup;   //已被踢出群聊（不在当前群聊会话）
+
+
 @end
 
 static NSString *const reuseIdentifier = @"messageCell";
@@ -140,6 +143,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     } else {
         GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
         [self setCustomTitle:groupModel.groupName];
+        
+        //根据群聊id,去除对应群表中自己的群成员数据 （判断是否已被剔除群聊）
+        GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:self.conversionId];
+        self.notInGroup = userModel.memberGroupState;
     }
     
     UserInfo *info = [UserInfo shareInstance];
