@@ -17,6 +17,7 @@
 #import "LGCallingController.h"
 #import "PesonalDiscoverController.h"
 #import "NSString+MsgId.h"
+#import "ConverseModel.h"
 
 @interface FriendProfilecontroller ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -92,6 +93,10 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             
             //更新好友表
             [FMDBShareManager upDataUserMessage:self.friend];
+            //更新会话表 （头像）
+            ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:self.userId andConverseType:NO];
+            conversionModel.converseHead_photo = self.friend.user_Head_photo;
+            [FMDBShareManager saveConverseListDataWithDataArray:@[conversionModel]];
             
             if (addSqlit) {
                 //插入好友到数据库
