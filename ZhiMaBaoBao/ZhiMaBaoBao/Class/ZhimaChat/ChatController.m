@@ -130,7 +130,16 @@ static NSString *const reuseIdentifier = @"messageCell";
         GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
         [self setCustomTitle:groupModel.groupName];
     }
+    
+    UserInfo *info = [UserInfo shareInstance];
+    info.currentConversionId = self.conversionId;
+}
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    UserInfo *info = [UserInfo shareInstance];
+    info.currentConversionId = nil;
 }
 
 //设置导航栏右侧按钮
