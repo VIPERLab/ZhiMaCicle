@@ -157,6 +157,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     UserInfo *info = [UserInfo shareInstance];
     info.currentConversionId = nil;
+    
+    [self.player stopPlaying];
 }
 
 //设置导航栏右侧按钮
@@ -1678,6 +1680,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     if (notInGroup) {
         self.navigationItem.rightBarButtonItem = nil;
+    }else{
+        [self setupNavRightItem];
     }
 }
 
