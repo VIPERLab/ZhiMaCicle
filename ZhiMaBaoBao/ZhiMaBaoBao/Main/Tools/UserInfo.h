@@ -88,6 +88,9 @@
  /** 当前控制器*/
 @property (nonatomic, strong) BaseViewController *currentVC;
 
+ /** 当前会话id*/
+@property (nonatomic, copy) NSString *currentConversionId;
+
  /** 网络不可用*/
 @property (nonatomic, assign) BOOL networkUnReachable;
 

@@ -101,6 +101,9 @@
 
 #define kRefreshConversionList @"kRefreshConversionList"
 
+//不让对方看自己的朋友圈
+#define kNotLookMyCircle @"kNotLookMyCircle"
+
 
 
 #endif /* KNotificationManager_h */

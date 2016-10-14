@@ -98,7 +98,7 @@
     //判断对发消息用户是否开启了新消息提醒 -> 播放系统消息提示音
     //1.数据库查会话模型，拿出对该用户设置的的新消息提醒 如果是yes 播放声音
     ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.isGroup];
-    if (!conversionModel.disturb && ![userinfo.currentVC isKindOfClass:[ChatController class]]) {    //不在当前控制器
+    if (!conversionModel.disturb && ![userinfo.currentConversionId isEqualToString:message.fromUid]) {    //在当前聊天页面收到消息不播放声音
         
         if (message.type != MessageTypeSystem) {    //系统消息不播放提示音
             [self playSystemAudio];

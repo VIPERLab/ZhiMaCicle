@@ -619,7 +619,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     for (int i = 0; i < count; i ++) {
         ZhiMaFriendModel *friendModel = self.selectedFriends[i];
         UIImageView *avtar = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, imageS, imageS)];
-        [avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",friendModel.user_Head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
+        [avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,friendModel.user_Head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
         avtar.x = (imageS + margin) * (count - 1);
         [self.imagesView addSubview:avtar];
     }

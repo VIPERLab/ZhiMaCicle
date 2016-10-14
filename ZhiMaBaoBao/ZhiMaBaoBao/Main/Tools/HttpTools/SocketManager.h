@@ -17,7 +17,8 @@ typedef NS_OPTIONS(NSUInteger, RequestType) {
     RequestTypeHeart,          //心跳包
     RequestTypeMessage,        //接收，发送普通消息
     RequestTypeUndo,           //撤销消息
-    RequestTypeCreateGroup     //建群
+    RequestTypeCreateGroup,     //建群
+    RequestTypeNotLookCircle
 };
 
 //群操作类型  --  用来生成发送给socket数据包
@@ -26,7 +27,8 @@ typedef NS_OPTIONS(NSUInteger, GroupActType) {
     GroupActTypeAddUser,        //邀请用户到群
     GroupActTypeDelUser,        //从群组删除用户
     GroupActTypeDelGroup,       //删除群组
-    GroupActTypeReName          //重命名群
+    GroupActTypeReName,         //重命名群
+    GroupActTypeUpdateName      //群组成员更新昵称
 };
 
 //好友操作类型  --  用来生成发送给socket数据包
@@ -125,6 +127,14 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  */
 - (void)renameGroup:(NSString *)groupId name:(NSString *)name;
 
+/**
+ *  群用户更新昵称
+ *
+ *  @param name    新的群昵称
+ *  @param groupId 群id
+ */
+- (void)groupUserUpdateName:(NSString *)name groupId:(NSString *)groupId;
+
 #pragma mark - 好友相关操作
 /**
  *  添加好友
@@ -154,6 +164,13 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  *  @param friendId 好友id
  */
 - (void)dragToBlack:(NSString *)friendId;
+
+/**
+ *  不让对方看自己的朋友圈
+ *
+ *  @param friendId 好友id
+ */
+- (void)notAllowFriendCircle:(NSString *)friendId;
 
 
 @end
