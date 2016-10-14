@@ -29,6 +29,8 @@
     [super viewDidLoad];
     [self hiddenBackBtn];
     [self setUI];
+    
+    [self loginAction];
 }
 
 - (void)setUI{
@@ -159,18 +161,21 @@
         return;
     }
     
-    [LCProgressHUD showLoadingText:@"正在上传..."];
-    UserInfo *userInfo = [UserInfo read];
+    [LCProgressHUD showLoadingText:@"正在登录..."];
+    
     //保存昵称，头像，邀请码
-    [LGNetWorking saveUserInfo:userInfo.sessionId headUrl:userInfo.head_photo nickName:self.nickNameField.text inviteCode:self.codeField.text block:^(ResponseData *obj) {
+    [LGNetWorking saveUserInfo:USERINFO.sessionId headUrl:USERINFO.head_photo nickName:self.nickNameField.text inviteCode:self.codeField.text block:^(ResponseData *obj) {
         if (obj.code == 0) {
             
-            [self loginAction];
+            UserInfo *info = [UserInfo read];
+            info.username = self.nickNameField.text;
+            [info save];
             
-//            [LCProgressHUD hide];
-//            //跳转到登录页面
-//            LGLoginController *vc = [[LGLoginController alloc] init];
-//            [self.navigationController pushViewController:vc animated:YES];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [LCProgressHUD hide];
+                [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
+            });
+            
         }else{
             [LCProgressHUD showFailureText:obj.msg];
         }
@@ -180,11 +185,9 @@
 
 - (void)loginAction{
     [self.view endEditing:YES];
-//    [LCProgressHUD showLoadingText:LODINGTEXT];
     [LGNetWorking loginWithPhone:self.phoneNumber password:self.password success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
-            //登录成功
-            [LCProgressHUD hide];
+            
             UserInfo *userInfo = [UserInfo mj_objectWithKeyValues:responseData.data];
             userInfo.hasLogin = YES;
             
@@ -209,8 +212,6 @@
             
             [JPUSHService setTags:[NSSet setWithObject:userInfo.userID] alias:userInfo.userID callbackSelector:nil object:nil];
             [userInfo save];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
             
         }else{
             [LCProgressHUD showFailureText:responseData.msg];
