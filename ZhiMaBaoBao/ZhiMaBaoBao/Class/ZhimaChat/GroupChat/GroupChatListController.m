@@ -12,8 +12,9 @@
 #import "CreateGroupChatController.h"
 #import "BaseNavigationController.h"
 #import "ChatController.h"
+#import "TransPopView.h"
 
-@interface GroupChatListController ()<UITableViewDelegate,UITableViewDataSource>
+@interface GroupChatListController ()<UITableViewDelegate,UITableViewDataSource,TransPopViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArr;
 @end
@@ -113,7 +114,7 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 10;
+    return 0.1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -121,23 +122,66 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ConverseModel *groupModel = self.dataArr[indexPath.row];
-    
-    UserInfo *userInfo = [UserInfo shareInstance];
-    [self.navigationController popToRootViewControllerAnimated:NO];
-    userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
-    
-    ChatController *vc = [[ChatController alloc] init];
-    vc.conversionId = groupModel.converseId;
-    vc.conversionName = groupModel.converseName;
-    vc.converseType = groupModel.converseType;
-    vc.hidesBottomBarWhenPushed = YES;
-    ConversationController *conversationVC = userInfo.conversationVC;
-    [conversationVC.navigationController pushViewController:vc animated:YES];
+
+    if (self.isBigImageTrans) {
+        TransPopView *popView = [[TransPopView alloc] initWithMessage:self.transMsg toUserId:groupModel.converseId isGroup:YES];
+        popView.delegate = self;
+        [popView show];
+    }else{
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        ConverseModel *groupModel = self.dataArr[indexPath.row];
+        
+        UserInfo *userInfo = [UserInfo shareInstance];
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
+        
+        ChatController *vc = [[ChatController alloc] init];
+        vc.conversionId = groupModel.converseId;
+        vc.conversionName = groupModel.converseName;
+        vc.converseType = groupModel.converseType;
+        vc.hidesBottomBarWhenPushed = YES;
+        ConversationController *conversationVC = userInfo.conversationVC;
+        [conversationVC.navigationController pushViewController:vc animated:YES];
+    }
     
 }
 
+
+#pragma mark - 转发消息
+//转发消息
+- (void)transformMessage:(LGMessage *)message toUserId:(NSString *)userId{
+    //生成一个新的消息模型
+    LGMessage *newMsg = [self generateNewMessage:message to:userId];
+    [[SocketManager shareInstance] sendMessage:newMsg];
+    
+    UserInfo *info = [UserInfo shareInstance];
+    if (info.topWindow) {
+        [info.topWindow resignKeyWindow];
+        info.topWindow = nil;
+        [info.keyWindow makeKeyAndVisible];
+        [LCProgressHUD showSuccessText:@"发送成功"];
+        
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [LCProgressHUD showSuccessText:@"发送成功"];
+    }
+}
+
+//生成一个新的消息模型 -> 用来转发
+- (LGMessage *)generateNewMessage:(LGMessage *)message to:(NSString *)userId{
+    LGMessage *newMsg = [[LGMessage alloc] init];
+    newMsg.type = message.type;
+    newMsg.fromUid = USERINFO.userID;
+    //如果转发自己的消息，那么touid为旧消息的touid 如果转发的别人的消息，那么to
+    newMsg.toUidOrGroupId = userId;
+    newMsg.timeStamp = [NSDate currentTimeStamp];
+    newMsg.isGroup = message.isGroup;
+    newMsg.text = message.text;
+    newMsg.msgid = [NSString generateMessageID];
+    newMsg.picUrl = message.picUrl;
+    return newMsg;
+}
 
 #pragma mark - lazy
 - (NSMutableArray *)dataArr{

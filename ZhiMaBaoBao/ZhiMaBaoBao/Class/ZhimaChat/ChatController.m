@@ -1017,12 +1017,11 @@ static NSString *const reuseIdentifier = @"messageCell";
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     
     UIWindow *topWindow = [[UIWindow alloc] init];
-    vc.topWindow = topWindow;
     topWindow.backgroundColor = THEMECOLOR;
     topWindow.windowLevel = UIWindowLevelNormal;
     topWindow.rootViewController = nav;
     [topWindow makeKeyAndVisible];
-    self.topWindow = topWindow;
+    info.topWindow = topWindow;
 }
 
 - (void)becomekeyWindow:(NSNotification *)notify{

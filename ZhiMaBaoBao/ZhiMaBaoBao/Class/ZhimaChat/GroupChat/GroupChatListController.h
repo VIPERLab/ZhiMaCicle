@@ -7,7 +7,9 @@
 //
 
 #import "BaseViewController.h"
-
+#import "LGMessage.h"
 @interface GroupChatListController : BaseViewController
 
+@property (nonatomic, assign) BOOL isBigImageTrans; //是大图转发
+@property (nonatomic, strong) LGMessage *transMsg;   //转发消息
 @end
