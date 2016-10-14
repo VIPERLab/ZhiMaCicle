@@ -10,6 +10,7 @@
 
 
 @interface LGPhoneContactInfoController : BaseViewController
+
 @property (nonatomic, strong) PhoneContact *contact;
 
 @end

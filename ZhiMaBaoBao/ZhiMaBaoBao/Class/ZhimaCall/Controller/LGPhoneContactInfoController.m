@@ -32,8 +32,14 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self setCustomTitle:@"联系人详情"];
     [self addSubViews];
+    if (self.contact.allPhones.count == 0) {
+        self.contact.allPhones  = @[self.contact.phoneNumber];
+    }
+    
     //判断联系人手机号是否开通芝麻好友
     [self requestData];
+    
+
 }
 
 - (void)requestData{
@@ -85,7 +91,7 @@
                 cell.avtar.image = [UIImage imageWithData:self.contact.avtar];
             }
             else{
-                cell.avtar.image = [UIImage imageNamed:@"defaultContact@"];
+                cell.avtar.image = [UIImage imageNamed:@"defaultContact"];
             }
             cell.name.text = self.contact.name;
             return cell;

@@ -9,7 +9,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="2QJ-pm-xjb" userLabel="YiKeyBoardView" customClass="YiKeyBoardView">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="266"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dEM-X6-5iB" userLabel="1">
@@ -200,30 +200,32 @@
             <connections>
                 <outlet property="btn1" destination="dEM-X6-5iB" id="Ffk-Lf-qky"/>
                 <outlet property="button0" destination="6H5-mt-r4v" id="ZmN-0I-IN5"/>
+                <outlet property="deleteBtn" destination="29o-5J-VPU" id="hYB-a6-gPZ"/>
+                <outlet property="setBtn" destination="tSY-LR-oUW" id="D9I-uY-viG"/>
             </connections>
             <point key="canvasLocation" x="215" y="334"/>
         </view>
     </objects>
     <resources>
-        <image name="0" width="180" height="88"/>
+        <image name="0" width="125" height="78"/>
         <image name="0_selected" width="180" height="88"/>
-        <image name="1" width="179" height="88"/>
+        <image name="1" width="125" height="78"/>
         <image name="1_selected" width="179" height="88"/>
-        <image name="2" width="180" height="88"/>
+        <image name="2" width="125" height="78"/>
         <image name="2_selected" width="180" height="88"/>
-        <image name="3" width="179" height="88"/>
+        <image name="3" width="125" height="78"/>
         <image name="3_selected" width="179" height="88"/>
-        <image name="4" width="179" height="88"/>
+        <image name="4" width="125" height="78"/>
         <image name="4_selected" width="179" height="88"/>
-        <image name="5" width="180" height="88"/>
+        <image name="5" width="125" height="78"/>
         <image name="5_selected" width="180" height="88"/>
-        <image name="6" width="179" height="88"/>
+        <image name="6" width="125" height="78"/>
         <image name="6_selected" width="179" height="88"/>
-        <image name="7" width="179" height="88"/>
+        <image name="7" width="125" height="78"/>
         <image name="7_selected" width="179" height="88"/>
-        <image name="8" width="180" height="88"/>
+        <image name="8" width="125" height="78"/>
         <image name="8_selected" width="180" height="88"/>
-        <image name="9" width="179" height="88"/>
+        <image name="9" width="125" height="78"/>
         <image name="9_selected" width="179" height="88"/>
         <image name="call_delete" width="179" height="88"/>
         <image name="call_delete_selected" width="179" height="88"/>

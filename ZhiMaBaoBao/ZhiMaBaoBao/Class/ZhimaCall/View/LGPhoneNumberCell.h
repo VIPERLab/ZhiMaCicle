@@ -20,4 +20,6 @@
 @property (nonatomic, assign) NSInteger row;
 @property (nonatomic, assign) id<LGPhoneNumberCellDelegate> delegate;
 
+- (void)setColorWithString:(NSString*)string;
+
 @end
