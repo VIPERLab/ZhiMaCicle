@@ -1773,7 +1773,7 @@
     
     //更新会话列表
     FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-    NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = ' '"];
+    NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = ' ', unReadCount = '0'"];
     NSString *optionStr2 = [NSString stringWithFormat:@"converseId = '%@'",converseID];
     NSString *converseOption = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:optionStr2];
     [converseQueue inDatabase:^(FMDatabase *db) {
@@ -1956,6 +1956,27 @@
     return success;
 }
 
+/**
+ *  删除群信息表 以及 对应的群成员
+ *
+ *  @param groupId   群id
+ *
+ */
+- (void)deletedGroupInfoWithGroupId:(NSString *)groupId {
+    FMDatabaseQueue *groupMessage = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
+    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = '%@'",groupId]];
+    [groupMessage inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"删除群信息表成功");
+        } else {
+            NSLog(@"删除群信息表失败");
+        }
+    }];
+    
+    [FMDBShareManager deletedGroupMemberWithGroupId:groupId];
+}
+
 #pragma mark - 群成员信息表
 //                    ------------   群成员信息表  ----------------
 /**
@@ -1975,7 +1996,7 @@
         NSString *opeartionStr;
         if (isExist) {
             NSLog(@"存在成员信息");
-            NSString *option1 = [NSString stringWithFormat:@"memberName = '%@', memberHeader_Photo = '%@'",model.friend_nick,model.head_photo];
+            NSString *option1 = [NSString stringWithFormat:@"memberName = '%@', memberHeader_Photo = '%@', memberGroupState = '%@'",model.friend_nick,model.head_photo,@(model.memberGroupState)];
             NSString *option2 = [NSString stringWithFormat:@"converseId = %@ and memberId = %@",groupChatId, model.userId];
             opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMenber_Table withOpton1:option1 andOption2:option2];
         } else {
@@ -1984,7 +2005,7 @@
         }
         
         [queuq inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:opeartionStr,groupChatId,model.userId,model.friend_nick,model.head_photo];
+            BOOL success = [db executeUpdate:opeartionStr,groupChatId,model.userId,model.friend_nick,model.head_photo,@(model.memberGroupState)];
             if (success) {
                 NSLog(@"插入群成员成功");
             } else {
@@ -2029,7 +2050,7 @@
 - (NSArray <GroupUserModel *> *)getAllGroupMenberWithGroupId:(NSString *)groupId {
     NSMutableArray *dataArray = [NSMutableArray array];
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@'",groupId]];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@' and memberGroupState = '0'",groupId]];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
@@ -2039,6 +2060,7 @@
             model.friend_nick = [result stringForColumn:@"memberName"];
             model.head_photo = [result stringForColumn:@"memberHeader_Photo"];
             model.groupId = [result stringForColumn:@"converseId"];
+            model.memberGroupState = [result intForColumn:@"memberGroupState"];
             [dataArray addObject:model];
         }
     }];
@@ -2066,9 +2088,27 @@
             model.friend_nick = [result stringForColumn:@"memberName"];
             model.head_photo = [result stringForColumn:@"memberHeader_Photo"];
             model.groupId = [result stringForColumn:@"converseId"];
+            model.memberGroupState = [result intForColumn:@"memberGroupState"];
         }
     }];
     return model;
+}
+
+
+/**
+ *  删除某个群的所有群成员
+ *
+ *  @param groupId 群id
+ */
+- (void)deletedGroupMemberWithGroupId:(NSString *)groupId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
+    NSString *deletedStr = [FMDBShareManager deletedTableData:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@'",groupId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *set = [db executeQuery:deletedStr];
+        while (set.next) {
+            NSLog(@"删除群成员成功");
+        }
+    }];
 }
 
 @end

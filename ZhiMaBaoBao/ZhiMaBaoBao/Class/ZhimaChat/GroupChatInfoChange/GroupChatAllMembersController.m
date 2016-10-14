@@ -153,8 +153,15 @@
         //删除好友
         [[SocketManager shareInstance] delUserFromGroup:self.groupId uids:self.currentCell.model.userId];
         NSIndexPath *indexPath = [_tableView indexPathForCell:self.currentCell];
+        
+        
         [self.membersArray removeObject:self.currentCell.model];
         [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+        
+        // 更新群用户表里 群成员的状态 memberState = 1
+        GroupUserModel *model = self.currentCell.model;
+        model.memberGroupState = 1;
+        [FMDBShareManager saveAllGroupMemberWithArray:@[model] andGroupChatId:self.groupId];
     }
 }
 

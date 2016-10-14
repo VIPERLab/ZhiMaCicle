@@ -335,6 +335,15 @@ typedef enum : NSUInteger {
 - (BOOL)isGroupChatExist:(NSString *)groupId;
 
 
+/**
+ *  删除群信息表 以及 对应的群成员
+ *
+ *  @param groupId   群id
+ *
+ */
+- (void)deletedGroupInfoWithGroupId:(NSString *)groupId;
+
+
 
 
 #pragma mark - 群成员信息表
@@ -376,5 +385,12 @@ typedef enum : NSUInteger {
  *  @return 群成员模型
  */
 - (GroupUserModel *)getGroupMemberWithMemberId:(NSString *)memberId andConverseId:(NSString *)converseId;
+
+/**
+ *  删除某个群的所有群成员
+ *
+ *  @param groupId 群id
+ */
+- (void)deletedGroupMemberWithGroupId:(NSString *)groupId;
 
 @end

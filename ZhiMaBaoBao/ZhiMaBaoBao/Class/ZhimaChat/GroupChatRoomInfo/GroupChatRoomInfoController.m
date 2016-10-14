@@ -39,6 +39,8 @@
 
 @property (nonatomic, strong) GroupChatModel *groupModel;   //群聊信息数据模型
 
+@property (nonatomic, assign) int MaxCount;
+
 @property (nonatomic, assign) BOOL isGroupCreater;
 @end
 
@@ -94,6 +96,9 @@
         
         if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
             self.isGroupCreater = YES;
+            self.MaxCount = 38;
+        } else {
+            self.MaxCount = 39;
         }
         
         // 设置尾部
@@ -176,7 +181,9 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         GroupChatInfoHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:GroupChatRoomInfoHeaderCellReusedID forIndexPath:indexPath];
         cell.isGroupCreater = self.isGroupCreater;
+        cell.MaxCount = self.MaxCount;
         cell.modelArray = self.groupMenberArray;
+        
         cell.delegate = self;
         
         return cell;
@@ -231,6 +238,7 @@
         if (temp < line) {
             temp++;
         }
+        temp = temp > 10 ? 10 : temp;
         return ((iconW + 45) * temp + 15);
     }
     return 45;
@@ -322,6 +330,10 @@
                 [[SocketManager shareInstance] delGroup:self.groupModel.groupId uid:USERINFO.userID];
                 [FMDBShareManager deleteMessageFormMessageTableByConverseID:self.groupModel.groupId];
                 [FMDBShareManager deleteConverseWithConverseId:self.groupModel.groupId];
+                
+                // 删除群信息表 和群成员表
+                [FMDBShareManager deletedGroupInfoWithGroupId:self.groupModel.groupId];
+                
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }else{
                 [LCProgressHUD showFailureText:responseData.msg];

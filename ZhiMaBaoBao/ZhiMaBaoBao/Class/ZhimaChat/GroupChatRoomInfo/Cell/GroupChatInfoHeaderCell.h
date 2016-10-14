@@ -26,6 +26,8 @@
 
 @property (nonatomic, assign) BOOL isGroupCreater;
 
+@property (nonatomic, assign) int MaxCount;
+
 @property (nonatomic, weak) id <GroupChatInfoHeaderCellDelegate> delegate;
 
 @end

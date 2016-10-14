@@ -22,6 +22,9 @@
  /** 群成员userId*/
 @property (nonatomic, copy) NSString *userId;
 
+/* 该群成员在这个群的状态， 0 是在群里，  1 表示异常状态（被踢、退出、删除等状态） */
+@property (nonatomic, assign) BOOL memberGroupState;
+
 
 
 @end
