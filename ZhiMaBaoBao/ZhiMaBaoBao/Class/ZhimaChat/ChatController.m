@@ -244,11 +244,28 @@ static NSString *const reuseIdentifier = @"messageCell";
     if ([message.fromUid isEqualToString:self.conversionId] || [message.toUidOrGroupId isEqualToString:self.conversionId]) {
         for (LGMessage *msg  in self.messages) {
             if ([msg.msgid isEqualToString:message.msgid]) {
-                row = [self.messages indexOfObject:message];
+                row = [self.messages indexOfObject:msg];
+                break;
             }
         }
         
         if (row != 100000) {
+            
+//            //修改图片数组里面对应的图片路径
+//            if (message.type == MessageTypeImage) {
+//                NSMutableArray* picMarr = [self.allImagesInfo mutableCopy];
+//                for (NSDictionary*dic in picMarr) {
+//                    if ([dic[@"index"] integerValue] == row) {
+//                        NSInteger  picIndex = [self.allImagesInfo indexOfObject:dic];
+//                        [self.allImagesInfo removeObject:dic];
+//                        NSLog(@"message.text = %@  index = %ld row = %ld",message.text,picIndex,row);
+//                        NSDictionary*newdic = @{@"index":[NSString stringWithFormat:@"%ld",row],@"url":message.text,@"fromUid":message.fromUid};
+//                        [self.allImagesInfo insertObject:newdic atIndex:picIndex];
+//                        
+//                    }
+//                }
+//            }
+//            
             NSIndexPath *indexpath = [NSIndexPath indexPathForRow:row inSection:0];
             NSArray *indexPaths = @[indexpath];
             [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -1398,15 +1415,24 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.picUrl = imagePath;
     [self.messages addObject:message];
     
-    NSInteger num = self.messages.count - 1;
-    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
-    NSArray *indexPaths = @[indexpath];
-    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
+    NSInteger num = self.messages.count - 1;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
+        NSArray *indexPaths = @[indexpath];
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//    });
+
+    
+    NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":[NSString stringWithFormat:@"%@%@",AUDIOPATH,imagePath],@"fromUid":message.fromUid};
+    [self.allImagesInfo addObject:dic];
+
     UIImage *image = self.imagesArray[0];
     [self sendPicToServerWithImage:image index:num];
+    
 
+    
 }
 
 - (void)sendPicToServerWithImage:(UIImage*)image index:(NSInteger)index
@@ -1426,8 +1452,18 @@ static NSString *const reuseIdentifier = @"messageCell";
             SocketManager* socket = [SocketManager shareInstance];
             [socket sendMessage:message];
             
-            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":message.text,@"fromUid":message.fromUid};
-            [self.allImagesInfo addObject:dic];
+            NSMutableArray* picMarr = [self.allImagesInfo mutableCopy];
+            for (NSDictionary*dic in picMarr) {
+                if ([dic[@"index"] integerValue] == index) {
+                    NSInteger  picIndex = [self.allImagesInfo indexOfObject:dic];
+                    [self.allImagesInfo removeObject:dic];
+                    NSLog(@"message.text = %@  index = %ld row = %ld",message.text,picIndex,index);
+                    NSDictionary*newdic = @{@"index":[NSString stringWithFormat:@"%ld",index],@"url":message.text,@"fromUid":message.fromUid};
+                    [self.allImagesInfo insertObject:newdic atIndex:picIndex];
+                    
+                }
+            }
+            
             
             [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@",AUDIOPATH,message.picUrl] error:nil];
             
@@ -1479,7 +1515,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             
             [self.imagesArray removeAllObjects];
             [self.imagesArray addObject:image];
-          
+
             [self sendImages:[self getImageSavePath:image]];
             
         } failureBlock:^(NSError *error) {
