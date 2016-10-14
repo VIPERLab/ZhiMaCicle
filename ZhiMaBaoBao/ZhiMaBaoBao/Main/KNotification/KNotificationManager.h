@@ -68,10 +68,8 @@
 
 
 //                    ------ 发布朋友圈通知 --------
-// ---- 唤起ImagePicker通知
-#define K_NewDiscoverPhotoPickerNotifcation @"KNewDiscoverPhotoPickerNotifcation"
-
 // ---- 取消响应通知
+// userInfo : { CurrentSelectedButton : 当前选中的按钮 }
 #define K_NewDiscoverPhotoClickNotifcation @"KNewDiscoverPhotoClickNotifcation"
 
 //  图片转发通知

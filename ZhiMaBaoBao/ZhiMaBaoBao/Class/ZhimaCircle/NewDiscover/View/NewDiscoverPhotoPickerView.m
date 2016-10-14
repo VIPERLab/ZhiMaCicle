@@ -56,26 +56,11 @@
 #pragma mark - 图片的点击事件
 - (void)addPhotoButtonDidClick:(UIButton *)sender {
     self.currentSelectedButton = sender;
-    [[NSNotificationCenter defaultCenter] postNotificationName:K_NewDiscoverPhotoClickNotifcation object:nil userInfo:@{@"CurrentSelectedButton" : sender
-                                                                                                                        }];
-
-    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"拍照",@"从手机相册选择"]];
-    sheet.delegate = self;
-    [sheet show];
-        
-        
-    
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:K_NewDiscoverPhotoClickNotifcation object:nil userInfo:@{@"currentSelectedButton" : self.currentSelectedButton}];
 }
 
 
-#pragma mark - actionSheetDelegate
-- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
-    [[NSNotificationCenter defaultCenter] postNotificationName:K_NewDiscoverPhotoPickerNotifcation object:self userInfo:@{   @"buttonIndex":[NSString stringWithFormat:@"%zd",index],
-                      @"currentSelectedButton" : self.currentSelectedButton,
-                      @"PhotoPickerViewController" : self
-                                                                                                                             }];
-}
+
 
 
 //增加下一个图片选择按钮

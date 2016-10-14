@@ -17,6 +17,7 @@
 
 //图片
 #import "NewDiscoverPhotoPickerView.h"
+#import "DNPhotoBrowser.h"
 
 #import "LGNetWorking.h"  //请求工具类
 
@@ -34,7 +35,7 @@
 #define NewDiscoverTableViewNormalCellReuserdID @"NewDiscoverTableViewNormalCellReuserdID"
 #define NewDiscoverTableViewHeaderCellReuserdID @"NewDiscoverTableViewHeaderCellReuserdID"
 
-@interface NewDiscoverController () <UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,CLLocationManagerDelegate>
+@interface NewDiscoverController () <UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,CLLocationManagerDelegate,KXActionSheetDelegate>
 
 @property (nonatomic, weak) UITableView *tableView;
 
@@ -105,9 +106,7 @@
 - (void)setupView {
     
     //图片点击通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClick:) name:K_NewDiscoverPhotoPickerNotifcation object:nil];
-         
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClickButton:) name:K_NewDiscoverPhotoClickNotifcation object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidClick:) name:K_NewDiscoverPhotoClickNotifcation object:nil];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -269,35 +268,43 @@
 #pragma mark - 图片通知
 - (void)photoViewDidClick:(NSNotification *)notification {
     [self.textView resignFirstResponder];
-    NSString *buttionIndex = notification.userInfo[@"buttonIndex"];
     UIButton *currentButton = notification.userInfo[@"currentSelectedButton"];
     
     self.currentSelectedButton = currentButton;
     
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.allowsEditing = NO;
+//    if (self.imagesArray.count > currentButton.tag) {
+//        //查看照片
+//        NSLog(@"我是查看照片");
+//        DNPhotoBrowser *borwser = [[DNPhotoBrowser alloc] initWithPhotos:self.imagesArray currentIndex:currentButton.tag fullImage:NO];
+//        [self presentViewController:borwser animated:YES completion:nil];
+//        return;
+//    }
     
-    
-    
-    if ([buttionIndex isEqualToString:@"0"]) {  //拍照
+    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"拍照",@"从手机相册选择"]];
+    sheet.delegate = self;
+    [sheet show];
+}
+
+
+#pragma mark - actionSheetDelegate
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)buttionIndex {
+    // 点击的是拍照
+    if (buttionIndex == 0) {
         
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = NO;
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         [self.navigationController presentViewController:picker animated:YES completion:nil];
         return;
         
-    } else if ([buttionIndex isEqualToString:@"1"]) {
-        
-        
-    } else {
-        return;
     }
     
     
-    
+    // 点击的是相册
     int limitNum = 9 - self.imagesArray.count;
     
-//    如果是更换图片，则只能选择1张
+    //    如果是更换图片，则只能选择1张
     if (self.currentSelectedButton.tag < self.imagesArray.count) {
         limitNum = 1;
     }
@@ -308,6 +315,8 @@
     imagePicker.filterType = DNImagePickerFilterTypePhotos;
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
+
+
 
 //点击回调通知
 - (void)photoViewDidClickButton:(NSNotification *)notifacation {
