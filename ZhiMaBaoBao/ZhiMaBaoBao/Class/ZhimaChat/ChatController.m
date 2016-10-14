@@ -138,7 +138,9 @@ static NSString *const reuseIdentifier = @"messageCell";
                 [indexPaths addObject:indexPath];
             }
         }
-        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        if (indexPaths.count) {
+            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
 
     } else {
         GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
@@ -1417,12 +1419,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     
     NSInteger num = self.messages.count - 1;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
-        NSArray *indexPaths = @[indexpath];
-        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//    });
+    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
+    NSArray *indexPaths = @[indexpath];
+    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
     
     NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":[NSString stringWithFormat:@"%@%@",AUDIOPATH,imagePath],@"fromUid":message.fromUid};
