@@ -69,6 +69,18 @@
 
 #pragma mark - 从数据库加载会话列表
 - (void)getDataFormSqlist {
+    
+    UserInfo *info = [UserInfo shareInstance];
+    if (info.blackUserId) {
+        // 删除该会话
+        [FMDBShareManager deleteConverseWithConverseId:info.blackUserId];
+        
+        // 删除该好友
+//        [FMDBShareManager deleteUserMessageByUserID:info.blackUserId];
+        
+        info.blackUserId = nil;
+    }
+    
     //先清空会话数组
     [self.dataArray removeAllObjects];
     

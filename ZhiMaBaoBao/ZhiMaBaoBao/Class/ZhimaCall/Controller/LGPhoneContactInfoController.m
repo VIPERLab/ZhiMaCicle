@@ -32,7 +32,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self setCustomTitle:@"联系人详情"];
     [self addSubViews];
-    if (self.contact.allPhones.count == 0) {
+    if (self.contact.allPhones.count == 0 && self.contact.phoneNumber) {
         self.contact.allPhones  = @[self.contact.phoneNumber];
     }
     

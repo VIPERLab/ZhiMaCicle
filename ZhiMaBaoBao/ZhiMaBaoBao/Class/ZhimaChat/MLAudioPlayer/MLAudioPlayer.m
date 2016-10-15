@@ -212,9 +212,11 @@ void outBufferHandler(void *inUserData,AudioQueueRef inAQ,AudioQueueBufferRef in
 
 - (void)stopPlaying
 {
+    
     if (!self.isPlaying) {
         return;
     }
+    
     
     [self stopProximityMonitering];
     self.isPlayDone = YES; //和isPlaying的区别是这个是给里面看的，那个是给外面看的

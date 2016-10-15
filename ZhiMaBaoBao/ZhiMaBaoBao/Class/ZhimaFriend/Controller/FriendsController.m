@@ -188,7 +188,6 @@ static NSString * const reuseIdentifier = @"friendListcell";
     [userInfo save];
     
     NSDictionary *userDic = notify.userInfo;
-    ZhiMaFriendModel *friend = userDic[@"friend"];
     //插入数据库，显示未读角标
 //    [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
     self.unReadLabel.hidden = NO;
@@ -289,7 +288,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
         return [UIView new];
     }else{
         UIView *headerView  = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICEWITH, 20)];
-        headerView.backgroundColor = RGB(229, 229, 229);
+        headerView.backgroundColor = self.tableView.backgroundColor;
         
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(14, 0, DEVICEWITH - 14, 20)];
         titleLabel.text = [self.sectionsArr objectAtIndex:section - 1];

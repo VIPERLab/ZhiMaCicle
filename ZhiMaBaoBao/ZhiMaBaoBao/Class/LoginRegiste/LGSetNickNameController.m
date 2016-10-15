@@ -29,8 +29,6 @@
     [super viewDidLoad];
     [self hiddenBackBtn];
     [self setUI];
-    
-    [self loginAction];
 }
 
 - (void)setUI{
@@ -171,13 +169,10 @@
             info.username = self.nickNameField.text;
             [info save];
             
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [LCProgressHUD hide];
-                [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
-            });
+            [self loginAction];
             
         }else{
-            [LCProgressHUD showFailureText:obj.msg];
+            [LCProgressHUD showFailureText:obj.msg]; 
         }
     }];
    
@@ -187,31 +182,12 @@
     [self.view endEditing:YES];
     [LGNetWorking loginWithPhone:self.phoneNumber password:self.password success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
-            
-            UserInfo *userInfo = [UserInfo mj_objectWithKeyValues:responseData.data];
-            userInfo.hasLogin = YES;
-            
-            if ([userInfo.area isEqualToString:@""] || userInfo.area == nil) {
-                userInfo.area = @"";
-            }
-            
-            // 旧的数据
-            UserInfo *oldInfo = [UserInfo read];
-            
-            if ([userInfo.userID isEqualToString:oldInfo.userID]) {
-                // 有旧数据
-                userInfo.newMessageVoiceNotify = oldInfo.newMessageVoiceNotify;
-                userInfo.newMessageShakeNotify = oldInfo.newMessageShakeNotify;
-                userInfo.newMessageNotify = oldInfo.newMessageNotify;
-            } else {
-                // 无旧数据 -  默认打开
-                userInfo.newMessageNotify = YES;
-                userInfo.newMessageShakeNotify = YES;
-                userInfo.newMessageVoiceNotify = YES;
-            }
-            
-            [JPUSHService setTags:[NSSet setWithObject:userInfo.userID] alias:userInfo.userID callbackSelector:nil object:nil];
-            [userInfo save];
+            UserInfo *info = [UserInfo read];
+            info.hasLogin = YES;
+            [info save];
+
+            [LCProgressHUD hide];
+            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
             
         }else{
             [LCProgressHUD showFailureText:responseData.msg];

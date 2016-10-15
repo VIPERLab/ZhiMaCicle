@@ -100,6 +100,9 @@
  /** 转发大图窗口*/
 @property (nonatomic, strong) UIWindow *topWindow;
 
+ /** 添加黑名单uid (拉黑时记录，跳到会话列表时删除 该id 的会话和 好友)*/
+@property (nonatomic, copy) NSString *blackUserId;
+
 
 #pragma mark - 消息通知提示
 /**

@@ -245,14 +245,18 @@
     [[SocketManager shareInstance] disconnect];
     // 进入后台时，注册极光推送
     UserInfo *info = [UserInfo read];
-    [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:@selector(tagsAliasCallback:tags:alias:) object:self];
-    
+    if (info) {
+        [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:@selector(tagsAliasCallback:tags:alias:) object:self];
+    }    
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // 开启sorket
-    [[SocketManager shareInstance] connect];
+    UserInfo *info = [UserInfo shareInstance];
+    if (info) {
+        // 开启sorket
+        [[SocketManager shareInstance] connect];
+    }
     
     [JPUSHService setBadge:0];
     

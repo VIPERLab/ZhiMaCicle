@@ -191,8 +191,9 @@
     
     //获取注册验证码
     [LGNetWorking getCodeWithPhone:self.phoneField.text flag:@"reg" SuccessfulBlock:^(ResponseData *obj) {
-        [LCProgressHUD showText:obj.msg];
         if (obj.code == 0) {
+            [LCProgressHUD showSuccessText:obj.msg];
+
             NSLog(@"成功获取验证码");
             
             //倒计时
@@ -231,7 +232,8 @@
             //储存验证码
             self.VerCode = [obj.data objectForKey:@"verifycode"];
         }else{
-            self.getCodeBtn.enabled = NO;
+            self.getCodeBtn.enabled = YES;
+            [LCProgressHUD showFailureText:obj.msg];
 
         }
     }];
