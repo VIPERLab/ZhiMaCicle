@@ -1118,6 +1118,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)jumpToWebViewWithUrlStr:(NSString *)urlStr
 {
+    
 }
 
 - (void)deleteTextComplete

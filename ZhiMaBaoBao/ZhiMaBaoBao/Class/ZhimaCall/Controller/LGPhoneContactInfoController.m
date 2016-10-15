@@ -37,7 +37,7 @@
     }
     
     //判断联系人手机号是否开通芝麻好友
-    [self requestData];
+//    [self requestData];
     
 
 }
@@ -68,23 +68,23 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    if (self.notFriend) {
-        return 2;
-    }else{
+//    if (self.notFriend) {
+//        return 2;
+//    }else{
         return 1;
-    }
+//    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0) {
+//    if (section == 0) {
         return self.contact.allPhones.count + 1;
-    }else{
-        return 2;
-    }
+//    }else{
+//        return 2;
+//    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section == 0) {
+//    if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             LGPhoneHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LGPhoneHeaderCell"];
             if (self.contact.avtar) {
@@ -109,25 +109,25 @@
             cell.delegate = self;
             return cell;
         }
-    }
-    else{
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"secondCell"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"secondCell"];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.font = MAINFONT
-        if (indexPath.row == 0) {
-            cell.textLabel.text = @"TA还不是你的芝麻好友，你可以：";
-            cell.textLabel.textColor = GRAYCOLOR;
-        }
-        else{
-            cell.textLabel.text = @"添加芝麻好友";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        
-        return cell;
-    }
+//    }
+//    else{
+//        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"secondCell"];
+//        if (!cell) {
+//            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"secondCell"];
+//        }
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        cell.textLabel.font = MAINFONT
+//        if (indexPath.row == 0) {
+//            cell.textLabel.text = @"TA还不是你的芝麻好友，你可以：";
+//            cell.textLabel.textColor = GRAYCOLOR;
+//        }
+//        else{
+//            cell.textLabel.text = @"添加芝麻好友";
+//            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//        }
+//        
+//        return cell;
+//    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

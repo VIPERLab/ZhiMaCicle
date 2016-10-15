@@ -335,6 +335,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
 }
 #pragma mark - ZMCallCellDelegate
 
+// 联系人详情
 - (void)checkDetailInfoWithModel:(LGCallRecordModel *)model
 {
     LGPhoneContactInfoController* vc = [[LGPhoneContactInfoController alloc]init];
