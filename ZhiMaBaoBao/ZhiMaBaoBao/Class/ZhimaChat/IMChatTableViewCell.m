@@ -110,8 +110,9 @@
     
     _chatMessageView = [[TQRichTextView alloc] initWithFrame:CGRectZero];
     _chatMessageView.backgroundColor = [UIColor clearColor];
-    _chatMessageView.font = SUBFONT;
+    _chatMessageView.font = [UIFont systemFontOfSize:DEFAULT_CHAT_FONT_SIZE];
     _chatMessageView.textColor = [UIColor blackColor];
+    _chatMessageView.delegage = self;
     [_bubble addSubview:_chatMessageView];
 }
 
