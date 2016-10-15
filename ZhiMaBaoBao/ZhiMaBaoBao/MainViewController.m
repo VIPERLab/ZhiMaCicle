@@ -25,6 +25,7 @@
 
 
 @interface MainViewController ()<SocketManagerDelegate>
+ @property (nonatomic, assign) BOOL canPlayAudio;
 
 @end
 
@@ -97,7 +98,12 @@
     
     //判断对发消息用户是否开启了新消息提醒 -> 播放系统消息提示音
     //1.数据库查会话模型，拿出对该用户设置的的新消息提醒 如果是yes 播放声音
-    ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.isGroup];
+    ConverseModel *conversionModel = nil;
+    if (message.isGroup) {
+        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.toUidOrGroupId andConverseType:message.isGroup];
+    }else{
+        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.isGroup];
+    }
     if (!conversionModel.disturb && ![userinfo.currentConversionId isEqualToString:message.fromUid]) {    //在当前聊天页面收到消息不播放声音
         
         if (message.type != MessageTypeSystem) {    //系统消息不播放提示音
@@ -198,7 +204,8 @@
 
 //播放消息提示音(已经判断是声音还是振动提醒)
 - (void)playSystemAudio{
-    if (USERINFO.newMessageNotify) {    //开启了接受信息消息通知
+
+    if (USERINFO.newMessageNotify && self.canPlayAudio) {    //开启了接受信息消息通知
         if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
             AudioServicesPlaySystemSound(1007);
         }else{
@@ -207,6 +214,12 @@
             }
         }
     }
+    
+    //用来解决上线收到多条消息，系统声音一直播放
+    self.canPlayAudio = NO;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.canPlayAudio = YES;
+    });
 }
 
 - (void)dealloc{

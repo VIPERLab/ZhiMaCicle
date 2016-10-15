@@ -183,19 +183,10 @@
 }
 
 - (void)show{
+    
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     [keyWindow addSubview:self];
-    
-    
-//    [UIView animateWithDuration:.5f animations:^{
-//        
-//    }];
-    
-//    POPSpringAnimation *anima = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
-//    anima.springSpeed = 10.f;
-//    anima.springBounciness = 4.f;
-//    anima.toValue = @(1.1);
-//    [self.containerView pop_addAnimation:anima forKey:@"go"];
+
 }
 
 

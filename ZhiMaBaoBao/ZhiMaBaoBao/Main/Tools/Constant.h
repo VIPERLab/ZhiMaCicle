@@ -54,23 +54,20 @@
 
 //本地测试环境
 //#define DFAPIURL @"http://192.168.1.243:8088"
-
+//#define DFAPIURL @"http://zhimachat.yihezhai.cc"
 
 //测试环境
-//#define DFAPIURL @"http://zhimachat.yihezhai.cc"
 #define DFAPIURL @"http://120.76.246.128:8080/"
 #define CHATPICURL  @"http://tpic.zhimabaobao.com"
-//测试支付，打电话余额
 #define DFAPIURLTEST @"http://tfr.zhimabaobao.com"
-//#define DFAPIURLTEST @"http://zm.yihezhai.cc"
 
 
 
 
 //正式网络环境
-//#define DFAPIURL @"http://app.zhima11.com:8080"
-//#define DFAPIURLTEST @"http://wx.zhima11.com"
-//#define CHATPICURL  @"tpic.zhimabaobao.com"
+//#define DFAPIURL @"http://zm.zhimabaobao.com:8080"
+//#define DFAPIURLTEST @"http://fr.zhimabaobao.com"
+//#define CHATPICURL  @"http://pic.zhimabaobao.com"
 
 
 

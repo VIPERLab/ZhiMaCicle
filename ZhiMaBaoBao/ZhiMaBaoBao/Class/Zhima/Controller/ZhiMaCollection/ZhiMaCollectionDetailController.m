@@ -131,8 +131,8 @@
             message.text = self.model.content;
         } else {
             message.type = MessageTypeImage;
-            message.text = [NSString stringWithFormat:@"%@%@",DFAPIURL,self.model.photoUrl];
-            message.picUrl = [NSString stringWithFormat:@"%@%@",DFAPIURL,self.model.photoUrl];
+            message.text = [NSString stringWithFormat:@"%@",self.model.photoUrl];
+            message.picUrl = [NSString stringWithFormat:@"%@",self.model.photoUrl];
         }
         
         ForwardMsgController *vc = [[ForwardMsgController alloc] init];

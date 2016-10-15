@@ -9,9 +9,10 @@
 #import "SetupFriendInfoController.h"
 #import "RemarkController.h"
 #import "SocketManager.h"
+#import "KXActionSheet.h"
 
 
-@interface SetupFriendInfoController ()
+@interface SetupFriendInfoController ()<KXActionSheetDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightConstraint;
 
 @property (weak, nonatomic) IBOutlet UIButton *deleteBtn;   //删除好友
@@ -82,48 +83,20 @@
 
 - (IBAction)deleteAction:(id)sender {
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"是否删除好友?" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除", nil];
-    [alert show];
-
-}
-
-//删除好友
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
-        //删除好友 删除会话 清除聊天记录
-        [LCProgressHUD showLoadingText:@"请稍等..."];
-        [LGNetWorking deleteFriend:USERINFO.sessionId friendId:self.friendInfo.user_Id success:^(ResponseData *responseData) {
-            if (responseData.code == 0) {
-                [LCProgressHUD hide];
-                
-                //从数据库删除会话 -- 删除好友列表
-                [FMDBShareManager deleteConverseWithConverseId:self.friendInfo.user_Id];
-                [FMDBShareManager deleteUserMessageByUserID:self.friendInfo.user_Id];
-                [self.navigationController popToRootViewControllerAnimated:YES];
-                
-            }else{
-                [LCProgressHUD showFailureText:responseData.msg];
-            }
-
-        } failure:^(ErrorData *error) {
-            [LCProgressHUD showFailureText:error.msg];
-        }];
-    }
+    KXActionSheet *deleteAction = [[KXActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"将好友\"%@\"删除，同时删除与该好友的聊天记录",self.friendInfo.displayName] cancellTitle:@"取消" andOtherButtonTitles:@[@"删除好友"]];
+    deleteAction.delegate = self;
+    deleteAction.flag = 0;
+    [deleteAction show];
 }
 
 //加入黑名单
 - (IBAction)addBlackList:(UISwitch *)sender {
     if (sender.on) {
-        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"3" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
-            if (responseData.code == 0) {
-                // 删除该会话
-                [FMDBShareManager deleteConverseWithConverseId:self.userId];
-                // 删除该好友
-                [FMDBShareManager deleteUserMessageByUserID:self.userId];
-            }else{
-                [LCProgressHUD showText:responseData.msg];
-            }
-        }];
+        
+        KXActionSheet *actionSheet = [[KXActionSheet alloc] initWithTitle:@"加入黑名单，你将不再收到对方的消息" cancellTitle:@"取消" andOtherButtonTitles:@[@"确定"]];
+        actionSheet.delegate = self;
+        [actionSheet show];
+        
     }else{
         [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
@@ -133,8 +106,58 @@
             }
         }];
     }
-
 }
+
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index{
+    if (sheet.flag == 0) {      //删除好友
+        if (index == 0) {
+            //删除好友 删除会话 清除聊天记录
+            [LCProgressHUD showLoadingText:@"请稍等..."];
+            [LGNetWorking deleteFriend:USERINFO.sessionId friendId:self.friendInfo.user_Id success:^(ResponseData *responseData) {
+                if (responseData.code == 0) {
+                    [LCProgressHUD hide];
+                    
+                    //从数据库删除会话 -- 删除好友列表
+                    [FMDBShareManager deleteConverseWithConverseId:self.friendInfo.user_Id];
+                    [FMDBShareManager deleteUserMessageByUserID:self.friendInfo.user_Id];
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                    
+                }else{
+                    [LCProgressHUD showFailureText:responseData.msg];
+                }
+                
+            } failure:^(ErrorData *error) {
+                [LCProgressHUD showFailureText:error.msg];
+            }];
+        }
+    }else{      //加入黑名单
+        if (index == 0) {
+            [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"3" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+                if (responseData.code == 0) {
+                    
+                    //标记黑名单 （在会话页面删除该会话）
+                    UserInfo *info = [UserInfo shareInstance];
+                    info.blackUserId = self.friendInfo.user_Id;
+                    
+                    
+                    //放到跳转到会话列表后去删除会话
+                    /*
+                     // 删除该会话
+                     [FMDBShareManager deleteConverseWithConverseId:self.userId];
+                     // 删除该好友
+                     [FMDBShareManager deleteUserMessageByUserID:self.userId];
+                     */
+                }else{
+                    [LCProgressHUD showText:responseData.msg];
+                }
+            }];
+        }else{
+            self.blackList.on = NO;
+        }
+
+    }
+}
+
 
 //不让他看我的朋友圈
 - (IBAction)lookMyCircle:(UISwitch *)sender {

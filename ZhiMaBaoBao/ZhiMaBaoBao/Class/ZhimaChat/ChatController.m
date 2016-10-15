@@ -39,6 +39,7 @@
 #import "FriendProfilecontroller.h"
 #import "ConverseModel.h"   //会话模型
 #import "KXActionSheet.h"
+#import "WebViewController.h"
 
 //相册相关头文件
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -110,8 +111,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     //监听消息发送状态回调
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMsgStatuescall:) name:kSendMessageStateCall object:nil];
     
-    [self changeProximityMonitorEnableState:YES];
-
     //监听大图转发
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
     
@@ -708,6 +707,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             textChatCell.isMe = isMe;
             textChatCell.chatMessageView.text = message.text;
             textChatCell.delegate = self;
+            textChatCell.cdDelegate = self;
             textChatCell.indexPath = indexPath;
             
             if (message.isSending && isMe) {
@@ -1118,7 +1118,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)jumpToWebViewWithUrlStr:(NSString *)urlStr
 {
-    
+    WebViewController *vc = [[WebViewController alloc] init];
+    vc.urlStr = urlStr;
+    [self.navigationController pushViewController:vc animated:YES];
+
 }
 
 - (void)deleteTextComplete
@@ -1142,6 +1145,8 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 
 - (void)chat_playMusic:(UIButton *)sender{
+    
+    [self changeProximityMonitorEnableState:YES];
     
     UIView *view = sender.superview;
     while(![view isKindOfClass:[IMChatVoiceTableViewCell class]]) {
@@ -1660,7 +1665,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     if ([UIDevice currentDevice].proximityMonitoringEnabled == YES) {
         if (enable) {
-            //添加近距离事件监听，添加前先设置为YES，如果设置完后还是NO的读话，说明当前设备没有近距离传感器
+            //添加近距离事件监听，添加前先设置为YES，如果设置完后还是NO的话，说明当前设备没有近距离传感器
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:) name:UIDeviceProximityStateDidChangeNotification object:nil];
             
         } else {

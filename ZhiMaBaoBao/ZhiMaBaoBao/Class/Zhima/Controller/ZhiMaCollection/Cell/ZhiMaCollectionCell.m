@@ -79,7 +79,6 @@
         _contentLabel.hidden = YES;
         _picImageView.hidden = NO;
         [_picImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.photoUrl]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
-        
     }
 }
 

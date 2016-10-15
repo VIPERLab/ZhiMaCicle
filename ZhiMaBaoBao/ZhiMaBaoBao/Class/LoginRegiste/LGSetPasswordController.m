@@ -9,6 +9,7 @@
 #import "LGSetPasswordController.h"
 #import "LGSetNickNameController.h"
 #import "RegexKitLite.h"
+#import "JPUSHService.h"
 @interface LGSetPasswordController ()
 
 @property (nonatomic, strong) UITextField *passField;
@@ -158,7 +159,30 @@
         if (obj.code == 0) {
             //存储用户资料
             
-            //连接xmpp -- 进行xmpp注册
+            UserInfo *userInfo = [UserInfo mj_objectWithKeyValues:obj.data];
+            
+            if ([userInfo.area isEqualToString:@""] || userInfo.area == nil) {
+                userInfo.area = @"";
+            }
+            
+            // 旧的数据
+            UserInfo *oldInfo = [UserInfo read];
+            
+            if ([userInfo.userID isEqualToString:oldInfo.userID]) {
+                // 有旧数据
+                userInfo.newMessageVoiceNotify = oldInfo.newMessageVoiceNotify;
+                userInfo.newMessageShakeNotify = oldInfo.newMessageShakeNotify;
+                userInfo.newMessageNotify = oldInfo.newMessageNotify;
+            } else {
+                // 无旧数据 -  默认打开
+                userInfo.newMessageNotify = YES;
+                userInfo.newMessageShakeNotify = YES;
+                userInfo.newMessageVoiceNotify = YES;
+            }
+            
+            [JPUSHService setTags:[NSSet setWithObject:userInfo.userID] alias:userInfo.userID callbackSelector:nil object:nil];
+            [userInfo save];
+
             
             LGSetNickNameController *vc = [[LGSetNickNameController alloc] init];
             vc.phoneNumber = self.phoneNumber;
