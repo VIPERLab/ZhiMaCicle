@@ -23,7 +23,9 @@
 //-- 替换基础文本
 - (void)replaceTextWithAttributedString:(NSMutableAttributedString*) attributedString
 {
-    [attributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[UIColor blueColor].CGColor range:self.range];
+    [attributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)RGB(50, 123, 247).CGColor range:self.range];
+//    [attributedString addAttribute:NSUnderlineStyleAttributeName value:
+//     [NSNumber numberWithInteger:NSUnderlineStyleSingle] range:self.range];
     [super replaceTextWithAttributedString:attributedString];
 }
 

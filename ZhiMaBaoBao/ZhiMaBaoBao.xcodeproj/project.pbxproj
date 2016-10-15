@@ -599,6 +599,7 @@
 		D5C8B3B31D9A0939007D6B5C /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = D5C8B3B21D9A0939007D6B5C /* NSString+Extension.m */; };
 		D5C8B3B91D9A1A6D007D6B5C /* IMMorePictureTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5C8B3B81D9A1A6D007D6B5C /* IMMorePictureTableViewCell.m */; };
 		D5DC48601D9A4AE9005E8766 /* IMChatVoiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5DC485F1D9A4AE9005E8766 /* IMChatVoiceTableViewCell.m */; };
+		D5FD28C01DB1E11900D19DF6 /* f000.gif in Resources */ = {isa = PBXBuildFile; fileRef = D5FD28BF1DB1E11900D19DF6 /* f000.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1761,6 +1762,7 @@
 		D5C8B3B81D9A1A6D007D6B5C /* IMMorePictureTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMMorePictureTableViewCell.m; sourceTree = "<group>"; };
 		D5DC485E1D9A4AE9005E8766 /* IMChatVoiceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMChatVoiceTableViewCell.h; sourceTree = "<group>"; };
 		D5DC485F1D9A4AE9005E8766 /* IMChatVoiceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMChatVoiceTableViewCell.m; sourceTree = "<group>"; };
+		D5FD28BF1DB1E11900D19DF6 /* f000.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = f000.gif; sourceTree = "<group>"; };
 		ED5B4B06468C0E404D88A32A /* Pods-ZhiMaBaoBao.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZhiMaBaoBao.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZhiMaBaoBao/Pods-ZhiMaBaoBao.debug.xcconfig"; sourceTree = "<group>"; };
 		F6223DBCE43169F5A4CF9B6D /* Pods-ZhiMaBaoBao.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZhiMaBaoBao.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZhiMaBaoBao/Pods-ZhiMaBaoBao.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -3853,6 +3855,7 @@
 				04F8625C1D94FC7900DCC6FE /* Cagegory */,
 				04F8625F1D94FC7900DCC6FE /* ChatKeyBoard.h */,
 				04F862601D94FC7900DCC6FE /* ChatKeyBoard.m */,
+				D5FD28BF1DB1E11900D19DF6 /* f000.gif */,
 				04F862611D94FC7900DCC6FE /* ChatKeyBoardMacroDefine.h */,
 				04F862621D94FC7900DCC6FE /* FaceSourceManager.h */,
 				04F862631D94FC7900DCC6FE /* FaceSourceManager.m */,
@@ -4923,6 +4926,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04F8628F1D94FC7900DCC6FE /* systemEmoji.plist in Resources */,
+				D5FD28C01DB1E11900D19DF6 /* f000.gif in Resources */,
 				04F862581D94FC6D00DCC6FE /* LICENSE in Resources */,
 				04F8624B1D94FC6D00DCC6FE /* MLEmoji_Expression.plist in Resources */,
 				319EA0121DA4E13D000EE216 /* AvtarAndNameCell.xib in Resources */,

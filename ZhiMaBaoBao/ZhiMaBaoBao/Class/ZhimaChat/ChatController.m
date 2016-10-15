@@ -136,7 +136,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             }
         }
         if (indexPaths.count) {
-            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadData];
         }
 
     } else {
@@ -1114,6 +1114,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)jumpToWebViewWithUrlStr:(NSString *)urlStr
+{
+}
+
 - (void)deleteTextComplete
 {
 
@@ -1390,7 +1394,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 // 发送图片前先保存到沙盒
 - (NSString*)getImageSavePath:(UIImage*)image{
 
-    NSString*photoName = [NSString stringWithFormat:@"/%ld",[NSDate currentTimeStamp]];
+    NSString*photoName = [NSString stringWithFormat:@"/%ld",[NSDate currentTimeStamp] + arc4random() % 1000];
     NSString *imageDocPath = [AUDIOPATH stringByAppendingPathComponent:photoName];
     
     NSData *data = UIImageJPEGRepresentation(image, 1);
@@ -1415,6 +1419,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.picUrl = imagePath;
     [self.messages addObject:message];
     
+    NSLog(@"imagePath = %@",imagePath);
     
     NSInteger num = self.messages.count - 1;
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
@@ -1513,7 +1518,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             
             [self.imagesArray removeAllObjects];
             [self.imagesArray addObject:image];
-
+            
             [self sendImages:[self getImageSavePath:image]];
             
         } failureBlock:^(NSError *error) {

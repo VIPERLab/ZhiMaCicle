@@ -17,6 +17,8 @@
 -(void)deleteTextComplete;
 -(void)onClicked_others_ivHead_Complete;
 
+-(void)jumpToWebViewWithUrlStr:(NSString*)urlStr;
+
 @end
 
 @interface IMChatTableViewCell : BaseChatTableViewCell

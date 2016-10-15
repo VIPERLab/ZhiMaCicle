@@ -51,7 +51,6 @@
     _isMe = isMySelf;
     
     if (chat.text) {
-        
         [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text]];
 //        [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
 //            
@@ -67,6 +66,8 @@
 //        }];
 
     }else{
+        NSLog(@"chat.text = %@",chat.picUrl);
+
         _picturesView.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.picUrl]];
 //        _picturesView.frameSize = [self pictureSizeToImage:_picturesView.image];
 //        [self.picturesView centerAlignHorizontalForSuperView];
