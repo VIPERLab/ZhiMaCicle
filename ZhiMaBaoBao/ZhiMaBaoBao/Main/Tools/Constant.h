@@ -65,7 +65,7 @@
 
 
 //正式网络环境
-//#define DFAPIURL @"http://zm.zhimabaobao.com"
+//#define DFAPIURL @"http://zm.zhimabaobao.com:8080"
 //#define DFAPIURLTEST @"http://fr.zhimabaobao.com"
 //#define CHATPICURL  @"http://pic.zhimabaobao.com"
 

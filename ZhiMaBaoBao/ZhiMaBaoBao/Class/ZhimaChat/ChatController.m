@@ -39,6 +39,7 @@
 #import "FriendProfilecontroller.h"
 #import "ConverseModel.h"   //会话模型
 #import "KXActionSheet.h"
+#import "WebViewController.h"
 
 //相册相关头文件
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -706,6 +707,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             textChatCell.isMe = isMe;
             textChatCell.chatMessageView.text = message.text;
             textChatCell.delegate = self;
+            textChatCell.cdDelegate = self;
             textChatCell.indexPath = indexPath;
             
             if (message.isSending && isMe) {
@@ -1116,6 +1118,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)jumpToWebViewWithUrlStr:(NSString *)urlStr
 {
+    WebViewController *vc = [[WebViewController alloc] init];
+    vc.urlStr = urlStr;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)deleteTextComplete
