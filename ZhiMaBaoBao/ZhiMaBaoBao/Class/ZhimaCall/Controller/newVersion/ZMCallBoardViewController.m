@@ -215,14 +215,14 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
 
         CGRect frame = self.tableView.frame;
         frame.size.height =  DEVICEHIGHT -self.keyboardView.frameOriginY;
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0.15 animations:^{
             self.tableView.frame = frame;
         }];
     }else{
 
         CGRect frame = self.tableView.frame;
         frame.size.height =  0;
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0.15 animations:^{
             self.tableView.frame = frame;
         }];
     }

@@ -86,7 +86,7 @@
 - (void)setColorWithString:(NSString*)string
 {
     NSRange range = [self.phoneLabel.text rangeOfString:string];
-    [self setTextColor:self.phoneLabel FontNumber:[UIFont systemFontOfSize:15] AndRange:range AndColor:BLACKCOLOR];
+    [self setTextColor:self.phoneLabel FontNumber:[UIFont systemFontOfSize:14] AndRange:range AndColor:BLACKCOLOR];
 }
 
 //设置不同字体颜色
