@@ -138,7 +138,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             }
         }
         if (indexPaths.count) {
-            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadData];
         }
 
     } else {
