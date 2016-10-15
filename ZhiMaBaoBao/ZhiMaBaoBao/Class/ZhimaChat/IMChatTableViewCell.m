@@ -11,10 +11,10 @@
 #import "UIImageView+WebCache.h"
 #import "KXCopyView.h"
 
-#define DEFAULT_CHAT_FONT_SIZE      14  //聊天cell中默认的字体为14
-#define DEFAULT_CHAT_MESSAGE_MAX_WIDTH      150.0 //聊天cell,文字内容最大宽度
+#define DEFAULT_CHAT_FONT_SIZE      15  //聊天cell中默认的字体为14
+#define DEFAULT_CHAT_MESSAGE_MAX_WIDTH      DEVICEWITH - 170 //聊天cell,文字内容最大宽度
 
-@interface IMChatTableViewCell()<KXCopyViewDelegate> {
+@interface IMChatTableViewCell()<KXCopyViewDelegate,TQRichTextViewDelegate> {
 
 }
 
@@ -28,7 +28,8 @@
     if (self) {
         _chatMessageView = [[TQRichTextView alloc] initWithFrame:CGRectZero];
         _chatMessageView.backgroundColor = [UIColor clearColor];
-        _chatMessageView.font = SUBFONT;
+        _chatMessageView.font = [UIFont systemFontOfSize:DEFAULT_CHAT_FONT_SIZE];
+        _chatMessageView.delegage = self;
         _chatMessageView.textColor = [UIColor blackColor];
         [_bubble addSubview:_chatMessageView];
         
@@ -137,13 +138,23 @@
                                                              lineSpacing:1.5
                                                                realWidth:&realWidth];
 
-    realWidth = realContentViewHeight<20 ? realWidth+1: realWidth; //单行如果有表情的时候最后的表情可能显示不下，so +1
+//    realWidth = realContentViewHeight<20 ? realWidth+1: realWidth; //单行如果有表情的时候最后的表情可能显示不下，so +1
     [_chatMessageView setFrameSize:CGSizeMake(realWidth, realContentViewHeight)];
     
     [self resizeBubbleView:_chatMessageView.frameSize];
     
     [self repositionContentView:_chatMessageView];
 }
+
+- (void)richTextView:(TQRichTextView *)view touchBeginRun:(TQRichTextBaseRun *)run
+{
+    NSLog(@"lianjie = %@",run.originalText);
+    if ([self.cdDelegate respondsToSelector:@selector(jumpToWebViewWithUrlStr:)]) {
+        [self.cdDelegate jumpToWebViewWithUrlStr:run.originalText];
+    }
+
+}
+
 
 + (CGFloat)getHeightWithMessage:(NSString *)message topText:(NSString *)topText nickName:(NSString *)nickName
 {

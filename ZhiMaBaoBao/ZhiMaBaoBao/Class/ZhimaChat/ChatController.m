@@ -1116,6 +1116,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)jumpToWebViewWithUrlStr:(NSString *)urlStr
+{
+}
+
 - (void)deleteTextComplete
 {
 

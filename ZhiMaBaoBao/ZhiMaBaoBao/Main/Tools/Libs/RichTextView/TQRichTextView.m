@@ -18,7 +18,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _text = @"";
-        _font = [UIFont systemFontOfSize:12.0];
+        _font = [UIFont systemFontOfSize:15];
         _textColor = [UIColor blackColor];
         _lineSpacing = 1.5;
         //
