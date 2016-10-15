@@ -19,6 +19,8 @@
 
 @property (nonatomic, weak) id <KXActionSheetDelegate> delegate;
 
+@property (nonatomic, assign) NSInteger flag;
+
 - (void)show;
 
 - (instancetype)initWithTitle:(NSString *)titleName cancellTitle:(NSString *)cancelTitle andOtherButtonTitles:(NSArray *)titles;

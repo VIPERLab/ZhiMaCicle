@@ -492,6 +492,7 @@
 		311CEFBD1D94D9C000BBB1F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */; };
 		3138F4051DA795990042D100 /* CallKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3138F4041DA795990042D100 /* CallKeyboardController.m */; };
 		314109481DAB247600D6F367 /* NSString+MsgId.m in Sources */ = {isa = PBXBuildFile; fileRef = 314109471DAB247600D6F367 /* NSString+MsgId.m */; };
+		31642D801DB21DA100A50480 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31642D7F1DB21DA100A50480 /* WebViewController.m */; };
 		316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957461D90D3DE00140126 /* KXPersonalCenterCell.m */; };
 		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
 		316957561D90E63100140126 /* LGAddFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957541D90E63100140126 /* LGAddFriendCell.m */; };
@@ -1574,6 +1575,8 @@
 		3138F4041DA795990042D100 /* CallKeyboardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallKeyboardController.m; sourceTree = "<group>"; };
 		314109461DAB247600D6F367 /* NSString+MsgId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MsgId.h"; sourceTree = "<group>"; };
 		314109471DAB247600D6F367 /* NSString+MsgId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MsgId.m"; sourceTree = "<group>"; };
+		31642D7E1DB21DA100A50480 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		31642D7F1DB21DA100A50480 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		316957451D90D3DE00140126 /* KXPersonalCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPersonalCenterCell.h; sourceTree = "<group>"; };
 		316957461D90D3DE00140126 /* KXPersonalCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPersonalCenterCell.m; sourceTree = "<group>"; };
 		3169574B1D90E24A00140126 /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
@@ -4214,6 +4217,15 @@
 			path = mp3_en_de;
 			sourceTree = "<group>";
 		};
+		31642D7D1DB21D5000A50480 /* Webview(网页浏览) */ = {
+			isa = PBXGroup;
+			children = (
+				31642D7E1DB21DA100A50480 /* WebViewController.h */,
+				31642D7F1DB21DA100A50480 /* WebViewController.m */,
+			);
+			name = "Webview(网页浏览)";
+			sourceTree = "<group>";
+		};
 		316957511D90E5C900140126 /* AddFriends(添加好友) */ = {
 			isa = PBXGroup;
 			children = (
@@ -4511,6 +4523,7 @@
 		31B7C70B1D8E96A100F1883A /* ZhimaChat(芝麻聊) */ = {
 			isa = PBXGroup;
 			children = (
+				31642D7D1DB21D5000A50480 /* Webview(网页浏览) */,
 				04DD49E31DACD5E70027256E /* GroupChatGetInside(扫码进群) */,
 				04AB88401DACBEB30087502C /* GroupQRCode(群二维码) */,
 				047F13ED1DAA4BAF00684881 /* GroupChatInfoChange(修改群聊信息内页) */,
@@ -5241,6 +5254,7 @@
 				04EA7B361D9126BE005E5425 /* NSData+AES.m in Sources */,
 				04EA7DC31D912872005E5425 /* ZXMaxiCodeDecoder.m in Sources */,
 				04EA7DCF1D912872005E5425 /* ZXAI01decoder.m in Sources */,
+				31642D801DB21DA100A50480 /* WebViewController.m in Sources */,
 				31B7C78D1D8FE71100F1883A /* PhoneContact.m in Sources */,
 				04EA7E2A1D912872005E5425 /* ZXQRCodeMaskUtil.m in Sources */,
 				31B7C78B1D8FE71100F1883A /* LGQueryModel.m in Sources */,
