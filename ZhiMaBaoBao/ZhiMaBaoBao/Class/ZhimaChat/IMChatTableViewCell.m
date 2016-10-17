@@ -129,7 +129,7 @@
 {
     [super layoutSubviews];
     
-    CGFloat  realContentViewHeight = 0;
+    float  realContentViewHeight = 0;
     float  realWidth = 0;
 
         
@@ -139,7 +139,7 @@
                                                              lineSpacing:1.5
                                                                realWidth:&realWidth];
 
-//    realWidth = realContentViewHeight<20 ? realWidth+1: realWidth; //单行如果有表情的时候最后的表情可能显示不下，so +1
+    realWidth = realContentViewHeight<20 ? realWidth+1: realWidth; //单行如果有表情的时候最后的表情可能显示不下，so +1
     [_chatMessageView setFrameSize:CGSizeMake(realWidth, realContentViewHeight)];
     
     [self resizeBubbleView:_chatMessageView.frameSize];
