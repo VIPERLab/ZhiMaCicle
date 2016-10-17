@@ -274,7 +274,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     _nameLable.sd_layout.widthIs(nameW);
     
     
-    _contentLabel.text = model.content;
+    
     
     // 正则筛选网址
     [self setContentLinkText];
@@ -330,10 +330,11 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 
 
 - (void)setContentLinkText {
+    _contentLabel.text = _model.content;
     // 正则筛选网页
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc]initWithString:self.model.content];
     
-    NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@;#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@;#$%^&*+?:_/=<>]*)?)";
+    NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
     
     NSError *error;
     
@@ -360,15 +361,17 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
         
         MLLink *link = [MLLink linkWithType:MLLinkTypeURL value:subStringForMatch range:[self.model.content rangeOfString:subStringForMatch]];
         [_contentLabel addLink:link];
+        
+        __weak typeof(self.delegate) weakDelegate = self.delegate;
+        [_contentLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+            NSLog(@"%@",linkText);
+            if ([weakDelegate respondsToSelector:@selector(didClickContentLink:)]) {
+                [weakDelegate didClickContentLink:linkText];
+            }
+        }];
     }
     
-    __weak typeof(self.delegate) weakDelegate = self.delegate;
-    [_contentLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
-        NSLog(@"%@",linkText);
-        if ([weakDelegate respondsToSelector:@selector(didClickContentLink:)]) {
-            [weakDelegate didClickContentLink:linkText];
-        }
-    }];
+    
 
 }
 
