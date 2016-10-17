@@ -112,6 +112,7 @@
 
     [LGNetWorking ComplainsUserWithSessionID:USERINFO.sessionId andComplaintsUserId:self.userId andComplainsReason:reason andComplainFriendCicle:self.circleId andComplatinType:self.type block:^(ResponseData *responseData) {
         if (responseData.code != 0) {
+            [LCProgressHUD showFailureText:responseData.msg];
             return ;
         }
         
