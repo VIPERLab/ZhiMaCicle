@@ -268,6 +268,12 @@
     [self checkAmountAndCall:self.phoneNum name:self.name];
 }
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    [self.player stop];
+}
+
 //电话结束操作 -- 上传通话时长
 - (void)handUpDo{
     NSDate *date = [NSDate date];
