@@ -338,7 +338,8 @@
         [alert show];
     } else if (indexPath.section == 4 && indexPath.row == 0) {
         ComplainViewController *complain = [[ComplainViewController alloc] init];
-        complain.converseId = self.groupModel.groupId;
+        complain.circleId = self.groupModel.groupId;
+        complain.type = 3;
         complain.dataArray = @[@"发布了不适当内容对我造成骚扰",@"有群成员在赌博",@"群成员存在欺诈骗钱行为",@"群成员传播谣言信息"];
         [self.navigationController pushViewController:complain animated:YES];
     }

@@ -780,12 +780,14 @@
 
 
 //投诉用户
-+ (void)ComplainsUserWithSessionID:(NSString *)sessionID andTheOpenFireAccount:(NSString *)openfirAccount andComplainsReason:(NSString *)reason andComplainFriendCicle:(NSString *)firendCicle block:(SuccessfulBlock)block {
++ (void)ComplainsUserWithSessionID:(NSString *)sessionID andComplaintsUserId:(NSString *)complaintsUserId andComplainsReason:(NSString *)reason andComplainFriendCicle:(NSString *)firendCicle andComplatinType:(int)complaintType block:(SuccessfulBlock)block {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     dic[@"sessionId"] = sessionID;
     dic[@"reason"] = reason;
     dic[@"friendcircleid"] = firendCicle;
     dic[@"appSystem"] = @"ios";
+    dic[@"complaintsUserId"] = complaintsUserId;
+    dic[@"type"] = @(complaintType);
     
     [HttpTool POST:@"/moblie/addComplaints.do" params:dic success:^(ResponseData *json) {
         block(json);

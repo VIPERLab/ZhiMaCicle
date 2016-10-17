@@ -145,7 +145,8 @@
         [alert show];
     } else if (indexPath.section == 3 && indexPath.row == 0) {
         ComplainViewController *complain = [[ComplainViewController alloc] init];
-        complain.converseId = self.userId;
+        complain.userId = self.userId;
+        complain.type = 2;
         complain.dataArray = @[@"发布了不适当内容对我造成骚扰",@"存在欺诈骗钱行为",@"此账号可能被盗用了",@"存在侵权行为",@"发布仿冒品信息"];
         [self.navigationController pushViewController:complain animated:YES];
     }

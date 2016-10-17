@@ -109,16 +109,16 @@
 
 
 - (void)complainReason:(NSString *)reason {
-    [LGNetWorking ComplainsUserWithSessionID:USERINFO.sessionId andTheOpenFireAccount:self.userId andComplainsReason:reason andComplainFriendCicle:self.circleId block:^(ResponseData *responseData) {
-        
+
+    [LGNetWorking ComplainsUserWithSessionID:USERINFO.sessionId andComplaintsUserId:self.userId andComplainsReason:reason andComplainFriendCicle:self.circleId andComplatinType:self.type block:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             return ;
         }
         
         ComplainSubViewController *subView = [[ComplainSubViewController alloc] init];
+        subView.type = self.type;
         [self.navigationController pushViewController:subView animated:YES];
         NSLog(@"投诉成功");
-        
     }];
 }
 /*

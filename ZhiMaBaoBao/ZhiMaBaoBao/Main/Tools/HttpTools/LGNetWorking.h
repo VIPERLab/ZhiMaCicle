@@ -246,7 +246,7 @@
 + (void)DeletedMyCommentWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andFcid:(NSString *)fcid block:(SuccessfulBlock)block;
 
 //投诉用户
-+ (void)ComplainsUserWithSessionID:(NSString *)sessionID andTheOpenFireAccount:(NSString *)openfirAccount andComplainsReason:(NSString *)reason andComplainFriendCicle:(NSString *)firendCicle block:(SuccessfulBlock)block;
++ (void)ComplainsUserWithSessionID:(NSString *)sessionID andComplaintsUserId:(NSString *)complaintsUserId andComplainsReason:(NSString *)reason andComplainFriendCicle:(NSString *)firendCicle andComplatinType:(int)complaintType block:(SuccessfulBlock)block;
 
 /**
  *  添加通话日志
