@@ -1025,49 +1025,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.tableView reloadData];
 }
 
-////收到转发大图通知
-//- (void)bigImageTransform:(NSNotification *)notify{
-//    NSDictionary *userInfo = notify.userInfo;
-//    NSString *imageUrl = userInfo[@"imageUrl"];
-//    
-//    //生成一条消息模型
-//    LGMessage *message = [[LGMessage alloc] init];
-//    message.text = imageUrl;
-//    message.type = MessageTypeImage;
-//    
-//    
-//    UserInfo *info = [UserInfo shareInstance];
-//    info.keyWindow = [UIApplication sharedApplication].keyWindow;
-//    info.bigImageTrans = YES;
-//    
-//    ForwardMsgController *vc = [[ForwardMsgController alloc] init];
-//    vc.message = message;
-//    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
-//    
-//    UIWindow *topWindow = [[UIWindow alloc] init];
-//    info.topWindow = topWindow;
-//    topWindow.windowLevel = UIWindowLevelNormal;
-//    topWindow.rootViewController = nav;
-//    [topWindow makeKeyAndVisible];
-//
-//}
-//
-//- (void)becomekeyWindow:(NSNotification *)notify{
-//    UserInfo *info = [UserInfo shareInstance];
-//    UIWindow *window = notify.object;
-//    
-//    if (window == info.topWindow) {
-//        info.topWindow.y = DEVICEHIGHT;
-//        [UIView animateWithDuration:.3f animations:^{
-//            info.topWindow.y = 0;
-//        }];
-//    }else{  //keywindow
-//        NSLog(@"keywindow");
-//        info.bigImageTrans = NO;
-//        info.topWindow = nil;
-//    }
-//}
-
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index{
     if (index == 0) {
         [self deleteAction:index];

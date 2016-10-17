@@ -185,6 +185,9 @@
             UserInfo *info = [UserInfo read];
             info.hasLogin = YES;
             [info save];
+            
+            [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:nil object:nil];
+
 
             [LCProgressHUD hide];
             [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];

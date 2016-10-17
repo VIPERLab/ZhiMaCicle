@@ -40,48 +40,61 @@
     [getCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
     [getCodeBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     getCodeBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    [getCodeBtn setFrame:CGRectMake(DEVICEWITH - 76 - 14, CGRectGetMinY(self.separtor.frame) + 10, 76, 30)];
+    [getCodeBtn setFrame:CGRectMake(DEVICEWITH - 76 - 14, 245 + 10, 76, 30)];
     [self.view addSubview:getCodeBtn];
     self.getCodeBtn = getCodeBtn;
     [getCodeBtn addTarget:self action:@selector(verCodeBtnCation:) forControlEvents:UIControlEventTouchUpInside];
     
-
 }
 
 - (void)navRightBtnAction{
     
     if (!self.account.hasText) {
-        [LCProgressHUD showText:@"请输入帐号"];
+        [LCProgressHUD showFailureText:@"请输入帐号"];
         return;
     }
     
     if (!self.password.hasText) {
-        [LCProgressHUD showText:@"请输入新密码"];
+        [LCProgressHUD showFailureText:@"请输入新密码"];
         return;
     }
     if (!self.againPassword.hasText) {
-        [LCProgressHUD showText:@"请再次输入新密码"];
-
+        [LCProgressHUD showFailureText:@"请再次输入新密码"];
         return;
     }
+    
+    if (![self.password.text isEqualToString:self.againPassword.text]) {
+        [LCProgressHUD showFailureText:@"两次输入密码不一致"];
+        return;
+    }
+    
+    if (![self.password.text isMatchedByRegex:@"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$"]) {
+        [LCProgressHUD showFailureText:@"请输入数字和字母组成的密码"];
+        return;
+    }
+    
+    if (self.password.text.length < 6 || self.password.text.length > 18) {
+        [LCProgressHUD showFailureText:@"请输入6-18位密码"];
+        return;
+    }
+
+    
     
     //重置密码
     [LGNetWorking forgetPassword:self.account.text verCode:self.verCodeField.text password:self.againPassword.text block:^(ResponseData *obj) {
         if (obj.code == 0) {
             //储存新密码
-//            YiUserInfo *userInfo = [YiUserInfo defaultUserInfo];
-//            userInfo.password = self.againPassword.text;
-//            [userInfo persist];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+            [LCProgressHUD showSuccessText:@"修改成功"];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 //跳回到登录页面
                 [self.navigationController popViewControllerAnimated:YES];
             });
             
         }else{
-            [LCProgressHUD showText:obj.msg];
+            [LCProgressHUD showFailureText:obj.msg];
 
         }
-        
     }];
 }
 /**
@@ -96,13 +109,13 @@
     //判断手机号是否正确
     if (self.account.text.length <= 0)
     {
-        [LCProgressHUD showText:@"请输入手机号码"];
+        [LCProgressHUD showFailureText:@"请输入手机号码"];
         return;
     }
     
     if (![self.account.text isMatchedByRegex:@"^(13|15|17|18|14)\\d{9}$"])
     {
-        [LCProgressHUD showText:@"请输入正确的手机号码"];
+        [LCProgressHUD showFailureText:@"请输入正确的手机号码"];
         return;
     }
     
@@ -139,13 +152,14 @@
     
     //获取注册验证码
     [LGNetWorking getCodeWithPhone:self.account.text flag:@"forget" SuccessfulBlock:^(ResponseData *obj) {
-        [LCProgressHUD showText:obj.msg];
         if (obj.code == 0) {
+            [LCProgressHUD showSuccessText:obj.msg];
             NSLog(@"成功获取验证码");
             //储存验证码
             self.verCodeStr = [obj.data objectForKey:@"verifycode"];
         }else{
-            
+            [LCProgressHUD showFailureText:obj.msg];
+
         }
     }];
 
