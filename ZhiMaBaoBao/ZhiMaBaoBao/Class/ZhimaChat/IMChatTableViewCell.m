@@ -149,7 +149,6 @@
 
 - (void)richTextView:(TQRichTextView *)view touchBeginRun:(TQRichTextBaseRun *)run
 {
-    NSLog(@"lianjie = %@",run.originalText);
     if ([self.cdDelegate respondsToSelector:@selector(jumpToWebViewWithUrlStr:)]) {
         [self.cdDelegate jumpToWebViewWithUrlStr:run.originalText];
     }
