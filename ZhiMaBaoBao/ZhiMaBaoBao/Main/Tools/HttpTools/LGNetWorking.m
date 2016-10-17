@@ -439,7 +439,7 @@
     param[@"sessionId"] = sessionId;
     param[@"groupid"] = groupId;
 
-    [HttpTool POST:@"moblie/getGroupDetail.do" params:param success:^(ResponseData *json) {
+    [HttpTool POST:@"/moblie/getGroupDetail.do" params:param success:^(ResponseData *json) {
         success(json);
     } failure:^(ErrorData *error) {
         failure(error);
