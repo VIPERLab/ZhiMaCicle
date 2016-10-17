@@ -936,7 +936,9 @@
     if (sheet.tag == 1000) {
         if (buttonIndex == 0) {
             ComplainViewController *complain = [[ComplainViewController alloc] init];
-            complain.model = self.complainModel;
+            complain.userId = self.complainModel.userId;
+            complain.circleId = self.complainModel.circle_ID;
+            complain.dataArray = @[@"发布不适当内容对我造成骚扰",@"发布带诱导分享性质的内容",@"传播谣言信息",@"存在侵权行为",@"发布仿冒品信息"];
             [self.navigationController pushViewController:complain animated:YES];
         }else if (buttonIndex == 1){
             //设置朋友圈权限

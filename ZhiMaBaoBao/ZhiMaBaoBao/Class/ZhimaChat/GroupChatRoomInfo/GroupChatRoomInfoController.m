@@ -26,6 +26,7 @@
 #import "GroupChatMessageDetailController.h"   //聊天记录
 #import "GroupChatAllMembersController.h"      //全部群成员
 #import "GroupQRCodeController.h"              //群二维码
+#import "ComplainViewController.h"             //投诉
 
 #define GroupChatRoomInfoCellReusedID @"GroupChatRoomInfoCellReusedID"
 #define GroupChatRoomInfoHeaderCellReusedID @"GroupChatRoomInfoHeaderCellReusedID"
@@ -335,6 +336,11 @@
         NSLog(@"清空聊天记录");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定要清除聊天记录吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         [alert show];
+    } else if (indexPath.section == 4 && indexPath.row == 0) {
+        ComplainViewController *complain = [[ComplainViewController alloc] init];
+        complain.converseId = self.groupModel.groupId;
+        complain.dataArray = @[@"发布了不适当内容对我造成骚扰",@"有群成员在赌博",@"群成员存在欺诈骗钱行为",@"群成员传播谣言信息"];
+        [self.navigationController pushViewController:complain animated:YES];
     }
 }
 
@@ -414,14 +420,14 @@
 #pragma mark - lazyLoad
 - (NSArray *)titleArray {
     if (self.groupModel) {
-        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
+        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"],@[@"投诉"]];
     }
     return _titleArray;
 }
 
 - (NSArray *)subTitleArray {
     if (self.groupModel) {
-        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode"],@[@"",@""],@[@""]];
+        _subTitleArray = @[@[@"",@""],@[self.groupModel.groupName,@"QRCode"],@[@"",@""],@[@""],@[@""]];
     }
     return _subTitleArray;
 }

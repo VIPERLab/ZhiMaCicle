@@ -14,6 +14,7 @@
 
 #import "FriendProfilecontroller.h" // 好友详情
 #import "CreateGroupChatController.h"
+#import "ComplainViewController.h" // 投诉
 
 
 #define CharRoomInfoHeaderCellReusedID @"CharRoomInfoHeaderCellReusedID"
@@ -142,6 +143,11 @@
         //清空聊天记录
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定要清除聊天记录吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         [alert show];
+    } else if (indexPath.section == 3 && indexPath.row == 0) {
+        ComplainViewController *complain = [[ComplainViewController alloc] init];
+        complain.converseId = self.userId;
+        complain.dataArray = @[@"发布了不适当内容对我造成骚扰",@"存在欺诈骗钱行为",@"此账号可能被盗用了",@"存在侵权行为",@"发布仿冒品信息"];
+        [self.navigationController pushViewController:complain animated:YES];
     }
 }
 
@@ -155,7 +161,7 @@
 #pragma mark - lazyLoad
 - (NSArray *)titleArray {
     if (!_titleArray) {
-        _titleArray = @[@[@""],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"]];
+        _titleArray = @[@[@""],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"],@[@"投诉"]];
     }
     return _titleArray;
 }
