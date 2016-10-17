@@ -115,6 +115,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomekeyWindow:) name:UIWindowDidBecomeKeyNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground) name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
     
 }
 
@@ -159,6 +161,11 @@ static NSString *const reuseIdentifier = @"messageCell";
     UserInfo *info = [UserInfo shareInstance];
     info.currentConversionId = nil;
     
+    [self.player stopPlaying];
+}
+
+- (void)appWillEnterForeground
+{
     [self.player stopPlaying];
 }
 
@@ -1233,7 +1240,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     srand((unsigned int)time(0));
     for (int i = 0; i < kNumber; i++)
     {
-        unsigned index = rand() % [sourceStr length];
+        unsigned index = arc4random() % [sourceStr length];
         NSString *oneStr = [sourceStr substringWithRange:NSMakeRange(index, 1)];
         [resultStr appendString:oneStr];
     }
@@ -1425,7 +1432,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.picUrl = imagePath;
     [self.messages addObject:message];
     
-    NSLog(@"imagePath = %@",imagePath);
+//    NSLog(@"imagePath = %@",message.msgid);
     
     NSInteger num = self.messages.count - 1;
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
@@ -1657,6 +1664,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.recorder stopRecording];
     [self changeProximityMonitorEnableState:NO];
     [self.player stopPlaying];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
 }
 
 #pragma mark - 近距离传感器
