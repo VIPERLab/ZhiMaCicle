@@ -178,7 +178,7 @@
         return;
     }
     
-    if (![self.oldPassword.text isMatchedByRegex:@"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$"]) {
+    if (![self.password.text isMatchedByRegex:@"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$"]) {
         [LCProgressHUD showFailureText:@"请输入数字和字母组成的密码"];
         return;
     }
@@ -204,7 +204,7 @@
 
     [LGNetWorking resetPassword:USERINFO.sessionId phone:USERINFO.uphone oldPass:titleF newPass:onepwd reNewpass:twoPsw block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
-            [LCProgressHUD showText:@"修改成功"];
+            [LCProgressHUD showSuccessText:@"修改成功"];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self.navigationController popToRootViewControllerAnimated:YES];
             });
