@@ -120,8 +120,8 @@
  */
 @property (nonatomic, assign) BOOL newMessageShakeNotify;
 
-
-
+//大图转发
+@property (nonatomic, assign) BOOL bigImageTrans;
 
 /**
  *  位置信息

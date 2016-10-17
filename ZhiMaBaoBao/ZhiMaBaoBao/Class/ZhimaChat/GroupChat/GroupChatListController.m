@@ -124,6 +124,8 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ConverseModel *groupModel = self.dataArr[indexPath.row];
 
     if (self.isBigImageTrans) {
@@ -160,7 +162,7 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     UserInfo *info = [UserInfo shareInstance];
     if (info.topWindow) {
         [info.topWindow resignKeyWindow];
-        info.topWindow = nil;
+//        info.topWindow = nil;
         [info.keyWindow makeKeyAndVisible];
         [LCProgressHUD showSuccessText:@"发送成功"];
         

@@ -20,6 +20,7 @@
 #import "RHSocketService.h"
 #import "ConverseModel.h"
 #import "ChatController.h"
+#import "ForwardMsgController.h"
 
 #import "ZMCallViewController.h"
 
@@ -68,6 +69,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doOtherLogin) name:kOtherLogin object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMessageRecieved:) name:kRecieveNewMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUnread) name:kUpdateUnReadMessage object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomekeyWindow:) name:UIWindowDidBecomeKeyNotification object:nil];
 }
 
 #pragma mark - socket 通知回调
@@ -189,6 +192,51 @@
     
     return unRead;
 }
+
+//收到转发大图通知
+- (void)bigImageTransform:(NSNotification *)notify{
+    NSDictionary *userInfo = notify.userInfo;
+    NSString *imageUrl = userInfo[@"imageUrl"];
+    
+    //生成一条消息模型
+    LGMessage *message = [[LGMessage alloc] init];
+    message.text = imageUrl;
+    message.type = MessageTypeImage;
+    
+    
+    UserInfo *info = [UserInfo shareInstance];
+    info.keyWindow = [UIApplication sharedApplication].keyWindow;
+    info.bigImageTrans = YES;
+    
+    ForwardMsgController *vc = [[ForwardMsgController alloc] init];
+    vc.message = message;
+    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+    
+    UIWindow *topWindow = [[UIWindow alloc] init];
+    info.topWindow = topWindow;
+    topWindow.windowLevel = UIWindowLevelNormal;
+    topWindow.rootViewController = nav;
+    [topWindow makeKeyAndVisible];
+    
+}
+
+- (void)becomekeyWindow:(NSNotification *)notify{
+    UserInfo *info = [UserInfo shareInstance];
+    UIWindow *window = notify.object;
+    
+    if (window == info.topWindow) {
+        info.topWindow.y = DEVICEHIGHT;
+        [UIView animateWithDuration:.3f animations:^{
+            info.topWindow.y = 0;
+        }];
+    }else{  //keywindow
+        NSLog(@"keywindow");
+        info.bigImageTrans = NO;
+        info.topWindow = nil;
+        
+    }
+}
+
 
 #pragma mark - 状态栏高度改变时，修改tabbar的Y值
 - (void)adapterstatusBarHeight{

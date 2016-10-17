@@ -453,7 +453,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     //拼接自己的userId和好友userId
     NSMutableArray *userIdArr = [NSMutableArray array];
-    [userIdArr addObject:USERINFO.userID];
+//    [userIdArr addObject:USERINFO.userID];
     for (ZhiMaFriendModel *model in self.selectedFriends) {
         [userIdArr addObject:model.user_Id];
     }
@@ -724,7 +724,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     UserInfo *info = [UserInfo shareInstance];
     if (info.topWindow) {
         [info.topWindow resignKeyWindow];
-        info.topWindow = nil;
+//        info.topWindow = nil;
         [info.keyWindow makeKeyAndVisible];
         [LCProgressHUD showSuccessText:@"发送成功"];
 
