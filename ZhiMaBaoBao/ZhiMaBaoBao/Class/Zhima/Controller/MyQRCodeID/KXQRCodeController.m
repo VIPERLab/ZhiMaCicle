@@ -164,7 +164,7 @@
     // 高清的二维码
     
 //    NSString * avatarPath = [YiXmppVCard getAvatarPathByJid:[userInfo getJid]];
-    self.imageView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:120];
+    self.imageView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:500];
     
     UIImageView *imageViewe = [[UIImageView alloc] initWithImage:self.userIcon.image];
     CGFloat width = self.imageView.width * 0.2;
