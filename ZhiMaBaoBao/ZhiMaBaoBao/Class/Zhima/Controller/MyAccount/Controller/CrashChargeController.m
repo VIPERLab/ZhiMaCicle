@@ -166,7 +166,7 @@
         
         if ([responseObject[@"code"] intValue] != 8888) {
 //            [LCProgressHUD showFailureText:@"支付失败"];
-//            return ;
+            return ;
         }
         if (type) {
             [self AliPay:responseObject];
