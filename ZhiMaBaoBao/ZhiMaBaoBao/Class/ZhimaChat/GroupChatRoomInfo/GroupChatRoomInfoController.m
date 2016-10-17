@@ -80,9 +80,11 @@
                      @"groupUserVos":@"GroupUserModel"
                      };
         }];
-        GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-        self.groupModel = groupChatModel;
+        self.groupModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
         self.groupModel.myGroupName = USERINFO.username;
+        
+        //将群组放在数组第一个
+        [self dealGroupMembers];
         
         // 设置群聊的置顶、免打扰
         self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
@@ -90,7 +92,7 @@
         self.groupModel.disturb = self.converseModel.disturb;
         
         // 更新群信息内容
-        [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:self.converseId];
+        [FMDBShareManager saveGroupChatInfo:self.groupModel andConverseID:self.converseId];
         
         [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
         
@@ -130,6 +132,27 @@
     [_tableView reloadData];
      
      */
+}
+
+- (void)dealGroupMembers{
+    NSMutableArray *array = [NSMutableArray array];
+    array = [self.groupModel.groupUserVos mutableCopy];
+    
+    GroupUserModel *flagModel;
+    for (GroupUserModel *model in self.groupModel.groupUserVos) {
+        if ([model.userId isEqualToString:self.groupModel.create_usreid]) {
+            flagModel = model;
+        }
+    }
+    
+    if (!flagModel) {
+        return;
+    }
+    
+    [array removeObject:flagModel];
+    [array insertObject:flagModel atIndex:0];
+    
+    self.groupModel.groupUserVos = array;
 }
 
 - (void)isGroupCreater:(NSString *)GrouperID {

@@ -112,9 +112,11 @@ static NSString *const reuseIdentifier = @"messageCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMsgStatuescall:) name:kSendMessageStateCall object:nil];
     
     //监听大图转发
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomekeyWindow:) name:UIWindowDidBecomeKeyNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
+ 
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomekeyWindow:) name:UIWindowDidBecomeKeyNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground) name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
     
 }
 
@@ -159,6 +161,11 @@ static NSString *const reuseIdentifier = @"messageCell";
     UserInfo *info = [UserInfo shareInstance];
     info.currentConversionId = nil;
     
+    [self.player stopPlaying];
+}
+
+- (void)appWillEnterForeground
+{
     [self.player stopPlaying];
 }
 
@@ -1018,44 +1025,50 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.tableView reloadData];
 }
 
-//收到转发大图通知
-- (void)bigImageTransform:(NSNotification *)notify{
-    NSDictionary *userInfo = notify.userInfo;
-    NSString *imageUrl = userInfo[@"imageUrl"];
-    
-    //生成一条消息模型
-    LGMessage *message = [[LGMessage alloc] init];
-    message.text = imageUrl;
-    message.type = MessageTypeImage;
-    
-    
-    UserInfo *info = [UserInfo shareInstance];
-    info.keyWindow = [UIApplication sharedApplication].keyWindow;
-    
-    ForwardMsgController *vc = [[ForwardMsgController alloc] init];
-    vc.message = message;
-    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
-    
-    UIWindow *topWindow = [[UIWindow alloc] init];
-    info.topWindow = topWindow;
-    topWindow.windowLevel = UIWindowLevelNormal;
-    topWindow.rootViewController = nav;
-    [topWindow makeKeyAndVisible];
-}
+////收到转发大图通知
+//- (void)bigImageTransform:(NSNotification *)notify{
+//    NSDictionary *userInfo = notify.userInfo;
+//    NSString *imageUrl = userInfo[@"imageUrl"];
+//    
+//    //生成一条消息模型
+//    LGMessage *message = [[LGMessage alloc] init];
+//    message.text = imageUrl;
+//    message.type = MessageTypeImage;
+//    
+//    
+//    UserInfo *info = [UserInfo shareInstance];
+//    info.keyWindow = [UIApplication sharedApplication].keyWindow;
+//    info.bigImageTrans = YES;
+//    
+//    ForwardMsgController *vc = [[ForwardMsgController alloc] init];
+//    vc.message = message;
+//    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+//    
+//    UIWindow *topWindow = [[UIWindow alloc] init];
+//    info.topWindow = topWindow;
+//    topWindow.windowLevel = UIWindowLevelNormal;
+//    topWindow.rootViewController = nav;
+//    [topWindow makeKeyAndVisible];
+//
+//}
+//
+//- (void)becomekeyWindow:(NSNotification *)notify{
+//    UserInfo *info = [UserInfo shareInstance];
+//    UIWindow *window = notify.object;
+//    
+//    if (window == info.topWindow) {
+//        info.topWindow.y = DEVICEHIGHT;
+//        [UIView animateWithDuration:.3f animations:^{
+//            info.topWindow.y = 0;
+//        }];
+//    }else{  //keywindow
+//        NSLog(@"keywindow");
+//        info.bigImageTrans = NO;
+//        info.topWindow = nil;
+//    }
+//}
 
-- (void)becomekeyWindow:(NSNotification *)notify{
-    UserInfo *info = [UserInfo shareInstance];
-    UIWindow *window = notify.object;
-    
-    if (window == info.topWindow) {
-        info.topWindow.y = DEVICEHIGHT;
-        [UIView animateWithDuration:.3f animations:^{
-            info.topWindow.y = 0;
-        }];
-    }
-}
-
-- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index;{
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index{
     if (index == 0) {
         [self deleteAction:index];
     }
@@ -1233,7 +1246,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     srand((unsigned int)time(0));
     for (int i = 0; i < kNumber; i++)
     {
-        unsigned index = rand() % [sourceStr length];
+        unsigned index = arc4random() % [sourceStr length];
         NSString *oneStr = [sourceStr substringWithRange:NSMakeRange(index, 1)];
         [resultStr appendString:oneStr];
     }
@@ -1425,7 +1438,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.picUrl = imagePath;
     [self.messages addObject:message];
     
-    NSLog(@"imagePath = %@",imagePath);
+//    NSLog(@"imagePath = %@",message.msgid);
     
     NSInteger num = self.messages.count - 1;
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
@@ -1657,6 +1670,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.recorder stopRecording];
     [self changeProximityMonitorEnableState:NO];
     [self.player stopPlaying];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
 }
 
 #pragma mark - 近距离传感器
