@@ -79,7 +79,7 @@
     //断开socket
     [[SocketManager shareInstance] disconnect];
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您的帐号已在其它设备登录！" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"你的帐号已在其他设备登录。如非本人操作，则密码可能已泄露，建议尽快修改密码。" message:@"" preferredStyle:UIAlertControllerStyleAlert];
     //重新登录
     UIAlertAction *reLogin = [UIAlertAction actionWithTitle:@"重新登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[SocketManager shareInstance] connect];
