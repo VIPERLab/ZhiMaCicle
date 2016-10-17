@@ -31,7 +31,15 @@
     [self.view insertSubview:progressView aboveSubview:self.webView];
     self.progressView = progressView;
     
-    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@",self.urlStr]]]];
+    NSString *urlStr = self.urlStr;
+    NSRange rang = [urlStr rangeOfString:@"http"];
+    if (rang.length == 0) {
+        urlStr = [@"http://" stringByAppendingString:urlStr];
+    }
+    
+    NSLog(@"加载的网址是 --  %@",urlStr);
+    
+    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]];
     [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
     [webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:NULL];
 }

@@ -38,6 +38,8 @@
 - (void)didClickcCommentButtonInCell:(SDTimeLineCell *)cell;
 - (void)didClickUserIconInCell:(SDTimeLineCell *)cell;
 - (void)DidClickCommentOtherButton:(SDTimeLineCell *)cell andCommentItem:(SDTimeLineCellCommentItemModel *)commentModel andCommentView:(UIView *)commentView;
+- (void)didClickContentLink:(NSString *)urlStr;
+
 // -- 长按点击
 - (void)didLongPressUserIconWithCell:(SDTimeLineCell *)cell;
 

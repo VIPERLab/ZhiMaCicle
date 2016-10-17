@@ -63,9 +63,11 @@
 
 // ---- 朋友圈长按文字文本通知
 // info :  @"contentLabel" : 文本控件 、 @"cell" : 当前文本所在的cell
-#define KDiscoverLongPressContentNotification @"KDiscoverLongPressContentNotification"
-#define KDiscoverDisLongPressContentNotificaion @"KDiscoverDisLongPressContentNotificaion"
+#define KDiscoverLongPressContentNotification @"K_DiscoverLongPressContentNotification"
 
+#define KDiscoverDisLongPressContentNotificaion @"K_DiscoverDisLongPressContentNotificaion"
+
+#define KDiscoverCommentViewClickNotification @"K_DiscoverCommentViewClickNotification"
 
 //                    ------ 发布朋友圈通知 --------
 // ---- 取消响应通知

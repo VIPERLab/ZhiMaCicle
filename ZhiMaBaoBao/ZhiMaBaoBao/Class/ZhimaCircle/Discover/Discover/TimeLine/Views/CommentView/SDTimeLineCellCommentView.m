@@ -109,8 +109,8 @@
         [commentButtonView addGestureRecognizer:singleRecognizer];
         
         
-//        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(commentViewDidLongPress:)];
-//        [commentButtonView addGestureRecognizer:longPressGesture];
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(commentViewDidLongPress:)];
+        [commentButtonView addGestureRecognizer:longPressGesture];
         [self addSubview:commentButtonView];
         
         [self.commentLabelsArray addObject:commentButtonView];
@@ -134,12 +134,11 @@
             
             if ([label isKindOfClass:[MLLinkLabel class]]) {
                 
-//                NSString *deCodingStr = [CodingManager UTF8DecodeString:model.comment];
-//                label.text = [model.friend_nick stringByAppendingString:];
                 if (!model.attributedContent) {
                     model.attributedContent = [self generateAttributedStringWithCommentItemModel:model];
                 }
                 label.attributedText = model.attributedContent;
+//                [self setContentLinkText:label andModel:model];
             }
         }
         
@@ -272,7 +271,7 @@
         UIView *buttonView = self.commentLabelsArray[i];
 
         buttonView.sd_layout
-        .leftSpaceToView(self,8)
+        .leftSpaceToView(self,0)
         .rightSpaceToView(self,margin)
         .topSpaceToView(lastTopView,5)
         .heightIs(commentHight);
@@ -284,7 +283,7 @@
             if ([label isKindOfClass:[UILabel class]]) {
                 label.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
                 label.sd_layout
-                .leftSpaceToView(buttonView, margin)
+                .leftSpaceToView(buttonView, 8)
                 .rightEqualToView(buttonView)
                 .topEqualToView(buttonView)
                 .autoHeightRatio(0);
@@ -346,14 +345,16 @@
 
 #pragma makr - 长按点击事件
 - (void)commentViewDidLongPress:(UIGestureRecognizer *)gesture {
-    UIView *commentView = gesture.view;
-    for (UILabel *label in commentView.subviews) {
-        if ([label isKindOfClass:[UILabel class]]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverLongPressContentNotification object:nil userInfo:@{@"contentLabel" : commentView}];
-            break;
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        UIView *commentView = gesture.view;
+        for (UIView *view in commentView.subviews) {
+            if ([view isKindOfClass:[UILabel class]]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentViewClickNotification object:nil userInfo:@{@"contentLabel" : view}];
+                break;
+            }
         }
-    }
     
+    }
 }
 
 #pragma mark - MLLinkLabelDelegate
@@ -363,6 +364,51 @@
     dic[@"openFirAccount"] = link.linkValue;
     NSNotification *notif = [NSNotification notificationWithName:KUserNameLabelNotification object:nil userInfo:dic];
     [[NSNotificationCenter defaultCenter] postNotification:notif];
+}
+
+
+//正则筛选
+- (void)setContentLinkText:(UILabel *)label andModel:(SDTimeLineCellCommentItemModel *)model {
+    // 正则筛选网页
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc]initWithString:model.comment];
+    
+    NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@;#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@;#$%^&*+?:_/=<>]*)?)";
+    
+    NSError *error;
+    
+    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:str options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSArray *resultArray = [expression matchesInString:label.attributedText.string options:0 range:NSMakeRange(0, label.attributedText.string.length)];
+    
+    for (NSTextCheckingResult * match in resultArray) {
+        
+        NSString * subStringForMatch = [label.attributedText.string substringWithRange:match.range];
+        
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        
+        dict[NSFontAttributeName] = [UIFont systemFontOfSize:14.0];
+        
+        dict[NSForegroundColorAttributeName] = [UIColor blueColor];
+        
+        NSMutableAttributedString * temStr = [[NSMutableAttributedString alloc]initWithString:subStringForMatch attributes:dict];
+        
+        [temStr addAttribute:NSLinkAttributeName value:[NSURL URLWithString:subStringForMatch] range:NSMakeRange(0, temStr.length)];
+        
+        [attrStr replaceCharactersInRange:match.range withAttributedString:temStr];
+        label.attributedText = attrStr;
+        
+//        MLLink *link = [MLLink linkWithType:MLLinkTypeURL value:subStringForMatch range:[model.comment rangeOfString:subStringForMatch]];
+//        [label addLink:link];
+    }
+    
+//    __weak typeof(self.delegate) weakDelegate = self.delegate;
+//    [_contentLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+//        NSLog(@"%@",linkText);
+//        if ([weakDelegate respondsToSelector:@selector(didClickContentLink:)]) {
+//            [weakDelegate didClickContentLink:linkText];
+//        }
+//    }];
+    
 }
 
 //计算文字高度
