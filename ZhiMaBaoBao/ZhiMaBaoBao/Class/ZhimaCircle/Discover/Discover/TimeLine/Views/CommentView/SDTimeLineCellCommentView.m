@@ -109,8 +109,8 @@
         [commentButtonView addGestureRecognizer:singleRecognizer];
         
         
-//        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(commentViewDidLongPress:)];
-//        [commentButtonView addGestureRecognizer:longPressGesture];
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(commentViewDidLongPress:)];
+        [commentButtonView addGestureRecognizer:longPressGesture];
         [self addSubview:commentButtonView];
         
         [self.commentLabelsArray addObject:commentButtonView];
@@ -272,7 +272,7 @@
         UIView *buttonView = self.commentLabelsArray[i];
 
         buttonView.sd_layout
-        .leftSpaceToView(self,8)
+        .leftSpaceToView(self,0)
         .rightSpaceToView(self,margin)
         .topSpaceToView(lastTopView,5)
         .heightIs(commentHight);
@@ -284,7 +284,7 @@
             if ([label isKindOfClass:[UILabel class]]) {
                 label.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
                 label.sd_layout
-                .leftSpaceToView(buttonView, margin)
+                .leftSpaceToView(buttonView, 8)
                 .rightEqualToView(buttonView)
                 .topEqualToView(buttonView)
                 .autoHeightRatio(0);
@@ -346,14 +346,16 @@
 
 #pragma makr - 长按点击事件
 - (void)commentViewDidLongPress:(UIGestureRecognizer *)gesture {
-    UIView *commentView = gesture.view;
-    for (UILabel *label in commentView.subviews) {
-        if ([label isKindOfClass:[UILabel class]]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverLongPressContentNotification object:nil userInfo:@{@"contentLabel" : commentView}];
-            break;
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        UIView *commentView = gesture.view;
+        for (UIView *view in commentView.subviews) {
+            if ([view isKindOfClass:[UILabel class]]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentViewClickNotification object:nil userInfo:@{@"contentLabel" : view}];
+                break;
+            }
         }
-    }
     
+    }
 }
 
 #pragma mark - MLLinkLabelDelegate

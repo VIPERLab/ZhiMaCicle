@@ -37,7 +37,7 @@
 #import "ChatKeyBoard.h" //键盘工具条
 #import "FaceSourceManager.h"  
 #import "LGNetWorking.h" //请求工具类
-//#import "YiUserInfo.h"
+#import "WebViewController.h"
 
 // 复制功能View
 #import "KXCopyView.h"
@@ -169,6 +169,9 @@
     
     //更新朋友圈数据通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDataFromSQL) name:K_UpDataCircleDataNotification object:nil];
+    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commentViewDidClick:) name:KDiscoverCommentViewClickNotification object:nil];
 }
 
 
@@ -475,6 +478,13 @@
     return width;
 }
 
+#pragma mark - 打开网页
+- (void)didClickContentLink:(NSString *)urlStr {
+    WebViewController *web = [[WebViewController alloc] init];
+    web.urlStr = urlStr;
+    [self.navigationController pushViewController:web animated:YES];
+}
+
 
 #pragma mark - SDTimeLineCellDelegate 点赞和评论
 // -----  评论
@@ -577,6 +587,15 @@
                 
             }];
 
+        }
+    } else if (alertView.tag == 1000) {
+        self.contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
+        if (buttonIndex != 0) {
+            // 点击了复制
+            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+            NSRange range = [self.contentLabel.text rangeOfString:@":"];
+            pboard.string = [self.contentLabel.text substringFromIndex:range.location + 1];
+            [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
         }
     }
     
@@ -838,6 +857,18 @@
     
     contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"c7c7c5"];
 
+}
+
+- (void)commentViewDidClick:(NSNotification *)notification {
+    if ([notification.name isEqualToString:KDiscoverCommentViewClickNotification]) {
+        UILabel *contentLabel = notification.userInfo[@"contentLabel"];
+        self.contentLabel = contentLabel;
+        contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"c7c7c5"];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alertView.tag = 1000;
+        [alertView show];
+    }
+    
 }
 
 #pragma mark - copyView回调

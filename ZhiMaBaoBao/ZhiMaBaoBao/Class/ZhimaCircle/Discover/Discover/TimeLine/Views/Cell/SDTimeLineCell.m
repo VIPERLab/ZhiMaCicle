@@ -40,6 +40,7 @@
 #import "UIButton+WebCache.h"
 
 #import "NSString+FontSize.h"
+#import "MLLinkLabel.h"
 
 
 const CGFloat contentLabelFontSize = 14;
@@ -59,7 +60,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 {
     
     UIButton *_nameLable;
-    UILabel *_contentLabel;
+    MLLinkLabel *_contentLabel;
     SDWeiXinPhotoContainerView *_picContainerView;
     UILabel *_timeLabel;
     UILabel *_areaLabel;
@@ -103,10 +104,10 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     [_nameLable addTarget:self action:@selector(userNameDidClick) forControlEvents:UIControlEventTouchUpInside];
     
     
-    _contentLabel = [UILabel new];
+    _contentLabel = [MLLinkLabel new];
     _contentLabel.font = [UIFont systemFontOfSize:contentLabelFontSize];
     _contentLabel.numberOfLines = 0;
-    _contentLabel.textColor = [UIColor colorFormHexRGB:@"000000"];
+    _contentLabel.textColor = [UIColor blackColor];
     _contentLabel.userInteractionEnabled = YES;
     UILongPressGestureRecognizer *labelLongPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressContentLabel:)];
     labelLongPressGesture.minimumPressDuration = 0.8f;
@@ -274,6 +275,10 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     
     
     _contentLabel.text = model.content;
+    
+    // 正则筛选网址
+    [self setContentLinkText];
+    
     _areaLabel.text = model.current_location;
     _picContainerView.picPathStringsArray = model.imglist;
     _timeLabel.text = model.create_time;
@@ -321,6 +326,50 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     [self setupAutoHeightWithBottomView:bottomView bottomMargin:15];
     
     
+}
+
+
+- (void)setContentLinkText {
+    // 正则筛选网页
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc]initWithString:self.model.content];
+    
+    NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@;#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@;#$%^&*+?:_/=<>]*)?)";
+    
+    NSError *error;
+    
+    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:str options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSArray *resultArray = [expression matchesInString:_contentLabel.attributedText.string options:0 range:NSMakeRange(0, _contentLabel.attributedText.string.length)];
+    
+    for (NSTextCheckingResult * match in resultArray) {
+        
+        NSString * subStringForMatch = [_contentLabel.attributedText.string substringWithRange:match.range];
+        
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        
+        dict[NSFontAttributeName] = [UIFont systemFontOfSize:14.0];
+        
+        dict[NSForegroundColorAttributeName] = [UIColor blueColor];
+        
+        NSMutableAttributedString * temStr = [[NSMutableAttributedString alloc]initWithString:subStringForMatch attributes:dict];
+        
+        [temStr addAttribute:NSLinkAttributeName value:[NSURL URLWithString:subStringForMatch] range:NSMakeRange(0, temStr.length)];
+        
+        [attrStr replaceCharactersInRange:match.range withAttributedString:temStr];
+        _contentLabel.attributedText = attrStr;
+        
+        MLLink *link = [MLLink linkWithType:MLLinkTypeURL value:subStringForMatch range:[self.model.content rangeOfString:subStringForMatch]];
+        [_contentLabel addLink:link];
+    }
+    
+    __weak typeof(self.delegate) weakDelegate = self.delegate;
+    [_contentLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+        NSLog(@"%@",linkText);
+        if ([weakDelegate respondsToSelector:@selector(didClickContentLink:)]) {
+            [weakDelegate didClickContentLink:linkText];
+        }
+    }];
+
 }
 
 - (void)setFrame:(CGRect)frame
