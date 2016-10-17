@@ -164,12 +164,13 @@
     // 高清的二维码
     
 //    NSString * avatarPath = [YiXmppVCard getAvatarPathByJid:[userInfo getJid]];
-    self.imageView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:120];
+    self.imageView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:500];
     
     UIImageView *imageViewe = [[UIImageView alloc] initWithImage:self.userIcon.image];
     CGFloat width = self.imageView.width * 0.2;
     imageViewe.layer.borderWidth = 3;
     imageViewe.layer.cornerRadius = 5;
+    imageViewe.clipsToBounds = YES;
     imageViewe.layer.borderColor = [UIColor whiteColor].CGColor;
     imageViewe.frame = CGRectMake((CGRectGetWidth(self.imageView.frame) - width) * 0.5, (CGRectGetHeight(self.imageView.frame) - width) * 0.5, width, width);
     [self.imageView addSubview:imageViewe];

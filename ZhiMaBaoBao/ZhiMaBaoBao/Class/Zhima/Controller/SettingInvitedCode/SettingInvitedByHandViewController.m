@@ -112,7 +112,7 @@
     params[@"invite_code"] = self.textField.text;
     [LCProgressHUD showText:@"正在设置正在设置邀请码"];
     [manager POST:[NSString stringWithFormat:@"%@/moblie/setInviter.do",DFAPIURL] parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [LCProgressHUD hide];
+//        [LCProgressHUD hide];
         ResponseData *data = [ResponseData mj_objectWithKeyValues:responseObject];
         if (data.code != 0) {
             [LCProgressHUD showFailureText:data.msg];
