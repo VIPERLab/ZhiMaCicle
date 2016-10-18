@@ -459,6 +459,9 @@
 		04F862CC1D9554AA00DCC6FE /* UserMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862C71D9554AA00DCC6FE /* UserMessageCell.m */; };
 		04F862CD1D9554AA00DCC6FE /* UserMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862C91D9554AA00DCC6FE /* UserMessageController.m */; };
 		04F862CE1D9554AA00DCC6FE /* UserMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */; };
+		04FC4D9C1DB5B40300C1E854 /* KXPhotoBrowersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FC4D9B1DB5B40300C1E854 /* KXPhotoBrowersController.m */; };
+		04FC4D9F1DB5B70B00C1E854 /* UINavigationBar+Awesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FC4D9E1DB5B70B00C1E854 /* UINavigationBar+Awesome.m */; };
+		04FC4DA31DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FC4DA21DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m */; };
 		310B83251D8E7B0100A0F408 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83241D8E7B0100A0F408 /* main.m */; };
 		310B83281D8E7B0100A0F408 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 310B83271D8E7B0100A0F408 /* AppDelegate.mm */; };
 		310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 310B832C1D8E7B0100A0F408 /* Main.storyboard */; };
@@ -1511,6 +1514,12 @@
 		04F862C91D9554AA00DCC6FE /* UserMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageController.m; sourceTree = "<group>"; };
 		04F862CA1D9554AA00DCC6FE /* UserMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMessageModel.h; sourceTree = "<group>"; };
 		04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageModel.m; sourceTree = "<group>"; };
+		04FC4D9A1DB5B40300C1E854 /* KXPhotoBrowersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPhotoBrowersController.h; sourceTree = "<group>"; };
+		04FC4D9B1DB5B40300C1E854 /* KXPhotoBrowersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPhotoBrowersController.m; sourceTree = "<group>"; };
+		04FC4D9D1DB5B70B00C1E854 /* UINavigationBar+Awesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+Awesome.h"; sourceTree = "<group>"; };
+		04FC4D9E1DB5B70B00C1E854 /* UINavigationBar+Awesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+Awesome.m"; sourceTree = "<group>"; };
+		04FC4DA11DB5F7B400C1E854 /* KXPhotoBorwerScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPhotoBorwerScrollView.h; sourceTree = "<group>"; };
+		04FC4DA21DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPhotoBorwerScrollView.m; sourceTree = "<group>"; };
 		310B83201D8E7B0100A0F408 /* ZhiMaBaoBao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZhiMaBaoBao.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		310B83241D8E7B0100A0F408 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		310B83261D8E7B0100A0F408 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -2099,6 +2108,8 @@
 		04EA79691D8F8F26005E5425 /* Categray */ = {
 			isa = PBXGroup;
 			children = (
+				04FC4D9D1DB5B70B00C1E854 /* UINavigationBar+Awesome.h */,
+				04FC4D9E1DB5B70B00C1E854 /* UINavigationBar+Awesome.m */,
 				D544F5481DAF5A7000E73624 /* UIColor+HtmlColorConvert.h */,
 				D544F5491DAF5A7000E73624 /* UIColor+HtmlColorConvert.m */,
 				D5C8B39B1D9A03C7007D6B5C /* NSString+Helpers.h */,
@@ -3726,6 +3737,7 @@
 		04F8620A1D94DB3000DCC6FE /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				04FC4D991DB5B3EE00C1E854 /* PhotoBrower */,
 				04F8620B1D94DB3000DCC6FE /* NewDiscoverController.h */,
 				04F8620C1D94DB3000DCC6FE /* NewDiscoverController.m */,
 			);
@@ -4006,6 +4018,25 @@
 				04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */,
 			);
 			path = MyMessage;
+			sourceTree = "<group>";
+		};
+		04FC4D991DB5B3EE00C1E854 /* PhotoBrower */ = {
+			isa = PBXGroup;
+			children = (
+				04FC4DA01DB5F78F00C1E854 /* View */,
+				04FC4D9A1DB5B40300C1E854 /* KXPhotoBrowersController.h */,
+				04FC4D9B1DB5B40300C1E854 /* KXPhotoBrowersController.m */,
+			);
+			path = PhotoBrower;
+			sourceTree = "<group>";
+		};
+		04FC4DA01DB5F78F00C1E854 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				04FC4DA11DB5F7B400C1E854 /* KXPhotoBorwerScrollView.h */,
+				04FC4DA21DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		310B83171D8E7B0100A0F408 = {
@@ -5103,6 +5134,7 @@
 				04F862131D94DB3000DCC6FE /* NewDiscoverController.m in Sources */,
 				04EA7B5A1D91282E005E5425 /* UIActionSheet+LBXAlertAction.m in Sources */,
 				04F862511D94FC6D00DCC6FE /* MLExpressionManager.m in Sources */,
+				04FC4DA31DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m in Sources */,
 				04F862A01D94FC8900DCC6FE /* UITableView+SDAutoTableViewCellHeight.m in Sources */,
 				04EA79E91D90E9F7005E5425 /* TelephoneBillCell.m in Sources */,
 				04F862871D94FC7900DCC6FE /* NSString+Emoji.m in Sources */,
@@ -5492,6 +5524,7 @@
 				04EA7E0D1D912872005E5425 /* ZXPDF417.m in Sources */,
 				04EA7E2D1D912872005E5425 /* ZXMultiFinderPatternFinder.m in Sources */,
 				04F862901D94FC7900DCC6FE /* FaceButton.m in Sources */,
+				04FC4D9C1DB5B40300C1E854 /* KXPhotoBrowersController.m in Sources */,
 				04EA7D7E1D912872005E5425 /* ZXURIParsedResult.m in Sources */,
 				31B7C7A31D8FE71F00F1883A /* PhoneContactCell.m in Sources */,
 				04EA7AD31D910F89005E5425 /* DNSendButton.m in Sources */,
@@ -5527,6 +5560,7 @@
 				3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */,
 				310B83251D8E7B0100A0F408 /* main.m in Sources */,
 				04F8624E1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.m in Sources */,
+				04FC4D9F1DB5B70B00C1E854 /* UINavigationBar+Awesome.m in Sources */,
 				04EA7E111D912872005E5425 /* ZXPDF417ErrorCorrection.m in Sources */,
 				04EA7B661D91282E005E5425 /* LBXScanWrapper.m in Sources */,
 				04F862C41D95545000DCC6FE /* KXDiscoverDetailCommentView.m in Sources */,

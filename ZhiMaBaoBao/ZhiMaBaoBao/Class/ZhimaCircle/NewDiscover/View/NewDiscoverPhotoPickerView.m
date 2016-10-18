@@ -85,6 +85,8 @@
         nextButtonX = 10;
     }
     
+    nextButtonW = nextButtonW > 0 ? nextButtonW : 70;
+    nextButtonH = nextButtonH > 0 ? nextButtonH : 70;
     UIButton *nextButton = [[UIButton alloc] initWithFrame:CGRectMake(nextButtonX, nextButtonY, nextButtonW, nextButtonH)];
     nextButton.tag = self.buttonArray.count;
     [nextButton addTarget:self action:@selector(addPhotoButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -130,7 +132,7 @@
         
     }
     
-    if (imageArray.count < 9  && imageArray.count > 0) {
+    if ((imageArray.count < 9  && imageArray.count > 0) || imageArray.count == 0) {
         [self addAnotherButton];
     }
     

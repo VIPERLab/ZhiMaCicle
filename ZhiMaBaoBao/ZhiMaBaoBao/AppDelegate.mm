@@ -82,7 +82,7 @@
     [[LYVoIP shareInstance]voipConfigWithID:@"6560" Key:@"rXk6stbTRTFMdDcyKbsfe8PZrcx8m8Za" model:LYVoIPModelAPPReView];
     
     //注册微信支付
-    [WXApi registerApp:@"wxa3b88585b89761a5" withDescription:@"ZhiMaBaoBao"];
+    [WXApi registerApp:@"wx59611779e8efe8c3" withDescription:@"ZhiMaBaoBao"];
     
     [self regiestJPush:launchOptions];
     
