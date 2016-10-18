@@ -10,6 +10,15 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 
+@interface IMMorePictureTableViewCell ()
+
+{
+    CALayer      *_contentLayer;
+    CAShapeLayer *_maskLayer;
+}
+
+@end
+
 @implementation IMMorePictureTableViewCell
 
 //+ (CGFloat)getHeightWithChat:(LGMessage *)chat TopText:(NSString *)topText nickName:(NSString *)nickName;
@@ -50,10 +59,15 @@
     
     _isMe = isMySelf;
     
+    _picturesView.backImage = isMySelf ? [UIImage imageNamed:@"1111"]: [UIImage imageNamed:@"2222"];
+    
     if (chat.text) {
-        [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text]];
-//        [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//            
+//        [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text]];
+        [_picturesView sd_setImageWithURL:[NSURL URLWithString:chat.text] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            
+            _picturesView.zmImage = _picturesView.image;
+            _picturesView.image = nil;
+            
 //            _picturesView.frameSize = [self pictureSizeToImage:_picturesView.image];
 //            [self.picturesView centerAlignHorizontalForSuperView];
 //            [self resizeBubbleView:_picturesView.frame.size];
@@ -62,13 +76,15 @@
 //            if (self.pDelegate && [self.pDelegate respondsToSelector:@selector(pictureCellHeightChange:indexPath:)]) {
 //                [self.pDelegate pictureCellHeightChange:_picturesView.frameSize.height indexPath:self.indexPath];
 //            }
-//
-//        }];
+
+        }];
 
     }else{
-        NSLog(@"chat.text = %@",chat.picUrl);
 
-        _picturesView.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.picUrl]];
+        _picturesView.zmImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.picUrl]];
+        
+//        _picturesView.zmImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.picUrl]];
+
 //        _picturesView.frameSize = [self pictureSizeToImage:_picturesView.image];
 //        [self.picturesView centerAlignHorizontalForSuperView];
 //        [self resizeBubbleView:_picturesView.frame.size];
@@ -80,10 +96,17 @@
 
     }
     
+
+    
     [self.picturesView centerAlignHorizontalForSuperView];
-    [self resizeBubbleView:_picturesView.frame.size];
+    [self imageResizeBubbleView:_picturesView.frame.size];
     [self repositionContentViewTypePic:_picturesView];
     
+    
+//    ZMImageView *shapedImageView = [[ZMImageView alloc] initWithFrame:_picturesView.bounds];
+//    shapedImageView.image =_picturesView.image;
+//    [self addSubview:shapedImageView];
+
     UITapGestureRecognizer*tap = [[UITapGestureRecognizer alloc]initWithTarget:target action:action];
     [_picturesView addGestureRecognizer:tap];
     
@@ -108,12 +131,26 @@
 
 - (void)createCustomViews
 {
-    //    _picturesView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth - kMainDWidth - kSpace * 2, 150)];
-    _picturesView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
-    _picturesView.backgroundColor = [UIColor lightGrayColor];
+    _picturesView = [[ZMImageView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
     _picturesView.userInteractionEnabled = YES;
-    _picturesView.contentMode =  UIViewContentModeScaleAspectFill;
-    _picturesView.clipsToBounds  = YES;
+//    _picturesView.contentMode =  UIViewContentModeScaleAspectFill;
+//    _picturesView.clipsToBounds  = YES;
+    
+//    _maskLayer = [CAShapeLayer layer];
+//    _maskLayer.fillColor = [UIColor blackColor].CGColor;
+//    _maskLayer.strokeColor = [UIColor clearColor].CGColor;
+//    _maskLayer.frame = _picturesView.bounds;
+//    _maskLayer.contentsCenter = CGRectMake(0.5, 0.5, 0.1, 0.1);
+//    _maskLayer.contentsScale = [UIScreen mainScreen].scale;
+//    //非常关键设置自动拉伸的效果且不变形
+//    _maskLayer.contents = (id)[UIImage imageNamed:@"chat_bg_sender"].CGImage;
+//    _contentLayer = [CALayer layer];
+//    _contentLayer.mask = _maskLayer;
+//    _contentLayer.frame = _picturesView.bounds;
+//    [_picturesView.layer addSublayer:_contentLayer];
+    
+//    _picturesView.layer.cornerRadius = 3;
+//    _picturesView.layer.masksToBounds = YES;
     
 //    _botLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 //    _botLabel.backgroundColor = [UIColor clearColor];
