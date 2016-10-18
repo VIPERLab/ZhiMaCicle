@@ -492,6 +492,8 @@
 		311CEFBD1D94D9C000BBB1F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */; };
 		3138F4051DA795990042D100 /* CallKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3138F4041DA795990042D100 /* CallKeyboardController.m */; };
 		314109481DAB247600D6F367 /* NSString+MsgId.m in Sources */ = {isa = PBXBuildFile; fileRef = 314109471DAB247600D6F367 /* NSString+MsgId.m */; };
+		315F78561DB5CC93008C8CA7 /* SendLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 315F78551DB5CC93008C8CA7 /* SendLocationController.m */; };
+		315F78581DB5D4F4008C8CA7 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 315F78571DB5D4F4008C8CA7 /* mapapi.bundle */; };
 		31642D801DB21DA100A50480 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31642D7F1DB21DA100A50480 /* WebViewController.m */; };
 		316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957461D90D3DE00140126 /* KXPersonalCenterCell.m */; };
 		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
@@ -1576,6 +1578,9 @@
 		3138F4041DA795990042D100 /* CallKeyboardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallKeyboardController.m; sourceTree = "<group>"; };
 		314109461DAB247600D6F367 /* NSString+MsgId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MsgId.h"; sourceTree = "<group>"; };
 		314109471DAB247600D6F367 /* NSString+MsgId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MsgId.m"; sourceTree = "<group>"; };
+		315F78541DB5CC93008C8CA7 /* SendLocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendLocationController.h; sourceTree = "<group>"; };
+		315F78551DB5CC93008C8CA7 /* SendLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendLocationController.m; sourceTree = "<group>"; };
+		315F78571DB5D4F4008C8CA7 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
 		31642D7E1DB21DA100A50480 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		31642D7F1DB21DA100A50480 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		316957451D90D3DE00140126 /* KXPersonalCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPersonalCenterCell.h; sourceTree = "<group>"; };
@@ -2484,6 +2489,7 @@
 		04EA7AE21D911FD2005E5425 /* BDSDK */ = {
 			isa = PBXGroup;
 			children = (
+				315F78571DB5D4F4008C8CA7 /* mapapi.bundle */,
 				04F578861D927B69002A6471 /* BaiduMapAPI_Map.framework */,
 				04EA7AE31D911FD2005E5425 /* BaiduMapAPI_Base.framework */,
 				04EA7AE41D911FD2005E5425 /* BaiduMapAPI_Location.framework */,
@@ -4220,6 +4226,15 @@
 			path = mp3_en_de;
 			sourceTree = "<group>";
 		};
+		315F78531DB5CC27008C8CA7 /* SendLocation(聊天发送位置) */ = {
+			isa = PBXGroup;
+			children = (
+				315F78541DB5CC93008C8CA7 /* SendLocationController.h */,
+				315F78551DB5CC93008C8CA7 /* SendLocationController.m */,
+			);
+			name = "SendLocation(聊天发送位置)";
+			sourceTree = "<group>";
+		};
 		31642D7D1DB21D5000A50480 /* Webview(网页浏览) */ = {
 			isa = PBXGroup;
 			children = (
@@ -4526,6 +4541,7 @@
 		31B7C70B1D8E96A100F1883A /* ZhimaChat(芝麻聊) */ = {
 			isa = PBXGroup;
 			children = (
+				315F78531DB5CC27008C8CA7 /* SendLocation(聊天发送位置) */,
 				31642D7D1DB21D5000A50480 /* Webview(网页浏览) */,
 				04DD49E31DACD5E70027256E /* GroupChatGetInside(扫码进群) */,
 				04AB88401DACBEB30087502C /* GroupQRCode(群二维码) */,
@@ -4925,6 +4941,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				315F78581DB5D4F4008C8CA7 /* mapapi.bundle in Resources */,
 				04F8628F1D94FC7900DCC6FE /* systemEmoji.plist in Resources */,
 				D5FD28C01DB1E11900D19DF6 /* f000.gif in Resources */,
 				04F862581D94FC6D00DCC6FE /* LICENSE in Resources */,
@@ -5496,6 +5513,7 @@
 				31B7C7A31D8FE71F00F1883A /* PhoneContactCell.m in Sources */,
 				04EA7AD31D910F89005E5425 /* DNSendButton.m in Sources */,
 				04EA7D941D912872005E5425 /* ZXBoolArray.m in Sources */,
+				315F78561DB5CC93008C8CA7 /* SendLocationController.m in Sources */,
 				31B7C78C1D8FE71100F1883A /* LGQueryResModel.m in Sources */,
 				04EA7D891D912872005E5425 /* ZXImage.m in Sources */,
 				047F13F31DAA60EF00684881 /* GroupChatChangeNoticeController.m in Sources */,
@@ -5739,7 +5757,7 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE = "6a80afc9-0847-4baa-a000-fce122b0bfdd";
 				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
@@ -5785,7 +5803,7 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE = "6a80afc9-0847-4baa-a000-fce122b0bfdd";
 				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";

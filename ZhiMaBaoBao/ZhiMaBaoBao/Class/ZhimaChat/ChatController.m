@@ -40,6 +40,7 @@
 #import "ConverseModel.h"   //会话模型
 #import "KXActionSheet.h"
 #import "WebViewController.h"
+#import "SendLocationController.h"
 
 //相册相关头文件
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -976,6 +977,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
     KXActionSheet *actionSheet = [[KXActionSheet alloc] initWithTitle:@"是否删除该条消息?" cancellTitle:@"取消" andOtherButtonTitles:@[@"确定"]];
     actionSheet.delegate = self;
+    actionSheet.flag = 0;
     [actionSheet show];
 }
 
@@ -1026,8 +1028,16 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index{
-    if (index == 0) {
-        [self deleteAction:index];
+    if (sheet.flag == 0) {  //删除消息
+        if (index == 0) {
+            [self deleteAction:index];
+        }
+    }else if (sheet.flag == 1){ //发送位置
+        if (index == 0) {
+            SendLocationController *vc = [[SendLocationController alloc] init];
+            BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+            [self presentViewController:nav animated:YES completion:nil];
+        }
     }
 }
 
@@ -1340,6 +1350,15 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
             break;
             
+        case 2: //位置
+        {
+            KXActionSheet *locationSheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"发送位置"]];
+            locationSheet.delegate = self;
+            locationSheet.flag = 1;
+            [locationSheet show];
+        }
+            break;
+            
         default:
             break;
     }
@@ -1588,11 +1607,11 @@ static NSString *const reuseIdentifier = @"messageCell";
 #pragma mark - chatKeyboard datasource
 - (NSArray<MoreItem *> *)chatKeyBoardMorePanelItems
 {
-//    MoreItem *item1 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"位置"];
+    MoreItem *item1 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"位置"];
     MoreItem *item2 = [MoreItem moreItemWithPicName:@"sharemore_pic" highLightPicName:nil itemName:@"图片"];
     MoreItem *item3 = [MoreItem moreItemWithPicName:@"sharemore_video" highLightPicName:nil itemName:@"拍照"];
 
-//    return @[item1, item2, item3];
+//    return @[ item2, item3, item1];
     return @[item2, item3];
 
 }
