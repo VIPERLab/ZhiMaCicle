@@ -128,12 +128,12 @@
     NSString *jid = USERINFO.userID;
     
 //    NSString *urlString = @"http://www.baidu.com";
-    NSString *params = [NSString stringWithFormat:@"sessionId=%@&invite_code=%@&groupId=0&jid=%@",USERINFO.sessionId,USERINFO.invite_code,jid];
+    NSString *params = [NSString stringWithFormat:@"invite_code=%@&groupId=0&jid=%@",USERINFO.invite_code,jid];
     
     //AES加密
     NSData *aesdataresult = [SecurityUtil encryptAESData:params];
     params = [SecurityUtil encodeBase64Data:aesdataresult];
-    NSLog(@"params = %@",params);
+    NSLog(@"params = %@ 加密长度 %zd",params,params.length);
     
     NSString *urlStr = [NSString stringWithFormat:@"%@/web/h5toReg.do?%@",DFAPIURL,params];
     

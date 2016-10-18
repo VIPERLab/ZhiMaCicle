@@ -23,109 +23,154 @@
 @end
 
 @implementation KXPhotoBrowersController {
+    BOOL _statusBarShouldBeHidden;
+    BOOL _didSavePreviousStateOfNavBar;
+    BOOL _viewIsActive;
+    BOOL _viewHasAppearedInitially;
+    // Appearance
+    BOOL _previousNavBarHidden;
+    BOOL _previousNavBarTranslucent;
+    
+    UIBarStyle _previousNavBarStyle;
+    UIStatusBarStyle _previousStatusBarStyle;
+    UIColor *_previousNavBarTintColor;
+    UIColor *_previousNavBarBarTintColor;
+    UIBarButtonItem *_previousViewControllerBackButton;
+    UIImage *_previousNavigationBarBackgroundImageDefault;
+    UIImage *_previousNavigationBarBackgroundImageLandscapePhone;
+    
+    UIToolbar *_toolbar;
     UILabel *_titleLabel;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [self setupView];
     [self setupNav];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    self.navigationController.navigationBar.hidden = YES;
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-    [self setNeedsStatusBarAppearanceUpdate];
-
-    [self showNavView];
+    [self storePreviousNavBarAppearance];
+    _previousStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:animated];
+    [self setNavBarAppearance:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    self.navigationController.navigationBar.hidden = NO;
+    [self restorePreviousNavBarAppearance:animated];
+    [[UIApplication sharedApplication] setStatusBarStyle:_previousStatusBarStyle animated:animated];
 }
 
 - (void)setupNav {
-    self.navigationController.navigationBar.hidden = YES;
-    
-    if (self.navView) {
-        return;
-    }
-    
-    UIView *navView = [[UIView alloc] initWithFrame:CGRectMake(0, -40 , ScreenWidth, 44)];
-    navView.backgroundColor = [UIColor colorFormHexRGB:@"151419"];
-    navView.userInteractionEnabled = YES;
-    [self.view addSubview:navView];
-    self.navView = navView;
-    
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((ScreenWidth - 100) * 0.5, 0, 100, 44)];
-    _titleLabel = titleLabel;
-    titleLabel.text = [NSString stringWithFormat:@"%zd/%zd",self.currentIndex,self.imageArray.count];
-    titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.textColor = [UIColor whiteColor];
-    [navView addSubview:titleLabel];
-    
-    UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(ScreenWidth - 40 - 20, 0, 44, 44)];
-    [rightBtn setImage:[UIImage imageNamed:@"Photo_Borwers_Del"] forState:UIControlStateNormal];
-    [rightBtn addTarget:self action:@selector(deletedButtonDidClcik) forControlEvents:UIControlEventTouchUpInside];
-    [navView addSubview:rightBtn];
-    
-    UIButton *leftBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 70, 44)];
-    [leftBtn setImage:[UIImage imageNamed:@"Photo_Borwers_back"] forState:UIControlStateNormal];
-    [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
-    leftBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [leftBtn addTarget:self action:@selector(backButtonDidClick) forControlEvents:UIControlEventTouchUpInside];
-    leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-    [navView addSubview:leftBtn];
+    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Photo_Borwers_Del"] style:UIBarButtonItemStylePlain target:self action:@selector(deletedButtonDidClcik)];
+    self.navigationItem.rightBarButtonItem = rightBar;
 }
 
-- (void)setCustomTitle:(NSString *)title {
-    _titleLabel.text = title;
+#pragma mark - Nav Bar Appearance
+- (void)setNavBarAppearance:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    navBar.tintColor = [UIColor whiteColor];
+    if ([navBar respondsToSelector:@selector(setBarTintColor:)]) {
+        navBar.barTintColor = nil;
+        navBar.shadowImage = nil;
+    }
+    navBar.translucent = YES;
+    navBar.barStyle = UIBarStyleBlackTranslucent;
+    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
+        [navBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+        [navBar setBackgroundImage:nil forBarMetrics:UIBarMetricsCompact];
+    }
 }
+
+- (void)storePreviousNavBarAppearance {
+    _didSavePreviousStateOfNavBar = YES;
+    if ([UINavigationBar instancesRespondToSelector:@selector(barTintColor)]) {
+        _previousNavBarBarTintColor = self.navigationController.navigationBar.barTintColor;
+    }
+    _previousNavBarTranslucent = self.navigationController.navigationBar.translucent;
+    _previousNavBarTintColor = self.navigationController.navigationBar.tintColor;
+    _previousNavBarHidden = self.navigationController.navigationBarHidden;
+    _previousNavBarStyle = self.navigationController.navigationBar.barStyle;
+    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
+        _previousNavigationBarBackgroundImageDefault = [self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault];
+        _previousNavigationBarBackgroundImageLandscapePhone = [self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsCompact];
+    }
+}
+
+- (void)restorePreviousNavBarAppearance:(BOOL)animated {
+    if (_didSavePreviousStateOfNavBar) {
+        [self.navigationController setNavigationBarHidden:_previousNavBarHidden animated:animated];
+        UINavigationBar *navBar = self.navigationController.navigationBar;
+        navBar.tintColor = THEMECOLOR;
+        navBar.translucent = _previousNavBarTranslucent;
+        if ([UINavigationBar instancesRespondToSelector:@selector(barTintColor)]) {
+            navBar.barTintColor = _previousNavBarBarTintColor;
+        }
+        navBar.barStyle = _previousNavBarStyle;
+        if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
+            [navBar setBackgroundImage:_previousNavigationBarBackgroundImageDefault forBarMetrics:UIBarMetricsDefault];
+            [navBar setBackgroundImage:_previousNavigationBarBackgroundImageLandscapePhone forBarMetrics:UIBarMetricsCompact];
+        }
+    }
+}
+
+
+- (void)setCustomTitle:(NSString *)title {
+    self.title = title;
+}
+
 
 
 #pragma mark - nav动画
-// nav 展示动画
-- (void)showNavView {
-    if (self.animatied) {
-        return;
+// Fades all controls slide and fade
+- (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated{
+    
+    // Force visible
+    if (self.imageArray.count == 0)
+        hidden = NO;
+    // Animations & positions
+    CGFloat animationDuration = (animated ? 0.35 : 0);
+    
+    // Status bar
+    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+        // Hide status bar
+        _statusBarShouldBeHidden = hidden;
+        [UIView animateWithDuration:animationDuration animations:^(void) {
+//            [self setNeedsStatusBarAppearanceUpdate];
+        } completion:^(BOOL finished) {}];
     }
     
-    self.animatied = YES;
-    [UIView animateWithDuration:0.3 animations:^{
-        self.navView.frame = CGRectMake(0, 20, ScreenWidth, 40);
-        [UIApplication sharedApplication].statusBarHidden = NO;
+
+    
+    [UIView animateWithDuration:animationDuration animations:^(void) {
+        CGFloat alpha = hidden ? 0 : 1;
+        [self.navigationController.navigationBar setAlpha:alpha];
+        
     } completion:^(BOOL finished) {
-        self.animatied = NO;
-        self.show = YES;
+        self.show = hidden == YES ? NO : YES;
     }];
 }
 
-// nav 隐藏动画
-- (void)hideNavView {
-    if (self.animatied) {
-        return;
-    }
-    
-    self.animatied = YES;
-    [UIView animateWithDuration:0.3 animations:^{
-        self.navView.frame = CGRectMake(0, -40, ScreenWidth, 40);
-        [UIApplication sharedApplication].statusBarHidden = YES;
-    } completion:^(BOOL finished) {
-        self.animatied = NO;
-        self.show = NO;
-    }];
+- (BOOL)prefersStatusBarHidden {
+    return _statusBarShouldBeHidden;
 }
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
+    return UIStatusBarAnimationSlide;
+}
+
+- (BOOL)areControlsHidden { return (_toolbar.alpha == 0); }
+- (void)hideControls { [self setControlsHidden:YES animated:YES]; }
+- (void)toggleControls { [self setControlsHidden:![self areControlsHidden] animated:YES]; }
 
 #pragma mark - 布局
 - (void)setupView {
     self.view.backgroundColor = [UIColor blackColor];
     
-    KXPhotoBorwerScrollView *scrollView = [[KXPhotoBorwerScrollView alloc] initWithFrame:CGRectMake(0, -20, ScreenWidth, ScreenHeight + 20)];
+    KXPhotoBorwerScrollView *scrollView = [[KXPhotoBorwerScrollView alloc] initWithFrame:CGRectMake(0, -64, ScreenWidth, ScreenHeight + 64)];
     self.scrollView = scrollView;
     [self.view addSubview:scrollView];
     
@@ -156,8 +201,11 @@
         CGSize imageSize = image.size;
         CGFloat imageWidth = imageSize.width > ScreenWidth ? ScreenWidth : imageSize.width;
         CGFloat imageHeight = imageSize.height / scale;
-        
-        SDBrowserImageView *imageView = [[SDBrowserImageView alloc] initWithFrame:CGRectMake(index * ScreenWidth, (CGRectGetHeight(self.scrollView.frame) - imageHeight) * 0.5, imageWidth, imageHeight)];
+        CGFloat imageY = (CGRectGetHeight(self.scrollView.frame) - imageHeight) * 0.5;
+        if (imageHeight == ScreenHeight) {
+            imageY = 0;
+        }
+        SDBrowserImageView *imageView = [[SDBrowserImageView alloc] initWithFrame:CGRectMake(index * ScreenWidth, imageY, imageWidth, imageHeight)];
         imageView.userInteractionEnabled = YES;
         imageView.image = image;
         [self.scrollView addSubview:imageView];
@@ -180,16 +228,16 @@
 
 - (void)tapBackGroud:(UIGestureRecognizer *)gesture {
     if (self.isShow) {
-        [self hideNavView];
+        [self setControlsHidden:YES animated:YES];
     } else {
-        [self showNavView];
+        [self setControlsHidden:NO animated:YES];
     }
 }
 
 #pragma mark - scrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (self.isShow) {
-        [self hideNavView];
+        [self setControlsHidden:YES animated:YES];
     }
     
     CGFloat result = scrollView.contentOffset.x / ScreenWidth;
@@ -199,11 +247,11 @@
 }
 
 #pragma mark - 返回按钮
-- (void)backButtonDidClick {
-    self.backBlock(self.imageArray);
+- (void)backAction {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - 手势处理
 // 双击手势
 - (void)imageViewDoubleTaped:(UITapGestureRecognizer *)recognizer
 {
@@ -240,7 +288,7 @@
             [self setCustomTitle:[NSString stringWithFormat:@"%zd/%zd",index,self.imageArray.count]];
             self.scrollView.contentSize = CGSizeMake(ScreenWidth * self.imageArray.count, 0);
         } else {
-            [self backButtonDidClick];
+            [self backAction];
         }
         
     }
