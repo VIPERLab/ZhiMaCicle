@@ -160,6 +160,28 @@
     
 }
 
+- (void)imageResizeBubbleView:(CGSize)contetnViewSize
+{
+    contetnViewSize.height = contetnViewSize.height< 22 ? 22 : contetnViewSize.height; //气泡会切边，太低了的时候加一点
+    contetnViewSize.width = contetnViewSize.width< 25 ? 25 : contetnViewSize.width;    //设置聊天内容最小宽度 防止气泡变形
+    
+    [_bubble setFrameSize:CGSizeMake(contetnViewSize.width, contetnViewSize.height)];
+    
+    if (self.isMe) {
+        
+        [_bubble setFrameOriginXLeftOfView:_userIcon offset:DEFAULT_CHAT_CELL_H_PADDING];
+        [_sendAgain setFrameOriginXLeftOfView:_bubble offset:0];
+    }
+    else
+    {
+        [_bubble setFrameOriginXRightOfView:_userIcon offset:DEFAULT_CHAT_CELL_H_PADDING];
+        [_sendAgain setFrameOriginXRightOfView:_bubble offset:10];
+    }
+
+    [_sendAgain topAlignForView:_bubble offset:((_bubble.frameSizeHeight - _sendAgain.frameSizeHeight) / 2)];
+    _sending.center = _sendAgain.center;
+}
+
 - (void)repositionContentView:(UIView *)contentView
 {
     CGFloat offsetX = self.isMe ? _margin.left : _margin.right;
@@ -169,8 +191,8 @@
 // 图片的上下间距
 - (void)repositionContentViewTypePic:(UIView *)contentView
 {
-    CGFloat offsetX = self.isMe ? _margin.left+1 : _margin.right+1;
-    contentView.frame = CGRectMake(offsetX-2, _margin.top-5-2, contentView.frame.size.width+4, contentView.frame.size.height+8+4);
+//    CGFloat offsetX = self.isMe ? _margin.left+1 : _margin.right+1;
+    contentView.frame = CGRectMake(0, 0, 120, 120);
 }
 
 + (CGFloat)getBaseHeightTopText:(NSString *)topText nick:(NSString *)nick

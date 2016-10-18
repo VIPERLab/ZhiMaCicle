@@ -8,6 +8,8 @@
 
 #import "BaseChatTableViewCell.h"
 #import "LGMessage.h"
+#import "ZMImageView.h"
+
 
 @protocol pictureCellDelegate <NSObject>
 
@@ -20,7 +22,7 @@
 }
 
 @property (nonatomic, strong) UIButton      *mainView;
-@property (nonatomic, strong) UIImageView   *picturesView;
+@property (nonatomic, strong) ZMImageView   *picturesView;
 @property (nonatomic, strong) UILabel       *botLabel;
 
 @property (nonatomic, weak)id<pictureCellDelegate>pDelegate;

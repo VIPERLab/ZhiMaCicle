@@ -102,7 +102,7 @@
         CGFloat sexX = CGRectGetMaxX(_userName.frame) + 10;
         CGFloat sexW = 15;
         CGFloat sexH = sexW;
-        CGFloat sexY = (CGRectGetHeight(_userName.frame) - sexH) * 0.5 + userY;
+        CGFloat sexY = CGRectGetMinY(_userName.frame) + ((CGRectGetHeight(_userName.frame) - sexH) * 0.5);
         _sexImage.frame = CGRectMake(sexX, sexY, sexW, sexH);
         
         
