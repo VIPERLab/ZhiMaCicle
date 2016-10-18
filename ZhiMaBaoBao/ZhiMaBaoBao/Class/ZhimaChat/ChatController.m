@@ -1611,8 +1611,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     MoreItem *item2 = [MoreItem moreItemWithPicName:@"sharemore_pic" highLightPicName:nil itemName:@"图片"];
     MoreItem *item3 = [MoreItem moreItemWithPicName:@"sharemore_video" highLightPicName:nil itemName:@"拍照"];
 
-//    return @[ item2, item3, item1];
-    return @[item2, item3];
+    return @[ item2, item3, item1];
+//    return @[item2, item3];
 
 }
 - (NSArray<ChatToolBarItem *> *)chatKeyBoardToolbarItems
