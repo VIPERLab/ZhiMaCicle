@@ -95,6 +95,7 @@
         
         KXActionSheet *actionSheet = [[KXActionSheet alloc] initWithTitle:@"加入黑名单，你将不再收到对方的消息" cancellTitle:@"取消" andOtherButtonTitles:@[@"确定"]];
         actionSheet.delegate = self;
+        actionSheet.flag = 1;
         [actionSheet show];
         
     }else{
@@ -130,7 +131,7 @@
                 [LCProgressHUD showFailureText:error.msg];
             }];
         }
-    }else{      //加入黑名单
+    }else if (sheet.flag == 1){      //加入黑名单
         if (index == 0) {
             [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"3" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
                 if (responseData.code == 0) {
