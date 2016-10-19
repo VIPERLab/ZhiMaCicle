@@ -264,7 +264,7 @@
     
     NSLog(@"jid = %@",jid);
     NSRange spacialRange = [jid rangeOfString:@"@"];
-    if (spacialRange.location) {
+    if (spacialRange.length) {
         NSLog(@"这是旧版本二维码");
         
         //获取邀请码
@@ -327,7 +327,7 @@
         
         
     } failure:^(ErrorData *error) {
-        
+        [self.navigationController popViewControllerAnimated:YES];
     }];
     
     
