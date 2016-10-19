@@ -18,6 +18,7 @@
 #import "IMMorePictureTableViewCell.h"
 #import "IMChatVoiceTableViewCell.h"
 #import "SystemChatCell.h"
+#import "IMChatVideoTableViewCell.h"
 
 #import "ChatRoomInfoController.h" // 聊天室详情
 #import "GroupChatRoomInfoController.h" // 群聊天室详情
@@ -47,8 +48,12 @@
 #import "DNAsset.h"
 #import "NSURL+DNIMagePickerUrlEqual.h"
 
+//小视频相关头文件
+#import "ZMRecordShortVideoView.h"
+#import "PKFullScreenPlayerViewController.h"
 
-@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, pictureCellDelegate,CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,KXActionSheetDelegate>
+
+@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, pictureCellDelegate,CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,KXActionSheetDelegate,ZMRecordShortVideoDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ChatKeyBoard *keyboard;
@@ -66,16 +71,12 @@
 @property (nonatomic, copy) NSString *filePath;
 
 @property (nonatomic, strong) NSIndexPath *currentPlayAudioIndexPath; //当前下在播放语音的cell indexpath;
-
-
 @property (nonatomic, strong) NSMutableArray *messages;       //聊天消息
 @property (nonatomic, strong) NSMutableArray *subviews;       //所有的imageView（浏览图片时用）
 @property (nonatomic, strong) NSMutableArray *allImagesInfo;  //界面加载出来了的所有的图片信息（浏览图片时用）
-
 @property (nonatomic, copy) NSString * audioName;         //最新语音文件后缀名
 
 @property (nonatomic, assign)BOOL isTimeOut; //录音时间超过60秒
-
 @property (nonatomic, assign)int currentPage;
 
 
@@ -89,6 +90,9 @@
 @property (nonatomic, strong) UIWindow *topWindow;
 
 @property (nonatomic, assign)BOOL notInGroup;   //已被踢出群聊（不在当前群聊会话）
+
+//小视频相关
+@property (nonatomic, strong) ZMRecordShortVideoView*videoView; // 视频录制视图
 
 
 @end
@@ -563,88 +567,18 @@ static NSString *const reuseIdentifier = @"messageCell";
             
             break;
         }
+        case MessageTypeVideo : {
+            //            rowHeight = [IMMorePictureTableViewCell getHeightWithChat:ch TopText:time nickName:nil];
+            rowHeight = needShowTime ? 200+20 : 200;
+            
+            break;
+        }
 
         default:
             break;
     }
     
     return  rowHeight;
-}
-
-#pragma mark - ——----------浏览图片
-- (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
-{
-   // 显示单张图片
-//    [self.subviews removeAllObjects];
-//    UIView *imageView = grz.view;
-//    
-//    LGMessage *msg = self.messages[imageView.tag];
-//    if (msg.text) {
-//        self.currentPicUrl = [msg.text stringByReplacingOccurrencesOfString:@"s_" withString:@""];
-//    }else{
-//        self.currentPicUrl = nil;
-//    }
-//    
-//    [self.subviews addObject:imageView];
-//    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-//    browser.currentImageIndex = 0;
-//    browser.sourceImagesContainerView = grz.view.superview;
-//    browser.imageCount = self.subviews.count;
-//    browser.delegate = self;
-//    browser.userId = msg.fromUid;
-//    [browser show];
-    
-    //多张图片浏览
-    NSUInteger index = 0;
-    NSLog(@"grz.view.tag = %ld",grz.view.tag);
-    for (int i=0; i<self.allImagesInfo.count; i++) {
-        NSDictionary*dic = self.allImagesInfo[i];
-        UIImageView*iv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 1, 1)];
-        [iv sd_setImageWithURL:dic[@"url"]];
-        [grz.view.superview addSubview:iv];
-        [self.subviews addObject:iv];
-        NSLog(@"index = %ld",[dic[@"index"] integerValue]);
-
-        if (grz.view.tag == [dic[@"index"] integerValue]) {
-            index = i;
-        }
-    }
-    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-    browser.currentImageIndex = index;
-    browser.sourceImagesContainerView = grz.view.superview;
-    browser.imageCount = self.subviews.count;
-    browser.delegate = self;
-    browser.isChat = YES;
-    [browser show];
-    
-}
-
-- (void)finishedWatch
-{
-    for (UIImageView*iv in self.subviews) {
-        [iv removeFromSuperview];
-    }
-    [self.subviews removeAllObjects];
-}
-
-#pragma mark - SDPhotoBrowserDelegate
-
-- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index
-{
-    
-    //    NSString*urlStr = self.currentPicUrl;
-
-    NSDictionary *msg = self.allImagesInfo[index];
-    NSString*urlStr = [msg[@"url"] stringByReplacingOccurrencesOfString:@"s_" withString:@""];
-    browser.userId = msg[@"fromUid"];
-    NSURL *url = [NSURL URLWithString:urlStr];
-    return url;
-}
-
-- (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index
-{
-    UIImageView *imageView = self.subviews[index];
-    return imageView.image;
 }
 
 #pragma mark - tableview datasource
@@ -865,6 +799,65 @@ static NSString *const reuseIdentifier = @"messageCell";
             }
             
         }
+#pragma mark--MessageTypeVideo
+        else if(fileType == MessageTypeVideo) {
+            IMChatVideoTableViewCell *picChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
+            if(!picChatCell) {
+                picChatCell = [[IMChatVideoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resuseIdentifierString];
+                
+                picChatCell.backgroundColor = WHITECOLOR;
+            }
+            
+            baseChatCell = picChatCell;
+            
+            picChatCell.isMe = isMe;
+            picChatCell.indexPath = indexPath;
+            picChatCell.playView.tag = indexPath.row;
+            
+            [picChatCell reloadData:message isMySelf:isMe tapVideoTarget:self action:@selector(touchCellPlayVideo:)];
+            
+            
+//            if (message.isSending && isMe) {
+//                [picChatCell.sending startAnimating];
+//                picChatCell.sendAgain.hidden = YES;
+//                picChatCell.bubble.userInteractionEnabled = NO;
+//                
+//            }else{
+//                
+//                //  以下内容判断是否发送失败
+//                if (message.sendStatus == 0) {
+//                    picChatCell.sendAgain.hidden = NO;
+//                    [picChatCell.sending stopAnimating];
+//                    picChatCell.bubble.userInteractionEnabled = YES;
+//                    
+//                    picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
+//                        
+//                        LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
+//                        chat.errorMsg = self.notInGroup;    //新增错误信息标记
+//                        
+//                        if (chat.text) { // 推送失败的情况
+//                            SocketManager* socket = [SocketManager shareInstance];
+//                            [socket reSendMessage:chat];
+//                            
+//                        }else{  // 图片发送服务器失败的情况
+//                            
+//                            //重新发送图片给服务器
+//                            UIImage *image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.picUrl]];
+//                            [self sendPicToServerWithImage:image index:indexPath.row];
+//                            
+//                        }
+//                        
+//                    };
+//                } else {
+//                    picChatCell.sendAgain.hidden = YES;
+//                    [picChatCell.sending stopAnimating];
+//                    picChatCell.bubble.userInteractionEnabled = YES;
+//                    
+//                }
+//            }
+            
+            
+        }
         
         //头像
         if (baseChatCell.isMe){
@@ -926,6 +919,22 @@ static NSString *const reuseIdentifier = @"messageCell";
     LGMessage * chat = [self.messages objectAtIndex:indexPath.row];
     return [self calculateRowHeightAccordingChat:chat indexPath:indexPath];
 }
+
+//- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if ([cell isKindOfClass:[IMChatVideoTableViewCell class]]) {
+//        IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+//        [cell2.playView pause];
+//    }
+//}
+//
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if ([cell isKindOfClass:[IMChatVideoTableViewCell class]]) {
+//        IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+//        [cell2.playView pause];
+//    }
+//}
 
 #pragma mark - 消息转发、撤回、删除等操作
 //转发
@@ -1069,11 +1078,14 @@ static NSString *const reuseIdentifier = @"messageCell";
 //点击单元格收起键盘
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.keyboard keyboardDown];
+    [self hiddenVideoView];
 }
 
 //滑动tableview,收起键盘
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.keyboard keyboardDown];
+    [self hiddenVideoView];
+
 }
 
 #pragma mark - BaseChatTableViewCell delegate
@@ -1103,59 +1115,6 @@ static NSString *const reuseIdentifier = @"messageCell";
 {
 //    [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
 
-}
-
-#pragma mark - 声音cell代理_________________________IMChatVoiceCell delegate
-
-- (void)onPlayBtn:(id)sender
-{
-    [self chat_playMusic:sender];
-    NSLog(@"播放声音");
-    
-}
-
-- (void)chat_playMusic:(UIButton *)sender{
-    
-    [self changeProximityMonitorEnableState:YES];
-    
-    UIView *view = sender.superview;
-    while(![view isKindOfClass:[IMChatVoiceTableViewCell class]]) {
-        view = [view superview];
-    }
-    
-    NSIndexPath* ip = [self.tableView indexPathForCell:(IMChatVoiceTableViewCell *)view];
-    IMChatVoiceTableViewCell *currentCell = (IMChatVoiceTableViewCell *)view;
-    
-    if([self.player isPlaying]) {
-        
-        [self.player stopPlaying];
-        NSIndexPath *index = self.currentPlayAudioIndexPath;
-        
-        IMChatVoiceTableViewCell *cell = (IMChatVoiceTableViewCell*)[self.tableView cellForRowAtIndexPath:index];
-        [cell.btnBg stopAnimating];
-        //如果当前cell 的语音正在播放，那么结束播放
-        if (self.currentPlayAudioIndexPath.row == ip.row) {
-            return;
-        }
-    }
-    
-    [self initAudioPlayAndReader];
-    
-    LGMessage *message = [self.messages objectAtIndex:ip.row];
-    self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
-    [self.player startPlaying];
-    [currentCell.btnBg startAnimating];
-    
-    if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
-        message.is_read = YES;
-
-        [FMDBShareManager upDataMessageStatusWithMessage:message];
-        [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
-        
-    }
-
-    
-    self.currentPlayAudioIndexPath = ip;
 }
 
 #pragma mark - chatKeyboard delegate ：发送文本消息
@@ -1210,6 +1169,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     return resultStr;
 }
 
+#pragma mark - ============================语音相关
 #pragma mark - 语音代理方法
 //开始录音
 - (void)chatKeyBoardDidStartRecording:(ChatKeyBoard *)chatKeyBoard{
@@ -1312,40 +1272,118 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
 }
 
-#pragma mark - chatKeyboard  键盘更多按钮代理
+#pragma mark - 声音cell代理_________________________IMChatVoiceCell delegate
 
-- (void)chatKeyBoard:(ChatKeyBoard *)chatKeyBoard didSelectMorePanelItemIndex:(NSInteger)index
+- (void)onPlayBtn:(id)sender
 {
-    NSLog(@"点击了index = %ld",index);
-    switch (index) {
-        case 0: // 图片
-        {
-            DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
-            imagePicker.imagePickerDelegate = self;
-            imagePicker.kDNImageFlowMaxSeletedNumber = 9;
-            imagePicker.filterType = DNImagePickerFilterTypePhotos;
-            [self presentViewController:imagePicker animated:YES completion:nil];
-        }
-            break;
-        case 1: // 拍照
-        {
-            [self.imagesArray removeAllObjects];
-
-            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-            picker.delegate = self;
-            picker.allowsEditing = NO;
-            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-            [self.navigationController presentViewController:picker animated:YES completion:nil];
-            
-        }
-            break;
-            
-        default:
-            break;
-    }
+    [self chat_playMusic:sender];
+    
 }
 
+- (void)chat_playMusic:(UIButton *)sender{
+    
+    [self changeProximityMonitorEnableState:YES];
+    
+    UIView *view = sender.superview;
+    while(![view isKindOfClass:[IMChatVoiceTableViewCell class]]) {
+        view = [view superview];
+    }
+    
+    NSIndexPath* ip = [self.tableView indexPathForCell:(IMChatVoiceTableViewCell *)view];
+    IMChatVoiceTableViewCell *currentCell = (IMChatVoiceTableViewCell *)view;
+    
+    if([self.player isPlaying]) {
+        
+        [self.player stopPlaying];
+        NSIndexPath *index = self.currentPlayAudioIndexPath;
+        
+        IMChatVoiceTableViewCell *cell = (IMChatVoiceTableViewCell*)[self.tableView cellForRowAtIndexPath:index];
+        [cell.btnBg stopAnimating];
+        //如果当前cell 的语音正在播放，那么结束播放
+        if (self.currentPlayAudioIndexPath.row == ip.row) {
+            return;
+        }
+    }
+    
+    [self initAudioPlayAndReader];
+    
+    LGMessage *message = [self.messages objectAtIndex:ip.row];
+    self.amrReader.filePath = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text];
+    [self.player startPlaying];
+    [currentCell.btnBg startAnimating];
+    
+    if (message.is_read != YES && !currentCell.isMe) {  //![chat.isReadContent isEqualToString:@"2"]
+        message.is_read = YES;
+        
+        [FMDBShareManager upDataMessageStatusWithMessage:message];
+        [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+    }
+    
+    
+    self.currentPlayAudioIndexPath = ip;
+}
 
+#pragma mark - ============================小视频相关
+
+#pragma mark - ZMRecordShortVideoDelegate
+
+- (void)hiddenVideoView
+{
+    if (!self.videoView) {
+        return;
+    }
+    CGRect frame = self.videoView.frame;
+    
+    if (frame.origin.y == DEVICEHIGHT) {
+        return;
+    }
+    
+    frame.origin.y = DEVICEHIGHT;
+    [UIView animateWithDuration:0.2 animations:^{
+        self.videoView.frame = frame;
+    }completion:^(BOOL finished) {
+        [self.videoView removeFromSuperview];
+        self.videoView = nil;
+    }];
+}
+
+- (void)playVideoWithPath:(NSString *)path image:(UIImage *)image
+{
+    PKFullScreenPlayerViewController *vc = [[PKFullScreenPlayerViewController alloc] initWithVideoPath:path previewImage:image];
+    [self presentViewController:vc animated:NO completion:NULL];
+}
+
+- (void)touchCellPlayVideo:(UIGestureRecognizer *)grz
+{
+    NSLog(@"dianjile xiaoshipin");
+}
+
+#pragma mark - 发送小视频
+
+- (void)didFinishRecordingToOutputFilePath:(NSString *)outputFilePath
+{
+    [self hiddenVideoView];
+    
+    LGMessage*message = [[LGMessage alloc]init];
+    message.type = MessageTypeVideo;
+    message.toUidOrGroupId = self.conversionId;
+    message.fromUid = USERINFO.userID;
+    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+    message.isGroup = NO;
+    message.timeStamp = [NSDate currentTimeStamp];
+    message.isSending = YES;
+    message.text = outputFilePath;
+    [self.messages addObject:message];
+    
+    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+    NSArray *indexPaths = @[indexpath];
+    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
+}
+
+#pragma mark - ============================图片相关
 // 读取拍照图片
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = info[@"UIImagePickerControllerOriginalImage"];
@@ -1480,15 +1518,15 @@ static NSString *const reuseIdentifier = @"messageCell";
                 return ;
             }
             
-            UIImageOrientation imageOrientation=image.imageOrientation;
-            if(imageOrientation!=UIImageOrientationUp) {
-                
-                UIGraphicsBeginImageContext(image.size);
-                [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
-                image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-                // 调整图片角度完毕
-            }
+//            UIImageOrientation imageOrientation=image.imageOrientation;
+//            if(imageOrientation!=UIImageOrientationUp) {
+//                
+//                UIGraphicsBeginImageContext(image.size);
+//                [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
+//                image = UIGraphicsGetImageFromCurrentImageContext();
+//                UIGraphicsEndImageContext();
+//                // 调整图片角度完毕
+//            }
 
             image = [self fixOrientation:image];
             
@@ -1585,15 +1623,94 @@ static NSString *const reuseIdentifier = @"messageCell";
     
 }
 
+#pragma mark - ——----------浏览图片
+
+- (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
+{
+    // 显示单张图片
+    //    [self.subviews removeAllObjects];
+    //    UIView *imageView = grz.view;
+    //
+    //    LGMessage *msg = self.messages[imageView.tag];
+    //    if (msg.text) {
+    //        self.currentPicUrl = [msg.text stringByReplacingOccurrencesOfString:@"s_" withString:@""];
+    //    }else{
+    //        self.currentPicUrl = nil;
+    //    }
+    //
+    //    [self.subviews addObject:imageView];
+    //    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
+    //    browser.currentImageIndex = 0;
+    //    browser.sourceImagesContainerView = grz.view.superview;
+    //    browser.imageCount = self.subviews.count;
+    //    browser.delegate = self;
+    //    browser.userId = msg.fromUid;
+    //    [browser show];
+    
+    //多张图片浏览
+    NSUInteger index = 0;
+    NSLog(@"grz.view.tag = %ld",grz.view.tag);
+    for (int i=0; i<self.allImagesInfo.count; i++) {
+        NSDictionary*dic = self.allImagesInfo[i];
+        UIImageView*iv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 1, 1)];
+        [iv sd_setImageWithURL:dic[@"url"]];
+        [grz.view.superview addSubview:iv];
+        [self.subviews addObject:iv];
+        NSLog(@"index = %ld",[dic[@"index"] integerValue]);
+        
+        if (grz.view.tag == [dic[@"index"] integerValue]) {
+            index = i;
+        }
+    }
+    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
+    browser.currentImageIndex = index;
+    browser.sourceImagesContainerView = grz.view.superview;
+    browser.imageCount = self.subviews.count;
+    browser.delegate = self;
+    browser.isChat = YES;
+    [browser show];
+    
+}
+
+- (void)finishedWatch
+{
+    for (UIImageView*iv in self.subviews) {
+        [iv removeFromSuperview];
+    }
+    [self.subviews removeAllObjects];
+}
+
+#pragma mark - SDPhotoBrowserDelegate
+
+- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index
+{
+    
+    //    NSString*urlStr = self.currentPicUrl;
+    
+    NSDictionary *msg = self.allImagesInfo[index];
+    NSString*urlStr = [msg[@"url"] stringByReplacingOccurrencesOfString:@"s_" withString:@""];
+    browser.userId = msg[@"fromUid"];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    return url;
+}
+
+- (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index
+{
+    UIImageView *imageView = self.subviews[index];
+    return imageView.image;
+}
+
+#pragma mark - ============================键盘设置
 #pragma mark - chatKeyboard datasource
 - (NSArray<MoreItem *> *)chatKeyBoardMorePanelItems
 {
-//    MoreItem *item1 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"位置"];
     MoreItem *item2 = [MoreItem moreItemWithPicName:@"sharemore_pic" highLightPicName:nil itemName:@"图片"];
     MoreItem *item3 = [MoreItem moreItemWithPicName:@"sharemore_video" highLightPicName:nil itemName:@"拍照"];
+    MoreItem *item4 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"小视频"];
+
 
 //    return @[item1, item2, item3];
-    return @[item2, item3];
+    return @[item2, item3, item4];
 
 }
 - (NSArray<ChatToolBarItem *> *)chatKeyBoardToolbarItems
@@ -1614,6 +1731,54 @@ static NSString *const reuseIdentifier = @"messageCell";
     return [FaceSourceManager loadFaceSource];
 }
 
+#pragma mark - chatKeyboard  键盘更多按钮代理
+
+- (void)chatKeyBoard:(ChatKeyBoard *)chatKeyBoard didSelectMorePanelItemIndex:(NSInteger)index
+{
+    switch (index) {
+        case 0: // 图片
+        {
+            DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
+            imagePicker.imagePickerDelegate = self;
+            imagePicker.kDNImageFlowMaxSeletedNumber = 9;
+            imagePicker.filterType = DNImagePickerFilterTypePhotos;
+            [self presentViewController:imagePicker animated:YES completion:nil];
+        }
+            break;
+        case 1: // 拍照
+        {
+            [self.imagesArray removeAllObjects];
+            
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.delegate = self;
+            picker.allowsEditing = NO;
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self.navigationController presentViewController:picker animated:YES completion:nil];
+            
+        }
+            break;
+        case 2: // 小视频
+        {
+            [self.keyboard keyboardDown];
+            
+            NSLog(@"小视频");
+            CGRect frame = CGRectMake(0, DEVICEHIGHT, DEVICEWITH, 400);
+            ZMRecordShortVideoView*videoView = [[ZMRecordShortVideoView alloc]initWithFrame:frame];
+            videoView.delegate = self;
+            [self.view addSubview:videoView];
+            self.videoView = videoView;
+            
+            frame.origin.y = DEVICEHIGHT-400;
+            [UIView animateWithDuration:0.2 animations:^{
+                videoView.frame = frame;
+            }];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
 
 - (void)backAction {
     [FMDBShareManager setConverseUnReadCountZero:self.conversionId];

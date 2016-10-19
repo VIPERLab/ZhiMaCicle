@@ -192,7 +192,14 @@
 - (void)repositionContentViewTypePic:(UIView *)contentView
 {
 //    CGFloat offsetX = self.isMe ? _margin.left+1 : _margin.right+1;
-    contentView.frame = CGRectMake(0, 0, 120, 120);
+    contentView.frame = CGRectMake(0, 0, contentView.frameSizeWidth,  contentView.frameSizeHeight);
+}
+
+// 视频的上下间距
+- (void)repositionContentViewTypeVideo:(UIView *)contentView
+{
+    CGFloat offsetX = self.isMe ? _margin.left+1 : _margin.right+1;
+    contentView.frame = CGRectMake(offsetX-2, _margin.top-5-2, contentView.frame.size.width+4, contentView.frame.size.height+8+4);
 }
 
 + (CGFloat)getBaseHeightTopText:(NSString *)topText nick:(NSString *)nick
