@@ -208,6 +208,7 @@
 - (void)jumpMainController{
     //已经登录过，直接跳转到主界面
     [self creatMySQL];
+    [self countculatedTime];
     MainViewController *mainVC = [[MainViewController alloc] init];
     self.window.rootViewController = mainVC;
 }
@@ -260,6 +261,13 @@
     
     [JPUSHService setBadge:0];
     
+    [self countculatedTime];
+    //通知更新未读消息数
+    [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
+    
+}
+
+- (void)countculatedTime {
     //计算是否超过设置邀请码的有效期
     if (USERINFO.sessionId && ![USERINFO.create_time isEqualToString:@""] && USERINFO.create_time!= nil) {
         //登录过的用户且有注册时间的才需要计算失效时间
@@ -294,10 +302,7 @@
         
         
     }
-    
-    //通知更新未读消息数
-    [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
-    
+
 }
 
 #pragma mark - 请求未读消息数

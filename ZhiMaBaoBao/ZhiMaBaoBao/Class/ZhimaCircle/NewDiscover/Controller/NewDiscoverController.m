@@ -98,7 +98,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController.navigationBar setAlpha:1];
+    [self upDataView];
+}
+
 - (void)setupNav {
+    
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(ReleaseButtonDidClick)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
 }
@@ -279,10 +285,6 @@
         borwser.currentIndex = currentButton.tag + 1;
         
         typeof(self) weakSelf = self;
-        borwser.backBlock = ^(NSMutableArray *imageArray) {
-            weakSelf.imagesArray = imageArray;
-            [weakSelf upDataView];
-        };
         [self.navigationController pushViewController:borwser animated:YES];
         return;
     }

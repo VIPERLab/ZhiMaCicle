@@ -16,7 +16,5 @@ typedef void(^BackBlock)(NSMutableArray *imageArray);
 
 @property (nonatomic, assign) int currentIndex;
 
-@property (nonatomic, copy) BackBlock backBlock;
-
 
 @end

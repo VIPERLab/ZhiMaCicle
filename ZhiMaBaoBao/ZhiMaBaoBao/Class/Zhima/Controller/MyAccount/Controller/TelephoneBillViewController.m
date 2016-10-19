@@ -139,7 +139,7 @@
     params[@"cardpass"] = self.cardPassword.text;
     params[@"sign"] = md5Sign;
     
-    [manager POST:@"http://120.76.239.173/Api/Index/cardpay" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:[NSString stringWithFormat:@"%@/Api/Index/cardpay",DFAPIURLTEST] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] intValue] != 8888) {
             [LCProgressHUD showFailureText:responseObject[@"msg"]];
             return ;

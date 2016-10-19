@@ -161,8 +161,8 @@
     parms[@"uid"] = self.model.ID;
     parms[@"type"] = [NSString stringWithFormat:@"%zd",type];
     parms[@"sign"] = md5Sign;
-    
-    [manager POST:@"http://120.76.239.173/Api/Index/getpay" parameters:parms progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+
+    [manager POST:[NSString stringWithFormat:@"%@/Api/Index/getpay",DFAPIURLTEST] parameters:parms progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if ([responseObject[@"code"] intValue] != 8888) {
 //            [LCProgressHUD showFailureText:@"支付失败"];
@@ -171,7 +171,7 @@
         if (type) {
             [self AliPay:responseObject];
         } else {
-            [self WXPay:responseObject];
+            [self WXPay:responseObject[@"data"]];
         }
         
         
