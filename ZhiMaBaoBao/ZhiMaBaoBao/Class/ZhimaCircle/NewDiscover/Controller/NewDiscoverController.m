@@ -99,10 +99,14 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    navBar.tintColor = THEMECOLOR;
+    navBar.backgroundColor = [UIColor clearColor];
     [self upDataView];
 }
 
 - (void)setupNav {
+    
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(ReleaseButtonDidClick)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
 }

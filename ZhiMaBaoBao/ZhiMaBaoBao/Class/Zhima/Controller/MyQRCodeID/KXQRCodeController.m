@@ -40,12 +40,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    self.navigationController.navigationBar.hidden = NO;
+}
 
 #pragma mark - setupView
 - (void)setupView {
     self.view.backgroundColor = [UIColor colorFormHexRGB:@"2e3132"];
-    
-    UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, 392)];
+    CGFloat scale = (ScreenWidth - 60) / ScreenWidth;
+    CGFloat centerHeigth = 392 * scale + 60;
+    UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, centerHeigth)];
     centerView.backgroundColor = [UIColor whiteColor];
     centerView.layer.cornerRadius = 10;
     self.centerView = centerView;
@@ -96,7 +100,7 @@
 //    [QRCodeView addSubview:imageView];
     
     
-    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 400 - 60, CGRectGetWidth(centerView.frame), 15)];
+    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(centerView.frame) - 45, CGRectGetWidth(centerView.frame), 15)];
     invitedLabel.textAlignment = NSTextAlignmentCenter;
     invitedLabel.font = [UIFont systemFontOfSize:15];
     invitedLabel.textColor = [UIColor colorFormHexRGB:@"888888"];

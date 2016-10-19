@@ -119,7 +119,7 @@
     param[@"openfireaccount"] = USERINFO.userID;
     param[@"sign"] = [md5Sign uppercaseString];
     
-    [manager POST:@"http://120.76.239.173/Api/Index/chkwx" parameters:param progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:[NSString stringWithFormat:@"%@/Api/Index/chkwx",DFAPIURLTEST] parameters:param progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if ([responseObject[@"code"] intValue] != 8888) {
 //            [self showHint:responseObject[@"msg"]];
@@ -175,8 +175,8 @@
     param[@"openfireaccount"] = USERINFO.userID;
     param[@"money"] = self.textField.text;
     param[@"sign"] = md5Sign;
-    
-    [manager POST:@"http://120.76.239.173/Api/Index/sendredbag" parameters:@"http://120.76.239.173/Api/Index/sendredbag" progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//    [NSString stringWithFormat:@"%@/Api/Index/sendredbag",DFAPIURLTEST]
+    [manager POST:[NSString stringWithFormat:@"%@/Api/Index/sendredbag",DFAPIURLTEST] parameters:param progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if ([responseObject[@"code"] intValue]!= 8888) {
             [LCProgressHUD showFailureText:responseObject[@"msg"]];
