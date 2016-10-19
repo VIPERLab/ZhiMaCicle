@@ -99,9 +99,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    navBar.tintColor = THEMECOLOR;
-    navBar.backgroundColor = [UIColor clearColor];
+    [self.navigationController.navigationBar setAlpha:1];
     [self upDataView];
 }
 
