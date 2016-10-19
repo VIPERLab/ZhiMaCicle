@@ -274,7 +274,7 @@
             vc.VerCode = self.VerCode;
             [self.navigationController pushViewController:vc animated:YES];
         }else{
-            [LCProgressHUD showText:obj.msg];
+            [LCProgressHUD showFailureText:obj.msg];
 
         }
     }];

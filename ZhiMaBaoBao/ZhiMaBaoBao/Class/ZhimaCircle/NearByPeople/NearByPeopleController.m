@@ -68,7 +68,7 @@
             self.dataArr = [NearByModel mj_objectArrayWithKeyValuesArray:responseData.data];
             [self.tableView reloadData];
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     }];
 

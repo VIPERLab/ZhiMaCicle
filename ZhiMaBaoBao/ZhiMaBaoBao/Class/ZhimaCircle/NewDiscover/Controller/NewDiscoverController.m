@@ -236,7 +236,7 @@
 - (void)ReleaseButtonDidClick {
     [self.textView resignFirstResponder];
     if (!self.textView.text.length && !_imagesArray.count) {
-        [LCProgressHUD showText:@"说说内容或图片不能为空"];
+        [LCProgressHUD showFailureText:@"说说内容或图片不能为空"];
         return;
     }
     

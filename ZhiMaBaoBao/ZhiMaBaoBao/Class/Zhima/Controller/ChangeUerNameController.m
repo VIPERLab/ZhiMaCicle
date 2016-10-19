@@ -52,7 +52,7 @@
 
 - (void)saveButtonDidClick {
     [self.textField resignFirstResponder];
-    [LCProgressHUD showText:@"正在修改昵称"];
+    [LCProgressHUD showLoadingText:@"正在修改昵称"];
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"username" andChangeValue:self.textField.text block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
         if (responseData.code != 0) {
