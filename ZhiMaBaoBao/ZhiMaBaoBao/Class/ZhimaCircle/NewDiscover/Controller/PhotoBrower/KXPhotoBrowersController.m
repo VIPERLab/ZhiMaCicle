@@ -61,6 +61,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [self restorePreviousNavBarAppearance:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:_previousStatusBarStyle animated:animated];
+    [self.navigationController.navigationBar setAlpha:1];
 }
 
 - (void)setupNav {
@@ -87,34 +88,33 @@
 
 - (void)storePreviousNavBarAppearance {
     _didSavePreviousStateOfNavBar = YES;
-    if ([UINavigationBar instancesRespondToSelector:@selector(barTintColor)]) {
+//    if ([UINavigationBar instancesRespondToSelector:@selector(barTintColor)]) {
         _previousNavBarBarTintColor = self.navigationController.navigationBar.barTintColor;
-    }
+//    }
     _previousNavBarTranslucent = self.navigationController.navigationBar.translucent;
     _previousNavBarTintColor = self.navigationController.navigationBar.tintColor;
     _previousNavBarHidden = self.navigationController.navigationBarHidden;
     _previousNavBarStyle = self.navigationController.navigationBar.barStyle;
-    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
+//    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
         _previousNavigationBarBackgroundImageDefault = [self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault];
         _previousNavigationBarBackgroundImageLandscapePhone = [self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsCompact];
-    }
+//    }
 }
 
 - (void)restorePreviousNavBarAppearance:(BOOL)animated {
-    if (_didSavePreviousStateOfNavBar) {
-        [self.navigationController setNavigationBarHidden:_previousNavBarHidden animated:animated];
-        UINavigationBar *navBar = self.navigationController.navigationBar;
-        navBar.tintColor = THEMECOLOR;
-        navBar.translucent = _previousNavBarTranslucent;
-        if ([UINavigationBar instancesRespondToSelector:@selector(barTintColor)]) {
-            navBar.barTintColor = _previousNavBarBarTintColor;
-        }
-        navBar.barStyle = _previousNavBarStyle;
-        if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
-            [navBar setBackgroundImage:_previousNavigationBarBackgroundImageDefault forBarMetrics:UIBarMetricsDefault];
-            [navBar setBackgroundImage:_previousNavigationBarBackgroundImageLandscapePhone forBarMetrics:UIBarMetricsCompact];
-        }
-    }
+    [self.navigationController setNavigationBarHidden:_previousNavBarHidden animated:animated];
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    navBar.tintColor = THEMECOLOR;
+    navBar.translucent = _previousNavBarTranslucent;
+//    if ([UINavigationBar instancesRespondToSelector:@selector(barTintColor)]) {
+        navBar.barTintColor = _previousNavBarBarTintColor;
+//    }
+    navBar.barStyle = _previousNavBarStyle;
+//    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
+        [navBar setBackgroundImage:_previousNavigationBarBackgroundImageDefault forBarMetrics:UIBarMetricsDefault];
+        [navBar setBackgroundImage:_previousNavigationBarBackgroundImageLandscapePhone forBarMetrics:UIBarMetricsCompact];
+//    }
+    
 }
 
 
@@ -129,42 +129,32 @@
 - (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated{
     
     // Force visible
-    if (self.imageArray.count == 0)
-        hidden = NO;
+//    if (self.imageArray.count == 0)
+//        hidden = NO;
     // Animations & positions
     CGFloat animationDuration = (animated ? 0.35 : 0);
     
     // Status bar
-    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
-        // Hide status bar
-        _statusBarShouldBeHidden = hidden;
-        [UIView animateWithDuration:animationDuration animations:^(void) {
+//    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+//        // Hide status bar
+//        _statusBarShouldBeHidden = hidden;
+//        [UIView animateWithDuration:animationDuration animations:^(void) {
 //            [self setNeedsStatusBarAppearanceUpdate];
-        } completion:^(BOOL finished) {}];
-    }
+//        } completion:^(BOOL finished) {}];
+//    }
     
 
     
     [UIView animateWithDuration:animationDuration animations:^(void) {
-        CGFloat alpha = hidden ? 0 : 1;
+        CGFloat alpha = hidden == YES ? 0 : 1;
         [self.navigationController.navigationBar setAlpha:alpha];
         
     } completion:^(BOOL finished) {
         self.show = hidden == YES ? NO : YES;
+        
     }];
 }
 
-- (BOOL)prefersStatusBarHidden {
-    return _statusBarShouldBeHidden;
-}
-
-- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
-    return UIStatusBarAnimationSlide;
-}
-
-- (BOOL)areControlsHidden { return (_toolbar.alpha == 0); }
-- (void)hideControls { [self setControlsHidden:YES animated:YES]; }
-- (void)toggleControls { [self setControlsHidden:![self areControlsHidden] animated:YES]; }
 
 #pragma mark - 布局
 - (void)setupView {
