@@ -103,6 +103,11 @@
         return;
     }
     
+    if ([self.textField.text isEqualToString:USERINFO.invite_code]) {
+        [LCProgressHUD showFailureText:@"邀请码不能为自己"];
+        return;
+    }
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer.timeoutInterval = 15.f;
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
