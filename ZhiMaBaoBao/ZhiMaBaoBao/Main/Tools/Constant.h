@@ -68,8 +68,6 @@
 #define CHATPICURL  @"http://pic.zhimabaobao.com"
 
 
-
-
 //生成签名的apikey
 #define APIKEY @"apikey=yihezhaizhima20162018"
 

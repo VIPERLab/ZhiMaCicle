@@ -47,10 +47,10 @@
             //初始化数据
             [self setupProfile];
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     } failure:^(ErrorData *error) {
-        [LCProgressHUD showText:error.msg];
+        [LCProgressHUD showFailureText:error.msg];
     }];
 }
 
@@ -103,7 +103,7 @@
             if (responseData.code == 0) {
 
             }else{
-                [LCProgressHUD showText:responseData.msg];
+                [LCProgressHUD showFailureText:responseData.msg];
             }
         }];
     }
@@ -149,7 +149,7 @@
                      [FMDBShareManager deleteUserMessageByUserID:self.userId];
                      */
                 }else{
-                    [LCProgressHUD showText:responseData.msg];
+                    [LCProgressHUD showFailureText:responseData.msg];
                 }
             }];
         }else{
@@ -170,7 +170,7 @@
                 [[SocketManager shareInstance] notAllowFriendCircle:self.userId];
             }
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
 
         }
     }];
@@ -189,7 +189,7 @@
                 });
             }
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     }];
 }

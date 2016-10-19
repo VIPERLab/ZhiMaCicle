@@ -189,7 +189,7 @@
             vc.password    = self.passField.text;
             [self.navigationController pushViewController:vc animated:YES];
         }else{
-            [LCProgressHUD showText:obj.msg];
+            [LCProgressHUD showFailureText:obj.msg];
         }
     }];
     

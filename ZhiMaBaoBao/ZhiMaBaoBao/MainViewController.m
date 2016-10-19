@@ -107,11 +107,16 @@
     }else{
         conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.isGroup];
     }
-    if (!conversionModel.disturb && ![userinfo.currentConversionId isEqualToString:message.fromUid]) {    //在当前聊天页面收到消息不播放声音
-        
-        if (message.type != MessageTypeSystem) {    //系统消息不播放提示音
-            [self playSystemAudio];
-
+    
+    if (!conversionModel.disturb && message.type != MessageTypeSystem) {
+        if (message.isGroup) {
+            if (![userinfo.currentConversionId isEqualToString:message.toUidOrGroupId]) {
+                [self playSystemAudio];
+            }
+        }else{
+            if (![userinfo.currentConversionId isEqualToString:message.fromUid]) {
+                [self playSystemAudio];
+            }
         }
     }
     

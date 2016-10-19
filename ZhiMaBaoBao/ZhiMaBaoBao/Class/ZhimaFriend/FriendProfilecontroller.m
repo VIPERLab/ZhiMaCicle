@@ -120,10 +120,10 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             }
 
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     } failure:^(ErrorData *error) {
-        [LCProgressHUD showText:error.msg];
+        [LCProgressHUD showFailureText:error.msg];
     }];
 }
 
@@ -282,7 +282,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
                 //重新加载数据 -> 刷新
                 [self requestFriendProfile:YES];
             }else{
-                [LCProgressHUD showText:responseData.msg];
+                [LCProgressHUD showFailureText:responseData.msg];
             }
         }];
     }
@@ -316,7 +316,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
                 //重新加载数据 -> 刷新
                 [self requestFriendProfile:YES];
             }else{
-                [LCProgressHUD showText:responseData.msg];
+                [LCProgressHUD showFailureText:responseData.msg];
             }
         }];
     }

@@ -154,7 +154,7 @@
 - (void)nextAction{
     [self.view endEditing:YES];
     if (!self.nickNameField.hasText) {
-        [LCProgressHUD showText:@"请填写昵称"];
+        [LCProgressHUD showFailureText:@"请填写昵称"];
 
         return;
     }

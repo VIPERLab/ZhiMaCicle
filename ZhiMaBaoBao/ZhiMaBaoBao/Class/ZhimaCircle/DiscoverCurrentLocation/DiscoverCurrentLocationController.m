@@ -119,9 +119,9 @@
     reverseGeocodeSearchOption.reverseGeoPoint = CLLocationCoordinate2D;
     BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
     if (flag) {
-        NSLog(@"成功");
+        NSLog(@"搜索成功");
     } else {
-        NSLog(@"失败");
+        NSLog(@"搜索失败");
     }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

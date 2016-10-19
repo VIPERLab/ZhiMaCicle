@@ -802,10 +802,10 @@
     [LGNetWorking DeletedMyCommentWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFcid:commentModel.ID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0 || responseData == nil) {
-            [LCProgressHUD showText:@"删除失败"];
+            [LCProgressHUD showFailureText:@"删除失败"];
             return ;
         }
-        [LCProgressHUD showText:@"删除成功"];
+        [LCProgressHUD showSuccessText:@"删除成功"];
         
         SDTimeLineCellModel *cellModel = self.dataArray[index.row];
         

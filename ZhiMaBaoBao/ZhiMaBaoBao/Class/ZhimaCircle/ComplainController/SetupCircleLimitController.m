@@ -120,7 +120,7 @@
                 [[SocketManager shareInstance] notAllowFriendCircle:self.model.userId];
             }
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
             
         }
     }];
@@ -141,7 +141,7 @@
             }
             
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     }];
 }

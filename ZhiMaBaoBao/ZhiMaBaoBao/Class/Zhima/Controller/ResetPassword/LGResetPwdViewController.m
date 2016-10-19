@@ -192,12 +192,12 @@
     NSString *onepwd = self.password.text;
     NSString *twoPsw = self.password2.text;
     if (![onepwd isEqualToString:twoPsw]) {
-        [LCProgressHUD showText:@"输入的新密码不一致"];
+        [LCProgressHUD showFailureText:@"输入的新密码不一致"];
         return;
     }
     
     if ([self.oldPassword.text isEqualToString:self.password.text]) {
-        [LCProgressHUD showText:@"新旧密码不能一致"];
+        [LCProgressHUD showFailureText:@"新旧密码不能一致"];
         return;
     }
     

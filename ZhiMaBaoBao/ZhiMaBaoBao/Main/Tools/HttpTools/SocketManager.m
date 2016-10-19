@@ -20,9 +20,9 @@
 #import "NSString+MsgId.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-
+typedef void (^CompleteBlock)(NSString *name);
 @interface SocketManager ()
-
+//@property (nonatomic, assign) CompleteBlock complettion;
 @end
 
 @implementation SocketManager
@@ -453,72 +453,107 @@ static SocketManager *manager = nil;
 
 //收到拉人进群消息  actuid:操作者id   uids:被邀请用户的id
 - (void)updateGroupNumber:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
-
-    LGMessage *systemMsg = [[LGMessage alloc] init];
-    //拼接被邀请者的姓名
-    NSString *userNames = nil;
-    if ([actUid isEqualToString:USERINFO.userID] && ![actUid isEqualToString:uids]) { //如果自己是操作者
+    
+    [self gengrateGroupInfo:groupId completion:^(NSString *name) {
+        
+        LGMessage *systemMsg = [[LGMessage alloc] init];
+        
+        //操作者名字
+        GroupUserModel *actModel = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
+        NSString *actName = actModel.friend_nick;
+        
         NSArray *copyArr = [uids componentsSeparatedByString:@","];     //拷贝一份
         NSMutableArray *uidsArr = [copyArr mutableCopy];
         
-        NSMutableArray *namesArr = [NSMutableArray array];
-        //剔除自己的id
+        //剔除操作者的id
         for (NSString *userid in copyArr) {
-            if ([userid isEqualToString:USERINFO.userID]) {
+            if ([userid isEqualToString:actUid]) {
                 [uidsArr removeObject:userid];
             }
         }
+        
+        NSMutableArray *namesArr = [NSMutableArray array];
         //拼接被邀请者名字
         for (NSString *userId in uidsArr) {
-            ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:userId];
-            [namesArr addObject:friend.user_Name];
+            GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
+            [namesArr addObject:userModel.friend_nick];
         }
-        userNames = [namesArr componentsJoinedByString:@","];
-        systemMsg.text = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",userNames];
-    }
-    else if ([actUid isEqualToString:uids]){   //通过扫描二维码进群
-        if ([actUid isEqualToString:USERINFO.userID]) { //自己
-            systemMsg.text = [NSString stringWithFormat:@"你通过扫描二维码加入了群聊"];
+        NSString *usersNames = [namesArr componentsJoinedByString:@","];
+        
+        
+        if ([actUid isEqualToString:uids]){   //通过扫描二维码进群
+            if ([actUid isEqualToString:USERINFO.userID]) { //自己
+                systemMsg.text = [NSString stringWithFormat:@"你通过扫描二维码加入了群聊"];
+            }else{
+                systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描你分享的二维码加入了群聊",actName];
+            }
         }else{
-            ZhiMaFriendModel *model = [FMDBShareManager getUserMessageByUserID:actUid];
-            systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描你分享的二维码加入了群聊",model.user_Name];
+            if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
+                
+                systemMsg.text = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",usersNames];
+            }else{      //被拉进群
+                BOOL containMe = NO;    //被邀请人是否包含自己
+                
+                NSMutableArray *bondingArr = [uidsArr mutableCopy];
+                
+                for (NSString *auserId in uidsArr) { //被邀请人的uid
+                    if ([auserId isEqualToString:USERINFO.userID]) {     //如果自己被邀请
+                        containMe = YES;
+                        [bondingArr removeObject:auserId];
+                    }
+                    
+                    //拼接我和被邀请人的姓名
+                    NSMutableArray *bondNamesArr = [NSMutableArray array];
+                    for (NSString *userId in bondingArr) {
+                        GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
+                        [bondNamesArr addObject:userModel.friend_nick];
+                    }
+                    NSString *bondName = [bondNamesArr componentsJoinedByString:@","];
+                    NSString *tbondName = [NSString stringWithFormat:@"你和\"%@\"",bondName];
+                    if (bondNamesArr.count == 0) {
+                        tbondName = @"你";
+                    }
+                    
+                    if (containMe) {
+                        
+                        systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请%@加入了群聊",actName,tbondName];
+                        
+                        //标记出席了当前群
+                        GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
+                        usermodel.memberGroupState = NO;
+                        [FMDBShareManager saveAllGroupMemberWithArray:@[usermodel] andGroupChatId:groupId];
+                        
+                        //发送通知，即时标记出席了当前群
+                        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                        LGMessage *tempMsg = [[LGMessage alloc] init];
+                        tempMsg.actType = ActTypeDeluserfromgroup;
+                        tempMsg.type = MessageTypeSystem;
+                        userInfo[@"message"] = tempMsg;
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+
+                    }
+                    else{
+                        systemMsg.text = [NSString stringWithFormat:@"%@邀请\"%@\"加入了群聊",actName,usersNames];
+                    }
+                }
+            }
         }
-    }
-    else{
-        ZhiMaFriendModel *actUserModel = [FMDBShareManager getUserMessageByUserID:actUid];
-        //修改为从群表查用户资料
-//        GroupUserModel *actUserModel = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
-        userNames = actUserModel.user_Name;
-        systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请你加入了群聊",userNames];
+        //发送系统消息 你邀请"xx"加入群聊
+        systemMsg.actType = ActTypeUpdategroupnum;
+        systemMsg.fromUid = USERINFO.userID;
+        systemMsg.toUidOrGroupId = groupId;
+        systemMsg.type = MessageTypeSystem;
+        systemMsg.msgid = [NSString generateMessageID];
+        systemMsg.isGroup = YES;
+        systemMsg.timeStamp = [NSDate currentTimeStamp];
+        [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
         
-        //标记出席了当前群
-        GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
-        usermodel.memberGroupState = NO;
-        [FMDBShareManager saveAllGroupMemberWithArray:@[usermodel] andGroupChatId:groupId];
-        
-        //发送通知，即时标记出席了当前群
+        //发送通知，即时更新相应的页面
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-        LGMessage *tempMsg = [[LGMessage alloc] init];
-        tempMsg.actType = ActTypeDeluserfromgroup;
-        tempMsg.type = MessageTypeSystem;
-        userInfo[@"message"] = tempMsg;
+        userInfo[@"message"] = systemMsg;
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
-    }
-    
-    //发送系统消息 你邀请"xx"加入群聊
-    systemMsg.actType = ActTypeUpdategroupnum;
-    systemMsg.fromUid = USERINFO.userID;
-    systemMsg.toUidOrGroupId = groupId;
-    systemMsg.type = MessageTypeSystem;
-    systemMsg.msgid = [NSString generateMessageID];
-    systemMsg.isGroup = YES;
-    systemMsg.timeStamp = [NSDate currentTimeStamp];
-    [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
-    
-    //发送通知，即时更新相应的页面
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    userInfo[@"message"] = systemMsg;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+
+    }];
 }
 
 //收到socket消息，更新群名称  userId : 修改群名的用户id
@@ -601,6 +636,20 @@ static SocketManager *manager = nil;
     }
 }
 
+//从网络获取用户名
+- (void)getUserName:(NSString *)userId completion:(CompleteBlock)block{
+    [LGNetWorking getFriendInfo:USERINFO.sessionId userId:userId block:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            ZhiMaFriendModel *friend = [ZhiMaFriendModel mj_objectWithKeyValues:responseData.data];
+            block(friend.user_Name);
+        }else{
+            [LCProgressHUD showFailureText:responseData.msg];
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:error.msg];
+    }];
+}
+
 //从网络加载新好友资料，存入数据库好友表  ->  然后添加系统消息 "xx通过了你的朋友验证请求,现在可以开始聊天了。" 到数据库
 - (void)addNewFriendToSqilt:(NSString *)friendId{
     [LGNetWorking getFriendInfo:USERINFO.sessionId userId:friendId block:^(ResponseData *responseData) {
@@ -616,12 +665,11 @@ static SocketManager *manager = nil;
             [self playSystemAudio];
             
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     } failure:^(ErrorData *error) {
-        [LCProgressHUD showText:error.msg];
+        [LCProgressHUD showFailureText:error.msg];
     }];
-
 }
 
 //添加系统消息"xx通过了你的朋友验证请求,现在可以开始聊天了。"
@@ -640,6 +688,27 @@ static SocketManager *manager = nil;
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     userInfo[@"message"] = systemMsg;
     [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+}
+
+//通过groupid生成群信息表，不添加会话  -- （方便查询群成员昵称）
+- (void)gengrateGroupInfo:(NSString *)groupId completion:(CompleteBlock)block{
+    //加载群信息
+    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            //生成群聊数据模型
+            [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                return @{
+                         @"groupUserVos":@"GroupUserModel"
+                         };
+            }];
+            GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+            groupChatModel.myGroupName = USERINFO.username;
+            [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId];
+            block(groupId);
+        }
+    } failure:^(ErrorData *error) {
+        
+    }];
 }
 
 //插入一条群消息到本地数据库

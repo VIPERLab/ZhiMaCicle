@@ -500,6 +500,8 @@
 		311CEFB51D938EF200BBB1F9 /* RecordingHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFB41D938EF200BBB1F9 /* RecordingHUD.m */; };
 		311CEFBB1D93F55000BBB1F9 /* SocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEFBA1D93F55000BBB1F9 /* SocketManager.m */; };
 		311CEFBD1D94D9C000BBB1F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */; };
+		3128E9401DB7084100B4F022 /* SendLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3128E93E1DB7084100B4F022 /* SendLocationCell.m */; };
+		3128E9411DB7084100B4F022 /* SendLocationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3128E93F1DB7084100B4F022 /* SendLocationCell.xib */; };
 		3138F4051DA795990042D100 /* CallKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3138F4041DA795990042D100 /* CallKeyboardController.m */; };
 		314109481DAB247600D6F367 /* NSString+MsgId.m in Sources */ = {isa = PBXBuildFile; fileRef = 314109471DAB247600D6F367 /* NSString+MsgId.m */; };
 		315F78561DB5CC93008C8CA7 /* SendLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 315F78551DB5CC93008C8CA7 /* SendLocationController.m */; };
@@ -1605,6 +1607,9 @@
 		311CEFB91D93F55000BBB1F9 /* SocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketManager.h; path = HttpTools/SocketManager.h; sourceTree = "<group>"; };
 		311CEFBA1D93F55000BBB1F9 /* SocketManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SocketManager.m; path = HttpTools/SocketManager.m; sourceTree = "<group>"; };
 		311CEFBC1D94D9C000BBB1F9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		3128E93D1DB7084100B4F022 /* SendLocationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendLocationCell.h; sourceTree = "<group>"; };
+		3128E93E1DB7084100B4F022 /* SendLocationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendLocationCell.m; sourceTree = "<group>"; };
+		3128E93F1DB7084100B4F022 /* SendLocationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendLocationCell.xib; sourceTree = "<group>"; };
 		3138F4031DA795990042D100 /* CallKeyboardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallKeyboardController.h; sourceTree = "<group>"; };
 		3138F4041DA795990042D100 /* CallKeyboardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallKeyboardController.m; sourceTree = "<group>"; };
 		314109461DAB247600D6F367 /* NSString+MsgId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MsgId.h"; sourceTree = "<group>"; };
@@ -4323,6 +4328,9 @@
 			children = (
 				315F78541DB5CC93008C8CA7 /* SendLocationController.h */,
 				315F78551DB5CC93008C8CA7 /* SendLocationController.m */,
+				3128E93D1DB7084100B4F022 /* SendLocationCell.h */,
+				3128E93E1DB7084100B4F022 /* SendLocationCell.m */,
+				3128E93F1DB7084100B4F022 /* SendLocationCell.xib */,
 			);
 			name = "SendLocation(聊天发送位置)";
 			sourceTree = "<group>";
@@ -5081,6 +5089,7 @@
 				31B7C79F1D8FE71F00F1883A /* LGPhoneHeaderCell.xib in Resources */,
 				319069E91D9D471E00D1D6D2 /* SetupFriendInfoController.xib in Resources */,
 				3169577E1D91199100140126 /* dtmf-1.aif in Resources */,
+				3128E9411DB7084100B4F022 /* SendLocationCell.xib in Resources */,
 				310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */,
 				316957571D90E63100140126 /* LGAddFriendCell.xib in Resources */,
 				04787AF11D9E07FF000A0DB5 /* hud_success.png in Resources */,
@@ -5548,6 +5557,7 @@
 				04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */,
 				041750B51DA4CFE800DCD7A9 /* GroupChatInfoCell.m in Sources */,
 				D5C8B3A01D9A07DC007D6B5C /* IMChatTableViewCell.m in Sources */,
+				3128E9401DB7084100B4F022 /* SendLocationCell.m in Sources */,
 				04F57AF61D9280BD002A6471 /* PersonalDiscoverCell.m in Sources */,
 				04EA7D991D912872005E5425 /* ZXDetectorResult.m in Sources */,
 				04EA7DA41D912872005E5425 /* ZXDimension.m in Sources */,

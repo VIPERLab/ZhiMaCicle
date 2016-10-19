@@ -204,9 +204,9 @@
     
     [manager POST:[NSString stringWithFormat:@"%@/Api/Index/getuser",DFAPIURLTEST] parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"%@",responseObject);
-        [LCProgressHUD hide];
         if ([responseObject[@"code"] integerValue] == 8888) {
-            
+            [LCProgressHUD hide];
+
             MyAccountModel *accountModel = [MyAccountModel mj_objectWithKeyValues:responseObject[@"data"]];
             self.model = accountModel;
             
@@ -215,7 +215,7 @@
             return ;
         }
         
-        [LCProgressHUD showText:responseObject[@"msg"]];
+        [LCProgressHUD showFailureText:responseObject[@"msg"]];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];

@@ -310,6 +310,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         }
 
     }else{
+        [self.textField resignFirstResponder];
+        
         ZhiMaFriendModel *friend = self.searchResultArr[indexPath.row];
         //如果是已选成员，直接return
         for (NSString *userId in self.selectedMembers) {

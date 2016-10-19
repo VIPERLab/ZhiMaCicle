@@ -133,7 +133,7 @@
                 [self.navigationController pushViewController:vc animated:YES];
                 
             }else{
-                [LCProgressHUD showText:responseData.msg];
+                [LCProgressHUD showFailureText:responseData.msg];
             }
     }];
 
