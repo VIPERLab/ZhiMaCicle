@@ -294,7 +294,8 @@
 // 设置群信息
 + (void)setGroupInfoMessageWithFunctionName:(NSString *)functionName andSessionId:(NSString *)seccessId andValue:(NSString *)value andGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
-
+//根据邀请码获取用户Id
++ (void)getUserIdWithInvitedCode:(NSString *)invitedCode success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
 
 @end

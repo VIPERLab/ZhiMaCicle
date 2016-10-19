@@ -130,8 +130,6 @@
     // NSString *dataString = userInfo.username;
     
     NSString *jid = USERINFO.userID;
-    
-//    NSString *urlString = @"http://www.baidu.com";
     NSString *params = [NSString stringWithFormat:@"sessionId=%@&invite_code=%@&groupId=0&jid=%@",USERINFO.sessionId,USERINFO.invite_code,jid];
     
     //AES加密
