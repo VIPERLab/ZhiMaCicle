@@ -12,14 +12,17 @@
 #import "LGPhoneNumberCell.h"
 
 #import "YiKeyBoardView.h"
+#import "KXKeyBoardView.h"
 #import "CallInfoMarkView.h"
+
+#import "KXCopyView.h"
 
 #import "PhoneContact.h"
 
 
-@interface ZMCallBoardViewController ()<YiKeyBoardViewDelegate,CallInfoMarkViewDelegate,LGPhoneNumberCellDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface ZMCallBoardViewController ()<CallInfoMarkViewDelegate,LGPhoneNumberCellDelegate,KXKeyBoardViewDelegate,UITableViewDelegate,UITableViewDataSource,KXCopyViewDelegate>
 
-@property (nonatomic, strong) YiKeyBoardView   *keyboardView; //拨号键盘
+@property (nonatomic, strong) KXKeyBoardView   *keyboardView; //拨号键盘
 @property (nonatomic, strong) CallInfoMarkView *callInfoView; //搜索出的用户信息view
 @property (nonatomic, strong) UILabel          *showNumLabel; //已波数字展示label
 @property (nonatomic, strong) UIButton         *deleteBtn;    //数字删除按钮
@@ -36,12 +39,12 @@
 #define KeyboardHeight 247  //拨号键盘高度
 static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
 
-@implementation ZMCallBoardViewController
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"TextFieldValueChanged" object:nil];
+@implementation ZMCallBoardViewController {
+    BOOL _isKeyBoardShow;
+    NSString *_currentNum;
+    KXCopyView *_copyView;
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -49,7 +52,6 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self initOthers];
     [self initKeyBoard];
     [self initShowView];
@@ -58,30 +60,44 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
 
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    if (!_isKeyBoardShow) {
+        _isKeyBoardShow = YES;
+        [self.keyboardView showAnimation];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [self creatCopyViewWithSubTitle:@""];
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.keyboardView hideAnimation];
+}
+
+
 #pragma mark - init
 
 - (void)initOthers
 {
-    self.dataArr     = [NSMutableArray array];
+    self.dataArr = [NSMutableArray array];
     
-    self.view.backgroundColor = WHITECOLOR;
+    self.view.backgroundColor = [UIColor whiteColor];
     UIButton*closeBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, 25, 50, 50)];
     [closeBtn setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
     [closeBtn addTarget:self action:@selector(dissBackAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:closeBtn];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputTextFieldValueChanged:) name:@"TextFieldValueChanged" object:nil];
 }
 
 - (void)initKeyBoard
 {
     CGFloat sss = 624.0/750.0; //键盘的款高比
     //拨号键盘
-    YiKeyBoardView *keyboardView = [YiKeyBoardView keyBoardView];
+    KXKeyBoardView *keyboardView = [[KXKeyBoardView alloc] init];
     keyboardView.frame = CGRectMake(0, DEVICEHIGHT - DEVICEWITH*sss - (12+58+30), DEVICEWITH, DEVICEWITH*sss);
     keyboardView.delegate = self;
-    keyboardView.setBtn.hidden = YES;
-    keyboardView.deleteBtn.hidden = YES;
+    
     [self.view addSubview:keyboardView];
     self.keyboardView = keyboardView;
     
@@ -100,13 +116,20 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
     self.showNumLabel.textColor = GRAYCOLOR;
     self.showNumLabel.text = @"请拨号或搜索姓名";
     self.showNumLabel.adjustsFontSizeToFitWidth = YES;
+    self.showNumLabel.userInteractionEnabled = YES;
     [self.view addSubview:self.showNumLabel];
+    
+    //添加长按手势
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(creatCopyView:)];
+    [self.showNumLabel addGestureRecognizer:longPress];
+
     
     self.deleteBtn = [[UIButton alloc]initWithFrame:CGRectMake(DEVICEWITH-50, 90, 40, 30)];
     [self.deleteBtn setImage:[UIImage imageNamed:@"deleteNum"] forState:UIControlStateNormal];
     [self.deleteBtn addTarget:self action:@selector(deleteNum) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.deleteBtn];
 }
+
 
 - (void)initcallInfoView
 {
@@ -116,7 +139,7 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
     
     self.callInfoView = [[CallInfoMarkView alloc]initWithFrame:CGRectMake(0, frameY, DEVICEWITH, 50)];
     self.callInfoView.delegate = self;
-    self.callInfoView.hidden =YES;
+    self.callInfoView.hidden = YES;
     [self.view addSubview:self.callInfoView];
 }
 
@@ -134,43 +157,178 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
     self.tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
 }
 
-#pragma mark -  get data
+#pragma mark - copyView
+- (void)creatCopyViewWithSubTitle:(NSString *)subTitle {
+    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    if (pboard.string.length && [self isMobile:pboard.string]) {
+        _copyView = [[KXCopyView alloc] initWithFrame:CGRectMake(self.showNumLabel.center.x - 25, CGRectGetMinY(self.showNumLabel.frame) - 40, 50, 40)];
+        _copyView.delegate = self;
+        
+        if (subTitle.length) {
+            _copyView.titleArray = @[@"粘贴",subTitle];
+        } else {
+             _copyView.titleArray = @[@"粘贴"];
+        }
+        
+        [_copyView setImage:[UIImage imageNamed:@"Discovre_Copy"] andInsets:UIEdgeInsetsMake(30, 40, 30, 40)];
+        [self.view addSubview:_copyView];
+        [_copyView showAnimation];
+    }
+}
+
+//正则表达式筛选电话号码
+- (BOOL)isMobile:(NSString *)mobileNumbel{
+    /**
+     * 手机号码
+     * 移动：134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
+     * 联通：130,131,132,152,155,156,185,186
+     * 电信：133,1349,153,180,189,181(增加)
+     */
+    NSString * MOBIL = @"^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$";
+    /**
+     10         * 中国移动：China Mobile
+     11         * 134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
+     12         */
+    NSString * CM = @"^1(34[0-8]|(3[5-9]|5[017-9]|8[2378])\\d)\\d{7}$";
+    /**
+     15         * 中国联通：China Unicom
+     16         * 130,131,132,152,155,156,185,186
+     17         */
+    NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
+    /**
+     20         * 中国电信：China Telecom
+     21         * 133,1349,153,180,189,181(增加)
+     22         */
+    NSString * CT = @"^1((33|53|8[019])[0-9]|349)\\d{7}$";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBIL];
+    NSPredicate *regextestcm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM];
+    NSPredicate *regextestcu = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU];
+    NSPredicate *regextestct = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CT];
+    
+    if (([regextestmobile evaluateWithObject:mobileNumbel]
+         || [regextestcm evaluateWithObject:mobileNumbel]
+         || [regextestct evaluateWithObject:mobileNumbel]
+         || [regextestcu evaluateWithObject:mobileNumbel])) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+
+#pragma mark - kxCopyViewDelegate 
+- (void)KXCopyViewDidClickWithIndex:(NSInteger)index {
+    if (index == 0) { // 粘贴
+        [_copyView removeFromSuperview];
+        _copyView = nil;
+        UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+        self.showNumLabel.text = pboard.string;
+        [self inputTextFieldValueChanged:nil];
+    } else {        //复制
+        UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+        pboard.string = self.showNumLabel.text;
+        
+        [_copyView removeFromSuperview];
+        _copyView = nil;
+    }
+    
+}
+
+#pragma mark - keyBoardDelegate
+- (void)KXKeyBoardViewDidClickNum:(NSString *)number {
+    if (_copyView) {
+        [_copyView removeFromSuperview];
+    }
+    
+    if ([self.showNumLabel.text isEqualToString:@"请拨号或搜索姓名"]) {
+        self.showNumLabel.text = @"";
+    }
+    _currentNum = number;
+    self.showNumLabel.text = [self.showNumLabel.text stringByAppendingString:number];
+    [self inputTextFieldValueChanged:nil];
+}
 
 
 
 #pragma mark - action
 
-- (void)dissBackAction
-{
+// 长按手势
+- (void)creatCopyView:(UIGestureRecognizer *)gesture {
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        if (_copyView) {
+            return;
+        }
+        if ([self.showNumLabel.text isEqualToString:@"请拨号或搜索姓名"]) {
+            [self creatCopyViewWithSubTitle:@""];
+        } else {
+            [self creatCopyViewWithSubTitle:@"复制"];
+        }
+    }
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (_copyView) {
+        [_copyView removeFromSuperview];
+        _copyView = nil;
+    }
+}
+
+
+- (void)dissBackAction {
+    if (_copyView) {
+        [_copyView removeFromSuperview];
+        _copyView = nil;
+
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)callAction
-{
+- (void)callAction {
+    if (_copyView) {
+        [_copyView removeFromSuperview];
+        _copyView = nil;
+
+    }
     LGCallingController *vc = [[LGCallingController alloc] init];
-    vc.phoneNum = self.keyboardView.numberTextField.text;
+    vc.phoneNum = self.showNumLabel.text;
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (void)deleteNum
-{
-    [self.keyboardView deleteClick:nil];
+- (void)deleteNum {
+    if (_copyView) {
+        [_copyView removeFromSuperview];
+        _copyView = nil;
+
+    }
+    
+    if ([self.showNumLabel.text isEqualToString:@"请拨号或搜索姓名"]) {
+        return;
+    }
+    if (self.showNumLabel.text.length <= 11  ) {
+        self.showNumLabel.text = [self.showNumLabel.text stringByReplacingOccurrencesOfString:@"-" withString:@""];;
+    }
+    
+    if ( self.showNumLabel.text.length > 0 ) {
+        self.showNumLabel.text = [self.showNumLabel.text substringToIndex:self.showNumLabel.text.length-1];
+    }
+    
+    [self inputTextFieldValueChanged:nil];
 }
 
 #pragma mark - notifaction
-
 //拨号输入监听
 - (void)inputTextFieldValueChanged:(NSNotification *)notis {
     
-    NSString * phoneText = self.keyboardView.numberTextField.text;
+    NSString * phoneText = self.showNumLabel.text;
     //有输入，弹出拨号工具条，
     if (phoneText.length >0) {
         
         self.showNumLabel.font = [UIFont systemFontOfSize:40];
-        self.showNumLabel.textColor = BLACKCOLOR;
+        self.showNumLabel.textColor = [UIColor blackColor];
         self.showNumLabel.text = phoneText;
         
-    }else if (phoneText.length<1) {
+    }else if (phoneText.length < 1) {
         
         self.showNumLabel.font = [UIFont systemFontOfSize:17];
         self.showNumLabel.textColor = GRAYCOLOR;
@@ -185,19 +343,22 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
     if (self.dataArr) {
         [self.dataArr removeAllObjects];
     }
-    NSString *phoneNumber = self.keyboardView.numberTextField.text;
+    NSString *phoneNumber = self.showNumLabel.text;
     if (!phoneNumber.length) {
         self.dataArr = [self.contactsArr mutableCopy];
          [self.callInfoView changeStateWithContact:nil];
     }else{
         for (PhoneContact *contact in self.contactsArr) {
+            
+            //匹配电话
             if ([contact.phoneNumber containsString:phoneNumber]) {
                 [self.dataArr addObject:contact];
             }
+            
         }
         if (self.dataArr.count) {
             [self.callInfoView changeStateWithContact:self.dataArr[0]];
-            [self.callInfoView setColorWithString:self.keyboardView.numberTextField.text];
+            [self.callInfoView setColorWithString:self.showNumLabel.text];
 
         }else{
             [self.callInfoView changeStateWithContact:nil];
@@ -283,7 +444,7 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
     cell.delegate = self;
     cell.row = indexPath.row;
     
-    [cell setColorWithString:self.keyboardView.numberTextField.text];
+    [cell setColorWithString:self.self.showNumLabel.text];
     return cell;
 }
 
