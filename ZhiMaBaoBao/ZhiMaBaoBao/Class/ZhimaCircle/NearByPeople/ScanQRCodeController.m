@@ -263,6 +263,20 @@
     NSString *jid = [AESDecodingStr substringFromIndex:jidRange.location + 4];
     
     NSLog(@"jid = %@",jid);
+    NSRange spacialRange = [jid rangeOfString:@"@"];
+    if (spacialRange.length) {
+        NSLog(@"这是旧版本二维码");
+        
+        //获取邀请码
+        NSRange invitedRange = [AESDecodingStr rangeOfString:@"invite_code"];
+        NSString *inviteCode = [AESDecodingStr substringFromIndex:invitedRange.location+12];
+        
+        NSRange range = [inviteCode rangeOfString:@"&"];
+        inviteCode = [inviteCode substringToIndex:range.location];
+        [self requestUserIdWithInviteCode:inviteCode];
+        return;
+    }
+    
     
     if (jid.length) {
         FriendProfilecontroller *friend = [[FriendProfilecontroller alloc] init];
@@ -294,6 +308,32 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+#pragma mark - 根据邀请码请求userId 
+- (void)requestUserIdWithInviteCode:(NSString *)inviteCode {
+    [LGNetWorking getUserIdWithInvitedCode:inviteCode success:^(ResponseData *responseData) {
+        
+        if (responseData.code!= 0) {
+            [LCProgressHUD showFailureText:responseData.msg];
+            [self.navigationController popViewControllerAnimated:YES];
+            return ;
+        }
+        
+        //跳转到用户详情
+        NSString *userId = responseData.data;
+        FriendProfilecontroller *friend = [[FriendProfilecontroller alloc] init];
+        friend.userId = userId;
+        [self.navigationController pushViewController:friend animated:YES];
+        
+        
+    } failure:^(ErrorData *error) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    
+    
+    
+    
+}
 
 #pragma mark -底部功能项
 //打开相册

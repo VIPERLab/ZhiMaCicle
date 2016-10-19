@@ -885,5 +885,16 @@
     }];
 }
 
+//根据邀请码获取用户Id
++ (void)getUserIdWithInvitedCode:(NSString *)invitedCode success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"inviteCode"] = invitedCode;
+    [HttpTool POST:@"/moblie/getUserIdByInviteCode.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
 
 @end
