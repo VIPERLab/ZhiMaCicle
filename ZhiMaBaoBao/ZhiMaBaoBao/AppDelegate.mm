@@ -18,10 +18,6 @@
 #import "ConverseModel.h"
 #import "LYVoIP.h"
 
-
-#import "Reachability.h"
-
-
 #import "JPUSHService.h"
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
@@ -150,7 +146,7 @@
     [GLobalRealReachability reachabilityWithBlock:^(ReachabilityStatus status) {
         switch (status)
         {
-            case NotReachable:
+            case RealStatusNotReachable:
             {
                 netCount ++;
                 if (netCount < 10) {
@@ -159,7 +155,7 @@
                 break;
             }
                 
-            case ReachableViaWiFi:
+            case RealStatusViaWiFi:
             {
                 netCount = 0;
                 [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
@@ -168,7 +164,7 @@
                 break;
             }
                 
-            case ReachableViaWWAN:
+            case RealStatusViaWWAN:
             {
                 netCount = 0;
                 [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];

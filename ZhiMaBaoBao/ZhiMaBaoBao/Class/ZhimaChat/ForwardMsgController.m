@@ -183,6 +183,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
         vc.transMsg = self.message;
         [self.navigationController pushViewController:vc animated:YES];
     }else{  //转发消息
+        [self.textField resignFirstResponder];
         ConverseModel *conversion = self.dataArray[indexPath.row];
         TransPopView *popView = [[TransPopView alloc] initWithMessage:self.message toUserId:conversion.converseId isGroup:conversion.converseType];
         popView.delegate = self;

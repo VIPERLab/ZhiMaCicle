@@ -35,6 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     UserInfo *userInfo = [UserInfo shareInstance];
     userInfo.mainVC = self;
     
