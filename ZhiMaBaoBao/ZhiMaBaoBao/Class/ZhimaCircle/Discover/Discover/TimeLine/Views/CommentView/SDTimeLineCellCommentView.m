@@ -33,7 +33,7 @@
 #import "UIColor+My.h"
 #import "KXCodingManager.h"
 
-@interface SDTimeLineCellCommentView () <MLLinkLabelDelegate>
+@interface SDTimeLineCellCommentView () <MLLinkLabelDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSArray *likeItemsArray; //点赞数组
 @property (nonatomic, strong) NSArray *commentItemsArray;//评论数组
@@ -48,7 +48,9 @@
 
 @end
 
-@implementation SDTimeLineCellCommentView
+@implementation SDTimeLineCellCommentView {
+    MLLabel *_currentLabel;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -367,14 +369,28 @@
     if (gesture.state == UIGestureRecognizerStateBegan) {
         UIView *commentView = gesture.view;
         for (UIView *view in commentView.subviews) {
-            if ([view isKindOfClass:[UILabel class]]) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentViewClickNotification object:nil userInfo:@{@"contentLabel" : view}];
+            if ([view isKindOfClass:[MLLabel class]]) {
+                _currentLabel = (MLLabel *)view;
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                alertView.delegate = self;
+                [alertView show];
                 break;
             }
         }
     
     }
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+        NSRange range = [_currentLabel.text rangeOfString:@":"];
+        pboard.string = [_currentLabel.text substringFromIndex:range.location + 1];
+        [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
+    }
+}
+
+
 
 
 

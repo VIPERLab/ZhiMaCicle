@@ -169,10 +169,6 @@
     //更新朋友圈数据通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDataFromSQL) name:K_UpDataCircleDataNotification object:nil];
     
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commentViewDidClick:) name:KDiscoverCommentViewClickNotification object:nil];
-    
-    
     //点击了评论人 或者 被评论人 的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KDiscoverCommenterNotification object:nil];
     
@@ -598,17 +594,7 @@
             }];
 
         }
-    } else if (alertView.tag == 1000) {
-        self.contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
-        if (buttonIndex != 0) {
-            // 点击了复制
-            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
-            NSRange range = [self.contentLabel.text rangeOfString:@":"];
-            pboard.string = [self.contentLabel.text substringFromIndex:range.location + 1];
-            [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
-        }
     }
-    
 }
 
 #pragma mark - 发送评论信息
