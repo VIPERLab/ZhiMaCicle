@@ -11,7 +11,7 @@
 #import "LCProgressHUD.h"
 
 // 背景视图的宽度/高度
-#define BGVIEW_WIDTH 80.0f
+#define BGVIEW_WIDTH 100.0f
 // 文字大小
 #define TEXT_SIZE 16.0f
 
@@ -24,7 +24,8 @@
     dispatch_once(&onceToken, ^{
         
         hud = [[LCProgressHUD alloc] initWithView:[UIApplication sharedApplication].keyWindow];
-        hud.bezelView.color = RGB(100, 100, 100);
+        hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+        hud.bezelView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"hud_bg"]];
         hud.contentColor = WHITECOLOR;
     });
     return hud;

@@ -18,9 +18,6 @@
 #import "ConverseModel.h"
 #import "LYVoIP.h"
 
-
-
-
 #import "JPUSHService.h"
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
@@ -35,6 +32,7 @@
 
 @implementation AppDelegate {
     BMKMapManager* _mapManager;
+    NSInteger netCount;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -86,7 +84,6 @@
     
     [self regiestJPush:launchOptions];
     
-    
     return YES;
 }
 
@@ -119,6 +116,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
         UserInfo *userInfo = [UserInfo shareInstance];
         userInfo.networkUnReachable = YES;
+        [self checkNetwork];
     }
     //wifi
     if (status == RealStatusViaWiFi)
@@ -135,6 +133,49 @@
         userInfo.networkUnReachable = NO;
     }
     
+    //未识别的网络
+    if (status == RealStatusUnknown){
+        [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
+        UserInfo *userInfo = [UserInfo shareInstance];
+        userInfo.networkUnReachable = YES;
+    }
+}
+
+- (void)checkNetwork{
+    
+    [GLobalRealReachability reachabilityWithBlock:^(ReachabilityStatus status) {
+        switch (status)
+        {
+            case RealStatusNotReachable:
+            {
+                netCount ++;
+                if (netCount < 10) {
+                    [self performSelector:@selector(checkNetwork) withObject:nil afterDelay:1];
+                }
+                break;
+            }
+                
+            case RealStatusViaWiFi:
+            {
+                netCount = 0;
+                [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
+                UserInfo *userInfo = [UserInfo shareInstance];
+                userInfo.networkUnReachable = NO;
+                break;
+            }
+                
+            case RealStatusViaWWAN:
+            {
+                netCount = 0;
+                [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
+                UserInfo *userInfo = [UserInfo shareInstance];
+                userInfo.networkUnReachable = NO;
+                break;
+            }
+            default:
+                break;
+        }
+    }];
 }
 
 // 极光推送
@@ -203,6 +244,11 @@
                                                object:nil];
     //接收用户退出通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(reachabilityChanged:)
+//                                                 name:kReachabilityChangedNotification
+//                                               object:nil];
 }
 
 - (void)jumpMainController{

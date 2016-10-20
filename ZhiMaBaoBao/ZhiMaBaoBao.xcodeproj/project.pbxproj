@@ -28,8 +28,6 @@
 		041750B81DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750B71DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m */; };
 		04608FA11DB078CD00F4B9E9 /* ChangeSexCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04608FA01DB078CD00F4B9E9 /* ChangeSexCell.m */; };
 		04787AE91D9CFF4B000A0DB5 /* KXActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */; };
-		04787AF11D9E07FF000A0DB5 /* hud_success.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF01D9E07FF000A0DB5 /* hud_success.png */; };
-		04787AF31D9E0896000A0DB5 /* hud_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 04787AF21D9E0896000A0DB5 /* hud_error.png */; };
 		04787AF61D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */; };
 		047F13F01DAA4BDE00684881 /* GroupChatChangeGroupNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */; };
 		047F13F31DAA60EF00684881 /* GroupChatChangeNoticeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F21DAA60EF00684881 /* GroupChatChangeNoticeController.m */; };
@@ -506,6 +504,15 @@
 		314109481DAB247600D6F367 /* NSString+MsgId.m in Sources */ = {isa = PBXBuildFile; fileRef = 314109471DAB247600D6F367 /* NSString+MsgId.m */; };
 		315F78561DB5CC93008C8CA7 /* SendLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 315F78551DB5CC93008C8CA7 /* SendLocationController.m */; };
 		315F78581DB5D4F4008C8CA7 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 315F78571DB5D4F4008C8CA7 /* mapapi.bundle */; };
+		315FF57E1DB863E80002CB97 /* hud_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315FF57C1DB863E80002CB97 /* hud_success@2x.png */; };
+		315FF57F1DB863E80002CB97 /* hud_success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315FF57D1DB863E80002CB97 /* hud_success@3x.png */; };
+		315FF5821DB866570002CB97 /* hud_error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315FF5801DB866570002CB97 /* hud_error@2x.png */; };
+		315FF5831DB866570002CB97 /* hud_error@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315FF5811DB866570002CB97 /* hud_error@3x.png */; };
+		315FF58E1DB893090002CB97 /* hud_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315FF58C1DB893090002CB97 /* hud_bg@2x.png */; };
+		315FF58F1DB893090002CB97 /* hud_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315FF58D1DB893090002CB97 /* hud_bg@3x.png */; };
+		315FF5921DB8994C0002CB97 /* MoreInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 315FF5911DB8994C0002CB97 /* MoreInfoController.m */; };
+		315FF5961DB89C4C0002CB97 /* MoreInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 315FF5941DB89C4C0002CB97 /* MoreInfoCell.m */; };
+		315FF5971DB89C4C0002CB97 /* MoreInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 315FF5951DB89C4C0002CB97 /* MoreInfoCell.xib */; };
 		31642D801DB21DA100A50480 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31642D7F1DB21DA100A50480 /* WebViewController.m */; };
 		316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 316957461D90D3DE00140126 /* KXPersonalCenterCell.m */; };
 		3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3169574C1D90E24A00140126 /* BaseNavigationController.m */; };
@@ -677,8 +684,6 @@
 		04608FA01DB078CD00F4B9E9 /* ChangeSexCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexCell.m; sourceTree = "<group>"; };
 		04787AE71D9CFF4B000A0DB5 /* KXActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXActionSheet.h; sourceTree = "<group>"; };
 		04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXActionSheet.m; sourceTree = "<group>"; };
-		04787AF01D9E07FF000A0DB5 /* hud_success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_success.png; sourceTree = "<group>"; };
-		04787AF21D9E0896000A0DB5 /* hud_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud_error.png; sourceTree = "<group>"; };
 		04787AF41D9E13FB000A0DB5 /* ConverseWithouNetworkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseWithouNetworkCell.h; sourceTree = "<group>"; };
 		04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseWithouNetworkCell.m; sourceTree = "<group>"; };
 		047F13EE1DAA4BDE00684881 /* GroupChatChangeGroupNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatChangeGroupNameController.h; sourceTree = "<group>"; };
@@ -1617,6 +1622,17 @@
 		315F78541DB5CC93008C8CA7 /* SendLocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendLocationController.h; sourceTree = "<group>"; };
 		315F78551DB5CC93008C8CA7 /* SendLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendLocationController.m; sourceTree = "<group>"; };
 		315F78571DB5D4F4008C8CA7 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
+		315FF57C1DB863E80002CB97 /* hud_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hud_success@2x.png"; sourceTree = "<group>"; };
+		315FF57D1DB863E80002CB97 /* hud_success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hud_success@3x.png"; sourceTree = "<group>"; };
+		315FF5801DB866570002CB97 /* hud_error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hud_error@2x.png"; sourceTree = "<group>"; };
+		315FF5811DB866570002CB97 /* hud_error@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hud_error@3x.png"; sourceTree = "<group>"; };
+		315FF58C1DB893090002CB97 /* hud_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hud_bg@2x.png"; sourceTree = "<group>"; };
+		315FF58D1DB893090002CB97 /* hud_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hud_bg@3x.png"; sourceTree = "<group>"; };
+		315FF5901DB8994C0002CB97 /* MoreInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreInfoController.h; sourceTree = "<group>"; };
+		315FF5911DB8994C0002CB97 /* MoreInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreInfoController.m; sourceTree = "<group>"; };
+		315FF5931DB89C4C0002CB97 /* MoreInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreInfoCell.h; sourceTree = "<group>"; };
+		315FF5941DB89C4C0002CB97 /* MoreInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreInfoCell.m; sourceTree = "<group>"; };
+		315FF5951DB89C4C0002CB97 /* MoreInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreInfoCell.xib; sourceTree = "<group>"; };
 		31642D7E1DB21DA100A50480 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		31642D7F1DB21DA100A50480 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		316957451D90D3DE00140126 /* KXPersonalCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPersonalCenterCell.h; sourceTree = "<group>"; };
@@ -4750,6 +4766,11 @@
 				31B7C7581D8FB33E00F1883A /* LGSetNickNameController.m */,
 				31B7C7591D8FB33E00F1883A /* LGSetPasswordController.h */,
 				31B7C75A1D8FB33E00F1883A /* LGSetPasswordController.m */,
+				315FF5901DB8994C0002CB97 /* MoreInfoController.h */,
+				315FF5911DB8994C0002CB97 /* MoreInfoController.m */,
+				315FF5931DB89C4C0002CB97 /* MoreInfoCell.h */,
+				315FF5941DB89C4C0002CB97 /* MoreInfoCell.m */,
+				315FF5951DB89C4C0002CB97 /* MoreInfoCell.xib */,
 			);
 			path = LoginRegiste;
 			sourceTree = "<group>";
@@ -4781,8 +4802,12 @@
 		31B7C7661D8FBC8000F1883A /* HUDImage */ = {
 			isa = PBXGroup;
 			children = (
-				04787AF21D9E0896000A0DB5 /* hud_error.png */,
-				04787AF01D9E07FF000A0DB5 /* hud_success.png */,
+				315FF58C1DB893090002CB97 /* hud_bg@2x.png */,
+				315FF58D1DB893090002CB97 /* hud_bg@3x.png */,
+				315FF5801DB866570002CB97 /* hud_error@2x.png */,
+				315FF5811DB866570002CB97 /* hud_error@3x.png */,
+				315FF57C1DB863E80002CB97 /* hud_success@2x.png */,
+				315FF57D1DB863E80002CB97 /* hud_success@3x.png */,
 				31B7C7691D8FBC8000F1883A /* hud_info.png */,
 				31B7C76A1D8FBC8000F1883A /* hud_info@2x.png */,
 			);
@@ -5044,6 +5069,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				315FF5831DB866570002CB97 /* hud_error@3x.png in Resources */,
 				041595EC1DB75C65002C0F66 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				315F78581DB5D4F4008C8CA7 /* mapapi.bundle in Resources */,
 				04F8628F1D94FC7900DCC6FE /* systemEmoji.plist in Resources */,
@@ -5057,15 +5083,19 @@
 				316957811D91199100140126 /* dtmf-4.aif in Resources */,
 				31B7C79D1D8FE71F00F1883A /* LGCallRecordCell.xib in Resources */,
 				31B7C7A41D8FE71F00F1883A /* PhoneContactCell.xib in Resources */,
+				315FF5821DB866570002CB97 /* hud_error@2x.png in Resources */,
 				319069DC1D9CE91F00D1D6D2 /* InfoHeaderCell.xib in Resources */,
 				316957871D91199100140126 /* dtmf-s.aif in Resources */,
 				316957841D91199100140126 /* dtmf-7.aif in Resources */,
 				31B7C7721D8FBC8000F1883A /* hud_info@2x.png in Resources */,
+				315FF57F1DB863E80002CB97 /* hud_success@3x.png in Resources */,
 				316957831D91199100140126 /* dtmf-6.aif in Resources */,
+				315FF57E1DB863E80002CB97 /* hud_success@2x.png in Resources */,
 				04F8624A1D94FC6D00DCC6FE /* MLEmoji_Expression.bundle in Resources */,
 				31B7C7711D8FBC8000F1883A /* hud_info.png in Resources */,
 				3169577F1D91199100140126 /* dtmf-2.aif in Resources */,
 				3169577C1D91199100140126 /* dtmf-#.aif in Resources */,
+				315FF58F1DB893090002CB97 /* hud_bg@3x.png in Resources */,
 				04F8628E1D94FC7900DCC6FE /* face.plist in Resources */,
 				31B7C7A11D8FE71F00F1883A /* LGPhoneNumberCell.xib in Resources */,
 				310B83331D8E7B0100A0F408 /* LaunchScreen.storyboard in Resources */,
@@ -5075,7 +5105,7 @@
 				04EA7ACE1D910F89005E5425 /* imageResources.xcassets in Resources */,
 				310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */,
 				04EA7AC71D910F89005E5425 /* DNImagePickerController.strings in Resources */,
-				04787AF31D9E0896000A0DB5 /* hud_error.png in Resources */,
+				315FF58E1DB893090002CB97 /* hud_bg@2x.png in Resources */,
 				316957851D91199100140126 /* dtmf-8.aif in Resources */,
 				3169577D1D91199100140126 /* dtmf-0.aif in Resources */,
 				04F8628D1D94FC7900DCC6FE /* emotion.plist in Resources */,
@@ -5092,8 +5122,8 @@
 				3128E9411DB7084100B4F022 /* SendLocationCell.xib in Resources */,
 				310B832E1D8E7B0100A0F408 /* Main.storyboard in Resources */,
 				316957571D90E63100140126 /* LGAddFriendCell.xib in Resources */,
-				04787AF11D9E07FF000A0DB5 /* hud_success.png in Resources */,
 				04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */,
+				315FF5971DB89C4C0002CB97 /* MoreInfoCell.xib in Resources */,
 				316957801D91199100140126 /* dtmf-3.aif in Resources */,
 				319069C21D9BF6F700D1D6D2 /* NewFriendsListCell.xib in Resources */,
 				316957881D91199100140126 /* ring.mp3 in Resources */,
@@ -5384,6 +5414,7 @@
 				04EA7DCF1D912872005E5425 /* ZXAI01decoder.m in Sources */,
 				31642D801DB21DA100A50480 /* WebViewController.m in Sources */,
 				31B7C78D1D8FE71100F1883A /* PhoneContact.m in Sources */,
+				315FF5921DB8994C0002CB97 /* MoreInfoController.m in Sources */,
 				04EA7E2A1D912872005E5425 /* ZXQRCodeMaskUtil.m in Sources */,
 				31B7C78B1D8FE71100F1883A /* LGQueryModel.m in Sources */,
 				D5C8B3B91D9A1A6D007D6B5C /* IMMorePictureTableViewCell.m in Sources */,
@@ -5396,6 +5427,7 @@
 				04F57AB21D9280BD002A6471 /* SDTimeLineTableViewController.m in Sources */,
 				047F13F01DAA4BDE00684881 /* GroupChatChangeGroupNameController.m in Sources */,
 				04EA7E031D912872005E5425 /* ZXPDF417BoundingBox.m in Sources */,
+				315FF5961DB89C4C0002CB97 /* MoreInfoCell.m in Sources */,
 				04EA7DF81D912872005E5425 /* ZXUPCEANExtension2Support.m in Sources */,
 				04EA7E001D912872005E5425 /* ZXPDF417ECErrorCorrection.m in Sources */,
 				04EA7DD81D912872005E5425 /* ZXRSSExpandedFieldParser.m in Sources */,

@@ -87,7 +87,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
         }
         
     } failure:^(ErrorData *error) {
-        [LCProgressHUD showFailureText:error.msg];
+//        [LCProgressHUD showFailureText:error.msg];
     }];
 }
 

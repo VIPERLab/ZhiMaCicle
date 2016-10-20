@@ -15,6 +15,7 @@
 #import "ChangeUerNameController.h"
 #import "ModifySignController.h"
 #import "ChangeSexController.h"
+#import "MoreInfoController.h"
 
 #define KXPersonalSettingCellReusedID @"KXPersonalSettingCellReusedID"
 
@@ -44,7 +45,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    _subTitleArray = @[@[@"编辑",USERINFO.username],@[USERINFO.sex,USERINFO.area,USERINFO.signature],@[@"",@""]];
+    _subTitleArray = @[@[@"编辑",USERINFO.username],@[USERINFO.sex,USERINFO.area,USERINFO.signature],@[@"",@""],@[@""]];
     [_tableView reloadData];
 }
 
@@ -182,6 +183,9 @@
         setting.isVideoZoom = YES;
         
         [self.navigationController pushViewController:setting animated:YES];
+    } else if (indexPath.section == 3){
+        MoreInfoController *vc = [[MoreInfoController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
@@ -245,7 +249,7 @@
 #pragma mark - lazyLoad
 - (NSArray *)titleArray {
     if (!_titleArray) {
-        _titleArray = @[@[@"",@"昵称"],@[@"性别",@"地区",@"个性签名"],@[@"二维码名片",@"设置邀请码"]];
+        _titleArray = @[@[@"",@"昵称"],@[@"性别",@"地区",@"个性签名"],@[@"二维码名片",@"设置邀请码"],@[@"更多"]];
     }
     return _titleArray;
 }
