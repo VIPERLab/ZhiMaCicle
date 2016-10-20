@@ -37,6 +37,8 @@
     // Do any additional setup after loading the view.
     [self setupNav];
     [self setupView];
+    
+    [self registNotification];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -54,6 +56,11 @@
 
 - (void)setupNav {
     [self setCustomTitle:@"我的账户"];
+}
+
+- (void)registNotification {
+    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(PaySuccess) name:@"PaySuccess" object:nil];
+
 }
 
 
@@ -182,6 +189,10 @@
     self.hidesBottomBarWhenPushed = YES;
 }
 
+
+- (void)PaySuccess {
+    [self request];
+}
 #pragma mark - 请求
 - (void)request {
     [LCProgressHUD showLoadingText:@"正在查询账户"];

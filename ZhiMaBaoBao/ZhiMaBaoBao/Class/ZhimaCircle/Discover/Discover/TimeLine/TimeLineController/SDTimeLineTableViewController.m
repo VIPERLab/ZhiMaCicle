@@ -158,8 +158,7 @@
 
 #pragma mark - 注册通知
 - (void)notification {
-    //成为富文本的观察者 - 点击别人的名字
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KUserNameLabelNotification object:nil];
+    
     
     // 长按文字、图片回调
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(longPressContentLabel:) name:KDiscoverLongPressContentNotification object:nil];
@@ -170,8 +169,18 @@
     //更新朋友圈数据通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDataFromSQL) name:K_UpDataCircleDataNotification object:nil];
     
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commentViewDidClick:) name:KDiscoverCommentViewClickNotification object:nil];
+    
+    
+    //点击了评论人 或者 被评论人 的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KDiscoverCommenterNotification object:nil];
+    
+    //点击点赞人的名字
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KUserNameLabelNotification object:nil];
+    
+    //点击了评论链接通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commentURLDidClick:) name:KDiscoverCommentURLNotification object:nil];
 }
 
 
@@ -480,6 +489,7 @@
 
 #pragma mark - 打开网页
 - (void)didClickContentLink:(NSString *)urlStr {
+    [self.view endEditing:YES];
     WebViewController *web = [[WebViewController alloc] init];
     web.urlStr = urlStr;
     [self.navigationController pushViewController:web animated:YES];
@@ -790,9 +800,16 @@
 - (void)UserNameLabelDidClick:(NSNotification *)notification {
     NSLog(@"%@",notification.userInfo);
     PesonalDiscoverController *personal = [[PesonalDiscoverController alloc] init];
-    personal.userID = notification.userInfo[@"openFirAccount"];
+    personal.userID = notification.userInfo[@"userId"];
     personal.sessionID = USERINFO.sessionId;
     [self.navigationController pushViewController:personal animated:YES];
+}
+
+// 点击了评论的网址
+- (void)commentURLDidClick:(NSNotification *)notification {
+    WebViewController *webView = [[WebViewController alloc] init];
+    webView.urlStr = notification.userInfo[@"linkValue"];
+    [self.navigationController pushViewController:webView animated:YES];
 }
 
 

@@ -56,7 +56,21 @@
  *  点击了点赞人的名字的通知  富文本通知
  *  info @{openFirAccount : 点击点赞人的openFirAccount}
  */
-#define KUserNameLabelNotification @"KUserNameLabelNotification"
+#define KUserNameLabelNotification @"K_UserNameLabelNotification"
+
+/*
+ *  评论框，点击了名字
+ *  info @{ userId : 点击的人的UserId }
+ */
+#define KDiscoverCommenterNotification @"K_DiscoverCommenterNotification"
+
+
+/*
+ * 评论框点击了链接
+ * info @{ linkValue : 网址路径 }
+ */
+#define KDiscoverCommentURLNotification @"K_DiscoverCommentURLNotification"
+
 
 // ---- 评论别人的通知
 #define KCommentOtherNotification @"KCommentOtherNotification"

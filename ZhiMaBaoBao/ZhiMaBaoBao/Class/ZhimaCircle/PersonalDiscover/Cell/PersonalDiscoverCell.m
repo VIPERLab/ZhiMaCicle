@@ -85,6 +85,7 @@ typedef enum : NSUInteger {
     [self addSubview:contentLabel];
     contentLabel.numberOfLines = 3;
     contentLabel.font = [UIFont systemFontOfSize:15];
+    contentLabel.backgroundColor = [UIColor clearColor];
     contentLabel.textColor = [UIColor colorFormHexRGB:@"0f0f0f"];
     
     

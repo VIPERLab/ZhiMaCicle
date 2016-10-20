@@ -766,7 +766,7 @@
         FMResultSet *result = [db executeQuery:operationStr];
         while ([result next]) {
             SDTimeLineCellModel *model = [[SDTimeLineCellModel alloc] init];
-            model.circle_ID = [result stringForColumn:@"circle_ID"];
+            model.circle_ID = [NSString stringWithFormat:@"%zd",[result intForColumn:@"circle_ID"]];
             model.friend_nick = [result stringForColumn:@"friend_nick"];
             model.userId = [result stringForColumn:@"userID"];
             model.content = [result stringForColumn:@"content"];

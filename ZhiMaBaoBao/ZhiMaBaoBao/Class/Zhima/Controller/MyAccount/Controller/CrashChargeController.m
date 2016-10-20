@@ -165,7 +165,7 @@
     [manager POST:[NSString stringWithFormat:@"%@/Api/Index/getpay",DFAPIURLTEST] parameters:parms progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if ([responseObject[@"code"] intValue] != 8888) {
-//            [LCProgressHUD showFailureText:@"支付失败"];
+            [LCProgressHUD showFailureText:@"支付失败"];
             return ;
         }
         if (type) {
@@ -214,6 +214,7 @@
             [LCProgressHUD showFailureText:@"正在处理中"];
         } else if ([resultDic[@"resultStatus"] integerValue] == 9000) {
             [LCProgressHUD showSuccessText:@"支付成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"PaySuccess" object:nil];
             [self.navigationController popViewControllerAnimated:YES];
         }
         
@@ -241,6 +242,7 @@
 
 - (void)WXPaySuccess {
     [LCProgressHUD showSuccessText:@"支付成功"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PaySuccess" object:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

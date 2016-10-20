@@ -77,7 +77,7 @@
     [_likeLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
         // -----    发送富文本点击通知
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-        dic[@"openFirAccount"] = link.linkValue;
+        dic[@"userId"] = link.linkValue;
         NSNotification *notif = [NSNotification notificationWithName:KUserNameLabelNotification object:nil userInfo:dic];
         [[NSNotificationCenter defaultCenter] postNotification:notif];
         
@@ -103,10 +103,8 @@
     
     for (int i = 0; i < needsToAddCount; i++) {
         //添加手势
-        UIView *commentButtonView = [[UIView alloc] init];
-        UITapGestureRecognizer* singleRecognizer;
-        singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentButtonDidClick:)];
-        [commentButtonView addGestureRecognizer:singleRecognizer];
+        UIButton *commentButtonView = [[UIButton alloc] init];
+        [commentButtonView addTarget:self action:@selector(commentButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
         
         
         UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(commentViewDidLongPress:)];
@@ -117,7 +115,7 @@
         
         MLLinkLabel *label = [MLLinkLabel new]; //名字Label
         UIColor *highLightColor = [UIColor colorFormHexRGB:@"546993"];
-        label.userInteractionEnabled = NO;
+        label.numberOfLines = 0;
         
         label.linkTextAttributes = @{NSForegroundColorAttributeName : highLightColor};
         label.font = [UIFont systemFontOfSize:14];
@@ -128,7 +126,7 @@
     for (int i = 0; i < commentItemsArray.count; i++) {
         SDTimeLineCellCommentItemModel *model = commentItemsArray[i];
         
-        UIView *buttonView = self.commentLabelsArray[i];
+        UIButton *buttonView = self.commentLabelsArray[i];
         
         for (MLLinkLabel *label in buttonView.subviews) {
             
@@ -137,8 +135,32 @@
                 if (!model.attributedContent) {
                     model.attributedContent = [self generateAttributedStringWithCommentItemModel:model];
                 }
-                label.attributedText = model.attributedContent;
-//                [self setContentLinkText:label andModel:model];
+//                label.attributedText = model.attributedContent;
+                
+                label.backgroundColor = [UIColor clearColor];
+                label.userInteractionEnabled = YES;
+                
+                //清除所有链接
+                [label.links removeAllObjects];
+                
+                [self setContentLinkText:model andLabel:label];
+                
+                //设置文本链接
+                MLLink *fistNameLink = [MLLink linkWithType:MLLinkTypeURL value:model.userId range:[self findTargetStr:model.friend_nick inStr:[model.attributedContent string]]];
+                
+                
+                MLLink *secondNameLink;
+                if (model.reply_friend_nick.length) {
+                    //设置文本链接
+                    secondNameLink = [MLLink linkWithType:MLLinkTypePhoneNumber value:model.reply_id range:[self findTargetStr:model.reply_friend_nick inStr:[model.attributedContent string]]];
+//                    [label addLink:secondNameLink];
+                }
+                if (secondNameLink) {
+                    [label addLinks:@[fistNameLink,secondNameLink]];
+                } else {
+                    [label addLinks:@[fistNameLink]];
+                }
+                
             }
         }
         
@@ -256,20 +278,13 @@
     for (int i = 0; i < self.commentItemsArray.count; i++) {   //设置Label的fram
         
         SDTimeLineCellCommentItemModel *commentItem = self.commentItemsArray[i];
-        //获取文本的高度
-        NSString *commentContent = [NSString string];
-        if (![commentItem.reply_friend_nick isEqualToString:@""]) {
-            commentContent = [commentItem.friend_nick stringByAppendingString:[NSString stringWithFormat:@"回复%@:%@",commentItem.reply_friend_nick,commentItem.comment]];
-        } else {
-            commentContent = [commentItem.friend_nick stringByAppendingString:[NSString stringWithFormat:@":%@",commentItem.comment]];
-        }
         
         //文本的最大长度
         CGFloat width = [UIScreen mainScreen].bounds.size.width - 79;
-        CGFloat commentHight = [self changeStationWidth:commentContent anWidthTxtt:width anfont:15];
+        CGFloat commentHight = [self changeStationWidth:commentItem.attributedContent.string anWidthTxtt:width anfont:15];
         
-        UIView *buttonView = self.commentLabelsArray[i];
-
+        UIButton *buttonView = self.commentLabelsArray[i];
+        
         buttonView.sd_layout
         .leftSpaceToView(self,0)
         .rightSpaceToView(self,margin)
@@ -281,12 +296,12 @@
         
         for (UILabel *label in buttonView.subviews) {
             if ([label isKindOfClass:[UILabel class]]) {
-                label.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
+                CGSize size = [label.text sizeWithFont:[UIFont boldSystemFontOfSize:14] maxSize:CGSizeMake(width, MAXFLOAT)];
                 label.sd_layout
                 .leftSpaceToView(buttonView, 8)
-                .rightEqualToView(buttonView)
+                .widthIs(size.width)
                 .topEqualToView(buttonView)
-                .autoHeightRatio(0);
+                .heightIs(size.height);
             }
         }
     }
@@ -302,15 +317,19 @@
 //拼接评论以及回复信息
 - (NSMutableAttributedString *)generateAttributedStringWithCommentItemModel:(SDTimeLineCellCommentItemModel *)model {
     NSString *text = model.friend_nick;
+    UIColor *highLightColor = [UIColor colorFormHexRGB:@"576b95"];
     if (model.reply_friend_nick.length) {
         text = [text stringByAppendingString:[NSString stringWithFormat:@"回复%@", model.reply_friend_nick]];
     }
     
-    text = [text stringByAppendingString:[NSString stringWithFormat:@":%@", model.comment]];
+    //设置第一个人的字体、颜色
+    text = [text stringByAppendingString:[NSString stringWithFormat:@": %@", model.comment]];
     NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:text];
-    [attString setAttributes:@{NSLinkAttributeName : model.userId} range:[text rangeOfString:model.friend_nick]];
+    [attString setAttributes:@{NSForegroundColorAttributeName : highLightColor, NSLinkAttributeName : model.userId, NSFontAttributeName : [UIFont boldSystemFontOfSize:14]} range:[text rangeOfString:model.friend_nick]];
+    
+    //设置第二个人的字体、颜色
     if (model.reply_friend_nick) {
-        [attString setAttributes:@{NSLinkAttributeName : model.reply_id} range:[text rangeOfString:model.reply_friend_nick]];
+        [attString setAttributes:@{NSForegroundColorAttributeName : highLightColor,NSLinkAttributeName : model.reply_id, NSFontAttributeName : [UIFont boldSystemFontOfSize:14]} range:[text rangeOfString:model.reply_friend_nick]];
     }
     return attString;
 }
@@ -331,10 +350,10 @@
 }
 
 #pragma mark - 评论框点击按钮
-- (void)commentButtonDidClick:(UITapGestureRecognizer*)recognizer {
-    UIView *commentButtonView = recognizer.self.view;
+- (void)commentButtonDidClick:(UIButton *)sender {
+    
     for (NSInteger index = 0; index < self.commentLabelsArray.count; index++) {
-        if (commentButtonView == self.commentLabelsArray[index]) {
+        if (sender == self.commentLabelsArray[index]) {
             SDTimeLineCellCommentItemModel *model = self.commentItemsArray[index];
             if ([self.delegate respondsToSelector:@selector(SDTimeLineCellCommentViewCommentOther:andCommentView:)]) {
                 [self.delegate SDTimeLineCellCommentViewCommentOther:model andCommentView:self.commentLabelsArray[index]];
@@ -357,14 +376,6 @@
     }
 }
 
-#pragma mark - MLLinkLabelDelegate
-// ---  富文本回调
-- (void)didClickLink:(MLLink *)link linkText:(NSString *)linkText linkLabel:(MLLinkLabel *)linkLabel {
-    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    dic[@"openFirAccount"] = link.linkValue;
-    NSNotification *notif = [NSNotification notificationWithName:KUserNameLabelNotification object:nil userInfo:dic];
-    [[NSNotificationCenter defaultCenter] postNotification:notif];
-}
 
 
 //正则筛选
@@ -396,18 +407,7 @@
         
         [attrStr replaceCharactersInRange:match.range withAttributedString:temStr];
         label.attributedText = attrStr;
-        
-//        MLLink *link = [MLLink linkWithType:MLLinkTypeURL value:subStringForMatch range:[model.comment rangeOfString:subStringForMatch]];
-//        [label addLink:link];
     }
-    
-//    __weak typeof(self.delegate) weakDelegate = self.delegate;
-//    [_contentLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
-//        NSLog(@"%@",linkText);
-//        if ([weakDelegate respondsToSelector:@selector(didClickContentLink:)]) {
-//            [weakDelegate didClickContentLink:linkText];
-//        }
-//    }];
     
 }
 
@@ -430,6 +430,75 @@
     
     return actualsize.height;
     
+}
+
+// 正则获取 网址
+- (void)setContentLinkText:(SDTimeLineCellCommentItemModel *)model andLabel:(MLLinkLabel *)label {
+    // 正则筛选网页
+    label.attributedText = model.attributedContent;
+    
+    NSMutableAttributedString *attrStr = [model.attributedContent mutableCopy];
+    
+    NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+    
+    NSError *error;
+    
+    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:str options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSArray *resultArray = [expression matchesInString:model.attributedContent.string options:0 range:NSMakeRange(0, model.attributedContent.string.length)];
+    
+    for (NSTextCheckingResult * match in resultArray) {
+        
+        NSString * subStringForMatch = [model.attributedContent.string substringWithRange:match.range];
+        
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        
+        dict[NSFontAttributeName] = [UIFont systemFontOfSize:14.0];
+        
+        dict[NSForegroundColorAttributeName] = [UIColor blueColor];
+        
+        NSMutableAttributedString *temStr = [[NSMutableAttributedString alloc] initWithString:subStringForMatch attributes:dict];
+        
+        [temStr addAttribute:NSLinkAttributeName value:[NSURL URLWithString:subStringForMatch] range:NSMakeRange(0, temStr.length)];
+        
+        [attrStr replaceCharactersInRange:match.range withAttributedString:temStr];
+        label.attributedText = attrStr;
+        
+        MLLink *link = [MLLink linkWithType:MLLinkTypeEmail value:subStringForMatch range:[model.attributedContent.string rangeOfString:subStringForMatch]];
+        [label addLink:link];
+//
+//        
+//        [label setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+//            NSLog(@"%@",linkText);
+//        }];
+    }
+}
+
+- (void)didClickLink:(MLLink *)link linkText:(NSString *)linkText linkLabel:(MLLinkLabel *)linkLabel {
+    if ([self isUrlStr:linkText]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentURLNotification object:nil userInfo:@{@"linkValue" : link.linkValue}];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommenterNotification object:nil userInfo:@{@"userId" : link.linkValue}];
+    }
+}
+
+- (BOOL)isUrlStr:(NSString *)urlStr {
+    
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:urlStr];
+    
+    NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+    
+    NSError *error;
+    
+    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:str options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSArray *resultArray = [expression matchesInString:attrStr.string options:0 range:NSMakeRange(0, attrStr.string.length)];
+    
+    if (resultArray.count) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (void)dealloc {
