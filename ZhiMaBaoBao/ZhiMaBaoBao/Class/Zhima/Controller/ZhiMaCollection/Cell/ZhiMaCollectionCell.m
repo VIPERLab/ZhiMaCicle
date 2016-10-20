@@ -7,11 +7,16 @@
 //
 
 #import "ZhiMaCollectionCell.h"
+#import "TQRichTextView.h"
+
+@interface ZhiMaCollectionCell ()
+
+@end
 
 @implementation ZhiMaCollectionCell {
     UIImageView *_userIcon;
     UILabel *_userName;
-    UILabel *_contentLabel;
+    TQRichTextView *_contentLabel;
     UILabel *_timeLabel;
     UIImageView *_picImageView;
 }
@@ -41,12 +46,12 @@
     
     _userName = [UILabel new];
     _userName.font = [UIFont systemFontOfSize:15];
-//    _userName.textColor = [UIColor colorFormHexRGB:@"888888"];
     [self addSubview:_userName];
     
-    _contentLabel = [UILabel new];
-    _contentLabel.font = [UIFont systemFontOfSize:15];
-    _contentLabel.numberOfLines = 3;
+    _contentLabel = [TQRichTextView new];
+    _contentLabel.backgroundColor = [UIColor clearColor];
+    _contentLabel.textColor = [UIColor blackColor];
+    _contentLabel.lineSpacing = 1.5;
     [self addSubview:_contentLabel];
     
     _timeLabel = [UILabel new];
@@ -102,8 +107,14 @@
     CGFloat contentX = iconX;
     CGFloat contentY = CGRectGetMaxY(_userIcon.frame) + 10;
     CGFloat contentW = CGRectGetWidth(self.frame) - contentX * 2;
-    CGFloat contentH = [_contentLabel.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(contentW, MAXFLOAT)].height;
-    _contentLabel.frame = CGRectMake(contentX, contentY, contentW, contentH);
+    float contentH = [_model.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(contentW, MAXFLOAT)].height;
+    if (![_model.content isEqualToString:@""]) {
+        contentH = [TQRichTextView getRechTextViewHeightWithText:_contentLabel.text viewWidth:contentW font:[UIFont systemFontOfSize:15] lineSpacing:1.5].height;
+        [_contentLabel setFrame:CGRectMake(contentX, contentY, contentW, contentH)];
+    }
+    
+    
+    
     
     CGFloat timeW = [_timeLabel.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, 15)].width;
     CGFloat timeH = nameH;

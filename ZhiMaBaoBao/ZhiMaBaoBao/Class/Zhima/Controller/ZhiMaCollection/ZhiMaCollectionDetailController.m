@@ -11,9 +11,13 @@
 #import "SDWebImageManager.h"
 #import "KXActionSheet.h"
 
+#import "WebViewController.h"
+//富文本
+#import "TQRichTextView.h"
+
 #import "ForwardMsgController.h"
 
-@interface ZhiMaCollectionDetailController () <KXActionSheetDelegate>
+@interface ZhiMaCollectionDetailController () <KXActionSheetDelegate,TQRichTextViewDelegate>
 
 @end
 
@@ -66,9 +70,16 @@
     UIView *lastView;
     if (self.model.type == 1) { // 纯文字
         
-        UILabel *contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(bottomLineView.frame) + 11, ScreenWidth - 20, [self.model.content sizeWithFont:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(ScreenWidth - 40, MAXFLOAT)].height)];
+        TQRichTextView *contentLabel = [[TQRichTextView alloc] init];
+        contentLabel.delegage = self;
+        contentLabel.backgroundColor = [UIColor clearColor];
+        contentLabel.textColor = [UIColor blackColor];
+        contentLabel.lineSpacing = 1.5;
         contentLabel.text = self.model.content;
-        contentLabel.numberOfLines = 0;
+        
+        CGFloat contentW = ScreenWidth - 20;
+        CGFloat contentH = [TQRichTextView getRechTextViewHeightWithText:contentLabel.text viewWidth:contentW font:[UIFont systemFontOfSize:15] lineSpacing:1.5].height;
+        [contentLabel setFrame:CGRectMake(20, CGRectGetMaxY(bottomLineView.frame) + 11, contentW, contentH)];
         [_scrollView addSubview:contentLabel];
         lastView = contentLabel;
         
@@ -117,6 +128,18 @@
     KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"发给朋友",@"删除"]];
     sheet.delegate = self;
     [sheet show];
+}
+
+
+#pragma mark - TQRichTextViewDelegate
+- (void)richTextView:(TQRichTextView *)view touchBeginRun:(TQRichTextBaseRun *)run {
+    if (run.type == richTextURLRunType) {
+        NSString *url = run.originalText;
+        WebViewController *webView = [[WebViewController alloc] init];
+        webView.urlStr = url;
+        [self.navigationController pushViewController:webView animated:YES];
+    }
+    
 }
 
 

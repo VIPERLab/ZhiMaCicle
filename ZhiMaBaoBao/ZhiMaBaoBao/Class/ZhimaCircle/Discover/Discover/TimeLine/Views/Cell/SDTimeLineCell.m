@@ -242,7 +242,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 - (void)setModel:(SDTimeLineCellModel *)model
 {
     _model = model;
-    
+    _operationMenu.isLike = NO;
     if ([model.userId isEqualToString:USERINFO.userID]) {
         [_complainButton setTitle:@"删除" forState:UIControlStateNormal];
     }else{
@@ -317,9 +317,13 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
         bottomView = _commentView;
     }
     
+    //控制菜单按钮
     for (SDTimeLineCellLikeItemModel *model in _model.likeItemsArray) {
         if ([model.userId isEqualToString:USERINFO.userID]) {
             _operationMenu.isLike = YES;
+            break;
+        } else {
+            _operationMenu.isLike = NO;
         }
     }
     
@@ -370,9 +374,6 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
             }
         }];
     }
-    
-    
-
 }
 
 - (void)setFrame:(CGRect)frame
