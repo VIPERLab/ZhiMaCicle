@@ -1145,6 +1145,22 @@
 }
 
 
+/**
+ *  删除数据库所有用户消息
+ */
+- (void)deletedAllUserMessage {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
+    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"id >= 0"]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"删除成功");
+        } else {
+            NSLog(@"删除失败");
+        }
+    }];
+}
+
 #pragma mark - 新的好友相关
 //                    ------------   新好友表  ----------------
 /**

@@ -68,8 +68,15 @@
     if (sender.tag == 9 || sender.tag == 11) { // 最后一行有2个不需要操作
         return;
     }
+    NSString *num = [NSString string];
+    if (sender.tag == 10) {
+        num = @"0";
+    } else {
+        num = [NSString stringWithFormat:@"%zd",sender.tag + 1];
+    }
     
-    [self labelShowNumber:[NSString stringWithFormat:@"%zd",sender.tag + 1]];
+    
+    [self labelShowNumber:num];
 }
 
 - (void)layoutSubviews {
