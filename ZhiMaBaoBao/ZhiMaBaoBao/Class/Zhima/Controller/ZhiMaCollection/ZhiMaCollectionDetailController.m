@@ -94,7 +94,6 @@
         [manager downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.model.photoUrl]] options:0 progress:0 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             [self setupPicWithImage:image];
         }];
-        
     }
 }
 
@@ -105,7 +104,7 @@
     }
     CGFloat scale = image.size.width / (ScreenWidth - 40);
     CGFloat picW = image.size.width > (ScreenWidth - 40) ? (ScreenWidth - 40) : image.size.width;
-    CGFloat picH = image.size.height / scale;
+    CGFloat picH = image.size.width > (ScreenWidth - 40) ? image.size.height / scale : image.size.height;
     CGFloat picX = (ScreenWidth - picW) * 0.5;
     CGFloat picY = CGRectGetMaxY(_bottomLineView.frame) + 11;
     UIImageView *picView = [[UIImageView alloc] initWithFrame:CGRectMake(picX, picY, picW, picH)];
