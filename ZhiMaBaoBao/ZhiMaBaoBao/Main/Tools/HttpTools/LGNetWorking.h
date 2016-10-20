@@ -225,7 +225,7 @@
 + (void)getFriendInfo:(NSString *)sessionId userId:(NSString *)userId block:(SuccessfulBlock)block failure:(FailureBlock)failure;
 
 //上传用户个人信息
-+ (void)upLoadUserDataWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andFunctionName:(NSString *)functionName andChangeValue:(NSString *)value block:(SuccessfulBlock)block;
++ (void)upLoadUserDataWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andFunctionName:(NSString *)functionName andChangeValue:(NSString *)value success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
 //返回所有的省
 + (void)getProvinceWithSessionID:(NSString *)sessionID block:(SuccessfulBlock)block;

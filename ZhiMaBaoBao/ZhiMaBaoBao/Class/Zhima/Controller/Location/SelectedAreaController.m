@@ -98,8 +98,7 @@
 //保存地区信息
 - (void)saveLocation:(KXLocationModel *)provinceModel andAreaModel:(KXLocationModel *)areaModel {
     NSString *location = [NSString stringWithFormat:@"%@ %@",provinceModel.region_name,areaModel.region_name];
-    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"area" andChangeValue:location block:^(ResponseData *responseData) {
-        
+    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"area" andChangeValue:location success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             return ;
         }
@@ -118,6 +117,8 @@
             }
             
         });
+    } failure:^(ErrorData *error) {
+        
     }];
 }
 

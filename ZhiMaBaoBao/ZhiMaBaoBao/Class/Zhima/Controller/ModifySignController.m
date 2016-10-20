@@ -80,8 +80,7 @@
 - (void)saveButtonDidClick {
     [self.countLabel resignFirstResponder];
     [LCProgressHUD showLoadingText:@"正在更改个性签名"];
-    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"signature" andChangeValue:self.textView.text block:^(ResponseData *responseData) {
-        [LCProgressHUD hide];
+    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"signature" andChangeValue:self.textView.text success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:@"请检查网络"];
             return ;
@@ -90,11 +89,11 @@
         info.signature = self.textView.text;
         [info save];
         [LCProgressHUD showSuccessText:@"修改成功"];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [LCProgressHUD hide];
-            [self.navigationController popViewControllerAnimated:YES];
-        });
-        
+        [self.navigationController popViewControllerAnimated:YES];
+
+
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:@"修改失败"];
     }];
 }
 

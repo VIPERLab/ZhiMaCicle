@@ -53,10 +53,9 @@
 - (void)saveButtonDidClick {
     [self.textField resignFirstResponder];
     [LCProgressHUD showLoadingText:@"正在修改昵称"];
-    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"username" andChangeValue:self.textField.text block:^(ResponseData *responseData) {
-        [LCProgressHUD hide];
+    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"username" andChangeValue:self.textField.text success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:@"请检查网络"];
+            [LCProgressHUD showFailureText:responseData.msg];
             return ;
         }
         
@@ -64,14 +63,12 @@
         info.username = self.textField.text;
         [info save];
         [LCProgressHUD showSuccessText:@"修改成功"];
-//        [[SocketManager shareInstance] updateProfile];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [LCProgressHUD hide];
-            [self.navigationController popViewControllerAnimated:YES];
-        });
         
-        
-    }];
+        [self.navigationController popViewControllerAnimated:YES];
+
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:@"修改失败"];
+    } ];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -91,7 +91,7 @@
     }
     
     
-    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"sex" andChangeValue:value block:^(ResponseData *responseData) {
+    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"sex" andChangeValue:value success:^(ResponseData *responseData) {
         [LCProgressHUD hide];
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:@"修改失败"];
@@ -106,6 +106,8 @@
             [LCProgressHUD hide];
             [self.navigationController popViewControllerAnimated:YES];
         });
+
+    } failure:^(ErrorData *error) {
         
     }];
     

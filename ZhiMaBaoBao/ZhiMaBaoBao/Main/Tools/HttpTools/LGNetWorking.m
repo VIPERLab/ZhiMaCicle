@@ -614,7 +614,7 @@
 }
 
 //上传用户个人信息
-+ (void)upLoadUserDataWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andFunctionName:(NSString *)functionName andChangeValue:(NSString *)value block:(SuccessfulBlock)block {
++ (void)upLoadUserDataWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andFunctionName:(NSString *)functionName andChangeValue:(NSString *)value success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionID;
     params[@"userId"] = openFirAccount;
@@ -622,9 +622,9 @@
     params[@"value"] = value;
     
     [HttpTool POST:@"/moblie/savePersonInfo.do" params:params success:^(ResponseData *json) {
-        block(json);
+        successBlock(json);
     } failure:^(ErrorData *error) {
-        
+        failureBlock(error);
     }];
 }
 
