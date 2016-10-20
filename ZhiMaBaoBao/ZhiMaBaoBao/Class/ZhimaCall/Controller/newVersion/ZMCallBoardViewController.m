@@ -241,6 +241,10 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
         [_copyView removeFromSuperview];
     }
     
+    if (self.showNumLabel.text.length >= 13) {
+        return;
+    }
+    
     if ([self.showNumLabel.text isEqualToString:@"请拨号或搜索姓名"]) {
         self.showNumLabel.text = @"";
     }

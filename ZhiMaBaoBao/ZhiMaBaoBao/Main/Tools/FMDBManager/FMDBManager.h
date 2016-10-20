@@ -164,6 +164,10 @@ typedef enum : NSUInteger {
  */
 - (BOOL)deleteUserMessageByUserID:(NSString *)userID;
 
+/**
+ *  删除数据库所有用户消息
+ */
+- (void)deletedAllUserMessage;
 
 #pragma mark - 新的好友相关
 //                    ------------   新好友表  ----------------
