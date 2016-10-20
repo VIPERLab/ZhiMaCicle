@@ -32,6 +32,8 @@
 @implementation KXDiscoverDetailCommentView {
     UIImageView *_bigBjImage;
     UIImageView *_commentIcon;
+    UIImageView *_likeImage;
+    UIView *_likeBottomLikeView;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -47,9 +49,6 @@
     _bigBjImage = [[UIImageView alloc] init];
     [self addSubview:_bigBjImage];
     _bigBjImage.backgroundColor = [UIColor groupTableViewBackgroundColor];
-//    UIView *likeView = [UIView new];
-//    self.likeView = likeView;
-//    [self addSubview:likeView];
     
     
     _bigBjImage.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
@@ -115,11 +114,13 @@
     
     //💕号
     if (self.likeItemArray.count) {
-        UIImageView *likeImage = [[UIImageView alloc] init];
-        likeImage.image = [UIImage imageNamed:@"Discover_Like"];
+        if (!_likeImage) {
+            _likeImage = [[UIImageView alloc] init];
+            _likeImage.image = [UIImage imageNamed:@"Discover_Like"];
+            [self addSubview:_likeImage];
+        }
         
-        [self addSubview:likeImage];
-        likeImage.sd_layout
+        _likeImage.sd_layout
         .topSpaceToView(self,20)
         .leftSpaceToView(self,7.5)
         .widthIs(15)
@@ -178,23 +179,24 @@
     
     
     //点赞下面的细线
-    if (self.likeItemArray.count) {
-        UIView *likeBottomLikeView = [UIView new];
-        [self addSubview:likeBottomLikeView];
-        likeBottomLikeView.backgroundColor = [UIColor colorFormHexRGB:@"e1e1e1"];
-        likeBottomLikeView.sd_layout
+    if (self.likeItemArray.count && !_likeBottomLikeView) {
+        _likeBottomLikeView= [UIView new];
+        [self addSubview:_likeBottomLikeView];
+        _likeBottomLikeView.backgroundColor = [UIColor colorFormHexRGB:@"e1e1e1"];
+        _likeBottomLikeView.sd_layout
         .topSpaceToView(lastButton,5)
         .leftEqualToView(self)
         .rightEqualToView(self)
         .heightIs(0.5);
         
-        lastTopView = likeBottomLikeView;
+        lastTopView = _likeBottomLikeView;
     }
     
     
     
     //设置评论view
-    if (self.commentItemArray.count) {
+    if (self.commentItemArray.count && !_commentIcon) {
+        
         _commentIcon = [[UIImageView alloc] init];
         _commentIcon.image = [UIImage imageNamed:@"Discover_Detail_Comment"];
         [self addSubview:_commentIcon];

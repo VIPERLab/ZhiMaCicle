@@ -877,14 +877,13 @@
 }
 
 - (void)commentViewDidClick:(NSNotification *)notification {
-    if ([notification.name isEqualToString:KDiscoverCommentViewClickNotification]) {
-        UILabel *contentLabel = notification.userInfo[@"contentLabel"];
-        self.contentLabel = contentLabel;
-        contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"c7c7c5"];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alertView.tag = 1000;
-        [alertView show];
-    }
+    
+    UILabel *contentLabel = notification.userInfo[@"contentLabel"];
+    self.contentLabel = contentLabel;
+    contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"c7c7c5"];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alertView.tag = 1000;
+    [alertView show];
     
 }
 
