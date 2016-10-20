@@ -172,15 +172,14 @@
         [self.navigationController pushViewController:vc animated:YES];
         
         //清除未读消息
-        model.unReadCount = -1;
-        [FMDBShareManager saveConverseListDataWithDataArray:@[model]];
-
+        [FMDBShareManager setConverseUnReadCountZero:model.converseId];
+//        model.unReadCount = -1;
+//        [FMDBShareManager saveConverseListDataWithDataArray:@[model]];
     }
     
     // 点击了没有网络
     
 }
-
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {

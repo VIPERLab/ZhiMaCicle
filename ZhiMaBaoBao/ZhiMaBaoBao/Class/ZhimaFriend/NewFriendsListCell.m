@@ -20,7 +20,7 @@
 - (void)setFriendModel:(ZhiMaFriendModel *)friendModel{
     _friendModel = friendModel;
     
-    [self.avtar sd_setImageWithURL:[NSURL URLWithString:friendModel.user_Head_photo] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
+    [self.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,friendModel.user_Head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
     self.name.text = friendModel.user_Name;
     self.subText.text = @"对方请求添加你为朋友";
     

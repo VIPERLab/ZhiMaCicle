@@ -99,7 +99,14 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
  *  接受好友请求
  */
 - (void)acceptNewFriendRequest:(NSIndexPath *)indexPath{
-    ZhiMaFriendModel *friend = self.friendsArr[indexPath.row];
+    //从网络加载的好友模型
+    ZhiMaFriendModel *netFriend = self.friendsArr[indexPath.row];
+    //从数据库加载的好友模型
+    ZhiMaFriendModel *sqlitFriend = [FMDBShareManager getUserMessageByUserID:netFriend.user_Id];
+    
+    //如果数据库有，就用数据库的好友模型
+    ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
+    friend = sqlitFriend.user_Id.length ? sqlitFriend : netFriend;
     [LCProgressHUD showLoadingText:@"请稍等..."];
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
@@ -107,15 +114,13 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
             [FMDBShareManager saveUserMessageWithMessageArray:@[friend]];
             [[SocketManager shareInstance] agreeFriendRequest:friend.user_Id];
             
-            ZhiMaFriendModel *userModel = [FMDBShareManager getUserMessageByUserID:friend.user_Id];
-
             
             //添加系统消息"你已添加了xx,现在可以开始聊天了"
             [self addSystemMsgToSqlite:friend];
 
             //添加好友成功 -- 更新数据库 新的好友表  和好友表
-            friend.status = YES;
-            [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
+            netFriend.status = YES;
+            [FMDBShareManager upDataNewFriendsMessageByFriendModel:netFriend];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             
         }else{

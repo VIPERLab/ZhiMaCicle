@@ -1070,7 +1070,11 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
         self.selectedIndexPath = indecPath;
-        [self deleteAction:indecPath.row];
+//        [self deleteAction:indecPath.row];
+        
+        [self.messages removeObjectAtIndex:self.selectedIndexPath.row];
+        //    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:self.selectedIndexPath,nil] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadData];
 
     });
 }

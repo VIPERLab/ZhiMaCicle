@@ -309,6 +309,11 @@ static SocketManager *manager = nil;
             NSString *fromUid = resDic[@"fromUid"];
             NSString *groupId = resDic[@"toUidOrGroupId"];
             
+            //收到自己撤销的群消息 不处理 （因为发送的时候已经处理了）
+            if ([fromUid isEqualToString:USERINFO.userID]) {
+                return;
+            }
+            
             //根据uid拿到用户名
             ZhiMaFriendModel *model = [FMDBShareManager getUserMessageByUserID:fromUid];
             NSString *userName = model.user_Name;
@@ -843,15 +848,32 @@ static SocketManager *manager = nil;
     systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
     systemMsg.fromUid = USERINFO.userID;
     systemMsg.type = MessageTypeSystem;
-    systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+//    systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+    systemMsg.msgid = message.msgid;
     systemMsg.isGroup = message.isGroup;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
     
-    if (message.isGroup) {  //群消息和单聊消息 分开进行更新消息表操作(主要是会话列表展示)
-        [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:message.toUidOrGroupId];
+    
+    //更新数据库会话 （最后一条消息显示）
+    NSString *conversionId = nil;
+    if (systemMsg.isGroup) {
+        conversionId = systemMsg.toUidOrGroupId;
     }else{
-        [FMDBShareManager saveMessage:systemMsg toConverseID:message.toUidOrGroupId];
+        conversionId = systemMsg.fromUid;
     }
+    [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];
+    NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",conversionId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:upDataStr];
+        
+    }];
+//    if (message.isGroup) {  //群消息和单聊消息 分开进行更新消息表操作(主要是会话列表展示)
+//        [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:message.toUidOrGroupId];
+//    }else{
+//        [FMDBShareManager saveMessage:systemMsg toConverseID:message.toUidOrGroupId];
+//    }
 }
 
 //建群
