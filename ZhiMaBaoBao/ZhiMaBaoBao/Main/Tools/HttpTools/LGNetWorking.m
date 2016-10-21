@@ -208,6 +208,40 @@
     
 }
 
++ (void)chatUploadVideo:(NSString *)sessindId image:(id)imageData fileName:(NSString *)fileName andFuctionName:(NSString *)functionName block:(ChatSuccessfulBlock)block progress:(ChatProgressBlock)progressBlock failure:(ChatFailureBlock)FailureBlock{
+    
+    NSString* str = [NSString stringWithFormat:@"fileName=%@&%@",fileName,APIKEY];
+    NSString *sign = [[str md5Encrypt] uppercaseString];
+    
+    [HttpTool chatGetVideo:nil
+                    params:@{@"sign":sign,
+                             @"fileName":fileName}
+                  formData:imageData
+                   success:^(NSDictionary *json) {
+                       
+                       block(json);
+                   }progress:^(NSProgress *pro) {
+                       progressBlock(pro);
+                   }failure:^(NSError *error) {
+                       
+                       FailureBlock(error);
+                       
+                   }];
+    
+}
+
++ (void)chatDownloadVideo:(NSString *)path urlStr:(NSString*)urlStr block:(ChatSuccessfulBlock)block progress:(ChatProgressBlock)progressBlock failure:(ChatFailureBlock)FailureBlock
+{
+    [HttpTool chatDownLoadVideo:path urlStr:urlStr success:^(NSDictionary *json) {
+        block(json);
+    } progress:^(NSProgress *pro) {
+        progressBlock(pro);
+    } failure:^(NSError *error) {
+        FailureBlock(error);
+
+    }];
+}
+
 //---------------------------------------------- 项目 -------------------------------------------------
 /**
  *  获取所有通话记录

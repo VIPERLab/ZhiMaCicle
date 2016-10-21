@@ -15,6 +15,8 @@ typedef void(^FailureBlock)(ErrorData *error);
 
 typedef void(^ChatSuccessfulBlock)(NSDictionary *responseData);
 typedef void(^ChatFailureBlock)(NSError *error);
+typedef void(^ChatProgressBlock)(NSProgress *progress);
+
 
 @interface HttpTool : AFHTTPSessionManager
 // 单例
@@ -27,5 +29,13 @@ typedef void(^ChatFailureBlock)(NSError *error);
 
 
 + (void)getImage:(NSString *)url params:(NSDictionary *)params formData:(NSData *)data success:(void (^)(ResponseData *json))success failure:(void (^)(ErrorData *json))error;
+
+// 聊天界面上传图片
 + (void)chatGetImage:(NSString *)url params:(NSDictionary *)params formData:(NSData *)data success:(void (^)(NSDictionary *json))success failure:(void (^)(NSError *))errorblock;
+// 聊天界面上传视频
++ (void)chatGetVideo:(NSString *)url params:(NSDictionary *)params formData:(NSData *)data success:(void (^)(NSDictionary *json))success progress:(void (^)(NSProgress *pro))progress failure:(void (^)(NSError *))errorblock;
+
+// 聊天界面下载视频
++ (void)chatDownLoadVideo:(NSString *)path urlStr:(NSString*)urlStr success:(void (^)(NSDictionary *json))success progress:(void (^)(NSProgress *pro))progress failure:(void (^)(NSError *))errorblock;
+
 @end

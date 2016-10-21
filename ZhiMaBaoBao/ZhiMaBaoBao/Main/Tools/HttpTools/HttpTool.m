@@ -129,17 +129,19 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    
+
     [manager POST:murl parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         if (data) {
             [formData appendPartWithFileData:data name:@"file" fileName:@"photo.png" mimeType:@"image/jpeg"];
         }
-    } progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        NSLog(@"------%lf",uploadProgress.fractionCompleted);
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             //封装返回数据
             NSDictionary *data = responseObject;
-//            NSLog(@"responseData:%@",data.data);
+            //            NSLog(@"responseData:%@",data.data);
             
             success(data);
         }
@@ -152,4 +154,70 @@
     }];
     
 }
+
++ (void)chatGetVideo:(NSString *)url params:(NSDictionary *)params formData:(NSData *)data success:(void (^)(NSDictionary *json))success progress:(void (^)(NSProgress *pro))progress failure:(void (^)(NSError *))errorblock {
+    
+    
+    NSString *murl = [NSString stringWithFormat:@"%@/Api/Vedio/upfile",CHATPICURL];//@"http://172.16.0.247/Api/pic/upfile";
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    [manager POST:murl parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        if (data) {
+            [formData appendPartWithFileData:data name:@"file" fileName:@"video.mp4" mimeType:@"mp4"];
+        }
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+//        NSLog(@"------%lf",uploadProgress.fractionCompleted);
+        progress(uploadProgress);
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            //封装返回数据
+            NSDictionary *data = responseObject;
+            //            NSLog(@"responseData:%@",data.data);
+            
+            success(data);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (error) {
+            
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            errorblock(error);
+        }
+    }];
+    
+}
+
+// 聊天界面下载视频
++ (void)chatDownLoadVideo:(NSString *)path urlStr:(NSString*)urlStr success:(void (^)(NSDictionary *json))success progress:(void (^)(NSProgress *pro))progress failure:(void (^)(NSError *))errorblock
+{
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager setResponseSerializer:[AFJSONResponseSerializer serializer]];
+
+    NSString  *fullPath = path;
+    NSURL *urll = [NSURL URLWithString:urlStr];
+    NSURLRequest *request = [NSURLRequest requestWithURL:urll];
+    NSURLSessionDownloadTask *task =[manager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+//        NSLog(@"------%lf",downloadProgress.fractionCompleted);
+        progress(downloadProgress);
+        
+    } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+        
+        return [NSURL fileURLWithPath:fullPath];
+        
+    } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
+        if (error) {
+            errorblock(error);
+        }else{
+            success(@{@"success":@"0"});
+        }
+    }];
+    [task resume];
+    
+
+}
+
+
 @end
