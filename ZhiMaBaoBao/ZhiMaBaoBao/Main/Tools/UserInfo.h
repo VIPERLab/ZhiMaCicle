@@ -103,6 +103,8 @@
  /** 添加黑名单uid (拉黑时记录，跳到会话列表时删除 该id 的会话和 好友)*/
 @property (nonatomic, copy) NSString *blackUserId;
 
+//app版本号（用来迁移数据库）
+@property (nonatomic, copy) NSString *appVersion;
 
 #pragma mark - 消息通知提示
 /**

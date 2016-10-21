@@ -165,6 +165,7 @@
                 userInfo.area = @"";
             }
             
+            
             // 旧的数据
             UserInfo *oldInfo = [UserInfo read];
             

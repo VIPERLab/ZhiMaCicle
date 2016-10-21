@@ -51,11 +51,27 @@
         LGGuideController *vc = [[LGGuideController alloc] init];
         UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
         self.window.rootViewController = guideVC;
+        
     }else{
         //已经登录过，直接跳转到主界面
         MainViewController *mainVC = [[MainViewController alloc] init];
         self.window.rootViewController = mainVC;
     }
+    
+    //存储app的版本号
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    if (userInfo && !userInfo.appVersion.length) {
+        userInfo.appVersion = app_Version;
+        [userInfo save];
+    }else{
+        UserInfo *info = [UserInfo shareInstance];
+        info.appVersion = app_Version;
+        [info save];
+    }
+
+    
+    NSLog(@"-----------%@",USERINFO.appVersion);
     
     //初始化百度地图
     // 要使用百度地图，请先启动BaiduMapManager
@@ -320,7 +336,7 @@
     [[SocketManager shareInstance] disconnect];
     // 进入后台时，注册极光推送
     UserInfo *info = [UserInfo read];
-    if (info) {
+    if (info.userID.length) {
         [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:@selector(tagsAliasCallback:tags:alias:) object:self];
     }    
 }
