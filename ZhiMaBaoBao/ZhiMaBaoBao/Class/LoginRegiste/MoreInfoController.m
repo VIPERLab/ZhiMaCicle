@@ -47,6 +47,7 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
     UIPickerView *pickView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, DEVICEHIGHT - 150, DEVICEWITH, 150)];
     pickView.delegate = self;
     pickView.dataSource = self;
+    pickView.backgroundColor = [UIColor orangeColor];
     [self.view addSubview:pickView];
     self.pickView = pickView;
 }
@@ -64,20 +65,27 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
     return 44;
 }
 
-- (nullable UIView *)viewForRow:(NSInteger)row forComponent:(NSInteger)component{
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 44)];
-    view.backgroundColor = WHITECOLOR;
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 44)];
-    label.backgroundColor = [UIColor clearColor];
-    label.text = self.titleArr[component];
-    label.font = MAINFONT;
-    label.textAlignment = NSTextAlignmentCenter;
-    [view addSubview:label];
-    
-    return view;
+
+- (nullable NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+    return self.titleArr[row];
 }
+
+
+//
+//- (nullable UIView *)viewForRow:(NSInteger)row forComponent:(NSInteger)component{
+//    
+//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 44)];
+//    view.backgroundColor = WHITECOLOR;
+//    
+//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 44)];
+//    label.backgroundColor = [UIColor clearColor];
+//    label.text = @"1";
+//    label.font = MAINFONT;
+//    label.textAlignment = NSTextAlignmentCenter;
+//    [view addSubview:label];
+//    
+//    return view;
+//}
 
 
 #pragma mark - tableView delegate

@@ -46,7 +46,8 @@ MJCodingImplementation
     NSString *path = [documentPath stringByAppendingPathComponent:@"userinfo.user"];
     
     //从文件中读取对象
-    UserInfo *userInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    UserInfo *userInfo = [[UserInfo alloc] init];
+    userInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     return userInfo;
 }
 
