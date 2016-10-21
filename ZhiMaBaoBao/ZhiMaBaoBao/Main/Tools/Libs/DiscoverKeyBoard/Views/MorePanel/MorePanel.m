@@ -35,6 +35,10 @@ typedef void (^ItemViewAction)(MoreItemView *itemView);
     if (self) {
         _iconBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _iconBtn.frame = CGRectMake(0, 0, kMoreItemIconSize, kMoreItemIconSize);
+        _iconBtn.layer.borderWidth = .5;
+        _iconBtn.layer.borderColor = [GRAYCOLOR CGColor];
+        _iconBtn.layer.cornerRadius = 5;
+        _iconBtn.layer.masksToBounds = YES;
         [_iconBtn addTarget:self action:@selector(iconBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_iconBtn];
         
