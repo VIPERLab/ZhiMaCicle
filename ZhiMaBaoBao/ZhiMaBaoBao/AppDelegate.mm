@@ -4,7 +4,7 @@
 //
 //  Created by liugang on 16/9/18.
 //  Copyright © 2016年 liugang. All rights reserved.
-//
+//  2.0版本 上传appstore 最终代码。
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
