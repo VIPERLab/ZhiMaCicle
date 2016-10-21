@@ -60,14 +60,10 @@
     
     //存储app的版本号
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-    if (userInfo && !userInfo.appVersion.length) {
-        userInfo.appVersion = app_Version;
+    NSString *appVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    if (!userInfo.appVersion.length) {
+        userInfo.appVersion = appVersion;
         [userInfo save];
-    }else{
-        UserInfo *info = [UserInfo shareInstance];
-        info.appVersion = app_Version;
-        [info save];
     }
 
     
