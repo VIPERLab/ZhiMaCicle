@@ -165,6 +165,21 @@ static SocketManager *manager = nil;
         sendMsg = message;
     }
     
+    else if (message.type == MessageTypeVideo){
+        sendMsg.toUidOrGroupId = message.toUidOrGroupId;
+        sendMsg.fromUid = message.fromUid;
+        sendMsg.type = message.type;
+        sendMsg.msgid = message.msgid;
+        sendMsg.isGroup = message.isGroup;
+        sendMsg.timeStamp = message.timeStamp;
+        
+        //拼接text (本地路径：text , 第一帧图片路径：holderImageUrlString , 视频下载路径：videoDownloadUrl , 是否存在本地：isDownLoad)
+        
+        sendMsg.isDownLoad = NO;
+        sendMsg.holderImageUrlString = message.holderImageUrlString;
+        sendMsg.videoDownloadUrl = message.videoDownloadUrl;
+    }
+    
     //根据网络状态-- 标记消息发送状态
     UserInfo *userInfo = [UserInfo shareInstance];
     message.sendStatus = !userInfo.networkUnReachable;
