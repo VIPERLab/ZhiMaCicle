@@ -599,6 +599,8 @@
 		31B7C7B71D90031D00F1883A /* YiKeyBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7B51D90031D00F1883A /* YiKeyBoardView.m */; };
 		31B7C7B81D90031D00F1883A /* YiKeyBoardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C7B61D90031D00F1883A /* YiKeyBoardView.xib */; };
 		31B7C7BC1D900A6F00F1883A /* CallBottombar.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7BB1D900A6F00F1883A /* CallBottombar.m */; };
+		31BB9C7A1DB9B3E400C38537 /* LGPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31BB9C791DB9B3E400C38537 /* LGPickerView.m */; };
+		31BB9C7D1DB9EBB900C38537 /* MoreInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31BB9C7C1DB9EBB900C38537 /* MoreInfoModel.m */; };
 		9D4903A7551EC331016D9D3A /* Pods_ZhiMaBaoBao.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF1AD7B94550139D0811527 /* Pods_ZhiMaBaoBao.framework */; };
 		D540F3CF1DAB99FA00FF5239 /* SystemChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D540F3CE1DAB99FA00FF5239 /* SystemChatCell.m */; };
 		D541D3571DAA1AA800FF21F3 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D541D3561DAA1AA800FF21F3 /* libresolv.tbd */; };
@@ -1780,6 +1782,10 @@
 		31B7C7B61D90031D00F1883A /* YiKeyBoardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = YiKeyBoardView.xib; path = ../View/YiKeyBoardView.xib; sourceTree = "<group>"; };
 		31B7C7BA1D900A6F00F1883A /* CallBottombar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallBottombar.h; sourceTree = "<group>"; };
 		31B7C7BB1D900A6F00F1883A /* CallBottombar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallBottombar.m; sourceTree = "<group>"; };
+		31BB9C781DB9B3E400C38537 /* LGPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGPickerView.h; sourceTree = "<group>"; };
+		31BB9C791DB9B3E400C38537 /* LGPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPickerView.m; sourceTree = "<group>"; };
+		31BB9C7B1DB9EBB900C38537 /* MoreInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreInfoModel.h; sourceTree = "<group>"; };
+		31BB9C7C1DB9EBB900C38537 /* MoreInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreInfoModel.m; sourceTree = "<group>"; };
 		7AF1AD7B94550139D0811527 /* Pods_ZhiMaBaoBao.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZhiMaBaoBao.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D540F3CD1DAB99FA00FF5239 /* SystemChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemChatCell.h; sourceTree = "<group>"; };
 		D540F3CE1DAB99FA00FF5239 /* SystemChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemChatCell.m; sourceTree = "<group>"; };
@@ -4409,6 +4415,8 @@
 		316957891D911A3F00140126 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				31BB9C781DB9B3E400C38537 /* LGPickerView.h */,
+				31BB9C791DB9B3E400C38537 /* LGPickerView.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -4768,6 +4776,8 @@
 				31B7C75A1D8FB33E00F1883A /* LGSetPasswordController.m */,
 				315FF5901DB8994C0002CB97 /* MoreInfoController.h */,
 				315FF5911DB8994C0002CB97 /* MoreInfoController.m */,
+				31BB9C7B1DB9EBB900C38537 /* MoreInfoModel.h */,
+				31BB9C7C1DB9EBB900C38537 /* MoreInfoModel.m */,
 				315FF5931DB89C4C0002CB97 /* MoreInfoCell.h */,
 				315FF5941DB89C4C0002CB97 /* MoreInfoCell.m */,
 				315FF5951DB89C4C0002CB97 /* MoreInfoCell.xib */,
@@ -5305,6 +5315,7 @@
 				04EA7DEA1D912872005E5425 /* ZXCode93Reader.m in Sources */,
 				04EA7E321D912872005E5425 /* ZXMultiFormatWriter.m in Sources */,
 				04EA7D8D1D912872005E5425 /* ZXGenericGF.m in Sources */,
+				31BB9C7A1DB9B3E400C38537 /* LGPickerView.m in Sources */,
 				04F57AA71D9280BD002A6471 /* TimeLineController.m in Sources */,
 				04F862C31D95545000DCC6FE /* KXCommentListView.m in Sources */,
 				04EA7DA61D912872005E5425 /* ZXErrors.m in Sources */,
@@ -5624,6 +5635,7 @@
 				04EA79E71D90E9F7005E5425 /* ChangeMoneyCell.m in Sources */,
 				310B83281D8E7B0100A0F408 /* AppDelegate.mm in Sources */,
 				31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */,
+				31BB9C7D1DB9EBB900C38537 /* MoreInfoModel.m in Sources */,
 				04EA7D9A1D912872005E5425 /* ZXGlobalHistogramBinarizer.m in Sources */,
 				311CEFA91D937BE700BBB1F9 /* AmrPlayerReader.m in Sources */,
 				04EA7D821D912872005E5425 /* ZXVEventResultParser.m in Sources */,
@@ -5905,7 +5917,7 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE = "6a80afc9-0847-4baa-a000-fce122b0bfdd";
 				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
@@ -5951,7 +5963,7 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE = "6a80afc9-0847-4baa-a000-fce122b0bfdd";
 				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";

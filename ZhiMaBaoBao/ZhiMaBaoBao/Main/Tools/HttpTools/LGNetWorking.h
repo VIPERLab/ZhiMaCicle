@@ -297,5 +297,11 @@
 //根据邀请码获取用户Id
 + (void)getUserIdWithInvitedCode:(NSString *)invitedCode success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
+//获取个人更多详细信息
++ (void)getMoreUserInfo:(NSString *)sessionId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
+//保存更多详细信息
++ (void)saveMoreUserInfo:(NSString *)sessionId moreData:(NSString *)jsonStr success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
 
 @end
