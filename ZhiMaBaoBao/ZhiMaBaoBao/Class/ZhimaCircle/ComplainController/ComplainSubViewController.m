@@ -10,6 +10,7 @@
 #import "UIColor+My.h"
 
 #import "SDTimeLineTableViewController.h"
+#import "ChatController.h"
 
 @interface ComplainSubViewController ()
 
@@ -69,11 +70,20 @@
 }
 
 - (void)closeButtonDidClick {
-    for (UIViewController *controller in self.navigationController.viewControllers) {
-        if ([controller isKindOfClass:[SDTimeLineTableViewController class]]) {
-            [self.navigationController popToViewController:controller animated:YES];
+    if (self.type == 1) { //投诉朋友圈
+        for (UIViewController *controller in self.navigationController.viewControllers) {
+            if ([controller isKindOfClass:[SDTimeLineTableViewController class]]) {
+                [self.navigationController popToViewController:controller animated:YES];
+            }
+        }
+    } else if (self.type == 2 || self.type == 3) {  // 单聊
+        for (UIViewController *controller in self.navigationController.viewControllers) {
+            if ([controller isKindOfClass:[ChatController class]]) {
+                [self.navigationController popToViewController:controller animated:YES];
+            }
         }
     }
+    
 }
 
 

@@ -180,7 +180,7 @@
 
 - (void)pinchGestureEnd{
     if (_totalScale < 1) {
-        [UIView animateWithDuration:.5 animations:^{
+        [UIView animateWithDuration:0.3 animations:^{
             _zoomingImageView.transform = CGAffineTransformIdentity;
         }];
         _totalScale = 1;
@@ -190,7 +190,7 @@
 - (void)doubleTapToZommWithScale:(CGFloat)scale
 {
     [self prepareForImageViewScaling];
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         [self zoomWithScale:scale];
     } completion:^(BOOL finished) {
         if (scale == 1) {

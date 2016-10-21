@@ -83,7 +83,11 @@
  *  @param block
  */
 + (void)uploadPhoto:(NSString *)sessindId image:(id)imageData fileName:(NSString *)fileName andFuctionName:(NSString *)functionName block:(SuccessfulBlock)block;
+
+//图片上传图、视频 ，下载视频
 + (void)chatUploadPhoto:(NSString *)sessindId image:(id)imageData fileName:(NSString *)fileName andFuctionName:(NSString *)functionName block:(ChatSuccessfulBlock)block failure:(ChatFailureBlock)FailureBlock;
++ (void)chatUploadVideo:(NSString *)sessindId image:(id)imageData fileName:(NSString *)fileName andFuctionName:(NSString *)functionName block:(ChatSuccessfulBlock)block progress:(ChatProgressBlock)progressBlock failure:(ChatFailureBlock)FailureBlock;
++ (void)chatDownloadVideo:(NSString *)path urlStr:(NSString*)urlStr block:(ChatSuccessfulBlock)block progress:(ChatProgressBlock)progressBlock failure:(ChatFailureBlock)FailureBlock;
 
 /**
  *  获取所有通话记录
@@ -246,7 +250,7 @@
 + (void)DeletedMyCommentWithSessionID:(NSString *)sessionID andOpenFirAccount:(NSString *)openFirAccount andFcid:(NSString *)fcid block:(SuccessfulBlock)block;
 
 //投诉用户
-+ (void)ComplainsUserWithSessionID:(NSString *)sessionID andTheOpenFireAccount:(NSString *)openfirAccount andComplainsReason:(NSString *)reason andComplainFriendCicle:(NSString *)firendCicle block:(SuccessfulBlock)block;
++ (void)ComplainsUserWithSessionID:(NSString *)sessionID andComplaintsUserId:(NSString *)complaintsUserId andComplainsReason:(NSString *)reason andComplainFriendCicle:(NSString *)firendCicle andComplatinType:(int)complaintType block:(SuccessfulBlock)block;
 
 /**
  *  添加通话日志

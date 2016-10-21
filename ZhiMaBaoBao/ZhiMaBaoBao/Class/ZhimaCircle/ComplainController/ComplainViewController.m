@@ -17,7 +17,7 @@
 
 @interface ComplainViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) NSArray *dataArray;
+
 
 @end
 
@@ -65,7 +65,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -90,7 +90,7 @@
     if (section == 0) {
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40)];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(headerView.frame), CGRectGetHeight(headerView.frame))];
-        label.text = @"请选择投诉该朋友圈的原因:";
+        label.text = @"请选择投诉的原因:";
         label.font = [UIFont systemFontOfSize:13];
         label.textColor = [UIColor lightGrayColor];
         [headerView addSubview:label];
@@ -109,16 +109,17 @@
 
 
 - (void)complainReason:(NSString *)reason {
-    [LGNetWorking ComplainsUserWithSessionID:USERINFO.sessionId andTheOpenFireAccount:self.model.userId andComplainsReason:reason andComplainFriendCicle:self.model.circle_ID block:^(ResponseData *responseData) {
-        
+
+    [LGNetWorking ComplainsUserWithSessionID:USERINFO.sessionId andComplaintsUserId:self.userId andComplainsReason:reason andComplainFriendCicle:self.circleId andComplatinType:self.type block:^(ResponseData *responseData) {
         if (responseData.code != 0) {
+            [LCProgressHUD showFailureText:responseData.msg];
             return ;
         }
         
         ComplainSubViewController *subView = [[ComplainSubViewController alloc] init];
+        subView.type = self.type;
         [self.navigationController pushViewController:subView animated:YES];
         NSLog(@"投诉成功");
-        
     }];
 }
 /*
@@ -138,11 +139,11 @@
     [self.navigationController pushViewController:web animated:YES];
 }
 
-- (NSArray *)dataArray {
-    if (!_dataArray) {
-        _dataArray = @[@"发布不适当内容对我造成骚扰",@"发布带诱导分享性质的内容",@"传播谣言信息",@"存在侵权行为",@"发布仿冒品信息"];
-    }
-    return _dataArray;
-}
+//- (NSArray *)dataArray {
+//    if (!_dataArray) {
+//        _dataArray = @[@"发布不适当内容对我造成骚扰",@"发布带诱导分享性质的内容",@"传播谣言信息",@"存在侵权行为",@"发布仿冒品信息"];
+//    }
+//    return _dataArray;
+//}
 
 @end

@@ -31,6 +31,8 @@
 @property (nonatomic, strong) UIButton *rightBtn;           //导航栏右侧按钮
 
 @property (nonatomic, strong) GroupChatModel *groupChatModel;
+
+@property (nonatomic, assign) CGFloat lastOffset;   //上一次scrollview偏移量
 @end
 
 
@@ -308,6 +310,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         }
 
     }else{
+        [self.textField resignFirstResponder];
+        
         ZhiMaFriendModel *friend = self.searchResultArr[indexPath.row];
         //如果是已选成员，直接return
         for (NSString *userId in self.selectedMembers) {
@@ -483,8 +487,10 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                 //新建一个群会话，插入数据库
                 [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                 
+                [userIdArr addObject:USERINFO.userID];
+                NSString *socketUids = [userIdArr componentsJoinedByString:@","];
                 //通过socket创建群聊
-                [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:userIds];
+                [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
                 
                 //跳转到群聊天页面
                 [self jumpGroupChat];
@@ -603,6 +609,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
     }else{
         self.imagesView.width = width;
+        self.imagesView.contentSize = CGSizeMake(width, 40);
         self.textField.x = CGRectGetMaxX(self.imagesView.frame) + margin;
         //更新导航栏右侧按钮显示
         [self.rightBtn setTitle:[NSString stringWithFormat:@"确定(%ld)",(long)count] forState:UIControlStateNormal];
@@ -610,25 +617,54 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     }
     
     //设置滑动试图最大宽度，
-    if (width > maxWidth) {
+    if (width >= maxWidth) {
         self.imagesView.width = maxWidth;
-        self.imagesView.contentSize = CGSizeMake(width, 40);
         self.textField.x = CGRectGetMaxX(self.imagesView.frame) + margin;
         
+        //先滑倒上次偏移的位置
+
+        [self.imagesView setContentOffset:CGPointMake(self.lastOffset, 0) animated:NO];
+
         //滑动到最右边
         [self.imagesView setContentOffset:CGPointMake(width - maxWidth, 0) animated:YES];
+        self.lastOffset = width - maxWidth;
+    }else{
+        [self.imagesView setContentOffset:CGPointMake(0, 0) animated:YES];
     }
     
     
     //先移除所有子试图 添加好友头像
-//    [self.imagesView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self.imagesView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     for (int i = 0; i < count; i ++) {
         ZhiMaFriendModel *friendModel = self.selectedFriends[i];
         UIImageView *avtar = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, imageS, imageS)];
+        avtar.userInteractionEnabled = YES;
         [avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,friendModel.user_Head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
-        avtar.x = (imageS + margin) * (count - 1);
+        avtar.x = (imageS + margin) * (i);
+        avtar.tag = i;
         [self.imagesView addSubview:avtar];
+        [avtar addTapGestureRecognizer:self forAction:@selector(removeSelectMember:)];
     }
+    
+}
+
+//单击已选好友头像，移除该群聊成员
+- (void)removeSelectMember:(UITapGestureRecognizer *)gesture{
+    NSInteger index = gesture.view.tag;
+    ZhiMaFriendModel *friend = self.selectedFriends[index];
+
+    //从已选好友中移出，刷新选择栏
+    [self.selectedFriends removeObjectAtIndex:index];
+    [self refreshImagesViewFrame];
+
+    //从全部好友中移除已选，刷新表
+    for (ZhiMaFriendModel *model in self.friends) {
+        if ([model.user_Id isEqualToString:friend.user_Id]) {
+            model.selectedGroup = !model.selectedGroup;
+            break;
+        }
+    }
+    [self.tableView reloadData];
 }
 
 //好友列表排序分组

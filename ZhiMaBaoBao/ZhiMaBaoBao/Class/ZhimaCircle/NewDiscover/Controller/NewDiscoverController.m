@@ -17,7 +17,7 @@
 
 //图片
 #import "NewDiscoverPhotoPickerView.h"
-#import "DNPhotoBrowser.h"
+#import "KXPhotoBrowersController.h"
 
 #import "LGNetWorking.h"  //请求工具类
 
@@ -35,7 +35,7 @@
 #define NewDiscoverTableViewNormalCellReuserdID @"NewDiscoverTableViewNormalCellReuserdID"
 #define NewDiscoverTableViewHeaderCellReuserdID @"NewDiscoverTableViewHeaderCellReuserdID"
 
-@interface NewDiscoverController () <UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,CLLocationManagerDelegate,KXActionSheetDelegate>
+@interface NewDiscoverController () <UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,CLLocationManagerDelegate,KXActionSheetDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, weak) UITableView *tableView;
 
@@ -98,7 +98,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController.navigationBar setAlpha:1];
+    [self upDataView];
+}
+
 - (void)setupNav {
+    
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(ReleaseButtonDidClick)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
 }
@@ -236,7 +242,7 @@
 - (void)ReleaseButtonDidClick {
     [self.textView resignFirstResponder];
     if (!self.textView.text.length && !_imagesArray.count) {
-        [LCProgressHUD showText:@"说说内容或图片不能为空"];
+        [LCProgressHUD showFailureText:@"说说内容或图片不能为空"];
         return;
     }
     
@@ -272,13 +278,16 @@
     
     self.currentSelectedButton = currentButton;
     
-//    if (self.imagesArray.count > currentButton.tag) {
-//        //查看照片
-//        NSLog(@"我是查看照片");
-//        DNPhotoBrowser *borwser = [[DNPhotoBrowser alloc] initWithPhotos:self.imagesArray currentIndex:currentButton.tag fullImage:NO];
-//        [self presentViewController:borwser animated:YES completion:nil];
-//        return;
-//    }
+    if (self.imagesArray.count > currentButton.tag) {
+        //查看照片
+        KXPhotoBrowersController *borwser = [[KXPhotoBrowersController alloc] init];
+        borwser.imageArray = self.imagesArray;
+        borwser.currentIndex = currentButton.tag + 1;
+        
+        typeof(self) weakSelf = self;
+        [self.navigationController pushViewController:borwser animated:YES];
+        return;
+    }
     
     KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"拍照",@"从手机相册选择"]];
     sheet.delegate = self;
@@ -543,6 +552,22 @@
     
 }
 
+#pragma mark - returnAction
+- (void)backAction {
+    [self.view endEditing:YES];
+    if (self.imagesArray.count || self.textView.text.length) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"退出此次编辑？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        [alertView show];
+        return;
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
 
 #pragma mark - lazyLoad
 

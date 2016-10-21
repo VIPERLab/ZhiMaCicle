@@ -86,7 +86,7 @@
     params[@"p"] = [NSString stringWithFormat:@"%zd",pageNumber];
     params[@"sign"] = enCodeString;
     
-    [manager POST:[NSString stringWithFormat:@"http://120.76.239.173/Api/Index/getmoneyrec"] parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:[NSString stringWithFormat:@"%@/Api/Index/getmoneyrec",DFAPIURLTEST] parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if ([responseObject[@"code"] intValue] != 8888) {
             [LCProgressHUD showFailureText:responseObject[@"msg"]];

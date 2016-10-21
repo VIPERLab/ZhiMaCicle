@@ -9,6 +9,12 @@
 #import "IMChatVideoTableViewCell.h"
 #import "UIImage+PKShortVideoPlayer.h"
 
+@interface IMChatVideoTableViewCell ()
+
+@property (nonatomic, assign)CGFloat lastProgress; //上次更新到是值
+@property (nonatomic, assign)BOOL isDownload; //是否已下载
+
+@end
 
 @implementation IMChatVideoTableViewCell
 
@@ -26,28 +32,72 @@
 {
     [super prepareForReuse];
     [self.playView removeFromSuperview];
+    [self.playBtn removeFromSuperview];
+    [self.progressView removeFromSuperview];
+    [self.holderIV removeFromSuperview];
     [self createCustomViews];
 }
 
 - (void)reloadData:(LGMessage *)chat isMySelf:(BOOL)isMySelf tapVideoTarget:(id)target action:(SEL)action
 {
     _isMe = isMySelf;
+    _isDownload = chat.isDownLoad;
     
-    self.playView.videoPath = chat.text;
+    if (chat.isSending) {
+        self.progressView.hidden = NO;
+        self.holderIV.hidden = YES;
+    }else{
+        self.progressView.hidden = YES;
+        self.holderIV.hidden = NO;
+    }
+    
+    // 是否有holder图片的路径，没有则代表是正在发送中的视频
+    if (chat.holderImageUrlString) {
+        
+        [self.holderIV sd_setImageWithURL:[NSURL URLWithString:chat.holderImageUrlString] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
 
-    self.playBtn.hidden = NO;
-    
-    UIImage *image = [UIImage pk_previewImageWithVideoURL:[NSURL fileURLWithPath:chat.text]];
-    self.playView.frameSize = [self pictureSizeToImage:image];
+            self.playView.frameSize = [self pictureSizeToImage:self.holderIV.image];
+            [self upDateUI:chat];
 
-    
+        }];
+        
+    }else{
+        self.holderIV.image = chat.holderImage;
+        self.playView.frameSize = [self pictureSizeToImage:chat.holderImage];
+        [self upDateUI:chat];
+    }
+
+    UITapGestureRecognizer*tap = [[UITapGestureRecognizer alloc]initWithTarget:target action:action];
+    [_playView addGestureRecognizer:tap];
+}
+
+- (void)upDateUI:(LGMessage*)chat
+{
     [self.playView centerAlignHorizontalForSuperView];
     [self resizeBubbleView:self.playView.frame.size];
     [self repositionContentViewTypeVideo:self.playView];
-    self.playBtn.center = self.playView.center;
     
-    UITapGestureRecognizer*tap = [[UITapGestureRecognizer alloc]initWithTarget:target action:action];
-    [_playView addGestureRecognizer:tap];
+    self.playBtn.center = self.playView.center;
+    self.progressView.center = self.playView.center;
+    self.holderIV.frame = self.playView.frame;
+    
+    // 是否已下载 已下载就直接播放
+    if (_isDownload) {
+        self.holderIV.hidden = YES;
+        self.playBtn.hidden = YES;
+        self.playView.videoPath = [NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.text];
+//        [self.playView play];
+        
+    }else{
+        if (_isMe) {
+            self.playBtn.hidden = YES;
+        }else{
+            self.playBtn.hidden = NO;
+        }
+        self.holderIV.hidden = NO;
+
+    }
+    
 }
 
 - (CGSize)pictureSizeToImage:(UIImage*)image
@@ -75,12 +125,23 @@
     _playView.layer.masksToBounds = YES;
     [_bubble addSubview:_playView];
     
-    _playBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 40)];
+    _holderIV = [[UIImageView alloc]initWithFrame:CGRectZero];
+    _holderIV.contentMode =  UIViewContentModeScaleAspectFill;
+    _holderIV.layer.cornerRadius = 3;
+    _holderIV.layer.masksToBounds = YES;
+    [_bubble addSubview:_holderIV];
+    
+    _playBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
     [_playBtn setImage:[UIImage imageNamed:@"PK_Play"] forState:UIControlStateNormal];
     _playBtn.hidden = YES;
     [_playBtn addTarget:self action:@selector(btnAction_play) forControlEvents:UIControlEventTouchUpInside];
     [_bubble addSubview:_playBtn];
 
+    _progressView = [[HKPieChartView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
+
+    [_bubble addSubview:_progressView];
+    
+    self.lastProgress = 0.0;
     
     //添加长按手势
     UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
@@ -90,7 +151,34 @@
 - (void)btnAction_play
 {
     self.playBtn.hidden = YES;
-    [self.playView play];
+    if (_isDownload) {
+        [self.playView play];
+
+    }else{
+    
+        if ([self.VDelegate respondsToSelector:@selector(goToDownloadVideo:)]) {
+            [self.VDelegate goToDownloadVideo:self.indexPath];
+        }
+    }
+}
+
+- (void)setProgressWithContent:(CGFloat)progress
+{
+    if (progress >= 0.99) {
+        progress = 0.99;
+    }
+    [self.progressView updatePercent:progress*100 lastProgress:self.lastProgress animation:NO];
+    
+    self.lastProgress = progress;
+    
+    NSLog(@"progress = %lf",progress);
+//    if (progress == 1.0) {
+////        self.playBtn.hidden = NO;
+//        self.progressView.hidden = YES;
+//        [self.progressView removeFromSuperview];
+//        [self.playView play];
+//    }
+
 }
 
 //长按弹出功能栏

@@ -68,10 +68,10 @@
 {
     [self.textView resignFirstResponder];
     if (!self.textView.text.length) {
-        [LCProgressHUD showText:@"建议不能为空"];
+        [LCProgressHUD showFailureText:@"建议不能为空"];
         return;
     }
-    [LCProgressHUD showText:@"正在提交"];
+    [LCProgressHUD showLoadingText:@"正在提交"];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer.timeoutInterval = 30.0f;
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
@@ -83,14 +83,13 @@
     parms[@"content"] = self.textView.text;
     
     [manager POST:url parameters:parms progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [LCProgressHUD hide];
         ResponseData *data = [ResponseData mj_objectWithKeyValues:responseObject];
         if (![data.msg containsString:@"成功"]) {
-            [LCProgressHUD showText:data.msg];
+            [LCProgressHUD showFailureText:data.msg];
             return ;
         }
         
-        [LCProgressHUD showText:data.msg];
+        [LCProgressHUD showSuccessText:data.msg];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [LCProgressHUD hide];
             [self.navigationController popViewControllerAnimated:YES];

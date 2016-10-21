@@ -38,6 +38,8 @@ static CGFloat const PKRecordButtonWidth = 70;
 @property (nonatomic, strong) PKShortVideoProgressBar *progressBar;
 @property (nonatomic, strong) PKShortVideoRecorder *recorder;
 
+@property (nonatomic, copy) NSString *photoName;   //路径后缀
+
 @end
 
 @implementation ZMRecordShortVideoView
@@ -57,7 +59,8 @@ static CGFloat const PKRecordButtonWidth = 70;
         NSString*photoName = [NSString stringWithFormat:@"/%ld",[NSDate currentTimeStamp] + arc4random() % 1000];
         NSString *outputFilePath = [AUDIOPATH stringByAppendingPathComponent:photoName];
         _outputFilePath = [outputFilePath stringByAppendingPathExtension:@"mp4"];
-        _themeColor = THEMECOLOR;//RGB(0, 153, 255);
+        _photoName = [photoName stringByAppendingPathExtension:@"mp4"];
+        _themeColor = RGB(115, 205, 100);//THEMECOLOR;//
         _outputSize = CGSizeMake(DEVICEWITH, 300);
         _videoMaximumDuration = 6;
         _videoMinimumDuration = 1;
@@ -116,7 +119,7 @@ static CGFloat const PKRecordButtonWidth = 70;
 
     [self.layer insertSublayer:previewLayer atIndex:0];
     
-    self.progressBar = [[PKShortVideoProgressBar alloc] initWithFrame:CGRectMake(0, 14 + PKPreviewLayerHeight - 5, DEVICEWITH, 5) themeColor:self.themeColor duration:self.videoMaximumDuration];
+    self.progressBar = [[PKShortVideoProgressBar alloc] initWithFrame:CGRectMake(0, 14 + PKPreviewLayerHeight - 3, DEVICEWITH, 3) themeColor:self.themeColor duration:self.videoMaximumDuration];
     [self addSubview:self.progressBar];
     
     self.recordButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -126,7 +129,7 @@ static CGFloat const PKRecordButtonWidth = 70;
     self.recordButton.frame = CGRectMake(0, 0, PKRecordButtonWidth, PKRecordButtonWidth);
     self.recordButton.center = CGPointMake(DEVICEWITH/2, PKRecordButtonVarticalHeight);
     self.recordButton.layer.cornerRadius = PKRecordButtonWidth/2;
-    self.recordButton.layer.borderWidth = 3;
+    self.recordButton.layer.borderWidth = 2;
     self.recordButton.layer.borderColor = self.themeColor.CGColor;
     self.recordButton.layer.masksToBounds = YES;
     [self recordButtonAction];
@@ -212,14 +215,14 @@ static CGFloat const PKRecordButtonWidth = 70;
 //        [self.delegate didFinishRecordingToOutputFilePath:self.outputFilePath];
 //    }];
     if ([self.delegate respondsToSelector:@selector(didFinishRecordingToOutputFilePath:)]) {
-        [self.delegate didFinishRecordingToOutputFilePath:self.outputFilePath];
+        [self.delegate didFinishRecordingToOutputFilePath:self.photoName];
     }
 }
 
 - (void)endRecordingWithPath:(NSString *)path failture:(BOOL)failture {
     [self.progressBar restore];
     
-    [self.recordButton setTitle:@"按住拍摄" forState:UIControlStateNormal];
+    [self.recordButton setTitle:@"按住录" forState:UIControlStateNormal];
     
     if (failture) {
         [self showAlertViewWithText:@"生成视频失败"];

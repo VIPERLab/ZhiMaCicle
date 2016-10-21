@@ -40,12 +40,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    self.navigationController.navigationBar.hidden = NO;
+}
 
 #pragma mark - setupView
 - (void)setupView {
     self.view.backgroundColor = [UIColor colorFormHexRGB:@"2e3132"];
-    
-    UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, 392)];
+    CGFloat scale = (ScreenWidth - 60) / ScreenWidth;
+    CGFloat centerHeigth = 392 * scale + 60;
+    UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, centerHeigth)];
     centerView.backgroundColor = [UIColor whiteColor];
     centerView.layer.cornerRadius = 10;
     self.centerView = centerView;
@@ -55,6 +59,7 @@
     UIImageView *userIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 45, 45)];
     self.userIcon = userIcon;
     userIcon.layer.cornerRadius = 10;
+    userIcon.clipsToBounds = YES;
     [userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,USERINFO.head_photo]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
     [self.centerView addSubview:userIcon];
     
@@ -75,26 +80,27 @@
     
     
     UIImageView *BJImage = [[UIImageView alloc] initWithFrame:CGRectMake(19, CGRectGetMaxY(userIcon.frame) + 10, CGRectGetWidth(self.centerView.frame) - 38 , 260)];
-    BJImage.image = [UIImage imageNamed:@"QRCodeBackground"];
+    self.imageView = BJImage;
+    BJImage.userInteractionEnabled = YES;
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressDidClick:)];
+    [BJImage addGestureRecognizer:longPress];
     [self.centerView addSubview:BJImage];
     
-    CGFloat imageW = 200;
-    CGFloat imageH = imageW;
-    CGFloat imageX = (CGRectGetWidth(self.centerView.frame) - imageW) * 0.5;
-    CGFloat imageY = (CGRectGetHeight(self.centerView.frame) - imageH) * 0.5;
-    UIView *QRCodeView = [[UIView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
-    QRCodeView.backgroundColor = [UIColor whiteColor];
-    [self.centerView addSubview:QRCodeView];
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, imageW - 40, imageH - 40)];
-    self.imageView = imageView;
-    imageView.userInteractionEnabled = YES;
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressDidClick:)];
-    [imageView addGestureRecognizer:longPress];
-    [QRCodeView addSubview:imageView];
+//    CGFloat imageW = 200;
+//    CGFloat imageH = imageW;
+//    CGFloat imageX = (CGRectGetWidth(self.centerView.frame) - imageW) * 0.5;
+//    CGFloat imageY = (CGRectGetHeight(self.centerView.frame) - imageH) * 0.5;
+//    UIView *QRCodeView = [[UIView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
+//    QRCodeView.backgroundColor = [UIColor whiteColor];
+//    [self.centerView addSubview:QRCodeView];
+//    
+//    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, imageW - 40, imageH - 40)];
+//    self.imageView = imageView;
+//    imageView.userInteractionEnabled = YES;
+//    [QRCodeView addSubview:imageView];
     
     
-    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 400 - 60, CGRectGetWidth(centerView.frame), 15)];
+    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(centerView.frame) - 45, CGRectGetWidth(centerView.frame), 15)];
     invitedLabel.textAlignment = NSTextAlignmentCenter;
     invitedLabel.font = [UIFont systemFontOfSize:15];
     invitedLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
@@ -162,10 +168,14 @@
     // 高清的二维码
     
 //    NSString * avatarPath = [YiXmppVCard getAvatarPathByJid:[userInfo getJid]];
-    self.imageView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:120];
+    self.imageView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:500];
     
     UIImageView *imageViewe = [[UIImageView alloc] initWithImage:self.userIcon.image];
     CGFloat width = self.imageView.width * 0.2;
+    imageViewe.layer.borderWidth = 3;
+    imageViewe.layer.cornerRadius = 5;
+    imageViewe.clipsToBounds = YES;
+    imageViewe.layer.borderColor = [UIColor whiteColor].CGColor;
     imageViewe.frame = CGRectMake((CGRectGetWidth(self.imageView.frame) - width) * 0.5, (CGRectGetHeight(self.imageView.frame) - width) * 0.5, width, width);
     [self.imageView addSubview:imageViewe];
     

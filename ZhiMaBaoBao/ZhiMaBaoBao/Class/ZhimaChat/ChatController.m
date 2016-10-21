@@ -1,4 +1,4 @@
-//
+    //
 //  ChatController.m
 //  ZhiMaBaoBao
 //
@@ -41,6 +41,7 @@
 #import "ConverseModel.h"   //会话模型
 #import "KXActionSheet.h"
 #import "WebViewController.h"
+#import "SendLocationController.h"
 
 //相册相关头文件
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -51,9 +52,10 @@
 //小视频相关头文件
 #import "ZMRecordShortVideoView.h"
 #import "PKFullScreenPlayerViewController.h"
+#import "UIImage+PKShortVideoPlayer.h"
 
 
-@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, pictureCellDelegate,CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,KXActionSheetDelegate,ZMRecordShortVideoDelegate>
+@interface ChatController ()<UITableViewDelegate,UITableViewDataSource,ChatKeyBoardDelegate,ChatKeyBoardDataSource, BaseChatTableViewCellDelegate, pictureCellDelegate,CDCelldelegate,VoiceCelldelegate,SDPhotoBrowserDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DNImagePickerControllerDelegate,KXActionSheetDelegate,ZMRecordShortVideoDelegate,VideoCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ChatKeyBoard *keyboard;
@@ -207,7 +209,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
     //
-    if ([message.fromUid isEqualToString:self.conversionId] || ([message.toUidOrGroupId isEqualToString:self.conversionId])) {
+    if (([message.fromUid isEqualToString:self.conversionId] && !message.isGroup )|| ([message.toUidOrGroupId isEqualToString:self.conversionId])) {
         if (message.actType == ActTypeUndomsg) {
             NSMutableArray*marr = [self.messages mutableCopy];
             for (LGMessage*msg in marr) {
@@ -600,9 +602,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 
     if(fileType == MessageTypeSystem) {
         
-        SystemChatCell *systemChatCell = [tableView dequeueReusableCellWithIdentifier:@"systemChatCell"];
+        SystemChatCell *systemChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
         if(!systemChatCell) {
-            systemChatCell = [[SystemChatCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"systemChatCell"];
+            systemChatCell = [[SystemChatCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resuseIdentifierString];
         }
         systemChatCell.systemLabel.text = message.text;
 //        systemChatCell.backgroundColor = indexPath.row%2 == 0 ? [UIColor orangeColor]:[UIColor lightGrayColor];
@@ -812,6 +814,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             
             picChatCell.isMe = isMe;
             picChatCell.indexPath = indexPath;
+            picChatCell.VDelegate = self;
             picChatCell.playView.tag = indexPath.row;
             
             [picChatCell reloadData:message isMySelf:isMe tapVideoTarget:self action:@selector(touchCellPlayVideo:)];
@@ -985,6 +988,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
     KXActionSheet *actionSheet = [[KXActionSheet alloc] initWithTitle:@"是否删除该条消息?" cancellTitle:@"取消" andOtherButtonTitles:@[@"确定"]];
     actionSheet.delegate = self;
+    actionSheet.flag = 0;
     [actionSheet show];
 }
 
@@ -1035,8 +1039,16 @@ static NSString *const reuseIdentifier = @"messageCell";
 }
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index{
-    if (index == 0) {
-        [self deleteAction:index];
+    if (sheet.flag == 0) {  //删除消息
+        if (index == 0) {
+            [self deleteAction:index];
+        }
+    }else if (sheet.flag == 1){ //发送位置
+        if (index == 0) {
+            SendLocationController *vc = [[SendLocationController alloc] init];
+            BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+            [self presentViewController:nav animated:YES completion:nil];
+        }
     }
 }
 
@@ -1303,6 +1315,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         if (self.currentPlayAudioIndexPath.row == ip.row) {
             return;
         }
+
     }
     
     [self initAudioPlayAndReader];
@@ -1357,6 +1370,12 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)touchCellPlayVideo:(UIGestureRecognizer *)grz
 {
     NSLog(@"dianjile xiaoshipin");
+    LGMessage*message = self.messages[grz.view.tag];
+    NSString*path = [NSString stringWithFormat:@"%@%@",AUDIOPATH,message.text];
+    UIImage *image = [UIImage pk_previewImageWithVideoURL:[NSURL fileURLWithPath:path]];
+    PKFullScreenPlayerViewController *vc = [[PKFullScreenPlayerViewController alloc] initWithVideoPath:path previewImage:image];
+    [self presentViewController:vc animated:NO completion:NULL];
+    
 }
 
 #pragma mark - 发送小视频
@@ -1374,13 +1393,106 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.text = outputFilePath;
+    message.holderImage = [UIImage pk_previewImageWithVideoURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@%@",AUDIOPATH,outputFilePath]]];
     [self.messages addObject:message];
     
-    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+    NSInteger num = self.messages.count - 1;
+    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
     NSArray *indexPaths = @[indexpath];
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
+    [self sendVideoHoldPic:message index:num];
+    
+}
+
+// 发送第一帧图片给服务器（暂未处理）
+- (void)sendVideoHoldPic:(LGMessage*)message index:(NSInteger)index
+{
+    NSData *imageData = UIImageJPEGRepresentation(message.holderImage, 0.5);
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell2 setProgressWithContent:0.03];
+
+    [LGNetWorking chatUploadPhoto:nil image:imageData fileName:[NSString stringWithFormat:@"%ld",[NSDate currentTimeStamp]] andFuctionName:nil block:^(NSDictionary *obj) {
+        
+        if ([obj[@"code"] integerValue] == 8888) {
+            
+            message.holderImageUrlString = obj[@"url"];
+            [self uploadVideo:message.text index:index];
+
+        }else{
+            // 发送报错
+            
+        }
+    }failure:^(NSError *error) {
+        
+    }];
+}
+
+- (void)uploadVideo:(NSString*)path index:(NSInteger)index
+{
+    //图片压缩
+    NSData *videoData = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,path]];
+    //上传图片到服务器  获取返回的图片路径然后socket推送出去
+    [LGNetWorking chatUploadVideo:nil image:videoData fileName:[NSString stringWithFormat:@"%ld",[NSDate currentTimeStamp]] andFuctionName:nil block:^(NSDictionary *obj) {
+        
+        LGMessage *message = self.messages[index];
+        message.isSending = NO;
+        if ([obj[@"code"] integerValue] == 8888) {
+            message.sendStatus = 1;
+            message.videoDownloadUrl = obj[@"url"];
+            message.isDownLoad = YES; //socket出去的时候记得改成 NO
+            message.errorMsg = self.notInGroup;    //新增错误信息标记
+
+        }else{
+            // 发送报错
+            message.sendStatus = 0;
+            
+        }
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+    }progress:^(NSProgress *progress) {
+        NSLog(@"进度 ==== %lf",progress.fractionCompleted);
+        
+        if (progress.fractionCompleted >0.03) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+            [cell2 setProgressWithContent:progress.fractionCompleted];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        // 发送失败
+        LGMessage *message = self.messages[index];
+        message.isSending = NO;
+        message.sendStatus = 0;
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+    }];
+}
+
+- (void)goToDownloadVideo:(NSIndexPath *)index
+{
+    LGMessage*message = self.messages[index.row];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index.row inSection:0];
+    IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    
+    //http://pic.zhimabaobao.com/Public/Upload/2016-10-21/580975cbf074a.mp4
+    NSString*path = [NSString stringWithFormat:@"%@%@",AUDIOPATH,message.text];
+    
+    [LGNetWorking chatDownloadVideo:path urlStr:message.videoDownloadUrl block:^(NSDictionary *responseData) {
+        
+        message.isDownLoad = YES;
+        [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+    } progress:^(NSProgress *progress) {
+        [cell2 setProgressWithContent:progress.fractionCompleted];
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 #pragma mark - ============================图片相关
@@ -1704,13 +1816,13 @@ static NSString *const reuseIdentifier = @"messageCell";
 #pragma mark - chatKeyboard datasource
 - (NSArray<MoreItem *> *)chatKeyBoardMorePanelItems
 {
+//    MoreItem *item1 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"位置"];
     MoreItem *item2 = [MoreItem moreItemWithPicName:@"sharemore_pic" highLightPicName:nil itemName:@"图片"];
     MoreItem *item3 = [MoreItem moreItemWithPicName:@"sharemore_video" highLightPicName:nil itemName:@"拍照"];
     MoreItem *item4 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"小视频"];
 
-
-//    return @[item1, item2, item3];
     return @[item2, item3, item4];
+
 
 }
 - (NSArray<ChatToolBarItem *> *)chatKeyBoardToolbarItems

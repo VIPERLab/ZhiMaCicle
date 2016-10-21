@@ -201,7 +201,7 @@ static CGFloat const PKRecordButtonWidth = 90;
 - (void)endRecordingWithPath:(NSString *)path failture:(BOOL)failture {
     [self.progressBar restore];
 
-    [self.recordButton setTitle:@"按住拍摄" forState:UIControlStateNormal];
+    [self.recordButton setTitle:@"按住录" forState:UIControlStateNormal];
     
     if (failture) {
         [PKRecordShortVideoViewController showAlertViewWithText:@"生成视频失败"];

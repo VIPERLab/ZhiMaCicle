@@ -75,7 +75,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
  */
 - (void)searchAction:(NSString *)content{
     if (!content.length) {
-        [LCProgressHUD showText:@"搜索内容不能为空！"];
+        [LCProgressHUD showFailureText:@"搜索内容不能为空！"];
         return;
     }
     [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
@@ -89,7 +89,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
                 [self.navigationController pushViewController:vc animated:YES];
                 
             }else{
-                [LCProgressHUD showText:responseData.msg];
+                [LCProgressHUD showFailureText:responseData.msg];
                 
             }
     }];
@@ -119,7 +119,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     }];
 }

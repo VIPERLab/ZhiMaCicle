@@ -19,6 +19,7 @@
 #import "ZMCallViewCell.h"
 
 #import "PhoneContact.h"
+#import "PinYin4Objc.h"
 
 #import <AddressBookUI/ABPeoplePickerNavigationController.h>
 #import <AddressBook/ABPerson.h>
@@ -241,7 +242,23 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
         contact.avtar = userImage;
         contact.allPhones = [NSArray arrayWithArray:phoneArr];
         
-        [self.contactsArr addObject:contact];
+        
+        
+        //将姓名转换成拼音
+        HanyuPinyinOutputFormat *outputFormat=[[HanyuPinyinOutputFormat alloc] init];
+        [outputFormat setToneType:ToneTypeWithoutTone];
+        [outputFormat setVCharType:VCharTypeWithV];
+        [outputFormat setCaseType:CaseTypeLowercase];
+        
+        [PinyinHelper toHanyuPinyinStringWithNSString:name withHanyuPinyinOutputFormat:outputFormat withNSString:@"" outputBlock:^(NSString *pinYin) {
+            
+            contact.pinyin = pinYin;
+            [self.contactsArr addObject:contact];
+        }];
+        
+        
+        
+//        [self.contactsArr addObject:contact];
         
     }
     

@@ -11,7 +11,11 @@
 #import "SDTimeLineCellModel.h"
 
 @interface ComplainViewController : BaseViewController
-
+@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, copy) NSString *converseId;
+@property (nonatomic, copy) NSString *userId;
+@property (nonatomic, copy) NSString *circleId;
+@property (nonatomic, assign) int type;
 @property (nonatomic, weak) SDTimeLineCellModel *model;
 
 @end

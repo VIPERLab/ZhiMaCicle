@@ -108,4 +108,12 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
 
 @property (nonatomic, assign) BOOL errorMsg; //错误信息 （被踢出群后标记为yes）
 
+#pragma mark - 小视频
+// 小视频的placeHolder图片  发送的时候用，不保存数据库
+@property (nonatomic, strong) UIImage *holderImage;
+// 视频第一帧图片的路径
+@property (nonatomic, copy) NSString  *holderImageUrlString;
+@property (nonatomic, assign)BOOL isDownLoad; //是否已存在本地
+@property (nonatomic, copy) NSString *videoDownloadUrl; //视频下载路径
+
 @end

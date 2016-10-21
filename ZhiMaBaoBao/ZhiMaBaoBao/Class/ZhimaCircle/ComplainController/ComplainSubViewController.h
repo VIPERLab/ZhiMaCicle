@@ -10,4 +10,6 @@
 
 @interface ComplainSubViewController : BaseViewController
 
+@property (nonatomic, assign) int type;
+
 @end

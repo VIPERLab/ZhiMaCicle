@@ -47,10 +47,10 @@
             //初始化数据
             [self setupProfile];
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     } failure:^(ErrorData *error) {
-        [LCProgressHUD showText:error.msg];
+        [LCProgressHUD showFailureText:error.msg];
     }];
 }
 
@@ -95,6 +95,7 @@
         
         KXActionSheet *actionSheet = [[KXActionSheet alloc] initWithTitle:@"加入黑名单，你将不再收到对方的消息" cancellTitle:@"取消" andOtherButtonTitles:@[@"确定"]];
         actionSheet.delegate = self;
+        actionSheet.flag = 1;
         [actionSheet show];
         
     }else{
@@ -102,7 +103,7 @@
             if (responseData.code == 0) {
 
             }else{
-                [LCProgressHUD showText:responseData.msg];
+                [LCProgressHUD showFailureText:responseData.msg];
             }
         }];
     }
@@ -130,7 +131,7 @@
                 [LCProgressHUD showFailureText:error.msg];
             }];
         }
-    }else{      //加入黑名单
+    }else if (sheet.flag == 1){      //加入黑名单
         if (index == 0) {
             [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"3" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
                 if (responseData.code == 0) {
@@ -148,7 +149,7 @@
                      [FMDBShareManager deleteUserMessageByUserID:self.userId];
                      */
                 }else{
-                    [LCProgressHUD showText:responseData.msg];
+                    [LCProgressHUD showFailureText:responseData.msg];
                 }
             }];
         }else{
@@ -169,7 +170,7 @@
                 [[SocketManager shareInstance] notAllowFriendCircle:self.userId];
             }
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
 
         }
     }];
@@ -188,7 +189,7 @@
                 });
             }
         }else{
-            [LCProgressHUD showText:responseData.msg];
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     }];
 }

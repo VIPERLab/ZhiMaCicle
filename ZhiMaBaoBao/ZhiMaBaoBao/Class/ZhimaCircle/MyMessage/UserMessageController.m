@@ -57,7 +57,7 @@
 - (void)loadData {  //请求消息列表
     [LGNetWorking getUnReadMessageWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID block:^(ResponseData *responseData) {
         if (responseData.code != 0) {
-            [LCProgressHUD showText:@"请检查网络"];
+            [LCProgressHUD showFailureText:@"请检查网络"];
             return ;
         }
         _isShowAllMessage = YES;

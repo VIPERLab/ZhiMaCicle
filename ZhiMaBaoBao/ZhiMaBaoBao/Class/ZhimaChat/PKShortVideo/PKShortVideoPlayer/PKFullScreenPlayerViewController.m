@@ -47,12 +47,21 @@
     self.view.backgroundColor = [UIColor blackColor];
     
     CGSize viewSize = self.view.bounds.size;
-    CGSize imageSize = self.image.size;
     
-    self.playerView = [[PKFullScreenPlayerView alloc] initWithFrame:CGRectMake(0, 0, viewSize.width, viewSize.width* (imageSize.height/imageSize.width) ) videoPath:self.videoPath previewImage:self.image];
-    self.playerView.center = self.view.center;
+    if (self.image) {
+        CGSize imageSize = self.image.size;
+        self.playerView = [[PKFullScreenPlayerView alloc] initWithFrame:CGRectMake(0, 0, viewSize.width, viewSize.width* (imageSize.height/imageSize.width) ) videoPath:self.videoPath previewImage:self.image];
+        self.playerView.center = self.view.center;
+        //    [self.playerView play];
+        [self.view addSubview:self.playerView];
+    }else{
+        self.playerView = [[PKFullScreenPlayerView alloc] initWithFrame:CGRectMake(0, 0, viewSize.width, 300) videoPath:self.videoPath previewImage:self.image];
+        self.playerView.center = self.view.center;
+        //    [self.playerView play];
+        [self.view addSubview:self.playerView];
+    }
     
-    [self.view addSubview:self.playerView];
+
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognizer:)];
     [self.view addGestureRecognizer:tap];
