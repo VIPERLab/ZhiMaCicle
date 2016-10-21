@@ -26,9 +26,14 @@
 #import "ZhiMaFriendModel.h"
 //#import "FMDBMigrationManager.h"
 
+#import <CoreTelephony/CTCallCenter.h>
+#import <CoreTelephony/CTCall.h>
+
 
 
 @interface AppDelegate () <JPUSHRegisterDelegate>
+@property(nonatomic,strong)CTCallCenter *callCenter;
+
 
 @end
 
@@ -101,6 +106,10 @@
     
     [self regiestJPush:launchOptions];
     
+    
+    //监听电话状态，记录通话时长
+    [self addCallRecordTime];
+    
     return YES;
 }
 
@@ -118,7 +127,38 @@
     }
 }
 
-
+//电话挂断，上传通话时长
+- (void)addCallRecordTime{
+    UserInfo *info = [UserInfo shareInstance];
+    self.callCenter = [[CTCallCenter alloc] init];
+    self.callCenter.callEventHandler = ^(CTCall* call) {
+        
+        //电话挂断
+        if ([call.callState isEqualToString:CTCallStateDisconnected])
+            
+        {
+            
+            NSLog(@"Call has been disconnected");
+            
+            NSDate *date = [NSDate date];
+            info.endTime = date.timeIntervalSince1970*1000;
+            
+            [LGNetWorking saveCallTime:USERINFO.sessionId toPhone:info.toPhoneNum callTime:0 CallId:info.callRecordId startTime:info.startTime endTime:info.endTime block:^(ResponseData *responseData) {
+                
+                if (responseData.code == 0) {
+                    
+                    //清除存储时间数据
+                    info.endTime = 0;
+                    info.startTime = 0;
+                    
+                }else{
+                    [LCProgressHUD showFailureText:responseData.msg];
+                }
+            }];
+            
+        }
+    };
+}
 
 //网络环境改变
 - (void)networkChanged:(NSNotification *)notification

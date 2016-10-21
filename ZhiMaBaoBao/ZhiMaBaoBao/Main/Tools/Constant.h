@@ -53,7 +53,7 @@
 #define APP_PUBLIC_PASSWORD     @"yihezhai16816888"
 
 //本地测试环境
-#define DFAPIURL @"http://192.168.1.243:8088"
+//#define DFAPIURL @"http://192.168.1.243:8088"
 //#define DFAPIURL @"http://zhimachat.yihezhai.cc"
 
 //测试环境
@@ -63,7 +63,7 @@
 
 
 //正式网络环境
-//#define DFAPIURL @"http://zm.zhimabaobao.com:8080"
+#define DFAPIURL @"http://zm.zhimabaobao.com:8080"
 #define DFAPIURLTEST @"http://fr.zhimabaobao.com"
 #define CHATPICURL  @"http://pic.zhimabaobao.com"
 

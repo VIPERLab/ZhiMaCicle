@@ -106,6 +106,11 @@
 //app版本号（用来迁移数据库）
 @property (nonatomic, copy) NSString *appVersion;
 
+@property (nonatomic, assign) long long startTime; //通话开始时间戳
+@property (nonatomic, assign) long long endTime;   //通话结束时间戳
+@property (nonatomic, copy) NSString *toPhoneNum;   //拨打的电话号码
+@property (nonatomic, assign) NSInteger callRecordId; //通话记录ID   （上面四个属性用作记录通话时长）
+
 #pragma mark - 消息通知提示
 /**
  *  新消息通知

@@ -16,7 +16,6 @@
 @property (nonatomic, strong) UIPickerView *pickView;
 @property (nonatomic, strong) NSMutableArray *dataArr;
 @property (nonatomic, strong) NSIndexPath *selectIndexPath;    //tableView选中行
-@property (nonatomic, strong) LGPickerView *lastPicker;         //上一个pickView
 @end
 
 static  NSString *const reuserIdentifier = @"moreInfoCell";
@@ -98,18 +97,12 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
     self.selectIndexPath = indexPath;
     MoreInfoModel *model = self.dataArr[indexPath.row];
     
-    //先移除上一个pickerView , 展示新的pickerView
-//    if (self.lastPicker) {
-//        [self.lastPicker dismiss];
-//    }
-    
     LGPickerView *pickerView = [LGPickerView pickerView];
     [self.view insertSubview:pickerView aboveSubview:self.tableView];
     pickerView.delegate = self;
     pickerView.title = model.item_name;
     pickerView.dataArr = model.list;
     [pickerView show];
-    self.lastPicker = pickerView;
 }
 
 //pickview确定按钮点击方法
