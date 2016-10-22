@@ -50,6 +50,7 @@
 
 @implementation SDTimeLineCellCommentView {
     MLLabel *_currentLabel;
+    NSString *_currentText;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -383,8 +384,10 @@
         for (UIView *view in commentView.subviews) {
             if ([view isKindOfClass:[MLLabel class]]) {
                 _currentLabel = (MLLabel *)view;
+                _currentText = _currentLabel.text;
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
                 alertView.delegate = self;
+                alertView.tag = 1;
                 [alertView show];
                 break;
             }
@@ -394,12 +397,21 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        UIPasteboard *pboard = [UIPasteboard generalPasteboard];
-        NSRange range = [_currentLabel.text rangeOfString:@":"];
-        pboard.string = [_currentLabel.text substringFromIndex:range.location + 1];
-        [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
+    if (alertView.tag == 1) {
+        if (buttonIndex == 1) {
+            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+            NSRange range = [_currentLabel.text rangeOfString:@":"];
+            pboard.string = [_currentLabel.text substringFromIndex:range.location + 1];
+            [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
+        }
+    } else if (alertView.tag == 100) {
+        if (buttonIndex == 1) {
+            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+            pboard.string = _currentText;
+            [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
+        }
     }
+    
 }
 
 
@@ -508,8 +520,10 @@
 
 - (void)didLongPressLink:(MLLink *)link linkText:(NSString *)linkText linkLabel:(MLLinkLabel *)linkLabel {
     _currentLabel = linkLabel;
+    _currentText = linkText;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     alertView.delegate = self;
+    alertView.tag = 100;
     [alertView show];
     
 

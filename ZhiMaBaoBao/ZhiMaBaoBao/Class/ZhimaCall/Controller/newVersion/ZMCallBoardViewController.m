@@ -160,6 +160,7 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
 #pragma mark - copyView
 - (void)creatCopyViewWithSubTitle:(NSString *)subTitle {
     UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    NSString *copyStr = pboard.string;
     if (pboard.string.length && [self isMobile:pboard.string]) {
         _copyView = [[KXCopyView alloc] initWithFrame:CGRectMake(self.showNumLabel.center.x - 25, CGRectGetMinY(self.showNumLabel.frame) - 40, 50, 40)];
         _copyView.delegate = self;

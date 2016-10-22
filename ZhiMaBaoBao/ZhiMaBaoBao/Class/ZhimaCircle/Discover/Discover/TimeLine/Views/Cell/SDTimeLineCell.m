@@ -48,9 +48,11 @@ CGFloat maxContentLabelHeight = 45; // 根据具体font而定
 
 NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLineCellOperationButtonClickedNotification";
 
-@interface SDTimeLineCell () <SDTimeLineCellCommentViewDelegate>
+@interface SDTimeLineCell () <SDTimeLineCellCommentViewDelegate,MLLinkLabelDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, assign,getter=isShowCopyView) BOOL showCopyView;
+
+@property (nonatomic, copy) NSString *currentText;
 
 @end
 
@@ -109,6 +111,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     _contentLabel.numberOfLines = 0;
     _contentLabel.textColor = [UIColor blackColor];
     _contentLabel.userInteractionEnabled = YES;
+    _contentLabel.delegate = self;
     UILongPressGestureRecognizer *labelLongPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressContentLabel:)];
     labelLongPressGesture.minimumPressDuration = 0.8f;
     [_contentLabel addGestureRecognizer:labelLongPressGesture];
@@ -388,6 +391,22 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 - (void)SDTimeLineCellCommentViewCommentOther:(SDTimeLineCellCommentItemModel *)model andCommentView:(UIView *)commentView {
     if ([self.delegate respondsToSelector:@selector(DidClickCommentOtherButton:andCommentItem:andCommentView:)]) {
         [self.delegate DidClickCommentOtherButton:self andCommentItem:model andCommentView:commentView];
+    }
+}
+
+
+- (void)didLongPressLink:(MLLink*)link linkText:(NSString*)linkText linkLabel:(MLLinkLabel*)linkLabel {
+    NSLog(@"%@",linkText);
+    self.currentText = linkText;
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alertView show];
+    
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+        pboard.string = self.currentText;
     }
 }
 
