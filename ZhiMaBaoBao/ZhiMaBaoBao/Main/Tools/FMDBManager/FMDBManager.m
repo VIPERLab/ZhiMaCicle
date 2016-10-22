@@ -840,6 +840,89 @@
     return cellModelArray;
 }
 
+
+
+/**
+ *  根据circleId 获取朋友圈模型
+ *
+ *  @param circleId 朋友圈ID
+ *
+ *  @return 朋友圈模型
+ */
+- (SDTimeLineCellModel *)getCircleContentWithCircleID:(NSString *)circleId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
+    NSString *operationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",circleId]];
+    SDTimeLineCellModel *cellModel = [[SDTimeLineCellModel alloc] init];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:operationStr];
+        while ([result next]) {
+            cellModel.circle_ID = [NSString stringWithFormat:@"%zd",[result intForColumn:@"circle_ID"]];
+            cellModel.friend_nick = [result stringForColumn:@"friend_nick"];
+            cellModel.userId = [result stringForColumn:@"userID"];
+            cellModel.content = [result stringForColumn:@"content"];
+            cellModel.current_location = [result stringForColumn:@"current_location"];
+            cellModel.create_time = [result stringForColumn:@"create_time"];
+            cellModel.head_photo = [result stringForColumn:@"head_photo"];
+        }
+    }];
+    
+    FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
+    
+    NSString *commentoperationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = '%@'",circleId]];
+    
+    [commentQueue inDatabase:^(FMDatabase *db) {
+        NSMutableArray *commentListArray = [NSMutableArray array];
+        FMResultSet *result = [db executeQuery:commentoperationStr];
+        while ([result next]) {
+            SDTimeLineCellCommentItemModel *model = [[SDTimeLineCellCommentItemModel alloc] init];
+            model.friend_nick = [result stringForColumn:@"friend_nick"];
+            model.ID = [result stringForColumn:@"circle_ID"];
+            model.userId = [result stringForColumn:@"userID"];
+            model.reply_friend_nick = [result stringForColumn:@"reply_friend_nick"];
+            model.reply_id = [result stringForColumn:@"reply_id"];
+            model.comment = [result stringForColumn:@"comment"];
+            model.head_photo = [result stringForColumn:@"head_photo"];
+            model.create_time = [result stringForColumn:@"create_time"];
+            [commentListArray addObject:model];
+        }
+        cellModel.commentList = commentListArray;
+    }];
+    
+    
+    FMDatabaseQueue *imgsQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Pic_Table];
+    NSString *imagesOperationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Pic_Table withOption:[NSString stringWithFormat:@"circle_ID = '%@'",circleId]];
+    
+    [imgsQueue inDatabase:^(FMDatabase *db) {
+        NSMutableArray *commentListArray = [NSMutableArray array];
+        FMResultSet *result = [db executeQuery:imagesOperationStr];
+        while ([result next]) {
+            SDTimeLineCellPicItemModel *model = [[SDTimeLineCellPicItemModel alloc] init];
+            model.weuser_id = [result stringForColumn:@"weuser_id"];
+            model.bigimg_url = [result stringForColumn:@"bigimg_url"];
+            model.img_url = [result stringForColumn:@"img_url"];
+            [commentListArray addObject:model];
+        }
+        cellModel.imglist = commentListArray;
+    }];
+    
+    FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
+    NSString *likeOperationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = '%@'",circleId]];
+    
+    [likeQueue inDatabase:^(FMDatabase *db) {
+        NSMutableArray *likeItemArray = [NSMutableArray array];
+        FMResultSet *result = [db executeQuery:likeOperationStr];
+        while ([result next]) {
+            SDTimeLineCellLikeItemModel *model = [[SDTimeLineCellLikeItemModel alloc] init];
+            model.userName = [result stringForColumn:@"userName"];
+            model.userId = [result stringForColumn:@"userId"];
+            [likeItemArray addObject:model];
+        }
+        cellModel.likeItemsArray = likeItemArray;
+    }];
+    
+    return cellModel;
+}
+
 /**
  *  根据朋友圈ID 删除评论和点赞数据库
  *

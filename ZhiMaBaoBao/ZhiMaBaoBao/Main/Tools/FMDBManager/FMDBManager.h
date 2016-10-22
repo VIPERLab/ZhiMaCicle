@@ -78,6 +78,16 @@ typedef enum : NSUInteger {
  */
 - (NSArray <SDTimeLineCellModel *> *)getCirCleDataInArrayWithPage:(int)pageNumber;
 
+
+/**
+ *  根据circleId 获取朋友圈模型
+ *
+ *  @param circleId 朋友圈ID
+ *
+ *  @return 朋友圈模型
+ */
+- (SDTimeLineCellModel *)getCircleContentWithCircleID:(NSString *)circleId;
+
 /**
  *  不看某个用户的朋友圈
  *
