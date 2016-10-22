@@ -168,6 +168,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     info.currentConversionId = nil;
     
     [self.player stopPlaying];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kChatViewControllerPopOut object:nil userInfo:nil];
+
 }
 
 - (void)appWillEnterForeground
@@ -508,6 +510,18 @@ static NSString *const reuseIdentifier = @"messageCell";
     if (marr.count<20) {
         self.tableView.mj_header = nil;
     }
+    
+//    LGMessage*message = [[LGMessage alloc]init];
+//    message.type = MessageTypeVideo;
+//    message.toUidOrGroupId = USERINFO.userID;
+//    message.fromUid = self.conversionId;
+//    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+//    message.isGroup = NO;
+//    message.timeStamp = [NSDate currentTimeStamp];
+//    message.text = @"/8888.mp4";
+//    message.holderImageUrlString = @"http://120.76.246.128/Public/Upload/2016-10-21/s_5809b85fd876f.png";
+//    [self.messages addObject:message];
+
 
     [self.tableView reloadData];
     // tableview 滑到底端
@@ -571,7 +585,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
         case MessageTypeVideo : {
             //            rowHeight = [IMMorePictureTableViewCell getHeightWithChat:ch TopText:time nickName:nil];
-            rowHeight = needShowTime ? 200+20 : 200;
+            rowHeight = needShowTime ? 210+20 : 210;
             
             break;
         }
@@ -1476,11 +1490,12 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)goToDownloadVideo:(NSIndexPath *)index
 {
     LGMessage*message = self.messages[index.row];
-    
+
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index.row inSection:0];
     IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    cell2.progressView.hidden = NO;
     
-    //http://pic.zhimabaobao.com/Public/Upload/2016-10-21/580975cbf074a.mp4
+    message.videoDownloadUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-10-21/580975cbf074a.mp4";
     NSString*path = [NSString stringWithFormat:@"%@%@",AUDIOPATH,message.text];
     
     [LGNetWorking chatDownloadVideo:path urlStr:message.videoDownloadUrl block:^(NSDictionary *responseData) {
@@ -1489,7 +1504,10 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
         
     } progress:^(NSProgress *progress) {
+        
+
         [cell2 setProgressWithContent:progress.fractionCompleted];
+        
     } failure:^(NSError *error) {
         
     }];
@@ -1539,7 +1557,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeImage;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = NO;
+    message.isGroup = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.picUrl = imagePath;
