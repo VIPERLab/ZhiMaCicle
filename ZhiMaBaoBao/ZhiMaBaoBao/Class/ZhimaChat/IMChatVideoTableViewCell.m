@@ -8,6 +8,7 @@
 
 #import "IMChatVideoTableViewCell.h"
 #import "UIImage+PKShortVideoPlayer.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface IMChatVideoTableViewCell ()
 
@@ -18,12 +19,20 @@
 
 @implementation IMChatVideoTableViewCell
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
         [self createCustomViews];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerError) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerError) name:kChatViewControllerPopOut object:nil];
+
     }
     return self;
 }
@@ -100,16 +109,28 @@
     
 }
 
+- (void)playerError
+{
+    NSLog(@"暂停了");
+    if (self.playBtn.hidden) {
+        self.playBtn.hidden = NO;
+    }
+    
+    [self.playView pause];
+
+}
+
 - (CGSize)pictureSizeToImage:(UIImage*)image
 {
     
-    CGSize  imageViewSize = CGSizeMake(160, 160);
+    CGSize  imageViewSize = CGSizeMake(170, 170);
     CGSize imgSize = image.size;
 //    if (imgSize.width >= imgSize.height) {
     
 //        imageViewSize.height = 100 * imgSize.height/imgSize.width;
-//    }else{
-        imageViewSize.width = 160 * imgSize.width/imgSize.height;
+//    }else{ // DEVICEWITH - 120
+        CGFloat width = 170 * imgSize.width/imgSize.height;
+        imageViewSize.width = width > DEVICEWITH - 120 ? DEVICEWITH - 120 : width;
 //
 //    }
     
@@ -118,7 +139,7 @@
 
 - (void)createCustomViews
 {
-    _playView = [[PKFullScreenPlayerView alloc] initWithFrame:CGRectMake(0, 0, 160, 160)];
+    _playView = [[PKFullScreenPlayerView alloc] initWithFrame:CGRectMake(0, 0, 170, 170)];
     _playView.isMuted = YES;
     _playView.contentMode =  UIViewContentModeScaleAspectFill;
     _playView.layer.cornerRadius = 3;

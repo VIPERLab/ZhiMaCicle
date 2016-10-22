@@ -123,6 +123,8 @@
 
 #define kRefreshConversionList @"kRefreshConversionList"
 
+//离开聊天界面（停止播放视频）
+#define kChatViewControllerPopOut @"kChatViewControllerPopOut"
 
 
 
