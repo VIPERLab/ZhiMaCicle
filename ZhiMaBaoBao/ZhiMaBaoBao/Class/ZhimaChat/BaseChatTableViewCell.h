@@ -59,6 +59,7 @@ typedef void (^ResendBlock)(BaseChatTableViewCell *cell);
 
 - (void)resizeBubbleView:(CGSize)contetnViewSize;               //根据内容视图的尺寸调整气泡的大小
 - (void)imageResizeBubbleView:(CGSize)contetnViewSize;
+- (void)repositionContentViewTypeVideo:(UIView *)contentView;
 - (void)repositionContentView:(UIView *)contentView;            //调整内容视图在气泡中的位置
 - (void)repositionContentViewTypePic:(UIView *)contentView;       //调整内容视图在气泡中的位置(图片)
 

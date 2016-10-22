@@ -21,23 +21,11 @@
 
 @implementation IMMorePictureTableViewCell
 
-//+ (CGFloat)getHeightWithChat:(LGMessage *)chat TopText:(NSString *)topText nickName:(NSString *)nickName;
-//{
-//    CGFloat height = [self hightForRowWithChat:chat];
-//    //height = [self getBaseHeightTopText:topText nick:nickName contentHeight:height];
-//    
-//    height = [self getBaseHeightTopText:topText nick:nickName contentHeight:height bubbleEdgeInset:UIEdgeInsetsMake(3, 3, 3, 11)];
-//    
-//    return height;
-//}
-
-
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        //        self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self createCustomViews];
     }
     return self;
@@ -135,35 +123,6 @@
     _picturesView.userInteractionEnabled = YES;
 //    _picturesView.contentMode =  UIViewContentModeScaleAspectFill;
 //    _picturesView.clipsToBounds  = YES;
-    
-//    _maskLayer = [CAShapeLayer layer];
-//    _maskLayer.fillColor = [UIColor blackColor].CGColor;
-//    _maskLayer.strokeColor = [UIColor clearColor].CGColor;
-//    _maskLayer.frame = _picturesView.bounds;
-//    _maskLayer.contentsCenter = CGRectMake(0.5, 0.5, 0.1, 0.1);
-//    _maskLayer.contentsScale = [UIScreen mainScreen].scale;
-//    //非常关键设置自动拉伸的效果且不变形
-//    _maskLayer.contents = (id)[UIImage imageNamed:@"chat_bg_sender"].CGImage;
-//    _contentLayer = [CALayer layer];
-//    _contentLayer.mask = _maskLayer;
-//    _contentLayer.frame = _picturesView.bounds;
-//    [_picturesView.layer addSublayer:_contentLayer];
-    
-//    _picturesView.layer.cornerRadius = 3;
-//    _picturesView.layer.masksToBounds = YES;
-    
-//    _botLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-//    _botLabel.backgroundColor = [UIColor clearColor];
-//    _botLabel.numberOfLines = 0;
-//    _botLabel.font          = kFont;
-//    _botLabel.textAlignment = NSTextAlignmentLeft;
-//    
-//    _mainView = [[UIButton alloc] initWithFrame:CGRectMake(kLeft - kSpace, kTop - kSpace, kWidth, 150)];
-//    _mainView.backgroundColor = [UIColor clearColor];
-//    
-//    
-//    [_mainView addSubview:_picturesView];
-//    [_mainView addSubview:_botLabel];
     
     [_bubble addSubview:_picturesView];
     
