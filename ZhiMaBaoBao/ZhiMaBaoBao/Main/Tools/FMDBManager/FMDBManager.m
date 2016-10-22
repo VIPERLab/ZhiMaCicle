@@ -468,6 +468,60 @@
 }
 
 
+// 更新数据库
+- (NSString *)updataTable:(ZhiMaSqliteTableType)type withColumn:(NSString *)column andColumnType:(NSString *)columnType {
+    NSString *tableName = [NSString string];  //表名
+    switch (type) {
+        case ZhiMa_Circle_Table: {
+            tableName = ZhiMaCicle_Talbe_Name;
+            break;
+        }
+        case ZhiMa_Circle_Comment_Table: {
+            tableName = ZhiMaCicleComment_Table_Name;
+            break;
+        }
+        case ZhiMa_Circle_Pic_Table: {
+            tableName = ZhiMaCirclePic_Table_Name;
+            break;
+        }
+        case ZhiMa_Circle_Like_Table: {
+            tableName = ZhiMaCircleLike_Table_Name;
+            break;
+        }
+        case ZhiMa_Chat_Converse_Table: {
+            tableName = ZhiMaChatConvence_Table_Name;
+            break;
+        }
+        case ZhiMa_Chat_Message_Table: {
+            tableName = ZhiMaChatMessage_Table_Name;
+            break;
+        }
+        case ZhiMa_User_Message_Table: {
+            tableName = ZhiMaUserMessage_Table_Name;
+            break;
+        }
+        case ZhiMa_NewFriend_Message_Table: {
+            tableName = ZhiMaNewFriend_Table_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMenber_Table: {
+            tableName = ZhiMaGroupChatMember_Table_Name;
+            break;
+        }
+        default: {
+            NSLog(@"无效参数");
+            return @"";
+            break;
+        }
+    }
+    NSString *updataStr = [NSString stringWithFormat:@"alter table %@ add '%@' '%@'",tableName,column,columnType];
+    return updataStr;
+}
+
 #pragma mark - 动态取出模型的所有属性
 - (NSArray *)getPropertyNameArrayWith:(id)model {
     // 动态获取模型的属性名
@@ -788,7 +842,7 @@
             while ([result next]) {
                 SDTimeLineCellCommentItemModel *model = [[SDTimeLineCellCommentItemModel alloc] init];
                 model.friend_nick = [result stringForColumn:@"friend_nick"];
-                model.ID = [result stringForColumn:@"circle_ID"];
+                model.ID = [result stringForColumn:@"fcid"];
                 model.userId = [result stringForColumn:@"userID"];
                 model.reply_friend_nick = [result stringForColumn:@"reply_friend_nick"];
                 model.reply_id = [result stringForColumn:@"reply_id"];
@@ -1588,7 +1642,7 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID,@(message.is_read),@(message.sendStatus)];
+        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID,@(message.is_read),@(message.sendStatus),message.holderImageUrlString,@(message.isDownLoad),message.videoDownloadUrl];
         if (successFul) {
             NSLog(@"插入消息成功");
         } else {
@@ -1695,7 +1749,7 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID,@(message.is_read),@(message.sendStatus)];
+        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID,@(message.is_read),@(message.sendStatus),message.holderImageUrlString,@(message.isDownLoad),message.videoDownloadUrl];
         if (successFul) {
             NSLog(@"插入消息成功");
         } else {
@@ -1816,6 +1870,10 @@
             message.text = [result stringForColumn:@"text"];
             message.is_read = [result intForColumn:@"is_read"];
             message.sendStatus = [result intForColumn:@"sendStatus"];
+            message.holderImageUrlString = [result stringForColumn:@"holderImageUrlString"];
+            message.isDownLoad = [result intForColumn:@"isDownLoad"];
+            message.videoDownloadUrl = [result stringForColumn:@"videoDownloadUrl"];
+            
             [dataArray addObject:message];
         }
     }];
@@ -1833,7 +1891,7 @@
     __block BOOL isSuccess = NO;
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
 //     is_read, sendStatus
-    NSString *option1 = [NSString stringWithFormat:@"is_read = '%@', sendStatus = '%@',type = '%@', text = '%@'",@(message.is_read),@(message.sendStatus),@(message.type),message.text];
+    NSString *option1 = [NSString stringWithFormat:@"is_read = '%@', sendStatus = '%@',type = '%@', text = '%@', isDownLoad = '%@'",@(message.is_read),@(message.sendStatus),@(message.type),message.text,@(message.isDownLoad)];
     NSString *option2 = [NSString stringWithFormat:@"msgid = '%@'",message.msgid];
     NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Message_Table withOpton1:option1 andOption2:option2];
     [queue inDatabase:^(FMDatabase *db) {

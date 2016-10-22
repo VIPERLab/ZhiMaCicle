@@ -11,7 +11,7 @@
 @class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel,GroupUserModel;
 @class SDTimeLineCellModel,SDTimeLineCellCommentItemModel,SDTimeLineCellLikeItemModel;
 
-typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
+//typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
 
 typedef enum : NSUInteger {
     /* ----   朋友圈相关 ----  */
@@ -54,6 +54,9 @@ typedef enum : NSUInteger {
 
 // 删表
 - (NSString *)deletedTableData:(ZhiMaSqliteTableType)type withOption:(NSString *)option;
+
+// 更新数据库
+- (NSString *)updataTable:(ZhiMaSqliteTableType)type withColumn:(NSString *)column andColumnType:(NSString *)columnType;
 
 /**
  *   关闭所有表
