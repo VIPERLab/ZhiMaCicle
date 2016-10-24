@@ -539,6 +539,7 @@
 		316957861D91199100140126 /* dtmf-9.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957791D91199100140126 /* dtmf-9.aif */; };
 		316957871D91199100140126 /* dtmf-s.aif in Resources */ = {isa = PBXBuildFile; fileRef = 3169577A1D91199100140126 /* dtmf-s.aif */; };
 		316957881D91199100140126 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3169577B1D91199100140126 /* ring.mp3 */; };
+		31861E0D1DBDAE850037E4E6 /* LGPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E0C1DBDAE850037E4E6 /* LGPickerView.m */; };
 		319069A41D9A17C300D1D6D2 /* NSData+Replace.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069A31D9A17C300D1D6D2 /* NSData+Replace.m */; };
 		319069AD1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */; };
 		319069B11D9BC09200D1D6D2 /* FriendsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */; };
@@ -1698,6 +1699,8 @@
 		316957791D91199100140126 /* dtmf-9.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-9.aif"; sourceTree = "<group>"; };
 		3169577A1D91199100140126 /* dtmf-s.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-s.aif"; sourceTree = "<group>"; };
 		3169577B1D91199100140126 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
+		31861E0B1DBDAE850037E4E6 /* LGPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGPickerView.h; sourceTree = "<group>"; };
+		31861E0C1DBDAE850037E4E6 /* LGPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPickerView.m; sourceTree = "<group>"; };
 		319069A21D9A17C300D1D6D2 /* NSData+Replace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Replace.h"; sourceTree = "<group>"; };
 		319069A31D9A17C300D1D6D2 /* NSData+Replace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Replace.m"; sourceTree = "<group>"; };
 		319069AB1D9A9DC100D1D6D2 /* NSDate+TimeCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TimeCategory.h"; sourceTree = "<group>"; };
@@ -4853,6 +4856,8 @@
 		31B7C7271D8F82CE00F1883A /* LoginRegiste */ = {
 			isa = PBXGroup;
 			children = (
+				31861E0B1DBDAE850037E4E6 /* LGPickerView.h */,
+				31861E0C1DBDAE850037E4E6 /* LGPickerView.m */,
 				31B7C74E1D8FB33E00F1883A /* LGGuideController.h */,
 				31B7C74F1D8FB33E00F1883A /* LGGuideController.m */,
 				31B7C7501D8FB33E00F1883A /* LGLoginController.h */,
@@ -5692,6 +5697,7 @@
 				04EA7DD41D912872005E5425 /* ZXRSSExpandedDecodedChar.m in Sources */,
 				04EA7D6F1D912872005E5425 /* ZXGeoParsedResult.m in Sources */,
 				04608FA11DB078CD00F4B9E9 /* ChangeSexCell.m in Sources */,
+				31861E0D1DBDAE850037E4E6 /* LGPickerView.m in Sources */,
 				04EA7D6B1D912872005E5425 /* ZXEmailAddressResultParser.m in Sources */,
 				04EA7DE21D912872005E5425 /* ZXRSSPair.m in Sources */,
 				04EA7ACC1D910F89005E5425 /* UIView+DNImagePicker.m in Sources */,

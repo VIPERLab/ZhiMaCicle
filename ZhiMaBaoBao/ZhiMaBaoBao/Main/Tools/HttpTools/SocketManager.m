@@ -165,6 +165,21 @@ static SocketManager *manager = nil;
         sendMsg = message;
     }
     
+    else if (message.type == MessageTypeVideo){
+        sendMsg.toUidOrGroupId = message.toUidOrGroupId;
+        sendMsg.fromUid = message.fromUid;
+        sendMsg.type = message.type;
+        sendMsg.msgid = message.msgid;
+        sendMsg.isGroup = message.isGroup;
+        sendMsg.timeStamp = message.timeStamp;
+        
+        //拼接text (本地路径：text , 第一帧图片路径：holderImageUrlString , 视频下载路径：videoDownloadUrl , 是否存在本地：isDownLoad)
+        
+        sendMsg.isDownLoad = NO;
+        sendMsg.holderImageUrlString = message.holderImageUrlString;
+        sendMsg.videoDownloadUrl = message.videoDownloadUrl;
+    }
+    
     //根据网络状态-- 标记消息发送状态
     UserInfo *userInfo = [UserInfo shareInstance];
     message.sendStatus = !userInfo.networkUnReachable;
@@ -369,7 +384,7 @@ static SocketManager *manager = nil;
             NSDictionary *resDic = responceData[@"data"];
             NSString *toUid = resDic[@"toUidOrGroupId"];
             LGMessage *systemMsg = [[LGMessage alloc] init];
-            systemMsg.text = @"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天";
+            systemMsg.text = @"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天。";
             systemMsg.fromUid = toUid;
             systemMsg.toUidOrGroupId = USERINFO.userID;
             systemMsg.type = MessageTypeSystem;
@@ -388,7 +403,7 @@ static SocketManager *manager = nil;
             NSDictionary *resDic = responceData[@"data"];
             NSString *toUid = resDic[@"toUidOrGroupId"];
             LGMessage *systemMsg = [[LGMessage alloc] init];
-            systemMsg.text = @"消息已成功发送，但被对方拒绝";
+            systemMsg.text = @"消息已成功发送，但被对方拒绝。";
             systemMsg.fromUid = toUid;
             systemMsg.toUidOrGroupId = USERINFO.userID;
             systemMsg.type = MessageTypeSystem;
@@ -493,7 +508,7 @@ static SocketManager *manager = nil;
             if ([actUid isEqualToString:USERINFO.userID]) { //自己
                 systemMsg.text = [NSString stringWithFormat:@"你通过扫描二维码加入了群聊"];
             }else{
-                systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描二维码加入了群聊",actName];
+                systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描你分享的二维码加入了群聊",actName];
             }
         }else{
             if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
@@ -684,7 +699,7 @@ static SocketManager *manager = nil;
 - (void)addSystemMsgToSqlite:(ZhiMaFriendModel *)friend{
     
     LGMessage *systemMsg = [[LGMessage alloc] init];
-    systemMsg.text = [NSString stringWithFormat:@"%@通过了你的朋友验证请求,现在可以开始聊天了",friend.user_Name];
+    systemMsg.text = [NSString stringWithFormat:@"%@通过了你的朋友验证请求,现在可以开始聊天了。",friend.user_Name];
     systemMsg.fromUid = USERINFO.userID;
     systemMsg.toUidOrGroupId = friend.user_Id;
     systemMsg.type = MessageTypeSystem;
