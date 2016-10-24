@@ -134,6 +134,10 @@
  *  位置信息
  */
 @property (nonatomic, copy) NSString *area;
+/**
+ *  标记是被挤下线
+ */
+@property (nonatomic, assign) BOOL isKicker;
 
 #pragma mark - 判断时候超过15天
 /**

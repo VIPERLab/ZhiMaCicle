@@ -29,6 +29,8 @@
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
 
+#import "LGLoginController.h"
+
 
 
 @interface AppDelegate () <JPUSHRegisterDelegate>
@@ -508,8 +510,9 @@
 }
 
 
-#pragma mark - 用户退出通知
+#pragma mark - 用户退出（或者被挤下线）通知
 - (void)userLogOut {
+    
     [[SocketManager shareInstance] disconnect];
     
     // 关闭数据库
@@ -518,6 +521,21 @@
     LGGuideController *vc = [[LGGuideController alloc] init];
     UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = guideVC;
+    
+    UserInfo *info = [UserInfo read];
+    //如果被挤下线
+    if (info.isKicker) {
+        
+        info.isKicker = NO;
+        [info save];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"你的帐号已在其他设备登录。如非本人操作，则密码可能已泄露，建议尽快修改密码。" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction *loginOut = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alert addAction:loginOut];
+        [guideVC presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 #pragma mark - 微信支付回调

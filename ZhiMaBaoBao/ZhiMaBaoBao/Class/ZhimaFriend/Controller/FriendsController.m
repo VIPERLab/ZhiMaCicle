@@ -196,7 +196,6 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     userInfo.unReadCount ++;
     [userInfo save];
     
-    NSDictionary *userDic = notify.userInfo;
     //插入数据库，显示未读角标
 //    [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
     self.unReadLabel.hidden = NO;
@@ -204,6 +203,9 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     if (USERINFO.unReadCount == 0) {
         self.unReadLabel.hidden = YES;
     }
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     
     
     //显示tabbar角标
@@ -250,18 +252,25 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     //组一：新的好友 群组
-    FriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:headerIdentifier];
+    FriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             cell.name.text = @"新的朋友";
             cell.avtar.image = [UIImage imageNamed:@"new_friend"];
-            [cell addSubview:self.unReadLabel];
+            if (USERINFO.unReadCount > 0) {
+                cell.unreadLabel.text = [NSString stringWithFormat:@"%d",USERINFO.unReadCount];
+                cell.unreadLabel.hidden = NO;
+            }else{
+                cell.unreadLabel.hidden = YES;
+            }
         }else{
             cell.name.text = @"群聊";
             cell.avtar.image = [UIImage imageNamed:@"group_Icon"];
+            cell.unreadLabel.hidden = YES;
         }
     //好友列表
     }else{
+        cell.unreadLabel.hidden = YES;
         NSInteger rowNum = 0;
         for (int i = 0; i < indexPath.section - 1; i++) {
             

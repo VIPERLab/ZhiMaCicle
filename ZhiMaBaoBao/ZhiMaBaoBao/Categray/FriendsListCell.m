@@ -12,7 +12,11 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    
+    self.unreadLabel.backgroundColor = THEMECOLOR;
+    self.unreadLabel.textColor = WHITECOLOR;
+    self.unreadLabel.layer.cornerRadius = 8.f;
+    self.unreadLabel.clipsToBounds = YES;
 }
 
 - (void)setFriendModel:(ZhiMaFriendModel *)friendModel{
