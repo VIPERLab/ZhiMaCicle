@@ -89,9 +89,15 @@
     self.likeItemArray = [likeItemsArray mutableCopy];
     self.commentItemArray = [commentItemsArray mutableCopy];
     
-    if (self.commentItemArray.count) {
+    if (self.commentViewArray.count) {
         [self.commentViewArray enumerateObjectsUsingBlock:^(UIView *commentView, NSUInteger idx, BOOL * _Nonnull stop) {
             commentView.hidden = YES;
+        }];
+    }
+    
+    if (self.likeButtonArray.count) {
+        [self.likeButtonArray enumerateObjectsUsingBlock:^(UIButton *likeButton, NSUInteger idx, BOOL * _Nonnull stop) {
+            likeButton.hidden = YES;
         }];
     }
     
@@ -119,12 +125,14 @@
             _likeImage.image = [UIImage imageNamed:@"Discover_Like"];
             [self addSubview:_likeImage];
         }
-        
+        _likeImage.hidden = NO;
         _likeImage.sd_layout
         .topSpaceToView(self,20)
         .leftSpaceToView(self,7.5)
         .widthIs(15)
         .heightIs(13);
+    } else {
+        _likeImage.hidden = YES;
     }
     
     
@@ -168,6 +176,7 @@
             .widthIs(35)
             .heightIs(35);
         }
+        button.hidden = NO;
         
         SDTimeLineCellLikeItemModel *model = self.likeItemArray[index];
         [button sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.userPhoto]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
@@ -179,10 +188,13 @@
     
     
     //点赞下面的细线
-    if (self.likeItemArray.count && !_likeBottomLikeView) {
-        _likeBottomLikeView= [UIView new];
-        [self addSubview:_likeBottomLikeView];
-        _likeBottomLikeView.backgroundColor = [UIColor colorFormHexRGB:@"e1e1e1"];
+    if (self.likeItemArray.count) {
+        if (!_likeBottomLikeView) {
+            _likeBottomLikeView= [UIView new];
+            [self addSubview:_likeBottomLikeView];
+            _likeBottomLikeView.backgroundColor = [UIColor colorFormHexRGB:@"e1e1e1"];
+        }
+        _likeBottomLikeView.hidden = NO;
         _likeBottomLikeView.sd_layout
         .topSpaceToView(lastButton,5)
         .leftEqualToView(self)
@@ -190,21 +202,27 @@
         .heightIs(0.5);
         
         lastTopView = _likeBottomLikeView;
+    } else {
+        _likeBottomLikeView.hidden = YES;
     }
     
     
     
     //设置评论view
-    if (self.commentItemArray.count && !_commentIcon) {
-        
-        _commentIcon = [[UIImageView alloc] init];
-        _commentIcon.image = [UIImage imageNamed:@"Discover_Detail_Comment"];
-        [self addSubview:_commentIcon];
+    if (self.commentItemArray.count) {
+        if (!_commentIcon) {
+            _commentIcon = [[UIImageView alloc] init];
+            _commentIcon.image = [UIImage imageNamed:@"Discover_Detail_Comment"];
+            [self addSubview:_commentIcon];
+        }
+        _commentIcon.hidden = NO;
         _commentIcon.sd_layout
         .topSpaceToView(lastTopView,20)
         .leftSpaceToView(self,6)
         .widthIs(15)
         .heightIs(15);
+    } else {
+        _commentIcon.hidden = YES;
     }
     
     for (NSInteger index = 0; index<self.commentItemArray.count; index++) {

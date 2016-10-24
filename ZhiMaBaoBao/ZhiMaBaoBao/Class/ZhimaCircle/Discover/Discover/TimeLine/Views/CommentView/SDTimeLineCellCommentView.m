@@ -50,6 +50,7 @@
 
 @implementation SDTimeLineCellCommentView {
     MLLabel *_currentLabel;
+    NSString *_currentText;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -108,6 +109,8 @@
         UIButton *commentButtonView = [[UIButton alloc] init];
         [commentButtonView addTarget:self action:@selector(commentButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
         
+//        UITapGestureRecognizer *panGesuture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentButtonDidClick:)];
+//        [commentButtonView addGestureRecognizer:panGesuture];
         
         UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(commentViewDidLongPress:)];
         [commentButtonView addGestureRecognizer:longPressGesture];
@@ -123,6 +126,9 @@
         label.font = [UIFont systemFontOfSize:14];
         label.delegate = self;
         [commentButtonView addSubview:label];
+        
+        
+        
     }
     
     for (int i = 0; i < commentItemsArray.count; i++) {
@@ -140,7 +146,13 @@
 //                label.attributedText = model.attributedContent;
                 
                 label.backgroundColor = [UIColor clearColor];
-                label.userInteractionEnabled = YES;
+                
+                if ([self isUrlStr:model.comment]) {
+                    label.userInteractionEnabled = YES;
+                } else {
+                    label.userInteractionEnabled = NO;
+                }
+                
                 
                 //清除所有链接
                 [label.links removeAllObjects];
@@ -352,10 +364,11 @@
 }
 
 #pragma mark - 评论框点击按钮
-- (void)commentButtonDidClick:(UIButton *)sender {
-    
+//- (void)commentButtonDidClick:(UIGestureRecognizer *)gesture {
+- (void)commentButtonDidClick:(UIButton  *)button {
+//    UIButton *button = (UIButton *)gesture.view;
     for (NSInteger index = 0; index < self.commentLabelsArray.count; index++) {
-        if (sender == self.commentLabelsArray[index]) {
+        if (button == self.commentLabelsArray[index]) {
             SDTimeLineCellCommentItemModel *model = self.commentItemsArray[index];
             if ([self.delegate respondsToSelector:@selector(SDTimeLineCellCommentViewCommentOther:andCommentView:)]) {
                 [self.delegate SDTimeLineCellCommentViewCommentOther:model andCommentView:self.commentLabelsArray[index]];
@@ -371,8 +384,10 @@
         for (UIView *view in commentView.subviews) {
             if ([view isKindOfClass:[MLLabel class]]) {
                 _currentLabel = (MLLabel *)view;
+                _currentText = _currentLabel.text;
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
                 alertView.delegate = self;
+                alertView.tag = 1;
                 [alertView show];
                 break;
             }
@@ -382,12 +397,21 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        UIPasteboard *pboard = [UIPasteboard generalPasteboard];
-        NSRange range = [_currentLabel.text rangeOfString:@":"];
-        pboard.string = [_currentLabel.text substringFromIndex:range.location + 1];
-        [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
+    if (alertView.tag == 1) {
+        if (buttonIndex == 1) {
+            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+            NSRange range = [_currentLabel.text rangeOfString:@":"];
+            pboard.string = [_currentLabel.text substringFromIndex:range.location + 1];
+            [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
+        }
+    } else if (alertView.tag == 100) {
+        if (buttonIndex == 1) {
+            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+            pboard.string = _currentText;
+            [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
+        }
     }
+    
 }
 
 
@@ -482,11 +506,7 @@
         
         MLLink *link = [MLLink linkWithType:MLLinkTypeEmail value:subStringForMatch range:[model.attributedContent.string rangeOfString:subStringForMatch]];
         [label addLink:link];
-//
-//        
-//        [label setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
-//            NSLog(@"%@",linkText);
-//        }];
+
     }
 }
 
@@ -496,6 +516,17 @@
     } else {
         [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommenterNotification object:nil userInfo:@{@"userId" : link.linkValue}];
     }
+}
+
+- (void)didLongPressLink:(MLLink *)link linkText:(NSString *)linkText linkLabel:(MLLinkLabel *)linkLabel {
+    _currentLabel = linkLabel;
+    _currentText = linkText;
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alertView.delegate = self;
+    alertView.tag = 100;
+    [alertView show];
+    
+
 }
 
 - (BOOL)isUrlStr:(NSString *)urlStr {

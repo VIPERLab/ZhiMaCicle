@@ -44,9 +44,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (self.model.ID.length == 0) {
-        [self request];
-    }
+//    if (self.model.ID.length == 0) {
+    [self request];
+//    }
 }
 
 - (void)didReceiveMemoryWarning {

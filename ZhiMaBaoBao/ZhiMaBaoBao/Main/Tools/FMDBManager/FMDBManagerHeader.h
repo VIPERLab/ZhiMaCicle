@@ -66,8 +66,8 @@
 
 
 // 创建 消息表 字段
-#define Chat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, msgid TEXT NOT NULL, type INTEGER, fromUid TEXT NOT NULL, toUidOrGroupId TEXT NOT NULL, time INTEGER, text TEXT NOT NULL, isGroup INTEGER, converseId TEXT NOT NULL, is_read INTEGER, sendStatus INTEGER)"
-#define Chat_MessageFields_name @"msgid,type,fromUid,toUidOrGroupId,time,text,isGroup,converseId,is_read,sendStatus"
+#define Chat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, msgid TEXT NOT NULL, type INTEGER, fromUid TEXT NOT NULL, toUidOrGroupId TEXT NOT NULL, time INTEGER, text TEXT NOT NULL, isGroup INTEGER, converseId TEXT NOT NULL, is_read INTEGER, sendStatus INTEGER, holderImageUrlString TEXT, isDownLoad INTEGER, videoDownloadUrl TEXT)"
+#define Chat_MessageFields_name @"msgid,type,fromUid,toUidOrGroupId,time,text,isGroup,converseId,is_read,sendStatus,holderImageUrlString,isDownLoad,videoDownloadUrl"
 
 
 // 用户表

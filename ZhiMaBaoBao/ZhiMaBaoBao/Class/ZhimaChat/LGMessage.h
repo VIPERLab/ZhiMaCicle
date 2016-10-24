@@ -24,7 +24,8 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
     MessageTypeText  = 0,   //文本消息
     MessageTypeImage,       //图片
     MessageTypeAudio,       //语音
-    MessageTypeSystem       //系统消息
+    MessageTypeSystem,      //系统消息
+    MessageTypeVideo        //小视频
 };
 
 //发送状态
@@ -106,5 +107,13 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
 @property (nonatomic, assign, readonly, getter=isUser) BOOL user;
 
 @property (nonatomic, assign) BOOL errorMsg; //错误信息 （被踢出群后标记为yes）
+
+#pragma mark - 小视频
+// 小视频的placeHolder图片  发送的时候用，不保存数据库
+@property (nonatomic, strong) UIImage *holderImage;
+// 视频第一帧图片的路径
+@property (nonatomic, copy) NSString  *holderImageUrlString;
+@property (nonatomic, assign)BOOL isDownLoad; //是否已存在本地
+@property (nonatomic, copy) NSString *videoDownloadUrl; //视频下载路径
 
 @end

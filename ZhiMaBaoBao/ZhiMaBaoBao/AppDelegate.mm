@@ -24,7 +24,7 @@
 #endif
 //临时用
 #import "ZhiMaFriendModel.h"
-//#import "FMDBMigrationManager.h"
+#import "FMDB.h"
 
 
 
@@ -77,13 +77,16 @@
         NSLog(@"manager start failed!");
     }
     
-    //迁移数据库
-    [self moveSQLToNew];
+    
+    
     
     //创建数据库表
     if (USERINFO.hasLogin) {
         [self creatMySQL];
     }
+    //迁移数据库
+    [self moveSQLToNew];
+    
     [self notification];
     
     
@@ -248,6 +251,49 @@
 //    NSLog(@"All migrations: %@", manager.migrations);
 //    NSLog(@"Applied versions: %@", manager.appliedVersions);
 //    NSLog(@"Pending versions: %@", manager.pendingVersions);
+    
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    CGFloat app_Version = [[infoDictionary objectForKey:@"CFBundleShortVersionString"] floatValue];
+    [queue inDatabase:^(FMDatabase *db) {
+        
+        int dbVersion = [db userVersion];
+        if (dbVersion < app_Version) {
+            NSLog(@"需要更新数据库");
+            //增加字段  “alter table "表名" add “字段名” “类型” ”  执行这个sql语句就行
+            NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Chat_Message_Table withColumn:@"holderImageUrlString" andColumnType:@"TEXT"];
+            BOOL success = [db executeUpdate:updataStr1];
+            if (success) {
+                NSLog(@"更新数据库成功");
+            } else {
+                NSLog(@"更新数据库失败");
+            }
+            
+            
+            NSString *updataStr2 = [FMDBShareManager updataTable:ZhiMa_Chat_Message_Table withColumn:@"isDownLoad" andColumnType:@"BOOL"];
+            BOOL success2 = [db executeUpdate:updataStr2];
+            if (success2) {
+                NSLog(@"更新数据库成功");
+            } else {
+                NSLog(@"更新数据库失败");
+            }
+            
+            
+            NSString *updataStr3 = [FMDBShareManager updataTable:ZhiMa_Chat_Message_Table withColumn:@"videoDownloadUrl" andColumnType:@"TEXT"];
+            BOOL success3 = [db executeUpdate:updataStr3];
+            if (success3) {
+                NSLog(@"更新数据库成功");
+            } else {
+                NSLog(@"更新数据库失败");
+            }
+            
+            //设置数据库版本号
+            if (success && success2 && success3) {
+                [db setUserVersion:app_Version];
+            }
+            
+        }
+    }];
 }
 
 //创建数据库表
