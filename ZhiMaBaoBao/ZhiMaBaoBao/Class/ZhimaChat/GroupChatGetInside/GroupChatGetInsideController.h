@@ -12,6 +12,6 @@
 
 @property (nonatomic, copy) NSString *groupId;
 
-@property (nonatomic, copy) NSString *sessionId;
+@property (nonatomic, copy) NSString *qrCodeUserId;
 
 @end

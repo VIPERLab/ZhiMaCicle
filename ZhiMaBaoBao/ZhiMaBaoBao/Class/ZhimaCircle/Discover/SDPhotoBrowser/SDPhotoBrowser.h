@@ -35,6 +35,9 @@
 @property (nonatomic, copy) NSString *userId;
 @property (nonatomic, assign) BOOL isChat;
 
+//收藏图片专用属性
+@property (nonatomic, assign) int type;
+
 
 @property (nonatomic, weak) id<SDPhotoBrowserDelegate> delegate;
 

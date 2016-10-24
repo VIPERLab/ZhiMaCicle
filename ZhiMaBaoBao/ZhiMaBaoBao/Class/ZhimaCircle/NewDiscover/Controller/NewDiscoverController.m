@@ -121,7 +121,7 @@
     self.textView = headerView.textView;
     [self.view addSubview:headerView];
     self.headerView = headerView;
-    headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 230);
+    headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 240);
 
     
     
@@ -544,11 +544,11 @@
 - (void)upDataView {
     CGFloat buttonWidth = ([UIScreen mainScreen].bounds.size.width - 50) / 4;
     if (self.imagesArray.count >= 4 && self.imagesArray.count < 8) {
-        self.headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 230 + buttonWidth + 5);
+        self.headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 240 + buttonWidth + 5);
     } else if (self.imagesArray.count >= 8){
-        self.headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 230 + buttonWidth * 2 + 10);
+        self.headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 240 + buttonWidth * 2 + 10);
     } else {
-        self.headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 230);
+        self.headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 240);
     }
     
     [self.headerView setContentWithImageArray:self.imagesArray];

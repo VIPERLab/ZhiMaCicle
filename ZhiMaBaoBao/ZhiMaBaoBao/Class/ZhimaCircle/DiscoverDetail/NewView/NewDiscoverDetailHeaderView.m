@@ -9,7 +9,11 @@
 #import "NewDiscoverDetailHeaderView.h"
 #import "UIButton+WebCache.h"
 #import "SDTimeLineCellModel.h"
-#import "SDTimeLineCellOperationMenu.h"
+//#import "SDTimeLineCellOperationMenu.h"
+#import "newDiscoverDetailMenu.h"
+
+#define kDiscoverDetailOperationButtonClickedNotification @"DiscoverDetailOperationButtonClickedNotification"
+//NSString *const kDiscoverDetailOperationButtonClickedNotification = @"DiscoverDetailOperationButtonClickedNotification";
 
 @interface NewDiscoverDetailHeaderView ()
 
@@ -26,7 +30,7 @@
     UILabel *_contentLabel;
     UILabel *_creatTimeLabel;
     UILabel *_locationLabel;
-    SDTimeLineCellOperationMenu *_operationMenu;
+    newDiscoverDetailMenu *_operationMenu;
     UIButton *_operationButton;
 }
 
@@ -67,15 +71,18 @@
     [_operationButton addTarget:self action:@selector(operationButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_operationButton];
     
-    _operationMenu = [SDTimeLineCellOperationMenu new];
-    [_operationMenu setLikeButtonClickedOperation:^(SDTimeLineCellOperationMenu *menu) {
+    _operationMenu = [newDiscoverDetailMenu new];
+    _operationMenu.show = NO;
+    [_operationMenu setLikeButtonClickedOperation:^(newDiscoverDetailMenu *menu) {
 
     }];
+    [self addSubview:_operationMenu];
 }
 
 #pragma mark - action
 - (void)operationButtonClicked {
-    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kDiscoverDetailOperationButtonClickedNotification object:_operationButton];
+    _operationMenu.show = !_operationMenu.isShowing;
 }
 
 
@@ -190,6 +197,13 @@
     CGFloat operationH = operationW;
     _operationButton.hidden = NO;
     _operationButton.frame = CGRectMake(operationX, operationY, operationW, operationH);
+    
+    CGFloat menuW = 161;
+    CGFloat menuH = 36;
+    CGFloat menuX = CGRectGetMinX(_operationButton.frame) - menuW - 10;
+    CGFloat menuY = CGRectGetMinY(_operationButton.frame) + (CGRectGetHeight(_operationButton.frame) - menuH) * 0.5;
+    _operationMenu.frame = CGRectMake(menuX, menuY, menuW, menuH);
+    
 }
 
 

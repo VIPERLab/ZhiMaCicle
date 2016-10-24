@@ -127,9 +127,6 @@
         
         imageView.frame = CGRectMake(columnIndex * (itemW + margin), rowIndex * (itemH + margin), itemW, itemH);
     }
-    
-    
-    
 }
 
 - (void)imageViewDidClick:(UIGestureRecognizer *)gesture {
@@ -151,7 +148,6 @@
     browser.sourceImagesContainerView = self;
     browser.imageCount = self.picPathStringsArray.count;
     browser.delegate = self;
-    UserInfo *info = [UserInfo shareInstance];
     [browser show];
 }
 

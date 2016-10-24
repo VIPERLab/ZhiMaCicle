@@ -258,9 +258,24 @@
     NSString *AESDecodingStr = [manager AESDecoding:subString];
     NSLog(@"AES解密之后的内容: %@",AESDecodingStr);
     
-    //解析jid
+    //解析jid  ->  群二维码中的jid 表示生成二维码的人的Id
     NSRange jidRange = [AESDecodingStr rangeOfString:@"jid="];
     NSString *jid = [AESDecodingStr substringFromIndex:jidRange.location + 4];
+    
+    
+    //解析groupid
+    NSRange groupRange = [AESDecodingStr rangeOfString:@"groupId="];
+    NSString *groupId = [AESDecodingStr substringFrom:groupRange.location + 8 to:jidRange.location - 1];
+    NSLog(@"groupId = %@",groupId);
+    
+    if ([groupId integerValue] != 0) {
+        GroupChatGetInsideController *group = [[GroupChatGetInsideController alloc] init];
+        group.groupId = groupId;
+        group.qrCodeUserId = jid;
+        [self.navigationController pushViewController:group animated:YES];
+        return;
+    }
+    
     
     NSLog(@"jid = %@",jid);
     NSRange spacialRange = [jid rangeOfString:@"@"];
@@ -285,22 +300,7 @@
         return;
     }
     
-    //解析sessionId
-    NSRange sessionRange = [AESDecodingStr rangeOfString:@"sessionId="];
-    NSRange codeRange = [AESDecodingStr rangeOfString:@"&"];
-    NSString *sessionId = [AESDecodingStr substringFrom:sessionRange.location + 10 to:codeRange.location];
-    NSLog(@"%@",sessionId);
     
-    //如果没有jid 就尝试解析groupid
-    NSRange groupRange = [AESDecodingStr rangeOfString:@"groupId="];
-    NSString *groupId = [AESDecodingStr substringFrom:groupRange.location + 8 to:jidRange.location - 1];
-    NSLog(@"groupId = %@",groupId);
-    if (groupId.length) {
-        GroupChatGetInsideController *group = [[GroupChatGetInsideController alloc] init];
-        group.groupId = groupId;
-        group.sessionId = sessionId;
-        [self.navigationController pushViewController:group animated:YES];
-    }
     
 }
 

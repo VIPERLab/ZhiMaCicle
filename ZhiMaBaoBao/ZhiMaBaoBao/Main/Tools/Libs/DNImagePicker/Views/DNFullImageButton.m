@@ -70,7 +70,7 @@ static NSInteger const buttonImageWidth = 16;
         _fullImageButton.contentVerticalAlignment = NSTextAlignmentRight;
         [_fullImageButton setTitleEdgeInsets:UIEdgeInsetsMake(0, buttonPadding-buttonImageWidth, 6, 0)];
         [_fullImageButton setImageEdgeInsets:UIEdgeInsetsMake(6, 0, 6, _fullImageButton.width - buttonImageWidth)];
-        [self addSubview:_fullImageButton];
+//        [self addSubview:_fullImageButton];
     }
     return _fullImageButton;
 }

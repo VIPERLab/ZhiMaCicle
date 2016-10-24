@@ -289,21 +289,18 @@
         _likeLableBottomLine.sd_resetLayout.heightIs(0);
     }
     
-    for (int i = 0; i < self.commentItemsArray.count; i++) {   //设置Label的fram
-        
-        SDTimeLineCellCommentItemModel *commentItem = self.commentItemsArray[i];
+    for (int i = 0; i < self.commentItemsArray.count; i++) {   //设置Label的frame
         
         //文本的最大长度
-        CGFloat width = [UIScreen mainScreen].bounds.size.width - 79;
-        CGFloat commentHight = [self changeStationWidth:commentItem.attributedContent.string anWidthTxtt:width anfont:15];
+        CGFloat width = [UIScreen mainScreen].bounds.size.width - 80;
         
         UIButton *buttonView = self.commentLabelsArray[i];
         
         buttonView.sd_layout
         .leftSpaceToView(self,0)
         .rightSpaceToView(self,margin)
-        .topSpaceToView(lastTopView,5)
-        .heightIs(commentHight);
+        .topSpaceToView(lastTopView,5);
+//        .heightIs(commentHight);
         
         buttonView.hidden = NO;
         lastTopView = buttonView;
@@ -311,6 +308,9 @@
         for (UILabel *label in buttonView.subviews) {
             if ([label isKindOfClass:[UILabel class]]) {
                 CGSize size = [label.text sizeWithFont:[UIFont boldSystemFontOfSize:14] maxSize:CGSizeMake(width, MAXFLOAT)];
+                
+                buttonView.sd_layout.heightIs(size.height);
+                
                 label.sd_layout
                 .leftSpaceToView(buttonView, 8)
                 .widthIs(size.width)
@@ -364,9 +364,7 @@
 }
 
 #pragma mark - 评论框点击按钮
-//- (void)commentButtonDidClick:(UIGestureRecognizer *)gesture {
 - (void)commentButtonDidClick:(UIButton  *)button {
-//    UIButton *button = (UIButton *)gesture.view;
     for (NSInteger index = 0; index < self.commentLabelsArray.count; index++) {
         if (button == self.commentLabelsArray[index]) {
             SDTimeLineCellCommentItemModel *model = self.commentItemsArray[index];
@@ -451,26 +449,6 @@
     
 }
 
-//计算文字高度
--(CGFloat)changeStationWidth:(NSString *)string anWidthTxtt:(CGFloat)widthText anfont:(CGFloat)fontSize{
-    
-    UIFont * tfont = [UIFont systemFontOfSize:fontSize];
-    
-    //高度估计文本大概要显示几行，宽度根据需求自己定义。 MAXFLOAT 可以算出具体要多高
-    
-    CGSize size =CGSizeMake(widthText,MAXFLOAT);
-    
-    //    获取当前文本的属性
-    
-    NSDictionary * tdic = [NSDictionary dictionaryWithObjectsAndKeys:tfont,NSFontAttributeName,nil];
-    
-    //ios7方法，获取文本需要的size，限制宽度
-    
-    CGSize  actualsize =[string boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin  attributes:tdic context:nil].size;
-    
-    return actualsize.height;
-    
-}
 
 // 正则获取 网址
 - (void)setContentLinkText:(SDTimeLineCellCommentItemModel *)model andLabel:(MLLinkLabel *)label {

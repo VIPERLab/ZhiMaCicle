@@ -15,7 +15,7 @@
 #define ZhiMaCollectionCellReusedID @"ZhiMaCollectionCellReusedID"
 
 @interface ZhiMaCollectionController () <UITableViewDelegate,UITableViewDataSource>
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 @end
 
 @implementation ZhiMaCollectionController {
@@ -42,6 +42,8 @@
     [LGNetWorking getCollectionListWithSessionId:USERINFO.sessionId success:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
+            [self.dataArray removeAllObjects];
+            [_tableView reloadData];
             return ;
         }
         
@@ -109,9 +111,9 @@
     [self.navigationController pushViewController:detail animated:YES];
 }
 
-- (NSArray *)dataArray {
+- (NSMutableArray *)dataArray {
     if (!_dataArray) {
-        _dataArray = [NSArray array];
+        _dataArray = [NSMutableArray array];
     }
     return _dataArray;
 }

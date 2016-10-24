@@ -17,7 +17,9 @@
 
 #import "ForwardMsgController.h"
 
-@interface ZhiMaCollectionDetailController () <KXActionSheetDelegate,TQRichTextViewDelegate>
+#import "SDPhotoBrowser.h"
+
+@interface ZhiMaCollectionDetailController () <KXActionSheetDelegate,TQRichTextViewDelegate,SDPhotoBrowserDelegate>
 
 @end
 
@@ -25,6 +27,7 @@
     UIScrollView *_scrollView;
     UIView *_bottomLineView;
     UIImageView *_picView;
+    UIView *_contentView;
 }
 
 - (void)viewDidLoad {
@@ -107,12 +110,22 @@
     CGFloat picH = image.size.width > (ScreenWidth - 40) ? image.size.height / scale : image.size.height;
     CGFloat picX = (ScreenWidth - picW) * 0.5;
     CGFloat picY = CGRectGetMaxY(_bottomLineView.frame) + 11;
-    UIImageView *picView = [[UIImageView alloc] initWithFrame:CGRectMake(picX, picY, picW, picH)];
-    [_scrollView addSubview:picView];
+    
+    _contentView = [[UIView alloc] initWithFrame:CGRectMake(picX, picY, picW, picH)];
+    [_scrollView addSubview:_contentView];
+    
+    UIImageView *picView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, picW, picH)];
+    picView.userInteractionEnabled = YES;
+    [_contentView addSubview:picView];
     picView.image = image;
     _picView = picView;
     
-    UILabel *collectionLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(_picView.frame) + 20, ScreenWidth - 40, 30)];
+    
+    UITapGestureRecognizer *tapGestuer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageDidClick:)];
+    [picView addGestureRecognizer:tapGestuer];
+    
+    
+    UILabel *collectionLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(_contentView.frame) + 20, ScreenWidth - 40, 30)];
     collectionLabel.textColor = [UIColor colorFormHexRGB:@"bcbcbc"];
     collectionLabel.font = [UIFont systemFontOfSize:15];
     collectionLabel.text = [NSString stringWithFormat:@"收藏于%@",self.model.time];
@@ -139,6 +152,24 @@
         [self.navigationController pushViewController:webView animated:YES];
     }
     
+}
+
+#pragma mark - 点击手势事件
+- (void)imageDidClick:(UIGestureRecognizer *)gesture {
+    NSLog(@"跳转大图");
+    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
+    browser.currentImageIndex = 0;
+    browser.userId = USERINFO.userID;
+    browser.sourceImagesContainerView = _contentView;
+    browser.imageCount = 1;
+    browser.delegate = self;
+    browser.type = 1;
+    [browser show];
+    
+}
+
+- (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index {
+    return  _picView.image;
 }
 
 

@@ -149,7 +149,7 @@
     [filter setDefaults];
     
     // 3.给过滤器添加数据
-    NSString *params = [NSString stringWithFormat:@"sessionId=%@&invite_code=%@&groupId=%@&jid=",USERINFO.sessionId,USERINFO.invite_code,self.model.groupId];
+    NSString *params = [NSString stringWithFormat:@"sessionId=%@&invite_code=%@&groupId=%@&jid=%@",USERINFO.sessionId,USERINFO.invite_code,self.model.groupId,USERINFO.userID];
     
     //AES加密
     NSData *aesdataresult = [SecurityUtil encryptAESData:params];

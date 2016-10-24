@@ -48,6 +48,7 @@
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04AB88431DACBF330087502C /* GroupQRCodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB88421DACBF330087502C /* GroupQRCodeController.m */; };
+		04B1F9E61DBDAB43000378A2 /* newDiscoverDetailMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1F9E51DBDAB43000378A2 /* newDiscoverDetailMenu.m */; };
 		04CBF5021D99228200CBB609 /* ConverseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5011D99228200CBB609 /* ConverseCell.m */; };
 		04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5051D99427B00CBB609 /* ConverseModel.m */; };
 		04CBF5091D9A695500CBB609 /* ZhiMaFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */; };
@@ -751,6 +752,8 @@
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
 		04AB88411DACBF330087502C /* GroupQRCodeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupQRCodeController.h; sourceTree = "<group>"; };
 		04AB88421DACBF330087502C /* GroupQRCodeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupQRCodeController.m; sourceTree = "<group>"; };
+		04B1F9E41DBDAB43000378A2 /* newDiscoverDetailMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newDiscoverDetailMenu.h; sourceTree = "<group>"; };
+		04B1F9E51DBDAB43000378A2 /* newDiscoverDetailMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newDiscoverDetailMenu.m; sourceTree = "<group>"; };
 		04CBF5001D99228200CBB609 /* ConverseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseCell.h; sourceTree = "<group>"; };
 		04CBF5011D99228200CBB609 /* ConverseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseCell.m; sourceTree = "<group>"; };
 		04CBF5041D99427B00CBB609 /* ConverseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseModel.h; sourceTree = "<group>"; };
@@ -1979,6 +1982,8 @@
 				043DD8451DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.m */,
 				043DD8471DBB6BFC008A98DD /* NewDiscoverDetailCommentView.h */,
 				043DD8481DBB6BFC008A98DD /* NewDiscoverDetailCommentView.m */,
+				04B1F9E41DBDAB43000378A2 /* newDiscoverDetailMenu.h */,
+				04B1F9E51DBDAB43000378A2 /* newDiscoverDetailMenu.m */,
 			);
 			path = NewView;
 			sourceTree = "<group>";
@@ -5774,6 +5779,7 @@
 				04EA7E061D912872005E5425 /* ZXPDF417DecodedBitStreamParser.m in Sources */,
 				319069D21D9CC2AE00D1D6D2 /* NSData+Base64.m in Sources */,
 				04EA7B641D91282E005E5425 /* LBXScanViewController.m in Sources */,
+				04B1F9E61DBDAB43000378A2 /* newDiscoverDetailMenu.m in Sources */,
 				04EA7E2E1D912872005E5425 /* ZXQRCodeMultiReader.m in Sources */,
 				311CEFB21D937BE700BBB1F9 /* Mp3RecordWriter.m in Sources */,
 				04EA7DE41D912872005E5425 /* ZXCodaBarReader.m in Sources */,
@@ -6100,7 +6106,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_ENTITLEMENTS = ZhiMaBaoBao/ZhiMaBaoBao.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = C74GJQS7VJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6130,8 +6136,8 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a0faf98e-8d2c-43de-b19e-0096fd7d995e";
-				PROVISIONING_PROFILE_SPECIFIER = AD_Hoc_ZhiMaCircle;
+				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
@@ -6146,7 +6152,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_ENTITLEMENTS = ZhiMaBaoBao/ZhiMaBaoBao.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = C74GJQS7VJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6176,8 +6182,8 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a0faf98e-8d2c-43de-b19e-0096fd7d995e";
-				PROVISIONING_PROFILE_SPECIFIER = AD_Hoc_ZhiMaCircle;
+				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};

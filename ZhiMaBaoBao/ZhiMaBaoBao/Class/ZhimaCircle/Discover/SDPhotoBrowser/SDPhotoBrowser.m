@@ -37,6 +37,7 @@
     UIActivityIndicatorView *_indicatorView;
     BOOL _willDisappear;
     KXActionSheet *_actionSheet;
+    UILongPressGestureRecognizer *_longPressGesture;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -54,6 +55,15 @@
     [self setupScrollView];
     
     [self setupToolbars];
+}
+
+- (void)setType:(int)type {
+    _type = type;
+    if (type == 0) {
+        int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
+        UIImageView *currentImageView = _scrollView.subviews[index];
+        [currentImageView removeGestureRecognizer:_longPressGesture];
+    }
 }
 
 - (void)dealloc
@@ -80,28 +90,18 @@
     _indexLabel = indexLabel;
     [self addSubview:indexLabel];
     
-    // 2.保存按钮
-//    UIButton *saveButton = [[UIButton alloc] init];
-//    [saveButton setTitle:@"保存" forState:UIControlStateNormal];
-//    [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    saveButton.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
-//    saveButton.layer.cornerRadius = 5;
-//    saveButton.clipsToBounds = YES;
-//    [saveButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
-//    _saveButton = saveButton;
-//    [self addSubview:saveButton];
 }
 
 // 收藏图片
 - (void)collectionImage {
     if (!self.userId.length) {
-        [LCProgressHUD showFailureText:@"请把用户id传进来"];
+        [LCProgressHUD showFailureText:@"收藏失败"];
         return;
     }
     int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
     NSURL *url = [self highQualityImageURLForIndex:index];
     NSString *str = url.absoluteString;
-//    str = [str substringFromIndex:DFAPIURL.length];
+    
     [LGNetWorking collectionCircleListWithCollectionType:3 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:@"" andBigImage:str andSource:@"" andAccount:self.userId success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:@"收藏失败"];
@@ -176,10 +176,14 @@
         
         [singleTap requireGestureRecognizerToFail:doubleTap];
         
-        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressPhoto:)];
-        [imageView addGestureRecognizer:longPressGesture];
+        if (_type != 1) { // 收藏专用
+            _longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressPhoto:)];
+            [imageView addGestureRecognizer:_longPressGesture];
+        }
+        
         [imageView addGestureRecognizer:singleTap];
         [imageView addGestureRecognizer:doubleTap];
+        
         [_scrollView addSubview:imageView];
     }
     

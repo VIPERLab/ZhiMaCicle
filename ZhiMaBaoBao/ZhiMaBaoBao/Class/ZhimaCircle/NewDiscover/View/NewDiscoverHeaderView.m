@@ -72,7 +72,7 @@
     .heightIs(20);
     
     _photoContentView.sd_layout
-    .topSpaceToView(_textView,0)
+    .topSpaceToView(_textView,10)
     .leftEqualToView(_textView)
     .rightEqualToView(_textView)
     .bottomEqualToView(self);
