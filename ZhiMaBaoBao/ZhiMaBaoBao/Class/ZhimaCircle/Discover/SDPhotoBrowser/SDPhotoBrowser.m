@@ -232,6 +232,7 @@
     [UIView animateWithDuration:SDPhotoBrowserHideImageAnimationDuration animations:^{
         if (self.isChat) {
             tempView.frame = CGRectMake(ScreenWidth/2, ScreenHeight/2, 0, 0);
+//            tempView.alpha = 0;
         }else{
             tempView.frame = targetTemp;
         }

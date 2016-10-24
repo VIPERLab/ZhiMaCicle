@@ -6094,7 +6094,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_ENTITLEMENTS = ZhiMaBaoBao/ZhiMaBaoBao.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = C74GJQS7VJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6124,8 +6124,8 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a0faf98e-8d2c-43de-b19e-0096fd7d995e";
-				PROVISIONING_PROFILE_SPECIFIER = AD_Hoc_ZhiMaCircle;
+				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
@@ -6140,7 +6140,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_ENTITLEMENTS = ZhiMaBaoBao/ZhiMaBaoBao.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = C74GJQS7VJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6170,8 +6170,8 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a0faf98e-8d2c-43de-b19e-0096fd7d995e";
-				PROVISIONING_PROFILE_SPECIFIER = AD_Hoc_ZhiMaCircle;
+				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
