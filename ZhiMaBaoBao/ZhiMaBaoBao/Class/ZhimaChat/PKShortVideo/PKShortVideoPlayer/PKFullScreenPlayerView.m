@@ -49,7 +49,7 @@
         __weak typeof(self)weakSelf = self;
         [asset loadValuesAsynchronouslyForKeys:@[@"playable"] completionHandler:^{
             dispatch_async( dispatch_get_main_queue(), ^{
-                [weakSelf prepareToPlayAsset:asset paly:YES];
+                [weakSelf prepareToPlayAsset:asset isMuted:NO];
             });
         }];
     }
@@ -71,8 +71,6 @@
     _videoPath = videoPath;
     AVAsset *asset = nil;
     
-    self.isMuted = YES;
-    
     if ([videoPath hasPrefix:@"http"]) {
         
         asset = [AVAsset assetWithURL:[NSURL URLWithString:videoPath]];
@@ -84,7 +82,7 @@
     __weak typeof(self)weakSelf = self;
     [asset loadValuesAsynchronouslyForKeys:@[@"playable"] completionHandler:^{
         dispatch_async( dispatch_get_main_queue(), ^{
-            [weakSelf prepareToPlayAsset:asset paly:YES];
+            [weakSelf prepareToPlayAsset:asset isMuted:YES];
         });
     }];
 }
@@ -92,7 +90,7 @@
 
 #pragma mark Prepare to play asset, URL
 
-- (void)prepareToPlayAsset:(AVAsset *)asset paly:(BOOL)play {
+- (void)prepareToPlayAsset:(AVAsset *)asset isMuted:(BOOL)isMuted {
     NSError *error = nil;
     AVKeyValueStatus keyStatus = [asset statusOfValueForKey:@"playable" error:&error];
     if (keyStatus == AVKeyValueStatusFailed) {
@@ -116,10 +114,11 @@
     self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     [self.layer addSublayer:_playerLayer];
     
-    if (play) {
-        [self.player play];
+    if (isMuted) {
+        self.isMuted = YES;
+        self.player.muted = YES;
     }
-//    [self.player play];
+    [self.player play];
 }
 
 #pragma mark - Error Handle

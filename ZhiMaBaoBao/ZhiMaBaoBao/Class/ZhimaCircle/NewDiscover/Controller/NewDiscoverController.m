@@ -298,6 +298,7 @@
 #pragma mark - actionSheetDelegate
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)buttionIndex {
     // 点击的是拍照
+
     if (buttionIndex == 0) {
         
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
@@ -308,6 +309,11 @@
         return;
         
     }
+//      else {
+//        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+//        [self.navigationController presentViewController:picker animated:YES completion:nil];
+//        return;
+//    }
     
     
     // 点击的是相册
@@ -407,8 +413,8 @@
             if (fullImage) {
                 image = [UIImage imageWithCGImage:asset.thumbnail];
             } else {
-                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
-//                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationUp];
+//                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
+                image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage scale:1 orientation:UIImageOrientationUp];
             }
             
             if (self.imagesArray.count > 8) {
@@ -445,7 +451,8 @@
         return;
     }
     UIImage *image = array[imageCount];
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.3);
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
+    
     [LCProgressHUD showLoadingText:@"正在上传图片"];
     
     [LGNetWorking uploadPhoto:USERINFO.sessionId image:imageData fileName:@"quan" andFuctionName:@"quan" block:^(ResponseData *obj) {

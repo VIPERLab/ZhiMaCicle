@@ -16,6 +16,7 @@
 
 #import "UserMessageController.h" //个人消息
 #import "DiscoverDetailController.h"  //朋友圈详情
+#import "NewDiscoverDetailController.h"
 #import "NewDiscoverController.h"  //发布新的说说
 #import "FriendProfilecontroller.h" //详情
 
@@ -154,9 +155,9 @@
     }
 
     DiscoverDetailController *dc = [[DiscoverDetailController alloc] init];
+//    NewDiscoverDetailController *dc = [[NewDiscoverDetailController alloc] init];
     dc.sessionId = USERINFO.sessionId;
     dc.ID = [NSString stringWithFormat:@"%zd",cell.model.ID];
-//    dc.delegate = self;
     dc.indexPath = indexPath;
     [self.navigationController pushViewController:dc animated:YES];
     

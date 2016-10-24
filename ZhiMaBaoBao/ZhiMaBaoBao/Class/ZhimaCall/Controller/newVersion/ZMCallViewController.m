@@ -277,7 +277,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
             [self fixName];
             
             //拷贝一份通话记录数据
-            self.matchArr = [NSMutableArray arrayWithArray:self.dataArr];
+            self.matchArr = [self.dataArr mutableCopy];
             [self.tableView reloadData];
         }else{
             //            [LCProgressHUD showText:responseData.msg];
