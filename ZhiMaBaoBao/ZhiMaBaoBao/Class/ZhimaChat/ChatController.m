@@ -12,6 +12,7 @@
 #import "FaceSourceManager.h"
 #import "RecordingHUD.h"
 #import "SDPhotoBrowser.h"
+#import "Masonry.h"
 
 #import "IMChatTableViewCell.h"
 #import "BaseChatTableViewCell.h"
@@ -96,6 +97,7 @@
 //小视频相关
 @property (nonatomic, strong) ZMRecordShortVideoView*videoView; // 视频录制视图
 
+@property (nonatomic, strong) UIButton *unreadBtn; // 未读消息按钮
 
 @end
 
@@ -335,6 +337,22 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
     CGFloat originY = self.keyboard.y;
     self.keyboard.y = originY - shouldBeSubtractionHeight;
+
+    self.unreadBtn = [[UIButton alloc]init];
+    [self.unreadBtn setBackgroundImage:[UIImage imageNamed:@"unreadUp"] forState:UIControlStateNormal];
+//    [self.unreadBtn setTitle:[NSString stringWithFormat:@"%ld",self.numOfUnread] forState:UIControlStateNormal];
+    [self.unreadBtn setTitle:@"99+"forState:UIControlStateNormal];
+
+    self.unreadBtn.titleLabel.textColor = WHITECOLOR;
+    [self.view addSubview:self.unreadBtn];
+
+    [self.unreadBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.right.equalTo(self.tableView.mas_right).offset(-10);
+        make.bottom.equalTo(self.tableView.mas_bottom).offset(-15);
+        make.width.mas_equalTo(41);
+        make.height.mas_equalTo(50);
+    }];
+    
 }
 
 - (NSString*)audioPathWithUid:(NSString*)uid{
@@ -501,25 +519,36 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)requestChatRecord{
 
     FMDBManager* shareManager = [FMDBManager shareManager];
-//    [shareManager deleteMessageFormMessageTableByConverseID:self.conversionId];
     
-    NSMutableArray*marr =  [[shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] mutableCopy];
-//    self.messages = (NSMutableArray *)[[marr reverseObjectEnumerator] allObjects];
+    NSInteger totalPage = 1;
+    totalPage += self.numOfUnread / 20;
     
-    for (int i=0; i<marr.count; i++) {
-        LGMessage*message = marr[i];
-        [self.messages insertObject:message atIndex:0];
-        
-        if (message.type == MessageTypeImage) {
-            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",marr.count-1-(long)i],@"url":message.text,@"fromUid":message.fromUid};
-            [self.allImagesInfo insertObject:dic atIndex:0];
+    NSMutableArray*marr = [NSMutableArray array];
+    for (int i=0; i<totalPage; i++) {
+        self.currentPage = i+1;
+        NSArray*arr = [shareManager getMessageDataWithConverseID:self.conversionId andPageNumber:self.currentPage] ;
+        [marr addObject:arr];
+    }
+
+    for (int j=0; j<marr.count; j++) {
+        NSArray*arr = marr[j];
+        for (int i=0; i<arr.count; i++) {
+            LGMessage*message = arr[i];
+            [self.messages insertObject:message atIndex:0];
+            
+            if (message.type == MessageTypeImage) {
+                NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",arr.count-1-(long)i],@"url":message.text,@"fromUid":message.fromUid};
+                [self.allImagesInfo insertObject:dic atIndex:0];
+            }
         }
     }
-    
-    if (marr.count<20) {
+
+    NSArray*lastArr = [marr lastObject];
+    if (lastArr.count<20) {
         self.tableView.mj_header = nil;
     }
     
+    //测试接收小视频用
 //    LGMessage*message = [[LGMessage alloc]init];
 //    message.type = MessageTypeVideo;
 //    message.toUidOrGroupId = USERINFO.userID;
@@ -537,7 +566,27 @@ static NSString *const reuseIdentifier = @"messageCell";
     if (self.tableView.contentSize.height > self.tableView.bounds.size.height-64) {
         [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height -self.tableView.bounds.size.height + 64) animated:YES];
     }
+    
+    //如果未读的第一条所在的cell在屏幕里面则隐藏按钮
+    if ([self cheakUnreadCellIsin:self.messages.count - self.numOfUnread]) {
+        self.unreadBtn.hidden = YES;
+    }
+    
+}
 
+//判断cell是否在可视屏幕之内
+- (BOOL)cheakUnreadCellIsin:(NSInteger)index
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    CGRect cellR = [self.tableView rectForRowAtIndexPath:indexPath];
+    
+    if (cellR.origin.y < self.tableView.contentOffset.y) {
+        NSLog(@"在屏幕外面");
+        return NO;
+    }else{
+        NSLog(@"在屏幕里面");
+        return YES;
+    }
 }
 
 - (BOOL)needShowTime:(NSInteger)time1 time2:(NSInteger)time2
@@ -1548,6 +1597,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self sendImages:[self getImageSavePath:image]];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    UIImageWriteToSavedPhotosAlbum(image, self,nil, NULL);//保存到相册
+
 }
 
 // 发送图片前先保存到沙盒
@@ -1625,7 +1677,6 @@ static NSString *const reuseIdentifier = @"messageCell";
                     
                 }
             }
-            
             
             [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@",AUDIOPATH,message.picUrl] error:nil];
             

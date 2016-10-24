@@ -168,6 +168,7 @@
         vc.conversionId = model.converseId;
         vc.conversionName = model.converseName;
         vc.converseType = model.converseType;
+        vc.numOfUnread = model.unReadCount;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         
