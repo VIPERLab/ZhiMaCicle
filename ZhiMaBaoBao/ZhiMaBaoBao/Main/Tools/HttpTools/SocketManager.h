@@ -27,6 +27,7 @@ typedef NS_OPTIONS(NSUInteger, RequestType) {
 typedef NS_OPTIONS(NSUInteger, GroupActType) {
     GroupActTypeCreate   = 0,   //建群
     GroupActTypeAddUser,        //邀请用户到群
+    GroupActTypeSaoma,          //扫码进群
     GroupActTypeDelUser,        //从群组删除用户
     GroupActTypeDelGroup,       //删除群组
     GroupActTypeReName,         //重命名群
@@ -105,6 +106,11 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  *  邀请用户到群
  */
 - (void)addUserToGroup:(NSString *)groupId uids:(NSString *)uids;
+
+/**
+ *  扫码进群
+ */
+- (void)scanCodeToGroup:(NSString *)groupId uids:(NSString *)uids;
 
 /**
  *  从群组删除用户

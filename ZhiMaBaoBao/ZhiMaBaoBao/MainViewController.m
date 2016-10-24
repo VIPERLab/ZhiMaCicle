@@ -295,8 +295,10 @@
             
             NSString *newVersion = responseObject[@"results"][0][@"version"];
             
-            if (![newVersion isEqualToString:oldVersion]) {
-                
+            NSComparisonResult result = [newVersion compare:oldVersion];
+            
+            if (result == NSOrderedDescending) {  //新的版本高于旧版本
+    
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"有新版本可供更新" message:nil preferredStyle:UIAlertControllerStyleAlert];
                 
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
