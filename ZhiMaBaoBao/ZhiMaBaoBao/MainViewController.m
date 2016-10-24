@@ -56,6 +56,7 @@
     
     [self addNotifications];
 
+    [self judgeAPPVersion];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -77,19 +78,12 @@
 - (void)doOtherLogin{
     //断开socket
     [[SocketManager shareInstance] disconnect];
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"你的帐号已在其他设备登录。如非本人操作，则密码可能已泄露，建议尽快修改密码。" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-    //重新登录
-    UIAlertAction *reLogin = [UIAlertAction actionWithTitle:@"重新登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [[SocketManager shareInstance] connect];
-        [alert dismissViewControllerAnimated:YES completion:nil];
-    }];
-    UIAlertAction *loginOut = [UIAlertAction actionWithTitle:@"退出" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
-    }];
-    [alert addAction:reLogin];
-    [alert addAction:loginOut];
-    [self presentViewController:alert animated:YES completion:nil];
+    //
+    UserInfo *info = [UserInfo read];
+    info.isKicker = YES;
+    info.hasLogin = NO;
+    [info save];
+    [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
 }
 
 //收到新消息
@@ -273,6 +267,61 @@
         self.canPlayAudio = YES;
     });
 }
+
+//判断appstore市场的版本 （检查更新）
+- (void)judgeAPPVersion{
+    
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    
+    NSString *oldVersion = infoDict[@"CFBundleShortVersionString"];
+    
+    NSString *url = [[NSString alloc] initWithFormat:@"https://itunes.apple.com/lookup?id=%@", @"1148317217"];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //申明返回的结果是json类型
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    //申明请求的数据是json类型
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    //如果报接受类型不一致请替换一致text/html或别的
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/javascript", nil];
+    
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSNumber *number = responseObject[@"resultCount"];
+        
+        if (number.intValue == 1) {
+            
+            NSString *newVersion = responseObject[@"results"][0][@"version"];
+            
+            if (![newVersion isEqualToString:oldVersion]) {
+                
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"有新版本可供更新" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/zhi-ma-bao-bao/id1148317217?mt=8"]];
+                    
+                }];
+                
+                UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
+                
+                [alertController addAction:cancleAction];
+                
+                [alertController addAction:okAction];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"%@", error);
+    }];
+}
+
 
 - (void)dealloc{
     

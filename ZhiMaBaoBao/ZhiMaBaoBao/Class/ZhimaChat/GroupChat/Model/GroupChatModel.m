@@ -18,26 +18,4 @@
              };
 }
 
-//- (void)setGroupUserVos:(NSArray<GroupUserModel *> *)groupUserVos{
-//    
-//    if (!self.create_usreid) {
-//        return;
-//    }
-//    
-//    NSMutableArray *array = [NSMutableArray array];
-//    array = [groupUserVos mutableCopy];
-//    
-//    GroupUserModel *flagModel;
-//    for (GroupUserModel *model in groupUserVos) {
-//        if ([model.userId isEqualToString:self.create_usreid]) {
-//            flagModel = model;
-//        }
-//    }
-//    
-//    [array removeObject:flagModel];
-//    [array insertObject:flagModel atIndex:0];
-//    
-//    _groupUserVos = array;
-//}
-
 @end

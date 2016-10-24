@@ -930,5 +930,27 @@
     }];
 }
 
+//获取个人更多详细信息
++ (void)getMoreUserInfo:(NSString *)sessionId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = sessionId;
+    [HttpTool POST:@"/moblie/getAllRedbag_items.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
+//保存个人更多详细信息
++ (void)saveMoreUserInfo:(NSString *)sessionId moreData:(NSString *)jsonStr success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = sessionId;
+    params[@"values"] = jsonStr;
+    [HttpTool POST:@"/moblie/saveWeuserDetail.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
 
 @end

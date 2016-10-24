@@ -635,6 +635,7 @@
     [newFriend_message_DB close];
     
     //群聊相关的表
+    [group_message_DB close];
     [group_userMenber_DB close];
 }
 

@@ -49,14 +49,17 @@
     self.callCenter = [[CTCallCenter alloc] init];
     __weak LGCallingController *weakSelf = self;
     __weak AVAudioPlayer *weakPlayer = self.player;
+    
+    UserInfo *info = [UserInfo shareInstance];
+    info.toPhoneNum = self.phoneNum;
 
     self.callCenter.callEventHandler = ^(CTCall *call){
         NSLog(@"call:%@",call.description);
-        if ([call.callState isEqualToString:@"CTCallStateDialing"]) {
+        if ([call.callState isEqualToString:CTCallStateDialing]) {
             
             //正在呼叫状态
         }
-        else if ([call.callState isEqualToString:@"CTCallStateDisconnected"]) {
+        else if ([call.callState isEqualToString:CTCallStateDisconnected]) {
             //断开连接状态
             
             //执行挂断操作
@@ -70,7 +73,7 @@
             [weakPlayer stop];
             //计算开始时间
             NSDate *date = [NSDate date];
-            weakSelf.startTime = date.timeIntervalSince1970*1000;
+            info.startTime = date.timeIntervalSince1970*1000;
 
         }
     };
@@ -315,6 +318,8 @@
                         //记录通话id
                         NSNumber *recordID = responseData.data;
                         self.recordId = [recordID integerValue];
+                        UserInfo *info = [UserInfo shareInstance];
+                        info.callRecordId = self.recordId;
                     }
                 }];
             }

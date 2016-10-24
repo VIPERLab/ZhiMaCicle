@@ -325,7 +325,16 @@ static NSString *const reuseIdentifier = @"messageCell";
     [header setTitle:@"下拉加载更多" forState:MJRefreshStateIdle];
     [header setTitle:@"松开立即加载" forState:MJRefreshStatePulling];
     self.tableView.mj_header = header;
-
+    
+    
+    //根据statusBar高度调整键盘高度
+    CGRect statusBarRect = [[UIApplication sharedApplication] statusBarFrame];
+    int shouldBeSubtractionHeight = 0;
+    if (statusBarRect.size.height == 40) {
+        shouldBeSubtractionHeight = 20;
+    }
+    CGFloat originY = self.keyboard.y;
+    self.keyboard.y = originY - shouldBeSubtractionHeight;
 }
 
 - (NSString*)audioPathWithUid:(NSString*)uid{
@@ -1095,7 +1104,11 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
         self.selectedIndexPath = indecPath;
-        [self deleteAction:indecPath.row];
+//        [self deleteAction:indecPath.row];
+        
+        [self.messages removeObjectAtIndex:self.selectedIndexPath.row];
+        //    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:self.selectedIndexPath,nil] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadData];
 
     });
 }
@@ -1458,7 +1471,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             message.sendStatus = 1;
             message.videoDownloadUrl = obj[@"url"];
             message.isDownLoad = YES; //socket出去的时候记得改成 NO
-            message.errorMsg = self.notInGroup;    //新增错误信息标记
+//            message.errorMsg = self.notInGroup;    //新增错误信息标记
 
         }else{
             // 发送报错
@@ -1466,6 +1479,8 @@ static NSString *const reuseIdentifier = @"messageCell";
             
         }
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        [[SocketManager shareInstance] sendMessage:message];
         
     }progress:^(NSProgress *progress) {
         NSLog(@"进度 ==== %lf",progress.fractionCompleted);

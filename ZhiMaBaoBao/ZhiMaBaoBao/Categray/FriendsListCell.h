@@ -12,5 +12,7 @@
 @interface FriendsListCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *avtar;
 @property (weak, nonatomic) IBOutlet UILabel *name;
+@property (weak, nonatomic) IBOutlet UILabel *unreadLabel;
+
 @property (nonatomic, strong) ZhiMaFriendModel *friendModel;
 @end

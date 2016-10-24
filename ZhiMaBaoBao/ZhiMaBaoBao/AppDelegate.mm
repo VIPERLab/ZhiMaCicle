@@ -26,9 +26,16 @@
 #import "ZhiMaFriendModel.h"
 #import "FMDB.h"
 
+#import <CoreTelephony/CTCallCenter.h>
+#import <CoreTelephony/CTCall.h>
+
+#import "LGLoginController.h"
+
 
 
 @interface AppDelegate () <JPUSHRegisterDelegate>
+@property(nonatomic,strong)CTCallCenter *callCenter;
+
 
 @end
 
@@ -51,11 +58,23 @@
         LGGuideController *vc = [[LGGuideController alloc] init];
         UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
         self.window.rootViewController = guideVC;
+        
     }else{
         //已经登录过，直接跳转到主界面
         MainViewController *mainVC = [[MainViewController alloc] init];
         self.window.rootViewController = mainVC;
     }
+    
+    //存储app的版本号
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *appVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    if (!userInfo.appVersion.length) {
+        userInfo.appVersion = appVersion;
+        [userInfo save];
+    }
+
+    
+    NSLog(@"-----------%@",USERINFO);
     
     //初始化百度地图
     // 要使用百度地图，请先启动BaiduMapManager
@@ -92,6 +111,10 @@
     
     [self regiestJPush:launchOptions];
     
+    
+    //监听电话状态，记录通话时长
+    [self addCallRecordTime];
+    
     return YES;
 }
 
@@ -109,7 +132,38 @@
     }
 }
 
-
+//电话挂断，上传通话时长
+- (void)addCallRecordTime{
+    UserInfo *info = [UserInfo shareInstance];
+    self.callCenter = [[CTCallCenter alloc] init];
+    self.callCenter.callEventHandler = ^(CTCall* call) {
+        
+        //电话挂断
+        if ([call.callState isEqualToString:CTCallStateDisconnected])
+            
+        {
+            
+            NSLog(@"Call has been disconnected");
+            
+            NSDate *date = [NSDate date];
+            info.endTime = date.timeIntervalSince1970*1000;
+            
+            [LGNetWorking saveCallTime:USERINFO.sessionId toPhone:info.toPhoneNum callTime:0 CallId:info.callRecordId startTime:info.startTime endTime:info.endTime block:^(ResponseData *responseData) {
+                
+                if (responseData.code == 0) {
+                    
+                    //清除存储时间数据
+                    info.endTime = 0;
+                    info.startTime = 0;
+                    
+                }else{
+                    [LCProgressHUD showFailureText:responseData.msg];
+                }
+            }];
+            
+        }
+    };
+}
 
 //网络环境改变
 - (void)networkChanged:(NSNotification *)notification
@@ -319,10 +373,6 @@
     //接收用户退出通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(reachabilityChanged:)
-//                                                 name:kReachabilityChangedNotification
-//                                               object:nil];
 }
 
 - (void)jumpMainController{
@@ -366,7 +416,7 @@
     [[SocketManager shareInstance] disconnect];
     // 进入后台时，注册极光推送
     UserInfo *info = [UserInfo read];
-    if (info) {
+    if (info.userID.length) {
         [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:@selector(tagsAliasCallback:tags:alias:) object:self];
     }    
 }
@@ -460,8 +510,9 @@
 }
 
 
-#pragma mark - 用户退出通知
+#pragma mark - 用户退出（或者被挤下线）通知
 - (void)userLogOut {
+    
     [[SocketManager shareInstance] disconnect];
     
     // 关闭数据库
@@ -470,6 +521,21 @@
     LGGuideController *vc = [[LGGuideController alloc] init];
     UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = guideVC;
+    
+    UserInfo *info = [UserInfo read];
+    //如果被挤下线
+    if (info.isKicker) {
+        
+        info.isKicker = NO;
+        [info save];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"你的帐号已在其他设备登录。如非本人操作，则密码可能已泄露，建议尽快修改密码。" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction *loginOut = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alert addAction:loginOut];
+        [guideVC presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 #pragma mark - 微信支付回调

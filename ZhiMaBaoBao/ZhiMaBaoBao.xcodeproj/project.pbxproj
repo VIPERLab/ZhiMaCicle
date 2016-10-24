@@ -540,6 +540,8 @@
 		316957861D91199100140126 /* dtmf-9.aif in Resources */ = {isa = PBXBuildFile; fileRef = 316957791D91199100140126 /* dtmf-9.aif */; };
 		316957871D91199100140126 /* dtmf-s.aif in Resources */ = {isa = PBXBuildFile; fileRef = 3169577A1D91199100140126 /* dtmf-s.aif */; };
 		316957881D91199100140126 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3169577B1D91199100140126 /* ring.mp3 */; };
+		31861E0D1DBDAE850037E4E6 /* LGPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E0C1DBDAE850037E4E6 /* LGPickerView.m */; };
+		31861E111DBDAF190037E4E6 /* MoreInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E101DBDAF190037E4E6 /* MoreInfoModel.m */; };
 		319069A41D9A17C300D1D6D2 /* NSData+Replace.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069A31D9A17C300D1D6D2 /* NSData+Replace.m */; };
 		319069AD1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */; };
 		319069B11D9BC09200D1D6D2 /* FriendsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */; };
@@ -1701,6 +1703,10 @@
 		316957791D91199100140126 /* dtmf-9.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-9.aif"; sourceTree = "<group>"; };
 		3169577A1D91199100140126 /* dtmf-s.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dtmf-s.aif"; sourceTree = "<group>"; };
 		3169577B1D91199100140126 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
+		31861E0B1DBDAE850037E4E6 /* LGPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGPickerView.h; sourceTree = "<group>"; };
+		31861E0C1DBDAE850037E4E6 /* LGPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPickerView.m; sourceTree = "<group>"; };
+		31861E0F1DBDAF190037E4E6 /* MoreInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreInfoModel.h; sourceTree = "<group>"; };
+		31861E101DBDAF190037E4E6 /* MoreInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreInfoModel.m; sourceTree = "<group>"; };
 		319069A21D9A17C300D1D6D2 /* NSData+Replace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Replace.h"; sourceTree = "<group>"; };
 		319069A31D9A17C300D1D6D2 /* NSData+Replace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Replace.m"; sourceTree = "<group>"; };
 		319069AB1D9A9DC100D1D6D2 /* NSDate+TimeCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TimeCategory.h"; sourceTree = "<group>"; };
@@ -4518,6 +4524,18 @@
 			name = Controls;
 			sourceTree = "<group>";
 		};
+		31861E0E1DBDAEDC0037E4E6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				31861E0B1DBDAE850037E4E6 /* LGPickerView.h */,
+				31861E0C1DBDAE850037E4E6 /* LGPickerView.m */,
+				315FF5931DB89C4C0002CB97 /* MoreInfoCell.h */,
+				315FF5941DB89C4C0002CB97 /* MoreInfoCell.m */,
+				315FF5951DB89C4C0002CB97 /* MoreInfoCell.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		319069B31D9BE89000D1D6D2 /* NewFriends(新的好友) */ = {
 			isa = PBXGroup;
 			children = (
@@ -4858,6 +4876,7 @@
 		31B7C7271D8F82CE00F1883A /* LoginRegiste */ = {
 			isa = PBXGroup;
 			children = (
+				31861E0E1DBDAEDC0037E4E6 /* View */,
 				31B7C74E1D8FB33E00F1883A /* LGGuideController.h */,
 				31B7C74F1D8FB33E00F1883A /* LGGuideController.m */,
 				31B7C7501D8FB33E00F1883A /* LGLoginController.h */,
@@ -4873,9 +4892,8 @@
 				31B7C75A1D8FB33E00F1883A /* LGSetPasswordController.m */,
 				315FF5901DB8994C0002CB97 /* MoreInfoController.h */,
 				315FF5911DB8994C0002CB97 /* MoreInfoController.m */,
-				315FF5931DB89C4C0002CB97 /* MoreInfoCell.h */,
-				315FF5941DB89C4C0002CB97 /* MoreInfoCell.m */,
-				315FF5951DB89C4C0002CB97 /* MoreInfoCell.xib */,
+				31861E0F1DBDAF190037E4E6 /* MoreInfoModel.h */,
+				31861E101DBDAF190037E4E6 /* MoreInfoModel.m */,
 			);
 			path = LoginRegiste;
 			sourceTree = "<group>";
@@ -5557,6 +5575,7 @@
 				04EA7D971D912872005E5425 /* ZXDecoderResult.m in Sources */,
 				D544F54A1DAF5A7000E73624 /* UIColor+HtmlColorConvert.m in Sources */,
 				04DD49E61DACD6050027256E /* GroupChatGetInsideController.m in Sources */,
+				31861E111DBDAF190037E4E6 /* MoreInfoModel.m in Sources */,
 				041750B21DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m in Sources */,
 				04EA7AC51D910F89005E5425 /* DNImageFlowViewController.m in Sources */,
 				04EA7E251D912872005E5425 /* ZXQRCodeFinderPatternFinder.m in Sources */,
@@ -5697,6 +5716,7 @@
 				04EA7DD41D912872005E5425 /* ZXRSSExpandedDecodedChar.m in Sources */,
 				04EA7D6F1D912872005E5425 /* ZXGeoParsedResult.m in Sources */,
 				04608FA11DB078CD00F4B9E9 /* ChangeSexCell.m in Sources */,
+				31861E0D1DBDAE850037E4E6 /* LGPickerView.m in Sources */,
 				04EA7D6B1D912872005E5425 /* ZXEmailAddressResultParser.m in Sources */,
 				04EA7DE21D912872005E5425 /* ZXRSSPair.m in Sources */,
 				04EA7ACC1D910F89005E5425 /* UIView+DNImagePicker.m in Sources */,
@@ -6136,7 +6156,7 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE = "6a80afc9-0847-4baa-a000-fce122b0bfdd";
 				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
@@ -6182,7 +6202,7 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE = "6a80afc9-0847-4baa-a000-fce122b0bfdd";
 				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";

@@ -12,7 +12,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <frame key="frameInset" width="320" height="49.5"/>
+                <frame key="frameInset" width="320" height="49"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uTb-iO-qXg">
@@ -30,10 +30,21 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X4n-yk-tI2">
+                        <constraints>
+                            <constraint firstAttribute="height" constant="16" id="OI0-co-zR3"/>
+                            <constraint firstAttribute="width" constant="16" id="aUF-gq-WzB"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="X4n-yk-tI2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="46" id="93M-YR-Xit"/>
                     <constraint firstItem="uTb-iO-qXg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="14" id="A4U-yC-7VR"/>
                     <constraint firstItem="uTb-iO-qXg" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="IDE-Qx-oO9"/>
+                    <constraint firstItem="X4n-yk-tI2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="2" id="ZZU-aV-8WD"/>
                     <constraint firstItem="kby-69-kV6" firstAttribute="leading" secondItem="uTb-iO-qXg" secondAttribute="trailing" constant="10" id="lSO-fd-LNg"/>
                     <constraint firstItem="kby-69-kV6" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="pvz-TK-LoO"/>
                 </constraints>
@@ -41,6 +52,7 @@
             <connections>
                 <outlet property="avtar" destination="uTb-iO-qXg" id="EI2-wW-UBc"/>
                 <outlet property="name" destination="kby-69-kV6" id="fAJ-9u-ZG1"/>
+                <outlet property="unreadLabel" destination="X4n-yk-tI2" id="R9F-Z4-WRr"/>
             </connections>
         </tableViewCell>
     </objects>

@@ -103,6 +103,13 @@
  /** 添加黑名单uid (拉黑时记录，跳到会话列表时删除 该id 的会话和 好友)*/
 @property (nonatomic, copy) NSString *blackUserId;
 
+//app版本号（用来迁移数据库）
+@property (nonatomic, copy) NSString *appVersion;
+
+@property (nonatomic, assign) long long startTime; //通话开始时间戳
+@property (nonatomic, assign) long long endTime;   //通话结束时间戳
+@property (nonatomic, copy) NSString *toPhoneNum;   //拨打的电话号码
+@property (nonatomic, assign) NSInteger callRecordId; //通话记录ID   （上面四个属性用作记录通话时长）
 
 #pragma mark - 消息通知提示
 /**
@@ -127,6 +134,10 @@
  *  位置信息
  */
 @property (nonatomic, copy) NSString *area;
+/**
+ *  标记是被挤下线
+ */
+@property (nonatomic, assign) BOOL isKicker;
 
 #pragma mark - 判断时候超过15天
 /**

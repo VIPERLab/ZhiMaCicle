@@ -14,7 +14,7 @@
 #import "KXActionSheet.h"
 #import "LGLoginController.h"
 #import "JPUSHService.h"
-
+#import "MoreInfoController.h"
 
 @interface LGSetNickNameController ()<UITextFieldDelegate,KXActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (nonatomic, strong) UITextField *nickNameField;
@@ -149,7 +149,7 @@
     }];
 }
 /**
- *  下一步按钮点击方法 -- 登录
+ *  下一步按钮点击方法 -->  更多信息页面
  */
 - (void)nextAction{
     [self.view endEditing:YES];
@@ -159,45 +159,29 @@
         return;
     }
     
-    [LCProgressHUD showLoadingText:@"正在登录..."];
+    [LCProgressHUD showLoadingText:@"请稍等"];
     
     //保存昵称，头像，邀请码
     [LGNetWorking saveUserInfo:USERINFO.sessionId headUrl:USERINFO.head_photo nickName:self.nickNameField.text inviteCode:self.codeField.text block:^(ResponseData *obj) {
         if (obj.code == 0) {
             
+            [LCProgressHUD hide];
+            
             UserInfo *info = [UserInfo read];
             info.username = self.nickNameField.text;
             [info save];
             
-            [self loginAction];
+            //新需求-> 跳转到更多信息页
+            MoreInfoController *vc = [[MoreInfoController alloc] init];
+            vc.password = self.password;
+            vc.isResgiste = YES;
+            [self.navigationController pushViewController:vc animated:YES];
             
         }else{
             [LCProgressHUD showFailureText:obj.msg]; 
         }
     }];
-   
-}
 
-- (void)loginAction{
-    [self.view endEditing:YES];
-    [LGNetWorking loginWithPhone:self.phoneNumber password:self.password success:^(ResponseData *responseData) {
-        if (responseData.code == 0) {
-            UserInfo *info = [UserInfo read];
-            info.hasLogin = YES;
-            [info save];
-            
-            [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:nil object:nil];
-
-
-            [LCProgressHUD hide];
-            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
-            
-        }else{
-            [LCProgressHUD showFailureText:responseData.msg];
-        }
-    } failure:^(ErrorData *error) {
-        [LCProgressHUD showFailureText:error.msg];
-    }];
 }
 
 /**

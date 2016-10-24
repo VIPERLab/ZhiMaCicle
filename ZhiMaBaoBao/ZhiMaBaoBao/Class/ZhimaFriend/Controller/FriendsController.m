@@ -29,6 +29,7 @@
 @end
 
 static NSString * const reuseIdentifier = @"friendListcell";
+static NSString * const headerIdentifier = @"headerIdentifier";
 @implementation FriendsController
 
 - (instancetype)init{
@@ -63,6 +64,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
     tableView.sectionIndexColor = RGB(54, 54, 54);
     tableView.sectionIndexBackgroundColor = [UIColor clearColor];
     [tableView registerNib:[UINib nibWithNibName:@"FriendsListCell" bundle:nil] forCellReuseIdentifier:reuseIdentifier];
+    [tableView registerNib:[UINib nibWithNibName:@"FriendsListCell" bundle:nil] forCellReuseIdentifier:headerIdentifier];
     [self.view addSubview:tableView];
     self.tableView = tableView;
 }
@@ -77,14 +79,21 @@ static NSString * const reuseIdentifier = @"friendListcell";
     [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
 
         self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+        //刷新tableview
+        [self friendsListSort];
         
-        //更新数据库，然后刷新列表
-        if ([FMDBShareManager saveUserMessageWithMessageArray:self.friends]) {
-            NSLog(@"好友列表插入数据库成功");
-            [self friendsListSort];
-        }else{
-            NSLog(@"好友列表插入数据库成功");
-        }
+        //删除数据库旧数据，插入新数据
+        [FMDBShareManager deletedAllUserMessage];
+        [FMDBShareManager saveUserMessageWithMessageArray:self.friends];
+        
+        
+//        //更新数据库，然后刷新列表
+//        if ([FMDBShareManager saveUserMessageWithMessageArray:self.friends]) {
+//            NSLog(@"好友列表插入数据库成功");
+//            [self friendsListSort];
+//        }else{
+//            NSLog(@"好友列表插入数据库成功");
+//        }
         
     } failure:^(ErrorData *error) {
 //        [LCProgressHUD showFailureText:error.msg];
@@ -187,7 +196,6 @@ static NSString * const reuseIdentifier = @"friendListcell";
     userInfo.unReadCount ++;
     [userInfo save];
     
-    NSDictionary *userDic = notify.userInfo;
     //插入数据库，显示未读角标
 //    [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
     self.unReadLabel.hidden = NO;
@@ -195,6 +203,9 @@ static NSString * const reuseIdentifier = @"friendListcell";
     if (USERINFO.unReadCount == 0) {
         self.unReadLabel.hidden = YES;
     }
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     
     
     //显示tabbar角标
@@ -246,13 +257,20 @@ static NSString * const reuseIdentifier = @"friendListcell";
         if (indexPath.row == 0) {
             cell.name.text = @"新的朋友";
             cell.avtar.image = [UIImage imageNamed:@"new_friend"];
-            [cell addSubview:self.unReadLabel];
+            if (USERINFO.unReadCount > 0) {
+                cell.unreadLabel.text = [NSString stringWithFormat:@"%d",USERINFO.unReadCount];
+                cell.unreadLabel.hidden = NO;
+            }else{
+                cell.unreadLabel.hidden = YES;
+            }
         }else{
             cell.name.text = @"群聊";
             cell.avtar.image = [UIImage imageNamed:@"group_Icon"];
+            cell.unreadLabel.hidden = YES;
         }
     //好友列表
     }else{
+        cell.unreadLabel.hidden = YES;
         NSInteger rowNum = 0;
         for (int i = 0; i < indexPath.section - 1; i++) {
             
