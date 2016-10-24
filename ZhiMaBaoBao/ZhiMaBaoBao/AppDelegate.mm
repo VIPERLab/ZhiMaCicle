@@ -325,10 +325,6 @@
     //接收用户退出通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(reachabilityChanged:)
-//                                                 name:kReachabilityChangedNotification
-//                                               object:nil];
 }
 
 - (void)jumpMainController{
