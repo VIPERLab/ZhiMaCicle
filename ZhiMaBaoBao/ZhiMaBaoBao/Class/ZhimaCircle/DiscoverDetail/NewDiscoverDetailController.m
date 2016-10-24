@@ -93,8 +93,8 @@
     _likeItemView.likeItemArray = _model.likeItemsArray;
     _likeItemView.frame = CGRectMake(10, CGRectGetMaxY(_headerView.frame) + 10, ScreenWidth - 20, 55);
     
-    
-    _scrollView.contentSize = CGSizeMake(ScreenWidth, CGRectGetMaxY(_likeItemView.frame));
+    CGFloat maxHeight = CGRectGetMaxY(_likeItemView.frame) > ScreenHeight ? CGRectGetMaxY(_likeItemView.frame) : ScreenHeight;
+    _scrollView.contentSize = CGSizeMake(ScreenWidth, maxHeight);
     
     
 }

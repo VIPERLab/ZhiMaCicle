@@ -29,6 +29,7 @@
 		041750B51DA4CFE800DCD7A9 /* GroupChatInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750B41DA4CFE800DCD7A9 /* GroupChatInfoCell.m */; };
 		041750B81DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750B71DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m */; };
 		043DD8461DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 043DD8451DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.m */; };
+		043DD8491DBB6BFC008A98DD /* NewDiscoverDetailCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 043DD8481DBB6BFC008A98DD /* NewDiscoverDetailCommentView.m */; };
 		04608FA11DB078CD00F4B9E9 /* ChangeSexCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04608FA01DB078CD00F4B9E9 /* ChangeSexCell.m */; };
 		04787AE91D9CFF4B000A0DB5 /* KXActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */; };
 		04787AF61D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */; };
@@ -713,6 +714,8 @@
 		041750B71DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatInfoHeaderCell.m; sourceTree = "<group>"; };
 		043DD8441DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDiscoverDetailCommentListView.h; sourceTree = "<group>"; };
 		043DD8451DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewDiscoverDetailCommentListView.m; sourceTree = "<group>"; };
+		043DD8471DBB6BFC008A98DD /* NewDiscoverDetailCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDiscoverDetailCommentView.h; sourceTree = "<group>"; };
+		043DD8481DBB6BFC008A98DD /* NewDiscoverDetailCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewDiscoverDetailCommentView.m; sourceTree = "<group>"; };
 		04608F9F1DB078CD00F4B9E9 /* ChangeSexCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexCell.h; sourceTree = "<group>"; };
 		04608FA01DB078CD00F4B9E9 /* ChangeSexCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexCell.m; sourceTree = "<group>"; };
 		04787AE71D9CFF4B000A0DB5 /* KXActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXActionSheet.h; sourceTree = "<group>"; };
@@ -1974,6 +1977,8 @@
 				040F82061DB9C6A600086A25 /* NewDiscoverDetailHeaderView.m */,
 				043DD8441DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.h */,
 				043DD8451DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.m */,
+				043DD8471DBB6BFC008A98DD /* NewDiscoverDetailCommentView.h */,
+				043DD8481DBB6BFC008A98DD /* NewDiscoverDetailCommentView.m */,
 			);
 			path = NewView;
 			sourceTree = "<group>";
@@ -5742,6 +5747,7 @@
 				04EA79761D8FB95B005E5425 /* KXSettingController.m in Sources */,
 				04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */,
 				04F8625A1D94FC6D00DCC6FE /* TTTAttributedLabel.m in Sources */,
+				043DD8491DBB6BFC008A98DD /* NewDiscoverDetailCommentView.m in Sources */,
 				04EA7D621D912872005E5425 /* ZXAztecWriter.m in Sources */,
 				04F862991D94FC7900DCC6FE /* RFTextView.m in Sources */,
 				04EA7E0F1D912872005E5425 /* ZXPDF417BarcodeRow.m in Sources */,

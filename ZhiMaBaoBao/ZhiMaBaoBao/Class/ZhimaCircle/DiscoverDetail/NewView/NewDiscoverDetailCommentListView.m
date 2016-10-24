@@ -65,7 +65,7 @@
     
     CGFloat likeIconW = 15;
     CGFloat likeIconH = 13;
-    CGFloat likeIconX = 20;
+    CGFloat likeIconX = 10;
     CGFloat likeIconY = (55 - likeIconH) * 0.5;
     _likeImageView.frame = CGRectMake(likeIconX, likeIconY, likeIconW, likeIconH);
     
