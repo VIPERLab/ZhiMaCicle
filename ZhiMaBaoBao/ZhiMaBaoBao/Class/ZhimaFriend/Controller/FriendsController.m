@@ -29,6 +29,7 @@
 @end
 
 static NSString * const reuseIdentifier = @"friendListcell";
+static NSString * const headerIdentifier = @"headerIdentifier";
 @implementation FriendsController
 
 - (instancetype)init{
@@ -63,6 +64,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
     tableView.sectionIndexColor = RGB(54, 54, 54);
     tableView.sectionIndexBackgroundColor = [UIColor clearColor];
     [tableView registerNib:[UINib nibWithNibName:@"FriendsListCell" bundle:nil] forCellReuseIdentifier:reuseIdentifier];
+    [tableView registerNib:[UINib nibWithNibName:@"FriendsListCell" bundle:nil] forCellReuseIdentifier:headerIdentifier];
     [self.view addSubview:tableView];
     self.tableView = tableView;
 }
@@ -248,7 +250,7 @@ static NSString * const reuseIdentifier = @"friendListcell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     //组一：新的好友 群组
-    FriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    FriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:headerIdentifier];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             cell.name.text = @"新的朋友";

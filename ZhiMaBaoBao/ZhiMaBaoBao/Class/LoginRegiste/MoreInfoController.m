@@ -10,12 +10,15 @@
 #import "MoreInfoCell.h"
 #import "LGPickerView.h"
 #import "MoreInfoModel.h"
+#import "JPUSHService.h"
+
 
 @interface MoreInfoController ()<UITableViewDelegate,UITableViewDataSource,LGPickerViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIPickerView *pickView;
 @property (nonatomic, strong) NSMutableArray *dataArr;
 @property (nonatomic, strong) NSIndexPath *selectIndexPath;    //tableView选中行
+@property (nonatomic, strong) NSMutableDictionary *parmas;      //上传参数
 @end
 
 static  NSString *const reuserIdentifier = @"moreInfoCell";
@@ -110,6 +113,11 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
     MoreInfoModel *selectModel = self.dataArr[self.selectIndexPath.row];
     selectModel.selectedId = [NSString stringWithFormat:@"%ld",(long)model.idd];
     [self.tableView reloadRowsAtIndexPaths:@[self.selectIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+    
+    //存选择参数
+    NSString *key = selectModel.item_code;
+    NSInteger value = model.idd;
+    self.parmas[key] = @(value);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -117,7 +125,27 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (self.isResgiste) {
+        return 40;
+    }
     return .1f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 40)];
+    footer.backgroundColor = [UIColor clearColor];
+    
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, DEVICEWITH - 14 - 80, 80, 40)];
+    [btn setTitle:@"跳过>>" forState:UIControlStateNormal];
+    [btn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(jumpNext) forControlEvents:UIControlEventTouchUpInside];
+    btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [footer addSubview:btn];
+    
+    if (self.isResgiste) {
+        return footer;
+    }
+    return [[UIView alloc] init];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -126,7 +154,55 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
 
 //保存更多资料
 - (void)saveMoreInfo{
+    [LCProgressHUD showLoadingText:@"请稍等..."];
+    NSString *jsonStr = [self.parmas mj_JSONString];
+    [LGNetWorking saveMoreUserInfo:USERINFO.sessionId moreData:jsonStr success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            if (self.isResgiste) {  //执行登录操作
+                [self loginAction];
+            }else{  //保存数据，跳转回上衣界面
+                [LCProgressHUD showSuccessText:@"保存成功"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
+            }
+        }else{
+            [LCProgressHUD showFailureText:responseData.msg];
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:error.msg];
+    }];
     
+}
+
+//跳过 -> 执行登录操作
+- (void)jumpNext{
+    [self loginAction];
+}
+
+- (void)loginAction{
+    [LCProgressHUD showLoadingText:@"正在登录..."];
+    
+    [self.view endEditing:YES];
+    [LGNetWorking loginWithPhone:USERINFO.uphone password:self.password success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            [LCProgressHUD hide];
+            UserInfo *info = [UserInfo read];
+            info.hasLogin = YES;
+            [info save];
+            
+            [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:nil object:nil];
+            
+            
+            [LCProgressHUD hide];
+            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
+            
+        }else{
+            [LCProgressHUD showFailureText:responseData.msg];
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:error.msg];
+    }];
 }
 
 
@@ -136,6 +212,13 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
         _dataArr = [NSMutableArray array];
     }
     return _dataArr;
+}
+
+- (NSMutableDictionary *)parmas{
+    if (!_parmas) {
+        _parmas = [NSMutableDictionary dictionary];
+    }
+    return _parmas;
 }
 
 @end
