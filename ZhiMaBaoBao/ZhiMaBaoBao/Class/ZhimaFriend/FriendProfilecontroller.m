@@ -107,9 +107,8 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",self.userId];
             NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
             [queue inDatabase:^(FMDatabase *db) {
-                BOOL success = [db executeQuery:optionStr];
+                [db executeUpdate:optionStr];
             }];
-
             
             if (addSqlit) {
                 //插入好友到数据库

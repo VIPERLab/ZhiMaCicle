@@ -107,7 +107,7 @@
             NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",self.userId];
             NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
             [queue inDatabase:^(FMDatabase *db) {
-                [db executeQuery:optionStr];
+                [db executeUpdate:optionStr];
             }];
             
             [self.navigationController popViewControllerAnimated:YES];
