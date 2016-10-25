@@ -224,6 +224,12 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         cell.delegate = self;
         cell.indexPath = indexPath;
         cell.tableView = tableView;
+        
+        if (self.hideFlagBtn) {
+            //隐藏选择按钮，头像左移
+            cell.selectFlagBtn.hidden = YES;
+            cell.avtarLeftMargin.constant = -25;
+        }
         return cell;
     }
 }
@@ -314,37 +320,45 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         [self.textField resignFirstResponder];
         
         ZhiMaFriendModel *friend = self.searchResultArr[indexPath.row];
-        //如果是已选成员，直接return
-        for (NSString *userId in self.selectedMembers) {
-            if ([friend.user_Id isEqualToString:userId]) {
-                return;
+        if (self.hideFlagBtn) {     //选择好友 ，转发消息
+            self.transMsg.isGroup = NO;
+            TransPopView *popView = [[TransPopView alloc] initWithMessage:self.transMsg toUserId:friend.user_Id isGroup:NO];
+            popView.delegate = self;
+            [popView show];
+        }else{  //选择好友进群
+            //如果是已选成员，直接return
+            for (NSString *userId in self.selectedMembers) {
+                if ([friend.user_Id isEqualToString:userId]) {
+                    return;
+                }
             }
-        }
-        
-        //找到在friendsAfterSort数组里面与之对应的模型，设置模型的选中属性
-        for (ZhiMaFriendModel *friend1 in self.friendsAfterSort) {
-            if ([friend1.user_Id isEqualToString:friend.user_Id]) {
-                friend1.selectedGroup = !friend1.selectedGroup;
+            
+            //找到在friendsAfterSort数组里面与之对应的模型，设置模型的选中属性
+            for (ZhiMaFriendModel *friend1 in self.friendsAfterSort) {
+                if ([friend1.user_Id isEqualToString:friend.user_Id]) {
+                    friend1.selectedGroup = !friend1.selectedGroup;
+                }
             }
-        }
-        //刷新选中行
-        [self.tableView reloadData];
-        
-        //如果是选中状态，加入数组 如果是非选中状态移出数组
-        if (friend.selectedGroup) {
-            [self.selectedFriends addObject:friend];
-        }else{
-            if ([self.selectedFriends containsObject:friend]) {
-                [self.selectedFriends removeObject:friend];
+            //刷新选中行
+            [self.tableView reloadData];
+            
+            //如果是选中状态，加入数组 如果是非选中状态移出数组
+            if (friend.selectedGroup) {
+                [self.selectedFriends addObject:friend];
+            }else{
+                if ([self.selectedFriends containsObject:friend]) {
+                    [self.selectedFriends removeObject:friend];
+                }
             }
+            
+            //更新顶栏试图 imagesView 的frame
+            [self refreshImagesViewFrame];
+            
+            //隐藏搜索结果tableview
+            self.textField.text = @"";
+            [self.searchTableView removeFromSuperview];
         }
-        
-        //更新顶栏试图 imagesView 的frame
-        [self refreshImagesViewFrame];
-        
-        //隐藏搜索结果tableview
-        self.textField.text = @"";
-        [self.searchTableView removeFromSuperview];
+
     }
     
 }
