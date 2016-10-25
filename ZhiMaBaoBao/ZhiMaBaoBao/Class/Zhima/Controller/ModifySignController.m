@@ -67,12 +67,22 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     //判断加上输入的字符，是否超过界限
-    NSString *str = [NSString stringWithFormat:@"%@%@", textView.text, text];
-    if (str.length > MaxCount) {
-        textView.text = [str substringToIndex:MaxCount];
+    NSString *textStr = textView.text;
+    NSString *copyStr = [textView.text substringWithRange:range];
+    if ([copyStr isEqualToString:@""]) {
+        copyStr = [textStr stringByAppendingString:text];
+    } else {
+        copyStr = [textStr substringWithRange:NSMakeRange(0, range.location)];
+    }
+    
+    
+    if (copyStr.length > MaxCount) {
+        textView.text = [copyStr substringWithRange:NSMakeRange(0, MaxCount)];
+        _countLabel.text = [NSString stringWithFormat:@"0"];
         return NO;
     }
-    _countLabel.text = [NSString stringWithFormat:@"%zd",MaxCount - str.length];
+    
+    _countLabel.text = [NSString stringWithFormat:@"%lu",(MaxCount - copyStr.length)];
     return YES;
 }
 

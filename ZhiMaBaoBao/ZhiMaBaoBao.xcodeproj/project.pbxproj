@@ -28,6 +28,8 @@
 		041750B21DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750B11DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m */; };
 		041750B51DA4CFE800DCD7A9 /* GroupChatInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750B41DA4CFE800DCD7A9 /* GroupChatInfoCell.m */; };
 		041750B81DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041750B71DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m */; };
+		043510BE1DBEF47F0031A895 /* SDBaseRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 043510BB1DBEF47F0031A895 /* SDBaseRefreshView.m */; };
+		043510BF1DBEF47F0031A895 /* SDTimeLineRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 043510BD1DBEF47F0031A895 /* SDTimeLineRefreshHeader.m */; };
 		043DD8461DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 043DD8451DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.m */; };
 		043DD8491DBB6BFC008A98DD /* NewDiscoverDetailCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 043DD8481DBB6BFC008A98DD /* NewDiscoverDetailCommentView.m */; };
 		04608FA11DB078CD00F4B9E9 /* ChangeSexCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04608FA01DB078CD00F4B9E9 /* ChangeSexCell.m */; };
@@ -391,7 +393,6 @@
 		04F57AA61D9280BD002A6471 /* SetupCircleLimitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579CD1D9280BD002A6471 /* SetupCircleLimitController.m */; };
 		04F57AA71D9280BD002A6471 /* TimeLineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579D11D9280BD002A6471 /* TimeLineController.m */; };
 		04F57AA81D9280BD002A6471 /* ZhiMaCicleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579D31D9280BD002A6471 /* ZhiMaCicleCell.m */; };
-		04F57AA91D9280BD002A6471 /* SDBaseRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579D71D9280BD002A6471 /* SDBaseRefreshView.m */; };
 		04F57AB11D9280BD002A6471 /* SDTimeLineCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579EC1D9280BD002A6471 /* SDTimeLineCellModel.m */; };
 		04F57AB21D9280BD002A6471 /* SDTimeLineTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579EF1D9280BD002A6471 /* SDTimeLineTableViewController.m */; };
 		04F57AB31D9280BD002A6471 /* SDTimeLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579F31D9280BD002A6471 /* SDTimeLineCell.m */; };
@@ -401,7 +402,6 @@
 		04F57AB71D9280BD002A6471 /* SDTimeLineCellOperationMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579FE1D9280BD002A6471 /* SDTimeLineCellOperationMenu.m */; };
 		04F57AB81D9280BD002A6471 /* SDWeiXinPhotoContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A011D9280BD002A6471 /* SDWeiXinPhotoContainerView.m */; };
 		04F57AB91D9280BD002A6471 /* SDTimeLineRefreshFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A041D9280BD002A6471 /* SDTimeLineRefreshFooter.m */; };
-		04F57ABA1D9280BD002A6471 /* SDTimeLineRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A071D9280BD002A6471 /* SDTimeLineRefreshHeader.m */; };
 		04F57AE41D9280BD002A6471 /* SDBrowserImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A6A1D9280BD002A6471 /* SDBrowserImageView.m */; };
 		04F57AE51D9280BD002A6471 /* SDPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A6C1D9280BD002A6471 /* SDPhotoBrowser.m */; };
 		04F57AE61D9280BD002A6471 /* SDWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A6F1D9280BD002A6471 /* SDWaitingView.m */; };
@@ -715,6 +715,10 @@
 		041750B41DA4CFE800DCD7A9 /* GroupChatInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatInfoCell.m; sourceTree = "<group>"; };
 		041750B61DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatInfoHeaderCell.h; sourceTree = "<group>"; };
 		041750B71DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatInfoHeaderCell.m; sourceTree = "<group>"; };
+		043510BA1DBEF47F0031A895 /* SDBaseRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBaseRefreshView.h; sourceTree = "<group>"; };
+		043510BB1DBEF47F0031A895 /* SDBaseRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBaseRefreshView.m; sourceTree = "<group>"; };
+		043510BC1DBEF47F0031A895 /* SDTimeLineRefreshHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDTimeLineRefreshHeader.h; sourceTree = "<group>"; };
+		043510BD1DBEF47F0031A895 /* SDTimeLineRefreshHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDTimeLineRefreshHeader.m; sourceTree = "<group>"; };
 		043DD8441DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDiscoverDetailCommentListView.h; sourceTree = "<group>"; };
 		043DD8451DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewDiscoverDetailCommentListView.m; sourceTree = "<group>"; };
 		043DD8471DBB6BFC008A98DD /* NewDiscoverDetailCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDiscoverDetailCommentView.h; sourceTree = "<group>"; };
@@ -1432,8 +1436,6 @@
 		04F579D11D9280BD002A6471 /* TimeLineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeLineController.m; sourceTree = "<group>"; };
 		04F579D21D9280BD002A6471 /* ZhiMaCicleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaCicleCell.h; sourceTree = "<group>"; };
 		04F579D31D9280BD002A6471 /* ZhiMaCicleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCicleCell.m; sourceTree = "<group>"; };
-		04F579D61D9280BD002A6471 /* SDBaseRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBaseRefreshView.h; sourceTree = "<group>"; };
-		04F579D71D9280BD002A6471 /* SDBaseRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBaseRefreshView.m; sourceTree = "<group>"; };
 		04F579EB1D9280BD002A6471 /* SDTimeLineCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDTimeLineCellModel.h; sourceTree = "<group>"; };
 		04F579EC1D9280BD002A6471 /* SDTimeLineCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDTimeLineCellModel.m; sourceTree = "<group>"; };
 		04F579EE1D9280BD002A6471 /* SDTimeLineTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDTimeLineTableViewController.h; sourceTree = "<group>"; };
@@ -1452,8 +1454,6 @@
 		04F57A011D9280BD002A6471 /* SDWeiXinPhotoContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDWeiXinPhotoContainerView.m; sourceTree = "<group>"; };
 		04F57A031D9280BD002A6471 /* SDTimeLineRefreshFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDTimeLineRefreshFooter.h; sourceTree = "<group>"; };
 		04F57A041D9280BD002A6471 /* SDTimeLineRefreshFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDTimeLineRefreshFooter.m; sourceTree = "<group>"; };
-		04F57A061D9280BD002A6471 /* SDTimeLineRefreshHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDTimeLineRefreshHeader.h; sourceTree = "<group>"; };
-		04F57A071D9280BD002A6471 /* SDTimeLineRefreshHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDTimeLineRefreshHeader.m; sourceTree = "<group>"; };
 		04F57A391D9280BD002A6471 /* GlobalDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalDefines.h; sourceTree = "<group>"; };
 		04F57A691D9280BD002A6471 /* SDBrowserImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBrowserImageView.h; sourceTree = "<group>"; };
 		04F57A6A1D9280BD002A6471 /* SDBrowserImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBrowserImageView.m; sourceTree = "<group>"; };
@@ -2123,6 +2123,17 @@
 				041750B11DA4CDE000DCD7A9 /* GroupChatInfoFooterView.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		043510B91DBEF47F0031A895 /* Refresh */ = {
+			isa = PBXGroup;
+			children = (
+				043510BA1DBEF47F0031A895 /* SDBaseRefreshView.h */,
+				043510BB1DBEF47F0031A895 /* SDBaseRefreshView.m */,
+				043510BC1DBEF47F0031A895 /* SDTimeLineRefreshHeader.h */,
+				043510BD1DBEF47F0031A895 /* SDTimeLineRefreshHeader.m */,
+			);
+			path = Refresh;
 			sourceTree = "<group>";
 		};
 		04608F9E1DB0779D00F4B9E9 /* Cell */ = {
@@ -3647,22 +3658,12 @@
 		04F579D41D9280BD002A6471 /* Discover(朋友圈) */ = {
 			isa = PBXGroup;
 			children = (
-				04F579D51D9280BD002A6471 /* BaseRefreshView */,
 				04F579E11D9280BD002A6471 /* Discover */,
 				04F57A381D9280BD002A6471 /* GloabalDefines */,
 				04F57A681D9280BD002A6471 /* SDPhotoBrowser */,
 			);
 			name = "Discover(朋友圈)";
 			path = Discover;
-			sourceTree = "<group>";
-		};
-		04F579D51D9280BD002A6471 /* BaseRefreshView */ = {
-			isa = PBXGroup;
-			children = (
-				04F579D61D9280BD002A6471 /* SDBaseRefreshView.h */,
-				04F579D71D9280BD002A6471 /* SDBaseRefreshView.m */,
-			);
-			path = BaseRefreshView;
 			sourceTree = "<group>";
 		};
 		04F579E11D9280BD002A6471 /* Discover */ = {
@@ -3708,10 +3709,10 @@
 				04F579F41D9280BD002A6471 /* CommentView */,
 				04F579F71D9280BD002A6471 /* HeaderView */,
 				04F57B871D92841F002A6471 /* NewMessage(新消息提示框) */,
+				043510B91DBEF47F0031A895 /* Refresh */,
 				04F579FC1D9280BD002A6471 /* OperationMenu */,
 				04F579FF1D9280BD002A6471 /* PhotoContainer */,
 				04F57A021D9280BD002A6471 /* TimeLineRefreshFooter */,
-				04F57A051D9280BD002A6471 /* TimeLineRefreshHeader */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3768,15 +3769,6 @@
 				04F57A041D9280BD002A6471 /* SDTimeLineRefreshFooter.m */,
 			);
 			path = TimeLineRefreshFooter;
-			sourceTree = "<group>";
-		};
-		04F57A051D9280BD002A6471 /* TimeLineRefreshHeader */ = {
-			isa = PBXGroup;
-			children = (
-				04F57A061D9280BD002A6471 /* SDTimeLineRefreshHeader.h */,
-				04F57A071D9280BD002A6471 /* SDTimeLineRefreshHeader.m */,
-			);
-			path = TimeLineRefreshHeader;
 			sourceTree = "<group>";
 		};
 		04F57A381D9280BD002A6471 /* GloabalDefines */ = {
@@ -5543,7 +5535,6 @@
 				04EA7D9D1D912872005E5425 /* ZXIntArray.m in Sources */,
 				04EA7DC01D912872005E5425 /* ZXDataMatrixWriter.m in Sources */,
 				04EA7D9F1D912872005E5425 /* ZXStringUtils.m in Sources */,
-				04F57ABA1D9280BD002A6471 /* SDTimeLineRefreshHeader.m in Sources */,
 				D544F5591DAF5A8A00E73624 /* TQRichTextURLRun.m in Sources */,
 				041750A61DA4A06400DCD7A9 /* ChatInfoHeaderCell.m in Sources */,
 				04EA7D981D912872005E5425 /* ZXDefaultGridSampler.m in Sources */,
@@ -5554,6 +5545,7 @@
 				04EA7D641D912872005E5425 /* ZXAddressBookAUResultParser.m in Sources */,
 				04EA7E1E1D912872005E5425 /* ZXQRCodeFormatInformation.m in Sources */,
 				04EA79E81D90E9F7005E5425 /* MyAccountHeaderView.m in Sources */,
+				043510BE1DBEF47F0031A895 /* SDBaseRefreshView.m in Sources */,
 				04F862151D94DB3000DCC6FE /* NewDiscoverPhotoPickerView.m in Sources */,
 				316957681D90E91700140126 /* LGSearchController.m in Sources */,
 				311CEF771D921F9F00BBB1F9 /* LGQueryCell.m in Sources */,
@@ -5611,6 +5603,7 @@
 				04EA7D5C1D912872005E5425 /* ZXAztecHighLevelEncoder.m in Sources */,
 				04EA7D631D912872005E5425 /* ZXAbstractDoCoMoResultParser.m in Sources */,
 				D5DC48601D9A4AE9005E8766 /* IMChatVoiceTableViewCell.m in Sources */,
+				043510BF1DBEF47F0031A895 /* SDTimeLineRefreshHeader.m in Sources */,
 				041750AA1DA4C9A500DCD7A9 /* GroupChatRoomInfoController.m in Sources */,
 				D5C8B3971D9A0059007D6B5C /* BaseChatTableViewCell.m in Sources */,
 				04EA7D671D912872005E5425 /* ZXBizcardResultParser.m in Sources */,
@@ -5642,7 +5635,6 @@
 				31B7C7A91D8FE91A00F1883A /* pinyin.c in Sources */,
 				311CEFAA1D937BE700BBB1F9 /* MLAudioPlayer.m in Sources */,
 				D53E3DD21DB704FC001C663B /* PKChatMessagePlayerView.m in Sources */,
-				04F57AA91D9280BD002A6471 /* SDBaseRefreshView.m in Sources */,
 				04EA7AD61D910F89005E5425 /* JKPromptView.m in Sources */,
 				04CBF50E1D9BE64700CBB609 /* GroupChatModel.m in Sources */,
 				04EA7DB61D912872005E5425 /* ZXDataMatrixDefaultPlacement.m in Sources */,

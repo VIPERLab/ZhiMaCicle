@@ -48,7 +48,8 @@
 - (void)setupView {
     self.view.backgroundColor = [UIColor colorFormHexRGB:@"2e3132"];
     CGFloat scale = (ScreenWidth - 60) / ScreenWidth;
-    CGFloat centerHeigth = 392 * scale + 60;
+    CGFloat heightScale = 460 / ScreenHeight;
+    CGFloat centerHeigth = 460 * heightScale;
     UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, centerHeigth)];
     centerView.backgroundColor = [UIColor whiteColor];
     centerView.layer.cornerRadius = 10;
@@ -79,7 +80,7 @@
     [self.centerView addSubview:locationLabel];
     
     
-    UIImageView *BJImage = [[UIImageView alloc] initWithFrame:CGRectMake(19, CGRectGetMaxY(userIcon.frame) + 10, CGRectGetWidth(self.centerView.frame) - 38 , 260)];
+    UIImageView *BJImage = [[UIImageView alloc] initWithFrame:CGRectMake(19, CGRectGetMaxY(userIcon.frame) + 10, CGRectGetWidth(self.centerView.frame) - 38 , CGRectGetWidth(self.centerView.frame) - 38)];
     self.imageView = BJImage;
     BJImage.userInteractionEnabled = YES;
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressDidClick:)];
@@ -100,7 +101,7 @@
 //    [QRCodeView addSubview:imageView];
     
     
-    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(centerView.frame) - 45, CGRectGetWidth(centerView.frame), 15)];
+    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(centerView.frame) - 35, CGRectGetWidth(centerView.frame), 15)];
     invitedLabel.textAlignment = NSTextAlignmentCenter;
     invitedLabel.font = [UIFont systemFontOfSize:15];
     invitedLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
@@ -108,7 +109,7 @@
     [self.centerView addSubview:invitedLabel];
     
     
-    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(invitedLabel.frame),  CGRectGetWidth(centerView.frame), 30)];
+    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(invitedLabel.frame),  CGRectGetWidth(centerView.frame), 20)];
     tipsLabel.textAlignment = NSTextAlignmentCenter;
     tipsLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
     tipsLabel.font = [UIFont systemFontOfSize:15];
@@ -166,18 +167,33 @@
     // 高清的二维码
     
 //    NSString * avatarPath = [YiXmppVCard getAvatarPathByJid:[userInfo getJid]];
-    self.imageView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:500];
+    self.imageView.image = [self composeImg1:[self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:500] andImage2:self.userIcon.image];
     
-    UIImageView *imageViewe = [[UIImageView alloc] initWithImage:self.userIcon.image];
-    CGFloat width = self.imageView.width * 0.2;
-    imageViewe.layer.borderWidth = 3;
-    imageViewe.layer.cornerRadius = 5;
-    imageViewe.clipsToBounds = YES;
-    imageViewe.layer.borderColor = [UIColor whiteColor].CGColor;
-    imageViewe.frame = CGRectMake((CGRectGetWidth(self.imageView.frame) - width) * 0.5, (CGRectGetHeight(self.imageView.frame) - width) * 0.5, width, width);
-    [self.imageView addSubview:imageViewe];
+}
+
+
+- (UIImage *)composeImg1:(UIImage *)image1 andImage2:(UIImage *)image2 {
     
+    CGImageRef imgRef = image2.CGImage;
     
+    //以1.png的图大小为底图
+    CGImageRef imgRef1 = image1.CGImage;
+    CGFloat w1 = CGImageGetWidth(imgRef1);
+    CGFloat h1 = CGImageGetHeight(imgRef1);
+    
+    //以1.png的图大小为画布创建上下文
+    UIGraphicsBeginImageContext(CGSizeMake(w1, h1));
+    [image1 drawInRect:CGRectMake(0, 0, w1, h1)];//先把1.png 画到上下文中
+    CGFloat width = 100;
+    [image2 drawInRect:CGRectMake((w1 - width) * 0.5, (h1 - width) * 0.5, width, width)];//再把小图放在上下文中
+    
+    UIImage *resultImg = UIGraphicsGetImageFromCurrentImageContext();//从当前上下文中获得最终图片
+    
+    UIGraphicsEndImageContext();//关闭上下文
+    CGImageRelease(imgRef);
+    CGImageRelease(imgRef1);
+    
+    return resultImg;
 }
 
 - (UIImage *)creatNonInterpolatedUIImageFormCIImage:(CIImage *)image withSize:(CGFloat)size {
@@ -205,7 +221,6 @@
 
 
 #pragma mark - upDataVCard
-
 - (void)longPressDidClick:(UILongPressGestureRecognizer *)longPress {
     
     if (longPress.state == UIGestureRecognizerStateBegan) {

@@ -8,19 +8,22 @@
 
 #import "WebViewController.h"
 #import <WebKit/WebKit.h>
+#import "KXActionSheet.h"
 
-
-@interface WebViewController ()
+@interface WebViewController () <KXActionSheetDelegate>
 @property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) UIProgressView *progressView;
 
 @end
 
-@implementation WebViewController
+@implementation WebViewController {
+    NSString *_urlStr;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setCustomTitle:@""];
+    [self setupNav];
     
     WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:webView];
@@ -31,18 +34,25 @@
     [self.view insertSubview:progressView aboveSubview:self.webView];
     self.progressView = progressView;
     
-    NSString *urlStr = self.urlStr;
-    NSRange rang = [urlStr rangeOfString:@"http"];
+    _urlStr = self.urlStr;
+    NSRange rang = [_urlStr rangeOfString:@"http"];
     if (rang.length == 0) {
-        urlStr = [@"http://" stringByAppendingString:urlStr];
+        _urlStr = [@"http://" stringByAppendingString:_urlStr];
     }
     
-    NSLog(@"加载的网址是 --  %@",urlStr);
+    NSLog(@"加载的网址是 --  %@",_urlStr);
     
-    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]];
+    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_urlStr]]];
     [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
     [webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:NULL];
 }
+
+- (void)setupNav {
+    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_more"] style:UIBarButtonItemStylePlain target:self action:@selector(rightItemDidClick)];
+    self.navigationItem.rightBarButtonItem = right;
+    
+}
+
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
@@ -83,6 +93,18 @@
     else {
         
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)rightItemDidClick {
+    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"在浏览器中打开"]];
+    sheet.delegate = self;
+    [sheet show];
+}
+
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
+    if (index == 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_urlStr]];
     }
 }
 

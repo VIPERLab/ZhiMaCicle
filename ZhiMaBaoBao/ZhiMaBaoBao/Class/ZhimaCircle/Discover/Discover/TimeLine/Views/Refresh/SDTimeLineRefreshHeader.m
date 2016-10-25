@@ -52,8 +52,9 @@ static const CGFloat criticalY = -60.f;
     return self;
 }
 
-- (void)setupView {
-    self.backgroundColor = [UIColor redColor];
+- (void)setupView
+{
+    self.backgroundColor = [UIColor clearColor];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"AlbumReflashIcon"]];
     self.bounds = imageView.bounds;

@@ -8,6 +8,8 @@
 
 #import "LGFeedBackViewController.h"
 
+#define MaxCount 200
+
 @interface LGFeedBackViewController ()<UITextViewDelegate>
 
 @property (nonatomic, strong) UITextView *textView;
@@ -16,7 +18,9 @@
 
 @end
 
-@implementation LGFeedBackViewController
+@implementation LGFeedBackViewController {
+    UILabel *_countDownLabel;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,22 +36,35 @@
     [self.textView becomeFirstResponder];
 }
 
-- (void)addAllViews
-{
-    UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(7, 74, DEVICEWITH - 14, 200)];
+- (void)addAllViews {
+    
+    UIView *customView = [[UIView alloc] initWithFrame:CGRectMake(7, 74, DEVICEWITH - 14, 200 + 20)];
+    [self.view addSubview:customView];
+    
+    
+    UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, DEVICEWITH - 14, 200)];
     textView.delegate = self;
     textView.backgroundColor = [UIColor whiteColor];
-    
     textView.layer.borderWidth = 1;
     textView.layer.borderColor = [UIColor colorFormHexRGB:@"e1e1e1"].CGColor;
     [textView.layer setMasksToBounds:YES];
     textView.font = MAINFONT;
-    
-    [self.view addSubview:textView];
+    [customView addSubview:textView];
     self.textView = textView;
     
+    
+    UILabel *countDownLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(textView.frame) + 5, ScreenWidth - 20, 15)];
+    _countDownLabel = countDownLabel;
+    countDownLabel.textAlignment = NSTextAlignmentRight;
+    countDownLabel.textColor = [UIColor lightGrayColor];
+    countDownLabel.font = [UIFont systemFontOfSize:15];
+    countDownLabel.text = @"200/200";
+    [customView addSubview:countDownLabel];
+    
+    
+    
     UIButton *subBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    subBtn.frame = CGRectMake(CGRectGetMinX(textView.frame), CGRectGetMaxY(textView.frame) + 18, CGRectGetWidth(textView.frame), 50);
+    subBtn.frame = CGRectMake(CGRectGetMinX(textView.frame), CGRectGetMaxY(customView.frame) + 18, CGRectGetWidth(customView.frame), 50);
     [subBtn setTitle:@"提交" forState:UIControlStateNormal];
     [subBtn setBackgroundColor:THEMECOLOR];
     subBtn.layer.masksToBounds = YES;
@@ -114,6 +131,30 @@
         self.pLabel.hidden = YES;
     }
 }
+
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    //判断加上输入的字符，是否超过界限
+    NSString *textStr = textView.text;
+    NSString *copyStr = [textView.text substringWithRange:range];
+    if ([copyStr isEqualToString:@""]) {
+        copyStr = [textStr stringByAppendingString:text];
+    } else {
+        copyStr = [textStr substringWithRange:NSMakeRange(0, range.location)];
+    }
+
+    
+    if (copyStr.length > MaxCount) {
+        textView.text = [copyStr substringWithRange:NSMakeRange(0, MaxCount)];
+        _countDownLabel.text = [NSString stringWithFormat:@"0/200"];
+        return NO;
+    }
+    
+    
+    _countDownLabel.text = [NSString stringWithFormat:@"%lu/200",(MaxCount - copyStr.length)];
+    return YES;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
