@@ -26,6 +26,7 @@
 @property (nonatomic, strong) NSMutableArray *countOfSectionArr;       //每组的好友个数
 
 @property (nonatomic, strong) UILabel *unReadLabel;     //未读好友请求角标
+@property (nonatomic, strong) NSMutableArray *nFriends;   //存放新的好友数组
 @end
 
 static NSString * const reuseIdentifier = @"friendListcell";
@@ -55,6 +56,10 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self requestFriendsList];
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [self.nFriends removeAllObjects];
 }
 
 - (void)addSubviews{
@@ -188,6 +193,17 @@ static NSString * const headerIdentifier = @"headerIdentifier";
  *  @param notify 好友信息字典
  */
 - (void)recieveFriendRequest:(NSNotification *)notify{
+    
+    //记录新的好友请求。 判断如果是重复好友请求 则直接跳过不处理
+    ZhiMaFriendModel *neewFriend = notify.userInfo[@"friend"];
+
+    for (NSString *uid in self.nFriends) {
+        if ([neewFriend.user_Id isEqualToString:uid]) {
+            return;
+        }
+    }
+    
+    [self.nFriends addObject:neewFriend.user_Id];
     
     [self playSystemAudio];
     
@@ -418,6 +434,13 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
     }
     return _unReadLabel;
+}
+
+- (NSMutableArray *)nFriends{
+    if (!_nFriends) {
+        _nFriends = [NSMutableArray array];
+    }
+    return _nFriends;
 }
 
 @end

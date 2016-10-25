@@ -516,10 +516,14 @@ static SocketManager *manager = nil;
             if ([actUid isEqualToString:USERINFO.userID]) { //自己
                 systemMsg.text = [NSString stringWithFormat:@"你通过扫描\"%@\"分享的二维码加入了群聊",jModel.friend_nick];
             }else{
-                if ([jid isEqualToString:USERINFO.userID]) {
-                    systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描你分享的二维码加入了群聊",actName];
+                if (![jid isKindOfClass:[NSNull class]]) {
+                    if ([jid isEqualToString:USERINFO.userID]) {
+                        systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描你分享的二维码加入了群聊",actName];
+                    }else{
+                        systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描\"%@\"分享的二维码加入了群聊",actName,jModel.friend_nick];
+                    }
                 }else{
-                    systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描\"%@\"分享的二维码加入了群聊",actName,jModel.friend_nick];
+                    systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描二维码加入了群聊",actName];
                 }
             }
         }else{
