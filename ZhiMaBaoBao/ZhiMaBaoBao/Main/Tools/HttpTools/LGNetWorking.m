@@ -965,4 +965,15 @@
     }];
 }
 
+//获取当前登录用户的二维码
++ (void)getMyQRCodeWithSessionId:(NSString *)sessionId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = sessionId;
+    [HttpTool POST:@"/moblie/createQRCode_user.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
 @end

@@ -57,27 +57,15 @@
 //#define DFAPIURL @"http://zhimachat.yihezhai.cc"
 
 //测试环境
-<<<<<<< HEAD
 #define DFAPIURL @"http://120.76.246.128:8080/"
 #define CHATPICURL  @"http://tpic.zhimabaobao.com"
 #define DFAPIURLTEST @"http://tfr.zhimabaobao.com"
 
 
 //正式网络环境
-//#define DFAPIURL @"http://zm.zhimabaobao.com:8080"
-//#define DFAPIURLTEST @"http://fr.zhimabaobao.com"
-//#define CHATPICURL  @"http://pic.zhimabaobao.com"
-=======
 //#define DFAPIURL @"http://120.76.246.128:8080/"
 //#define CHATPICURL  @"http://tpic.zhimabaobao.com"
 //#define DFAPIURLTEST @"http://tfr.zhimabaobao.com"
-
-
-//正式网络环境
-#define DFAPIURL @"http://zm.zhimabaobao.com:8080"
-#define DFAPIURLTEST @"http://fr.zhimabaobao.com"
-#define CHATPICURL  @"http://pic.zhimabaobao.com"
->>>>>>> a190d100d25746523e3cc39ab9acae91063d3bba
 
 
 //生成签名的apikey

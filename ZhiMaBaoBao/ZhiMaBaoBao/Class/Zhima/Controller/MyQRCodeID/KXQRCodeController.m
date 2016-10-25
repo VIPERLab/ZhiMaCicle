@@ -32,12 +32,33 @@
     // Do any additional setup after loading the view.
     [self setCustomTitle:@"二维码名片"];
     [self setupView];
-    [self creatQRCode];
+//    [self creatQRCode];
+    [self requestMyQRCode];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)requestMyQRCode {
+    [LGNetWorking getMyQRCodeWithSessionId:USERINFO.sessionId success:^(ResponseData *responseData) {
+        
+        if (responseData.code != 0 ) {
+            [LCProgressHUD showFailureText:responseData.msg];
+            return ;
+        }
+        
+        NSString *urlData = responseData.data;
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,urlData]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            
+        }];
+        
+        
+        
+    } failure:^(ErrorData *error) {
+        
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
