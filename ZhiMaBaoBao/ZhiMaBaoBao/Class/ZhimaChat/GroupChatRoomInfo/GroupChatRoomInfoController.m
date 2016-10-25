@@ -100,9 +100,9 @@
         
         if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
             self.isGroupCreater = YES;
-            self.MaxCount = 38;
-        } else {
             self.MaxCount = 39;
+        } else {
+            self.MaxCount = 40;
         }
         
         // 设置尾部

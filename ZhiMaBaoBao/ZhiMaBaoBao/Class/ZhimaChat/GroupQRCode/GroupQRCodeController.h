@@ -10,8 +10,6 @@
 @class GroupChatModel;
 @interface GroupQRCodeController : BaseViewController
 
-@property (nonatomic, copy) NSString *groupId;
-
 @property (nonatomic, weak) GroupChatModel *model;
 
 @end

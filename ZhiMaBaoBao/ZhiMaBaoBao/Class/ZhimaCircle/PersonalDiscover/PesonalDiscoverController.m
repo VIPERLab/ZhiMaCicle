@@ -154,8 +154,8 @@
         return;
     }
 
-//    DiscoverDetailController *dc = [[DiscoverDetailController alloc] init];
-    NewDiscoverDetailController *dc = [[NewDiscoverDetailController alloc] init];
+    DiscoverDetailController *dc = [[DiscoverDetailController alloc] init];
+//    NewDiscoverDetailController *dc = [[NewDiscoverDetailController alloc] init];
     dc.sessionId = USERINFO.sessionId;
     dc.ID = [NSString stringWithFormat:@"%zd",cell.model.ID];
     dc.indexPath = indexPath;

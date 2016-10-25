@@ -953,4 +953,16 @@
     }];
 }
 
+//获取群二维码
++ (void)getGroupChatQRCodeWithSessionId:(NSString *)sessionId andGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = sessionId;
+    params[@"groupid"] = groupId;
+    [HttpTool POST:@"/moblie/createQRCode.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
 @end

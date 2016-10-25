@@ -20,7 +20,7 @@
 @interface GroupQRCodeController () <KXActionSheetDelegate>
 
 @property (nonatomic, weak) UIView *centerView;
-@property (nonatomic, weak) UIImageView *imageView; //二维码
+@property (nonatomic, weak) UIImageView *QRCodeView; //二维码
 @property (nonatomic, weak) UIImageView *userIcon;  //用户头像
 
 @end
@@ -34,12 +34,33 @@
     // Do any additional setup after loading the view.
     [self setupNav];
     [self setupView];
-    [self creatQRCode];
+//    [self creatQRCode];
+    [self requestQRCode];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)requestQRCode {
+    [LGNetWorking getGroupChatQRCodeWithSessionId:USERINFO.sessionId andGroupId:self.model.groupId success:^(ResponseData *responseData) {
+        
+        if (responseData.code != 0) {
+            [LCProgressHUD showFailureText:responseData.msg];
+            return ;
+        }
+        
+        NSString *QRCodeStr = responseData.data;
+        [self.QRCodeView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,QRCodeStr]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            
+        }];
+        
+        
+        
+    } failure:^(ErrorData *error) {
+        
+    }];
 }
 
 - (void)setupNav {
@@ -76,13 +97,14 @@
     CGFloat imageH = imageW;
     CGFloat imageX = (CGRectGetWidth(self.centerView.frame) - imageW) * 0.5;
     CGFloat imageY = (CGRectGetHeight(self.centerView.frame) - imageH) * 0.5;
-    UIView *QRCodeView = [[UIView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
+    UIImageView *QRCodeView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     QRCodeView.backgroundColor = [UIColor whiteColor];
+    self.QRCodeView = QRCodeView;
     [self.centerView addSubview:QRCodeView];
     
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, imageW - 40, imageH - 40)];
-    self.imageView = imageView;
-    [QRCodeView addSubview:imageView];
+//    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, imageW - 40, imageH - 40)];
+//    self.imageView = imageView;
+//    [QRCodeView addSubview:imageView];
     
 }
 
@@ -104,7 +126,7 @@
 // 保存图片
 - (void)saveImage {
     
-    UIImageWriteToSavedPhotosAlbum(self.imageView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    UIImageWriteToSavedPhotosAlbum(self.QRCodeView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
     
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] init];
     indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
@@ -185,7 +207,7 @@
     // 高清的二维码
     
     //    NSString * avatarPath = [YiXmppVCard getAvatarPathByJid:[userInfo getJid]];
-    self.imageView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:500];
+    self.QRCodeView.image = [self creatNonInterpolatedUIImageFormCIImage:outputImage withSize:500];
     
 }
 

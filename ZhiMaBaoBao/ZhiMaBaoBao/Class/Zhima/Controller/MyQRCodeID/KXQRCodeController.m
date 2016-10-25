@@ -49,7 +49,7 @@
     self.view.backgroundColor = [UIColor colorFormHexRGB:@"2e3132"];
     CGFloat scale = (ScreenWidth - 60) / ScreenWidth;
     CGFloat heightScale = 460 / ScreenHeight;
-    CGFloat centerHeigth = 460 * heightScale;
+    CGFloat centerHeigth = (ScreenWidth - 60) + 45 + 40;
     UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, centerHeigth)];
     centerView.backgroundColor = [UIColor whiteColor];
     centerView.layer.cornerRadius = 10;
@@ -101,7 +101,7 @@
 //    [QRCodeView addSubview:imageView];
     
     
-    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(centerView.frame) - 35, CGRectGetWidth(centerView.frame), 15)];
+    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(centerView.frame) - 40, CGRectGetWidth(centerView.frame), 15)];
     invitedLabel.textAlignment = NSTextAlignmentCenter;
     invitedLabel.font = [UIFont systemFontOfSize:15];
     invitedLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
@@ -249,26 +249,12 @@
     [indicator startAnimating];
 }
 
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo;
-{
-    
-    UILabel *label = [[UILabel alloc] init];
-    label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
-    label.layer.cornerRadius = 5;
-    label.clipsToBounds = YES;
-    label.bounds = CGRectMake(0, 0, 150, 30);
-    label.center = self.imageView.center;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont boldSystemFontOfSize:17];
-    [[UIApplication sharedApplication].keyWindow addSubview:label];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:label];
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
     if (error) {
         [LCProgressHUD showSuccessText:@"图片保存失败"];
     }   else {
         [LCProgressHUD showSuccessText:@"图片保存成功"];
     }
-    [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
 }
 
 

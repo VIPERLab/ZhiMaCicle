@@ -273,7 +273,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     
     //设置名字的长度
     [_nameLable setTitle:model.friend_nick forState:UIControlStateNormal];
-    CGFloat nameW = [model.friend_nick sizeWithFont:[UIFont systemFontOfSize:16] maxSize:CGSizeMake(MAXFLOAT, 20)].width;
+    CGFloat nameW = [model.friend_nick sizeWithFont:[UIFont systemFontOfSize:16] maxSize:CGSizeMake(ScreenWidth - 60, 20)].width;
     _nameLable.sd_layout.widthIs(nameW);
     
     

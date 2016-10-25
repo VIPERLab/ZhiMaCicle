@@ -1287,16 +1287,18 @@
  *  删除数据库所有用户消息
  */
 - (void)deletedAllUserMessage {
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
-    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"id >= 0"]];
-    [queue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:optionStr];
-        if (success) {
-            NSLog(@"删除成功");
-        } else {
-            NSLog(@"删除失败");
-        }
-    }];
+    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
+        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
+        NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"id >= 0"]];
+        [queue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:optionStr];
+            if (success) {
+                NSLog(@"删除成功");
+            } else {
+                NSLog(@"删除失败");
+            }
+        }];
+    });
 }
 
 #pragma mark - 新的好友相关
@@ -2042,8 +2044,11 @@
         }
     }];
     
+    // 异步存储群组成员信息
+    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
+        [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
+    });
     
-    [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
     
     
     // 更新会话

@@ -307,5 +307,7 @@
 //保存更多详细信息
 + (void)saveMoreUserInfo:(NSString *)sessionId moreData:(NSString *)jsonStr success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
+//获取群二维码
++ (void)getGroupChatQRCodeWithSessionId:(NSString *)sessionId andGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
 @end

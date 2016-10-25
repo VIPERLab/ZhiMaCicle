@@ -77,7 +77,7 @@
         [self addSubview:titleLabel];
         
         if (!self.isGroupCreater) {
-            if (index == self.modelArray.count) {
+            if (index == self.modelArray.count || index == self.MaxCount - 1) {
                 // 最后一个
                 [iconView setBackgroundImage:[UIImage imageNamed:@"ChatAddMember"] forState:UIControlStateNormal];
                 iconView.tag = 999;
