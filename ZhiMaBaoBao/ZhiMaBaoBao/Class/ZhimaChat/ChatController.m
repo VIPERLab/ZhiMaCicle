@@ -97,7 +97,11 @@
 //小视频相关
 @property (nonatomic, strong) ZMRecordShortVideoView*videoView; // 视频录制视图
 
-@property (nonatomic, strong) UIButton *unreadBtn; // 未读消息按钮
+@property (nonatomic, strong) UIButton *unreadBtn;    // 进入界面未读消息按钮
+@property (nonatomic, strong) UIButton *unreadNewBtn; // 在界面里面新的未读消息按钮
+@property (nonatomic, assign)NSInteger numOfNewUnread; //新的未读消息条数
+
+
 
 @end
 
@@ -232,9 +236,16 @@ static NSString *const reuseIdentifier = @"messageCell";
             [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
             
             //判断如果消息条数如果很多而且倒数第11条已经划到屏幕下面去了  则收到新消息不滚动到最后一条了
-            if (!(self.messages.count>=12 && ![self cheakNewUnreadCellIsin:self.messages.count-11])) {
+            if (self.messages.count<=12 || [self cheakNewUnreadCellIsin:self.messages.count-11]) {
                 [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
+            }else{
+            
+                self.numOfNewUnread ++;
+                self.unreadNewBtn.hidden = NO;
+                NSString* unreadNumStr = self.numOfNewUnread>99 ? [NSString stringWithFormat:@"99+"] : [NSString stringWithFormat:@"%ld",self.numOfNewUnread];
+                [self.unreadNewBtn setTitle:unreadNumStr forState:UIControlStateNormal];
+            
             }
             
             //如果是图片 添加到图片数组
@@ -355,8 +366,22 @@ static NSString *const reuseIdentifier = @"messageCell";
 
     [self.unreadBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.right.equalTo(self.tableView.mas_right).offset(-10);
-//        make.bottom.equalTo(self.tableView.mas_bottom).offset(-15);
         make.top.equalTo(self.view.mas_top).offset(20+64);
+        make.width.mas_equalTo(41);
+        make.height.mas_equalTo(50);
+    }];
+    
+    self.numOfNewUnread = 0;
+    self.unreadNewBtn = [[UIButton alloc]init];
+    [self.unreadNewBtn setBackgroundImage:[UIImage imageNamed:@"unreadDown"] forState:UIControlStateNormal];
+    self.unreadNewBtn.titleLabel.textColor = WHITECOLOR;
+    [self.unreadNewBtn addTarget:self action:@selector(scrollToNewUnreadCell) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.unreadNewBtn];
+    self.unreadNewBtn.hidden = YES;
+    
+    [self.unreadNewBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.right.equalTo(self.tableView.mas_right).offset(-10);
+        make.bottom.equalTo(self.tableView.mas_bottom).offset(-20);
         make.width.mas_equalTo(41);
         make.height.mas_equalTo(50);
     }];
@@ -367,6 +392,13 @@ static NSString *const reuseIdentifier = @"messageCell";
 {
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count - self.numOfUnread inSection:0] animated:YES scrollPosition:UITableViewScrollPositionTop];
     self.unreadBtn.hidden = YES;
+}
+
+- (void)scrollToNewUnreadCell
+{
+    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionBottom];
+    self.numOfNewUnread = 0;
+    self.unreadNewBtn.hidden = YES;
 }
 
 - (NSString*)audioPathWithUid:(NSString*)uid{
@@ -1038,7 +1070,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 //        IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
 //        [cell2.playView pause];
 //    }
-    if (self.unreadBtn.hidden) {
+    if (self.unreadBtn.hidden && self.unreadNewBtn.hidden) {
         return;
     }
     
@@ -1047,6 +1079,10 @@ static NSString *const reuseIdentifier = @"messageCell";
         self.unreadBtn.hidden = YES;
     }
     
+    if (indexPath.row == self.messages.count - self.numOfNewUnread) {
+        self.unreadNewBtn.hidden = YES;
+        self.numOfNewUnread = 0;
+    }
 }
 
 #pragma mark - 消息转发、撤回、删除等操作
