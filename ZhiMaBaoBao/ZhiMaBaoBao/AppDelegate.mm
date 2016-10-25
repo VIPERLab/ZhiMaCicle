@@ -411,6 +411,10 @@
     //遍历所有会话
     NSInteger unRead = 0;
     for (ConverseModel *conversion in conversions) {
+        //设置了消息免打扰的不统计
+        if (conversion.disturb) {
+            continue;
+        }
         unRead += conversion.unReadCount;
     }
     application.applicationIconBadgeNumber = unRead;
