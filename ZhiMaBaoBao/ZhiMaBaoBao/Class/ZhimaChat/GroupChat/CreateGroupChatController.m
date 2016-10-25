@@ -231,7 +231,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView == self.tableView) {
-        if (self.hideFirstSection) {   //不显示"选择一个群"
+        if (self.hideFirstSection) {   //不显示"选择群聊"
 
             NSInteger rowNum = 0;
             for (int i = 0; i < indexPath.section; i++) {
@@ -282,6 +282,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                 ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
                 
                 if (self.hideFlagBtn) {     //选择好友 ，转发消息
+                    self.transMsg.isGroup = NO; 
                     TransPopView *popView = [[TransPopView alloc] initWithMessage:self.transMsg toUserId:friend.user_Id isGroup:NO];
                     popView.delegate = self;
                     [popView show];

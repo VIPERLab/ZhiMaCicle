@@ -27,6 +27,7 @@
 #import "GroupChatAllMembersController.h"      //全部群成员
 #import "GroupQRCodeController.h"              //群二维码
 #import "ComplainViewController.h"             //投诉
+#import "GroupDeleteMembersController.h"
 
 #define GroupChatRoomInfoCellReusedID @"GroupChatRoomInfoCellReusedID"
 #define GroupChatRoomInfoHeaderCellReusedID @"GroupChatRoomInfoHeaderCellReusedID"
@@ -411,11 +412,11 @@
 
 - (void)GroupChatInfoHeaderCellDelegateDidClickDeletedMembers {
     NSLog(@"点击了删除好友");
-    GroupChatAllMembersController *members = [[GroupChatAllMembersController alloc] init];
-    members.membersArray = [self.groupModel.groupUserVos mutableCopy];
-    members.isDeletedMembers = YES;
-    members.groupId = self.groupModel.groupId;
-    [self.navigationController pushViewController:members animated:YES];
+    GroupDeleteMembersController *vc = [[GroupDeleteMembersController alloc] init];
+    BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+    vc.membersArr = [self.groupModel.groupUserVos mutableCopy];
+    vc.groupId = self.groupModel.groupId;
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 #pragma mark - lazyLoad

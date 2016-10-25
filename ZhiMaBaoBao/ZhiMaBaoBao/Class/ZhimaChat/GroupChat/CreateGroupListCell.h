@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ZhiMaFriendModel.h"
+#import "GroupUserModel.h"
 
 @protocol GreateGroupListCellDelegate <NSObject>
 
@@ -24,6 +25,7 @@
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ZhiMaFriendModel *friendModel;
+@property (nonatomic, strong) GroupUserModel *model;    //群成员数据模型
 @property (nonatomic, assign) id<GreateGroupListCellDelegate> delegate;
 
 @property (nonatomic, strong) NSArray *selectedMembers;     //新建群聊时已选成员 userID

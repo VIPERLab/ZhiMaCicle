@@ -263,8 +263,8 @@
     }];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     
     //播放等待提示音、开始查询余额、然后拨打电话
     [self.player play];
@@ -324,12 +324,10 @@
                 }];
             }
             else{
-//                [LCProgressHUD showFailureText:responseModel.msg];
-//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self dismissViewControllerAnimated:YES completion:^{
-                         [LCProgressHUD showFailureText:responseModel.msg];
-                    }];
-//                });
+                [LCProgressHUD showFailureText:responseModel.msg];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                });
             }
             
             //添加本地通话日志
@@ -370,7 +368,6 @@
     manager.requestSerializer.timeoutInterval = 30.f;
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
     
-    
     NSString *sign = [NSString stringWithFormat:@"uid=%@&apikey=%@",USERINFO.userID,RECHAPPKEY];
     NSString *md5Sign = [NSString md5:sign];
     
@@ -389,25 +386,25 @@
         if ([responseObject[@"code"] integerValue] == 8888) {
             
             //有话费余额，拨打电话
-            if ([responseObject[@"phoneusetime"] integerValue] >= 0) {
+            if ([responseObject[@"phoneusetime"] integerValue] > 0) {
                 [self makeCall:phone name:name];
                 
             }else{
-                [LCProgressHUD showFailureText:responseObject[@"msg"]];
-                [self dismissViewControllerAnimated:YES completion:nil];
-                
+                [LCProgressHUD showFailureText:responseObject[@"data"][@"msg"]];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                });
             }
         }else{
             [LCProgressHUD showFailureText:responseObject[@"msg"]];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self dismissViewControllerAnimated:YES completion:nil];
             });
-            
         }
 
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [LCProgressHUD showFailureText:error.description];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self dismissViewControllerAnimated:YES completion:nil];
         });
     }];

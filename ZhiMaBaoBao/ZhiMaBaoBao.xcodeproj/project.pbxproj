@@ -542,6 +542,7 @@
 		316957881D91199100140126 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3169577B1D91199100140126 /* ring.mp3 */; };
 		31861E0D1DBDAE850037E4E6 /* LGPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E0C1DBDAE850037E4E6 /* LGPickerView.m */; };
 		31861E111DBDAF190037E4E6 /* MoreInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E101DBDAF190037E4E6 /* MoreInfoModel.m */; };
+		31861E171DBF02990037E4E6 /* GroupDeleteMembersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E161DBF02990037E4E6 /* GroupDeleteMembersController.m */; };
 		319069A41D9A17C300D1D6D2 /* NSData+Replace.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069A31D9A17C300D1D6D2 /* NSData+Replace.m */; };
 		319069AD1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */; };
 		319069B11D9BC09200D1D6D2 /* FriendsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */; };
@@ -1707,6 +1708,8 @@
 		31861E0C1DBDAE850037E4E6 /* LGPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPickerView.m; sourceTree = "<group>"; };
 		31861E0F1DBDAF190037E4E6 /* MoreInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreInfoModel.h; sourceTree = "<group>"; };
 		31861E101DBDAF190037E4E6 /* MoreInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreInfoModel.m; sourceTree = "<group>"; };
+		31861E151DBF02990037E4E6 /* GroupDeleteMembersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupDeleteMembersController.h; sourceTree = "<group>"; };
+		31861E161DBF02990037E4E6 /* GroupDeleteMembersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupDeleteMembersController.m; sourceTree = "<group>"; };
 		319069A21D9A17C300D1D6D2 /* NSData+Replace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Replace.h"; sourceTree = "<group>"; };
 		319069A31D9A17C300D1D6D2 /* NSData+Replace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Replace.m"; sourceTree = "<group>"; };
 		319069AB1D9A9DC100D1D6D2 /* NSDate+TimeCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TimeCategory.h"; sourceTree = "<group>"; };
@@ -2146,6 +2149,8 @@
 				047F13F51DAB253300684881 /* GroupChatMessageDetailController.m */,
 				047F13F71DAB25C500684881 /* GroupChatAllMembersController.h */,
 				047F13F81DAB25C500684881 /* GroupChatAllMembersController.m */,
+				31861E151DBF02990037E4E6 /* GroupDeleteMembersController.h */,
+				31861E161DBF02990037E4E6 /* GroupDeleteMembersController.m */,
 			);
 			name = "GroupChatInfoChange(修改群聊信息内页)";
 			path = GroupChatInfoChange;
@@ -5581,6 +5586,7 @@
 				04EA7E251D912872005E5425 /* ZXQRCodeFinderPatternFinder.m in Sources */,
 				04EA7DA81D912872005E5425 /* ZXLuminanceSource.m in Sources */,
 				04EA7ACD1D910F89005E5425 /* UIViewController+DNImagePicker.m in Sources */,
+				31861E171DBF02990037E4E6 /* GroupDeleteMembersController.m in Sources */,
 				04EA7DEE1D912872005E5425 /* ZXEAN8Writer.m in Sources */,
 				04EA7D831D912872005E5425 /* ZXVINParsedResult.m in Sources */,
 				04F862911D94FC7900DCC6FE /* FacePageView.m in Sources */,
