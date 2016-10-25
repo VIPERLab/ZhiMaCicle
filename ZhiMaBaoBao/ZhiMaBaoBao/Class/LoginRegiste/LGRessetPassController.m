@@ -40,7 +40,8 @@
     [getCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
     [getCodeBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     getCodeBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    [getCodeBtn setFrame:CGRectMake(DEVICEWITH - 76 - 14, 245 + 10, 76, 30)];
+    getCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [getCodeBtn setFrame:CGRectMake(DEVICEWITH - 100 - 14, 245 + 10, 100, 30)];
     [self.view addSubview:getCodeBtn];
     self.getCodeBtn = getCodeBtn;
     [getCodeBtn addTarget:self action:@selector(verCodeBtnCation:) forControlEvents:UIControlEventTouchUpInside];

@@ -386,7 +386,7 @@
         if ([responseObject[@"code"] integerValue] == 8888) {
             
             //有话费余额，拨打电话
-            if ([responseObject[@"phoneusetime"] integerValue] > 0) {
+            if ([responseObject[@"data"][@"phoneusetime"] integerValue] > 0) {
                 [self makeCall:phone name:name];
                 
             }else{

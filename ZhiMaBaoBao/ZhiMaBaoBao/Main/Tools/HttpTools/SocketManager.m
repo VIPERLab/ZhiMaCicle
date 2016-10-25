@@ -446,6 +446,9 @@ static SocketManager *manager = nil;
         NSMutableArray *models = [NSMutableArray array];
         for (NSString *uid in uidsArr) {
             GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uid andConverseId:groupId];
+            if (!model) {
+                return ;
+            }
             model.memberGroupState = YES;
             [names addObject:model.friend_nick];
             [models addObject:model];
@@ -477,9 +480,7 @@ static SocketManager *manager = nil;
         userInfo[@"message"] = systemMsg;
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
     }];
-    
 }
-
 
 //收到拉人进群消息  actuid:操作者id   uids:被邀请用户的id   //扫描二维码加群，生成二维码用户的id
 - (void)updateGroupNumber:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids jid:(NSString *)jid{
@@ -767,7 +768,7 @@ static SocketManager *manager = nil;
                 GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                 groupChatModel.myGroupName = USERINFO.username;
                 
-                //改为gcd同步存储
+                //改为gcd异步存储
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     //新建一个群会话，插入数据库
                     [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
@@ -776,9 +777,12 @@ static SocketManager *manager = nil;
                     [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
                     
                     //发送通知，刷新会话列表
-                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                    userInfo[@"message"] = message;
-                    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                        userInfo[@"message"] = message;
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                    });
+
                 });
                 
             }

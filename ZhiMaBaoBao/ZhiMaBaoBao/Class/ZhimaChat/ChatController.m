@@ -173,6 +173,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     UserInfo *info = [UserInfo shareInstance];
     info.currentConversionId = nil;
     
+    //清空当前会话未读消息
+    [FMDBShareManager setConverseUnReadCountZero:self.conversionId];
+
+    
     [self.player stopPlaying];
     [[NSNotificationCenter defaultCenter] postNotificationName:kChatViewControllerPopOut object:nil userInfo:nil];
 

@@ -485,7 +485,7 @@
  *
  *  @param sessionId    sessionId
  *  @param groupId      群组房间id
- *  @param functionName 保存相应的功能:functionName  固定值固定值("聊天置顶","set_chat_top"),("用户在群的昵称","group_nick"),("新消息提示","new_msg_tip"),("保存群到通讯录","save_to_contacts"),()
+ *  @param functionName 保存相应的功能:functionName  固定值固定值("聊天置顶","set_chat_top"),("用户在群的昵称","group_nick"),("新消息提示","new_msg_tip"),("保存群到通讯录","save_to_contacts"),("quit_group","退出群聊")
  *  @param value        1 为是 0 为否
  */
 + (void)setupGroup:(NSString *)sessionId groupId:(NSString *)groupId functionName:(NSString *)functionName value:(NSString *)value success:(SuccessfulBlock)success failure:(FailureBlock)failure{
