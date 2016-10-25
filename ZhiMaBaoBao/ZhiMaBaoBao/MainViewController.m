@@ -113,6 +113,10 @@
         }
     }
     
+    if (conversionModel.disturb) {  //如果开启了免打扰  -- 不更新tabbar未读角标
+        return;
+    }
+    
     //更新未读消息
     [self updateUnread];
 }
@@ -176,6 +180,10 @@
     //遍历所有会话
     NSInteger unRead = 0;
     for (ConverseModel *conversion in conversions) {
+        //不统计设置了免打扰的会话
+        if (conversion.disturb) {
+            continue;
+        }
         unRead += conversion.unReadCount;
     }
     
