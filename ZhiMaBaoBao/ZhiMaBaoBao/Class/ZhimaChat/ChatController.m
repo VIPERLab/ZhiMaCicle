@@ -101,7 +101,7 @@
 @property (nonatomic, strong) UIButton *unreadNewBtn; // 在界面里面新的未读消息按钮
 @property (nonatomic, assign)NSInteger numOfNewUnread; //新的未读消息条数
 
-
+@property (nonatomic, assign)BOOL isWatching; // 图片是否在浏览状态（增加这个防止被同时点击两张图片出现BUG）
 
 @end
 
@@ -204,7 +204,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.navigationController pushViewController:vc animated:YES];
         return;
     }
-    
+     
     // 群聊
     GroupChatRoomInfoController *vc = [[GroupChatRoomInfoController alloc] init];
     vc.converseId = self.conversionId;
@@ -1641,7 +1641,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell2.progressView.hidden = NO;
     
-    message.videoDownloadUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-10-21/580975cbf074a.mp4";
+//    message.videoDownloadUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-10-21/580975cbf074a.mp4";
     NSString*path = [NSString stringWithFormat:@"%@%@",AUDIOPATH,message.text];
     
     [LGNetWorking chatDownloadVideo:path urlStr:message.videoDownloadUrl block:^(NSDictionary *responseData) {
@@ -1650,7 +1650,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
         
     } progress:^(NSProgress *progress) {
-        
 
         [cell2 setProgressWithContent:progress.fractionCompleted];
         
@@ -1905,26 +1904,11 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
 {
-    // 显示单张图片
-    //    [self.subviews removeAllObjects];
-    //    UIView *imageView = grz.view;
-    //
-    //    LGMessage *msg = self.messages[imageView.tag];
-    //    if (msg.text) {
-    //        self.currentPicUrl = [msg.text stringByReplacingOccurrencesOfString:@"s_" withString:@""];
-    //    }else{
-    //        self.currentPicUrl = nil;
-    //    }
-    //
-    //    [self.subviews addObject:imageView];
-    //    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-    //    browser.currentImageIndex = 0;
-    //    browser.sourceImagesContainerView = grz.view.superview;
-    //    browser.imageCount = self.subviews.count;
-    //    browser.delegate = self;
-    //    browser.userId = msg.fromUid;
-    //    [browser show];
-    
+    //防止同时点开多张图片 BUG
+    if (self.isWatching) {
+        return;
+    }
+    self.isWatching = YES;
     //多张图片浏览
     NSUInteger index = 0;
     NSLog(@"grz.view.tag = %ld",grz.view.tag);
@@ -1952,10 +1936,17 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)finishedWatch
 {
+//    for (SDPhotoBrowser *browser in [UIApplication sharedApplication].keyWindow.subviews) {
+//
+//        [browser removeFromSuperview];
+//    }
+    
     for (UIImageView*iv in self.subviews) {
         [iv removeFromSuperview];
     }
     [self.subviews removeAllObjects];
+
+    self.isWatching = NO;
 }
 
 #pragma mark - SDPhotoBrowserDelegate

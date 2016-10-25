@@ -54,12 +54,32 @@
         }
         self.phoneNum.text = model.to_phone;
         self.callStateIV.image = [UIImage imageNamed:@"icon-callOut"];
+    }    //未接来电
+    if (model.call_type == 3) {
+        self.phoneNum.text = model.from_phone;
+        if (model.from_weuser.length) {
+            self.distruct.text = model.from_weuser;
+        }else{
+            //没有名字显示归属地
+            self.distruct.text = model.from_phone;
+        }
+        self.callStateIV.image = [UIImage imageNamed:@"icon-callNo"];
     }
 }
 - (IBAction)infoAction:(id)sender {
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(checkDetailInfoWithModel:)]) {
         [self.delegate checkDetailInfoWithModel:self.model];
+    }
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+    if (highlighted) {
+        self.contentView.backgroundColor = BGCOLOR;
+
+    }else{
+        self.contentView.backgroundColor = ClearColor;
     }
 }
 

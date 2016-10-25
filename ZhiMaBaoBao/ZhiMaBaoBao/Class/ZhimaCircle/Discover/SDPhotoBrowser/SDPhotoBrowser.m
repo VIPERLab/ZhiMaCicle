@@ -232,13 +232,13 @@
     [self addSubview:tempView];
 
     _saveButton.hidden = YES;
-    
     [UIView animateWithDuration:SDPhotoBrowserHideImageAnimationDuration animations:^{
         if (self.isChat) {
 //            tempView.frame = CGRectMake(ScreenWidth/2, ScreenHeight/2, 0, 0);
             tempView.frameSize = CGSizeMake(tempView.frameSize.width*2, tempView.frameSize.height*2);
             tempView.center = self.center;
             tempView.alpha = 0;
+
         }else{
             tempView.frame = targetTemp;
         }
@@ -246,6 +246,7 @@
         _indexLabel.alpha = 0.1;
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
+
         if (self.isChat && [self.delegate respondsToSelector:@selector(finishedWatch)]) {
             [self.delegate finishedWatch];
         }
