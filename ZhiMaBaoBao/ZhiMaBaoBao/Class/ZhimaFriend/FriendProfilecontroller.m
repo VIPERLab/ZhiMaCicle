@@ -94,22 +94,22 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             //生成好友相册
             [self generateAlbums];
             [self setupNavRightItem];
-//            if (self.friendType) {
-//                self.totalSections = 4;
-//            }else{
-//                self.totalSections = 3;
-//            }
+
             self.totalSections = self.friendType ? 4 : 3;
             [self.tableView reloadData];
             
-
-            
             //更新好友表
             [FMDBShareManager upDataUserMessage:self.friend];
+            
             //更新会话表 （头像）
-            ConverseModel *conversionModel = [FMDBShareManager searchConverseWithConverseID:self.userId andConverseType:NO];
-            conversionModel.converseHead_photo = self.friend.user_Head_photo;
-            [FMDBShareManager saveConverseListDataWithDataArray:@[conversionModel]];
+            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+            NSString *option1 = [NSString stringWithFormat:@"converseHead_photo = '%@'",self.friend.user_Head_photo];
+            NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",self.userId];
+            NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
+            [queue inDatabase:^(FMDatabase *db) {
+                BOOL success = [db executeQuery:optionStr];
+            }];
+
             
             if (addSqlit) {
                 //插入好友到数据库

@@ -99,9 +99,16 @@
             if (!self.textField.hasText) {
                 convesion.converseName = friendModel.user_Name;
             }
-            //4.更新数据库会话表
-            [FMDBShareManager saveConverseListDataWithDataArray:@[convesion]];
             
+            //4.更新数据库会话表 （会话名）
+//            [FMDBShareManager saveConverseListDataWithDataArray:@[convesion]];
+            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+            NSString *option1 = [NSString stringWithFormat:@"converseName = '%@'",convesion.converseName];
+            NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",self.userId];
+            NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
+            [queue inDatabase:^(FMDatabase *db) {
+                [db executeQuery:optionStr];
+            }];
             
             [self.navigationController popViewControllerAnimated:YES];
         }else{

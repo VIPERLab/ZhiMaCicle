@@ -767,7 +767,7 @@ static SocketManager *manager = nil;
                 GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                 groupChatModel.myGroupName = USERINFO.username;
                 
-                //改为gcd同步存储
+                //改为gcd异步存储
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     //新建一个群会话，插入数据库
                     [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
