@@ -235,8 +235,10 @@
     
     [UIView animateWithDuration:SDPhotoBrowserHideImageAnimationDuration animations:^{
         if (self.isChat) {
-            tempView.frame = CGRectMake(ScreenWidth/2, ScreenHeight/2, 0, 0);
-//            tempView.alpha = 0;
+//            tempView.frame = CGRectMake(ScreenWidth/2, ScreenHeight/2, 0, 0);
+            tempView.frameSize = CGSizeMake(tempView.frameSize.width*2, tempView.frameSize.height*2);
+            tempView.center = self.center;
+            tempView.alpha = 0;
         }else{
             tempView.frame = targetTemp;
         }

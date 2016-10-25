@@ -230,8 +230,14 @@ static NSString *const reuseIdentifier = @"messageCell";
             NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
             NSArray *indexPaths = @[indexpath];
             [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
             
+            //判断如果消息条数如果很多而且倒数第11条已经划到屏幕下面去了  则收到新消息不滚动到最后一条了
+            if (!(self.messages.count>=12 && ![self cheakNewUnreadCellIsin:self.messages.count-11])) {
+                [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
+            }
+            
+            //如果是图片 添加到图片数组
             if (message.type == MessageTypeImage) {
                 NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":message.text,@"fromUid":message.fromUid};
                 [self.allImagesInfo addObject:dic];
@@ -338,21 +344,29 @@ static NSString *const reuseIdentifier = @"messageCell";
     CGFloat originY = self.keyboard.y;
     self.keyboard.y = originY - shouldBeSubtractionHeight;
 
+    NSString* unreadNumStr = self.numOfUnread>99 ? [NSString stringWithFormat:@"99+"] : [NSString stringWithFormat:@"%ld",self.numOfUnread];
     self.unreadBtn = [[UIButton alloc]init];
     [self.unreadBtn setBackgroundImage:[UIImage imageNamed:@"unreadUp"] forState:UIControlStateNormal];
-//    [self.unreadBtn setTitle:[NSString stringWithFormat:@"%ld",self.numOfUnread] forState:UIControlStateNormal];
-    [self.unreadBtn setTitle:@"99+"forState:UIControlStateNormal];
+    [self.unreadBtn setTitle:unreadNumStr forState:UIControlStateNormal];
 
     self.unreadBtn.titleLabel.textColor = WHITECOLOR;
+    [self.unreadBtn addTarget:self action:@selector(scrollToUnreadCell) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.unreadBtn];
 
     [self.unreadBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.right.equalTo(self.tableView.mas_right).offset(-10);
-        make.bottom.equalTo(self.tableView.mas_bottom).offset(-15);
+//        make.bottom.equalTo(self.tableView.mas_bottom).offset(-15);
+        make.top.equalTo(self.view.mas_top).offset(20+64);
         make.width.mas_equalTo(41);
         make.height.mas_equalTo(50);
     }];
     
+}
+
+- (void)scrollToUnreadCell
+{
+    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count - self.numOfUnread inSection:0] animated:YES scrollPosition:UITableViewScrollPositionTop];
+    self.unreadBtn.hidden = YES;
 }
 
 - (NSString*)audioPathWithUid:(NSString*)uid{
@@ -568,19 +582,34 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
     
     //如果未读的第一条所在的cell在屏幕里面则隐藏按钮
-    if ([self cheakUnreadCellIsin:self.messages.count - self.numOfUnread]) {
+    if (self.numOfUnread==0 || [self cheakUnreadCellIsin:self.messages.count - self.numOfUnread]) {
         self.unreadBtn.hidden = YES;
     }
     
 }
 
-//判断cell是否在可视屏幕之内
+//判断cell是否在可视屏幕之内 (在屏幕的上方)
 - (BOOL)cheakUnreadCellIsin:(NSInteger)index
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     CGRect cellR = [self.tableView rectForRowAtIndexPath:indexPath];
     
     if (cellR.origin.y < self.tableView.contentOffset.y) {
+        NSLog(@"在屏幕外面");
+        return NO;
+    }else{
+        NSLog(@"在屏幕里面");
+        return YES;
+    }
+}
+
+//判断cell是否在可视屏幕之内 (在屏幕的下方)
+- (BOOL)cheakNewUnreadCellIsin:(NSInteger)index
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    CGRect cellR = [self.tableView rectForRowAtIndexPath:indexPath];
+    
+    if (cellR.origin.y > self.tableView.contentOffset.y + self.tableView.frameSize.height) {
         NSLog(@"在屏幕外面");
         return NO;
     }else{
@@ -1003,13 +1032,22 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    }
 //}
 //
-//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
 //    if ([cell isKindOfClass:[IMChatVideoTableViewCell class]]) {
 //        IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
 //        [cell2.playView pause];
 //    }
-//}
+    if (self.unreadBtn.hidden) {
+        return;
+    }
+    
+    //手动滑动tableview 当第一条未读cell完全显示出来后（即它的后一条cell开始出来） 隐藏按钮
+    if (indexPath.row == self.messages.count - self.numOfUnread - 2) {
+        self.unreadBtn.hidden = YES;
+    }
+    
+}
 
 #pragma mark - 消息转发、撤回、删除等操作
 //转发
@@ -1147,10 +1185,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 
         [self.messages insertObject:systemMsg atIndex:num];
         
-        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
-        NSArray *indexPaths = @[indexpath];
-        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
+//        NSArray *indexPaths = @[indexpath];
+//        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+//        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
         self.selectedIndexPath = indecPath;
 //        [self deleteAction:indecPath.row];
@@ -1261,6 +1299,10 @@ static NSString *const reuseIdentifier = @"messageCell";
 #pragma mark - 语音代理方法
 //开始录音
 - (void)chatKeyBoardDidStartRecording:(ChatKeyBoard *)chatKeyBoard{
+    if (self.player.isPlaying) {
+        [self.player stopPlaying];
+    }
+    
     [self.recorder startRecording];
     self.meterObserver.audioQueue = self.recorder->_audioQueue;
 
