@@ -342,7 +342,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
         vc.phoneNum = model.to_phone;
         vc.name = model.to_weuser;
         
-        if (model.call_type == 2) {
+        if (model.call_type == 2 || model.call_type == 3) {
             vc.phoneNum = model.from_phone;
             vc.name = model.from_weuser;
         }
@@ -396,7 +396,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
         LGCallRecordModel*model = self.dataArr[indexPath.row];
         NSString*phone;
         NSString*name;
-        if (model.call_type == 2) {
+        if (model.call_type == 2 || model.call_type == 3) {
             phone = model.from_phone;
             if (model.from_weuser) {
                 name = model.from_weuser;
@@ -413,7 +413,6 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
             }
         }
 
-        
         NSString*message = [NSString stringWithFormat:@"\n%@  %@",name,phone];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"是否拨打电话？" message:message delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"拨打", nil];
         [alert show];
