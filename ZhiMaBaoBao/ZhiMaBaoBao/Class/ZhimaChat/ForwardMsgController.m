@@ -185,6 +185,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     }else{  //转发消息
         [self.textField resignFirstResponder];
         ConverseModel *conversion = self.dataArray[indexPath.row];
+        self.message.isGroup = conversion.converseType;     //设置消息是群聊还是单聊
         TransPopView *popView = [[TransPopView alloc] initWithMessage:self.message toUserId:conversion.converseId isGroup:conversion.converseType];
         popView.delegate = self;
         [popView show];

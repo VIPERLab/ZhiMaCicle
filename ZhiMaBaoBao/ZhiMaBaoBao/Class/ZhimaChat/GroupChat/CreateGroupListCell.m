@@ -25,16 +25,14 @@
     self.selectFlagBtn.enabled = !friendModel.originalUser;
 }
 
-//- (void)setSelectedMembers:(NSArray *)selectedMembers{
-//    _selectedMembers = selectedMembers;
-//    
-//    //如果是已选成员 ， flagBtn  默认显示灰色勾选
-//    for (NSString *userId in selectedMembers) {
-//        if ([_friendModel.user_Id isEqualToString:userId]) {
-//            self.selectFlagBtn.enabled = NO;
-//        }
-//    }
-//}
+
+- (void)setModel:(GroupUserModel *)model{
+    _model = model;
+    
+    [self.avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
+    self.name.text = model.friend_nick;
+    self.selectFlagBtn.selected = model.selectedGroup;
+}
 
 - (IBAction)flagBtnClick:(UIButton *)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(selectGroupMember:indexPath:)]) {

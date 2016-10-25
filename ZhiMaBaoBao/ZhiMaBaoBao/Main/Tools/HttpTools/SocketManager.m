@@ -385,8 +385,8 @@ static SocketManager *manager = nil;
             NSString *toUid = resDic[@"toUidOrGroupId"];
             LGMessage *systemMsg = [[LGMessage alloc] init];
             systemMsg.text = @"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天。";
-            systemMsg.fromUid = toUid;
-            systemMsg.toUidOrGroupId = USERINFO.userID;
+            systemMsg.fromUid = USERINFO.userID;
+            systemMsg.toUidOrGroupId = toUid;
             systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = resDic[@"msgid"];
             systemMsg.isGroup = NO;
@@ -441,17 +441,24 @@ static SocketManager *manager = nil;
     [self gengrateGroupInfo:groupId completion:^(NSString *name) {
         LGMessage *systemMsg = [[LGMessage alloc] init];
         //从群表cha用户数据
-        GroupUserModel *selfModel = [FMDBShareManager getGroupMemberWithMemberId:uids andConverseId:groupId];
-        
+        NSArray *uidsArr = [uids componentsSeparatedByString:@","];
+        NSMutableArray *names = [NSMutableArray array];
+        NSMutableArray *models = [NSMutableArray array];
+        for (NSString *uid in uidsArr) {
+            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uid andConverseId:groupId];
+            model.memberGroupState = YES;
+            [names addObject:model.friend_nick];
+            [models addObject:model];
+        }
+        NSString *usersName = [names componentsJoinedByString:@","];
         if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
-            systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移出了群聊",selfModel.friend_nick];
+            systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移出了群聊",usersName];
         }else{
             GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
             systemMsg.text = [NSString stringWithFormat:@"你被\"%@\"移出了群聊",model.friend_nick];
             
             //将状态改为 被剔出群
-            selfModel.memberGroupState = YES;
-            [FMDBShareManager saveAllGroupMemberWithArray:@[selfModel] andGroupChatId:groupId];
+            [FMDBShareManager saveAllGroupMemberWithArray:models andGroupChatId:groupId];
         }
         
         //发送系统消息 你邀请"xx"加入群聊
@@ -544,7 +551,7 @@ static SocketManager *manager = nil;
                     
                     if (containMe) {
                         
-                        systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请%@加入了群聊",actName,tbondName];
+                        systemMsg.text = [NSString stringWithFormat:@"%@邀请%@加入了群聊",actName,tbondName];
                         
                         //标记出席了当前群
                         GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
@@ -755,16 +762,20 @@ static SocketManager *manager = nil;
                 }];
                 GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                 groupChatModel.myGroupName = USERINFO.username;
-                //新建一个群会话，插入数据库
-                [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
                 
-                //保存群消息到数据库
-                [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-                                
-                //发送通知，刷新会话列表
-                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                userInfo[@"message"] = message;
-                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                //改为gcd同步存储
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                    //新建一个群会话，插入数据库
+                    [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
+                    
+                    //保存群消息到数据库
+                    [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+                    
+                    //发送通知，刷新会话列表
+                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                    userInfo[@"message"] = message;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                });
                 
             }
         } failure:^(ErrorData *error) {

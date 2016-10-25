@@ -135,6 +135,11 @@
 //电话挂断，上传通话时长
 - (void)addCallRecordTime{
     UserInfo *info = [UserInfo shareInstance];
+    
+    if (!info.toPhoneNum) {
+        return;
+    }
+    
     self.callCenter = [[CTCallCenter alloc] init];
     self.callCenter.callEventHandler = ^(CTCall* call) {
         
