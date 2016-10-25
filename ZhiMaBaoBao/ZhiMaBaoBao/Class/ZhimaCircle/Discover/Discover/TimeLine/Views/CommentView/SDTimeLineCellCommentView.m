@@ -369,6 +369,11 @@
         if (button == self.commentLabelsArray[index]) {
             SDTimeLineCellCommentItemModel *model = self.commentItemsArray[index];
             if ([self.delegate respondsToSelector:@selector(SDTimeLineCellCommentViewCommentOther:andCommentView:)]) {
+                
+                button.backgroundColor = [UIColor colorFormHexRGB:@"c7c7c5"];
+                [UIView animateWithDuration:0.3 animations:^{
+                    button.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
+                }];
                 [self.delegate SDTimeLineCellCommentViewCommentOther:model andCommentView:self.commentLabelsArray[index]];
             }
         }

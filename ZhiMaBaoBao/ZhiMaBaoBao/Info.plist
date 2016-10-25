@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.0</string>
+	<string>2.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -40,7 +40,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>1</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>alipay</string>
@@ -53,17 +53,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>cameraDesciption</string>
+	<string></string>
 	<key>NSContactsUsageDescription</key>
-	<string>contactsDesciption</string>
+	<string></string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>请打开定位权限</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>请打开定位权限</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>microphoneDesciption</string>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>photoLibraryDesciption</string>
+	<string></string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

@@ -23,4 +23,6 @@
 
 - (void)showNewMessageViewWith:(NSString *)iconURL andNewMessageCount:(int)count;
 
+@property (nonatomic, assign) BOOL show;
+
 @end

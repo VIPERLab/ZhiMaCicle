@@ -118,4 +118,22 @@
     }];
 }
 
+
+- (void)setShow:(BOOL)show
+{
+    _show = show;
+    
+    [UIView animateWithDuration:2 animations:^{
+        if (!show) {
+            [self clearAutoWidthSettings];
+            self.sd_layout
+            .heightIs(40);
+        } else {
+            self.fixedWidth = nil;
+            [self setupAutoHeightWithBottomView:_arrowView bottomMargin:5];
+        }
+        [self updateLayoutWithCellContentView:self.superview];
+    }];
+}
+
 @end

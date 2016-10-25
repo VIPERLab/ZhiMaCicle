@@ -72,7 +72,7 @@
 @property (nonatomic, strong) ChatKeyBoard *chatKeyBoard; //富文本键盘
 
 // ------ 新消息提示
-@property (nonatomic, weak) KXDiscoverNewMessageView *tipsNewMessage;
+@property (nonatomic, strong) KXDiscoverNewMessageView *tipsNewMessage;
 
 
 // ------ 投诉专用中间变量
@@ -107,6 +107,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [self setupKeyBoard];
+    self.tipsNewMessage.show = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -449,24 +450,29 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        if (self.unReadCount != 0 && ![self.headPhoto isEqualToString:@""]) {
+        
             //有图片且有未读消息
-            KXDiscoverNewMessageView *newMessage = [[KXDiscoverNewMessageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40 )];
-            [newMessage showNewMessageViewWith:self.headPhoto andNewMessageCount:self.unReadCount];
-            newMessage.delegate = self;
-            self.tipsNewMessage = newMessage;
-            return self.tipsNewMessage;
+        if (!self.tipsNewMessage) {
+            self.tipsNewMessage = [[KXDiscoverNewMessageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40 )];
         }
+        self.tipsNewMessage.hidden = YES;
+        [self.tipsNewMessage showNewMessageViewWith:self.headPhoto andNewMessageCount:self.unReadCount];
+        self.tipsNewMessage.delegate = self;
+        if (self.unReadCount != 0 && ![self.headPhoto isEqualToString:@""]) {
+            self.tipsNewMessage.hidden = NO;
+        }
+        
+        return self.tipsNewMessage;
     }
     return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        if (self.unReadCount != 0 && ![self.headPhoto isEqualToString:@""]) {
+//        if (self.unReadCount != 0 && ![self.headPhoto isEqualToString:@""]) {
             //有图片且有未读消息
             return 40;
-        }
+//        }
     }
     return 0.1;
 }
