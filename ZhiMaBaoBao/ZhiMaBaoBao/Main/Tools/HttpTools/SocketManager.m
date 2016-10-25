@@ -298,8 +298,9 @@ static SocketManager *manager = nil;
             NSString *groupId = resDic[@"groupid"];
             NSString *actuid = resDic[@"actuid"];
             NSString *uids = resDic[@"uids"];
+            NSString *jid = resDic[@"jid"];     //扫描二维码加群，生成二维码用户的id
             //拉人进群相关操作
-            [self updateGroupNumber:groupId actUid:actuid uids:uids];
+            [self updateGroupNumber:groupId actUid:actuid uids:uids jid:jid];
         }
         else if ([actType isEqualToString:@"deluserfromgroup"]){   //从群组中删除用户
             NSDictionary *resDic = responceData[@"data"];
@@ -473,8 +474,8 @@ static SocketManager *manager = nil;
 }
 
 
-//收到拉人进群消息  actuid:操作者id   uids:被邀请用户的id
-- (void)updateGroupNumber:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
+//收到拉人进群消息  actuid:操作者id   uids:被邀请用户的id   //扫描二维码加群，生成二维码用户的id
+- (void)updateGroupNumber:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids jid:(NSString *)jid{
     
     [self gengrateGroupInfo:groupId completion:^(NSString *name) {
         
@@ -502,12 +503,17 @@ static SocketManager *manager = nil;
         }
         NSString *usersNames = [namesArr componentsJoinedByString:@","];
         
-        
         if ([actUid isEqualToString:uids]){   //通过扫描二维码进群
+            GroupUserModel *jModel = [FMDBShareManager getGroupMemberWithMemberId:jid andConverseId:groupId];
+
             if ([actUid isEqualToString:USERINFO.userID]) { //自己
-                systemMsg.text = [NSString stringWithFormat:@"你通过扫描二维码加入了群聊"];
+                systemMsg.text = [NSString stringWithFormat:@"你通过扫描\"%@\"分享的二维码加入了群聊",jModel.friend_nick];
             }else{
-                systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描你分享的二维码加入了群聊",actName];
+                if ([jid isEqualToString:USERINFO.userID]) {
+                    systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描你分享的二维码加入了群聊",actName];
+                }else{
+                    systemMsg.text = [NSString stringWithFormat:@"\"%@\"通过扫描\"%@\"分享的二维码加入了群聊",actName,jModel.friend_nick];
+                }
             }
         }else{
             if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
@@ -906,6 +912,14 @@ static SocketManager *manager = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
+//扫码进群
+- (void)scanCodeToGroup:(NSString *)groupId uids:(NSString *)uids{
+    NSData *data = [self generateGroupActType:GroupActTypeSaoma groupId:groupId uids:uids];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
 //从群组删除用户
 - (void)delUserFromGroup:(NSString *)groupId uids:(NSString *)uids{
     NSData *data = [self generateGroupActType:GroupActTypeDelUser groupId:groupId uids:uids];
@@ -1096,7 +1110,9 @@ static SocketManager *manager = nil;
         }
             
             break;
-        case GroupActTypeAddUser:{      //邀请用户到群
+        case GroupActTypeAddUser:
+        case GroupActTypeSaoma:
+        {      //邀请用户到群
             methodName = @"addUserToGroup";
         }
             
@@ -1135,10 +1151,16 @@ static SocketManager *manager = nil;
         dataDic[@"uid"] = USERINFO.userID;
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&groupname=%@&uid=%@&%@",controllerName,methodName,groupId,uids,USERINFO.userID,APIKEY];
     }
-    else if (type == GroupActTypeAddUser || type == GroupActTypeCreate || type == GroupActTypeDelUser){
+    else if (type == GroupActTypeCreate || type == GroupActTypeDelUser || type == GroupActTypeAddUser){
         dataDic[@"uids"]= uids;
         dataDic[@"actuid"] = USERINFO.userID; //操作者的uid
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&actuid=%@&groupid=%@&uids=%@&%@",controllerName,methodName,USERINFO.userID,groupId,uids,APIKEY];
+    }
+    else if (type == GroupActTypeSaoma){
+        dataDic[@"uids"] = USERINFO.userID;
+        dataDic[@"actuid"] = USERINFO.userID; //操作者的uid
+        dataDic[@"jid"] = uids;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&actuid=%@&groupid=%@&jid=%@&uids=%@&%@",controllerName,methodName,USERINFO.userID,groupId,uids,USERINFO.userID,APIKEY];
     }
     else if (type == GroupActTypeDelGroup){
         dataDic[@"uid"] = uids;

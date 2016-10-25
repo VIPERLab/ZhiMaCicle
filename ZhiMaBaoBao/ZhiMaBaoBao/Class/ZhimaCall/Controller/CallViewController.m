@@ -153,7 +153,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
     }
     if (tip) {
         //做一个友好的提示
-        UIAlertView * alart = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"请您设置允许APP访问您的通讯录\nSettings>General>Privacy" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        UIAlertView * alart = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"请您设置允许APP访问您的通讯录" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [alart show];
         return;
     }

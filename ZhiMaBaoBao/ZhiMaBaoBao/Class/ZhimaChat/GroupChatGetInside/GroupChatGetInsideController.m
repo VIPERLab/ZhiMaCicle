@@ -122,7 +122,7 @@
             [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupId];
             
             //通过socket拉人进群
-            [[SocketManager shareInstance] addUserToGroup:self.groupChatModel.groupId uids:USERINFO.userID];
+            [[SocketManager shareInstance] scanCodeToGroup:self.groupChatModel.groupId uids:self.qrCodeUserId];
             
             //跳转到群聊天页面
             [self jumpGroupChat];
