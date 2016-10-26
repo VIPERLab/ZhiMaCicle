@@ -34,7 +34,6 @@
     // Do any additional setup after loading the view.
     [self setupNav];
     [self setupView];
-//    [self creatQRCode];
     [self requestQRCode];
 }
 
@@ -59,7 +58,7 @@
         
         
     } failure:^(ErrorData *error) {
-        
+        [self creatQRCode];
     }];
 }
 

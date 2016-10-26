@@ -135,23 +135,25 @@
 {
     [_indicatorView removeFromSuperview];
     
-    UILabel *label = [[UILabel alloc] init];
-    label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
-    label.layer.cornerRadius = 5;
-    label.clipsToBounds = YES;
-    label.bounds = CGRectMake(0, 0, 150, 30);
-    label.center = self.center;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont boldSystemFontOfSize:17];
-    [[UIApplication sharedApplication].keyWindow addSubview:label];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:label];
+//    UILabel *label = [[UILabel alloc] init];
+//    label.textColor = [UIColor whiteColor];
+//    label.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
+//    label.layer.cornerRadius = 5;
+//    label.clipsToBounds = YES;
+//    label.bounds = CGRectMake(0, 0, 150, 30);
+//    label.center = self.center;
+//    label.textAlignment = NSTextAlignmentCenter;
+//    label.font = [UIFont boldSystemFontOfSize:17];
+//    [[UIApplication sharedApplication].keyWindow addSubview:label];
+//    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:label];
     if (error) {
-        label.text = SDPhotoBrowserSaveImageFailText;
+//        label.text = SDPhotoBrowserSaveImageFailText;
+        [LCProgressHUD showFailureText:@"保存失败"];
     }   else {
-        label.text = SDPhotoBrowserSaveImageSuccessText;
+        [LCProgressHUD showSuccessText:@"保存到系统相册"];
+//        label.text = SDPhotoBrowserSaveImageSuccessText;
     }
-    [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
+//    [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
 }
 
 - (void)setupScrollView

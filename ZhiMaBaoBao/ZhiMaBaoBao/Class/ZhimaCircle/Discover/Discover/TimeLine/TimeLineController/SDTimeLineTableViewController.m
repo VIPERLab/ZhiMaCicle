@@ -314,21 +314,22 @@
             return;
         }
         
+        [weakRefreshFooter endRefreshing];
+        
         NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:NO];
         
         if (dataArray.count) {
             [weakSelf.dataArray addObjectsFromArray:dataArray];
         } else {
-            weakRefreshFooter.refreshState = SDWXRefreshViewStateNormal;
+            [weakRefreshFooter endRefreshing];
             return;
-            
         }
         
         // 异步 存数据 到朋友圈数据库
         dispatch_async(dispatch_queue_create(0, 0), ^{
             //存数据到朋友圈表
             [FMDBShareManager saveCircleDataWithDataArray:dataArray];
-            
+        
         });
         
         
@@ -338,6 +339,7 @@
         
     } failure:^(ErrorData *error) {
         // 失败则展示数据库中下一页的数据
+        [weakRefreshFooter endRefreshing];
         NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
         if (newDataArray.count != 0) {
             [self.dataArray addObjectsFromArray:newDataArray];

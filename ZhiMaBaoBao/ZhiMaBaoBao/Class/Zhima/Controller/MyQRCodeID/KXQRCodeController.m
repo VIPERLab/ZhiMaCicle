@@ -32,7 +32,7 @@
     // Do any additional setup after loading the view.
     [self setCustomTitle:@"二维码名片"];
     [self setupView];
-//    [self creatQRCode];
+    
     [self requestMyQRCode];
 }
 
@@ -57,7 +57,7 @@
         
         
     } failure:^(ErrorData *error) {
-        
+        [self creatQRCode];
     }];
 }
 
