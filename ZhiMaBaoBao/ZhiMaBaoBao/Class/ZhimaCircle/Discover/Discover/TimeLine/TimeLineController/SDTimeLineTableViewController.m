@@ -10,7 +10,7 @@
 #import "SDTimeLineTableViewController.h"
 
 //#import "SDRefresh.h"
-#import "MJRefresh.h"
+//#import "MJRefresh.h"
 
 #import "SDTimeLineTableHeaderView.h"
 #import "SDTimeLineRefreshHeader.h"
@@ -218,11 +218,10 @@
 #pragma mark - 新增说说
 - (void)rightBarButtonItemAction:(UIBarButtonItem *)sender{
     //新增说说
-    __weak typeof(self) weakSelf = self;
     
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
     new.block = ^() {
-        [weakSelf.tableView.mj_header beginRefreshing];
+        _refreshHeader.refreshState = SDWXRefreshViewStateRefreshing;
     };
     [self.navigationController pushViewController:new animated:YES];
     
