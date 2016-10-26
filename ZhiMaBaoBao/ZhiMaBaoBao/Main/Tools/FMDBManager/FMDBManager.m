@@ -2154,6 +2154,7 @@
  *
  */
 - (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupChatId {
+    NSLog(@"----开始插入");
     FMDatabaseQueue *queuq = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
     for (GroupUserModel *model in array) {
         
@@ -2181,6 +2182,7 @@
             
         }];
     }
+    NSLog(@"----插入结束");
 }
 
 

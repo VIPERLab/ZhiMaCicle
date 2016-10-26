@@ -446,7 +446,7 @@ static SocketManager *manager = nil;
         NSMutableArray *models = [NSMutableArray array];
         for (NSString *uid in uidsArr) {
             GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uid andConverseId:groupId];
-            if (!model) {
+            if (!model.friend_nick.length) {
                 return ;
             }
             model.memberGroupState = YES;

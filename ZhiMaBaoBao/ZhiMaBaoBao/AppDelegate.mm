@@ -281,23 +281,13 @@
 
 //数据库迁移
 - (void)moveSQLToNew {
-//    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:[NSString stringWithFormat:@"ZhiMa%@.sqlite",USERINFO.userID]];
-//    FMDBMigrationManager *manager = [FMDBMigrationManager managerWithDatabaseAtPath:path  migrationsBundle:[NSBundle mainBundle]];
-//    
-//    BOOL resultState = NO;
-//    NSError *error = nil;
-//    if (!manager.hasMigrationsTable) {
-//        resultState = [manager createMigrationsTable:&error];
-//    }
-//    
-//    resultState = [manager migrateDatabaseToVersion:UINT64_MAX progress:nil error:&error];//迁移函数
-//    
-//    NSLog(@"Has `schema_migrations` table?: %@", manager.hasMigrationsTable ? @"YES" : @"NO");
-//    NSLog(@"Origin Version: %llu", manager.originVersion);
-//    NSLog(@"Current version: %llu", manager.currentVersion);
-//    NSLog(@"All migrations: %@", manager.migrations);
-//    NSLog(@"Applied versions: %@", manager.appliedVersions);
-//    NSLog(@"Pending versions: %@", manager.pendingVersions);
+    
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *version = infoDict[@"CFBundleShortVersionString"];
+    if ([USERINFO.appVersion isEqualToString:version]) {
+        return;
+    }
+    
     
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];

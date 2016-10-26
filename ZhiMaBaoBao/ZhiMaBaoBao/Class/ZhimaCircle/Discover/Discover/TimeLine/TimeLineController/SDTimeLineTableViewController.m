@@ -14,6 +14,7 @@
 
 #import "SDTimeLineTableHeaderView.h"
 #import "SDTimeLineRefreshHeader.h"
+#import "SDTimeLineRefreshFooter.h"
 #import "SDTimeLineCell.h"
 #import "SDTimeLineCellModel.h"
 
@@ -90,6 +91,7 @@
     CGFloat _lastScrollViewOffsetY;
     CGFloat _totalKeybordHeight;
     SDTimeLineRefreshHeader * _refreshHeader;
+    SDTimeLineRefreshFooter *_refreshFooter;
     KXCopyView *_copyView;
 }
 
@@ -108,15 +110,46 @@
 - (void)viewDidAppear:(BOOL)animated {
     [self setupKeyBoard];
     self.tipsNewMessage.show = YES;
+    __weak typeof(self) weakSelf = self;
+    if (!_refreshHeader.superview) {
+        
+        _refreshHeader = [SDTimeLineRefreshHeader refreshHeaderWithCenter:CGPointMake(40, 45)];
+        _refreshHeader.scrollView = self.tableView;
+        [_refreshHeader setRefreshingBlock:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf setupNewData];
+            });
+        }];
+        [self.tableView.superview addSubview:_refreshHeader];
+    } else {
+        [self.tableView.superview bringSubviewToFront:_refreshHeader];
+    }
+    
+    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
+    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
+        _refreshHeader.refreshState = SDWXRefreshViewStateRefreshing;
+    }
+    
+    
+    // 上拉加载
+    _refreshFooter = [SDTimeLineRefreshFooter refreshFooterWithRefreshingText:@"正在加载数据..."];
+    [_refreshFooter addToScrollView:self.tableView refreshOpration:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf loadMoreData];
+        });
+    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self.chatKeyBoard removeFromSuperview];
     _chatKeyBoard = nil;
+    
 }
 
 - (void)dealloc {
-    _refreshHeader = nil;
+    [_refreshHeader removeFromSuperview];
+    [_refreshFooter removeFromSuperview];
+    
     [self.chatKeyBoard removeFromSuperview];
     _chatKeyBoard = nil;
     
@@ -196,140 +229,263 @@
 }
 
 #pragma mark - 设置下拉和上啦刷新控件
-- (void)setupKeyBoardAndRefreshHeader {
-    
+//下拉刷新
+- (void)setupNewData {
+    //加载未读消息数
     __weak typeof(self) weakSelf = self;
+    __weak typeof(_refreshHeader) weakHeader = _refreshHeader;
     
-    //下拉刷新
-    if (!self.tableView.mj_header) {
-        self.tableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
-            //加载未读消息数
-            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
-            //下拉页数置1
-            weakSelf.pageNumber = 1;
-            NSString *pageNumber = [NSString stringWithFormat:@"%zd",weakSelf.pageNumber];
-            NSString *sectionID = USERINFO.sessionId;
-            NSString *userID = USERINFO.userID;
-            
-            [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
-                if (responseData == nil || responseData.data == nil) {
-                    return ;
-                }
-                if (responseData.code != 0) {
-                    [self.tableView.mj_header endRefreshing];
-                    return;
-                }
-                [self.tableView.mj_header endRefreshing];
-                
-                [weakSelf.dataArray removeAllObjects];
-                
-                NSArray *delCircleIDArray = [NSString mj_objectArrayWithKeyValuesArray:responseData.data_temp[@"dataList"]];
-                
-                
-                for (NSString *circleID in delCircleIDArray) {
-                    [FMDBShareManager deleteCircleDataWithCircleID:circleID];
-                }
-                
-                
-                NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:YES];
-                self.dataArray = [dataArray mutableCopy];
-                // 异步 存数据 到朋友圈数据库
-                dispatch_async(dispatch_queue_create(0, 0), ^{
-                    //存数据到朋友圈表
-                    [FMDBShareManager saveCircleDataWithDataArray:dataArray];
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.tableView reloadDataWithExistedHeightCache];
-                        [self.tableView reloadData];
-                    });
-                    
-                });
- 
-            } failure:^(ErrorData *error) {
-                
-            }];
-        }];
-        //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
-        if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
-            [self.tableView.mj_header beginRefreshing];
+    [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
+    //下拉页数置1
+    weakSelf.pageNumber = 1;
+    NSString *pageNumber = [NSString stringWithFormat:@"%zd",weakSelf.pageNumber];
+    NSString *sectionID = USERINFO.sessionId;
+    NSString *userID = USERINFO.userID;
+    
+    [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
+        if (responseData == nil || responseData.data == nil) {
+            return ;
+        }
+        if (responseData.code != 0) {
+            [weakHeader endRefreshing];
+            return;
+        }
+        [weakHeader endRefreshing];
+        
+        [weakSelf.dataArray removeAllObjects];
+        
+        NSArray *delCircleIDArray = [NSString mj_objectArrayWithKeyValuesArray:responseData.data_temp[@"dataList"]];
+        
+        
+        for (NSString *circleID in delCircleIDArray) {
+            [FMDBShareManager deleteCircleDataWithCircleID:circleID];
         }
         
-    }
-    
-    //上啦刷新
-    if (!self.tableView.mj_footer) {
-        self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-            self.pageNumber++;
-            NSString *pageNumber = [NSString stringWithFormat:@"%zd",self.pageNumber];
+        
+        NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:YES];
+        self.dataArray = [dataArray mutableCopy];
+        // 异步 存数据 到朋友圈数据库
+        dispatch_async(dispatch_queue_create(0, 0), ^{
+            //存数据到朋友圈表
+            [FMDBShareManager saveCircleDataWithDataArray:dataArray];
             
-            NSString *sectionID = USERINFO.sessionId;
-            NSString *userID = USERINFO.userID;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadDataWithExistedHeightCache];
+                [self.tableView reloadData];
+            });
             
-            
-            [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
-                if (responseData.code != 0) {
-                    // 失败则展示数据库中下一页的数据  异步获取下一页数据
-                    dispatch_async(dispatch_queue_create(0, 0), ^{
-                        //存数据到朋友圈表
-                        NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (newDataArray.count != 0) {
-                                [self.dataArray addObjectsFromArray:newDataArray];
-                                [self.tableView.mj_footer endRefreshing];
-                                [self.tableView reloadData];
-                                [self.tableView reloadDataWithExistedHeightCache];
-                            }else{
-                                [self.tableView.mj_footer endRefreshing];
-                                self.tableView.mj_footer.state = MJRefreshStateNoMoreData;
-                            }
+        });
+        
+    } failure:^(ErrorData *error) {
+        
+    }];
+}
 
-                        });
-                        
-                    });
-                    
-                    return;
-                }
+//上啦刷新
+- (void)loadMoreData {
+    self.pageNumber++;
+    NSString *pageNumber = [NSString stringWithFormat:@"%zd",self.pageNumber];
+    
+    NSString *sectionID = USERINFO.sessionId;
+    NSString *userID = USERINFO.userID;
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(_refreshFooter) weakRefreshFooter = _refreshFooter;
+    [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
+        if (responseData.code != 0) {
+            // 失败则展示数据库中下一页的数据  异步获取下一页数据
+            dispatch_async(dispatch_queue_create(0, 0), ^{
+                //存数据到朋友圈表
+                NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
                 
-                NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:NO];
-                
-                if (dataArray.count) {
-                    [self.dataArray addObjectsFromArray:dataArray];
-                } else {
-                    self.tableView.mj_footer.state = MJRefreshStateNoMoreData;
-                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
-                    return;
-                    
-                }
-                
-                // 异步 存数据 到朋友圈数据库
-                dispatch_async(dispatch_queue_create(0, 0), ^{
-                    //存数据到朋友圈表
-                    [FMDBShareManager saveCircleDataWithDataArray:dataArray];
-                    
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (newDataArray.count != 0) {
+                        [weakSelf.dataArray addObjectsFromArray:newDataArray];
+                        [weakRefreshFooter endRefreshing];
+                        [weakSelf.tableView reloadData];
+                        [weakSelf.tableView reloadDataWithExistedHeightCache];
+                    }else{
+                        [weakRefreshFooter endRefreshing];
+                        weakRefreshFooter.refreshState = SDWXRefreshViewStateNormal;
+                    }
                 });
                 
-                
-                [self.tableView.mj_footer endRefreshing];
-                [self.tableView reloadData];
-                [self.tableView reloadDataWithExistedHeightCache];
-                
-            } failure:^(ErrorData *error) {
-                // 失败则展示数据库中下一页的数据
-                NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
-                if (newDataArray.count != 0) {
-                    [self.dataArray addObjectsFromArray:newDataArray];
-                    [self.tableView.mj_footer endRefreshing];
-                    [self.tableView reloadData];
-                    [self.tableView reloadDataWithExistedHeightCache];
-                }
-                return;
-                
-            }];
-
+            });
             
-        }];
-    }
+            return;
+        }
+        
+        NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:NO];
+        
+        if (dataArray.count) {
+            [weakSelf.dataArray addObjectsFromArray:dataArray];
+        } else {
+            weakRefreshFooter.refreshState = SDWXRefreshViewStateNormal;
+            return;
+            
+        }
+        
+        // 异步 存数据 到朋友圈数据库
+        dispatch_async(dispatch_queue_create(0, 0), ^{
+            //存数据到朋友圈表
+            [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+            
+        });
+        
+        
+        [weakRefreshFooter endRefreshing];
+        [self.tableView reloadData];
+        [self.tableView reloadDataWithExistedHeightCache];
+        
+    } failure:^(ErrorData *error) {
+        // 失败则展示数据库中下一页的数据
+        NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
+        if (newDataArray.count != 0) {
+            [self.dataArray addObjectsFromArray:newDataArray];
+            [weakRefreshFooter endRefreshing];
+            [self.tableView reloadData];
+            [self.tableView reloadDataWithExistedHeightCache];
+        }
+        return;
+        
+    }];
+    
+    
+}
+
+- (void)setupKeyBoardAndRefreshHeader {
+    
+//    __weak typeof(self) weakSelf = self;
+    
+    //下拉刷新
+//    if (!self.tableView.mj_header) {
+//        self.tableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
+//            //加载未读消息数
+//            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
+//            //下拉页数置1
+//            weakSelf.pageNumber = 1;
+//            NSString *pageNumber = [NSString stringWithFormat:@"%zd",weakSelf.pageNumber];
+//            NSString *sectionID = USERINFO.sessionId;
+//            NSString *userID = USERINFO.userID;
+//            
+//            [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
+//                if (responseData == nil || responseData.data == nil) {
+//                    return ;
+//                }
+//                if (responseData.code != 0) {
+//                    [self.tableView.mj_header endRefreshing];
+//                    return;
+//                }
+//                [self.tableView.mj_header endRefreshing];
+//                
+//                [weakSelf.dataArray removeAllObjects];
+//                
+//                NSArray *delCircleIDArray = [NSString mj_objectArrayWithKeyValuesArray:responseData.data_temp[@"dataList"]];
+//                
+//                
+//                for (NSString *circleID in delCircleIDArray) {
+//                    [FMDBShareManager deleteCircleDataWithCircleID:circleID];
+//                }
+//                
+//                
+//                NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:YES];
+//                self.dataArray = [dataArray mutableCopy];
+//                // 异步 存数据 到朋友圈数据库
+//                dispatch_async(dispatch_queue_create(0, 0), ^{
+//                    //存数据到朋友圈表
+//                    [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+//                    
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [self.tableView reloadDataWithExistedHeightCache];
+//                        [self.tableView reloadData];
+//                    });
+//                    
+//                });
+// 
+//            } failure:^(ErrorData *error) {
+//                
+//            }];
+//        }];
+//        //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
+//        if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
+//            [self.tableView.mj_header beginRefreshing];
+//        }
+//        
+//    }
+//
+//    //上啦刷新
+//    if (!self.tableView.mj_footer) {
+//        self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+//            self.pageNumber++;
+//            NSString *pageNumber = [NSString stringWithFormat:@"%zd",self.pageNumber];
+//            
+//            NSString *sectionID = USERINFO.sessionId;
+//            NSString *userID = USERINFO.userID;
+//            
+//            
+//            [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
+//                if (responseData.code != 0) {
+//                    // 失败则展示数据库中下一页的数据  异步获取下一页数据
+//                    dispatch_async(dispatch_queue_create(0, 0), ^{
+//                        //存数据到朋友圈表
+//                        NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
+//                        
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            if (newDataArray.count != 0) {
+//                                [self.dataArray addObjectsFromArray:newDataArray];
+//                                [self.tableView.mj_footer endRefreshing];
+//                                [self.tableView reloadData];
+//                                [self.tableView reloadDataWithExistedHeightCache];
+//                            }else{
+//                                [self.tableView.mj_footer endRefreshing];
+//                                self.tableView.mj_footer.state = MJRefreshStateNoMoreData;
+//                            }
+//
+//                        });
+//                        
+//                    });
+//                    
+//                    return;
+//                }
+//                
+//                NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:NO];
+//                
+//                if (dataArray.count) {
+//                    [self.dataArray addObjectsFromArray:dataArray];
+//                } else {
+//                    self.tableView.mj_footer.state = MJRefreshStateNoMoreData;
+//                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+//                    return;
+//                    
+//                }
+//                
+//                // 异步 存数据 到朋友圈数据库
+//                dispatch_async(dispatch_queue_create(0, 0), ^{
+//                    //存数据到朋友圈表
+//                    [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+//                    
+//                });
+//                
+//                
+//                [self.tableView.mj_footer endRefreshing];
+//                [self.tableView reloadData];
+//                [self.tableView reloadDataWithExistedHeightCache];
+//                
+//            } failure:^(ErrorData *error) {
+//                // 失败则展示数据库中下一页的数据
+//                NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
+//                if (newDataArray.count != 0) {
+//                    [self.dataArray addObjectsFromArray:newDataArray];
+//                    [self.tableView.mj_footer endRefreshing];
+//                    [self.tableView reloadData];
+//                    [self.tableView reloadDataWithExistedHeightCache];
+//                }
+//                return;
+//                
+//            }];
+//
+//            
+//        }];
+//    }
 }
 
 #pragma mark - 加载未读消息数
