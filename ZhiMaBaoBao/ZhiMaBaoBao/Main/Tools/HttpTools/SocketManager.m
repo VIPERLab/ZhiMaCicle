@@ -437,7 +437,6 @@ static SocketManager *manager = nil;
 //收到从群组删除用户 actuid:操作者id   uids:被删除用户的id
 - (void)deleteGroupUser:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
     
-    
     [self gengrateGroupInfo:groupId completion:^(NSArray *groupUsers) {
         LGMessage *systemMsg = [[LGMessage alloc] init];
         //从群表cha用户数据
@@ -445,8 +444,7 @@ static SocketManager *manager = nil;
         NSMutableArray *names = [NSMutableArray array];
         NSMutableArray *models = [NSMutableArray array];
         for (NSString *uid in uidsArr) {
-//            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uid andConverseId:groupId];
-            GroupUserModel *model = [self getGroupUser:uid fromArr:groupUsers];
+            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uid andConverseId:groupId];
             if (!model.friend_nick.length) {
                 return ;
             }
@@ -458,8 +456,8 @@ static SocketManager *manager = nil;
         if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
             systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移出了群聊",usersName];
         }else{
-//            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
-            GroupUserModel *model = [self getGroupUser:actUid fromArr:groupUsers];
+            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
+//            GroupUserModel *model = [self getGroupUser:actUid fromArr:groupUsers];
             systemMsg.text = [NSString stringWithFormat:@"你被\"%@\"移出了群聊",model.friend_nick];
             
             //将状态改为 被剔出群
