@@ -52,7 +52,7 @@
     [SocketManager shareInstance].delegate = self;
     
     //添加异常捕获
-    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
+//    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
     
     [self addNotifications];
 
@@ -339,11 +339,11 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-void UncaughtExceptionHandler(NSException *exception) {
-    NSArray *arr = [exception callStackSymbols];    //得到当前调用栈信息
-    NSString *reason = [exception reason];          //非常重要，就是崩溃的原因
-    NSString *name = [exception name];              //异常类型
-    NSLog(@"异常类型 : %@ \n 崩溃原因 : %@ \n 当前调用栈信息 : %@", name, reason, arr);
-}
+//void UncaughtExceptionHandler(NSException *exception) {
+//    NSArray *arr = [exception callStackSymbols];    //得到当前调用栈信息
+//    NSString *reason = [exception reason];          //非常重要，就是崩溃的原因
+//    NSString *name = [exception name];              //异常类型
+//    NSLog(@"异常类型 : %@ \n 崩溃原因 : %@ \n 当前调用栈信息 : %@", name, reason, arr);
+//}
 
 @end

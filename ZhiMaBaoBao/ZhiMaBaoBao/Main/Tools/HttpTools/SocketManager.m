@@ -878,41 +878,35 @@ static SocketManager *manager = nil;
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
     
-    //先从数据库删除该条消息
-    
-    
-    //插入系统消息:"你撤回了一条消息"到数据库
-    LGMessage *systemMsg = [[LGMessage alloc] init];
-    systemMsg.text = @"你撤回了一条消息";
-    systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
-    systemMsg.fromUid = USERINFO.userID;
-    systemMsg.type = MessageTypeSystem;
-//    systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    systemMsg.msgid = message.msgid;
-    systemMsg.isGroup = message.isGroup;
-    systemMsg.timeStamp = [NSDate currentTimeStamp];
-    
-    
-    //更新数据库会话 （最后一条消息显示）
-    NSString *conversionId = nil;
-    if (systemMsg.isGroup) {
-        conversionId = systemMsg.toUidOrGroupId;
-    }else{
-        conversionId = systemMsg.fromUid;
-    }
-    [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-    NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];
-    NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",conversionId]];
-    [queue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:upDataStr];
-        
-    }];
-//    if (message.isGroup) {  //群消息和单聊消息 分开进行更新消息表操作(主要是会话列表展示)
-//        [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:message.toUidOrGroupId];
+//    //先从数据库删除该条消息
+//    
+//    
+//    //插入系统消息:"你撤回了一条消息"到数据库
+//    LGMessage *systemMsg = [[LGMessage alloc] init];
+//    systemMsg.text = @"你撤回了一条消息";
+//    systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
+//    systemMsg.fromUid = USERINFO.userID;
+//    systemMsg.type = MessageTypeSystem;
+//    systemMsg.msgid = message.msgid;
+//    systemMsg.isGroup = message.isGroup;
+//    systemMsg.timeStamp = [NSDate currentTimeStamp];
+//    
+//    
+//    //更新数据库会话 （最后一条消息显示）
+//    NSString *conversionId = nil;
+//    if (systemMsg.isGroup) {
+//        conversionId = systemMsg.toUidOrGroupId;
 //    }else{
-//        [FMDBShareManager saveMessage:systemMsg toConverseID:message.toUidOrGroupId];
+//        conversionId = systemMsg.fromUid;
 //    }
+//    [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
+//    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+//    NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];
+//    NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",conversionId]];
+//    [queue inDatabase:^(FMDatabase *db) {
+//        [db executeUpdate:upDataStr];
+//        
+//    }];
 }
 
 //建群

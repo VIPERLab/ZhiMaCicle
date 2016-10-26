@@ -543,6 +543,7 @@
 		31861E0D1DBDAE850037E4E6 /* LGPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E0C1DBDAE850037E4E6 /* LGPickerView.m */; };
 		31861E111DBDAF190037E4E6 /* MoreInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E101DBDAF190037E4E6 /* MoreInfoModel.m */; };
 		31861E171DBF02990037E4E6 /* GroupDeleteMembersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E161DBF02990037E4E6 /* GroupDeleteMembersController.m */; };
+		31861E201DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E1F1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m */; };
 		319069A41D9A17C300D1D6D2 /* NSData+Replace.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069A31D9A17C300D1D6D2 /* NSData+Replace.m */; };
 		319069AD1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */; };
 		319069B11D9BC09200D1D6D2 /* FriendsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */; };
@@ -1710,6 +1711,8 @@
 		31861E101DBDAF190037E4E6 /* MoreInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreInfoModel.m; sourceTree = "<group>"; };
 		31861E151DBF02990037E4E6 /* GroupDeleteMembersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupDeleteMembersController.h; sourceTree = "<group>"; };
 		31861E161DBF02990037E4E6 /* GroupDeleteMembersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupDeleteMembersController.m; sourceTree = "<group>"; };
+		31861E1E1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UncaughtExceptionHandler.h; sourceTree = "<group>"; };
+		31861E1F1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UncaughtExceptionHandler.m; sourceTree = "<group>"; };
 		319069A21D9A17C300D1D6D2 /* NSData+Replace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Replace.h"; sourceTree = "<group>"; };
 		319069A31D9A17C300D1D6D2 /* NSData+Replace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Replace.m"; sourceTree = "<group>"; };
 		319069AB1D9A9DC100D1D6D2 /* NSDate+TimeCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TimeCategory.h"; sourceTree = "<group>"; };
@@ -4517,6 +4520,8 @@
 		316957891D911A3F00140126 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				31861E1E1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.h */,
+				31861E1F1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -5426,6 +5431,7 @@
 				04EA7DA01D912872005E5425 /* ZXBinarizer.m in Sources */,
 				04EA7E281D912872005E5425 /* ZXQRCodeBlockPair.m in Sources */,
 				04F8624D1D94FC6D00DCC6FE /* MLEmojiLabel.m in Sources */,
+				31861E201DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m in Sources */,
 				04EA7E221D912872005E5425 /* ZXQRCodeAlignmentPatternFinder.m in Sources */,
 				04EA7ACB1D910F89005E5425 /* UIColor+Hex.m in Sources */,
 				04EA7D811D912872005E5425 /* ZXVCardResultParser.m in Sources */,
