@@ -15,7 +15,7 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        _maxFrameSize = 65536;
+        _maxFrameSize = 262144;
         _countOfLengthByte = 4;
         _reverseOfLengthByte = NO;
     }

@@ -31,6 +31,8 @@
 
 #import "LGLoginController.h"
 
+#import "UncaughtExceptionHandler.h"
+
 
 
 @interface AppDelegate () <JPUSHRegisterDelegate>
@@ -46,6 +48,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [UncaughtExceptionHandler installUncaughtExceptionHandler:YES showAlert:NO];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpMainController) name:LOGIN_SUCCESS object:nil];
     

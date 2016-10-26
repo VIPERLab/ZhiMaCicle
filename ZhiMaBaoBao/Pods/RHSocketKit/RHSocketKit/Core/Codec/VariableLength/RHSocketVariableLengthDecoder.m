@@ -16,7 +16,7 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        _maxFrameSize = 65536;
+        _maxFrameSize = 262144;
         _countOfLengthByte = 4;
         _reverseOfLengthByte = YES;
     }
@@ -34,7 +34,7 @@
     NSData *downstreamData = object;
     NSUInteger headIndex = 0;
     
-    //先读区2个字节的协议长度 (前2个字节为数据包的长度)
+    //先读区4个字节的协议长度 (前4个字节为数据包的长度)
     while (downstreamData && downstreamData.length - headIndex > _countOfLengthByte) {
         NSData *lenData = [downstreamData subdataWithRange:NSMakeRange(headIndex, _countOfLengthByte)];
         //长度字节数据，可能存在高低位互换，通过数值转换工具处理

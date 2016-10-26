@@ -20,7 +20,7 @@
 #import "NSString+MsgId.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-typedef void (^CompleteBlock)(NSString *name);
+typedef void (^CompleteBlock)(id data);
 @interface SocketManager ()
 //@property (nonatomic, assign) CompleteBlock complettion;
 @end
@@ -438,14 +438,15 @@ static SocketManager *manager = nil;
 - (void)deleteGroupUser:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
     
     
-    [self gengrateGroupInfo:groupId completion:^(NSString *name) {
+    [self gengrateGroupInfo:groupId completion:^(NSArray *groupUsers) {
         LGMessage *systemMsg = [[LGMessage alloc] init];
         //从群表cha用户数据
         NSArray *uidsArr = [uids componentsSeparatedByString:@","];
         NSMutableArray *names = [NSMutableArray array];
         NSMutableArray *models = [NSMutableArray array];
         for (NSString *uid in uidsArr) {
-            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uid andConverseId:groupId];
+//            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uid andConverseId:groupId];
+            GroupUserModel *model = [self getGroupUser:uid fromArr:groupUsers];
             if (!model.friend_nick.length) {
                 return ;
             }
@@ -457,7 +458,8 @@ static SocketManager *manager = nil;
         if ([actUid isEqualToString:USERINFO.userID]) { //如果自己是操作者
             systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移出了群聊",usersName];
         }else{
-            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
+//            GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
+            GroupUserModel *model = [self getGroupUser:actUid fromArr:groupUsers];
             systemMsg.text = [NSString stringWithFormat:@"你被\"%@\"移出了群聊",model.friend_nick];
             
             //将状态改为 被剔出群
@@ -482,15 +484,28 @@ static SocketManager *manager = nil;
     }];
 }
 
+//从群成员数组中取出对应id的用户数据模型
+- (GroupUserModel *)getGroupUser:(NSString *)userId fromArr:(NSArray *)array{
+    GroupUserModel *userModel = nil;
+    for (GroupUserModel *model in array) {
+        if ([model.userId isEqualToString:userId]) {
+            userModel = model;
+            break;
+        }
+    }
+    return userModel;
+}
+
 //收到拉人进群消息  actuid:操作者id   uids:被邀请用户的id   //扫描二维码加群，生成二维码用户的id
 - (void)updateGroupNumber:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids jid:(NSString *)jid{
     
-    [self gengrateGroupInfo:groupId completion:^(NSString *name) {
+    [self gengrateGroupInfo:groupId completion:^(NSArray *groupUsers) {
         
         LGMessage *systemMsg = [[LGMessage alloc] init];
         
         //操作者名字
-        GroupUserModel *actModel = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
+//        GroupUserModel *actModel = [FMDBShareManager getGroupMemberWithMemberId:actUid andConverseId:groupId];
+        GroupUserModel *actModel = [self getGroupUser:actUid fromArr:groupUsers];
         NSString *actName = actModel.friend_nick;
         
         NSArray *copyArr = [uids componentsSeparatedByString:@","];     //拷贝一份
@@ -506,13 +521,15 @@ static SocketManager *manager = nil;
         NSMutableArray *namesArr = [NSMutableArray array];
         //拼接被邀请者名字
         for (NSString *userId in uidsArr) {
-            GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
+//            GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
+            GroupUserModel *userModel = [self getGroupUser:userId fromArr:groupUsers];
             [namesArr addObject:userModel.friend_nick];
         }
         NSString *usersNames = [namesArr componentsJoinedByString:@","];
         
         if ([actUid isEqualToString:uids]){   //通过扫描二维码进群
-            GroupUserModel *jModel = [FMDBShareManager getGroupMemberWithMemberId:jid andConverseId:groupId];
+//            GroupUserModel *jModel = [FMDBShareManager getGroupMemberWithMemberId:jid andConverseId:groupId];
+            GroupUserModel *jModel = [self getGroupUser:jid fromArr:groupUsers];
 
             if ([actUid isEqualToString:USERINFO.userID]) { //自己
                 systemMsg.text = [NSString stringWithFormat:@"你通过扫描\"%@\"分享的二维码加入了群聊",jModel.friend_nick];
@@ -545,7 +562,8 @@ static SocketManager *manager = nil;
                     //拼接我和被邀请人的姓名
                     NSMutableArray *bondNamesArr = [NSMutableArray array];
                     for (NSString *userId in bondingArr) {
-                        GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
+//                        GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
+                        GroupUserModel *userModel = [self getGroupUser:userId fromArr:groupUsers];
                         [bondNamesArr addObject:userModel.friend_nick];
                     }
                     NSString *bondName = [bondNamesArr componentsJoinedByString:@","];
@@ -559,7 +577,8 @@ static SocketManager *manager = nil;
                         systemMsg.text = [NSString stringWithFormat:@"%@邀请%@加入了群聊",actName,tbondName];
                         
                         //标记出席了当前群
-                        GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
+//                        GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
+                        GroupUserModel *usermodel = [self getGroupUser:USERINFO.userID fromArr:groupUsers];
                         usermodel.memberGroupState = NO;
                         [FMDBShareManager saveAllGroupMemberWithArray:@[usermodel] andGroupChatId:groupId];
                         
@@ -744,7 +763,7 @@ static SocketManager *manager = nil;
             GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             groupChatModel.myGroupName = USERINFO.username;
             [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId];
-            block(groupId);
+            block(groupChatModel.groupUserVos);
         }
     } failure:^(ErrorData *error) {
         
@@ -878,41 +897,35 @@ static SocketManager *manager = nil;
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
     
-    //先从数据库删除该条消息
-    
-    
-    //插入系统消息:"你撤回了一条消息"到数据库
-    LGMessage *systemMsg = [[LGMessage alloc] init];
-    systemMsg.text = @"你撤回了一条消息";
-    systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
-    systemMsg.fromUid = USERINFO.userID;
-    systemMsg.type = MessageTypeSystem;
-//    systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    systemMsg.msgid = message.msgid;
-    systemMsg.isGroup = message.isGroup;
-    systemMsg.timeStamp = [NSDate currentTimeStamp];
-    
-    
-    //更新数据库会话 （最后一条消息显示）
-    NSString *conversionId = nil;
-    if (systemMsg.isGroup) {
-        conversionId = systemMsg.toUidOrGroupId;
-    }else{
-        conversionId = systemMsg.fromUid;
-    }
-    [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-    NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];
-    NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",conversionId]];
-    [queue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:upDataStr];
-        
-    }];
-//    if (message.isGroup) {  //群消息和单聊消息 分开进行更新消息表操作(主要是会话列表展示)
-//        [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:message.toUidOrGroupId];
+//    //先从数据库删除该条消息
+//    
+//    
+//    //插入系统消息:"你撤回了一条消息"到数据库
+//    LGMessage *systemMsg = [[LGMessage alloc] init];
+//    systemMsg.text = @"你撤回了一条消息";
+//    systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
+//    systemMsg.fromUid = USERINFO.userID;
+//    systemMsg.type = MessageTypeSystem;
+//    systemMsg.msgid = message.msgid;
+//    systemMsg.isGroup = message.isGroup;
+//    systemMsg.timeStamp = [NSDate currentTimeStamp];
+//    
+//    
+//    //更新数据库会话 （最后一条消息显示）
+//    NSString *conversionId = nil;
+//    if (systemMsg.isGroup) {
+//        conversionId = systemMsg.toUidOrGroupId;
 //    }else{
-//        [FMDBShareManager saveMessage:systemMsg toConverseID:message.toUidOrGroupId];
+//        conversionId = systemMsg.fromUid;
 //    }
+//    [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
+//    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+//    NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];
+//    NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",conversionId]];
+//    [queue inDatabase:^(FMDatabase *db) {
+//        [db executeUpdate:upDataStr];
+//        
+//    }];
 }
 
 //建群
