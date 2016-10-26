@@ -1122,10 +1122,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
     [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:content andSmallImg:smallImg andBigImage:@"" andSource:@"" andAccount:collectionId success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:responseData.msg];
+            [LCProgressHUD showFailureText:@"暂不支持收藏此类型消息"];
             return ;
         }
-        
         [LCProgressHUD showSuccessText:@"收藏成功"];
     } failure:^(ErrorData *error) {
         NSLog(@"%@",error.msg);
