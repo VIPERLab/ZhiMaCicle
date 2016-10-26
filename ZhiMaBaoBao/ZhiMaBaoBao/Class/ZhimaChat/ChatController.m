@@ -1217,26 +1217,33 @@ static NSString *const reuseIdentifier = @"messageCell";
         systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
         systemMsg.fromUid = USERINFO.userID;
         systemMsg.type = MessageTypeSystem;
-        systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+//        systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+        systemMsg.msgid = message.msgid;
         systemMsg.isGroup = message.isGroup;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
         
         NSInteger num = indecPath.row+1;
 
         [self.messages insertObject:systemMsg atIndex:num];
-        
-//        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:num inSection:0];
-//        NSArray *indexPaths = @[indexpath];
-//        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-//        [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
         self.selectedIndexPath = indecPath;
-//        [self deleteAction:indecPath.row];
         
         [self.messages removeObjectAtIndex:self.selectedIndexPath.row];
-        //    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:self.selectedIndexPath,nil] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView reloadData];
 
+        [self.tableView reloadData];
+        
+        
+        //更新消息表中该条消息
+        [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
+        //如果是撤销的最后一条 更新会话列表最后一条消息显示
+        if (indecPath.row == self.messages.count - 1) {
+            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+            NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];
+            NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",systemMsg.toUidOrGroupId]];
+            [queue inDatabase:^(FMDatabase *db) {
+                [db executeUpdate:upDataStr];
+            }];
+        }
     });
 }
 
