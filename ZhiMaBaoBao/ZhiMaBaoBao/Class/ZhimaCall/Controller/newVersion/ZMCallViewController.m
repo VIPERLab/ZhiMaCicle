@@ -123,6 +123,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
     [headView addSubview:lineview];
     
     self.tableView.tableHeaderView = headView;
+    
 }
 
 #pragma mark - get data
