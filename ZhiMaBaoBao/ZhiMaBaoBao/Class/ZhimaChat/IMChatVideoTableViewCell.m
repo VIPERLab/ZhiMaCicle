@@ -158,7 +158,7 @@
     [_bubble addSubview:_holderIV];
     
     _playBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
-    [_playBtn setImage:[UIImage imageNamed:@"PK_Play"] forState:UIControlStateNormal];
+    [_playBtn setImage:[UIImage imageNamed:@"PK_PlayBtn"] forState:UIControlStateNormal];
     _playBtn.hidden = YES;
     [_playBtn addTarget:self action:@selector(btnAction_play) forControlEvents:UIControlEventTouchUpInside];
     [_bubble addSubview:_playBtn];
