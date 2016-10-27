@@ -174,9 +174,13 @@ static SocketManager *manager = nil;
         sendMsg.timeStamp = message.timeStamp;
         
         //拼接text (本地路径：text , 第一帧图片路径：holderImageUrlString , 视频下载路径：videoDownloadUrl , 是否存在本地：isDownLoad)
-        sendMsg.isDownLoad = NO;
         sendMsg.holderImageUrlString = message.holderImageUrlString;
         sendMsg.videoDownloadUrl = message.videoDownloadUrl;
+        sendMsg.isDownLoad = NO;
+        
+        //拼接完整的text
+        [sendMsg.text stringByAppendingFormat:@",%@,%@,%d",sendMsg.holderImageUrlString,sendMsg.videoDownloadUrl,sendMsg.isDownLoad];
+        
     }
     
     //根据网络状态-- 标记消息发送状态
@@ -260,6 +264,15 @@ static SocketManager *manager = nil;
             
             else if (message.type == MessageTypeImage){
 
+            }
+            
+            else if (message.type == MessageTypeVideo){
+                
+                NSArray *parmas = [message.text componentsSeparatedByString:@","];
+                message.text = parmas[0];
+                message.holderImageUrlString = parmas[1];
+                message.videoDownloadUrl = parmas[2];
+                message.isDownLoad = [parmas[3] boolValue];
             }
             
             //将消息插入数据库，并更新会话列表  (根据是否为群聊，插入不同的表)
