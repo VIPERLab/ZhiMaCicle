@@ -57,6 +57,8 @@
     UIImage* newImage = [self ct_imageFromImage:zmImage inRect:frame];
     _contentLayer.contents = (id)newImage.CGImage;
     
+//    _contentLayer.borderWidth = 1;
+//    _contentLayer.borderColor = [GRAYCOLOR CGColor];
 }
 
 // 以图片为中心获取一个最大的正方形
