@@ -360,19 +360,21 @@ static NSString *const reuseIdentifier = @"messageCell";
     self.keyboard.y = originY - shouldBeSubtractionHeight;
 
     NSString* unreadNumStr = self.numOfUnread>99 ? [NSString stringWithFormat:@"99+"] : [NSString stringWithFormat:@"%ld",self.numOfUnread];
+    unreadNumStr = [unreadNumStr stringByAppendingString:@"条未读消息"];
     self.unreadBtn = [[UIButton alloc]init];
     [self.unreadBtn setBackgroundImage:[UIImage imageNamed:@"unreadUp"] forState:UIControlStateNormal];
     [self.unreadBtn setTitle:unreadNumStr forState:UIControlStateNormal];
-
-    self.unreadBtn.titleLabel.textColor = WHITECOLOR;
+    [self.unreadBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+    self.unreadBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+    [self.unreadBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];
     [self.unreadBtn addTarget:self action:@selector(scrollToUnreadCell) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.unreadBtn];
 
     [self.unreadBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.right.equalTo(self.tableView.mas_right).offset(-10);
+        make.right.equalTo(self.tableView.mas_right).offset(0);
         make.top.equalTo(self.view.mas_top).offset(20+64);
-        make.width.mas_equalTo(41);
-        make.height.mas_equalTo(50);
+        make.width.mas_equalTo(125);
+        make.height.mas_equalTo(40);
     }];
     
     self.numOfNewUnread = 0;
@@ -414,7 +416,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     path = [path stringByAppendingString:[NSString stringWithFormat:@"-%@",uid]];
     
     self.audioName = [NSString stringWithFormat:@"/%@.amr",path];
-    NSLog(@"注册时候的时间 = %@",self.audioName);
     
     return path;
 }
@@ -627,6 +628,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 //判断cell是否在可视屏幕之内 (在屏幕的上方)
 - (BOOL)cheakUnreadCellIsin:(NSInteger)index
 {
+    if (index<0) {
+        return YES;
+    }
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     CGRect cellR = [self.tableView rectForRowAtIndexPath:indexPath];
     
@@ -693,7 +697,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
         case MessageTypeImage : {
 //            rowHeight = [IMMorePictureTableViewCell getHeightWithChat:ch TopText:time nickName:nil];
-            rowHeight = needShowTime ? 160+20 : 160;
+            rowHeight = needShowTime ? 140+20 : 140;
             
             break;
         }
