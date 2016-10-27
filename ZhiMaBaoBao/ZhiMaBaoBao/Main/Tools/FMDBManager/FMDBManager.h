@@ -253,7 +253,7 @@ typedef enum : NSUInteger {
  *
  *  @return 会话模型
  */
-- (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID andConverseType:(BOOL)conversetType;
+- (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID andConverseType:(NSInteger)conversetType;
 
 /**
  *  设置消息的未读数量为0

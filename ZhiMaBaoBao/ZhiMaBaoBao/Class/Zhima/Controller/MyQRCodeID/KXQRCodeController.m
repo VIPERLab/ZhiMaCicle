@@ -50,9 +50,14 @@
         }
         
         NSString *urlData = responseData.data;
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,urlData]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            
-        }];
+        if (urlData.length) {
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,urlData]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                
+            }];
+        } else {
+            [self creatQRCode];
+        }
+        
         
         
         

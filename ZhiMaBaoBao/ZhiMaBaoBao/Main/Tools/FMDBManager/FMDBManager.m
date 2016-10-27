@@ -1539,7 +1539,7 @@
  *
  *  @return 会话模型
  */
-- (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID andConverseType:(BOOL)conversetType{
+- (ConverseModel *)searchConverseWithConverseID:(NSString *)converseID andConverseType:(NSInteger)conversetType{
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     ConverseModel *model = [[ConverseModel alloc] init];
     [queue inDatabase:^(FMDatabase *db) {
@@ -2047,9 +2047,8 @@
     }];
     
     // 异步存储群组成员信息
-    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
-        [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
-    });
+    [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
+
     
     
     
@@ -2153,7 +2152,7 @@
  */
 - (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupChatId {
     NSLog(@"----开始插入群信息");
-    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
         FMDatabaseQueue *queuq = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
         for (GroupUserModel *model in array) {
             

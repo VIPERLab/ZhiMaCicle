@@ -428,7 +428,7 @@
         [[SocketManager shareInstance] connect];
     }
     
-    [JPUSHService setBadge:0];
+    [JPUSHService resetBadge];
     
     [self countculatedTime];
     //通知更新未读消息数
