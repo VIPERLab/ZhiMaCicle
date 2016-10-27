@@ -785,23 +785,16 @@ static SocketManager *manager = nil;
                 GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                 groupChatModel.myGroupName = USERINFO.username;
                 
-                //改为gcd异步存储
-                dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                    //新建一个群会话，插入数据库
-                    [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
-                    
-                    //保存群消息到数据库
-                    [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-                    
-                    //发送通知，刷新会话列表
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                        userInfo[@"message"] = message;
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
-                    });
-
-                });
+                //新建一个群会话，插入数据库
+                [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
                 
+                //保存群消息到数据库
+                [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+                
+                //发送通知，刷新会话列表
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                userInfo[@"message"] = message;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
             }
         } failure:^(ErrorData *error) {
             
@@ -809,8 +802,14 @@ static SocketManager *manager = nil;
     }else{
         //保存群消息到数据库
         [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+        
+        //发送通知，刷新会话列表
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        userInfo[@"message"] = message;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
     }
-    return YES;
+    //群消息直接在这里发通知，就不在收到新消息处发送通知了  所以返回no
+    return NO;
 }
 
 #pragma mark - 封装消息操作指令
