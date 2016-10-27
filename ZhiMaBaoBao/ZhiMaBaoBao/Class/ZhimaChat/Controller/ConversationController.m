@@ -48,8 +48,8 @@
 
 
 - (void)notification {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kRecieveNewMessage object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList) name:kSendMessageStateCall object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList:) name:kRecieveNewMessage object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList:) name:kSendMessageStateCall object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRecovery) name:K_NetworkRecoveryNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withoutNetwork) name:K_WithoutNetWorkNotification object:nil];
 }
@@ -68,16 +68,13 @@
 }
 
 #pragma mark - 从数据库加载会话列表
-- (void)getDataFormSqlist {
+- (void)getDataFormSqlist{
     
+    //用来删除拉黑好友的会话列表
     UserInfo *info = [UserInfo shareInstance];
     if (info.blackUserId) {
         // 删除该会话
         [FMDBShareManager deleteConverseWithConverseId:info.blackUserId];
-        
-        // 删除该好友
-//        [FMDBShareManager deleteUserMessageByUserID:info.blackUserId];
-        
         info.blackUserId = nil;
     }
     
@@ -113,7 +110,35 @@
 }
 
 //收到新消息-从数据库加载最新数据刷新列表
-- (void)refreshConversionList{
+- (void)refreshConversionList:(NSNotification *)notify{
+    LGMessage *recieveMsg = notify.userInfo[@"message"];
+    
+//    //刷新消息对应的会话
+//    //1.从数据取出最新的会话模型
+//    NSString *conversionId = nil;
+//    if (recieveMsg.isGroup) {
+//        conversionId = recieveMsg.toUidOrGroupId;
+//    }else{
+//        conversionId = recieveMsg.fromUid;
+//    }
+//    ConverseModel *conversion = [FMDBShareManager searchConverseWithConverseID:conversionId andConverseType:recieveMsg.isGroup];
+//    //2.根据需要更新的会话id,找到数据源数组对应的会话  删除旧的，将新的插入第一个
+//    for (int i = 0; i < self.dataArray.count; i ++) {
+//        ConverseModel *model = self.dataArray[i];
+//        if ([model.converseId isEqualToString:conversionId]) {
+//            [self.dataArray removeObjectAtIndex:i];
+//            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+//            [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//
+//            break;
+//        }
+//    }
+//    [self.dataArray insertObject:conversion atIndex:0];
+////    [_tableView reloadData];
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+
+    
     [self getDataFormSqlist];
 }
 

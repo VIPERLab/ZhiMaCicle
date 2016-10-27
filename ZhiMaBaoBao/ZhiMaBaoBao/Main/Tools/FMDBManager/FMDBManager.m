@@ -1287,18 +1287,16 @@
  *  删除数据库所有用户消息
  */
 - (void)deletedAllUserMessage {
-    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
-        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
-        NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"id >= 0"]];
-        [queue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:optionStr];
-            if (success) {
-                NSLog(@"删除成功");
-            } else {
-                NSLog(@"删除失败");
-            }
-        }];
-    });
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_User_Message_Table];
+    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"id >= 0"]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"删除成功");
+        } else {
+            NSLog(@"删除失败");
+        }
+    }];
 }
 
 #pragma mark - 新的好友相关
@@ -1908,44 +1906,37 @@
     return isSuccess;
 }
 
-
-
-
 /**
  *  根据会话ID删除消息
  *
  *  @param converseID 会话id
  */
 - (void)deleteMessageFormMessageTableByConverseID:(NSString *)converseID {
-    //异步删除
-    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
-        FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
-        NSString *option = [NSString stringWithFormat:@"converseId = %@",converseID];
-        NSString *detOpeartionStr = [FMDBShareManager deletedTableData:ZhiMa_Chat_Message_Table withOption:option];
-        [messageQueue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:detOpeartionStr];
-            if (success) {
-                NSLog(@"删除消息成功");
-            } else {
-                NSLog(@"删除消息失败");
-            }
-        }];
-        
-        //更新会话列表
-        FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-        NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = ' ', unReadCount = '0'"];
-        NSString *optionStr2 = [NSString stringWithFormat:@"converseId = '%@'",converseID];
-        NSString *converseOption = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:optionStr2];
-        [converseQueue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:converseOption];
-            if (success) {
-                NSLog(@"更新会话成功");
-            } else {
-                NSLog(@"更新会话失败");
-            }
-        }];
-    });
+    FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
+    NSString *option = [NSString stringWithFormat:@"converseId = %@",converseID];
+    NSString *detOpeartionStr = [FMDBShareManager deletedTableData:ZhiMa_Chat_Message_Table withOption:option];
+    [messageQueue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:detOpeartionStr];
+        if (success) {
+            NSLog(@"删除消息成功");
+        } else {
+            NSLog(@"删除消息失败");
+        }
+    }];
     
+    //更新会话列表
+    FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = ' ', unReadCount = '0'"];
+    NSString *optionStr2 = [NSString stringWithFormat:@"converseId = '%@'",converseID];
+    NSString *converseOption = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:optionStr2];
+    [converseQueue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:converseOption];
+        if (success) {
+            NSLog(@"更新会话成功");
+        } else {
+            NSLog(@"更新会话失败");
+        }
+    }];
 }
 
 /**
@@ -2048,9 +2039,6 @@
     
     // 异步存储群组成员信息
     [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
-
-    
-    
     
     // 更新会话
     ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:1];
