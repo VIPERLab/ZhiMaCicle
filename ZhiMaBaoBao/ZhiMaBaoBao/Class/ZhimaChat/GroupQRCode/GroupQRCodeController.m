@@ -42,6 +42,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc {
+    [[[SDWebImageManager sharedManager] imageCache] clearMemory];
+}
+
 - (void)requestQRCode {
     [LGNetWorking getGroupChatQRCodeWithSessionId:USERINFO.sessionId andGroupId:self.model.groupId success:^(ResponseData *responseData) {
         
@@ -51,7 +55,7 @@
         }
         
         NSString *QRCodeStr = responseData.data;
-        [self.QRCodeView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,QRCodeStr]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [self.QRCodeView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,QRCodeStr]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             
         }];
         

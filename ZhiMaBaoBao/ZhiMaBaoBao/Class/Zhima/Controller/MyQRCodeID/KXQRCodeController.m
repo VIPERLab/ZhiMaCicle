@@ -78,8 +78,6 @@
 #pragma mark - setupView
 - (void)setupView {
     self.view.backgroundColor = [UIColor colorFormHexRGB:@"2e3132"];
-    CGFloat scale = (ScreenWidth - 60) / ScreenWidth;
-    CGFloat heightScale = 460 / ScreenHeight;
     CGFloat centerHeigth = (ScreenWidth - 60) + 45 + 40;
     UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, centerHeigth)];
     centerView.backgroundColor = [UIColor whiteColor];
