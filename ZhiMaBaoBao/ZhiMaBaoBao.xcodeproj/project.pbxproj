@@ -615,8 +615,6 @@
 		D53E3DCD1DB704FC001C663B /* GPUImageFramebuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DAA1DB704FC001C663B /* GPUImageFramebuffer.m */; };
 		D53E3DCE1DB704FC001C663B /* GPUImageFramebufferCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DAC1DB704FC001C663B /* GPUImageFramebufferCache.m */; };
 		D53E3DCF1DB704FC001C663B /* PK_Camera_Turn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D53E3DAE1DB704FC001C663B /* PK_Camera_Turn@2x.png */; };
-		D53E3DD01DB704FC001C663B /* PK_Delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D53E3DAF1DB704FC001C663B /* PK_Delete@2x.png */; };
-		D53E3DD11DB704FC001C663B /* PK_Play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D53E3DB01DB704FC001C663B /* PK_Play@2x.png */; };
 		D53E3DD21DB704FC001C663B /* PKChatMessagePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DB41DB704FC001C663B /* PKChatMessagePlayerView.m */; };
 		D53E3DD31DB704FC001C663B /* PKColorConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DB61DB704FC001C663B /* PKColorConversion.m */; };
 		D53E3DD41DB704FC001C663B /* PKFullScreenPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DB81DB704FC001C663B /* PKFullScreenPlayerView.m */; };
@@ -1843,8 +1841,6 @@
 		D53E3DAB1DB704FC001C663B /* GPUImageFramebufferCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPUImageFramebufferCache.h; sourceTree = "<group>"; };
 		D53E3DAC1DB704FC001C663B /* GPUImageFramebufferCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPUImageFramebufferCache.m; sourceTree = "<group>"; };
 		D53E3DAE1DB704FC001C663B /* PK_Camera_Turn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PK_Camera_Turn@2x.png"; sourceTree = "<group>"; };
-		D53E3DAF1DB704FC001C663B /* PK_Delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PK_Delete@2x.png"; sourceTree = "<group>"; };
-		D53E3DB01DB704FC001C663B /* PK_Play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PK_Play@2x.png"; sourceTree = "<group>"; };
 		D53E3DB11DB704FC001C663B /* PKShortVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKShortVideo.h; sourceTree = "<group>"; };
 		D53E3DB31DB704FC001C663B /* PKChatMessagePlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKChatMessagePlayerView.h; sourceTree = "<group>"; };
 		D53E3DB41DB704FC001C663B /* PKChatMessagePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKChatMessagePlayerView.m; sourceTree = "<group>"; };
@@ -5045,8 +5041,6 @@
 			isa = PBXGroup;
 			children = (
 				D53E3DAE1DB704FC001C663B /* PK_Camera_Turn@2x.png */,
-				D53E3DAF1DB704FC001C663B /* PK_Delete@2x.png */,
-				D53E3DB01DB704FC001C663B /* PK_Play@2x.png */,
 			);
 			path = PKAsset;
 			sourceTree = "<group>";
@@ -5330,8 +5324,6 @@
 				316957861D91199100140126 /* dtmf-9.aif in Resources */,
 				319069E11D9CF18500D1D6D2 /* InfoContentCell.xib in Resources */,
 				310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */,
-				D53E3DD01DB704FC001C663B /* PK_Delete@2x.png in Resources */,
-				D53E3DD11DB704FC001C663B /* PK_Play@2x.png in Resources */,
 				D544F55F1DAF611000E73624 /* ZMCallViewCell.xib in Resources */,
 				316957821D91199100140126 /* dtmf-5.aif in Resources */,
 				319069B21D9BC09200D1D6D2 /* FriendsListCell.xib in Resources */,

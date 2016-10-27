@@ -31,6 +31,7 @@
         
         [self createCustomViews];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerError) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playVideo) name:UIApplicationWillEnterForegroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerError) name:kChatViewControllerPopOut object:nil];
 
     }
@@ -107,6 +108,10 @@
 
     }
     
+}
+
+- (void)playVideo
+{
 }
 
 - (void)playerError
