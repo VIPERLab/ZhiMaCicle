@@ -611,7 +611,6 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    message.holderImageUrlString = @"http://120.76.246.128/Public/Upload/2016-10-21/s_5809b85fd876f.png";
 //    [self.messages addObject:message];
 
-
     [self.tableView reloadData];
     // tableview 滑到底端
     if (self.tableView.contentSize.height > self.tableView.bounds.size.height-64) {
