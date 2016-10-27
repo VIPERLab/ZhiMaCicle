@@ -173,14 +173,13 @@ static SocketManager *manager = nil;
         sendMsg.isGroup = message.isGroup;
         sendMsg.timeStamp = message.timeStamp;
         
-        //拼接text (本地路径：text , 第一帧图片路径：holderImageUrlString , 视频下载路径：videoDownloadUrl , 是否存在本地：isDownLoad)
-        sendMsg.holderImageUrlString = message.holderImageUrlString;
-        sendMsg.videoDownloadUrl = message.videoDownloadUrl;
-        sendMsg.isDownLoad = NO;
+        //拼接text (本地路径：text , 第一帧图片路径：holderImageUrlString , 视频下载路径：videoDownloadUrl , 是否存在本地：isDownLoad 发送时设置为no)
+//        sendMsg.holderImageUrlString = message.holderImageUrlString;
+//        sendMsg.videoDownloadUrl = message.videoDownloadUrl;
+//        sendMsg.isDownLoad = NO;
         
         //拼接完整的text
-        [sendMsg.text stringByAppendingFormat:@",%@,%@,%d",sendMsg.holderImageUrlString,sendMsg.videoDownloadUrl,sendMsg.isDownLoad];
-        
+        sendMsg.text = [NSString stringWithFormat:@"%@,%@,%@,%d",message.text,message.holderImageUrlString,message.videoDownloadUrl,sendMsg.isDownLoad];
     }
     
     //根据网络状态-- 标记消息发送状态
