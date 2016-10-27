@@ -1677,6 +1677,8 @@
         converseModel.lastConverse = @"[图片]";
     }else if (message.type == MessageTypeAudio){
         converseModel.lastConverse = @"[语音]";
+    }else if (message.type == MessageTypeVideo){
+        converseModel.lastConverse = @"[视频]";
     }
     
     
@@ -1712,6 +1714,8 @@
             converseModel.lastConverse = @"[图片]";
         }else if (message.type == MessageTypeAudio){
             converseModel.lastConverse = @"[语音]";
+        }else if (message.type == MessageTypeVideo){
+            converseModel.lastConverse = @"[视频]";
         }
         
         NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseHead_photo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];
@@ -1786,6 +1790,8 @@
         converseModel.lastConverse = @"[图片]";
     }else if (message.type == MessageTypeAudio){
         converseModel.lastConverse = @"[语音]";
+    }else if (message.type == MessageTypeVideo){
+        converseModel.lastConverse = @"[视频]";
     }
     
     NSString *opeartionStr = [NSString string];
@@ -1820,6 +1826,8 @@
             converseModel.lastConverse = @"[图片]";
         }else if (message.type == MessageTypeAudio){
             converseModel.lastConverse = @"[语音]";
+        }else if (message.type == MessageTypeVideo){
+            converseModel.lastConverse = @"[视频]";
         }
         
         NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseHead_photo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];

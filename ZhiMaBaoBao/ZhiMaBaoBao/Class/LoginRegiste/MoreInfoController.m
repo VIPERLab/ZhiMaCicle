@@ -70,7 +70,6 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
     tableView.dataSource = self;
     [self.view addSubview:tableView];
     self.tableView = tableView;
-    
 }
 
 #pragma mark - tableView delegate
@@ -135,7 +134,7 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 40)];
     footer.backgroundColor = [UIColor clearColor];
     
-    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, DEVICEWITH - 14 - 80, 80, 40)];
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(DEVICEWITH - 14 - 80, 0, 80, 40)];
     [btn setTitle:@"跳过>>" forState:UIControlStateNormal];
     [btn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(jumpNext) forControlEvents:UIControlEventTouchUpInside];
