@@ -118,8 +118,10 @@
         self.isMuted = YES;
         self.player.muted = YES;
     }
+
     [self.player play];
 }
+
 
 #pragma mark - Error Handle
 
