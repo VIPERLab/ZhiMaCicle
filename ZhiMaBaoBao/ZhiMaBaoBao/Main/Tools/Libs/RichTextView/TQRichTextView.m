@@ -79,7 +79,6 @@
 check:  lineRange = CFRangeMake(lineRange.location,testLineLength);
         CTLineRef line = CTTypesetterCreateLine(typeSetter,lineRange);
         CFArrayRef runs = CTLineGetGlyphRuns(line);
-        
         //边界检查
         CTRunRef lastRun = CFArrayGetValueAtIndex(runs, CFArrayGetCount(runs) - 1);
         CGFloat lastRunAscent;
@@ -93,7 +92,6 @@ check:  lineRange = CFRangeMake(lineRange.location,testLineLength);
             CFRelease(line);
 goto check;
         }
-        
         //绘制普通行元素
         drawLineX = CTLineGetPenOffsetForFlush(line,0,self.bounds.size.width);
         CGContextSetTextPosition(context,drawLineX,drawLineY);
@@ -134,6 +132,10 @@ goto check;
         }
 
         CFRelease(line);
+        
+        if (lineRange.location==0 && lineRange.length==0) {// 防止无限循环
+            drawFlag = NO;
+        }
         
         if(lineRange.location + lineRange.length >= self.attString.length)
         {
@@ -306,12 +308,15 @@ goto check;
     {
         if(realWidth)
         {
+            width = width==1? 21: width;
             *realWidth=width;
         }
     }
     
     CFRelease(typeSetter);
     return drawLineY;
+    
+    
 }
 
 

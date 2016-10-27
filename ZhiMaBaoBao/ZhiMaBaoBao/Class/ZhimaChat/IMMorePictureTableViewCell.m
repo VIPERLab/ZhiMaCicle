@@ -90,7 +90,6 @@
     [self imageResizeBubbleView:_picturesView.frame.size];
     [self repositionContentViewTypePic:_picturesView];
     
-    
 //    ZMImageView *shapedImageView = [[ZMImageView alloc] initWithFrame:_picturesView.bounds];
 //    shapedImageView.image =_picturesView.image;
 //    [self addSubview:shapedImageView];
