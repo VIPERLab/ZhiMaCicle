@@ -382,6 +382,7 @@
 		04EA7E311D912872005E5425 /* ZXMultiFormatReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7D501D912872005E5425 /* ZXMultiFormatReader.m */; };
 		04EA7E321D912872005E5425 /* ZXMultiFormatWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7D521D912872005E5425 /* ZXMultiFormatWriter.m */; };
 		04EA7E331D912872005E5425 /* UIImageView+CornerRadius.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA7D561D912872005E5425 /* UIImageView+CornerRadius.m */; };
+		04EAE2C71DC1EA3C004EBF00 /* SDTimeLineRefreshFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EAE2C61DC1EA3C004EBF00 /* SDTimeLineRefreshFooter.m */; };
 		04F5760C1D922125002A6471 /* ChangeUerNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F5760B1D922125002A6471 /* ChangeUerNameController.m */; };
 		04F576101D922533002A6471 /* ModifySignController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F5760F1D922533002A6471 /* ModifySignController.m */; };
 		04F5774E1D9277E8002A6471 /* BaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F5774D1D9277E8002A6471 /* BaseTableViewController.m */; };
@@ -401,7 +402,6 @@
 		04F57AB61D9280BD002A6471 /* KXDiscoverNewMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579FB1D9280BD002A6471 /* KXDiscoverNewMessageView.m */; };
 		04F57AB71D9280BD002A6471 /* SDTimeLineCellOperationMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F579FE1D9280BD002A6471 /* SDTimeLineCellOperationMenu.m */; };
 		04F57AB81D9280BD002A6471 /* SDWeiXinPhotoContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A011D9280BD002A6471 /* SDWeiXinPhotoContainerView.m */; };
-		04F57AB91D9280BD002A6471 /* SDTimeLineRefreshFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A041D9280BD002A6471 /* SDTimeLineRefreshFooter.m */; };
 		04F57AE41D9280BD002A6471 /* SDBrowserImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A6A1D9280BD002A6471 /* SDBrowserImageView.m */; };
 		04F57AE51D9280BD002A6471 /* SDPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A6C1D9280BD002A6471 /* SDPhotoBrowser.m */; };
 		04F57AE61D9280BD002A6471 /* SDWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A6F1D9280BD002A6471 /* SDWaitingView.m */; };
@@ -1418,6 +1418,8 @@
 		04EA7D521D912872005E5425 /* ZXMultiFormatWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiFormatWriter.m; sourceTree = "<group>"; };
 		04EA7D551D912872005E5425 /* UIImageView+CornerRadius.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+CornerRadius.h"; sourceTree = "<group>"; };
 		04EA7D561D912872005E5425 /* UIImageView+CornerRadius.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+CornerRadius.m"; sourceTree = "<group>"; };
+		04EAE2C51DC1EA3C004EBF00 /* SDTimeLineRefreshFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDTimeLineRefreshFooter.h; sourceTree = "<group>"; };
+		04EAE2C61DC1EA3C004EBF00 /* SDTimeLineRefreshFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDTimeLineRefreshFooter.m; sourceTree = "<group>"; };
 		04F5760A1D922125002A6471 /* ChangeUerNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeUerNameController.h; sourceTree = "<group>"; };
 		04F5760B1D922125002A6471 /* ChangeUerNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeUerNameController.m; sourceTree = "<group>"; };
 		04F5760E1D922533002A6471 /* ModifySignController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifySignController.h; sourceTree = "<group>"; };
@@ -1454,8 +1456,6 @@
 		04F579FE1D9280BD002A6471 /* SDTimeLineCellOperationMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDTimeLineCellOperationMenu.m; sourceTree = "<group>"; };
 		04F57A001D9280BD002A6471 /* SDWeiXinPhotoContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWeiXinPhotoContainerView.h; sourceTree = "<group>"; };
 		04F57A011D9280BD002A6471 /* SDWeiXinPhotoContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDWeiXinPhotoContainerView.m; sourceTree = "<group>"; };
-		04F57A031D9280BD002A6471 /* SDTimeLineRefreshFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDTimeLineRefreshFooter.h; sourceTree = "<group>"; };
-		04F57A041D9280BD002A6471 /* SDTimeLineRefreshFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDTimeLineRefreshFooter.m; sourceTree = "<group>"; };
 		04F57A391D9280BD002A6471 /* GlobalDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalDefines.h; sourceTree = "<group>"; };
 		04F57A691D9280BD002A6471 /* SDBrowserImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBrowserImageView.h; sourceTree = "<group>"; };
 		04F57A6A1D9280BD002A6471 /* SDBrowserImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBrowserImageView.m; sourceTree = "<group>"; };
@@ -2134,6 +2134,8 @@
 		043510B91DBEF47F0031A895 /* Refresh */ = {
 			isa = PBXGroup;
 			children = (
+				04EAE2C51DC1EA3C004EBF00 /* SDTimeLineRefreshFooter.h */,
+				04EAE2C61DC1EA3C004EBF00 /* SDTimeLineRefreshFooter.m */,
 				043510BA1DBEF47F0031A895 /* SDBaseRefreshView.h */,
 				043510BB1DBEF47F0031A895 /* SDBaseRefreshView.m */,
 				043510BC1DBEF47F0031A895 /* SDTimeLineRefreshHeader.h */,
@@ -3720,7 +3722,6 @@
 				043510B91DBEF47F0031A895 /* Refresh */,
 				04F579FC1D9280BD002A6471 /* OperationMenu */,
 				04F579FF1D9280BD002A6471 /* PhotoContainer */,
-				04F57A021D9280BD002A6471 /* TimeLineRefreshFooter */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3768,15 +3769,6 @@
 				04F57A011D9280BD002A6471 /* SDWeiXinPhotoContainerView.m */,
 			);
 			path = PhotoContainer;
-			sourceTree = "<group>";
-		};
-		04F57A021D9280BD002A6471 /* TimeLineRefreshFooter */ = {
-			isa = PBXGroup;
-			children = (
-				04F57A031D9280BD002A6471 /* SDTimeLineRefreshFooter.h */,
-				04F57A041D9280BD002A6471 /* SDTimeLineRefreshFooter.m */,
-			);
-			path = TimeLineRefreshFooter;
 			sourceTree = "<group>";
 		};
 		04F57A381D9280BD002A6471 /* GloabalDefines */ = {
@@ -5666,6 +5658,7 @@
 				D53E3DCE1DB704FC001C663B /* GPUImageFramebufferCache.m in Sources */,
 				04EA7B171D9125C5005E5425 /* KXLocationCell.m in Sources */,
 				040FE2741DA7763100EF435F /* ZhiMaCollectionCell.m in Sources */,
+				04EAE2C71DC1EA3C004EBF00 /* SDTimeLineRefreshFooter.m in Sources */,
 				04EA7DC51D912872005E5425 /* ZXByQuadrantReader.m in Sources */,
 				04EA7D951D912872005E5425 /* ZXByteArray.m in Sources */,
 				04F57AB21D9280BD002A6471 /* SDTimeLineTableViewController.m in Sources */,
@@ -5731,7 +5724,6 @@
 				04EA7DDE1D912872005E5425 /* ZXAbstractRSSReader.m in Sources */,
 				04EA7DDF1D912872005E5425 /* ZXRSS14Reader.m in Sources */,
 				04EA798C1D8FBCF3005E5425 /* KXBlackListCell.m in Sources */,
-				04F57AB91D9280BD002A6471 /* SDTimeLineRefreshFooter.m in Sources */,
 				04EA7AC81D910F89005E5425 /* DNPhotoBrowser.m in Sources */,
 				04F57AB41D9280BD002A6471 /* SDTimeLineCellCommentView.m in Sources */,
 				04EA798A1D8FBCF3005E5425 /* LGBlackListViewController.m in Sources */,

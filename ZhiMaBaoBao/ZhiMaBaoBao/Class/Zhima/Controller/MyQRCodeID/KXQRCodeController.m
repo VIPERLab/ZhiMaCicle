@@ -36,6 +36,11 @@
     [self requestMyQRCode];
 }
 
+
+- (void)dealloc {
+    [[[SDWebImageManager sharedManager] imageCache] clearMemory];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -51,7 +56,7 @@
         
         NSString *urlData = responseData.data;
         if (urlData.length) {
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,urlData]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,urlData]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 
             }];
         } else {

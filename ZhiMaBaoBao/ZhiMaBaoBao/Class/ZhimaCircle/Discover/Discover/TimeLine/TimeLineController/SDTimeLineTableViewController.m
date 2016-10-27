@@ -13,8 +13,8 @@
 //#import "MJRefresh.h"
 
 #import "SDTimeLineTableHeaderView.h"
-#import "SDTimeLineRefreshHeader.h"
-#import "SDTimeLineRefreshFooter.h"
+//#import "SDTimeLineRefreshHeader.h"
+//#import "SDTimeLineRefreshFooter.h"
 #import "SDTimeLineCell.h"
 #import "SDTimeLineCellModel.h"
 
@@ -90,8 +90,8 @@
 {
     CGFloat _lastScrollViewOffsetY;
     CGFloat _totalKeybordHeight;
-    SDTimeLineRefreshHeader * _refreshHeader;
-    SDTimeLineRefreshFooter *_refreshFooter;
+//    SDTimeLineRefreshHeader * _refreshHeader;
+//    SDTimeLineRefreshFooter *_refreshFooter;
     KXCopyView *_copyView;
 }
 
@@ -110,36 +110,36 @@
 - (void)viewDidAppear:(BOOL)animated {
     [self setupKeyBoard];
     self.tipsNewMessage.show = YES;
-    __weak typeof(self) weakSelf = self;
-    if (!_refreshHeader.superview) {
-        
-        _refreshHeader = [SDTimeLineRefreshHeader refreshHeaderWithCenter:CGPointMake(40, 45)];
-        _refreshHeader.scrollView = self.tableView;
-        [_refreshHeader setRefreshingBlock:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [weakSelf setupNewData];
-            });
-        }];
-        [self.tableView.superview addSubview:_refreshHeader];
-    } else {
-        [self.tableView.superview bringSubviewToFront:_refreshHeader];
-    }
-    
-    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
-    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
-        _refreshHeader.refreshState = SDWXRefreshViewStateRefreshing;
-    } else {
-        _refreshHeader.refreshState = SDWXRefreshViewStateNormal;
-    }
-    
-    
-    // 上拉加载
-    _refreshFooter = [SDTimeLineRefreshFooter refreshFooterWithRefreshingText:@"正在加载数据..."];
-    [_refreshFooter addToScrollView:self.tableView refreshOpration:^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf loadMoreData];
-        });
-    }];
+//    __weak typeof(self) weakSelf = self;
+//    if (!_refreshHeader.superview) {
+//        
+//        _refreshHeader = [SDTimeLineRefreshHeader refreshHeaderWithCenter:CGPointMake(40, 45)];
+//        _refreshHeader.scrollView = self.tableView;
+//        [_refreshHeader setRefreshingBlock:^{
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                [weakSelf setupNewData];
+//            });
+//        }];
+//        [self.tableView.superview addSubview:_refreshHeader];
+//    } else {
+//        [self.tableView.superview bringSubviewToFront:_refreshHeader];
+//    }
+//    
+//    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
+//    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
+//        _refreshHeader.refreshState = SDWXRefreshViewStateRefreshing;
+//    } else {
+//        _refreshHeader.refreshState = SDWXRefreshViewStateNormal;
+//    }
+//
+//    
+//    // 上拉加载
+//    _refreshFooter = [SDTimeLineRefreshFooter refreshFooterWithRefreshingText:@"正在加载数据..."];
+//    [_refreshFooter addToScrollView:self.tableView refreshOpration:^{
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [weakSelf loadMoreData];
+//        });
+//    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -149,8 +149,8 @@
 }
 
 - (void)dealloc {
-    [_refreshHeader removeFromSuperview];
-    [_refreshFooter removeFromSuperview];
+//    [_refreshHeader removeFromSuperview];
+//    [_refreshFooter removeFromSuperview];
     
     [self.chatKeyBoard removeFromSuperview];
     _chatKeyBoard = nil;
@@ -223,18 +223,35 @@
     
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
     new.block = ^() {
-        _refreshHeader.refreshState = SDWXRefreshViewStateRefreshing;
+//        _refreshHeader.refreshState = SDWXRefreshViewStateRefreshing;
+        [_tableView.mj_header beginRefreshing];
     };
     [self.navigationController pushViewController:new animated:YES];
     
 }
 
 #pragma mark - 设置下拉和上啦刷新控件
+- (void)setupUpHeaderAndFooter {
+    _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self setupNewData];
+    }];
+    
+    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
+    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
+        [_tableView.mj_header beginRefreshing];
+    }
+    
+    _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [self loadMoreData];
+    }];
+    
+}
+
 //下拉刷新
 - (void)setupNewData {
     //加载未读消息数
     __weak typeof(self) weakSelf = self;
-    __weak typeof(_refreshHeader) weakHeader = _refreshHeader;
+//    __weak typeof(_refreshHeader) weakHeader = _refreshHeader;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
     //下拉页数置1
@@ -244,14 +261,11 @@
     NSString *userID = USERINFO.userID;
     
     [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
-        if (responseData == nil || responseData.data == nil) {
-            return ;
-        }
-        if (responseData.code != 0) {
-            [weakHeader endRefreshing];
+        [_tableView.mj_header endRefreshing];
+        
+        if (responseData.code != 0 || responseData == nil || responseData.data == nil) {
             return;
         }
-        [weakHeader endRefreshing];
         
         [weakSelf.dataArray removeAllObjects];
         
@@ -276,7 +290,7 @@
         [self.tableView reloadData];
         
     } failure:^(ErrorData *error) {
-        [weakHeader endRefreshing];
+        [_tableView.mj_header endRefreshing];
     }];
 }
 
@@ -288,18 +302,23 @@
     NSString *sectionID = USERINFO.sessionId;
     NSString *userID = USERINFO.userID;
     __weak typeof(self) weakSelf = self;
-    __weak typeof(_refreshFooter) weakRefreshFooter = _refreshFooter;
+    
     [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
-        [weakRefreshFooter endRefreshing];
+        
         if (responseData.code != 0) {
             // 失败则展示数据库中下一页的数据  异步获取下一页数据
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 //存数据到朋友圈表
                 NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
                 
-                if (newDataArray.count != 0) {
+                if (newDataArray.count == 0) {
+                    [_tableView.mj_footer endRefreshingWithNoMoreData];
+                    return ;
+                } else {
                     [weakSelf.dataArray addObjectsFromArray:newDataArray];
+                    [_tableView.mj_footer endRefreshing];
                 }
+                
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf.tableView reloadData];
@@ -310,18 +329,21 @@
             return;
         }
         
-        
+        [_tableView.mj_footer endRefreshing];
+        //请求成功的时候
         NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:NO];
         
         if (dataArray.count) {
             [weakSelf.dataArray addObjectsFromArray:dataArray];
+        } else {
+            [_tableView.mj_footer endRefreshingWithNoMoreData];
+            return ;
         }
         
         // 异步 存数据 到朋友圈数据库
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             //存数据到朋友圈表
             [FMDBShareManager saveCircleDataWithDataArray:dataArray];
-        
         });
         
         [self.tableView reloadData];
@@ -330,7 +352,7 @@
     } failure:^(ErrorData *error) {
         
         // 失败则展示数据库中下一页的数据
-        [weakRefreshFooter endRefreshing];
+        [_tableView.mj_footer endRefreshing];
         // 失败则展示数据库中下一页的数据  异步获取下一页数据
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             //存数据到朋友圈表
@@ -338,16 +360,12 @@
             
             if (newDataArray.count != 0) {
                 [weakSelf.dataArray addObjectsFromArray:newDataArray];
-                [weakRefreshFooter endRefreshing];
-            }else{
-                [weakRefreshFooter endRefreshing];
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.tableView reloadData];
                 [weakSelf.tableView reloadDataWithExistedHeightCache];
             });
-        
             
         });
 
@@ -382,7 +400,7 @@
         //返回主线程更新ui
         dispatch_async(dispatch_get_main_queue(), ^{
             // 获取所有朋友圈的数据
-            
+            [self setupUpHeaderAndFooter];
             [self.tableView reloadDataWithExistedHeightCache];
             [self.tableView reloadData];
         });
@@ -392,6 +410,9 @@
     
     
 }
+
+
+
 
 
 

@@ -123,7 +123,7 @@
         //保留长按手势
 //        UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewDidClick:)];
 //        [imageView addGestureRecognizer:gesture];
-        [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.img_url]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+        [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.img_url]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageLowPriority];
         
         imageView.frame = CGRectMake(columnIndex * (itemW + margin), rowIndex * (itemH + margin), itemW, itemH);
     }
