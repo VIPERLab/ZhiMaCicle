@@ -179,6 +179,7 @@
 }
 
 - (void)setupView {
+    [self setCustomTitle:@""];
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;

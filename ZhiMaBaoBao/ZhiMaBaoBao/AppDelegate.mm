@@ -87,9 +87,6 @@
         NSLog(@"manager start failed!");
     }
     
-    
-    
-    
     //创建数据库表
     if (USERINFO.hasLogin) {
         [self creatMySQL];
@@ -425,8 +422,8 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    UserInfo *info = [UserInfo shareInstance];
-    if (info) {
+    UserInfo *info = [UserInfo read];
+    if (info.hasLogin) {
         // 开启sorket
         [[SocketManager shareInstance] connect];
     }

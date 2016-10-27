@@ -16,6 +16,7 @@
 #import "ConversationController.h"
 #import "GroupChatListController.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "ConverseModel.h"
 
 
 @interface FriendsController ()<UITableViewDelegate,UITableViewDataSource>
@@ -91,17 +92,39 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         [FMDBShareManager deletedAllUserMessage];
         [FMDBShareManager saveUserMessageWithMessageArray:self.friends];
         
-        
-//        //更新数据库，然后刷新列表
-//        if ([FMDBShareManager saveUserMessageWithMessageArray:self.friends]) {
-//            NSLog(@"好友列表插入数据库成功");
-//            [self friendsListSort];
-//        }else{
-//            NSLog(@"好友列表插入数据库成功");
-//        }
+        //更新会话表用户头像和昵称
+        NSArray *allConversions = [FMDBShareManager getChatConverseDataInArray];
+        //1.取出所有单聊的会话
+        NSMutableArray *singleConversions = [NSMutableArray array];
+        for (ConverseModel *model in allConversions) {
+            if (!model.converseType) {
+                [singleConversions addObject:model];
+            }
+        }
+        //2.更新单聊所有单聊会话的用户头像和昵称
+        for (ConverseModel *model in singleConversions) {
+            ZhiMaFriendModel *mFriend = nil;
+            //遍历好友数组，取出对应id的好友模型
+            for (ZhiMaFriendModel *friend in self.friends) {
+                if ([model.converseId isEqualToString:friend.user_Id]) {
+                    mFriend = friend;
+                    break;
+                }
+            }
+            
+            //更新数据库会话表
+            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+            NSString *optionStr1 = [NSString stringWithFormat:@"converseHead_photo = '%@',converseName = '%@'",mFriend.user_Head_photo,mFriend.displayName];
+            NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",model.converseId]];
+            [queue inDatabase:^(FMDatabase *db) {
+                [db executeUpdate:upDataStr];
+            }];
+            
+        }
+
         
     } failure:^(ErrorData *error) {
-//        [LCProgressHUD showFailureText:error.msg];
+
     }];
 }
 
