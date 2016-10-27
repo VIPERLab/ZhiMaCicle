@@ -1367,6 +1367,21 @@
     }
 }
 
+//根据好友id删除新的好友
+- (void)deleteNewFriendByUseid:(NSString *)userId{
+    //删除朋友圈数据库该条记录
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_NewFriend_Message_Table];
+    NSString *operation = [FMDBShareManager deletedTableData:ZhiMa_NewFriend_Message_Table withOption:[NSString stringWithFormat:@"user_Id = %@",userId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:operation];
+        if (success) {
+            NSLog(@"删除新的好友成功");
+        } else {
+            NSLog(@"删除新的好友失败");
+        }
+    }];
+}
+
 /**
  *  更新新的好友模型
  *

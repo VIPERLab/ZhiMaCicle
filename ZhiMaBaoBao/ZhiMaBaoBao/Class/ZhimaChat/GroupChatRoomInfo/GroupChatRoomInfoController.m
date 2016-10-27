@@ -69,12 +69,14 @@
 
 // 拉取网络上最新的数据
 - (void)dataRequst {
-    
+    [LCProgressHUD showLoadingText:@"请稍等..."];
     [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.converseId success:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:responseData.msg];
         }
+        
+        [LCProgressHUD hide];
         
         //生成群聊数据模型
         [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
