@@ -1436,8 +1436,6 @@
                 NSLog(@"插入会话失败");
             }
         }];
-        
-        
     }
 }
 
@@ -2036,7 +2034,7 @@
         opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMessage_Table];
     }
     
-    //#define GroupChat_MessageFields_name @"groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName"
+    
     // 创建/更新 群信息表
     [queue inDatabase:^(FMDatabase *db) {
         BOOL success = [db executeUpdate:opeartionStr,model.groupId,model.groupName,model.notice,@(model.topChat),@(model.disturb),@(model.saveToMailList),model.myGroupName,@(model.saveToMailList),model.groupAvtar];
@@ -2069,7 +2067,7 @@
         converseModel.lastConverse = @" ";
 
     }
-        [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel]];
+    [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel]];
     return isSuccess;
 }
 

@@ -64,7 +64,7 @@
     
     
     UIButton *subBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    subBtn.frame = CGRectMake(CGRectGetMinX(textView.frame), CGRectGetMaxY(customView.frame) + 18, CGRectGetWidth(customView.frame), 50);
+    subBtn.frame = CGRectMake(CGRectGetMinX(customView.frame), CGRectGetMaxY(customView.frame) + 18, CGRectGetWidth(customView.frame), 50);
     [subBtn setTitle:@"提交" forState:UIControlStateNormal];
     [subBtn setBackgroundColor:THEMECOLOR];
     subBtn.layer.masksToBounds = YES;

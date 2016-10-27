@@ -32,9 +32,6 @@
 #import "MLLinkLabel.h"
 #import "UIColor+My.h"
 #import "KXCodingManager.h"
-#import "TQRichTextView.h"
-#import "TQRichTextEmojiRun.h"
-#import "FaceThemeModel.h"
 
 
 @interface SDTimeLineCellCommentView () <MLLinkLabelDelegate,UIAlertViewDelegate>
@@ -351,26 +348,6 @@
         [attString setAttributes:@{NSForegroundColorAttributeName : highLightColor,NSLinkAttributeName : model.reply_id, NSFontAttributeName : [UIFont boldSystemFontOfSize:14]} range:[text rangeOfString:model.reply_friend_nick]];
     }
     
-    
-    //表情处理
-//    NSString *result = @"";
-//    NSMutableArray *richTextRunsArray = [NSMutableArray array];
-//    result = [TQRichTextEmojiRun analyzeText:model.comment runsArray:&richTextRunsArray];
-//    
-//    //文本处理
-//    for (TQRichTextBaseRun *textRun in richTextRunsArray)
-//    {
-//        [textRun replaceTextWithAttributedString:attString];
-//    }
-    
-//    CGFloat realContentViewHeight  = 0;
-//    realContentViewHeight = [TQRichTextView getRechTextViewHeightWithText:[attString string]
-//                                                                viewWidth:DEFAULT_CHAT_MESSAGE_MAX_WIDTH
-//                                                                     font:[UIFont systemFontOfSize:DEFAULT_CHAT_FONT_SIZE]
-//                                                              lineSpacing:1.5
-//                                                                realWidth:&realWidth];
-    
-    
     return attString;
 }
 
@@ -556,30 +533,6 @@
     
     return NO;
 }
-
-
-+ (NSArray *)emojiStringArray
-{
-    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"face" ofType:@"plist"];
-    NSDictionary *faceDic = [NSDictionary dictionaryWithContentsOfFile:plistPath];
-    NSArray *allkeys = faceDic.allKeys;
-    
-    //    FaceThemeModel *themeM = [[FaceThemeModel alloc] init];
-    
-    NSMutableArray *modelsArr = [NSMutableArray array];
-    
-    for (int i = 0; i < allkeys.count; ++i) {
-        NSString *name = allkeys[i];
-        FaceModel *fm = [[FaceModel alloc] init];
-        fm.faceTitle = name;
-        //        fm.faceIcon = [faceDic objectForKey:name];
-        [modelsArr addObject:fm.faceTitle];
-    }
-    
-    
-    return modelsArr;//[NSArray arrayWithObjects:@"[smile]",@"[cry]",nil];
-}
-
 
 
 - (void)dealloc {

@@ -50,6 +50,7 @@
     
     _contentLabel = [TQRichTextView new];
     _contentLabel.backgroundColor = [UIColor clearColor];
+    _contentLabel.font = [UIFont systemFontOfSize:15];
     _contentLabel.textColor = [UIColor blackColor];
     _contentLabel.lineSpacing = 1.5;
     [self addSubview:_contentLabel];
