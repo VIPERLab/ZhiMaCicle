@@ -31,7 +31,7 @@
         
         [self createCustomViews];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerError) name:UIApplicationDidEnterBackgroundNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playVideo) name:UIApplicationWillEnterForegroundNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playVideo) name:UIApplicationWillEnterForegroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerError) name:kChatViewControllerPopOut object:nil];
 
     }
@@ -45,6 +45,7 @@
     [self.playBtn removeFromSuperview];
     [self.progressView removeFromSuperview];
     [self.holderIV removeFromSuperview];
+    [_sendFailBtn removeFromSuperview];
     [self createCustomViews];
 }
 
@@ -90,11 +91,12 @@
     self.playBtn.center = self.playView.center;
     self.progressView.center = self.playView.center;
     self.holderIV.frame = self.playView.frame;
+    self.sendFailBtn.center = self.playView.center;
     
     // 是否已下载 已下载就直接播放
     if (_isDownload) {
         self.holderIV.hidden = YES;
-        self.playBtn.hidden = YES;
+        self.playBtn.hidden = NO;
         self.playView.videoPath = [NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.text];
 //        [self.playView play];
         
@@ -105,7 +107,7 @@
             self.playBtn.hidden = NO;
         }
         self.holderIV.hidden = NO;
-
+        
     }
     
 }
@@ -117,7 +119,7 @@
 - (void)playerError
 {
     NSLog(@"暂停了");
-    if (self.playBtn.hidden) {
+    if (self.playBtn.hidden && self.isDownload) {
         self.playBtn.hidden = NO;
     }
     
@@ -164,8 +166,14 @@
     [_bubble addSubview:_playBtn];
 
     _progressView = [[HKPieChartView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
-
     [_bubble addSubview:_progressView];
+    
+    _sendFailBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
+    [_sendFailBtn setImage:[UIImage imageNamed:@"sendFail"] forState:UIControlStateNormal];
+    [_sendFailBtn addTarget:self action:@selector(reloadViewAction) forControlEvents:UIControlEventTouchUpInside];
+    _sendFailBtn.hidden = YES;
+    [_bubble addSubview:_sendFailBtn];
+    
     
     self.lastProgress = 0.0;
     
@@ -186,6 +194,25 @@
             [self.VDelegate goToDownloadVideo:self.indexPath];
         }
     }
+}
+
+- (void)reloadViewAction
+{
+    if (self.isMe) {
+        if ([self.VDelegate respondsToSelector:@selector(reloadVideo:)]) {
+            self.sendFailBtn.hidden = YES;
+            self.progressView.hidden = NO;
+            [self.VDelegate reloadVideo:self.indexPath];
+        }
+    }else{
+        
+        if ([self.VDelegate respondsToSelector:@selector(goToDownloadVideo:)]) {
+            self.sendFailBtn.hidden = YES;
+            self.progressView.hidden = NO;
+            [self.VDelegate goToDownloadVideo:self.indexPath];
+        }
+    }
+    
 }
 
 - (void)setProgressWithContent:(CGFloat)progress

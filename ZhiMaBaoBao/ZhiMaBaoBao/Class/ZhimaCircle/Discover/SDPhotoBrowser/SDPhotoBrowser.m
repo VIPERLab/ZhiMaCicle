@@ -238,8 +238,8 @@
         if (self.isChat) {
 //            tempView.frame = CGRectMake(ScreenWidth/2, ScreenHeight/2, 0, 0);
             
-            tempView.frameSize = CGSizeMake(tempView.frameSize.width*1.5, tempView.frameSize.height*1.5);
-            tempView.center = self.center;
+//            tempView.frameSize = CGSizeMake(tempView.frameSize.width*1.5, tempView.frameSize.height*1.5);
+//            tempView.center = self.center;
             tempView.alpha = 0;
 
         }else{

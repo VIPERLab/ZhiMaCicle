@@ -49,7 +49,7 @@
         __weak typeof(self)weakSelf = self;
         [asset loadValuesAsynchronouslyForKeys:@[@"playable"] completionHandler:^{
             dispatch_async( dispatch_get_main_queue(), ^{
-                [weakSelf prepareToPlayAsset:asset isMuted:NO];
+                [weakSelf prepareToPlayAsset:asset isMuted:NO play:YES];
             });
         }];
     }
@@ -82,7 +82,7 @@
     __weak typeof(self)weakSelf = self;
     [asset loadValuesAsynchronouslyForKeys:@[@"playable"] completionHandler:^{
         dispatch_async( dispatch_get_main_queue(), ^{
-            [weakSelf prepareToPlayAsset:asset isMuted:YES];
+            [weakSelf prepareToPlayAsset:asset isMuted:YES play:NO];
         });
     }];
 }
@@ -90,7 +90,7 @@
 
 #pragma mark Prepare to play asset, URL
 
-- (void)prepareToPlayAsset:(AVAsset *)asset isMuted:(BOOL)isMuted {
+- (void)prepareToPlayAsset:(AVAsset *)asset isMuted:(BOOL)isMuted play:(BOOL)play{
     NSError *error = nil;
     AVKeyValueStatus keyStatus = [asset statusOfValueForKey:@"playable" error:&error];
     if (keyStatus == AVKeyValueStatusFailed) {
@@ -119,7 +119,10 @@
         self.player.muted = YES;
     }
 
-    [self.player play];
+    if (play) {
+        [self.player play];
+
+    }
 }
 
 
@@ -129,7 +132,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Video cannot be played" message:@"Video cannot be played" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alertView show];
 }
-
 
 
 #pragma mark - Notification
