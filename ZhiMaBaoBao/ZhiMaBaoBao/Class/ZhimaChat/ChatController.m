@@ -123,10 +123,6 @@ static NSString *const reuseIdentifier = @"messageCell";
     //监听消息发送状态回调
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMsgStatuescall:) name:kSendMessageStateCall object:nil];
     
-    //监听大图转发
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
- 
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomekeyWindow:) name:UIWindowDidBecomeKeyNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground) name:UIApplicationDidEnterBackgroundNotification
                                                object:nil];
     
@@ -158,9 +154,14 @@ static NSString *const reuseIdentifier = @"messageCell";
         GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
         [self setCustomTitle:groupModel.groupName];
         
-        //根据群聊id,去除对应群表中自己的群成员数据 （判断是否已被剔除群聊）
+        //根据群聊id,去取对应群表中自己的群成员数据 （判断是否已被剔除群聊）
         GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:self.conversionId];
-        self.notInGroup = userModel.memberGroupState;
+        if (!userModel) {
+            self.notInGroup = YES;  //如果群成员表不存在该用户，标记被不在该群
+        }else{
+            //如果群表存在该用户，取出群成员用户 获取是否出席该群
+            self.notInGroup = userModel.memberGroupState;
+        }
     }
     
     UserInfo *info = [UserInfo shareInstance];

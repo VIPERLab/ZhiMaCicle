@@ -277,25 +277,9 @@
     [self.player stop];
 }
 
-//电话结束操作 -- 上传通话时长
+//电话结束操作 
 - (void)handUpDo{
-    NSDate *date = [NSDate date];
-    self.endTime = date.timeIntervalSince1970*1000;
-    
-    [LGNetWorking saveCallTime:USERINFO.sessionId toPhone:self.phoneNum callTime:0 CallId:self.recordId startTime:self.startTime endTime:self.endTime block:^(ResponseData *responseData) {
-        
-        [self dismissViewControllerAnimated:YES completion:nil];
-
-        if (responseData.code == 0) {
-            
-            //清除存储时间数据
-            self.endTime = 0;
-            self.startTime = 0;
-            
-        }else{
-            [LCProgressHUD showFailureText:responseData.msg];
-        }
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
