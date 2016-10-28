@@ -37,6 +37,12 @@
     userinfo.currentVC = self;
 }
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    [LCProgressHUD hide];
+}
+
 
 //自定义标题
 - (void)setCustomTitle:(NSString *)title {

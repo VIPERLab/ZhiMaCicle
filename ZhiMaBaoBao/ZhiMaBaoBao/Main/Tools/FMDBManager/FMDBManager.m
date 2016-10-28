@@ -655,7 +655,7 @@
             FMResultSet *result = [db executeQuery:searchOptionStr];
             
             while ([result next]) {
-                NSLog(@"查表成功");
+                NSLog(@"查表成功3");
                 isExist = YES;
             }
             
@@ -697,7 +697,7 @@
                 FMResultSet *result = [db executeQuery:searchOptionStr];
                 
                 while ([result next]) {
-                    NSLog(@"查表成功");
+                    NSLog(@"查表成功4");
                     isExist = YES;
                 }
                 
@@ -737,7 +737,7 @@
                 NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Pic_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",cellModel.circle_ID]];
                 FMResultSet *result = [db executeQuery:searchOptionStr];
                 while ([result next]) {
-                    NSLog(@"查表成功");
+                    NSLog(@"查表成功5");
                     NSString *imageURL = [result stringForColumn:@"img_url"];
                     if ([imageURL isEqualToString:picModel.img_url]) {
                         isExist = YES;
@@ -778,7 +778,7 @@
                 NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = %@ and userId = %@",cellModel.circle_ID,likeModel.userId]];
                 FMResultSet *result = [db executeQuery:searchOptionStr];
                 while ([result next]) {
-                    NSLog(@"查表成功");
+                    NSLog(@"查表成功6");
                     isExist = YES;
                 }
             }];
@@ -1424,7 +1424,7 @@
             NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = '%@' and converseType = '%zd'",converseModel.converseId,converseModel.converseType]];
             FMResultSet *result = [db executeQuery:searchOptionStr];
             while ([result next]) {
-                NSLog(@"查表成功");
+                NSLog(@"查表成功7");
                 isExist = YES;
             }
         }];
@@ -1468,7 +1468,7 @@
         FMResultSet *result = [db executeQuery:searchOptionStr];
         
         while ([result next]) {
-            NSLog(@"查表成功");
+            NSLog(@"查表成功8");
             ConverseModel *model = [[ConverseModel alloc] init];
             model.unReadCount = [result intForColumn:@"unReadCount"];
             model.converseName = [result stringForColumn:@"converseName"];
@@ -1503,7 +1503,7 @@
         FMResultSet *result = [db executeQuery:searchOptionStr];
         
         while ([result next]) {
-            NSLog(@"查表成功");
+            NSLog(@"查表成功9");
             ConverseModel *model = [[ConverseModel alloc] init];
             model.unReadCount = [result intForColumn:@"unReadCount"];
             model.converseName = [result stringForColumn:@"converseName"];
@@ -1561,7 +1561,7 @@
         FMResultSet *result = [db executeQuery:searchOptionStr];
         
         while ([result next]) {
-            NSLog(@"查表成功");
+            NSLog(@"查表成功10");
             model.unReadCount = [result intForColumn:@"unReadCount"];
             model.converseName = [result stringForColumn:@"converseName"];
             model.lastConverse = [result stringForColumn:@"converseContent"];
@@ -2026,7 +2026,7 @@
         NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = %@",converseID]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         while ([result next]) {
-            NSLog(@"查表成功");
+            NSLog(@"查表成功1");
             isExist = YES;
         }
     }];
@@ -2121,7 +2121,7 @@
         NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = %@",groupId]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         while ([result next]) {
-            NSLog(@"查表成功");
+            NSLog(@"查表成功2");
             success = YES;
         }
     }];
