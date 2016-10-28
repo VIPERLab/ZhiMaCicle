@@ -544,6 +544,8 @@
 		31861E111DBDAF190037E4E6 /* MoreInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E101DBDAF190037E4E6 /* MoreInfoModel.m */; };
 		31861E171DBF02990037E4E6 /* GroupDeleteMembersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E161DBF02990037E4E6 /* GroupDeleteMembersController.m */; };
 		31861E201DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E1F1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m */; };
+		31861E231DC34CAC0037E4E6 /* PlaySound.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E221DC34CAC0037E4E6 /* PlaySound.m */; };
+		31861E251DC350FF0037E4E6 /* sms-received1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31861E241DC350FF0037E4E6 /* sms-received1.caf */; };
 		319069A41D9A17C300D1D6D2 /* NSData+Replace.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069A31D9A17C300D1D6D2 /* NSData+Replace.m */; };
 		319069AD1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */; };
 		319069B11D9BC09200D1D6D2 /* FriendsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AF1D9BC09200D1D6D2 /* FriendsListCell.m */; };
@@ -1711,6 +1713,9 @@
 		31861E161DBF02990037E4E6 /* GroupDeleteMembersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupDeleteMembersController.m; sourceTree = "<group>"; };
 		31861E1E1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UncaughtExceptionHandler.h; sourceTree = "<group>"; };
 		31861E1F1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UncaughtExceptionHandler.m; sourceTree = "<group>"; };
+		31861E211DC34CAC0037E4E6 /* PlaySound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaySound.h; sourceTree = "<group>"; };
+		31861E221DC34CAC0037E4E6 /* PlaySound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaySound.m; sourceTree = "<group>"; };
+		31861E241DC350FF0037E4E6 /* sms-received1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sms-received1.caf"; sourceTree = "<group>"; };
 		319069A21D9A17C300D1D6D2 /* NSData+Replace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Replace.h"; sourceTree = "<group>"; };
 		319069A31D9A17C300D1D6D2 /* NSData+Replace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Replace.m"; sourceTree = "<group>"; };
 		319069AB1D9A9DC100D1D6D2 /* NSDate+TimeCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TimeCategory.h"; sourceTree = "<group>"; };
@@ -4488,6 +4493,7 @@
 		3169576C1D91195100140126 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				31861E241DC350FF0037E4E6 /* sms-received1.caf */,
 				3169576F1D91199100140126 /* dtmf-#.aif */,
 				316957701D91199100140126 /* dtmf-0.aif */,
 				316957711D91199100140126 /* dtmf-1.aif */,
@@ -4510,6 +4516,8 @@
 			children = (
 				31861E1E1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.h */,
 				31861E1F1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m */,
+				31861E211DC34CAC0037E4E6 /* PlaySound.h */,
+				31861E221DC34CAC0037E4E6 /* PlaySound.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -5306,6 +5314,7 @@
 				3169577F1D91199100140126 /* dtmf-2.aif in Resources */,
 				3169577C1D91199100140126 /* dtmf-#.aif in Resources */,
 				315FF58F1DB893090002CB97 /* hud_bg@3x.png in Resources */,
+				31861E251DC350FF0037E4E6 /* sms-received1.caf in Resources */,
 				04F8628E1D94FC7900DCC6FE /* face.plist in Resources */,
 				31B7C7A11D8FE71F00F1883A /* LGPhoneNumberCell.xib in Resources */,
 				310B83331D8E7B0100A0F408 /* LaunchScreen.storyboard in Resources */,
@@ -5478,6 +5487,7 @@
 				047F142D1DAC850400684881 /* Order.m in Sources */,
 				04EA7DFB1D912872005E5425 /* ZXUPCEANReader.m in Sources */,
 				04F862181D94DE7100DCC6FE /* NearByPeopleCell.m in Sources */,
+				31861E231DC34CAC0037E4E6 /* PlaySound.m in Sources */,
 				04F57AEC1D9280BD002A6471 /* DiscoverCurrentLocationController.m in Sources */,
 				04F862121D94DB3000DCC6FE /* NewDiscoverNormalCell.m in Sources */,
 				04EA7ACA1D910F89005E5425 /* NSURL+DNIMagePickerUrlEqual.m in Sources */,

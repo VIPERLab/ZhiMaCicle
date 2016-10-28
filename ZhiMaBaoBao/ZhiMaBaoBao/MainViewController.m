@@ -35,7 +35,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     UserInfo *userInfo = [UserInfo shareInstance];
     userInfo.mainVC = self;
     
@@ -262,6 +261,7 @@
     if (USERINFO.newMessageNotify && self.canPlayAudio) {    //开启了接受信息消息通知
         if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
             AudioServicesPlaySystemSound(1007);
+
         }else{
             if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
