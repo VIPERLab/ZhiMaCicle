@@ -13,6 +13,7 @@
 @protocol VideoCellDelegate <NSObject>
 
 - (void)goToDownloadVideo:(NSIndexPath*)index;
+- (void)reloadVideo:(NSIndexPath*)index;
 
 @end
 
@@ -24,6 +25,7 @@
 @property (nonatomic, strong) UIButton *playBtn; // 播放按钮
 @property (nonatomic, strong) HKPieChartView *progressView; // 进度圈
 @property (nonatomic, strong) UIImageView *holderIV; // 视频未下载前显示视频的第一帧图片
+@property (nonatomic, strong) UIButton *sendFailBtn; // 上传失败展示按钮
 @property (nonatomic, weak) id<VideoCellDelegate>VDelegate;
 
 - (void)reloadData:(LGMessage *)chat isMySelf:(BOOL)isMySelf tapVideoTarget:(id)target action:(SEL)action;

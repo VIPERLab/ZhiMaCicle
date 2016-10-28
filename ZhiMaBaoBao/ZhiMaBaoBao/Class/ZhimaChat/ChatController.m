@@ -963,33 +963,47 @@ static NSString *const reuseIdentifier = @"messageCell";
             if (message.isSending && isMe) {
                 picChatCell.sendAgain.hidden = YES;
                 picChatCell.bubble.userInteractionEnabled = NO;
+                picChatCell.sendFailBtn.hidden = YES;
+
             }else{
                 
                 //  以下内容判断是否发送失败
-                if (message.sendStatus == 0) {
-                    picChatCell.sendAgain.hidden = NO;
+                if (message.sendStatus == 0  && isMe ) {
+                    
+                    
+                    if (message.isDownLoad) { // 推送失败的情况
+                        picChatCell.sendAgain.hidden = NO;
+                        picChatCell.sendFailBtn.hidden = YES;
+
+                    }else{  // 视频发送服务器失败的情况
+                        
+                        picChatCell.sendAgain.hidden = YES;
+                        picChatCell.sendFailBtn.hidden = NO;
+
+                    }
+                    
                     picChatCell.bubble.userInteractionEnabled = YES;
+
                     
                     picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
                         
                         LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
 //                        chat.errorMsg = self.notInGroup;    //新增错误信息标记
-
-                        if (chat.isDownLoad) { // 推送失败的情况
-                            
+//                        if (chat.isDownLoad) { // 推送失败的情况
+                        
                             SocketManager* socket = [SocketManager shareInstance];
                             [socket reSendMessage:chat];
                             
-                        }else{  // 视频发送服务器失败的情况
-                            
-                            [self sendVideoHoldPic:chat index:indexPath.row];
-
-                        }
+//                        }else{  // 视频发送服务器失败的情况
+//                            
+//                            [self sendVideoHoldPic:chat index:indexPath.row];
+//                        }
                         
                     };
                 } else {
                     picChatCell.sendAgain.hidden = YES;
                     picChatCell.bubble.userInteractionEnabled = YES;
+                    picChatCell.sendFailBtn.hidden = YES;
                     
                 }
             }
@@ -1065,7 +1079,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 //        [cell2.playView pause];
 //    }
 //}
-//
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
 //    if ([cell isKindOfClass:[IMChatVideoTableViewCell class]]) {
@@ -1533,6 +1547,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 {
     NSLog(@"dianjile xiaoshipin");
     LGMessage*message = self.messages[grz.view.tag];
+    if (!message.isDownLoad) {
+        return;
+    }
     NSString*path = [NSString stringWithFormat:@"%@%@",AUDIOPATH,message.text];
     UIImage *image = [UIImage pk_previewImageWithVideoURL:[NSURL fileURLWithPath:path]];
     PKFullScreenPlayerViewController *vc = [[PKFullScreenPlayerViewController alloc] initWithVideoPath:path previewImage:image];
@@ -1644,6 +1661,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     }];
 }
 
+//视频cell delegate  下载视频
+
 - (void)goToDownloadVideo:(NSIndexPath *)index
 {
     LGMessage*message = self.messages[index.row];
@@ -1651,8 +1670,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index.row inSection:0];
     IMChatVideoTableViewCell*cell2 = (IMChatVideoTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell2.progressView.hidden = NO;
+//    [cell2 setProgressWithContent:0.03];
+    [cell2.progressView updatePercent:0.08*100 lastProgress:0 animation:YES];
+
     
-//    message.videoDownloadUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-10-21/580975cbf074a.mp4";
     NSString*path = [NSString stringWithFormat:@"%@%@",AUDIOPATH,message.text];
     
     [LGNetWorking chatDownloadVideo:path urlStr:message.videoDownloadUrl block:^(NSDictionary *responseData) {
@@ -1664,12 +1685,28 @@ static NSString *const reuseIdentifier = @"messageCell";
 
         
     } progress:^(NSProgress *progress) {
-
-        [cell2 setProgressWithContent:progress.fractionCompleted];
+        if (progress.fractionCompleted >0.08) {
+            [cell2 setProgressWithContent:progress.fractionCompleted];
+        }
         
     } failure:^(NSError *error) {
         
+        [LCProgressHUD showFailureText:@"视频加载失败"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            cell2.progressView.hidden = YES;
+            cell2.playBtn.hidden = NO;
+        });
+        
+
     }];
+}
+
+//视频cell delegate 重新上传视频
+- (void)reloadVideo:(NSIndexPath *)index
+{
+    LGMessage*message = self.messages[index.row];
+    [self sendVideoHoldPic:message index:index.row];
+
 }
 
 #pragma mark - ============================图片相关
