@@ -7,8 +7,9 @@
 //
 
 #import "NewDiscoverController.h"
-#import "NewDiscoverNormalCell.h" //普通样式cell视图
-#import "NewDiscoverHeaderView.h"  //头部样式cell视图
+#import "NewDiscoverNormalCell.h"    // 普通样式cell视图
+#import "NewDiscoverHeaderView.h"    // 图文样式头部视图
+#import "NewDiscoverLinkTypeView.h"  // 链接类型头部样式
 #import "KXCurrentLocationModel.h"
 
 
@@ -44,7 +45,7 @@
 @property (nonatomic, weak) UIButton *currentSelectedButton; //当前选择的按钮
 
 @property (nonatomic, weak) NewDiscoverHeaderView *headerView;
-
+@property (nonatomic, weak) NewDiscoverLinkTypeView *linkTypeView; //- 链接类型
 
 @property (nonatomic, assign) int headerCellHight;
 
@@ -100,7 +101,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController.navigationBar setAlpha:1];
-    [self upDataView];
+    if (self.circleType == 1) {
+        // 图文类型
+        [self upDataView];
+    }
 }
 
 - (void)setupNav {
@@ -116,23 +120,38 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    //设置头部
-    NewDiscoverHeaderView *headerView = [[NewDiscoverHeaderView alloc] init];
-    self.textView = headerView.textView;
-    [self.view addSubview:headerView];
-    self.headerView = headerView;
-    headerView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 240);
-
+    UIView *fistView;
+    if (self.circleType == 2) {
+        // 分享朋友圈链接
+        NewDiscoverLinkTypeView *linkTypeView = [[NewDiscoverLinkTypeView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 220)];
+        linkTypeView.backgroundColor = [UIColor whiteColor];
+        self.linkTypeView = linkTypeView;
+        [self.view addSubview:linkTypeView];
+        fistView = linkTypeView;
+        
+        
+    } else if (self.circleType == 1) {
+        // 普通图文朋友圈
+        //设置头部
+        NewDiscoverHeaderView *headerView = [[NewDiscoverHeaderView alloc] init];
+        self.textView = headerView.textView;
+        [self.view addSubview:headerView];
+        self.headerView = headerView;
+        headerView.frame = CGRectMake(0, 64,ScreenWidth, 240);
+        fistView = headerView;
+    }
+    
+    
+    
+    
     
     
     //设置TableView
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(fistView.frame), [UIScreen mainScreen].bounds.size.width, CGRectGetHeight(self.view.frame) - 240 ) style:UITableViewStyleGrouped];
     self.tableView = tableView;
     tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     [self.view addSubview:tableView];
-    
-    self.tableView.frame = CGRectMake(0, CGRectGetMaxY(headerView.frame), [UIScreen mainScreen].bounds.size.width, CGRectGetHeight(self.view.frame) - 230 );
-    
+
     
     tableView.delegate = self;
     tableView.dataSource = self;
@@ -241,10 +260,13 @@
 #pragma mark - 发布按钮的点击事件
 - (void)ReleaseButtonDidClick {
     [self.textView resignFirstResponder];
-    if (!self.textView.text.length && !_imagesArray.count) {
-        [LCProgressHUD showFailureText:@"说说内容或图片不能为空"];
-        return;
+    if (self.circleType == 1) {  //图文类型判断
+        if (!self.textView.text.length && !_imagesArray.count) {
+            [LCProgressHUD showFailureText:@"说说内容或图片不能为空"];
+            return;
+        }
     }
+    
     
     [self upLoadImageCount:0 andImageArray:_imagesArray];
 }
@@ -493,7 +515,10 @@
         locationStr = self.locationTips;
     }
     
-    [LGNetWorking AddNewDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andContent_type:@"1" andContent:self.textView.text andLink:@"" andType:_privateClass andCurrent_location:locationStr andImgs:_imgs block:^(ResponseData *responseData) {
+    
+    
+    
+    [LGNetWorking AddNewDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andContent_type:[NSString stringWithFormat:@"%zd",self.circleType] andContent:self.textView.text andLink:@"" andType:_privateClass andCurrent_location:locationStr andImgs:_imgs block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             _imgs = @"";
@@ -554,8 +579,6 @@
     [self.headerView setContentWithImageArray:self.imagesArray];
     
     self.tableView.frame = CGRectMake(0, CGRectGetMaxY(self.headerView.frame), [UIScreen mainScreen].bounds.size.width, CGRectGetHeight(self.view.frame) - CGRectGetMaxY(self.headerView.frame));
-    
-    
 }
 
 #pragma mark - returnAction

@@ -56,6 +56,7 @@
 		04CBF5091D9A695500CBB609 /* ZhiMaFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF5081D9A695500CBB609 /* ZhiMaFriendModel.m */; };
 		04CBF50E1D9BE64700CBB609 /* GroupChatModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBF50D1D9BE64700CBB609 /* GroupChatModel.m */; };
 		04DD49E61DACD6050027256E /* GroupChatGetInsideController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DD49E51DACD6050027256E /* GroupChatGetInsideController.m */; };
+		04E8F30B1DC322F7008C2174 /* NewDiscoverLinkTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E8F30A1DC322F7008C2174 /* NewDiscoverLinkTypeView.m */; };
 		04EA79601D8F7EA7005E5425 /* ZhiMaImage.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */; };
 		04EA79701D8F8F49005E5425 /* NSString+FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */; };
 		04EA79711D8F8F49005E5425 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EA796D1D8F8F49005E5425 /* NSString+MD5.m */; };
@@ -771,6 +772,8 @@
 		04CBF50D1D9BE64700CBB609 /* GroupChatModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatModel.m; sourceTree = "<group>"; };
 		04DD49E41DACD6050027256E /* GroupChatGetInsideController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatGetInsideController.h; sourceTree = "<group>"; };
 		04DD49E51DACD6050027256E /* GroupChatGetInsideController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatGetInsideController.m; sourceTree = "<group>"; };
+		04E8F3091DC322F7008C2174 /* NewDiscoverLinkTypeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDiscoverLinkTypeView.h; sourceTree = "<group>"; };
+		04E8F30A1DC322F7008C2174 /* NewDiscoverLinkTypeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewDiscoverLinkTypeView.m; sourceTree = "<group>"; };
 		04EA795F1D8F7EA7005E5425 /* ZhiMaImage.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZhiMaImage.xcassets; sourceTree = "<group>"; };
 		04EA796A1D8F8F49005E5425 /* NSString+FontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontSize.h"; sourceTree = "<group>"; };
 		04EA796B1D8F8F49005E5425 /* NSString+FontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontSize.m"; sourceTree = "<group>"; };
@@ -3931,6 +3934,8 @@
 				04F8620F1D94DB3000DCC6FE /* NewDiscoverHeaderView.m */,
 				04F862101D94DB3000DCC6FE /* NewDiscoverPhotoPickerView.h */,
 				04F862111D94DB3000DCC6FE /* NewDiscoverPhotoPickerView.m */,
+				04E8F3091DC322F7008C2174 /* NewDiscoverLinkTypeView.h */,
+				04E8F30A1DC322F7008C2174 /* NewDiscoverLinkTypeView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5936,6 +5941,7 @@
 				04F8624E1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.m in Sources */,
 				04FC4D9F1DB5B70B00C1E854 /* UINavigationBar+Awesome.m in Sources */,
 				04EA7E111D912872005E5425 /* ZXPDF417ErrorCorrection.m in Sources */,
+				04E8F30B1DC322F7008C2174 /* NewDiscoverLinkTypeView.m in Sources */,
 				04EA7B661D91282E005E5425 /* LBXScanWrapper.m in Sources */,
 				04F862C41D95545000DCC6FE /* KXDiscoverDetailCommentView.m in Sources */,
 				04F862561D94FC6D00DCC6FE /* MLLabel.m in Sources */,

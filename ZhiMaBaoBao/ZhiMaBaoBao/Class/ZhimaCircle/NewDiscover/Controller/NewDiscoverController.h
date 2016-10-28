@@ -13,6 +13,9 @@ typedef void(^returnBlock)();
 
 @interface NewDiscoverController : BaseViewController
 
+// 这条朋友圈的性质 1文字 , 2链接
+@property (nonatomic, assign) int circleType;
+
 @property (nonatomic, copy) returnBlock block;
 
 @end

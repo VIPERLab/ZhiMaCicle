@@ -165,9 +165,10 @@
                 //关闭sorket
                 [[SocketManager shareInstance] disconnect];                
                 
-                //关闭推送
+                //关闭推送 
                 [JPUSHService removeNotification:nil];
-                
+                [JPUSHService setTags:[NSSet setWithObject:@""] alias:@"" callbackSelector:nil object:self];
+
                 //成功退出
                 [[NSNotificationCenter defaultCenter] postNotificationName:LOGOUT_SUCCESS object:nil];
                 

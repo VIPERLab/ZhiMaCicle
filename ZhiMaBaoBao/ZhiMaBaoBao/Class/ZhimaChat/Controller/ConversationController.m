@@ -114,42 +114,42 @@
 
 //收到新消息-从数据库加载最新数据刷新列表
 - (void)refreshConversionList:(NSNotification *)notify{
-    LGMessage *recieveMsg = notify.userInfo[@"message"];
-    
-    //刷新消息对应的会话
-    //1.从数据取出最新的会话模型
-    NSString *conversionId = nil;
-    if (recieveMsg.isGroup) {
-        conversionId = recieveMsg.toUidOrGroupId;
-    }else{
-        conversionId = recieveMsg.fromUid;
-    }
-    ConverseModel *conversion = [FMDBShareManager searchConverseWithConverseID:conversionId andConverseType:recieveMsg.isGroup];
-    //2.根据需要更新的会话id,找到数据源数组对应的会话  删除旧的，将新的插入第一个
-    for (int i = 0; i < self.dataArray.count; i ++) {
-        ConverseModel *model = self.dataArray[i];
-        if ([model.converseId isEqualToString:conversionId]) {
-            [self.dataArray removeObjectAtIndex:i];
+//    LGMessage *recieveMsg = notify.userInfo[@"message"];
+//    
+//    //刷新消息对应的会话
+//    //1.从数据取出最新的会话模型
+//    NSString *conversionId = nil;
+//    if (recieveMsg.isGroup) {
+//        conversionId = recieveMsg.toUidOrGroupId;
+//    }else{
+//        conversionId = recieveMsg.fromUid;
+//    }
+//    ConverseModel *conversion = [FMDBShareManager searchConverseWithConverseID:conversionId andConverseType:recieveMsg.isGroup];
+//    //2.根据需要更新的会话id,找到数据源数组对应的会话  删除旧的，将新的插入第一个
+//    for (int i = 0; i < self.dataArray.count; i ++) {
+//        ConverseModel *model = self.dataArray[i];
+//        if ([model.converseId isEqualToString:conversionId]) {
+//            [self.dataArray removeObjectAtIndex:i];
+//
+//            break;
+//        }
+//    }
+//    [self.dataArray insertObject:conversion atIndex:0];
+//    [_tableView reloadData];
+//    
+//    CGFloat time = 0;
+//    __block
+//    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+//    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
+//    dispatch_source_set_timer(timer,dispatch_walltime(NULL, 0),0.1*NSEC_PER_SEC, 0); //每0.1秒执行
+//    dispatch_source_set_event_handler(timer, ^{
+////        time += 0.1;
+//    });
+//    dispatch_resume(timer);
 
-            break;
-        }
-    }
-    [self.dataArray insertObject:conversion atIndex:0];
-    [_tableView reloadData];
-    
-    CGFloat time = 0;
-    __block
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
-    dispatch_source_set_timer(timer,dispatch_walltime(NULL, 0),0.1*NSEC_PER_SEC, 0); //每0.1秒执行
-    dispatch_source_set_event_handler(timer, ^{
-//        time += 0.1;
-    });
-    dispatch_resume(timer);
-
 
     
-//    [self getDataFormSqlist];
+    [self getDataFormSqlist];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

@@ -222,8 +222,8 @@
     //新增说说
     
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
+    new.circleType = 1;
     new.block = ^() {
-//        _refreshHeader.refreshState = SDWXRefreshViewStateRefreshing;
         [_tableView.mj_header beginRefreshing];
     };
     [self.navigationController pushViewController:new animated:YES];

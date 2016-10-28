@@ -155,6 +155,13 @@
     return YES;
 }
 
+- (void)textViewDidChangeSelection:(UITextView *)textView {
+    NSLog(@"调用了我 -- %@",textView.text);
+    _countDownLabel.text = [NSString stringWithFormat:@"%lu/200",(MaxCount - textView.text.length)];
+}
+
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

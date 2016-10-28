@@ -417,7 +417,6 @@
             [LCProgressHUD showSuccessText:@"已复制到粘贴板"];
         }
     }
-    
 }
 
 
