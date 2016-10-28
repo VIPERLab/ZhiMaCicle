@@ -64,6 +64,9 @@
             
         case LCProgressHUDStatusWaitting: {
             
+            //更改hud的frame
+            hud.frame = CGRectMake(0, 64, DEVICEWITH, DEVICEHIGHT - 64);
+            
             hud.mode = MBProgressHUDModeIndeterminate;
         }
             break;

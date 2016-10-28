@@ -17,11 +17,12 @@
 #define ConverseWithoutNetworkCellReusedID @"ConverseWithoutNetworkCellReusedID"
 
 @interface ConversationController () <UITableViewDelegate,UITableViewDataSource>{
-    dispatch_source_t timer;
     dispatch_source_t timer1;
 }
 
+@property (nonatomic, strong) dispatch_source_t timer;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, assign) CGFloat timeCount;
 
 @end
 
@@ -37,8 +38,9 @@
     userInfo.conversationVC = self;
     [self setCustomRightItems];
     [self setupView];
-
     [self notification];
+    
+    self.timeCount = -1;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -87,6 +89,7 @@
     NSArray *dataArray = [FMDBShareManager getChatConverseDataInArray];
     
     self.dataArray = [dataArray mutableCopy];
+    
     [_tableView reloadData];
 }
 
@@ -146,9 +149,25 @@
 ////        time += 0.1;
 //    });
 //    dispatch_resume(timer);
-
-
-    
+//    if (self.timeCount > 0.4 || self.timeCount == -1) {
+//        //先清空会话数组
+//        [self.dataArray removeAllObjects];
+//        
+//        NSArray *dataArray = [FMDBShareManager getChatConverseDataInArray];
+//        
+//        self.dataArray = [dataArray mutableCopy];
+//        [_tableView reloadData];
+//    }
+//    
+//    self.timeCount = 0;
+//    
+//    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+//    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
+//    dispatch_source_set_timer(self.timer,dispatch_walltime(NULL, 0),0.1*NSEC_PER_SEC, 0); //每0.1秒执行
+//    dispatch_source_set_event_handler(self.timer, ^{
+//        self.timeCount += 0.1;
+//    });
+//    dispatch_resume(self.timer);
     [self getDataFormSqlist];
 }
 
