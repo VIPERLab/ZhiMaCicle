@@ -25,6 +25,8 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+    self.model.isSelected = selected;
+    _tickButton.selected = selected;
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -47,11 +49,10 @@
     [self addSubview:_titleLabel];
     
     _tickButton = [UIButton new];
+    _tickButton.userInteractionEnabled = NO;
     [self addSubview:_tickButton];
     [_tickButton setImage:[UIImage imageNamed:@"MyPayWay_tickButton"] forState:UIControlStateNormal];
     [_tickButton setImage:[UIImage imageNamed:@"MyPayWay_tickButton_selected"] forState:UIControlStateSelected];
-    [_tickButton addTarget:self action:@selector(tickButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
-    
     
     _bottomLineView = [[UIView alloc] init];
     _bottomLineView.backgroundColor = [UIColor colorFormHexRGB:@"d6d7dc"];
@@ -59,23 +60,13 @@
 }
 
 
-- (void)setIndexPath:(NSIndexPath *)indexPath {
-    _indexPath = indexPath;
-}
-
 - (void)setModel:(chargeMomeyMdoel *)model {
     _model = model;
     _titleLabel.text = model.titleName;
     _imageView.image = [UIImage imageNamed:model.iconName];
-    _tickButton.selected = model.isSelected;
+    [_tickButton setSelected:model.isSelected];
 }
 
-- (void)tickButtonDidClick:(UIButton *)sender {
-    if ([self.delegate respondsToSelector:@selector(KXCrashChargeCellTickDidClick:)]) {
-        [self.delegate KXCrashChargeCellTickDidClick:self];
-    }
-    
-}
 
 - (void)layoutSubviews {
     _imageView.frame = CGRectMake(20, 15, 35, 30);

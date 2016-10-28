@@ -21,7 +21,7 @@
 #import "chargeMomeyMdoel.h"
 
 #define CrashChargeTableViewCellReusedID @"CrashChargeTableViewCellReusedID"
-@interface CrashChargeController () <UITableViewDelegate,UITableViewDataSource,KXCrashChargeCellDelegate>
+@interface CrashChargeController () <UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
@@ -50,6 +50,11 @@
     [self setCustomTitle:@"请选择支付方式"];
     
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+}
+
 
 - (void)setupView {
     
@@ -102,11 +107,9 @@
     KXCrashChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:CrashChargeTableViewCellReusedID forIndexPath:indexPath];
     chargeMomeyMdoel *model = self.dataArray[indexPath.row];
     cell.model = model;
-    cell.indexPath = indexPath;
-    cell.delegate = self;
     
     if (indexPath.row == 0 && !self.currentCell) {
-        self.currentCell = cell;
+        cell.selected = YES;
     }
     
     return cell;
@@ -181,22 +184,6 @@
 
 }
 
-- (void)KXCrashChargeCellTickDidClick:(KXCrashChargeCell *)cell {
-    chargeMomeyMdoel *model = self.dataArray[cell.indexPath.row];
-    model.isSelected = !model.isSelected;
-    
-    if (cell.indexPath.row == 0) {
-        chargeMomeyMdoel *model = self.dataArray[1];
-        model.isSelected = NO;
-    } else if (cell.indexPath.row == 1) {
-        chargeMomeyMdoel *model = self.dataArray[0];
-        model.isSelected = NO;
-    }
-    
-    self.currentCell = cell;
-    [self.tableView reloadData];
-}
-
 
 - (void)AliPay:(id)responseObject {
     NSString *order = responseObject[@"data"];
@@ -247,20 +234,32 @@
 }
 
 - (void)bottomButtonDidClick {
-    chargeMomeyMdoel *model = self.currentCell.model;
-    if (model.isSelected == NO) {
+    
+    int type = 3;
+    for (NSInteger index = 0; index < self.dataArray.count; index++) {
+        chargeMomeyMdoel *model = self.dataArray[index];
+        if (index == 0) {
+            type = model.isSelected == YES ? 1 : 3;
+            if (type == 1) {
+                [self payMoenyByType:type];
+                break;
+            }
+        } else {
+            type = model.isSelected == YES ? 0 : 3;
+            if (type == 0) {
+                [self payMoenyByType:type];
+                break;
+            }
+        }
+    }
+    
+    if (type == 3) {
         [LCProgressHUD showFailureText:@"请选择支付方式"];
         return;
     }
     
-    int type;
-    if (self.currentCell.indexPath.row == 0) {
-        type = 1;
-    } else {
-        type = 0;
-    }
     
-    [self payMoenyByType:type];
+//    [self payMoenyByType:type];
 }
 
 
@@ -272,7 +271,7 @@
             if (index == 0) {
                 model.iconName = @"AliPay";
                 model.titleName = @"支付宝支付";
-                model.isSelected = YES;
+                model.isSelected = NO;
             } else {
                 model.iconName = @"WXPay";
                 model.titleName = @"微信支付";
