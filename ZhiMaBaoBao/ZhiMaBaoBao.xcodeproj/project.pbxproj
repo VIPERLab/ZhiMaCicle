@@ -609,14 +609,13 @@
 		31B7C7B81D90031D00F1883A /* YiKeyBoardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C7B61D90031D00F1883A /* YiKeyBoardView.xib */; };
 		31B7C7BC1D900A6F00F1883A /* CallBottombar.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7BB1D900A6F00F1883A /* CallBottombar.m */; };
 		9D4903A7551EC331016D9D3A /* Pods_ZhiMaBaoBao.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF1AD7B94550139D0811527 /* Pods_ZhiMaBaoBao.framework */; };
+		D50585111DC21EA6002EC749 /* PK_PlayBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D50585101DC21EA6002EC749 /* PK_PlayBtn@2x.png */; };
 		D53E3DCA1DB704FC001C663B /* UIImage+PKShortVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DA31DB704FC001C663B /* UIImage+PKShortVideoPlayer.m */; };
 		D53E3DCB1DB704FC001C663B /* GLProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DA61DB704FC001C663B /* GLProgram.m */; };
 		D53E3DCC1DB704FC001C663B /* GPUImageContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DA81DB704FC001C663B /* GPUImageContext.m */; };
 		D53E3DCD1DB704FC001C663B /* GPUImageFramebuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DAA1DB704FC001C663B /* GPUImageFramebuffer.m */; };
 		D53E3DCE1DB704FC001C663B /* GPUImageFramebufferCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DAC1DB704FC001C663B /* GPUImageFramebufferCache.m */; };
 		D53E3DCF1DB704FC001C663B /* PK_Camera_Turn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D53E3DAE1DB704FC001C663B /* PK_Camera_Turn@2x.png */; };
-		D53E3DD01DB704FC001C663B /* PK_Delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D53E3DAF1DB704FC001C663B /* PK_Delete@2x.png */; };
-		D53E3DD11DB704FC001C663B /* PK_Play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D53E3DB01DB704FC001C663B /* PK_Play@2x.png */; };
 		D53E3DD21DB704FC001C663B /* PKChatMessagePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DB41DB704FC001C663B /* PKChatMessagePlayerView.m */; };
 		D53E3DD31DB704FC001C663B /* PKColorConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DB61DB704FC001C663B /* PKColorConversion.m */; };
 		D53E3DD41DB704FC001C663B /* PKFullScreenPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DB81DB704FC001C663B /* PKFullScreenPlayerView.m */; };
@@ -1832,6 +1831,7 @@
 		31B7C7BA1D900A6F00F1883A /* CallBottombar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallBottombar.h; sourceTree = "<group>"; };
 		31B7C7BB1D900A6F00F1883A /* CallBottombar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallBottombar.m; sourceTree = "<group>"; };
 		7AF1AD7B94550139D0811527 /* Pods_ZhiMaBaoBao.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZhiMaBaoBao.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D50585101DC21EA6002EC749 /* PK_PlayBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PK_PlayBtn@2x.png"; sourceTree = "<group>"; };
 		D53E3DA21DB704FC001C663B /* UIImage+PKShortVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PKShortVideoPlayer.h"; sourceTree = "<group>"; };
 		D53E3DA31DB704FC001C663B /* UIImage+PKShortVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PKShortVideoPlayer.m"; sourceTree = "<group>"; };
 		D53E3DA51DB704FC001C663B /* GLProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgram.h; sourceTree = "<group>"; };
@@ -1843,8 +1843,6 @@
 		D53E3DAB1DB704FC001C663B /* GPUImageFramebufferCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPUImageFramebufferCache.h; sourceTree = "<group>"; };
 		D53E3DAC1DB704FC001C663B /* GPUImageFramebufferCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPUImageFramebufferCache.m; sourceTree = "<group>"; };
 		D53E3DAE1DB704FC001C663B /* PK_Camera_Turn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PK_Camera_Turn@2x.png"; sourceTree = "<group>"; };
-		D53E3DAF1DB704FC001C663B /* PK_Delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PK_Delete@2x.png"; sourceTree = "<group>"; };
-		D53E3DB01DB704FC001C663B /* PK_Play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PK_Play@2x.png"; sourceTree = "<group>"; };
 		D53E3DB11DB704FC001C663B /* PKShortVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKShortVideo.h; sourceTree = "<group>"; };
 		D53E3DB31DB704FC001C663B /* PKChatMessagePlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKChatMessagePlayerView.h; sourceTree = "<group>"; };
 		D53E3DB41DB704FC001C663B /* PKChatMessagePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKChatMessagePlayerView.m; sourceTree = "<group>"; };
@@ -5044,9 +5042,8 @@
 		D53E3DAD1DB704FC001C663B /* PKAsset */ = {
 			isa = PBXGroup;
 			children = (
+				D50585101DC21EA6002EC749 /* PK_PlayBtn@2x.png */,
 				D53E3DAE1DB704FC001C663B /* PK_Camera_Turn@2x.png */,
-				D53E3DAF1DB704FC001C663B /* PK_Delete@2x.png */,
-				D53E3DB01DB704FC001C663B /* PK_Play@2x.png */,
 			);
 			path = PKAsset;
 			sourceTree = "<group>";
@@ -5330,11 +5327,10 @@
 				316957861D91199100140126 /* dtmf-9.aif in Resources */,
 				319069E11D9CF18500D1D6D2 /* InfoContentCell.xib in Resources */,
 				310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */,
-				D53E3DD01DB704FC001C663B /* PK_Delete@2x.png in Resources */,
-				D53E3DD11DB704FC001C663B /* PK_Play@2x.png in Resources */,
 				D544F55F1DAF611000E73624 /* ZMCallViewCell.xib in Resources */,
 				316957821D91199100140126 /* dtmf-5.aif in Resources */,
 				319069B21D9BC09200D1D6D2 /* FriendsListCell.xib in Resources */,
+				D50585111DC21EA6002EC749 /* PK_PlayBtn@2x.png in Resources */,
 				31B7C79F1D8FE71F00F1883A /* LGPhoneHeaderCell.xib in Resources */,
 				319069E91D9D471E00D1D6D2 /* SetupFriendInfoController.xib in Resources */,
 				3169577E1D91199100140126 /* dtmf-1.aif in Resources */,

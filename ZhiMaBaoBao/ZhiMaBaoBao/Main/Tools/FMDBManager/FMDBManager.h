@@ -203,6 +203,12 @@ typedef enum : NSUInteger {
 - (void)saveNewFirendsWithArray:(NSArray <ZhiMaFriendModel *>*)dataArray andUserId:(NSString *)userId;
 
 /**
+ *  根据好友id删除新的好友
+ *  @param userId    当前用户id
+ */
+- (void)deleteNewFriendByUseid:(NSString *)userId;
+
+/**
  *  更新新的好友模型
  *
  *  @param model 新的好友模型

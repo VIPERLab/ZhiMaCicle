@@ -960,44 +960,39 @@ static NSString *const reuseIdentifier = @"messageCell";
             [picChatCell reloadData:message isMySelf:isMe tapVideoTarget:self action:@selector(touchCellPlayVideo:)];
             
             
-//            if (message.isSending && isMe) {
-//                [picChatCell.sending startAnimating];
-//                picChatCell.sendAgain.hidden = YES;
-//                picChatCell.bubble.userInteractionEnabled = NO;
-//                
-//            }else{
-//                
-//                //  以下内容判断是否发送失败
-//                if (message.sendStatus == 0) {
-//                    picChatCell.sendAgain.hidden = NO;
-//                    [picChatCell.sending stopAnimating];
-//                    picChatCell.bubble.userInteractionEnabled = YES;
-//                    
-//                    picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
-//                        
-//                        LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
+            if (message.isSending && isMe) {
+                picChatCell.sendAgain.hidden = YES;
+                picChatCell.bubble.userInteractionEnabled = NO;
+            }else{
+                
+                //  以下内容判断是否发送失败
+                if (message.sendStatus == 0) {
+                    picChatCell.sendAgain.hidden = NO;
+                    picChatCell.bubble.userInteractionEnabled = YES;
+                    
+                    picChatCell.resendBlock = ^(BaseChatTableViewCell *theCell) {
+                        
+                        LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
 //                        chat.errorMsg = self.notInGroup;    //新增错误信息标记
-//                        
-//                        if (chat.text) { // 推送失败的情况
-//                            SocketManager* socket = [SocketManager shareInstance];
-//                            [socket reSendMessage:chat];
-//                            
-//                        }else{  // 图片发送服务器失败的情况
-//                            
-//                            //重新发送图片给服务器
-//                            UIImage *image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,chat.picUrl]];
-//                            [self sendPicToServerWithImage:image index:indexPath.row];
-//                            
-//                        }
-//                        
-//                    };
-//                } else {
-//                    picChatCell.sendAgain.hidden = YES;
-//                    [picChatCell.sending stopAnimating];
-//                    picChatCell.bubble.userInteractionEnabled = YES;
-//                    
-//                }
-//            }
+
+                        if (chat.isDownLoad) { // 推送失败的情况
+                            
+                            SocketManager* socket = [SocketManager shareInstance];
+                            [socket reSendMessage:chat];
+                            
+                        }else{  // 视频发送服务器失败的情况
+                            
+                            [self sendVideoHoldPic:chat index:indexPath.row];
+
+                        }
+                        
+                    };
+                } else {
+                    picChatCell.sendAgain.hidden = YES;
+                    picChatCell.bubble.userInteractionEnabled = YES;
+                    
+                }
+            }
             
             
         }
@@ -1591,10 +1586,17 @@ static NSString *const reuseIdentifier = @"messageCell";
 
         }else{
             // 发送报错
+            LGMessage *message = self.messages[index];
+            message.isSending = NO;
+            message.sendStatus = 0;
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
             
         }
     }failure:^(NSError *error) {
-        
+        LGMessage *message = self.messages[index];
+        message.isSending = NO;
+        message.sendStatus = 0;
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }];
 }
 
@@ -1657,6 +1659,9 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         message.isDownLoad = YES;
         [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        [FMDBShareManager upDataMessageStatusWithMessage:message];
+
         
     } progress:^(NSProgress *progress) {
 

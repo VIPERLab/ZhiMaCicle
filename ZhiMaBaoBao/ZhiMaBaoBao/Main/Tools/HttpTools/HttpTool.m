@@ -92,8 +92,6 @@
 }
 
 
-
-
 + (void)getImage:(NSString *)url params:(NSDictionary *)params formData:(NSData *)data success:(void (^)(ResponseData *json))success failure:(void (^)(ErrorData *))error {
     NSString *murl = [NSString stringWithFormat:@"%@%@",DFAPIURL,url];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;

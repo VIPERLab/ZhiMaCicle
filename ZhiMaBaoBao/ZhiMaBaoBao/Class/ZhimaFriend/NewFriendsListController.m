@@ -61,7 +61,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
             [self.tableView reloadData];
             
         }else{
-            //如果没有数据，直接从数据拉取
+            //如果没有数据，直接从数据库拉取
             self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
             [self.tableView reloadData];
         }
@@ -186,7 +186,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 50;
+    return 60;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -216,6 +216,21 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 0.1f;
+}
+
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        ZhiMaFriendModel *model = self.friendsArr[indexPath.row];
+        [self.friendsArr removeObject:model];
+        [self.tableView reloadData];
+        //从新好友表中删除该条数据
+        [FMDBShareManager deleteNewFriendByUseid:model.user_Id];
+    }
 }
 
 #pragma mark - lazy

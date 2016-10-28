@@ -123,7 +123,7 @@ static CGFloat const PKRecordButtonWidth = 70;
     [self addSubview:self.progressBar];
     
     self.recordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.recordButton setTitle:@"按住录" forState:UIControlStateNormal];
+    [self.recordButton setTitle:@"长按" forState:UIControlStateNormal];
     [self.recordButton setTitleColor:self.themeColor forState:UIControlStateNormal];
     self.recordButton.titleLabel.font = [UIFont systemFontOfSize:17.0f];
     self.recordButton.frame = CGRectMake(0, 0, PKRecordButtonWidth, PKRecordButtonWidth);
@@ -174,7 +174,7 @@ static CGFloat const PKRecordButtonWidth = 70;
 
 - (void)refreshView {
     [[NSFileManager defaultManager] removeItemAtPath:self.outputFilePath error:nil];
-    [self.recordButton setTitle:@"按住录" forState:UIControlStateNormal];
+    [self.recordButton setTitle:@"长按" forState:UIControlStateNormal];
     
     [self recordButtonAction ];
     [self.playButton removeFromSuperview];
@@ -222,7 +222,7 @@ static CGFloat const PKRecordButtonWidth = 70;
 - (void)endRecordingWithPath:(NSString *)path failture:(BOOL)failture {
     [self.progressBar restore];
     
-    [self.recordButton setTitle:@"按住录" forState:UIControlStateNormal];
+    [self.recordButton setTitle:@"长按" forState:UIControlStateNormal];
     
     if (failture) {
         [self showAlertViewWithText:@"生成视频失败"];

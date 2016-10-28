@@ -458,7 +458,7 @@ static SocketManager *manager = nil;
         for (NSString *uid in uidsArr) {
             GroupUserModel *model = [FMDBShareManager getGroupMemberWithMemberId:uid andConverseId:groupId];
             if (!model.friend_nick.length) {
-                return ;
+                continue ;
             }
             model.memberGroupState = YES;
             [names addObject:model.friend_nick];
@@ -476,7 +476,7 @@ static SocketManager *manager = nil;
             [FMDBShareManager saveAllGroupMemberWithArray:models andGroupChatId:groupId];
         }
         
-        //发送系统消息 你邀请"xx"加入群聊
+        //发送系统消息
         systemMsg.actType = ActTypeDeluserfromgroup;
         systemMsg.fromUid = USERINFO.userID;
         systemMsg.toUidOrGroupId = groupId;
@@ -533,6 +533,9 @@ static SocketManager *manager = nil;
         for (NSString *userId in uidsArr) {
 //            GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
             GroupUserModel *userModel = [self getGroupUser:userId fromArr:groupUsers];
+            if (!userModel.friend_nick.length) {
+                continue;
+            }
             [namesArr addObject:userModel.friend_nick];
         }
         NSString *usersNames = [namesArr componentsJoinedByString:@","];
@@ -574,6 +577,9 @@ static SocketManager *manager = nil;
                     for (NSString *userId in bondingArr) {
 //                        GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
                         GroupUserModel *userModel = [self getGroupUser:userId fromArr:groupUsers];
+                        if (!userModel.userId.length) {
+                            continue;
+                        }
                         [bondNamesArr addObject:userModel.friend_nick];
                     }
                     NSString *bondName = [bondNamesArr componentsJoinedByString:@","];
@@ -587,10 +593,15 @@ static SocketManager *manager = nil;
                         systemMsg.text = [NSString stringWithFormat:@"%@邀请%@加入了群聊",actName,tbondName];
                         
                         //标记出席了当前群
-//                        GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
-                        GroupUserModel *usermodel = [self getGroupUser:USERINFO.userID fromArr:groupUsers];
-                        usermodel.memberGroupState = NO;
-                        [FMDBShareManager saveAllGroupMemberWithArray:@[usermodel] andGroupChatId:groupId];
+                        GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
+                        if (!usermodel.userId) {
+                            usermodel = [self getGroupUser:USERINFO.userID fromArr:groupUsers];
+                        }
+                        
+                        if (usermodel.userId.length) {
+                            usermodel.memberGroupState = NO;
+                            [FMDBShareManager saveAllGroupMemberWithArray:@[usermodel] andGroupChatId:groupId];
+                        }
                         
                         //发送通知，即时标记出席了当前群
                         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];

@@ -1367,6 +1367,21 @@
     }
 }
 
+//根据好友id删除新的好友
+- (void)deleteNewFriendByUseid:(NSString *)userId{
+    //删除朋友圈数据库该条记录
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_NewFriend_Message_Table];
+    NSString *operation = [FMDBShareManager deletedTableData:ZhiMa_NewFriend_Message_Table withOption:[NSString stringWithFormat:@"user_Id = %@",userId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:operation];
+        if (success) {
+            NSLog(@"删除新的好友成功");
+        } else {
+            NSLog(@"删除新的好友失败");
+        }
+    }];
+}
+
 /**
  *  更新新的好友模型
  *
@@ -1677,6 +1692,8 @@
         converseModel.lastConverse = @"[图片]";
     }else if (message.type == MessageTypeAudio){
         converseModel.lastConverse = @"[语音]";
+    }else if (message.type == MessageTypeVideo){
+        converseModel.lastConverse = @"[视频]";
     }
     
     
@@ -1712,6 +1729,8 @@
             converseModel.lastConverse = @"[图片]";
         }else if (message.type == MessageTypeAudio){
             converseModel.lastConverse = @"[语音]";
+        }else if (message.type == MessageTypeVideo){
+            converseModel.lastConverse = @"[视频]";
         }
         
         NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseHead_photo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];
@@ -1777,13 +1796,58 @@
         converseModel.lastConverse = @"[图片]";
     }else if (message.type == MessageTypeAudio){
         converseModel.lastConverse = @"[语音]";
+    }else if (message.type == MessageTypeVideo){
+        converseModel.lastConverse = @"[视频]";
     }
     
     NSString *opeartionStr = [NSString string];
+//<<<<<<< HEAD
     NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseHead_photo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];
     NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",converseModel.converseId];
     opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
 
+//=======
+//    if (!isExist) {
+//        //不存在会话列表 ->  创建这个会话
+//        NSLog(@"会话不存在，需要创建");
+//        
+//        converseModel.converseId = converseID;
+//        converseModel.disturb = NO;
+//        converseModel.topChat = NO;
+//        converseModel.unReadCount = 1;
+//        converseModel.converseType = message.isGroup;
+//        
+//        opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
+//        
+//    } else {
+//        //更新这个会话
+//        NSLog(@"会话存在,更新会话");
+//        //取出这个会话
+//        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID andConverseType:message.isGroup];
+//        //设置更新内容
+//        if (![message.fromUid isEqualToString:USERINFO.userID]) {
+//            converseModel.unReadCount ++;
+//        }
+//        converseModel.time = message.timeStamp;
+//        converseModel.lastConverse = message.text;
+//        converseModel.converseHead_photo = groupModel.groupAvtar;
+//        converseModel.converseName = groupModel.groupName;
+//        if (message.type == MessageTypeText || message.type == MessageTypeSystem) {
+//            converseModel.lastConverse = message.text;
+//        }else if (message.type == MessageTypeImage){
+//            converseModel.lastConverse = @"[图片]";
+//        }else if (message.type == MessageTypeAudio){
+//            converseModel.lastConverse = @"[语音]";
+//        }else if (message.type == MessageTypeVideo){
+//            converseModel.lastConverse = @"[视频]";
+//        }
+//        
+//        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseHead_photo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];
+//        NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",converseModel.converseId];
+//        
+//        opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
+//    }
+//>>>>>>> 9bf8b19acb2fc8582ac33ccf09ae53943fe3fca0
 
     [queue inDatabase:^(FMDatabase *db) {
         BOOL successFul = [db executeUpdate:opeartionStr,@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
