@@ -575,7 +575,7 @@ static SocketManager *manager = nil;
                     //拼接我和被邀请人的姓名
                     NSMutableArray *bondNamesArr = [NSMutableArray array];
                     for (NSString *userId in bondingArr) {
-//                        GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:userId andConverseId:groupId];
+                        
                         GroupUserModel *userModel = [self getGroupUser:userId fromArr:groupUsers];
                         [bondNamesArr addObject:userModel.friend_nick];
                     }
@@ -587,7 +587,7 @@ static SocketManager *manager = nil;
                     
                     if (containMe) {
                         
-                        systemMsg.text = [NSString stringWithFormat:@"%@邀请%@加入了群聊",actName,tbondName];
+                        systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请%@加入了群聊",actName,tbondName];
                         
                         //标记出席了当前群
 //                        GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
