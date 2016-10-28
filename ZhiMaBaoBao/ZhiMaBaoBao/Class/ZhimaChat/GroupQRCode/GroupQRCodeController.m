@@ -55,7 +55,7 @@
         }
         
         NSString *QRCodeStr = responseData.data;
-        [self.QRCodeView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,QRCodeStr]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [self.QRCodeView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",DFAPIURL,QRCodeStr]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             
         }];
         

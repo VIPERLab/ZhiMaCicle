@@ -56,7 +56,7 @@
         
         NSString *urlData = responseData.data;
         if (urlData.length) {
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,urlData]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",DFAPIURL,urlData]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 
             }];
         } else {
