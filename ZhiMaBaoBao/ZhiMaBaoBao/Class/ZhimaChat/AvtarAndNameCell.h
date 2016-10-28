@@ -13,7 +13,7 @@
 
 @interface AvtarAndNameCell : UITableViewCell
 
-
+@property (weak, nonatomic) IBOutlet UIView *bottomLineView;
 @property (weak, nonatomic) IBOutlet UIView *separtor;
 @property (weak, nonatomic) IBOutlet UIImageView *avtar;
 @property (weak, nonatomic) IBOutlet UILabel *name;

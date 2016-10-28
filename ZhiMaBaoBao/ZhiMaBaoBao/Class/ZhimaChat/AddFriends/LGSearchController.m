@@ -104,7 +104,7 @@ static NSString *const reuseIdentifier = @"searchResultCell";
     AvtarAndNameCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     ZhiMaFriendModel *friendModel = self.dataArray[indexPath.row];
     cell.friendModel = friendModel;
-    
+    cell.bottomLineView.hidden = YES;
     return cell;
 }
 

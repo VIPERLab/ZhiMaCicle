@@ -172,16 +172,41 @@
             [info save];
             
             //新需求-> 跳转到更多信息页
-            MoreInfoController *vc = [[MoreInfoController alloc] init];
-            vc.password = self.password;
-            vc.isResgiste = YES;
-            [self.navigationController pushViewController:vc animated:YES];
+//            MoreInfoController *vc = [[MoreInfoController alloc] init];
+//            vc.password = self.password;
+//            vc.isResgiste = YES;
+//            [self.navigationController pushViewController:vc animated:YES];
+            
+            //直接执行登录操作
+            [self loginAction];
             
         }else{
             [LCProgressHUD showFailureText:obj.msg]; 
         }
     }];
 
+}
+
+- (void)loginAction{
+    [self.view endEditing:YES];
+    [LGNetWorking loginWithPhone:self.phoneNumber password:self.password success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            UserInfo *info = [UserInfo read];
+            info.hasLogin = YES;
+            [info save];
+            
+            [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:nil object:nil];
+            
+            
+            [LCProgressHUD hide];
+            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
+            
+        }else{
+            [LCProgressHUD showFailureText:responseData.msg];
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:error.msg];
+    }];
 }
 
 /**
