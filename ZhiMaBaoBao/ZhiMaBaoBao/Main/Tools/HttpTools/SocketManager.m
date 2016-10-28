@@ -396,7 +396,7 @@ static SocketManager *manager = nil;
             NSDictionary *resDic = responceData[@"data"];
             NSString *toUid = resDic[@"toUidOrGroupId"];
             LGMessage *systemMsg = [[LGMessage alloc] init];
-            systemMsg.text = @"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天。";
+            systemMsg.text = @"你不是对方的朋友，请先发送朋友验证请求，对方验证通过后才能聊天";
             systemMsg.fromUid = USERINFO.userID;
             systemMsg.toUidOrGroupId = toUid;
             systemMsg.type = MessageTypeSystem;
@@ -415,7 +415,7 @@ static SocketManager *manager = nil;
             NSDictionary *resDic = responceData[@"data"];
             NSString *toUid = resDic[@"toUidOrGroupId"];
             LGMessage *systemMsg = [[LGMessage alloc] init];
-            systemMsg.text = @"消息已成功发送，但被对方拒绝。";
+            systemMsg.text = @"消息已成功发送，但被对方拒绝";
             systemMsg.fromUid = toUid;
             systemMsg.toUidOrGroupId = USERINFO.userID;
             systemMsg.type = MessageTypeSystem;
@@ -572,31 +572,31 @@ static SocketManager *manager = nil;
                         [bondingArr removeObject:auserId];
                     }
                     
-                    //拼接我和被邀请人的姓名
-                    NSMutableArray *bondNamesArr = [NSMutableArray array];
-                    for (NSString *userId in bondingArr) {
-                        
-                        GroupUserModel *userModel = [self getGroupUser:userId fromArr:groupUsers];
-                        if (!userModel.userId.length) {
-                            continue;
-                        }
-                        [bondNamesArr addObject:userModel.friend_nick];
-                    }
-                    NSString *bondName = [bondNamesArr componentsJoinedByString:@","];
-                    NSString *tbondName = [NSString stringWithFormat:@"你和\"%@\"",bondName];
-                    if (bondNamesArr.count == 0) {
+                    NSString *tbondName = nil;  //系统提示消息拼接姓名
+                    if (bondingArr.count == 0) {    //被邀请者只有自己一个人
                         tbondName = @"你";
+                    }else{
+                        //拼接我和被邀请人的姓名
+                        NSMutableArray *bondNamesArr = [NSMutableArray array];
+                        for (NSString *userId in bondingArr) {
+                            
+                            GroupUserModel *userModel = [self getGroupUser:userId fromArr:groupUsers];
+                            if (!userModel.userId.length) {
+                                continue;
+                            }
+                            [bondNamesArr addObject:userModel.friend_nick];
+                        }
+                        NSString *bondName = [bondNamesArr componentsJoinedByString:@","];
+                        tbondName = [NSString stringWithFormat:@"你和\"%@\"",bondName];
                     }
+                    
                     
                     if (containMe) {
                         
                         systemMsg.text = [NSString stringWithFormat:@"\"%@\"邀请%@加入了群聊",actName,tbondName];
                         
                         //标记出席了当前群
-                        GroupUserModel *usermodel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:groupId];
-                        if (!usermodel.userId) {
-                            usermodel = [self getGroupUser:USERINFO.userID fromArr:groupUsers];
-                        }
+                        GroupUserModel *usermodel = [self getGroupUser:USERINFO.userID fromArr:groupUsers];
                         
                         if (usermodel.userId.length) {
                             usermodel.memberGroupState = NO;
@@ -756,7 +756,7 @@ static SocketManager *manager = nil;
 - (void)addSystemMsgToSqlite:(ZhiMaFriendModel *)friend{
     
     LGMessage *systemMsg = [[LGMessage alloc] init];
-    systemMsg.text = [NSString stringWithFormat:@"%@通过了你的朋友验证请求,现在可以开始聊天了。",friend.user_Name];
+    systemMsg.text = [NSString stringWithFormat:@"%@通过了你的朋友验证请求,现在可以开始聊天了",friend.user_Name];
     systemMsg.fromUid = USERINFO.userID;
     systemMsg.toUidOrGroupId = friend.user_Id;
     systemMsg.type = MessageTypeSystem;

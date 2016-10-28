@@ -53,9 +53,13 @@
 - (void)saveButtonDidClick {
     [self.textField resignFirstResponder];
     [LCProgressHUD showLoadingText:@"正在修改昵称"];
+    if (!self.textField.hasText) {
+        [LCProgressHUD showFailureText:@"昵称不能为空"];
+        return;
+    }
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"username" andChangeValue:self.textField.text success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:responseData.msg];
+            [LCProgressHUD showFailureText:@"暂不支持表情符号"];
             return ;
         }
         

@@ -236,6 +236,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.textField resignFirstResponder];
+
     if (tableView == self.tableView) {
         if (self.hideFirstSection) {   //不显示"选择群聊"
 
@@ -317,7 +319,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         }
 
     }else{
-        [self.textField resignFirstResponder];
         
         ZhiMaFriendModel *friend = self.searchResultArr[indexPath.row];
         if (self.hideFlagBtn) {     //选择好友 ，转发消息
