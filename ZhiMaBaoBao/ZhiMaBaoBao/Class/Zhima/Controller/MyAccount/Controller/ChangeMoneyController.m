@@ -35,8 +35,10 @@
 }
 
 - (void)setupNav {
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithTitle:@"明细" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonAction)];
-    self.navigationItem.rightBarButtonItem = rightBarButton;
+    if (self.model.payuser == 1 ) {
+        UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithTitle:@"明细" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonAction)];
+        self.navigationItem.rightBarButtonItem = rightBarButton;
+    }
 }
 
 - (void)setupView {

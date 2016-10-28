@@ -22,4 +22,6 @@
 
 @property (nonatomic, copy) NSString *user_type;
 
+@property (nonatomic, assign) int payuser; //0 不是充值用户  ->  1 是充值用户
+
 @end
