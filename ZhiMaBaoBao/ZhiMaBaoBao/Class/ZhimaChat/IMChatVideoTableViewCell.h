@@ -6,6 +6,8 @@
 //  Copyright © 2016年 liugang. All rights reserved.
 //
 
+// 小视频cell
+
 #import "BaseChatTableViewCell.h"
 #import "PKFullScreenPlayerView.h"
 #import "HKPieChartView.h"
