@@ -111,6 +111,7 @@
     float contentH = [_model.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(contentW, MAXFLOAT)].height;
     if (![_model.content isEqualToString:@""]) {
         contentH = [TQRichTextView getRechTextViewHeightWithText:_contentLabel.text viewWidth:contentW font:[UIFont systemFontOfSize:15] lineSpacing:1.5].height;
+//        contentH = contentH > 45 ? 45 : contentH;
         [_contentLabel setFrame:CGRectMake(contentX, contentY, contentW, contentH)];
     }
     

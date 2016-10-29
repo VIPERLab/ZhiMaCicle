@@ -114,6 +114,34 @@
     }];
 }
 
+- (void)notinceQRCode {
+    int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
+    SDBrowserImageView *tempImageView = _scrollView.subviews[index];
+    NSLog(@"%@",tempImageView.image);
+    
+    
+    
+    if(tempImageView.image){
+        //1. 初始化扫描仪，设置设别类型和识别质量
+        CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeQRCode context:nil options:@{CIDetectorAccuracy : CIDetectorAccuracyHigh}];
+        //2. 扫描获取的特征组
+        NSArray *features = [detector featuresInImage:tempImageView.image.CIImage];
+        //3. 获取扫描结果
+        for (CIQRCodeFeature *qrCodeFeature in features) {
+            NSString *scannedResult = qrCodeFeature.messageString;
+            NSLog(@"%@",scannedResult);
+        }
+//        CIQRCodeFeature *feature = [features objectAtIndex:0];
+//        
+//        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"扫描结果" message:scannedResult delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//        [alertView show];
+    }else {
+        
+        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"扫描结果" message:@"您还没有生成二维码" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alertView show];
+    }
+}
+
 
 // 保存图片
 - (void)saveImage
@@ -289,6 +317,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:K_ForwardPhotoNotifation object:nil userInfo:params];
     } else if (buttonIndex == 1) { // 保存图片
         [self saveImage];
+//        [self notinceQRCode];
     } else if (buttonIndex == 2) { // 收藏图片
         [self collectionImage];
     } else if (buttonIndex == 3) { // 取消

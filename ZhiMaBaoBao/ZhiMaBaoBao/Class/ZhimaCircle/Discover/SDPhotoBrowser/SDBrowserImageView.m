@@ -15,7 +15,7 @@
     __weak SDWaitingView *_waitingView;
     BOOL _didCheckSize;
     UIScrollView *_scroll;
-    UIImageView *_scrollImageView;
+//    UIImageView *self.scrollImageView;
     UIScrollView *_zoomingScroolView;
     UIImageView *_zoomingImageView;
     CGFloat _totalScale;
@@ -59,7 +59,7 @@
             scroll.backgroundColor = [UIColor whiteColor];
             UIImageView *imageView = [[UIImageView alloc] init];
             imageView.image = self.image;
-            _scrollImageView = imageView;
+            self.scrollImageView = imageView;
             [scroll addSubview:imageView];
             scroll.backgroundColor = SDPhotoBrowserBackgrounColor;
             _scroll = scroll;
@@ -72,9 +72,9 @@
 
         CGFloat imageViewH = self.bounds.size.width * (imageSize.height / imageSize.width);
 
-        _scrollImageView.bounds = CGRectMake(0, 0, _scroll.frame.size.width, imageViewH);
-        _scrollImageView.center = CGPointMake(_scroll.frame.size.width * 0.5, _scrollImageView.frame.size.height * 0.5);
-        _scroll.contentSize = CGSizeMake(0, _scrollImageView.bounds.size.height);
+        self.scrollImageView.bounds = CGRectMake(0, 0, _scroll.frame.size.width, imageViewH);
+        self.scrollImageView.center = CGPointMake(_scroll.frame.size.width * 0.5, self.scrollImageView.frame.size.height * 0.5);
+        _scroll.contentSize = CGSizeMake(0, self.scrollImageView.bounds.size.height);
         
     } else {
         if (_scroll) [_scroll removeFromSuperview]; // 防止旋转时适配的scrollView的影响
@@ -122,8 +122,8 @@
             label.textAlignment = NSTextAlignmentCenter;
             [imageViewWeak addSubview:label];
         } else {
-            _scrollImageView.image = image;
-            [_scrollImageView setNeedsDisplay];
+            self.scrollImageView.image = image;
+            [self.scrollImageView setNeedsDisplay];
         }
    
     }];

@@ -74,6 +74,13 @@
         
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:responseData.msg];
+            return ;
+        }
+        
+        if (responseData.code == 81) {
+            [LCProgressHUD showFailureText:responseData.msg];
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
         }
         
         [LCProgressHUD hide];
