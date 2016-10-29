@@ -35,6 +35,10 @@
 #import "ComplainViewController.h" //投诉页面
 #import "SetupCircleLimitController.h" //设置朋友圈权限
 
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "DNAsset.h"
+#import "DNImagePickerController.h" //图片选择器
+
 #import "ChatKeyBoard.h" //键盘工具条
 #import "FaceSourceManager.h"  
 #import "LGNetWorking.h" //请求工具类
@@ -49,7 +53,7 @@
 #define kTimeLineTableViewCellId @"SDTimeLineCell"
 
 
-@interface SDTimeLineTableViewController () <SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,KXDiscoverNewMessageViewDelegate,UITableViewDelegate,UITableViewDataSource,KXCopyViewDelegate,KXActionSheetDelegate>
+@interface SDTimeLineTableViewController () <SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,KXDiscoverNewMessageViewDelegate,UITableViewDelegate,UITableViewDataSource,KXCopyViewDelegate,KXActionSheetDelegate,DNImagePickerControllerDelegate>
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) SDTimeLineTableHeaderView *headerView;  //头部视图
 
@@ -1003,21 +1007,73 @@
         return;
     } else if (sheet.tag == 100) {
         //打开图片相册
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        switch (buttonIndex) {
-            case 0:
-                picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                break;
-            case 1:
-                picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                break;
-            default:
-                return;
-                break;
+        if (buttonIndex == 0) {
+            
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.delegate = self;
+            picker.allowsEditing = NO;
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self.navigationController presentViewController:picker animated:YES completion:nil];
+            return;
+            
         }
-        [self.navigationController presentViewController:picker animated:YES completion:nil];
+        
+        
+        DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
+        imagePicker.imagePickerDelegate = self;
+        imagePicker.kDNImageFlowMaxSeletedNumber = 1;
+        imagePicker.filterType = DNImagePickerFilterTypePhotos;
+        [self presentViewController:imagePicker animated:YES completion:nil];
     }
+}
+
+- (void)dnImagePickerController:(DNImagePickerController *)imagePickerController sendImages:(NSArray *)imageAssets isFullImage:(BOOL)fullImage {
+    
+    ALAssetsLibrary *lib = [ALAssetsLibrary new];
+    
+    
+    DNAsset *dnasset = imageAssets[0];
+    [lib assetForURL:dnasset.url resultBlock:^(ALAsset *asset) {
+        UIImage *image;
+        if (fullImage) {
+            image = [UIImage imageWithCGImage:asset.thumbnail];
+        } else {
+            image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage];
+        }
+        
+        [LCProgressHUD showLoadingText:@"正在上传图片"];
+        [LGNetWorking uploadPhoto:USERINFO.sessionId image:UIImageJPEGRepresentation(image, 0.8) fileName:@"backgroundImg" andFuctionName:@"backgroundImg" block:^(ResponseData *responseData) {
+            
+            if (responseData.code != 0) {
+                [LCProgressHUD showFailureText:responseData.msg];
+            } else {
+                [LCProgressHUD showSuccessText:@"上传成功"];
+                UserInfo *info = [UserInfo read];
+                info.backgroundImg = responseData.data;
+                [info save];
+                [self.headerView.backgroundImageView setImage:image forState:UIControlStateNormal];
+            }
+            [imagePickerController dismissViewControllerAnimated:YES completion:^{
+                self.tabBarController.tabBar.hidden = YES;
+            }];
+            
+        }];
+        
+        
+    } failureBlock:nil];
+    
+    
+    
+    
+    
+}
+
+
+- (void)dnImagePickerControllerDidCancel:(DNImagePickerController *)imagePicker {
+    [imagePicker dismissViewControllerAnimated:YES completion:^{
+        self.tabBarController.tabBar.hidden = YES;
+    }];
+    
 }
 
 
@@ -1029,21 +1085,23 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
     UIImage *image = info[@"UIImagePickerControllerOriginalImage"];
-    NSData *imageData = UIImageJPEGRepresentation(image, 1);
-    
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
+    [LCProgressHUD showLoadingText:@"正在上传图片"];
     [LGNetWorking uploadPhoto:USERINFO.sessionId image:imageData fileName:@"backgroundImg" andFuctionName:@"backgroundImg" block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
-            return ;
+            [LCProgressHUD showFailureText:responseData.msg];
+        } else {
+            [LCProgressHUD showSuccessText:@"上传成功"];
+            UserInfo *info = [UserInfo read];
+            info.backgroundImg = responseData.data;
+            [info save];
+            [self.headerView.backgroundImageView setImage:image forState:UIControlStateNormal];
         }
-        UserInfo *info = [UserInfo read];
-        info.backgroundImg = responseData.data;
-        [info save];
-        [self.headerView.backgroundImageView setImage:image forState:UIControlStateNormal];
-        
+        [picker dismissViewControllerAnimated:YES completion:nil];
     }];
     
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 

@@ -331,13 +331,6 @@
         return;
         
     }
-//      else {
-//        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-//        [self.navigationController presentViewController:picker animated:YES completion:nil];
-//        return;
-//    }
-    
-    
     // 点击的是相册
     int limitNum = 9 - self.imagesArray.count;
     

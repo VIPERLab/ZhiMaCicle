@@ -78,7 +78,8 @@
 - (void)setupView {
     self.view.backgroundColor = [UIColor colorFormHexRGB:@"2e3132"];
     
-    UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, 392)];
+    CGFloat centerHeigth = (ScreenWidth - 60) + 45 + 10;
+    UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, centerHeigth)];
     centerView.backgroundColor = [UIColor whiteColor];
     centerView.layer.cornerRadius = 10;
     self.centerView = centerView;
@@ -96,10 +97,12 @@
     titleLabel.text = self.model.groupName;
     [self.centerView addSubview:titleLabel];
     
-    CGFloat imageW = 250;
+    
+    
+    CGFloat imageX = 20;
+    CGFloat imageW = CGRectGetWidth(centerView.frame) - 40;
     CGFloat imageH = imageW;
-    CGFloat imageX = (CGRectGetWidth(self.centerView.frame) - imageW) * 0.5;
-    CGFloat imageY = (CGRectGetHeight(self.centerView.frame) - imageH) * 0.5;
+    CGFloat imageY = CGRectGetMaxY(userIcon.frame) + 10;
     UIImageView *QRCodeView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     QRCodeView.backgroundColor = [UIColor whiteColor];
     self.QRCodeView = QRCodeView;

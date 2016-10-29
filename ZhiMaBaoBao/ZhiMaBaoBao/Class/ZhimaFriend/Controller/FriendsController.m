@@ -226,6 +226,14 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         }
     }
     
+    // 如果已经在好友列表内，则不显示新好友请求
+    for (ZhiMaFriendModel *model in self.friends) {
+        if ([neewFriend.user_Id isEqualToString:model.user_Id]) {
+            return;
+        }
+    }
+    
+    
     [self.nFriends addObject:neewFriend.user_Id];
     
     [self playSystemAudio];

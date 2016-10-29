@@ -127,8 +127,8 @@
         
         [self.buttonArray addObject:imageButton];
         [imageButton addTarget:self action:@selector(addPhotoButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
+        imageButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
         [imageButton setImage:imageArray[index] forState:UIControlStateNormal];
-        
         
     }
     
