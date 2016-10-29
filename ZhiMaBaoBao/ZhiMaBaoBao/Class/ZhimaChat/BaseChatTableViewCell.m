@@ -125,7 +125,6 @@
         oldImage = [UIImage imageNamed:DEFAULT_CHAT_CELL_BUBBLE_LEFT_NORMAL_IMAGE];
     }
     
-    
     //聊天气泡
 //    UIImage *bgImage = [oldImage stretchableImageWithLeftCapWidth:15 topCapHeight:20];
     
