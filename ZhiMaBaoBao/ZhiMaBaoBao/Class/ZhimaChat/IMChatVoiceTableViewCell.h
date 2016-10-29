@@ -6,6 +6,8 @@
 //  Copyright © 2016年 liugang. All rights reserved.
 //
 
+// 语音cell
+
 #import "BaseChatTableViewCell.h"
 
 #define BubbleMaxWidth   145

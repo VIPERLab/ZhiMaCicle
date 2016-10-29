@@ -82,6 +82,8 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 
 //请求好友详细资料
 - (void)requestFriendProfile:(BOOL)addSqlit{
+    
+    
     [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             self.hasRequestData = YES;
