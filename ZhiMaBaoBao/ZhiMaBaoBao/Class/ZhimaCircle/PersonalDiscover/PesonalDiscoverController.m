@@ -77,7 +77,7 @@
     SDTimeLineTableHeaderView *headerView = [SDTimeLineTableHeaderView new];
     headerView.delegate = self;
     self.headerView = headerView;
-    headerView.frame = CGRectMake(0, 0, 0, 260);
+    headerView.frame = CGRectMake(0, 0, 0, ScreenWidth);
     self.tableView.tableHeaderView = headerView;
     
 }

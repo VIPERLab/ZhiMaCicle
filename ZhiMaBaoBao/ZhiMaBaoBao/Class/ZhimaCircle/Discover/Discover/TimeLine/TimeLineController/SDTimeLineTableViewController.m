@@ -190,7 +190,7 @@
     self.headerView.userName = USERINFO.username;
     self.headerView.sessionID = USERINFO.sessionId;
     self.headerView.openFirAccount = USERINFO.userID;
-    headerView.frame = CGRectMake(0, 0, 0, 260); //260
+    headerView.frame = CGRectMake(0, 0, 0, ScreenWidth - 50); //260
     self.tableView.tableHeaderView = headerView;
     
     [self.tableView registerClass:[SDTimeLineCell class] forCellReuseIdentifier:kTimeLineTableViewCellId];
@@ -1007,23 +1007,26 @@
         return;
     } else if (sheet.tag == 100) {
         //打开图片相册
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         if (buttonIndex == 0) {
-            
-            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             picker.delegate = self;
-            picker.allowsEditing = NO;
+            picker.allowsEditing = YES;
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
             [self.navigationController presentViewController:picker animated:YES completion:nil];
             return;
             
+        } else if (buttonIndex == 1) {
+            picker.delegate = self;
+            picker.allowsEditing = YES;
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self.navigationController presentViewController:picker animated:YES completion:nil];
+            return;
         }
-        
-        
-        DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
-        imagePicker.imagePickerDelegate = self;
-        imagePicker.kDNImageFlowMaxSeletedNumber = 1;
-        imagePicker.filterType = DNImagePickerFilterTypePhotos;
-        [self presentViewController:imagePicker animated:YES completion:nil];
+//        DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
+//        imagePicker.imagePickerDelegate = self;
+//        imagePicker.kDNImageFlowMaxSeletedNumber = 1;
+//        imagePicker.filterType = DNImagePickerFilterTypePhotos;
+//        [self presentViewController:imagePicker animated:YES completion:nil];
     }
 }
 
@@ -1084,7 +1087,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
-    UIImage *image = info[@"UIImagePickerControllerOriginalImage"];
+    UIImage *image = info[@"UIImagePickerControllerEditedImage"];
     NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
     [LCProgressHUD showLoadingText:@"正在上传图片"];
     [LGNetWorking uploadPhoto:USERINFO.sessionId image:imageData fileName:@"backgroundImg" andFuctionName:@"backgroundImg" block:^(ResponseData *responseData) {
