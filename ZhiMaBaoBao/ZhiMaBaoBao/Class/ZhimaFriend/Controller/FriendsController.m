@@ -233,7 +233,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     for (ZhiMaFriendModel *model in self.friends) {
         if ([neewFriend.user_Id isEqualToString:model.user_Id]) {
             //直接系统同意他的好友请求，并且不显示新的好友请求提示
-            [[SocketManager shareInstance] agreeFriendRequest:neewFriend.user_Id];
+//            [[SocketManager shareInstance] agreeFriendRequest:neewFriend.user_Id];
             return;
         }
     }
