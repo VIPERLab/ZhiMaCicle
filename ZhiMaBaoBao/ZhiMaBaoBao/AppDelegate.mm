@@ -334,37 +334,37 @@
     }];
     
     
-    FMDatabaseQueue *queue2 = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
-    [queue2 inDatabase:^(FMDatabase *db) {
-        int dbVersion = [db userVersion];
-        if (dbVersion < app_Version) {
-            //需要更新朋友圈数据库
-            NSLog(@"需要更新朋友圈数据库");
-            
-            NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"content_type" andColumnType:@"INTEGER"];
-            BOOL success = [db executeUpdate:updataStr1];
-            if (success) {
-                NSLog(@"更新数据库成功");
-            } else {
-                NSLog(@"更新数据库失败");
-            }
-            
-            
-            NSString *updataStr2 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"article_link" andColumnType:@"TEXT"];
-            BOOL success2 = [db executeUpdate:updataStr2];
-            if (success2) {
-                NSLog(@"更新数据库成功");
-            } else {
-                NSLog(@"更新数据库失败");
-            }
-            
-            //设置数据库版本号
-            if (success && success2) {
-                [db setUserVersion:app_Version];
-            }
-            
-        }
-    }];
+//    FMDatabaseQueue *queue2 = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
+//    [queue2 inDatabase:^(FMDatabase *db) {
+//        int dbVersion = [db userVersion];
+//        if (dbVersion < app_Version) {
+//            //需要更新朋友圈数据库
+//            NSLog(@"需要更新朋友圈数据库");
+//            
+//            NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"content_type" andColumnType:@"INTEGER"];
+//            BOOL success = [db executeUpdate:updataStr1];
+//            if (success) {
+//                NSLog(@"更新数据库成功");
+//            } else {
+//                NSLog(@"更新数据库失败");
+//            }
+//            
+//            
+//            NSString *updataStr2 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"article_link" andColumnType:@"TEXT"];
+//            BOOL success2 = [db executeUpdate:updataStr2];
+//            if (success2) {
+//                NSLog(@"更新数据库成功");
+//            } else {
+//                NSLog(@"更新数据库失败");
+//            }
+//            
+//            //设置数据库版本号
+//            if (success && success2) {
+//                [db setUserVersion:app_Version];
+//            }
+//            
+//        }
+//    }];
     
     
     
