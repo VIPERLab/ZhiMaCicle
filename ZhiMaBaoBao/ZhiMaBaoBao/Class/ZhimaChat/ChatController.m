@@ -256,7 +256,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             
             //如果是图片 添加到图片数组
             if (message.type == MessageTypeImage) {
-                NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":message.text,@"fromUid":message.fromUid};
+                NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":message.text,@"fromUid":message.fromUid,@"msgid":message.msgid};
                 [self.allImagesInfo addObject:dic];
             }
             
@@ -541,7 +541,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     for (int i=0; i<marrImageInfo.count; i++) {
         NSDictionary*dic = marrImageInfo[i];
         NSString*index = dic[@"index"];
-        NSDictionary*nDic = @{@"index":[NSString stringWithFormat:@"%ld",[index integerValue] + marr.count],@"url":dic[@"url"],@"fromUid":dic[@"fromUid"]};
+        NSDictionary*nDic = @{@"index":[NSString stringWithFormat:@"%ld",[index integerValue] + marr.count],@"url":dic[@"url"],@"fromUid":dic[@"fromUid"],@"msgid":dic[@"msgid"]};
         [self.allImagesInfo removeObjectAtIndex:i];
         [self.allImagesInfo insertObject:nDic atIndex:i];
     }
@@ -550,7 +550,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.messages insertObject:marr[i] atIndex:0];
         LGMessage*message = marr[i];
         if (message.type == MessageTypeImage) {
-            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",marr.count-1-(long)i],@"url":message.text,@"fromUid":message.fromUid};
+            NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",marr.count-1-(long)i],@"url":message.text,@"fromUid":message.fromUid,@"msgid":message.msgid};
             [self.allImagesInfo insertObject:dic atIndex:0];
         }
     }
@@ -590,7 +590,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             [self.messages insertObject:message atIndex:0];
             
             if (message.type == MessageTypeImage) {
-                NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",arr.count-1-(long)i],@"url":message.text,@"fromUid":message.fromUid};
+                NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",arr.count-1-(long)i],@"url":message.text,@"fromUid":message.fromUid,@"msgid":message.msgid};
                 [self.allImagesInfo insertObject:dic atIndex:0];
             }
         }
@@ -1811,7 +1811,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
     
-    NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":[NSString stringWithFormat:@"%@%@",AUDIOPATH,imagePath],@"fromUid":message.fromUid};
+    NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",self.messages.count - 1],@"url":[NSString stringWithFormat:@"%@%@",AUDIOPATH,imagePath],@"fromUid":message.fromUid,@"msgid":message.msgid};
     [self.allImagesInfo addObject:dic];
 
     UIImage *image = self.imagesArray[0];
@@ -1844,7 +1844,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                     NSInteger  picIndex = [self.allImagesInfo indexOfObject:dic];
                     [self.allImagesInfo removeObject:dic];
                     NSLog(@"message.text = %@  index = %ld row = %ld",message.text,picIndex,index);
-                    NSDictionary*newdic = @{@"index":[NSString stringWithFormat:@"%ld",index],@"url":message.text,@"fromUid":message.fromUid};
+                    NSDictionary*newdic = @{@"index":[NSString stringWithFormat:@"%ld",index],@"url":message.text,@"fromUid":message.fromUid,@"msgid":message.msgid};
                     [self.allImagesInfo insertObject:newdic atIndex:picIndex];
                     
                 }
@@ -2050,6 +2050,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     NSDictionary *msg = self.allImagesInfo[index];
     NSString*urlStr = [msg[@"url"] stringByReplacingOccurrencesOfString:@"s_" withString:@""];
     browser.userId = msg[@"fromUid"];
+    browser.msgId = msg[@"msgid"];
     NSURL *url = [NSURL URLWithString:urlStr];
     return url;
 }
