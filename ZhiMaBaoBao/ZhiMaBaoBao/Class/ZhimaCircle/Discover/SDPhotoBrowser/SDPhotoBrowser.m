@@ -102,16 +102,29 @@
     NSURL *url = [self highQualityImageURLForIndex:index];
     NSString *str = url.absoluteString;
     
-    [LGNetWorking collectionCircleListWithCollectionType:3 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:@"" andBigImage:str andSource:@"" andAccount:self.userId success:^(ResponseData *responseData) {
-        if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:@"收藏失败"];
-            return ;
-        }
-        
-        [LCProgressHUD showSuccessText:@"收藏成功"];
-    } failure:^(ErrorData *error) {
-        
-    }];
+    if (self.fcId.length) {
+        [LGNetWorking collectionCircleListWithCollectionType:3 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:@"" andBigImage:str andSource:@"" andAccount:self.userId andMsgId:@"" andFcId:self.fcId success:^(ResponseData *responseData) {
+            if (responseData.code != 0) {
+                [LCProgressHUD showFailureText:@"收藏失败"];
+                return ;
+            }
+            [LCProgressHUD showSuccessText:@"收藏成功"];
+        } failure:^(ErrorData *error) {
+            
+        }];
+    } else if (self.msgId.length) {
+        [LGNetWorking collectionCircleListWithCollectionType:3 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:@"" andBigImage:str andSource:@"" andAccount:self.userId andMsgId:self.msgId andFcId:@"" success:^(ResponseData *responseData) {
+            if (responseData.code != 0) {
+                [LCProgressHUD showFailureText:@"收藏失败"];
+                return ;
+            }
+            [LCProgressHUD showSuccessText:@"收藏成功"];
+        } failure:^(ErrorData *error) {
+            
+        }];
+    }
+    
+    
 }
 
 - (void)notinceQRCode {

@@ -33,6 +33,8 @@
 @property (nonatomic, assign) NSInteger currentImageIndex;
 @property (nonatomic, assign) NSInteger imageCount;
 @property (nonatomic, copy) NSString *userId;
+@property (nonatomic, copy) NSString *msgId;
+@property (nonatomic, copy) NSString *fcId;
 @property (nonatomic, assign) BOOL isChat;
 
 //收藏图片专用属性

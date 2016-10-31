@@ -284,11 +284,11 @@
     
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
     NSString *version = infoDict[@"CFBundleShortVersionString"];
-    if ([USERINFO.appVersion isEqualToString:version]) {
-        return;
-    }
+//    if ([USERINFO.appVersion isEqualToString:version]) {
+//        return;
+//    }
     
-    
+    // 更新消息数据库
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     CGFloat app_Version = [[infoDictionary objectForKey:@"CFBundleShortVersionString"] floatValue];
@@ -296,7 +296,7 @@
         
         int dbVersion = [db userVersion];
         if (dbVersion < app_Version) {
-            NSLog(@"需要更新数据库");
+            NSLog(@"需要消息更新数据库");
             //增加字段  “alter table "表名" add “字段名” “类型” ”  执行这个sql语句就行
             NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Chat_Message_Table withColumn:@"holderImageUrlString" andColumnType:@"TEXT"];
             BOOL success = [db executeUpdate:updataStr1];
@@ -324,6 +324,7 @@
                 NSLog(@"更新数据库失败");
             }
             
+            
             //设置数据库版本号
             if (success && success2 && success3) {
                 [db setUserVersion:app_Version];
@@ -331,6 +332,42 @@
             
         }
     }];
+    
+    
+    FMDatabaseQueue *queue2 = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
+    [queue2 inDatabase:^(FMDatabase *db) {
+        int dbVersion = [db userVersion];
+        if (dbVersion < app_Version) {
+            //需要更新朋友圈数据库
+            NSLog(@"需要更新朋友圈数据库");
+            
+            NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"content_type" andColumnType:@"INTEGER"];
+            BOOL success = [db executeUpdate:updataStr1];
+            if (success) {
+                NSLog(@"更新数据库成功");
+            } else {
+                NSLog(@"更新数据库失败");
+            }
+            
+            
+            NSString *updataStr2 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"article_link" andColumnType:@"TEXT"];
+            BOOL success2 = [db executeUpdate:updataStr2];
+            if (success2) {
+                NSLog(@"更新数据库成功");
+            } else {
+                NSLog(@"更新数据库失败");
+            }
+            
+            //设置数据库版本号
+            if (success && success2) {
+                [db setUserVersion:app_Version];
+            }
+            
+        }
+    }];
+    
+    
+    
 }
 
 //创建数据库表

@@ -1133,7 +1133,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     } else {
         collectionId = message.fromUid;
     }
-    [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:content andSmallImg:smallImg andBigImage:@"" andSource:@"" andAccount:collectionId success:^(ResponseData *responseData) {
+    [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:content andSmallImg:smallImg andBigImage:@"" andSource:@"" andAccount:collectionId andMsgId:message.msgid andFcId:@"" success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:@"暂不支持收藏此类型消息"];
             return ;

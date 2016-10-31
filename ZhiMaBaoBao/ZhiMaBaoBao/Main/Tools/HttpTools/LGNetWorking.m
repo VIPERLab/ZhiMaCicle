@@ -865,7 +865,7 @@
  *  @param source         来源 目前给nil
  *  @param account        被收藏者的userID
  */
-+ (void)collectionCircleListWithCollectionType:(int)collectionType andSessionId:(NSString *)sessionId andConent:(NSString *)content andSmallImg:(NSString *)smallImg andBigImage:(NSString *)big_img andSource:(NSString *)source andAccount:(NSString *)account success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
++ (void)collectionCircleListWithCollectionType:(int)collectionType andSessionId:(NSString *)sessionId andConent:(NSString *)content andSmallImg:(NSString *)smallImg andBigImage:(NSString *)big_img andSource:(NSString *)source andAccount:(NSString *)account andMsgId:(NSString *)msgId andFcId:(NSString *)fcid success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = sessionId;
     params[@"collection_type"] = [NSString stringWithFormat:@"%zd",collectionType];
@@ -874,6 +874,8 @@
     params[@"big_img"] = big_img;
     params[@"source"] = source;
     params[@"oppositeId"] = account;
+    params[@"msgid"] = msgId;
+    params[@"fcid"] = fcid;
     
     [HttpTool POST:@"/moblie/addLoveCollection.do" params:params success:^(ResponseData *responseData) {
         successBlock(responseData);

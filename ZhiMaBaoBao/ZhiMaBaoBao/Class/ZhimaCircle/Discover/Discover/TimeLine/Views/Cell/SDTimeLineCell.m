@@ -44,7 +44,7 @@
 
 
 const CGFloat contentLabelFontSize = 14;
-CGFloat maxContentLabelHeight = 45; // 根据具体font而定
+CGFloat maxContentLabelHeight = 60; // 根据具体font而定
 
 NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLineCellOperationButtonClickedNotification";
 
@@ -73,6 +73,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     SDTimeLineCellOperationMenu *_operationMenu;
     UIImageView *_copyView;
     UIButton *_complainButton;
+    UIView *_linkTypeView;
 }
 
 
@@ -133,6 +134,13 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     _commentView = [SDTimeLineCellCommentView new];
     _commentView.delegate = self;
     
+    
+    
+    _linkTypeView = [UIView new];
+    _linkTypeView.backgroundColor = [UIColor colorFormHexRGB:@"dedede"];
+    
+    
+    
     _timeLabel = [UILabel new];
     _timeLabel.textColor = [UIColor colorFormHexRGB:@"737373"];
     _timeLabel.font = [UIFont systemFontOfSize:12];
@@ -166,7 +174,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     [self addSubview:_bottomLineView];
     
     
-    NSArray *views = @[_iconView, _nameLable, _contentLabel, _moreButton, _picContainerView, _timeLabel,_complainButton,_areaLabel, _operationButton, _operationMenu, _commentView];
+    NSArray *views = @[_iconView, _nameLable, _contentLabel, _moreButton, _picContainerView, _linkTypeView, _timeLabel,_complainButton,_areaLabel, _operationButton, _operationMenu, _commentView];
     
     [self.contentView sd_addSubviews:views];
     
@@ -199,9 +207,17 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     _picContainerView.sd_layout
     .leftEqualToView(_contentLabel); // 已经在内部实现宽度和高度自适应所以不需要再设置宽度高度，top值是具体有无图片在setModel方法中设置
     
+    //链接类型
+    _linkTypeView.sd_layout
+    .topSpaceToView(_picContainerView,margin)
+    .leftEqualToView(_contentLabel)
+    .rightEqualToView(_contentLabel)
+    .heightIs(0);
+    
+    
     _timeLabel.sd_layout
     .leftEqualToView(_contentLabel)
-    .topSpaceToView(_picContainerView, margin * 0.5)
+    .topSpaceToView(_linkTypeView, margin * 0.5)
     .heightIs(15);
     [_timeLabel setSingleLineAutoResizeWithMaxWidth:200];
     
@@ -250,7 +266,6 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
         [_complainButton setTitle:@"删除" forState:UIControlStateNormal];
     }else{
         [_complainButton setTitle:@"投诉" forState:UIControlStateNormal];
-
     }
     
     if (_copyView) {
@@ -275,8 +290,6 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     [_nameLable setTitle:model.friend_nick forState:UIControlStateNormal];
     CGFloat nameW = [model.friend_nick sizeWithFont:[UIFont systemFontOfSize:16] maxSize:CGSizeMake(ScreenWidth - 60, 20)].width;
     _nameLable.sd_layout.widthIs(nameW);
-    
-    
     
     
     // 正则筛选网址
@@ -305,8 +318,14 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     if (model.imglist.count) {
         picContainerTopMargin = 10;
     }
+    
     _picContainerView.sd_layout.topSpaceToView(_moreButton, picContainerTopMargin);
     
+    
+    if (model.content_type == 2) { //红包类型
+        NSLog(@"我是红包类型");
+        _linkTypeView.sd_layout.heightIs(150);
+    }
     
     //设置bottomView
     UIView *bottomView;

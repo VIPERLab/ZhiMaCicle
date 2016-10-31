@@ -35,9 +35,9 @@
 
 
 //  创建朋友圈table字段
-#define CircleField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, circle_ID INTEGER, userID TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL)"
+#define CircleField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, circle_ID INTEGER, userID TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL, content_type INTEGER, article_link TEXT)"
 // 取朋友圈table的字段名
-#define CircleFiels_Name @"friend_nick, circle_ID, userID, content, current_location, create_time, head_photo"
+#define CircleFiels_Name @"friend_nick, circle_ID, userID, content, current_location, create_time, head_photo, content_type, article_link"
 
 
 

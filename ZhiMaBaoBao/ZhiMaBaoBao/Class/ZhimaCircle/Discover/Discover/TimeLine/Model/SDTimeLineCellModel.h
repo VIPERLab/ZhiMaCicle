@@ -34,6 +34,10 @@
 
 @property (nonatomic, assign) BOOL isOpening;
 
+@property (nonatomic, assign) NSInteger content_type;     //朋友圈的内容类型:1文字 ,2链接
+
+@property (nonatomic, copy) NSString *article_link;       //链接地址
+
 //是否已经点赞
 @property (nonatomic, assign, getter = isLiked) BOOL liked;
 

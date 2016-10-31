@@ -287,7 +287,7 @@
  *  @param source         来源 目前给nil
  *  @param account        被收藏者的userID
  */
-+ (void)collectionCircleListWithCollectionType:(int)collectionType andSessionId:(NSString *)sessionId andConent:(NSString *)content andSmallImg:(NSString *)smallImg andBigImage:(NSString *)big_img andSource:(NSString *)source andAccount:(NSString *)account success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
++ (void)collectionCircleListWithCollectionType:(int)collectionType andSessionId:(NSString *)sessionId andConent:(NSString *)content andSmallImg:(NSString *)smallImg andBigImage:(NSString *)big_img andSource:(NSString *)source andAccount:(NSString *)account andMsgId:(NSString *)msgId andFcId:(NSString *)fcid success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
 // 获取收藏列表接口
 + (void)getCollectionListWithSessionId:(NSString *)sessionId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
