@@ -6,6 +6,8 @@
 //  Copyright (c) 2013年 Tentinet. All rights reserved.
 //
 
+// 文本cell
+
 #import <UIKit/UIKit.h>
 #import "TQRichTextView.h"
 #import "BaseChatTableViewCell.h"

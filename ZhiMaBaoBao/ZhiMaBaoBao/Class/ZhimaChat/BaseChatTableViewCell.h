@@ -6,6 +6,8 @@
 //  Copyright (c) 2014年 Tentinet. All rights reserved.
 //
 
+//聊天界面cell基类
+
 #import <UIKit/UIKit.h>
 #import "Constant.h"
 #import "LGMessage.h"
