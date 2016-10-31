@@ -422,6 +422,27 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+    
+    //获取登录状态，判断sessionId是否失效
+    [LGNetWorking getProvinceWithSessionID:USERINFO.sessionId block:^(ResponseData *responseData) {
+        if (responseData.code == 14) {  //sessionId已经失效，不执行socket连接  发送被挤下线通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:kOtherLogin object:nil];
+        }else{  //正常情况
+            UserInfo *info = [UserInfo read];
+            if (info.hasLogin) {
+                // 开启sorket
+                [[SocketManager shareInstance] connect];
+            }
+            
+            [JPUSHService resetBadge];
+            
+            [self countculatedTime];
+            //通知更新未读消息数
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
+        }
+    }];
+    
+    /*
     UserInfo *info = [UserInfo read];
     if (info.hasLogin) {
         // 开启sorket
@@ -433,6 +454,7 @@
     [self countculatedTime];
     //通知更新未读消息数
     [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
+     */
     
 }
 
@@ -522,6 +544,7 @@
     self.window.rootViewController = guideVC;
     
     UserInfo *info = [UserInfo read];
+    info.hasLogin = NO;
     //如果被挤下线
     if (info.isKicker) {
         

@@ -143,33 +143,6 @@
     [self addChildViewController:navigationVc];
 }
 
-////发送本地通知
-//- (void)sendLocalNotification:(NSString *)content{
-//    // 初始化本地通知对象
-//    UILocalNotification *notification = [[UILocalNotification alloc] init];
-//    if (notification) {
-//        // 设置通知的提醒时间
-//        NSDate *currentDate   = [NSDate date];
-//        notification.timeZone = [NSTimeZone defaultTimeZone]; // 使用本地时区
-//        notification.fireDate = [currentDate dateByAddingTimeInterval:0.f];
-//        
-//        // 设置重复间隔
-//        notification.repeatInterval = kCFCalendarUnitDay;
-//        
-//        // 设置提醒的文字内容
-//        notification.alertBody   = content;
-////        notification.alertAction = NSLocalizedString(@"起床了", nil);
-//        
-//        // 通知提示音 使用默认的
-//        notification.soundName= UILocalNotificationDefaultSoundName;
-//        
-//        // 设置应用程序右上角的提醒个数
-//        notification.applicationIconBadgeNumber = [self updateUnread];
-//        
-//        // 将通知添加到系统中
-//        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-//    }
-//}
 
 //获取未读消息提示
 - (NSInteger)updateUnread{
