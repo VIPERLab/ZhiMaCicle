@@ -32,7 +32,7 @@
 - (void)setup {
     _backgroundImageView = [UIButton new];
     _backgroundImageView.highlighted = NO;
-    _backgroundImageView.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    _backgroundImageView.imageView.contentMode = UIViewContentModeScaleToFill;
     [_backgroundImageView addTarget:self action:@selector(backGroundImageViewDidClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_backgroundImageView];
     

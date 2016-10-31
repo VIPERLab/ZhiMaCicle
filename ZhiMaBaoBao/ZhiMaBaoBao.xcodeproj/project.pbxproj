@@ -47,6 +47,7 @@
 		047F14221DABADAD00684881 /* chargeMomeyMdoel.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F14211DABADAD00684881 /* chargeMomeyMdoel.m */; };
 		047F142C1DAC850400684881 /* APAuthV2Info.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F14271DAC850400684881 /* APAuthV2Info.m */; };
 		047F142D1DAC850400684881 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F14291DAC850400684881 /* Order.m */; };
+		04830F691DC74524002F1B66 /* SDLinkTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04830F681DC74524002F1B66 /* SDLinkTypeView.m */; };
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04AB88431DACBF330087502C /* GroupQRCodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB88421DACBF330087502C /* GroupQRCodeController.m */; };
@@ -759,6 +760,8 @@
 		047F14271DAC850400684881 /* APAuthV2Info.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APAuthV2Info.m; sourceTree = "<group>"; };
 		047F14281DAC850400684881 /* Order.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Order.h; sourceTree = "<group>"; };
 		047F14291DAC850400684881 /* Order.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order.m; sourceTree = "<group>"; };
+		04830F671DC74524002F1B66 /* SDLinkTypeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLinkTypeView.h; sourceTree = "<group>"; };
+		04830F681DC74524002F1B66 /* SDLinkTypeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLinkTypeView.m; sourceTree = "<group>"; };
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
@@ -2223,6 +2226,15 @@
 				047F14291DAC850400684881 /* Order.m */,
 			);
 			path = AliPay;
+			sourceTree = "<group>";
+		};
+		04830F661DC7450A002F1B66 /* LinkTypeView */ = {
+			isa = PBXGroup;
+			children = (
+				04830F671DC74524002F1B66 /* SDLinkTypeView.h */,
+				04830F681DC74524002F1B66 /* SDLinkTypeView.m */,
+			);
+			path = LinkTypeView;
 			sourceTree = "<group>";
 		};
 		0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */ = {
@@ -3731,6 +3743,7 @@
 				04F579F11D9280BD002A6471 /* Cell */,
 				04F579F41D9280BD002A6471 /* CommentView */,
 				04F579F71D9280BD002A6471 /* HeaderView */,
+				04830F661DC7450A002F1B66 /* LinkTypeView */,
 				04F57B871D92841F002A6471 /* NewMessage(新消息提示框) */,
 				043510B91DBEF47F0031A895 /* Refresh */,
 				04F579FC1D9280BD002A6471 /* OperationMenu */,
@@ -5748,6 +5761,7 @@
 				0417509C1DA4952D00DCD7A9 /* ChatRoomInfoController.m in Sources */,
 				314109481DAB247600D6F367 /* NSString+MsgId.m in Sources */,
 				04EA7B1A1D9125C5005E5425 /* SelectedAreaController.m in Sources */,
+				04830F691DC74524002F1B66 /* SDLinkTypeView.m in Sources */,
 				311CEF7A1D921FDA00BBB1F9 /* LGNetWorking.m in Sources */,
 				04EA7B631D91282E005E5425 /* LBXScanView.m in Sources */,
 				04EA7D851D912872005E5425 /* ZXWifiParsedResult.m in Sources */,
