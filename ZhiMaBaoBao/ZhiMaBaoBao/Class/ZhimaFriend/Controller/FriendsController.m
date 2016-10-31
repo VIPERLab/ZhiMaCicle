@@ -112,13 +112,16 @@ static NSString * const headerIdentifier = @"headerIdentifier";
                 }
             }
             
-            //更新数据库会话表
-            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-            NSString *optionStr1 = [NSString stringWithFormat:@"converseHead_photo = '%@',converseName = '%@'",mFriend.user_Head_photo,mFriend.displayName];
-            NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",model.converseId]];
-            [queue inDatabase:^(FMDatabase *db) {
-                [db executeUpdate:upDataStr];
-            }];
+            //如果查到了好友数据，则更新会话列表
+            if (mFriend) {
+                //更新数据库会话表
+                FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+                NSString *optionStr1 = [NSString stringWithFormat:@"converseHead_photo = '%@',converseName = '%@'",mFriend.user_Head_photo,mFriend.displayName];
+                NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",model.converseId]];
+                [queue inDatabase:^(FMDatabase *db) {
+                    [db executeUpdate:upDataStr];
+                }];
+            }
             
         }
 
@@ -229,6 +232,8 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     // 如果已经在好友列表内，则不显示新好友请求
     for (ZhiMaFriendModel *model in self.friends) {
         if ([neewFriend.user_Id isEqualToString:model.user_Id]) {
+            //直接系统同意他的好友请求，并且不显示新的好友请求提示
+            [[SocketManager shareInstance] agreeFriendRequest:neewFriend.user_Id];
             return;
         }
     }

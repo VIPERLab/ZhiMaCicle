@@ -230,6 +230,11 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
         [self.tableView reloadData];
         //从新好友表中删除该条数据
         [FMDBShareManager deleteNewFriendByUseid:model.user_Id];
+        
+        //删除http 新的好友列表
+        [LGNetWorking deleteFriend:USERINFO.sessionId friendId:model.user_Id success:^(ResponseData *responseData) {
+        } failure:^(ErrorData *error) {
+        }];
     }
 }
 

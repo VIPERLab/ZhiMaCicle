@@ -66,8 +66,8 @@
             
             //状态码为重新登录
             if (data.code == 14) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"shouldLogin" object:nil];
-                return ;
+//                [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
+//                return ;
             }
             //成功访问
             SuccessfulBlock(data);

@@ -119,6 +119,9 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
         [info.topWindow resignKeyWindow];
 //        info.topWindow = nil;
         [info.keyWindow makeKeyAndVisible];
+        
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        
         [LCProgressHUD showSuccessText:@"发送成功"];
 
     }else{
