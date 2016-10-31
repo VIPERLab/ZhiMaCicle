@@ -262,7 +262,6 @@
     } else {
         [self loadRequest];
     }
-    
 }
 
 
@@ -270,6 +269,7 @@
 #pragma mark - 照相的点击事件
 - (void)PersonalDiscoverCellFirstCellDidClick {
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
+    new.circleType = 1;
     new.block = ^() {
         
     };
