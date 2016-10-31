@@ -471,6 +471,7 @@
                 [[SocketManager shareInstance] connect];
             }
             
+
             [JPUSHService resetBadge];
             
             [self countculatedTime];
