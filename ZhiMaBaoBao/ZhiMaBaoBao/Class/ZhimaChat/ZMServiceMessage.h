@@ -29,6 +29,9 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 @property (nonatomic, copy) NSString *msgContent;
 /** 消息图片*/
 @property (nonatomic, copy) NSString *msgPicUrl;
-
+/** 消息详情的链接*/
+@property (nonatomic, copy) NSString *msgUrl;
+// 多条消息（由多个ZMServiceMessage组成）
+@property (nonatomic, strong) NSArray *msgArr;
 
 @end
