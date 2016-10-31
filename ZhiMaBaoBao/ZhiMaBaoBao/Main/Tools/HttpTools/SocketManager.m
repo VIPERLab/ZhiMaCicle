@@ -289,7 +289,6 @@ static SocketManager *manager = nil;
                 userInfo[@"message"] = message;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
             }
-            
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
             NSDictionary *resDic = responceData[@"data"];

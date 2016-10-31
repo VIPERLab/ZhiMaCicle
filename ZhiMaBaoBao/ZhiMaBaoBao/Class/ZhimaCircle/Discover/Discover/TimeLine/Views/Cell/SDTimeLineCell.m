@@ -131,6 +131,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     _picContainerView = [SDWeiXinPhotoContainerView new];
     
     
+    
     _commentView = [SDTimeLineCellCommentView new];
     _commentView.delegate = self;
     
@@ -275,6 +276,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     }
     
     _picContainerView.userId = self.model.userId;
+    _picContainerView.fcid = self.model.circle_ID;
     
     [_commentView setupWithLikeItemsArray:model.likeItemsArray commentItemsArray:model.commentList];
     

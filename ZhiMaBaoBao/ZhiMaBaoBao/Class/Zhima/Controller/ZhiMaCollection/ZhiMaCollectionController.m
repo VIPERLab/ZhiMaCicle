@@ -111,6 +111,38 @@
     [self.navigationController pushViewController:detail animated:YES];
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        if (editingStyle == UITableViewCellEditingStyleDelete) {
+            // Delete the row from the data source.
+            ZhiMaCollectionModel *model = self.dataArray[indexPath.row];
+            // 删除
+            [LGNetWorking deletedCircleCollectionWithSessionId:USERINFO.sessionId andCollectionId:model.ID success:^(ResponseData *responseData) {
+                
+                if (responseData.code != 0) {
+                    return ;
+                }
+                
+                [LCProgressHUD showSuccessText:@"删除成功"];
+                [self.dataArray removeObject:model];
+                [_tableView reloadData];
+                
+            } failure:^(ErrorData *error) {
+                
+            }];
+            
+        }
+    }
+}
+
+
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];

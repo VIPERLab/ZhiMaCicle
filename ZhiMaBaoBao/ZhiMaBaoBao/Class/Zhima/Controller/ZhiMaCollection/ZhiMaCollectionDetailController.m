@@ -172,6 +172,10 @@
     return  _picView.image;
 }
 
+- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index {
+    return  [NSURL URLWithString:self.model.photoUrl];
+}
+
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
     if (index == 0) {

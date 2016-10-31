@@ -53,6 +53,7 @@
     _contentLabel.font = [UIFont systemFontOfSize:15];
     _contentLabel.textColor = [UIColor blackColor];
     _contentLabel.lineSpacing = 1.5;
+    _contentLabel.userInteractionEnabled = NO;
     [self addSubview:_contentLabel];
     
     _timeLabel = [UILabel new];

@@ -145,6 +145,7 @@
     SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
     browser.currentImageIndex = imageView.tag;
     browser.userId = picModel.weuser_id;
+    browser.fcId = self.fcid;
     browser.sourceImagesContainerView = self;
     browser.imageCount = self.picPathStringsArray.count;
     browser.delegate = self;

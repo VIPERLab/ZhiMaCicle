@@ -219,10 +219,10 @@
         
         [singleTap requireGestureRecognizerToFail:doubleTap];
         
-        if (_type != 1) { // 收藏专用
-            _longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressPhoto:)];
-            [imageView addGestureRecognizer:_longPressGesture];
-        }
+//        if (_type != 1) { // 收藏专用
+        _longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressPhoto:)];
+        [imageView addGestureRecognizer:_longPressGesture];
+//        }
         
         [imageView addGestureRecognizer:singleTap];
         [imageView addGestureRecognizer:doubleTap];
@@ -315,7 +315,15 @@
 
 - (void)longPressPhoto:(UIGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
-        KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"转发给朋友",@"保存图片",@"收藏"]];
+        KXActionSheet *sheet;
+        if (self.type == 0) {
+            sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"转发给朋友", @"保存图片",@"收藏"]];
+            sheet.tag = 10;
+        } else {
+            sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"转发给朋友", @"保存图片"]];
+            sheet.tag = 100;
+        }
+        
         sheet.delegate = self;
         [sheet show];
     }
@@ -323,18 +331,30 @@
 
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {   //转发给朋友
-        int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
-        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        params[@"imageUrl"] = [[self highQualityImageURLForIndex:index] absoluteString];
-        [[NSNotificationCenter defaultCenter] postNotificationName:K_ForwardPhotoNotifation object:nil userInfo:params];
-    } else if (buttonIndex == 1) { // 保存图片
-        [self saveImage];
-//        [self notinceQRCode];
-    } else if (buttonIndex == 2) { // 收藏图片
-        [self collectionImage];
-    } else if (buttonIndex == 3) { // 取消
-        
+    if (sheet.tag == 10) {
+        if (buttonIndex == 0) {   //转发给朋友
+            int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            params[@"imageUrl"] = [[self highQualityImageURLForIndex:index] absoluteString];
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_ForwardPhotoNotifation object:nil userInfo:params];
+        } else if (buttonIndex == 1) { // 保存图片
+            [self saveImage];
+        } else if (buttonIndex == 2) { // 收藏图片
+            [self collectionImage];
+        } else if (buttonIndex == 3) { // 取消
+            
+        }
+    } else if (sheet.tag == 100){
+        if (buttonIndex == 0) {   //转发给朋友
+            int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            params[@"imageUrl"] = [[self highQualityImageURLForIndex:index] absoluteString];
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_ForwardPhotoNotifation object:nil userInfo:params];
+        } else if (buttonIndex == 1) { // 保存图片
+            [self saveImage];
+        } else if (buttonIndex == 2) { // 
+            
+        }
     }
 }
 
