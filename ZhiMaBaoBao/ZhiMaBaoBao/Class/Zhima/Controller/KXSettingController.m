@@ -155,7 +155,6 @@
 - (void)exit {
     [LGNetWorking logout:USERINFO.sessionId block:^(ResponseData *responseData) {
         if (responseData) {
-            if (responseData.code == 0) {
                 [LCProgressHUD showSuccessText:responseData.msg];
                 
                 UserInfo *info = [UserInfo read];
@@ -174,15 +173,8 @@
                 
                 //跳转到登录页面
                 [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
-                
-            }else{
-                [LCProgressHUD showInfoText:responseData.msg];
-            }
         }
-    }];
-    
-    
-    
+    }];    
 }
 
 

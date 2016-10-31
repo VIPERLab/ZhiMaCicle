@@ -9,4 +9,6 @@
 
 @interface LGLoginController : LogResBaseController
 
+@property (nonatomic, assign) BOOL iskicker;    //被挤下线
+
 @end

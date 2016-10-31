@@ -115,7 +115,33 @@
     //监听电话状态，记录通话时长
     [self addCallRecordTime];
     
+    //如果用户已经登录过，已经有sessionId - 判断用户登录状态
+    if (userInfo.sessionId.length) {
+        [self judgeLoginState];
+    }
+    
     return YES;
+}
+
+- (void)judgeLoginState{
+    //获取登录状态，判断sessionId是否失效
+    [LGNetWorking getProvinceWithSessionID:USERINFO.sessionId block:^(ResponseData *responseData) {
+        if (responseData.code == 14) {  //sessionId已经失效，不执行socket连接  发送被挤下线通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:kOtherLogin object:nil];
+        }
+    }];
+}
+
+//用户在其他地方登录
+- (void)doOtherLogin{
+    //断开socket
+    [[SocketManager shareInstance] disconnect];
+    //
+    UserInfo *info = [UserInfo read];
+    info.isKicker = YES;
+    info.hasLogin = NO;
+    [info save];
+    [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
 }
 
 /*
@@ -405,6 +431,10 @@
     //接收用户退出通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
     
+    //被挤下线通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doOtherLogin) name:kOtherLogin object:nil];
+
+    
 }
 
 - (void)jumpMainController{
@@ -576,7 +606,9 @@
     // 关闭数据库
     [FMDBShareManager closeAllSquilteTable];
     
-    LGGuideController *vc = [[LGGuideController alloc] init];
+    LGLoginController *vc = [[LGLoginController alloc] init];
+    vc.iskicker = YES;
+//    LGGuideController *vc = [[LGGuideController alloc] init];
     UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = guideVC;
     

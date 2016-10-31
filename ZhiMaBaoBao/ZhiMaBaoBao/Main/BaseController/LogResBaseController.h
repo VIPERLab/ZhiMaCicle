@@ -16,6 +16,9 @@
 //导航栏右侧按钮点击方法
 - (void)navRightBtnAction;
 
+//导航栏左侧取消按钮点击方法
+- (void)navBackAction;
+
 //设置标题
 - (void)setNavTitle:(NSString *)title;
 

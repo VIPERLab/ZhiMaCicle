@@ -9,7 +9,7 @@
 #import "LGLoginController.h"
 #import "MainViewController.h"
 #import "LGRessetPassController.h"
-
+#import "LGGuideController.h"
 #import "JPUSHService.h"
 
 @interface LGLoginController ()
@@ -129,7 +129,6 @@
     }];
 }
 
-
 //登录
 - (void)loginAction{
     [self.view endEditing:YES];
@@ -177,6 +176,15 @@
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:error.msg];
     }];
+}
+
+- (void)navBackAction{
+    if (self.iskicker) {
+        LGGuideController *vc = [[LGGuideController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 //忘记密码

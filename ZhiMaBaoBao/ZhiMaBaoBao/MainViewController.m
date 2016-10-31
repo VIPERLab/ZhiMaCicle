@@ -49,7 +49,7 @@
     //连接socket服务器
     [[SocketManager shareInstance] connect];
     [SocketManager shareInstance].delegate = self;
-    
+
     //添加异常捕获
 //    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
     
@@ -65,7 +65,6 @@
 }
 
 - (void)addNotifications{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doOtherLogin) name:kOtherLogin object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMessageRecieved:) name:kRecieveNewMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUnread) name:kUpdateUnReadMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
@@ -73,17 +72,6 @@
 }
 
 #pragma mark - socket 通知回调
-//用户在其他地方登录
-- (void)doOtherLogin{
-    //断开socket
-    [[SocketManager shareInstance] disconnect];
-    //
-    UserInfo *info = [UserInfo read];
-    info.isKicker = YES;
-    info.hasLogin = NO;
-    [info save];
-    [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
-}
 
 //收到新消息
 - (void)newMessageRecieved:(NSNotification *)notification{
