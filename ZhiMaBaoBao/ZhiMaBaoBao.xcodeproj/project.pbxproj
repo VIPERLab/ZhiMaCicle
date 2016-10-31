@@ -648,6 +648,8 @@
 		D544F5621DAF6F9C00E73624 /* ZMCallBoardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D544F5611DAF6F9C00E73624 /* ZMCallBoardViewController.m */; };
 		D544F5651DAF7F5600E73624 /* CallInfoMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = D544F5641DAF7F5600E73624 /* CallInfoMarkView.m */; };
 		D54D7F171DB5C30500347AA3 /* ZMImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D54D7F161DB5C30500347AA3 /* ZMImageView.m */; };
+		D55B67421DC6DCBA00B47CAB /* ServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D55B67411DC6DCBA00B47CAB /* ServiceViewController.m */; };
+		D55B67471DC6DD5E00B47CAB /* ZMServiceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D55B67461DC6DD5E00B47CAB /* ZMServiceMessage.m */; };
 		D58FAF5C1DC493BB002970F6 /* IMChatActivityPurseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D58FAF5B1DC493BB002970F6 /* IMChatActivityPurseCell.m */; };
 		D5C8B3971D9A0059007D6B5C /* BaseChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5C8B3961D9A0059007D6B5C /* BaseChatTableViewCell.m */; };
 		D5C8B39A1D9A0293007D6B5C /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D5C8B3991D9A0293007D6B5C /* UIView+Helpers.m */; };
@@ -1907,6 +1909,10 @@
 		D544F5641DAF7F5600E73624 /* CallInfoMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallInfoMarkView.m; sourceTree = "<group>"; };
 		D54D7F151DB5C30500347AA3 /* ZMImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZMImageView.h; sourceTree = "<group>"; };
 		D54D7F161DB5C30500347AA3 /* ZMImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMImageView.m; sourceTree = "<group>"; };
+		D55B67401DC6DCBA00B47CAB /* ServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceViewController.h; sourceTree = "<group>"; };
+		D55B67411DC6DCBA00B47CAB /* ServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceViewController.m; sourceTree = "<group>"; };
+		D55B67451DC6DD5E00B47CAB /* ZMServiceMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZMServiceMessage.h; sourceTree = "<group>"; };
+		D55B67461DC6DD5E00B47CAB /* ZMServiceMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMServiceMessage.m; sourceTree = "<group>"; };
 		D58FAF5A1DC493BB002970F6 /* IMChatActivityPurseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMChatActivityPurseCell.h; sourceTree = "<group>"; };
 		D58FAF5B1DC493BB002970F6 /* IMChatActivityPurseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMChatActivityPurseCell.m; sourceTree = "<group>"; };
 		D5C8B3951D9A0059007D6B5C /* BaseChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseChatTableViewCell.h; sourceTree = "<group>"; };
@@ -4798,6 +4804,7 @@
 				319EA00A1DA4D8A0000EE216 /* Forward(转发) */,
 				04CBF50A1D9BE5F600CBB609 /* GroupChat(群聊) */,
 				311CEF2C1D92182400BBB1F9 /* Chat(聊天) */,
+				D55B673F1DC6DBDD00B47CAB /* ServiceAndPurse(服务号和红包) */,
 				316957511D90E5C900140126 /* AddFriends(添加好友) */,
 				31B7C70C1D8E96A100F1883A /* Controller(会话列表) */,
 			);
@@ -5139,6 +5146,33 @@
 				D544F5551DAF5A8A00E73624 /* TQRichTextView.m */,
 			);
 			path = RichTextView;
+			sourceTree = "<group>";
+		};
+		D55B673F1DC6DBDD00B47CAB /* ServiceAndPurse(服务号和红包) */ = {
+			isa = PBXGroup;
+			children = (
+				D55B67441DC6DCFD00B47CAB /* View */,
+				D55B67431DC6DCF400B47CAB /* Model */,
+				D55B67401DC6DCBA00B47CAB /* ServiceViewController.h */,
+				D55B67411DC6DCBA00B47CAB /* ServiceViewController.m */,
+			);
+			name = "ServiceAndPurse(服务号和红包)";
+			sourceTree = "<group>";
+		};
+		D55B67431DC6DCF400B47CAB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D55B67451DC6DD5E00B47CAB /* ZMServiceMessage.h */,
+				D55B67461DC6DD5E00B47CAB /* ZMServiceMessage.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		D55B67441DC6DCFD00B47CAB /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		F8838AFF61B5D250B9C12805 /* Frameworks */ = {
@@ -5487,6 +5521,7 @@
 				04EA7D921D912872005E5425 /* ZXBitMatrix.m in Sources */,
 				04F57AA51D9280BD002A6471 /* ChooseWhoCanSeeController.m in Sources */,
 				04F862141D94DB3000DCC6FE /* NewDiscoverHeaderView.m in Sources */,
+				D55B67421DC6DCBA00B47CAB /* ServiceViewController.m in Sources */,
 				04EA7E2B1D912872005E5425 /* ZXQRCodeMatrixUtil.m in Sources */,
 				04F862131D94DB3000DCC6FE /* NewDiscoverController.m in Sources */,
 				04EA7B5A1D91282E005E5425 /* UIActionSheet+LBXAlertAction.m in Sources */,
@@ -5581,6 +5616,7 @@
 				04F862591D94FC6D00DCC6FE /* README.md in Sources */,
 				D544F5571DAF5A8A00E73624 /* TQRichTextEmojiRun.m in Sources */,
 				04EA7D971D912872005E5425 /* ZXDecoderResult.m in Sources */,
+				D55B67471DC6DD5E00B47CAB /* ZMServiceMessage.m in Sources */,
 				D544F54A1DAF5A7000E73624 /* UIColor+HtmlColorConvert.m in Sources */,
 				04DD49E61DACD6050027256E /* GroupChatGetInsideController.m in Sources */,
 				31861E111DBDAF190037E4E6 /* MoreInfoModel.m in Sources */,

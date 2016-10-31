@@ -20,6 +20,7 @@
 #import "IMChatVoiceTableViewCell.h"
 #import "SystemChatCell.h"
 #import "IMChatVideoTableViewCell.h"
+#import "IMChatActivityPurseCell.h"
 
 #import "ChatRoomInfoController.h" // 聊天室详情
 #import "GroupChatRoomInfoController.h" // 群聊天室详情
@@ -600,17 +601,24 @@ static NSString *const reuseIdentifier = @"messageCell";
         self.tableView.mj_header = nil;
     }
     
-    //测试接收小视频用
+//    //测试活动红包用
 //    LGMessage*message = [[LGMessage alloc]init];
-//    message.type = MessageTypeVideo;
+//    message.type = MessageTypeActivityPurse;
 //    message.toUidOrGroupId = USERINFO.userID;
 //    message.fromUid = self.conversionId;
 //    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
 //    message.isGroup = NO;
 //    message.timeStamp = [NSDate currentTimeStamp];
-//    message.text = @"/8888.mp4";
-//    message.holderImageUrlString = @"http://120.76.246.128/Public/Upload/2016-10-21/s_5809b85fd876f.png";
 //    [self.messages addObject:message];
+//    
+//    LGMessage*message2 = [[LGMessage alloc]init];
+//    message2.type = MessageTypeActivityPurse;
+//    message2.toUidOrGroupId = USERINFO.userID;
+//    message2.fromUid = self.conversionId;
+//    message2.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+//    message2.isGroup = NO;
+//    message2.timeStamp = [NSDate currentTimeStamp];
+//    [self.messages addObject:message2];
 
     [self.tableView reloadData];
     // tableview 滑到底端
@@ -713,6 +721,12 @@ static NSString *const reuseIdentifier = @"messageCell";
         case MessageTypeVideo : {
             //            rowHeight = [IMMorePictureTableViewCell getHeightWithChat:ch TopText:time nickName:nil];
             rowHeight = needShowTime ? 210+20 : 210;
+            
+            break;
+        }
+        case MessageTypeActivityPurse : {
+
+            rowHeight = needShowTime ? 140+20 : 140;
             
             break;
         }
@@ -1009,6 +1023,20 @@ static NSString *const reuseIdentifier = @"messageCell";
                 }
             }
             
+        }
+#pragma mark--MessageTypeActivityPurse
+        else if(fileType == MessageTypeActivityPurse) {
+            IMChatActivityPurseCell *picChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
+            if(!picChatCell) {
+                picChatCell = [[IMChatActivityPurseCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resuseIdentifierString];
+                
+                picChatCell.backgroundColor = WHITECOLOR;
+            }
+            
+            baseChatCell = picChatCell;
+            
+            picChatCell.isMe = isMe;
+            picChatCell.indexPath = indexPath;
             
         }
         
@@ -1264,6 +1292,17 @@ static NSString *const reuseIdentifier = @"messageCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.keyboard keyboardDown];
     [self hiddenVideoView];
+    
+    LGMessage * message = [self.messages objectAtIndex:indexPath.row];
+    switch (message.type) {
+        case MessageTypeActivityPurse:
+            NSLog(@"活动红包");
+            break;
+            
+        default:
+            break;
+    }
+
 }
 
 //滑动tableview,收起键盘

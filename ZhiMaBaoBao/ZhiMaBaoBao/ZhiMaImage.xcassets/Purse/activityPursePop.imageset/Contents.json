@@ -1,26 +1,26 @@
 {
   "images" : [
     {
-      "resizing" : {
-        "mode" : "9-part",
-        "center" : {
-          "mode" : "tile",
-          "width" : 16,
-          "height" : 18
-        },
-        "cap-insets" : {
-          "bottom" : 26,
-          "top" : 99,
-          "right" : 20,
-          "left" : 33
-        }
-      },
       "idiom" : "universal",
-      "filename" : "activityPursePop.png",
       "scale" : "1x"
     },
     {
+      "resizing" : {
+        "mode" : "9-part",
+        "center" : {
+          "mode" : "stretch",
+          "width" : 6,
+          "height" : 7
+        },
+        "cap-insets" : {
+          "bottom" : 23,
+          "top" : 67,
+          "right" : 18,
+          "left" : 22
+        }
+      },
       "idiom" : "universal",
+      "filename" : "activityPursePop@2x.png",
       "scale" : "2x"
     },
     {
