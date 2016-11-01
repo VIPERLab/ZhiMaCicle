@@ -425,23 +425,6 @@
 		04F8621B1D94F6FC00DCC6FE /* NearByModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8621A1D94F6FC00DCC6FE /* NearByModel.m */; };
 		04F862201D94FB7600DCC6FE /* ScanQRCodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8621F1D94FB7600DCC6FE /* ScanQRCodeController.m */; };
 		04F862241D94FC5C00DCC6FE /* KXCopyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862231D94FC5C00DCC6FE /* KXCopyView.m */; };
-		04F8624A1D94FC6D00DCC6FE /* MLEmoji_Expression.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 04F862261D94FC6D00DCC6FE /* MLEmoji_Expression.bundle */; };
-		04F8624B1D94FC6D00DCC6FE /* MLEmoji_Expression.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04F862271D94FC6D00DCC6FE /* MLEmoji_Expression.plist */; };
-		04F8624C1D94FC6D00DCC6FE /* MLEmoji_ExpressionImage.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04F862281D94FC6D00DCC6FE /* MLEmoji_ExpressionImage.plist */; };
-		04F8624D1D94FC6D00DCC6FE /* MLEmojiLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8622A1D94FC6D00DCC6FE /* MLEmojiLabel.m */; };
-		04F8624E1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8622F1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.m */; };
-		04F8624F1D94FC6D00DCC6FE /* NSMutableAttributedString+MLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862311D94FC6D00DCC6FE /* NSMutableAttributedString+MLLabel.m */; };
-		04F862501D94FC6D00DCC6FE /* NSString+MLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862331D94FC6D00DCC6FE /* NSString+MLLabel.m */; };
-		04F862511D94FC6D00DCC6FE /* MLExpressionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862361D94FC6D00DCC6FE /* MLExpressionManager.m */; };
-		04F862521D94FC6D00DCC6FE /* MLTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862381D94FC6D00DCC6FE /* MLTextAttachment.m */; };
-		04F862531D94FC6D00DCC6FE /* NSAttributedString+MLExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8623A1D94FC6D00DCC6FE /* NSAttributedString+MLExpression.m */; };
-		04F862541D94FC6D00DCC6FE /* NSString+MLExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8623C1D94FC6D00DCC6FE /* NSString+MLExpression.m */; };
-		04F862551D94FC6D00DCC6FE /* MLLabelLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862401D94FC6D00DCC6FE /* MLLabelLayoutManager.m */; };
-		04F862561D94FC6D00DCC6FE /* MLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862421D94FC6D00DCC6FE /* MLLabel.m */; };
-		04F862571D94FC6D00DCC6FE /* MLLinkLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862441D94FC6D00DCC6FE /* MLLinkLabel.m */; };
-		04F862581D94FC6D00DCC6FE /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 04F862451D94FC6D00DCC6FE /* LICENSE */; };
-		04F862591D94FC6D00DCC6FE /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 04F862461D94FC6D00DCC6FE /* README.md */; };
-		04F8625A1D94FC6D00DCC6FE /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862491D94FC6D00DCC6FE /* TTTAttributedLabel.m */; };
 		04F862871D94FC7900DCC6FE /* NSString+Emoji.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8625E1D94FC7900DCC6FE /* NSString+Emoji.m */; };
 		04F862881D94FC7900DCC6FE /* ChatKeyBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862601D94FC7900DCC6FE /* ChatKeyBoard.m */; };
 		04F862891D94FC7900DCC6FE /* FaceSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862631D94FC7900DCC6FE /* FaceSourceManager.m */; };
@@ -648,6 +631,23 @@
 		D544F55F1DAF611000E73624 /* ZMCallViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D544F55D1DAF611000E73624 /* ZMCallViewCell.xib */; };
 		D544F5621DAF6F9C00E73624 /* ZMCallBoardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D544F5611DAF6F9C00E73624 /* ZMCallBoardViewController.m */; };
 		D544F5651DAF7F5600E73624 /* CallInfoMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = D544F5641DAF7F5600E73624 /* CallInfoMarkView.m */; };
+		D54B2F801DC8699800BF4445 /* MLEmoji_Expression.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D54B2F5C1DC8699800BF4445 /* MLEmoji_Expression.bundle */; };
+		D54B2F811DC8699800BF4445 /* MLEmoji_Expression.plist in Resources */ = {isa = PBXBuildFile; fileRef = D54B2F5D1DC8699800BF4445 /* MLEmoji_Expression.plist */; };
+		D54B2F821DC8699800BF4445 /* MLEmoji_ExpressionImage.plist in Resources */ = {isa = PBXBuildFile; fileRef = D54B2F5E1DC8699800BF4445 /* MLEmoji_ExpressionImage.plist */; };
+		D54B2F831DC8699800BF4445 /* MLEmojiLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F601DC8699800BF4445 /* MLEmojiLabel.m */; };
+		D54B2F841DC8699800BF4445 /* NSAttributedString+MLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F651DC8699800BF4445 /* NSAttributedString+MLLabel.m */; };
+		D54B2F851DC8699800BF4445 /* NSMutableAttributedString+MLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F671DC8699800BF4445 /* NSMutableAttributedString+MLLabel.m */; };
+		D54B2F861DC8699800BF4445 /* NSString+MLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F691DC8699800BF4445 /* NSString+MLLabel.m */; };
+		D54B2F871DC8699800BF4445 /* MLExpressionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F6C1DC8699800BF4445 /* MLExpressionManager.m */; };
+		D54B2F881DC8699800BF4445 /* MLTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F6E1DC8699800BF4445 /* MLTextAttachment.m */; };
+		D54B2F891DC8699800BF4445 /* NSAttributedString+MLExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F701DC8699800BF4445 /* NSAttributedString+MLExpression.m */; };
+		D54B2F8A1DC8699800BF4445 /* NSString+MLExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F721DC8699800BF4445 /* NSString+MLExpression.m */; };
+		D54B2F8B1DC8699800BF4445 /* MLLabelLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F761DC8699800BF4445 /* MLLabelLayoutManager.m */; };
+		D54B2F8C1DC8699800BF4445 /* MLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F781DC8699800BF4445 /* MLLabel.m */; };
+		D54B2F8D1DC8699800BF4445 /* MLLinkLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F7A1DC8699800BF4445 /* MLLinkLabel.m */; };
+		D54B2F8E1DC8699800BF4445 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = D54B2F7B1DC8699800BF4445 /* LICENSE */; };
+		D54B2F8F1DC8699800BF4445 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F7C1DC8699800BF4445 /* README.md */; };
+		D54B2F901DC8699800BF4445 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F7F1DC8699800BF4445 /* TTTAttributedLabel.m */; };
 		D54D7F171DB5C30500347AA3 /* ZMImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D54D7F161DB5C30500347AA3 /* ZMImageView.m */; };
 		D55B67421DC6DCBA00B47CAB /* ServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D55B67411DC6DCBA00B47CAB /* ServiceViewController.m */; };
 		D55B67471DC6DD5E00B47CAB /* ZMServiceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D55B67461DC6DD5E00B47CAB /* ZMServiceMessage.m */; };
@@ -1513,36 +1513,6 @@
 		04F8621F1D94FB7600DCC6FE /* ScanQRCodeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScanQRCodeController.m; path = ZhiMaBaoBao/Class/ZhimaCircle/NearByPeople/ScanQRCodeController.m; sourceTree = SOURCE_ROOT; };
 		04F862221D94FC5C00DCC6FE /* KXCopyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXCopyView.h; sourceTree = "<group>"; };
 		04F862231D94FC5C00DCC6FE /* KXCopyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXCopyView.m; sourceTree = "<group>"; };
-		04F862261D94FC6D00DCC6FE /* MLEmoji_Expression.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MLEmoji_Expression.bundle; sourceTree = "<group>"; };
-		04F862271D94FC6D00DCC6FE /* MLEmoji_Expression.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MLEmoji_Expression.plist; sourceTree = "<group>"; };
-		04F862281D94FC6D00DCC6FE /* MLEmoji_ExpressionImage.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MLEmoji_ExpressionImage.plist; sourceTree = "<group>"; };
-		04F862291D94FC6D00DCC6FE /* MLEmojiLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLEmojiLabel.h; sourceTree = "<group>"; };
-		04F8622A1D94FC6D00DCC6FE /* MLEmojiLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLEmojiLabel.m; sourceTree = "<group>"; };
-		04F8622E1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+MLLabel.h"; sourceTree = "<group>"; };
-		04F8622F1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+MLLabel.m"; sourceTree = "<group>"; };
-		04F862301D94FC6D00DCC6FE /* NSMutableAttributedString+MLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+MLLabel.h"; sourceTree = "<group>"; };
-		04F862311D94FC6D00DCC6FE /* NSMutableAttributedString+MLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+MLLabel.m"; sourceTree = "<group>"; };
-		04F862321D94FC6D00DCC6FE /* NSString+MLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MLLabel.h"; sourceTree = "<group>"; };
-		04F862331D94FC6D00DCC6FE /* NSString+MLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MLLabel.m"; sourceTree = "<group>"; };
-		04F862351D94FC6D00DCC6FE /* MLExpressionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLExpressionManager.h; sourceTree = "<group>"; };
-		04F862361D94FC6D00DCC6FE /* MLExpressionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLExpressionManager.m; sourceTree = "<group>"; };
-		04F862371D94FC6D00DCC6FE /* MLTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLTextAttachment.h; sourceTree = "<group>"; };
-		04F862381D94FC6D00DCC6FE /* MLTextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLTextAttachment.m; sourceTree = "<group>"; };
-		04F862391D94FC6D00DCC6FE /* NSAttributedString+MLExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+MLExpression.h"; sourceTree = "<group>"; };
-		04F8623A1D94FC6D00DCC6FE /* NSAttributedString+MLExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+MLExpression.m"; sourceTree = "<group>"; };
-		04F8623B1D94FC6D00DCC6FE /* NSString+MLExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MLExpression.h"; sourceTree = "<group>"; };
-		04F8623C1D94FC6D00DCC6FE /* NSString+MLExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MLExpression.m"; sourceTree = "<group>"; };
-		04F8623E1D94FC6D00DCC6FE /* MLLabel+Override.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MLLabel+Override.h"; sourceTree = "<group>"; };
-		04F8623F1D94FC6D00DCC6FE /* MLLabelLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLabelLayoutManager.h; sourceTree = "<group>"; };
-		04F862401D94FC6D00DCC6FE /* MLLabelLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLabelLayoutManager.m; sourceTree = "<group>"; };
-		04F862411D94FC6D00DCC6FE /* MLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLabel.h; sourceTree = "<group>"; };
-		04F862421D94FC6D00DCC6FE /* MLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLabel.m; sourceTree = "<group>"; };
-		04F862431D94FC6D00DCC6FE /* MLLinkLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLinkLabel.h; sourceTree = "<group>"; };
-		04F862441D94FC6D00DCC6FE /* MLLinkLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLinkLabel.m; sourceTree = "<group>"; };
-		04F862451D94FC6D00DCC6FE /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		04F862461D94FC6D00DCC6FE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		04F862481D94FC6D00DCC6FE /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
-		04F862491D94FC6D00DCC6FE /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		04F8625D1D94FC7900DCC6FE /* NSString+Emoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Emoji.h"; sourceTree = "<group>"; };
 		04F8625E1D94FC7900DCC6FE /* NSString+Emoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Emoji.m"; sourceTree = "<group>"; };
 		04F8625F1D94FC7900DCC6FE /* ChatKeyBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatKeyBoard.h; sourceTree = "<group>"; };
@@ -1914,6 +1884,36 @@
 		D544F5611DAF6F9C00E73624 /* ZMCallBoardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMCallBoardViewController.m; sourceTree = "<group>"; };
 		D544F5631DAF7F5600E73624 /* CallInfoMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallInfoMarkView.h; sourceTree = "<group>"; };
 		D544F5641DAF7F5600E73624 /* CallInfoMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallInfoMarkView.m; sourceTree = "<group>"; };
+		D54B2F5C1DC8699800BF4445 /* MLEmoji_Expression.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MLEmoji_Expression.bundle; sourceTree = "<group>"; };
+		D54B2F5D1DC8699800BF4445 /* MLEmoji_Expression.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MLEmoji_Expression.plist; sourceTree = "<group>"; };
+		D54B2F5E1DC8699800BF4445 /* MLEmoji_ExpressionImage.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MLEmoji_ExpressionImage.plist; sourceTree = "<group>"; };
+		D54B2F5F1DC8699800BF4445 /* MLEmojiLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLEmojiLabel.h; sourceTree = "<group>"; };
+		D54B2F601DC8699800BF4445 /* MLEmojiLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLEmojiLabel.m; sourceTree = "<group>"; };
+		D54B2F641DC8699800BF4445 /* NSAttributedString+MLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+MLLabel.h"; sourceTree = "<group>"; };
+		D54B2F651DC8699800BF4445 /* NSAttributedString+MLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+MLLabel.m"; sourceTree = "<group>"; };
+		D54B2F661DC8699800BF4445 /* NSMutableAttributedString+MLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+MLLabel.h"; sourceTree = "<group>"; };
+		D54B2F671DC8699800BF4445 /* NSMutableAttributedString+MLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+MLLabel.m"; sourceTree = "<group>"; };
+		D54B2F681DC8699800BF4445 /* NSString+MLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MLLabel.h"; sourceTree = "<group>"; };
+		D54B2F691DC8699800BF4445 /* NSString+MLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MLLabel.m"; sourceTree = "<group>"; };
+		D54B2F6B1DC8699800BF4445 /* MLExpressionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLExpressionManager.h; sourceTree = "<group>"; };
+		D54B2F6C1DC8699800BF4445 /* MLExpressionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLExpressionManager.m; sourceTree = "<group>"; };
+		D54B2F6D1DC8699800BF4445 /* MLTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLTextAttachment.h; sourceTree = "<group>"; };
+		D54B2F6E1DC8699800BF4445 /* MLTextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLTextAttachment.m; sourceTree = "<group>"; };
+		D54B2F6F1DC8699800BF4445 /* NSAttributedString+MLExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+MLExpression.h"; sourceTree = "<group>"; };
+		D54B2F701DC8699800BF4445 /* NSAttributedString+MLExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+MLExpression.m"; sourceTree = "<group>"; };
+		D54B2F711DC8699800BF4445 /* NSString+MLExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MLExpression.h"; sourceTree = "<group>"; };
+		D54B2F721DC8699800BF4445 /* NSString+MLExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MLExpression.m"; sourceTree = "<group>"; };
+		D54B2F741DC8699800BF4445 /* MLLabel+Override.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MLLabel+Override.h"; sourceTree = "<group>"; };
+		D54B2F751DC8699800BF4445 /* MLLabelLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLabelLayoutManager.h; sourceTree = "<group>"; };
+		D54B2F761DC8699800BF4445 /* MLLabelLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLabelLayoutManager.m; sourceTree = "<group>"; };
+		D54B2F771DC8699800BF4445 /* MLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLabel.h; sourceTree = "<group>"; };
+		D54B2F781DC8699800BF4445 /* MLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLabel.m; sourceTree = "<group>"; };
+		D54B2F791DC8699800BF4445 /* MLLinkLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLinkLabel.h; sourceTree = "<group>"; };
+		D54B2F7A1DC8699800BF4445 /* MLLinkLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLinkLabel.m; sourceTree = "<group>"; };
+		D54B2F7B1DC8699800BF4445 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		D54B2F7C1DC8699800BF4445 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D54B2F7E1DC8699800BF4445 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
+		D54B2F7F1DC8699800BF4445 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		D54D7F151DB5C30500347AA3 /* ZMImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZMImageView.h; sourceTree = "<group>"; };
 		D54D7F161DB5C30500347AA3 /* ZMImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMImageView.m; sourceTree = "<group>"; };
 		D55B67401DC6DCBA00B47CAB /* ServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceViewController.h; sourceTree = "<group>"; };
@@ -3997,91 +3997,6 @@
 			path = KXTools;
 			sourceTree = "<group>";
 		};
-		04F862251D94FC6D00DCC6FE /* MLEmojiLabel */ = {
-			isa = PBXGroup;
-			children = (
-				04F862261D94FC6D00DCC6FE /* MLEmoji_Expression.bundle */,
-				04F862271D94FC6D00DCC6FE /* MLEmoji_Expression.plist */,
-				04F862281D94FC6D00DCC6FE /* MLEmoji_ExpressionImage.plist */,
-				04F862291D94FC6D00DCC6FE /* MLEmojiLabel.h */,
-				04F8622A1D94FC6D00DCC6FE /* MLEmojiLabel.m */,
-				04F8622B1D94FC6D00DCC6FE /* MLLabel */,
-				04F862471D94FC6D00DCC6FE /* TTTAttributedLabel */,
-			);
-			path = MLEmojiLabel;
-			sourceTree = "<group>";
-		};
-		04F8622B1D94FC6D00DCC6FE /* MLLabel */ = {
-			isa = PBXGroup;
-			children = (
-				04F8622C1D94FC6D00DCC6FE /* Classes */,
-				04F862451D94FC6D00DCC6FE /* LICENSE */,
-				04F862461D94FC6D00DCC6FE /* README.md */,
-			);
-			path = MLLabel;
-			sourceTree = "<group>";
-		};
-		04F8622C1D94FC6D00DCC6FE /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				04F8622D1D94FC6D00DCC6FE /* Category */,
-				04F862341D94FC6D00DCC6FE /* Expression */,
-				04F8623D1D94FC6D00DCC6FE /* Helper */,
-				04F862411D94FC6D00DCC6FE /* MLLabel.h */,
-				04F862421D94FC6D00DCC6FE /* MLLabel.m */,
-				04F862431D94FC6D00DCC6FE /* MLLinkLabel.h */,
-				04F862441D94FC6D00DCC6FE /* MLLinkLabel.m */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
-		04F8622D1D94FC6D00DCC6FE /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				04F8622E1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.h */,
-				04F8622F1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.m */,
-				04F862301D94FC6D00DCC6FE /* NSMutableAttributedString+MLLabel.h */,
-				04F862311D94FC6D00DCC6FE /* NSMutableAttributedString+MLLabel.m */,
-				04F862321D94FC6D00DCC6FE /* NSString+MLLabel.h */,
-				04F862331D94FC6D00DCC6FE /* NSString+MLLabel.m */,
-			);
-			path = Category;
-			sourceTree = "<group>";
-		};
-		04F862341D94FC6D00DCC6FE /* Expression */ = {
-			isa = PBXGroup;
-			children = (
-				04F862351D94FC6D00DCC6FE /* MLExpressionManager.h */,
-				04F862361D94FC6D00DCC6FE /* MLExpressionManager.m */,
-				04F862371D94FC6D00DCC6FE /* MLTextAttachment.h */,
-				04F862381D94FC6D00DCC6FE /* MLTextAttachment.m */,
-				04F862391D94FC6D00DCC6FE /* NSAttributedString+MLExpression.h */,
-				04F8623A1D94FC6D00DCC6FE /* NSAttributedString+MLExpression.m */,
-				04F8623B1D94FC6D00DCC6FE /* NSString+MLExpression.h */,
-				04F8623C1D94FC6D00DCC6FE /* NSString+MLExpression.m */,
-			);
-			path = Expression;
-			sourceTree = "<group>";
-		};
-		04F8623D1D94FC6D00DCC6FE /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				04F8623E1D94FC6D00DCC6FE /* MLLabel+Override.h */,
-				04F8623F1D94FC6D00DCC6FE /* MLLabelLayoutManager.h */,
-				04F862401D94FC6D00DCC6FE /* MLLabelLayoutManager.m */,
-			);
-			path = Helper;
-			sourceTree = "<group>";
-		};
-		04F862471D94FC6D00DCC6FE /* TTTAttributedLabel */ = {
-			isa = PBXGroup;
-			children = (
-				04F862481D94FC6D00DCC6FE /* TTTAttributedLabel.h */,
-				04F862491D94FC6D00DCC6FE /* TTTAttributedLabel.m */,
-			);
-			path = TTTAttributedLabel;
-			sourceTree = "<group>";
-		};
 		04F8625B1D94FC7900DCC6FE /* DiscoverKeyBoard */ = {
 			isa = PBXGroup;
 			children = (
@@ -4979,6 +4894,7 @@
 		31B7C7A51D8FE91A00F1883A /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				D54B2F5B1DC8699800BF4445 /* MLEmojiLabel */,
 				041595D81DB75C65002C0F66 /* PinYin4Objc */,
 				D544F54B1DAF5A8A00E73624 /* RichTextView */,
 				047F14231DAC850400684881 /* AliPay */,
@@ -4986,7 +4902,6 @@
 				047F13FE1DAB359700684881 /* JPush */,
 				04F8629A1D94FC8900DCC6FE /* SDAutoLayout */,
 				04F8625B1D94FC7900DCC6FE /* DiscoverKeyBoard */,
-				04F862251D94FC6D00DCC6FE /* MLEmojiLabel */,
 				04F862211D94FC5C00DCC6FE /* KXTools */,
 				31B7C7651D8FBC8000F1883A /* LCProgressHUD */,
 				04EA7B691D912872005E5425 /* ZXingObjC */,
@@ -5170,6 +5085,91 @@
 				D544F5551DAF5A8A00E73624 /* TQRichTextView.m */,
 			);
 			path = RichTextView;
+			sourceTree = "<group>";
+		};
+		D54B2F5B1DC8699800BF4445 /* MLEmojiLabel */ = {
+			isa = PBXGroup;
+			children = (
+				D54B2F5C1DC8699800BF4445 /* MLEmoji_Expression.bundle */,
+				D54B2F5D1DC8699800BF4445 /* MLEmoji_Expression.plist */,
+				D54B2F5E1DC8699800BF4445 /* MLEmoji_ExpressionImage.plist */,
+				D54B2F5F1DC8699800BF4445 /* MLEmojiLabel.h */,
+				D54B2F601DC8699800BF4445 /* MLEmojiLabel.m */,
+				D54B2F611DC8699800BF4445 /* MLLabel */,
+				D54B2F7D1DC8699800BF4445 /* TTTAttributedLabel */,
+			);
+			path = MLEmojiLabel;
+			sourceTree = "<group>";
+		};
+		D54B2F611DC8699800BF4445 /* MLLabel */ = {
+			isa = PBXGroup;
+			children = (
+				D54B2F621DC8699800BF4445 /* Classes */,
+				D54B2F7B1DC8699800BF4445 /* LICENSE */,
+				D54B2F7C1DC8699800BF4445 /* README.md */,
+			);
+			path = MLLabel;
+			sourceTree = "<group>";
+		};
+		D54B2F621DC8699800BF4445 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				D54B2F631DC8699800BF4445 /* Category */,
+				D54B2F6A1DC8699800BF4445 /* Expression */,
+				D54B2F731DC8699800BF4445 /* Helper */,
+				D54B2F771DC8699800BF4445 /* MLLabel.h */,
+				D54B2F781DC8699800BF4445 /* MLLabel.m */,
+				D54B2F791DC8699800BF4445 /* MLLinkLabel.h */,
+				D54B2F7A1DC8699800BF4445 /* MLLinkLabel.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		D54B2F631DC8699800BF4445 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				D54B2F641DC8699800BF4445 /* NSAttributedString+MLLabel.h */,
+				D54B2F651DC8699800BF4445 /* NSAttributedString+MLLabel.m */,
+				D54B2F661DC8699800BF4445 /* NSMutableAttributedString+MLLabel.h */,
+				D54B2F671DC8699800BF4445 /* NSMutableAttributedString+MLLabel.m */,
+				D54B2F681DC8699800BF4445 /* NSString+MLLabel.h */,
+				D54B2F691DC8699800BF4445 /* NSString+MLLabel.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		D54B2F6A1DC8699800BF4445 /* Expression */ = {
+			isa = PBXGroup;
+			children = (
+				D54B2F6B1DC8699800BF4445 /* MLExpressionManager.h */,
+				D54B2F6C1DC8699800BF4445 /* MLExpressionManager.m */,
+				D54B2F6D1DC8699800BF4445 /* MLTextAttachment.h */,
+				D54B2F6E1DC8699800BF4445 /* MLTextAttachment.m */,
+				D54B2F6F1DC8699800BF4445 /* NSAttributedString+MLExpression.h */,
+				D54B2F701DC8699800BF4445 /* NSAttributedString+MLExpression.m */,
+				D54B2F711DC8699800BF4445 /* NSString+MLExpression.h */,
+				D54B2F721DC8699800BF4445 /* NSString+MLExpression.m */,
+			);
+			path = Expression;
+			sourceTree = "<group>";
+		};
+		D54B2F731DC8699800BF4445 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				D54B2F741DC8699800BF4445 /* MLLabel+Override.h */,
+				D54B2F751DC8699800BF4445 /* MLLabelLayoutManager.h */,
+				D54B2F761DC8699800BF4445 /* MLLabelLayoutManager.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		D54B2F7D1DC8699800BF4445 /* TTTAttributedLabel */ = {
+			isa = PBXGroup;
+			children = (
+				D54B2F7E1DC8699800BF4445 /* TTTAttributedLabel.h */,
+				D54B2F7F1DC8699800BF4445 /* TTTAttributedLabel.m */,
+			);
+			path = TTTAttributedLabel;
 			sourceTree = "<group>";
 		};
 		D55B673F1DC6DBDD00B47CAB /* ServiceAndPurse(服务号和红包) */ = {
@@ -5374,8 +5374,6 @@
 				04F8628F1D94FC7900DCC6FE /* systemEmoji.plist in Resources */,
 				D5FD28C01DB1E11900D19DF6 /* f000.gif in Resources */,
 				D53E3DCF1DB704FC001C663B /* PK_Camera_Turn@2x.png in Resources */,
-				04F862581D94FC6D00DCC6FE /* LICENSE in Resources */,
-				04F8624B1D94FC6D00DCC6FE /* MLEmoji_Expression.plist in Resources */,
 				319EA0121DA4E13D000EE216 /* AvtarAndNameCell.xib in Resources */,
 				31B7C7B81D90031D00F1883A /* YiKeyBoardView.xib in Resources */,
 				31B7C75F1D8FB33E00F1883A /* LGRessetPassController.xib in Resources */,
@@ -5383,6 +5381,7 @@
 				D540F9031DB871C000C9775A /* shadow@2x.png in Resources */,
 				316957811D91199100140126 /* dtmf-4.aif in Resources */,
 				31B7C79D1D8FE71F00F1883A /* LGCallRecordCell.xib in Resources */,
+				D54B2F801DC8699800BF4445 /* MLEmoji_Expression.bundle in Resources */,
 				31B7C7A41D8FE71F00F1883A /* PhoneContactCell.xib in Resources */,
 				315FF5821DB866570002CB97 /* hud_error@2x.png in Resources */,
 				319069DC1D9CE91F00D1D6D2 /* InfoHeaderCell.xib in Resources */,
@@ -5393,7 +5392,8 @@
 				315FF57F1DB863E80002CB97 /* hud_success@3x.png in Resources */,
 				316957831D91199100140126 /* dtmf-6.aif in Resources */,
 				315FF57E1DB863E80002CB97 /* hud_success@2x.png in Resources */,
-				04F8624A1D94FC6D00DCC6FE /* MLEmoji_Expression.bundle in Resources */,
+				D54B2F8E1DC8699800BF4445 /* LICENSE in Resources */,
+				D54B2F811DC8699800BF4445 /* MLEmoji_Expression.plist in Resources */,
 				31B7C7711D8FBC8000F1883A /* hud_info.png in Resources */,
 				3169577F1D91199100140126 /* dtmf-2.aif in Resources */,
 				3169577C1D91199100140126 /* dtmf-#.aif in Resources */,
@@ -5403,9 +5403,9 @@
 				31B7C7A11D8FE71F00F1883A /* LGPhoneNumberCell.xib in Resources */,
 				310B83331D8E7B0100A0F408 /* LaunchScreen.storyboard in Resources */,
 				04EA7AC91D910F89005E5425 /* DNImagePicker.strings in Resources */,
+				D54B2F821DC8699800BF4445 /* MLEmoji_ExpressionImage.plist in Resources */,
 				311CEF7C1D92219200BBB1F9 /* FakeData.plist in Resources */,
 				D540F9041DB871C000C9775A /* shadow@3x.png in Resources */,
-				04F8624C1D94FC6D00DCC6FE /* MLEmoji_ExpressionImage.plist in Resources */,
 				04EA7ACE1D910F89005E5425 /* imageResources.xcassets in Resources */,
 				310B83301D8E7B0100A0F408 /* Assets.xcassets in Resources */,
 				04EA7AC71D910F89005E5425 /* DNImagePickerController.strings in Resources */,
@@ -5507,9 +5507,9 @@
 				04EA7DCA1D912872005E5425 /* ZXAI01392xDecoder.m in Sources */,
 				04EA7DA01D912872005E5425 /* ZXBinarizer.m in Sources */,
 				04EA7E281D912872005E5425 /* ZXQRCodeBlockPair.m in Sources */,
-				04F8624D1D94FC6D00DCC6FE /* MLEmojiLabel.m in Sources */,
 				31861E201DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m in Sources */,
 				D58FAF5C1DC493BB002970F6 /* IMChatActivityPurseCell.m in Sources */,
+				D54B2F8F1DC8699800BF4445 /* README.md in Sources */,
 				04EA7E221D912872005E5425 /* ZXQRCodeAlignmentPatternFinder.m in Sources */,
 				04EA7ACB1D910F89005E5425 /* UIColor+Hex.m in Sources */,
 				04EA7D811D912872005E5425 /* ZXVCardResultParser.m in Sources */,
@@ -5528,12 +5528,12 @@
 				04F57AF81D9280BD002A6471 /* PersonalDiscoverPhotoModel.m in Sources */,
 				04F8628A1D94FC7900DCC6FE /* ChatToolBarItem.m in Sources */,
 				041750A01DA499B600DCD7A9 /* ChatInfoCell.m in Sources */,
+				D54B2F881DC8699800BF4445 /* MLTextAttachment.m in Sources */,
 				041750B81DA4E4BF00DCD7A9 /* GroupChatInfoHeaderCell.m in Sources */,
 				04F57AEB1D9280BD002A6471 /* KXCurrentLocationCell.m in Sources */,
 				04F57AB31D9280BD002A6471 /* SDTimeLineCell.m in Sources */,
 				04EA797A1D8FBA0C005E5425 /* KXWebViewController.m in Sources */,
 				04EA7D901D912872005E5425 /* ZXReedSolomonEncoder.m in Sources */,
-				04F862521D94FC6D00DCC6FE /* MLTextAttachment.m in Sources */,
 				04EA7AD51D910F89005E5425 /* DNUnAuthorizedTipsView.m in Sources */,
 				04EA7D931D912872005E5425 /* ZXBitSource.m in Sources */,
 				043DD8461DB9FFC5008A98DD /* NewDiscoverDetailCommentListView.m in Sources */,
@@ -5556,6 +5556,7 @@
 				04EA7E131D912872005E5425 /* ZXPDF417Common.m in Sources */,
 				04EA79E01D90E9F7005E5425 /* KXMoneyController.m in Sources */,
 				D53E3DD81DB704FC001C663B /* PKVideoDecoder.m in Sources */,
+				D54B2F831DC8699800BF4445 /* MLEmojiLabel.m in Sources */,
 				D53E3DD61DB704FC001C663B /* PKPlayerManager.m in Sources */,
 				047F13F91DAB25C500684881 /* GroupChatAllMembersController.m in Sources */,
 				04EA7D921D912872005E5425 /* ZXBitMatrix.m in Sources */,
@@ -5565,7 +5566,6 @@
 				04EA7E2B1D912872005E5425 /* ZXQRCodeMatrixUtil.m in Sources */,
 				04F862131D94DB3000DCC6FE /* NewDiscoverController.m in Sources */,
 				04EA7B5A1D91282E005E5425 /* UIActionSheet+LBXAlertAction.m in Sources */,
-				04F862511D94FC6D00DCC6FE /* MLExpressionManager.m in Sources */,
 				04FC4DA31DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m in Sources */,
 				04F862A01D94FC8900DCC6FE /* UITableView+SDAutoTableViewCellHeight.m in Sources */,
 				04EA79E91D90E9F7005E5425 /* TelephoneBillCell.m in Sources */,
@@ -5590,7 +5590,6 @@
 				D53E3DCB1DB704FC001C663B /* GLProgram.m in Sources */,
 				04EA7D5F1D912872005E5425 /* ZXAztecToken.m in Sources */,
 				04EA7DC71D912872005E5425 /* ZXAbstractExpandedDecoder.m in Sources */,
-				04F8624F1D94FC6D00DCC6FE /* NSMutableAttributedString+MLLabel.m in Sources */,
 				04F862941D94FC7900DCC6FE /* PanelBottomView.m in Sources */,
 				319069CA1D9CA90800D1D6D2 /* LGSearchResultController.m in Sources */,
 				04EA7E1B1D912872005E5425 /* ZXQRCodeDecoder.m in Sources */,
@@ -5616,6 +5615,7 @@
 				04EA7B681D91282E005E5425 /* ZXingWrapper.m in Sources */,
 				04EA79DE1D90E9F7005E5425 /* CrashChargeController.m in Sources */,
 				047F14221DABADAD00684881 /* chargeMomeyMdoel.m in Sources */,
+				D54B2F8B1DC8699800BF4445 /* MLLabelLayoutManager.m in Sources */,
 				04EA7DEA1D912872005E5425 /* ZXCode93Reader.m in Sources */,
 				D53E3DDF1DB705A6001C663B /* ZMRecordShortVideoView.m in Sources */,
 				04EA7E321D912872005E5425 /* ZXMultiFormatWriter.m in Sources */,
@@ -5636,6 +5636,7 @@
 				04EA7D641D912872005E5425 /* ZXAddressBookAUResultParser.m in Sources */,
 				04EA7E1E1D912872005E5425 /* ZXQRCodeFormatInformation.m in Sources */,
 				04EA79E81D90E9F7005E5425 /* MyAccountHeaderView.m in Sources */,
+				D54B2F891DC8699800BF4445 /* NSAttributedString+MLExpression.m in Sources */,
 				043510BE1DBEF47F0031A895 /* SDBaseRefreshView.m in Sources */,
 				04F862151D94DB3000DCC6FE /* NewDiscoverPhotoPickerView.m in Sources */,
 				316957681D90E91700140126 /* LGSearchController.m in Sources */,
@@ -5652,8 +5653,8 @@
 				319069D61D9CE56100D1D6D2 /* FriendProfilecontroller.m in Sources */,
 				04F57AFE1D928154002A6471 /* ComplainSubViewController.m in Sources */,
 				04EA7ACF1D910F89005E5425 /* DNAssetsViewCell.m in Sources */,
+				D54B2F871DC8699800BF4445 /* MLExpressionManager.m in Sources */,
 				04F57AB71D9280BD002A6471 /* SDTimeLineCellOperationMenu.m in Sources */,
-				04F862591D94FC6D00DCC6FE /* README.md in Sources */,
 				D544F5571DAF5A8A00E73624 /* TQRichTextEmojiRun.m in Sources */,
 				04EA7D971D912872005E5425 /* ZXDecoderResult.m in Sources */,
 				D55B67471DC6DD5E00B47CAB /* ZMServiceMessage.m in Sources */,
@@ -5688,11 +5689,12 @@
 				D53E3DD41DB704FC001C663B /* PKFullScreenPlayerView.m in Sources */,
 				04F862891D94FC7900DCC6FE /* FaceSourceManager.m in Sources */,
 				04EA7DB51D912872005E5425 /* ZXDataMatrixC40Encoder.m in Sources */,
-				04F862551D94FC6D00DCC6FE /* MLLabelLayoutManager.m in Sources */,
 				041595EA1DB75C65002C0F66 /* PinyinFormatter.m in Sources */,
 				04EA7DDD1D912872005E5425 /* ZXRSSExpandedRow.m in Sources */,
 				04EA7B181D9125C5005E5425 /* KXLocationController.m in Sources */,
 				04EA79DD1D90E9F7005E5425 /* ChangeMoneyController.m in Sources */,
+				D54B2F8D1DC8699800BF4445 /* MLLinkLabel.m in Sources */,
+				D54B2F8A1DC8699800BF4445 /* NSString+MLExpression.m in Sources */,
 				04EA7D5C1D912872005E5425 /* ZXAztecHighLevelEncoder.m in Sources */,
 				04EA7D631D912872005E5425 /* ZXAbstractDoCoMoResultParser.m in Sources */,
 				D5DC48601D9A4AE9005E8766 /* IMChatVoiceTableViewCell.m in Sources */,
@@ -5710,7 +5712,6 @@
 				04EA79BB1D90E8C2005E5425 /* LGFeedBackViewController.m in Sources */,
 				31B7C7601D8FB33E00F1883A /* LGSetNickNameController.m in Sources */,
 				04EA79E51D90E9F7005E5425 /* TelephoneBillViewController.m in Sources */,
-				04F862541D94FC6D00DCC6FE /* NSString+MLExpression.m in Sources */,
 				04F57AED1D9280BD002A6471 /* KXCurrentLocationModel.m in Sources */,
 				04F57AA31D9280BD002A6471 /* ChooserWhoCanSeeCellModel.m in Sources */,
 				D53E3DE21DB7496A001C663B /* IMChatVideoTableViewCell.m in Sources */,
@@ -5756,6 +5757,7 @@
 				04F57AB21D9280BD002A6471 /* SDTimeLineTableViewController.m in Sources */,
 				047F13F01DAA4BDE00684881 /* GroupChatChangeGroupNameController.m in Sources */,
 				04EA7E031D912872005E5425 /* ZXPDF417BoundingBox.m in Sources */,
+				D54B2F901DC8699800BF4445 /* TTTAttributedLabel.m in Sources */,
 				315FF5961DB89C4C0002CB97 /* MoreInfoCell.m in Sources */,
 				04EA7DF81D912872005E5425 /* ZXUPCEANExtension2Support.m in Sources */,
 				04EA7E001D912872005E5425 /* ZXPDF417ECErrorCorrection.m in Sources */,
@@ -5776,6 +5778,7 @@
 				04EA79E21D90E9F7005E5425 /* KXMoneyDetailController.m in Sources */,
 				D544F5651DAF7F5600E73624 /* CallInfoMarkView.m in Sources */,
 				311CEFAD1D937BE700BBB1F9 /* AmrRecordWriter.m in Sources */,
+				D54B2F841DC8699800BF4445 /* NSAttributedString+MLLabel.m in Sources */,
 				04EA7DEC1D912872005E5425 /* ZXEAN13Writer.m in Sources */,
 				04EA7DEF1D912872005E5425 /* ZXEANManufacturerOrgSupport.m in Sources */,
 				04EA7E011D912872005E5425 /* ZXPDF417BarcodeMetadata.m in Sources */,
@@ -5795,7 +5798,6 @@
 				311CEF7A1D921FDA00BBB1F9 /* LGNetWorking.m in Sources */,
 				04EA7B631D91282E005E5425 /* LBXScanView.m in Sources */,
 				04EA7D851D912872005E5425 /* ZXWifiParsedResult.m in Sources */,
-				04F862571D94FC6D00DCC6FE /* MLLinkLabel.m in Sources */,
 				04F57AFF1D928154002A6471 /* ComplainViewController.m in Sources */,
 				319069B11D9BC09200D1D6D2 /* FriendsListCell.m in Sources */,
 				04EA7DEB1D912872005E5425 /* ZXEAN13Reader.m in Sources */,
@@ -5842,6 +5844,7 @@
 				04EA79721D8F8F49005E5425 /* UIColor+My.m in Sources */,
 				04EA7D731D912872005E5425 /* ZXParsedResult.m in Sources */,
 				04EA7DCD1D912872005E5425 /* ZXAI013x0xDecoder.m in Sources */,
+				D54B2F851DC8699800BF4445 /* NSMutableAttributedString+MLLabel.m in Sources */,
 				04EA7DFA1D912872005E5425 /* ZXUPCEANExtensionSupport.m in Sources */,
 				04EA7B371D9126BE005E5425 /* SecurityUtil.m in Sources */,
 				04EA7DF61D912872005E5425 /* ZXUPCAReader.m in Sources */,
@@ -5856,11 +5859,9 @@
 				04EA7DCE1D912872005E5425 /* ZXAI01AndOtherAIs.m in Sources */,
 				04F862961D94FC7900DCC6FE /* ChatToolBar.m in Sources */,
 				047F13F61DAB253300684881 /* GroupChatMessageDetailController.m in Sources */,
-				04F862501D94FC6D00DCC6FE /* NSString+MLLabel.m in Sources */,
 				04EA7DBE1D912872005E5425 /* ZXDataMatrixX12Encoder.m in Sources */,
 				04EA79761D8FB95B005E5425 /* KXSettingController.m in Sources */,
 				04CBF5061D99427B00CBB609 /* ConverseModel.m in Sources */,
-				04F8625A1D94FC6D00DCC6FE /* TTTAttributedLabel.m in Sources */,
 				043DD8491DBB6BFC008A98DD /* NewDiscoverDetailCommentView.m in Sources */,
 				04EA7D621D912872005E5425 /* ZXAztecWriter.m in Sources */,
 				04F862991D94FC7900DCC6FE /* RFTextView.m in Sources */,
@@ -5945,12 +5946,12 @@
 				04EA7E1A1D912872005E5425 /* ZXQRCodeDecodedBitStreamParser.m in Sources */,
 				31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */,
 				3138F4051DA795990042D100 /* CallKeyboardController.m in Sources */,
-				04F862531D94FC6D00DCC6FE /* NSAttributedString+MLExpression.m in Sources */,
 				04EA7E301D912872005E5425 /* ZXQRCodeWriter.m in Sources */,
 				04EA7D791D912872005E5425 /* ZXSMSTOMMSTOResultParser.m in Sources */,
 				04EA7DF31D912872005E5425 /* ZXMultiFormatUPCEANReader.m in Sources */,
 				04EA7DA71D912872005E5425 /* ZXInvertedLuminanceSource.m in Sources */,
 				04EA7D9B1D912872005E5425 /* ZXGridSampler.m in Sources */,
+				D54B2F8C1DC8699800BF4445 /* MLLabel.m in Sources */,
 				311CEFB51D938EF200BBB1F9 /* RecordingHUD.m in Sources */,
 				04EA7DE61D912872005E5425 /* ZXCode128Reader.m in Sources */,
 				D53E3DD91DB704FC001C663B /* PKRecordShortVideoViewController.m in Sources */,
@@ -5984,6 +5985,7 @@
 				04EA7DAB1D912872005E5425 /* ZXResultPoint.m in Sources */,
 				041595EB1DB75C65002C0F66 /* PinyinHelper.m in Sources */,
 				04F862981D94FC7900DCC6FE /* RFRecordButton.m in Sources */,
+				D54B2F861DC8699800BF4445 /* NSString+MLLabel.m in Sources */,
 				04EA7E0D1D912872005E5425 /* ZXPDF417.m in Sources */,
 				040F82011DB9A50900086A25 /* NewDiscoverDetailController.m in Sources */,
 				04EA7E2D1D912872005E5425 /* ZXMultiFinderPatternFinder.m in Sources */,
@@ -6030,13 +6032,11 @@
 				319EA0081DA49A4F000EE216 /* CreateGroupListCell.m in Sources */,
 				3169574D1D90E24A00140126 /* BaseNavigationController.m in Sources */,
 				310B83251D8E7B0100A0F408 /* main.m in Sources */,
-				04F8624E1D94FC6D00DCC6FE /* NSAttributedString+MLLabel.m in Sources */,
 				04FC4D9F1DB5B70B00C1E854 /* UINavigationBar+Awesome.m in Sources */,
 				04EA7E111D912872005E5425 /* ZXPDF417ErrorCorrection.m in Sources */,
 				04E8F30B1DC322F7008C2174 /* NewDiscoverLinkTypeView.m in Sources */,
 				04EA7B661D91282E005E5425 /* LBXScanWrapper.m in Sources */,
 				04F862C41D95545000DCC6FE /* KXDiscoverDetailCommentView.m in Sources */,
-				04F862561D94FC6D00DCC6FE /* MLLabel.m in Sources */,
 				04EA7D801D912872005E5425 /* ZXURLTOResultParser.m in Sources */,
 				04EA7DBB1D912872005E5425 /* ZXDataMatrixSymbolInfo.m in Sources */,
 				04EA7D771D912872005E5425 /* ZXSMSMMSResultParser.m in Sources */,
@@ -6216,7 +6216,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_ENTITLEMENTS = ZhiMaBaoBao/ZhiMaBaoBao.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = C74GJQS7VJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6246,8 +6246,8 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "59c9ebf0-f681-430a-9326-f3e787a9e0dd";
-				PROVISIONING_PROFILE_SPECIFIER = ZhimaDistribution_Profile;
+				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
@@ -6262,7 +6262,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_ENTITLEMENTS = ZhiMaBaoBao/ZhiMaBaoBao.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = C74GJQS7VJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6292,8 +6292,8 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimabaobao.ZhiMaCircle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "59c9ebf0-f681-430a-9326-f3e787a9e0dd";
-				PROVISIONING_PROFILE_SPECIFIER = ZhimaDistribution_Profile;
+				PROVISIONING_PROFILE = "ffafebe5-c7aa-4cd4-916a-55a5519bb518";
+				PROVISIONING_PROFILE_SPECIFIER = ZhimaDevelopment_Profile;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
