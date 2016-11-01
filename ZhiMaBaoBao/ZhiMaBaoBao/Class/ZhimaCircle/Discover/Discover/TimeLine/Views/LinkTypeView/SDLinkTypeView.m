@@ -10,9 +10,7 @@
 
 @implementation SDLinkTypeView {
     UILabel *_titleLabel;
-    UILabel *_subTitleLabel;
     UIImageView *_typeImageView;
-    UIImageView *_detailImageView;
 }
 
 
