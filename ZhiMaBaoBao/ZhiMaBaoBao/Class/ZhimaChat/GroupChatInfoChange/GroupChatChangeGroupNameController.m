@@ -99,7 +99,7 @@
             systemMsg.toUidOrGroupId = self.groupModel.groupId;
             systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = [NSString generateMessageID];
-            systemMsg.isGroup = YES;
+            systemMsg.conversionType = ConversionTypeGroupChat;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:self.groupModel.groupId];
             

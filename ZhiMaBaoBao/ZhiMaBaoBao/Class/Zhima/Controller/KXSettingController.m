@@ -62,7 +62,7 @@
     NSArray *titleArray = self.dataArray[indexPath.section];
     cell.textLabel.text = titleArray[indexPath.row];
     cell.textLabel.font = [UIFont systemFontOfSize:16];
-    if (indexPath.section == 0 && indexPath.row == 5) {
+    if (indexPath.section == 0 && indexPath.row == 4) {
         UILabel *subTileLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 100, 0, 80, 40)];
         subTileLabel.textAlignment = NSTextAlignmentRight;
         subTileLabel.textColor = [UIColor lightGrayColor];
@@ -155,7 +155,6 @@
 - (void)exit {
     [LGNetWorking logout:USERINFO.sessionId block:^(ResponseData *responseData) {
         if (responseData) {
-            if (responseData.code == 0) {
                 [LCProgressHUD showSuccessText:responseData.msg];
                 
                 UserInfo *info = [UserInfo read];
@@ -174,15 +173,8 @@
                 
                 //跳转到登录页面
                 [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
-                
-            }else{
-                [LCProgressHUD showInfoText:responseData.msg];
-            }
         }
-    }];
-    
-    
-    
+    }];    
 }
 
 

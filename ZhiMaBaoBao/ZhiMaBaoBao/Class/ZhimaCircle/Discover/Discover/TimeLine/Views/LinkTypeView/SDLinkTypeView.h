@@ -1,14 +1,17 @@
 //
-//  NewDiscoverRedBagView.h
+//  SDLinkTypeView.h
 //  ZhiMaBaoBao
 //
-//  Created by mac on 16/10/28.
+//  Created by mac on 16/10/31.
 //  Copyright © 2016年 liugang. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface NewDiscoverLinkTypeView : UIView
-@property (nonatomic, weak) UITextView *textView;
+@interface SDLinkTypeView : UIView
+
 @property (nonatomic, copy) NSString *linkValue;
+
+@property (nonatomic, assign) BOOL tapEnable;
+
 @end

@@ -44,6 +44,7 @@
 #import "KXActionSheet.h"
 #import "WebViewController.h"
 #import "SendLocationController.h"
+#import "ServiceViewController.h" //服务号控制器
 
 //相册相关头文件
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -222,8 +223,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     LGMessage *message = userInfo[@"message"];
         
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
-    //
-    if (([message.fromUid isEqualToString:self.conversionId] && !message.isGroup )|| ([message.toUidOrGroupId isEqualToString:self.conversionId])) {
+    
+    if (([message.fromUid isEqualToString:self.conversionId] && message.conversionType == ConversionTypeSingle )|| ([message.toUidOrGroupId isEqualToString:self.conversionId])) {
         if (message.actType == ActTypeUndomsg) {
             NSMutableArray*marr = [self.messages mutableCopy];
             for (LGMessage*msg in marr) {
@@ -556,6 +557,28 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
     [self.tableView reloadData];
     
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSArray *fileNames = [fm contentsOfDirectoryAtPath:AUDIOPATH error:nil];
+    for (NSString*title in fileNames) {
+        
+        unsigned long long size = 0;
+        NSString *sizeText = nil;
+        size = [[NSFileManager defaultManager] attributesOfItemAtPath:[NSString stringWithFormat:@"%@/%@",AUDIOPATH,title] error:nil].fileSize;
+        if (size >= pow(10, 9)) { // size >= 1GB
+            sizeText = [NSString stringWithFormat:@"%.2fGB", size / pow(10, 9)];
+        } else if (size >= pow(10, 6)) { // 1GB > size >= 1MB
+            sizeText = [NSString stringWithFormat:@"%.2fMB", size / pow(10, 6)];
+        } else if (size >= pow(10, 3)) { // 1MB > size >= 1KB
+            sizeText = [NSString stringWithFormat:@"%.2fKB", size / pow(10, 3)];
+        } else { // 1KB > size
+            sizeText = [NSString stringWithFormat:@"%zdB", size];
+        }
+        
+        NSLog(@"title = %@  daxiao = %@",title,sizeText);
+        
+        
+    }
+    
     // 滑动到刷新前的位置
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:marr.count inSection:0] animated:NO scrollPosition:UITableViewScrollPositionTop];
     [self.tableView.mj_header endRefreshing];
@@ -601,24 +624,24 @@ static NSString *const reuseIdentifier = @"messageCell";
         self.tableView.mj_header = nil;
     }
     
-//    //测试活动红包用
-//    LGMessage*message = [[LGMessage alloc]init];
-//    message.type = MessageTypeActivityPurse;
-//    message.toUidOrGroupId = USERINFO.userID;
-//    message.fromUid = self.conversionId;
-//    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-//    message.isGroup = NO;
-//    message.timeStamp = [NSDate currentTimeStamp];
-//    [self.messages addObject:message];
-//    
-//    LGMessage*message2 = [[LGMessage alloc]init];
-//    message2.type = MessageTypeActivityPurse;
-//    message2.toUidOrGroupId = USERINFO.userID;
-//    message2.fromUid = self.conversionId;
-//    message2.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-//    message2.isGroup = NO;
-//    message2.timeStamp = [NSDate currentTimeStamp];
-//    [self.messages addObject:message2];
+    //测试活动红包用
+    LGMessage*message = [[LGMessage alloc]init];
+    message.type = MessageTypeActivityPurse;
+    message.toUidOrGroupId = USERINFO.userID;
+    message.fromUid = self.conversionId;
+    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+    message.conversionType = ConversionTypeSingle;
+    message.timeStamp = [NSDate currentTimeStamp];
+    [self.messages addObject:message];
+    
+    LGMessage*message2 = [[LGMessage alloc]init];
+    message2.type = MessageTypeActivityPurse;
+    message2.toUidOrGroupId = USERINFO.userID;
+    message2.fromUid = self.conversionId;
+    message2.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+    message.conversionType = ConversionTypeSingle;
+    message2.timeStamp = [NSDate currentTimeStamp];
+    [self.messages addObject:message2];
 
     [self.tableView reloadData];
     // tableview 滑到底端
@@ -1259,7 +1282,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         systemMsg.type = MessageTypeSystem;
 //        systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
         systemMsg.msgid = message.msgid;
-        systemMsg.isGroup = message.isGroup;
+        systemMsg.conversionType = message.conversionType;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
         
         NSInteger num = indecPath.row+1;
@@ -1296,7 +1319,11 @@ static NSString *const reuseIdentifier = @"messageCell";
     LGMessage * message = [self.messages objectAtIndex:indexPath.row];
     switch (message.type) {
         case MessageTypeActivityPurse:
+        {
             NSLog(@"活动红包");
+            ServiceViewController*vc = [[ServiceViewController alloc]init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
             break;
             
         default:
@@ -1357,7 +1384,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = self.converseType;
+    message.conversionType = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     
@@ -1439,7 +1466,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeAudio;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = self.converseType;
+    message.conversionType = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.audioLength = [AmrPlayerReader durationOfAmrFilePath:[NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text]];
@@ -1608,7 +1635,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.toUidOrGroupId = self.conversionId;
     message.fromUid = USERINFO.userID;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = self.converseType;
+    message.conversionType = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.text = outputFilePath;
@@ -1659,7 +1686,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)uploadVideo:(NSString*)path index:(NSInteger)index
 {
-    //图片压缩
+  
     NSData *videoData = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@%@",AUDIOPATH,path]];
     //上传图片到服务器  获取返回的图片路径然后socket推送出去
     [LGNetWorking chatUploadVideo:nil image:videoData fileName:[NSString stringWithFormat:@"%ld",[NSDate currentTimeStamp]] andFuctionName:nil block:^(NSDictionary *obj) {
@@ -1796,7 +1823,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeImage;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = self.converseType;
+    message.conversionType = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.picUrl = imagePath;
@@ -2068,9 +2095,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    MoreItem *item1 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"位置"];
     MoreItem *item2 = [MoreItem moreItemWithPicName:@"sharemore_pic" highLightPicName:nil itemName:@"图片"];
     MoreItem *item3 = [MoreItem moreItemWithPicName:@"sharemore_video" highLightPicName:nil itemName:@"拍照"];
-//    MoreItem *item4 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"小视频"];
+    MoreItem *item4 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"小视频"];
 
-    return @[item2, item3]; //, item4];
+    return @[item2, item3, item4];
 
 }
 - (NSArray<ChatToolBarItem *> *)chatKeyBoardToolbarItems

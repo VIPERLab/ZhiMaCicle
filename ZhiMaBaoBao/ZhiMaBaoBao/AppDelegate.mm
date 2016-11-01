@@ -115,7 +115,33 @@
     //监听电话状态，记录通话时长
     [self addCallRecordTime];
     
+    //如果用户已经登录过，已经有sessionId - 判断用户登录状态
+    if (userInfo.sessionId.length) {
+        [self judgeLoginState];
+    }
+    
     return YES;
+}
+
+- (void)judgeLoginState{
+    //获取登录状态，判断sessionId是否失效
+    [LGNetWorking getProvinceWithSessionID:USERINFO.sessionId block:^(ResponseData *responseData) {
+        if (responseData.code == 14) {  //sessionId已经失效，不执行socket连接  发送被挤下线通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:kOtherLogin object:nil];
+        }
+    }];
+}
+
+//用户在其他地方登录
+- (void)doOtherLogin{
+    //断开socket
+    [[SocketManager shareInstance] disconnect];
+    //
+    UserInfo *info = [UserInfo read];
+    info.isKicker = YES;
+    info.hasLogin = NO;
+    [info save];
+    [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
 }
 
 /*
@@ -334,37 +360,37 @@
     }];
     
     
-//    FMDatabaseQueue *queue2 = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
-//    [queue2 inDatabase:^(FMDatabase *db) {
-//        int dbVersion = [db userVersion];
-//        if (dbVersion < app_Version) {
-//            //需要更新朋友圈数据库
-//            NSLog(@"需要更新朋友圈数据库");
-//            
-//            NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"content_type" andColumnType:@"INTEGER"];
-//            BOOL success = [db executeUpdate:updataStr1];
-//            if (success) {
-//                NSLog(@"更新数据库成功");
-//            } else {
-//                NSLog(@"更新数据库失败");
-//            }
-//            
-//            
-//            NSString *updataStr2 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"article_link" andColumnType:@"TEXT"];
-//            BOOL success2 = [db executeUpdate:updataStr2];
-//            if (success2) {
-//                NSLog(@"更新数据库成功");
-//            } else {
-//                NSLog(@"更新数据库失败");
-//            }
-//            
-//            //设置数据库版本号
-//            if (success && success2) {
-//                [db setUserVersion:app_Version];
-//            }
-//            
-//        }
-//    }];
+    FMDatabaseQueue *queue2 = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
+    [queue2 inDatabase:^(FMDatabase *db) {
+        int dbVersion = [db userVersion];
+        if (dbVersion < app_Version) {
+            //需要更新朋友圈数据库
+            NSLog(@"需要更新朋友圈数据库");
+            
+            NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"content_type" andColumnType:@"INTEGER"];
+            BOOL success = [db executeUpdate:updataStr1];
+            if (success) {
+                NSLog(@"更新数据库成功");
+            } else {
+                NSLog(@"更新数据库失败");
+            }
+            
+            
+            NSString *updataStr2 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"article_link" andColumnType:@"TEXT"];
+            BOOL success2 = [db executeUpdate:updataStr2];
+            if (success2) {
+                NSLog(@"更新数据库成功");
+            } else {
+                NSLog(@"更新数据库失败");
+            }
+            
+            //设置数据库版本号
+            if (success && success2) {
+                [db setUserVersion:app_Version];
+            }
+            
+        }
+    }];
     
     
     
@@ -404,6 +430,10 @@
                                                object:nil];
     //接收用户退出通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
+    
+    //被挤下线通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doOtherLogin) name:kOtherLogin object:nil];
+
     
 }
 
@@ -471,6 +501,7 @@
                 [[SocketManager shareInstance] connect];
             }
             
+
             [JPUSHService resetBadge];
             
             [self countculatedTime];
@@ -576,7 +607,9 @@
     // 关闭数据库
     [FMDBShareManager closeAllSquilteTable];
     
-    LGGuideController *vc = [[LGGuideController alloc] init];
+    LGLoginController *vc = [[LGLoginController alloc] init];
+    vc.iskicker = YES;
+//    LGGuideController *vc = [[LGGuideController alloc] init];
     UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = guideVC;
     

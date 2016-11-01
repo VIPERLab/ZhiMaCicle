@@ -332,7 +332,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     systemMsg.toUidOrGroupId = friend.user_Id;
     systemMsg.type = MessageTypeSystem;
     systemMsg.msgid = [NSString generateMessageID];
-    systemMsg.isGroup = NO;
+    systemMsg.conversionType = ConversionTypeSingle;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
     
     [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];

@@ -77,7 +77,7 @@
     SDTimeLineTableHeaderView *headerView = [SDTimeLineTableHeaderView new];
     headerView.delegate = self;
     self.headerView = headerView;
-    headerView.frame = CGRectMake(0, 0, 0, 260);
+    headerView.frame = CGRectMake(0, 0, 0, ScreenWidth);
     self.tableView.tableHeaderView = headerView;
     
 }
@@ -262,7 +262,6 @@
     } else {
         [self loadRequest];
     }
-    
 }
 
 
@@ -270,6 +269,7 @@
 #pragma mark - 照相的点击事件
 - (void)PersonalDiscoverCellFirstCellDidClick {
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
+    new.circleType = 1;
     new.block = ^() {
         
     };

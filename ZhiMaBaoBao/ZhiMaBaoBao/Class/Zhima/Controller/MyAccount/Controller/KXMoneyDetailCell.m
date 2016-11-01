@@ -26,7 +26,7 @@
 
 - (void)setupView {
     _titleLabel = [[UILabel alloc] init];
-    _titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    _titleLabel.font = [UIFont boldSystemFontOfSize:16];
     _titleLabel.textColor = [UIColor blackColor];
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:_titleLabel];

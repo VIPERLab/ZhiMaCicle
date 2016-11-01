@@ -49,7 +49,7 @@
     //连接socket服务器
     [[SocketManager shareInstance] connect];
     [SocketManager shareInstance].delegate = self;
-    
+
     //添加异常捕获
 //    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
     
@@ -65,7 +65,6 @@
 }
 
 - (void)addNotifications{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doOtherLogin) name:kOtherLogin object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMessageRecieved:) name:kRecieveNewMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUnread) name:kUpdateUnReadMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
@@ -73,17 +72,6 @@
 }
 
 #pragma mark - socket 通知回调
-//用户在其他地方登录
-- (void)doOtherLogin{
-    //断开socket
-    [[SocketManager shareInstance] disconnect];
-    //
-    UserInfo *info = [UserInfo read];
-    info.isKicker = YES;
-    info.hasLogin = NO;
-    [info save];
-    [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
-}
 
 //收到新消息
 - (void)newMessageRecieved:(NSNotification *)notification{
@@ -94,18 +82,18 @@
     //判断对发消息用户是否开启了新消息提醒 -> 播放系统消息提示音
     //1.数据库查会话模型，拿出对该用户设置的的新消息提醒 如果是yes 播放声音
     ConverseModel *conversionModel = nil;
-    if (message.isGroup) {
-        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.toUidOrGroupId andConverseType:message.isGroup];
-    }else{
-        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.isGroup];
+    if (message.conversionType == ConversionTypeGroupChat) {
+        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.toUidOrGroupId andConverseType:message.conversionType];
+    }else if (message.conversionType == ConversionTypeSingle){
+        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.conversionType];
     }
     
     if (!conversionModel.disturb && message.type != MessageTypeSystem) {
-        if (message.isGroup) {
+        if (message.conversionType == ConversionTypeGroupChat) {
             if (![userinfo.currentConversionId isEqualToString:message.toUidOrGroupId]) {
                 [self playSystemAudio];
             }
-        }else{
+        }else if (message.conversionType == ConversionTypeSingle){
             if (![userinfo.currentConversionId isEqualToString:message.fromUid]) {
                 [self playSystemAudio];
             }

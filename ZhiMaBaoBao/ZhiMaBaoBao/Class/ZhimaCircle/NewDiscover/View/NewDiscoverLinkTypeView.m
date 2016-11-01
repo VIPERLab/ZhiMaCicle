@@ -8,6 +8,8 @@
 
 #import "NewDiscoverLinkTypeView.h"
 
+#import "SDLinkTypeView.h"
+
 #define FontSize 15
 
 @interface NewDiscoverLinkTypeView () <UITextViewDelegate>
@@ -42,8 +44,8 @@
     self.contentViewPlaceHolder.text = @"这一刻你的想法...";
     [self addSubview:contentViewPlaceHolder];
     
-    UIView *linkView = [[UIView alloc] init];
-    linkView.backgroundColor = [UIColor colorFormHexRGB:@"dedede"];
+    SDLinkTypeView *linkView = [[SDLinkTypeView alloc] init];
+    linkView.tapEnable = NO;
     self.linkView = linkView;
     [self addSubview:linkView];
 }
@@ -67,7 +69,7 @@
 
     self.contentViewPlaceHolder.frame = CGRectMake(10, 10, CGRectGetWidth(self.frame) - 20, 20);
     
-    self.linkView.frame = CGRectMake(20, CGRectGetMaxY(self.textView.frame) + 10, CGRectGetWidth(self.frame) - 40, 80);
+    self.linkView.frame = CGRectMake(20, CGRectGetMaxY(self.textView.frame) + 10, CGRectGetWidth(self.frame) - 40, 50);
 }
 
 

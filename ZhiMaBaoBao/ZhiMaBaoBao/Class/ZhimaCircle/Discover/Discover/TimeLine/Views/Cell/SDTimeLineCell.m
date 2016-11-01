@@ -32,7 +32,7 @@
 #import "UIView+SDAutoLayout.h"
 #import "UIColor+My.h"
 #import "SDTimeLineCellCommentView.h"
-
+#import "SDLinkTypeView.h"
 #import "SDWeiXinPhotoContainerView.h"
 
 #import "SDTimeLineCellOperationMenu.h"
@@ -73,7 +73,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     SDTimeLineCellOperationMenu *_operationMenu;
     UIImageView *_copyView;
     UIButton *_complainButton;
-    UIView *_linkTypeView;
+    SDLinkTypeView *_linkTypeView;
 }
 
 
@@ -137,9 +137,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     
     
     
-    _linkTypeView = [UIView new];
-    _linkTypeView.backgroundColor = [UIColor colorFormHexRGB:@"dedede"];
-    
+    _linkTypeView = [SDLinkTypeView new];
     
     
     _timeLabel = [UILabel new];
@@ -275,6 +273,15 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
         self.showCopyView = NO;
     }
     
+    if (model.content_type == 2) { //红包类型
+        _linkTypeView.hidden = NO;
+        _linkTypeView.linkValue = model.article_link;
+        _linkTypeView.sd_layout.heightIs(50);
+    } else {
+        _linkTypeView.sd_layout.heightIs(0);
+        _linkTypeView.hidden = YES;
+    }
+    
     _picContainerView.userId = self.model.userId;
     _picContainerView.fcid = self.model.circle_ID;
     
@@ -324,10 +331,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     _picContainerView.sd_layout.topSpaceToView(_moreButton, picContainerTopMargin);
     
     
-    if (model.content_type == 2) { //红包类型
-        NSLog(@"我是红包类型");
-        _linkTypeView.sd_layout.heightIs(150);
-    }
+    
     
     //设置bottomView
     UIView *bottomView;

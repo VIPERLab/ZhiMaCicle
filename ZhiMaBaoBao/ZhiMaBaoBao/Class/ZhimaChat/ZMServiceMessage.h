@@ -22,7 +22,12 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 /** 消息id*/
 @property (nonatomic, copy) NSString *msgid;
 /** 消息时间*/
-@property (nonatomic, copy) NSString *msgTime;
+@property (nonatomic, copy) NSString *msgtime;
+/** 消息发送时间时间戳*/
+@property (nonatomic, assign) NSInteger timeStamp;
+
+/** 文章消息里面的时间*/
+@property (nonatomic, copy) NSString *detailMsgTime;
 /** 消息标题*/
 @property (nonatomic, copy) NSString *msgTitle;
 /** 消息内容*/
@@ -32,6 +37,6 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 /** 消息详情的链接*/
 @property (nonatomic, copy) NSString *msgUrl;
 // 多条消息（由多个ZMServiceMessage组成）
-@property (nonatomic, strong) NSArray *msgArr;
+@property (nonatomic, strong) NSArray<ZMServiceMessage *>* msgArr;
 
 @end
