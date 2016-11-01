@@ -149,7 +149,8 @@
 
 - (void)nextButtonDidClick {
     [self.textField resignFirstResponder];
-    
+    [LCProgressHUD showLoadingText:@"请稍等..."];
+
     if (!self.isWeCheat) {
         [LCProgressHUD showFailureText:@"请先关注微信公众号并绑定芝麻号"];
         return;
@@ -185,15 +186,16 @@
         
         [LCProgressHUD showSuccessText:responseObject[@"msg"]];
         
-        for (UIViewController *controller in self.navigationController.viewControllers) {
-            if ([controller isKindOfClass:[MyAccountViewController class]]) {
-                [self.navigationController popToViewController:controller animated:YES];
-                return;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            for (UIViewController *controller in self.navigationController.viewControllers) {
+                if ([controller isKindOfClass:[MyAccountViewController class]]) {
+                    [self.navigationController popToViewController:controller animated:YES];
+                    return;
+                }
             }
-        }
+        });
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
         
         [LCProgressHUD showFailureText:@"提现失败"];
 

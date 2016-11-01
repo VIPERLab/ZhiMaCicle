@@ -51,7 +51,7 @@
 - (void)createCustomViews
 {
 
-    CGFloat originX = self.userIcon.frameMaxX + 15;
+    CGFloat originX = self.userIcon.frameMaxX + 16;
     CGFloat originY = self.userIcon.frameOriginY;
     
     self.activityPursePopIV = [[UIImageView alloc]initWithFrame:CGRectMake(originX, originY, DEVICEWITH-originX*2, 115)];

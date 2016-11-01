@@ -62,7 +62,7 @@
     NSArray *titleArray = self.dataArray[indexPath.section];
     cell.textLabel.text = titleArray[indexPath.row];
     cell.textLabel.font = [UIFont systemFontOfSize:16];
-    if (indexPath.section == 0 && indexPath.row == 5) {
+    if (indexPath.section == 0 && indexPath.row == 4) {
         UILabel *subTileLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 100, 0, 80, 40)];
         subTileLabel.textAlignment = NSTextAlignmentRight;
         subTileLabel.textColor = [UIColor lightGrayColor];

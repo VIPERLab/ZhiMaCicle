@@ -36,7 +36,7 @@
 
 
 - (void)setupView {
-    [self setCustomTitle:@"新消息通知"];
+    [self setCustomTitle:@"隐私设置"];
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
