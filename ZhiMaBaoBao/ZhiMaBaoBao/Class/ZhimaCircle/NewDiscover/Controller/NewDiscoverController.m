@@ -527,7 +527,7 @@
         NSString *optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Table];
         [queue inDatabase:^(FMDatabase *db) {
             
-            BOOL success = [db executeUpdate:optionStr,info.username,fcid,info.userID,self.textView.text,locationStr,@"刚刚",info.head_photo];
+            BOOL success = [db executeUpdate:optionStr,info.username,fcid,info.userID,self.textView.text,locationStr,@"刚刚",info.head_photo,@(1),@""];
             if (success) {
                 NSLog(@"插入朋友圈成功");
             } else {

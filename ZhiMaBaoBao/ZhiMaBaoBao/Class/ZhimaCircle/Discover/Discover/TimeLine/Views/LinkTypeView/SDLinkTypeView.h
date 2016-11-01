@@ -10,4 +10,7 @@
 
 @interface SDLinkTypeView : UIView
 
+
+
+
 @end
