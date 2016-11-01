@@ -7,31 +7,71 @@
 //
 
 #import "ServiceViewController.h"
+#import "ServicePurseCell.h"
+#import "ServiceSingleMsgCell.h"
 
-@interface ServiceViewController ()
+@interface ServiceViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (nonatomic, strong) UITableView *tableView; // 列表
 
 @end
 
 @implementation ServiceViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self initTableview];
 }
-*/
+
+
+#pragma mark - init
+
+- (void)initTableview
+{
+    self.navigationItem.title = @"麦当劳";
+    
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, DEVICEHIGHT) style:UITableViewStylePlain];
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableView.dataSource = self;
+    tableView.delegate = self;
+    [self.view addSubview:tableView];
+    self.tableView = tableView;
+}
+
+#pragma mark - tableviewDelegate DataSource
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 55+(DEVICEWITH-36)*690/682;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0) {
+        ServicePurseCell *servicePurseCell = [tableView dequeueReusableCellWithIdentifier:@"ServicePurseCell"];
+        if(!servicePurseCell) {
+            servicePurseCell = [[ServicePurseCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ServicePurseCell"];
+        }
+        return servicePurseCell;
+    }else
+    {
+        ServiceSingleMsgCell *serviceSingleMsgCell = [tableView dequeueReusableCellWithIdentifier:@"ServiceSingleMsgCell"];
+        if(!serviceSingleMsgCell) {
+            serviceSingleMsgCell = [[ServiceSingleMsgCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ServiceSingleMsgCell"];
+        }
+        return serviceSingleMsgCell;
+    }
+
+}
 
 @end
