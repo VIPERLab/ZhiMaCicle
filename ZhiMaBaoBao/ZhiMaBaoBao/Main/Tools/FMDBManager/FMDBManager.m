@@ -672,7 +672,7 @@
         }
         
         [queue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:operationStr,cellModel.friend_nick,cellModel.circle_ID,cellModel.userId,cellModel.content,cellModel.current_location,cellModel.create_time,cellModel.head_photo];//,@(cellModel.content_type),cellModel.article_link];
+            BOOL success = [db executeUpdate:operationStr,cellModel.friend_nick,cellModel.circle_ID,cellModel.userId,cellModel.content,cellModel.current_location,cellModel.create_time,cellModel.head_photo,@(cellModel.content_type),cellModel.article_link];
             if (success) {
                 NSLog(@"插入朋友圈成功");
             } else {
@@ -828,8 +828,8 @@
             model.current_location = [result stringForColumn:@"current_location"];
             model.create_time = [result stringForColumn:@"create_time"];
             model.head_photo = [result stringForColumn:@"head_photo"];
-//            model.content_type = [result intForColumn:@"content_type"];
-//            model.article_link = [result stringForColumn:@"article_link"];
+            model.content_type = [result intForColumn:@"content_type"];
+            model.article_link = [result stringForColumn:@"article_link"];
             [cellModelArray addObject:model];
         }
     }];
@@ -920,8 +920,8 @@
             cellModel.current_location = [result stringForColumn:@"current_location"];
             cellModel.create_time = [result stringForColumn:@"create_time"];
             cellModel.head_photo = [result stringForColumn:@"head_photo"];
-//            cellModel.content_type = [result intForColumn:@"content_type"];
-//            cellModel.article_link = [result stringForColumn:@"article_link"];
+            cellModel.content_type = [result intForColumn:@"content_type"];
+            cellModel.article_link = [result stringForColumn:@"article_link"];
         }
     }];
     
