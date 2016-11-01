@@ -25,7 +25,7 @@
     self.backgroundColor = [UIColor colorFormHexRGB:@"f3f4f6"];
     
     _titleLabel = [UILabel new];
-    _titleLabel.font = [UIFont systemFontOfSize:16];
+    _titleLabel.font = [UIFont systemFontOfSize:15];
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.text = @"我只是一个标题";
     _titleLabel.numberOfLines = 2;
@@ -42,31 +42,41 @@
 //    _detailImageView = [UIImageView  new];
 //    [self addSubview:_detailImageView];
     
+    
+    
+}
+
+- (void)viewDidClick {
+    self.backgroundColor = [UIColor colorFormHexRGB:@"dedede"];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.backgroundColor = [UIColor colorFormHexRGB:@"f3f4f6"];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:KCircleLinkTypeDidClickNotification object:nil userInfo:@{ @"linkValue" : self.linkValue}];
+}
+
+- (void)setTapEnable:(BOOL)tapEnable {
+    _tapEnable = tapEnable;
+    if (tapEnable) {
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewDidClick)];
+        [self addGestureRecognizer:tapGesture];
+    }
 }
 
 
 - (void)layoutSubviews {
-    
     CGFloat titleImgX = 6;
-    CGFloat titleImgY = 6;
     CGFloat titleImgW = 25;
     CGFloat titleImgH = 35;
+    CGFloat titleImgY = (CGRectGetHeight(self.frame) - titleImgH) * 0.5;;
     _typeImageView.frame = CGRectMake(titleImgX, titleImgY, titleImgW, titleImgH);
     
     
     CGFloat titleNameX = CGRectGetMaxX(_typeImageView.frame) + 5;
-    CGFloat titleNameY = CGRectGetMinY(_typeImageView.frame);
+    CGFloat titleNameY = 0;
     CGFloat titleNameW = CGRectGetWidth(self.frame) - titleNameX;
-    CGFloat titleNameH = titleImgH;
+    CGFloat titleNameH = CGRectGetHeight(self.frame);
     _titleLabel.frame = CGRectMake(titleNameX, titleNameY, titleNameW, titleNameH);
-    
-//    CGFloat subTitleX = titleNameX;
-//    CGFloat subTitleY = CGRectGetMaxY(_titleLabel.frame) + 5;
-//    CGFloat subTitleW = titleNameW;
-//    CGFloat subTitleH = [_subTitleLabel.text sizeGwWithFont:[UIFont systemFontOfSize:14] Size:CGSizeMake(subTitleW, 30)].height;
-//    _subTitleLabel.frame = CGRectMake(subTitleX, subTitleY, subTitleW, subTitleH);
-    
-    
     
 }
 

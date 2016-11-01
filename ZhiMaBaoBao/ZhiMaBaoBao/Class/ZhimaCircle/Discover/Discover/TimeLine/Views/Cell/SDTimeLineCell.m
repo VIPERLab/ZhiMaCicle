@@ -275,6 +275,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     
     if (model.content_type == 2) { //红包类型
         _linkTypeView.hidden = NO;
+        _linkTypeView.linkValue = model.article_link;
         _linkTypeView.sd_layout.heightIs(50);
     } else {
         _linkTypeView.sd_layout.heightIs(0);

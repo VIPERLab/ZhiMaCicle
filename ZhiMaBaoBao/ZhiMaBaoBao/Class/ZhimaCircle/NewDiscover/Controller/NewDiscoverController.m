@@ -123,16 +123,17 @@
     UIView *fistView;
     if (self.circleType == 2) {
         // 分享朋友圈链接
-        NewDiscoverLinkTypeView *linkTypeView = [[NewDiscoverLinkTypeView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 220)];
+        NewDiscoverLinkTypeView *linkTypeView = [[NewDiscoverLinkTypeView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 180)];
+        _linkTypeView.linkValue = self.linkValue;
         linkTypeView.backgroundColor = [UIColor whiteColor];
         self.linkTypeView = linkTypeView;
+        self.textView = linkTypeView.textView;
         [self.view addSubview:linkTypeView];
         fistView = linkTypeView;
         
         
     } else if (self.circleType == 1) {
         // 普通图文朋友圈
-        //设置头部
         NewDiscoverHeaderView *headerView = [[NewDiscoverHeaderView alloc] init];
         self.textView = headerView.textView;
         [self.view addSubview:headerView];
@@ -140,10 +141,6 @@
         headerView.frame = CGRectMake(0, 64,ScreenWidth, 240);
         fistView = headerView;
     }
-    
-    
-    
-    
     
     
     //设置TableView
@@ -508,10 +505,7 @@
         locationStr = self.locationTips;
     }
     
-    
-    
-    
-    [LGNetWorking AddNewDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andContent_type:[NSString stringWithFormat:@"%zd",self.circleType] andContent:self.textView.text andLink:@"" andType:_privateClass andCurrent_location:locationStr andImgs:_imgs block:^(ResponseData *responseData) {
+    [LGNetWorking AddNewDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andContent_type:[NSString stringWithFormat:@"%zd",self.circleType] andContent:self.textView.text andLink:self.linkValue andType:_privateClass andCurrent_location:locationStr andImgs:_imgs block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             _imgs = @"";

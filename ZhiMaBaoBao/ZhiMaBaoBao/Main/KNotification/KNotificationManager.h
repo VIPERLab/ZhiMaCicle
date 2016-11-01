@@ -83,6 +83,8 @@
 
 #define KDiscoverCommentViewClickNotification @"K_DiscoverCommentViewClickNotification"
 
+// 朋友圈链接类型点击事件
+#define KCircleLinkTypeDidClickNotification @"K_CircleLinkTypeDidClickNotification"
 //                    ------ 发布朋友圈通知 --------
 // ---- 取消响应通知
 // userInfo : { CurrentSelectedButton : 当前选中的按钮 }

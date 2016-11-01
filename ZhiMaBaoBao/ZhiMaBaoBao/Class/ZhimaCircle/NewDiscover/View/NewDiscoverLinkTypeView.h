@@ -10,4 +10,5 @@
 
 @interface NewDiscoverLinkTypeView : UIView
 @property (nonatomic, weak) UITextView *textView;
+@property (nonatomic, copy) NSString *linkValue;
 @end
