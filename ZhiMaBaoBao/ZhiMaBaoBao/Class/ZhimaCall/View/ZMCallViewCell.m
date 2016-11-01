@@ -25,7 +25,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
+//    self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 
@@ -73,15 +73,15 @@
     }
 }
 
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
-{
-    if (highlighted) {
-        self.contentView.backgroundColor = BGCOLOR;
-
-    }else{
-        self.contentView.backgroundColor = ClearColor;
-    }
-}
+//- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+//{
+//    if (highlighted) {
+//        self.contentView.backgroundColor = BGCOLOR;
+//
+//    }else{
+//        self.contentView.backgroundColor = ClearColor;
+//    }
+//}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
