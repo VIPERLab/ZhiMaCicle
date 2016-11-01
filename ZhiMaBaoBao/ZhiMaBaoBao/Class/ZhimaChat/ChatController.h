@@ -12,8 +12,8 @@
 
 @property (nonatomic, copy) NSString *conversionId;
 
-//0是单聊，1是群聊
-@property (nonatomic, assign) BOOL converseType;
+//会话类型
+@property (nonatomic, assign) ConversionType converseType;
 /**
  *  会话名称
  */

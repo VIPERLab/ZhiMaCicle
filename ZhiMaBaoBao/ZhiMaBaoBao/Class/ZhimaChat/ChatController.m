@@ -222,8 +222,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     LGMessage *message = userInfo[@"message"];
         
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
-    //
-    if (([message.fromUid isEqualToString:self.conversionId] && !message.isGroup )|| ([message.toUidOrGroupId isEqualToString:self.conversionId])) {
+    
+    if (([message.fromUid isEqualToString:self.conversionId] && message.conversionType == ConversionTypeSingle )|| ([message.toUidOrGroupId isEqualToString:self.conversionId])) {
         if (message.actType == ActTypeUndomsg) {
             NSMutableArray*marr = [self.messages mutableCopy];
             for (LGMessage*msg in marr) {
@@ -1259,7 +1259,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         systemMsg.type = MessageTypeSystem;
 //        systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
         systemMsg.msgid = message.msgid;
-        systemMsg.isGroup = message.isGroup;
+        systemMsg.conversionType = message.conversionType;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
         
         NSInteger num = indecPath.row+1;
@@ -1357,7 +1357,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = self.converseType;
+    message.conversionType = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     
@@ -1439,7 +1439,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeAudio;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = self.converseType;
+    message.conversionType = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.audioLength = [AmrPlayerReader durationOfAmrFilePath:[NSString stringWithFormat:@"%@/%@",AUDIOPATH,message.text]];
@@ -1608,7 +1608,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.toUidOrGroupId = self.conversionId;
     message.fromUid = USERINFO.userID;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = self.converseType;
+    message.conversionType = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.text = outputFilePath;
@@ -1796,7 +1796,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUid = USERINFO.userID;
     message.type = MessageTypeImage;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = self.converseType;
+    message.conversionType = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
     message.picUrl = imagePath;

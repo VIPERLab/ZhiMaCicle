@@ -37,6 +37,7 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
 };
 
 #import <Foundation/Foundation.h>
+#import "ConverseModel.h"
 
 #define MSG_MAX_WIDTH   DEVICEWITH - 2 * MSG_AVTAR_SIZE - 7 * MSG_MARGIN   //消息最大宽度
 #define MSG_FONT [UIFont systemFontOfSize:15]       //消息字体
@@ -58,8 +59,9 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
 @property (nonatomic, assign) MessageType type;
  /** 消息发送者id*/
 @property (nonatomic, copy) NSString *fromUid;
- /** 是否为群聊*/
-@property (nonatomic, assign) BOOL isGroup;
+
+ /** 消息所属会话类型*/
+@property (nonatomic, assign) ConversionType conversionType;
 
  /** 消息接收者id(如果是群则是群id) */
 @property (nonatomic, copy) NSString *toUidOrGroupId;

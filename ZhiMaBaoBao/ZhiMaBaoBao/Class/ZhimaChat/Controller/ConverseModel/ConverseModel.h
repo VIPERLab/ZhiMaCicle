@@ -6,6 +6,13 @@
 //  Copyright © 2016年 liugang. All rights reserved.
 //
 
+//发送状态
+typedef NS_OPTIONS(NSUInteger, ConversionType){
+    ConversionTypeSingle = 0,       // 单聊
+    ConversionTypeGroupChat ,       // 群聊
+    ConversionTypeActivity          // 红包活动
+};
+
 #import <Foundation/Foundation.h>
 
 @interface ConverseModel : NSObject
