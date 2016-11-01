@@ -10,7 +10,8 @@
 
 @interface SDLinkTypeView : UIView
 
+@property (nonatomic, copy) NSString *linkValue;
 
-
+@property (nonatomic, assign) BOOL tapEnable;
 
 @end

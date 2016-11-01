@@ -217,6 +217,9 @@
     
     //点击了评论链接通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commentURLDidClick:) name:KDiscoverCommentURLNotification object:nil];
+    
+    //链接类型的朋友圈 点击事件
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(linkTypeCircleDidClick:) name:KCircleLinkTypeDidClickNotification object:nil];
 }
 
 
@@ -226,7 +229,8 @@
     //新增说说
     
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
-    new.circleType = 1;
+    new.circleType = 2;
+    new.linkValue = @"http://www.baidu.com";
     new.block = ^() {
         [_tableView.mj_header beginRefreshing];
     };
@@ -848,6 +852,12 @@
 
 // 点击了评论的网址
 - (void)commentURLDidClick:(NSNotification *)notification {
+    WebViewController *webView = [[WebViewController alloc] init];
+    webView.urlStr = notification.userInfo[@"linkValue"];
+    [self.navigationController pushViewController:webView animated:YES];
+}
+
+- (void)linkTypeCircleDidClick:(NSNotification *)notification {
     WebViewController *webView = [[WebViewController alloc] init];
     webView.urlStr = notification.userInfo[@"linkValue"];
     [self.navigationController pushViewController:webView animated:YES];
