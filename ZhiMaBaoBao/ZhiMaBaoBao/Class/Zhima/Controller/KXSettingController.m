@@ -62,7 +62,7 @@
     NSArray *titleArray = self.dataArray[indexPath.section];
     cell.textLabel.text = titleArray[indexPath.row];
     cell.textLabel.font = [UIFont systemFontOfSize:16];
-    if (indexPath.section == 0 && indexPath.row == 4) {
+    if (indexPath.section == 0 && indexPath.row == 3) {
         UILabel *subTileLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 100, 0, 80, 40)];
         subTileLabel.textAlignment = NSTextAlignmentRight;
         subTileLabel.textColor = [UIColor lightGrayColor];
@@ -108,29 +108,29 @@
         [self presentViewController:alertController animated:YES completion:nil];
         
     }
-    else if (indexPath.section == 0 && indexPath.row == 3){
+    else if (indexPath.section == 0 && indexPath.row == 2){
         //重置密码
         LGResetPwdViewController *resetPwdVC = [[LGResetPwdViewController alloc]init];
         [self.navigationController pushViewController:resetPwdVC animated:YES];
     }
-    else if(indexPath.section == 0  && indexPath.row == 2){
+    else if(indexPath.section == 0  && indexPath.row == 1){
         // 黑名单
         LGBlackListViewController *blackLVC = [[LGBlackListViewController alloc]init];
         [self.navigationController pushViewController:blackLVC animated:YES];
         
-    } else if (indexPath.section == 0 && indexPath.row == 4) {
+    } else if (indexPath.section == 0 && indexPath.row == 3) {
         //版本公告
         KXWebViewController *aboutUs = [[KXWebViewController alloc] init];
         aboutUs.navTitleName = @"版本公告";
         aboutUs.htmlURL = [NSString stringWithFormat:@"%@/web/getNoticeListBytype.do?sessionId=%@&openfireaccount=%@&type=2",DFAPIURL,USERINFO.sessionId,USERINFO.userID];
         [self.navigationController pushViewController:aboutUs animated:YES];
-    } else if (indexPath.section == 0 && indexPath.row == 5) {
+    } else if (indexPath.section == 0 && indexPath.row == 4) {
         //关于我们
         KXWebViewController *aboutUs = [[KXWebViewController alloc] init];
         aboutUs.navTitleName = @"关于我们";
         aboutUs.htmlURL = [NSString stringWithFormat:@"%@/company_info.html?%f",DFAPIURL,interval];
         [self.navigationController pushViewController:aboutUs animated:YES];
-    } else if (indexPath.section == 0 && indexPath.row == 6) {
+    } else if (indexPath.section == 0 && indexPath.row == 5) {
         //联系我们
         KXWebViewController *aboutUs = [[KXWebViewController alloc] init];
         aboutUs.navTitleName = @"联系我们";
@@ -141,11 +141,12 @@
         NewMessageSettingController *message = [[NewMessageSettingController alloc] init];
         [self.navigationController pushViewController:message animated:YES];
         
-    } else if (indexPath.section == 0 && indexPath.row == 1) {
-        //隐私设置
-        PersonalSettingController *personalSetting = [[PersonalSettingController alloc] init];
-        [self.navigationController pushViewController:personalSetting animated:YES];
     }
+//    else if (indexPath.section == 0 && indexPath.row == 1) {
+//        //隐私设置
+//        PersonalSettingController *personalSetting = [[PersonalSettingController alloc] init];
+//        [self.navigationController pushViewController:personalSetting animated:YES];
+//    }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -183,7 +184,7 @@
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
-        [_dataArray addObject:@[@"新消息提醒",@"隐私设置",@"黑名单",@"修改密码",@"版本公告",@"关于我们",@"联系我们"]];
+        [_dataArray addObject:@[@"新消息提醒",@"黑名单",@"修改密码",@"版本公告",@"关于我们",@"联系我们"]];
         [_dataArray addObject:@[@"退出"]];
     }
     return _dataArray;

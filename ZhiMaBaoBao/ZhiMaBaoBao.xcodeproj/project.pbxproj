@@ -464,6 +464,10 @@
 		310B83331D8E7B0100A0F408 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 310B83311D8E7B0100A0F408 /* LaunchScreen.storyboard */; };
 		310B833E1D8E7B0100A0F408 /* ZhiMaBaoBaoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B833D1D8E7B0100A0F408 /* ZhiMaBaoBaoTests.m */; };
 		310B83491D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 310B83481D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m */; };
+		310E10301DC87FC100044B1E /* ServiceDetailInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 310E102F1DC87FC100044B1E /* ServiceDetailInfoViewController.m */; };
+		310E10741DC8B37200044B1E /* JFMyPlayerSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 310E10731DC8B37200044B1E /* JFMyPlayerSound.m */; };
+		310E10771DC8B41400044B1E /* RBDMuteSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 310E10761DC8B41400044B1E /* RBDMuteSwitch.m */; };
+		310E10791DC8BA3A00044B1E /* detection.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 310E10781DC8BA3A00044B1E /* detection.aiff */; };
 		310E67381DAA347E008DD15C /* TransPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 310E67371DAA347E008DD15C /* TransPopView.m */; };
 		311CEF281D91639700BBB1F9 /* PlaySounds.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF271D91639700BBB1F9 /* PlaySounds.m */; };
 		311CEF2B1D91653C00BBB1F9 /* CallSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 311CEF2A1D91653C00BBB1F9 /* CallSettingController.m */; };
@@ -529,7 +533,6 @@
 		31861E111DBDAF190037E4E6 /* MoreInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E101DBDAF190037E4E6 /* MoreInfoModel.m */; };
 		31861E171DBF02990037E4E6 /* GroupDeleteMembersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E161DBF02990037E4E6 /* GroupDeleteMembersController.m */; };
 		31861E201DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E1F1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m */; };
-		31861E231DC34CAC0037E4E6 /* PlaySound.m in Sources */ = {isa = PBXBuildFile; fileRef = 31861E221DC34CAC0037E4E6 /* PlaySound.m */; };
 		31861E251DC350FF0037E4E6 /* sms-received1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31861E241DC350FF0037E4E6 /* sms-received1.caf */; };
 		319069A41D9A17C300D1D6D2 /* NSData+Replace.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069A31D9A17C300D1D6D2 /* NSData+Replace.m */; };
 		319069AD1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 319069AC1D9A9DC100D1D6D2 /* NSDate+TimeCategory.m */; };
@@ -1591,6 +1594,13 @@
 		310B83441D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZhiMaBaoBaoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		310B83481D8E7B0100A0F408 /* ZhiMaBaoBaoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZhiMaBaoBaoUITests.m; sourceTree = "<group>"; };
 		310B834A1D8E7B0100A0F408 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		310E102E1DC87FC100044B1E /* ServiceDetailInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceDetailInfoViewController.h; sourceTree = "<group>"; };
+		310E102F1DC87FC100044B1E /* ServiceDetailInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceDetailInfoViewController.m; sourceTree = "<group>"; };
+		310E10721DC8B37200044B1E /* JFMyPlayerSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFMyPlayerSound.h; sourceTree = "<group>"; };
+		310E10731DC8B37200044B1E /* JFMyPlayerSound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFMyPlayerSound.m; sourceTree = "<group>"; };
+		310E10751DC8B41400044B1E /* RBDMuteSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBDMuteSwitch.h; sourceTree = "<group>"; };
+		310E10761DC8B41400044B1E /* RBDMuteSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBDMuteSwitch.m; sourceTree = "<group>"; };
+		310E10781DC8BA3A00044B1E /* detection.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = detection.aiff; sourceTree = "<group>"; };
 		310E67361DAA347E008DD15C /* TransPopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransPopView.h; sourceTree = "<group>"; };
 		310E67371DAA347E008DD15C /* TransPopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransPopView.m; sourceTree = "<group>"; };
 		311CEF261D91639700BBB1F9 /* PlaySounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaySounds.h; sourceTree = "<group>"; };
@@ -1696,8 +1706,6 @@
 		31861E161DBF02990037E4E6 /* GroupDeleteMembersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupDeleteMembersController.m; sourceTree = "<group>"; };
 		31861E1E1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UncaughtExceptionHandler.h; sourceTree = "<group>"; };
 		31861E1F1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UncaughtExceptionHandler.m; sourceTree = "<group>"; };
-		31861E211DC34CAC0037E4E6 /* PlaySound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaySound.h; sourceTree = "<group>"; };
-		31861E221DC34CAC0037E4E6 /* PlaySound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaySound.m; sourceTree = "<group>"; };
 		31861E241DC350FF0037E4E6 /* sms-received1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sms-received1.caf"; sourceTree = "<group>"; };
 		319069A21D9A17C300D1D6D2 /* NSData+Replace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Replace.h"; sourceTree = "<group>"; };
 		319069A31D9A17C300D1D6D2 /* NSData+Replace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Replace.m"; sourceTree = "<group>"; };
@@ -4248,6 +4256,15 @@
 			path = ZhiMaBaoBaoUITests;
 			sourceTree = "<group>";
 		};
+		310E102D1DC87F4100044B1E /* ServiceDetailInfo(服务号详情) */ = {
+			isa = PBXGroup;
+			children = (
+				310E102E1DC87FC100044B1E /* ServiceDetailInfoViewController.h */,
+				310E102F1DC87FC100044B1E /* ServiceDetailInfoViewController.m */,
+			);
+			name = "ServiceDetailInfo(服务号详情)";
+			sourceTree = "<group>";
+		};
 		311CEF251D91637A00BBB1F9 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -4469,10 +4486,13 @@
 		316957891D911A3F00140126 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				310E10781DC8BA3A00044B1E /* detection.aiff */,
+				310E10751DC8B41400044B1E /* RBDMuteSwitch.h */,
+				310E10761DC8B41400044B1E /* RBDMuteSwitch.m */,
+				310E10721DC8B37200044B1E /* JFMyPlayerSound.h */,
+				310E10731DC8B37200044B1E /* JFMyPlayerSound.m */,
 				31861E1E1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.h */,
 				31861E1F1DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m */,
-				31861E211DC34CAC0037E4E6 /* PlaySound.h */,
-				31861E221DC34CAC0037E4E6 /* PlaySound.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -5175,6 +5195,7 @@
 		D55B673F1DC6DBDD00B47CAB /* ServiceAndPurse(服务号和红包) */ = {
 			isa = PBXGroup;
 			children = (
+				310E102D1DC87F4100044B1E /* ServiceDetailInfo(服务号详情) */,
 				D55B674E1DC72D1900B47CAB /* Tools */,
 				D55B67441DC6DCFD00B47CAB /* View */,
 				D55B67431DC6DCF400B47CAB /* Model */,
@@ -5385,6 +5406,7 @@
 				31B7C7A41D8FE71F00F1883A /* PhoneContactCell.xib in Resources */,
 				315FF5821DB866570002CB97 /* hud_error@2x.png in Resources */,
 				319069DC1D9CE91F00D1D6D2 /* InfoHeaderCell.xib in Resources */,
+				310E10791DC8BA3A00044B1E /* detection.aiff in Resources */,
 				316957871D91199100140126 /* dtmf-s.aif in Resources */,
 				D55B67501DC72D3700B47CAB /* miniJLX.TTF in Resources */,
 				316957841D91199100140126 /* dtmf-7.aif in Resources */,
@@ -5573,7 +5595,6 @@
 				047F142D1DAC850400684881 /* Order.m in Sources */,
 				04EA7DFB1D912872005E5425 /* ZXUPCEANReader.m in Sources */,
 				04F862181D94DE7100DCC6FE /* NearByPeopleCell.m in Sources */,
-				31861E231DC34CAC0037E4E6 /* PlaySound.m in Sources */,
 				04F57AEC1D9280BD002A6471 /* DiscoverCurrentLocationController.m in Sources */,
 				04F862121D94DB3000DCC6FE /* NewDiscoverNormalCell.m in Sources */,
 				04EA7ACA1D910F89005E5425 /* NSURL+DNIMagePickerUrlEqual.m in Sources */,
@@ -5596,6 +5617,7 @@
 				311CEFAF1D937BE700BBB1F9 /* MLAudioMeterObserver.m in Sources */,
 				04EA7D6E1D912872005E5425 /* ZXExpandedProductResultParser.m in Sources */,
 				31B7C75B1D8FB33E00F1883A /* LGGuideController.m in Sources */,
+				310E10771DC8B41400044B1E /* RBDMuteSwitch.m in Sources */,
 				04F862201D94FB7600DCC6FE /* ScanQRCodeController.m in Sources */,
 				31B7C7811D8FE69E00F1883A /* PhoneAddressController.m in Sources */,
 				04EA7D601D912872005E5425 /* ZXAztecDetectorResult.m in Sources */,
@@ -5872,6 +5894,7 @@
 				04EA7D8C1D912872005E5425 /* ZXWhiteRectangleDetector.m in Sources */,
 				04EA7AC61D910F89005E5425 /* DNImagePickerController.m in Sources */,
 				04EA7D7A1D912872005E5425 /* ZXSMTPResultParser.m in Sources */,
+				310E10741DC8B37200044B1E /* JFMyPlayerSound.m in Sources */,
 				04EA7DAE1D912872005E5425 /* ZXDataMatrixDataBlock.m in Sources */,
 				04F862CD1D9554AA00DCC6FE /* UserMessageController.m in Sources */,
 				04EA7DF41D912872005E5425 /* ZXOneDimensionalCodeWriter.m in Sources */,
@@ -5992,6 +6015,7 @@
 				04F862901D94FC7900DCC6FE /* FaceButton.m in Sources */,
 				04FC4D9C1DB5B40300C1E854 /* KXPhotoBrowersController.m in Sources */,
 				04EA7D7E1D912872005E5425 /* ZXURIParsedResult.m in Sources */,
+				310E10301DC87FC100044B1E /* ServiceDetailInfoViewController.m in Sources */,
 				31B7C7A31D8FE71F00F1883A /* PhoneContactCell.m in Sources */,
 				04EA7AD31D910F89005E5425 /* DNSendButton.m in Sources */,
 				04EA7D941D912872005E5425 /* ZXBoolArray.m in Sources */,

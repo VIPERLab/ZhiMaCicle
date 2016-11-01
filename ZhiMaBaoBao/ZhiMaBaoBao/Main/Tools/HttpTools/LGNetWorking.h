@@ -313,4 +313,9 @@
 //获取当前登录用户的二维码
 + (void)getMyQRCodeWithSessionId:(NSString *)sessionId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
+//查看加好友是否需要验证
++ (void)lookAddFriendShouldAskSuccess:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
+//删除群成员的时候调用，用来获取最新的群头像
++ (void)getGroupHeadGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 @end
