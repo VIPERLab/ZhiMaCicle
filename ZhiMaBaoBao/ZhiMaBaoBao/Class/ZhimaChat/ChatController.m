@@ -630,7 +630,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.toUidOrGroupId = USERINFO.userID;
     message.fromUid = self.conversionId;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message.isGroup = NO;
+    message.conversionType = ConversionTypeSingle;
     message.timeStamp = [NSDate currentTimeStamp];
     [self.messages addObject:message];
     
@@ -639,7 +639,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     message2.toUidOrGroupId = USERINFO.userID;
     message2.fromUid = self.conversionId;
     message2.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-    message2.isGroup = NO;
+    message.conversionType = ConversionTypeSingle;
     message2.timeStamp = [NSDate currentTimeStamp];
     [self.messages addObject:message2];
 

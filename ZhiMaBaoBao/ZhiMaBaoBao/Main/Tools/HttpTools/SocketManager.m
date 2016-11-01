@@ -149,7 +149,7 @@ static SocketManager *manager = nil;
         sendMsg.fromUid = message.fromUid;
         sendMsg.type = message.type;
         sendMsg.msgid = message.msgid;
-        sendMsg.isGroup = message.isGroup;
+        sendMsg.conversionType = message.conversionType;
         sendMsg.timeStamp = message.timeStamp;
         sendMsg.text = base64;
         sendMsg.audioLength = message.audioLength;
@@ -170,7 +170,7 @@ static SocketManager *manager = nil;
         sendMsg.fromUid = message.fromUid;
         sendMsg.type = message.type;
         sendMsg.msgid = message.msgid;
-        sendMsg.isGroup = message.isGroup;
+        sendMsg.conversionType = message.conversionType;
         sendMsg.timeStamp = message.timeStamp;
         
         //拼接text (本地路径：text , 第一帧图片路径：holderImageUrlString , 视频下载路径：videoDownloadUrl , 是否存在本地：isDownLoad 发送时设置为no)
@@ -188,9 +188,9 @@ static SocketManager *manager = nil;
     
     //插入消息数据库
     BOOL success = NO;
-    if (message.isGroup) {
+    if (message.conversionType == ConversionTypeGroupChat) {
         success = [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-    } else {
+    } else if (message.conversionType == ConversionTypeSingle) {
         success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
     }
 
@@ -276,10 +276,10 @@ static SocketManager *manager = nil;
             
             //将消息插入数据库，并更新会话列表  (根据是否为群聊，插入不同的表)
             BOOL success = NO;
-            if (message.isGroup) {  //如果是群消息 先从http请求群信息 加入本地数据库
+            if (message.conversionType == ConversionTypeGroupChat) {  //如果是群消息 先从http请求群信息 加入本地数据库
 
                 success = [self addGroupMessage:message groupId:message.toUidOrGroupId];
-            } else {
+            } else if (message.conversionType == ConversionTypeSingle) {
                 success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
             }
             
@@ -358,14 +358,14 @@ static SocketManager *manager = nil;
             systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = resDic[@"msgid"];
             systemMsg.undoMsgid = resDic[@"msgid"];
-            systemMsg.isGroup = [resDic[@"isGroup"] boolValue];
+            systemMsg.conversionType = [resDic[@"isGroup"] integerValue];
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             
             //更新数据库会话 （最后一条消息显示）
             NSString *conversionId = nil;
-            if (systemMsg.isGroup) {
+            if (systemMsg.conversionType == ConversionTypeGroupChat) {
                 conversionId = systemMsg.toUidOrGroupId;
-            }else{
+            }else if (systemMsg.conversionType == ConversionTypeSingle){
                 conversionId = systemMsg.fromUid;
             }
             [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
@@ -400,7 +400,7 @@ static SocketManager *manager = nil;
             systemMsg.toUidOrGroupId = toUid;
             systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = resDic[@"msgid"];
-            systemMsg.isGroup = NO;
+            systemMsg.conversionType = ConversionTypeSingle;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             [FMDBShareManager saveMessage:systemMsg toConverseID:toUid];
             
@@ -419,7 +419,7 @@ static SocketManager *manager = nil;
             systemMsg.toUidOrGroupId = USERINFO.userID;
             systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = resDic[@"msgid"];
-            systemMsg.isGroup = NO;
+            systemMsg.conversionType = ConversionTypeSingle;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             [FMDBShareManager saveMessage:systemMsg toConverseID:toUid];
             
@@ -481,7 +481,7 @@ static SocketManager *manager = nil;
         systemMsg.toUidOrGroupId = groupId;
         systemMsg.type = MessageTypeSystem;
         systemMsg.msgid = [NSString generateMessageID];
-        systemMsg.isGroup = YES;
+        systemMsg.conversionType = ConversionTypeGroupChat;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
         
         [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
@@ -623,7 +623,7 @@ static SocketManager *manager = nil;
         systemMsg.toUidOrGroupId = groupId;
         systemMsg.type = MessageTypeSystem;
         systemMsg.msgid = [NSString generateMessageID];
-        systemMsg.isGroup = YES;
+        systemMsg.conversionType = ConversionTypeGroupChat;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
         [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
         
@@ -672,7 +672,7 @@ static SocketManager *manager = nil;
                 systemMsg.toUidOrGroupId = groupId;
                 systemMsg.type = MessageTypeSystem;
                 systemMsg.msgid = [NSString generateMessageID];
-                systemMsg.isGroup = YES;
+                systemMsg.conversionType = ConversionTypeGroupChat;
                 systemMsg.timeStamp = [NSDate currentTimeStamp];
                 [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
                 
@@ -703,7 +703,7 @@ static SocketManager *manager = nil;
         systemMsg.toUidOrGroupId = groupId;
         systemMsg.type = MessageTypeSystem;
         systemMsg.msgid = [NSString generateMessageID];
-        systemMsg.isGroup = YES;
+        systemMsg.conversionType = ConversionTypeGroupChat;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
         [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:groupId];
         
@@ -760,7 +760,7 @@ static SocketManager *manager = nil;
     systemMsg.toUidOrGroupId = friend.user_Id;
     systemMsg.type = MessageTypeSystem;
     systemMsg.msgid = [NSString generateMessageID];
-    systemMsg.isGroup = NO;
+    systemMsg.conversionType = ConversionTypeSingle;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
     [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
     
@@ -860,7 +860,7 @@ static SocketManager *manager = nil;
         sendMsg.fromUid = message.fromUid;
         sendMsg.type = message.type;
         sendMsg.msgid = message.msgid;
-        sendMsg.isGroup = message.isGroup;
+        sendMsg.conversionType = message.conversionType;
         sendMsg.timeStamp = message.timeStamp;
         sendMsg.text = base64;
         
@@ -1083,13 +1083,12 @@ static SocketManager *manager = nil;
             request[@"controller_name"] = @"MessageController";
             request[@"method_name"] = @"sendmsg";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&fromUid=%@&isGroup=%d&msgid=%@&text=%@&time=%ld&toUidOrGroupId=%@&type=%zd&%@",message.fromUid,message.isGroup,message.msgid,message.text,(long)message.audioLength,message.toUidOrGroupId,message.type,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&fromUid=%@&isGroup=%lu&msgid=%@&text=%@&time=%ld&toUidOrGroupId=%@&type=%zd&%@",message.fromUid,(unsigned long)message.conversionType,message.msgid,message.text,(long)message.audioLength,message.toUidOrGroupId,message.type,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //拼接消息
-            NSInteger isgroup = message.isGroup;
             dataDic[@"msgid"] = message.msgid;
             dataDic[@"type"] = @(message.type);
-            dataDic[@"isGroup"] = @(isgroup);
+            dataDic[@"isGroup"] = @(message.conversionType);
             dataDic[@"fromUid"] = message.fromUid;
             dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
             dataDic[@"text"] = message.text;
@@ -1105,17 +1104,12 @@ static SocketManager *manager = nil;
             request[@"controller_name"] = @"MessageController";
             request[@"method_name"] = @"undo";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=undo&fromUid=%@&isGroup=%d&msgid=%@&toUidOrGroupId=%@&type=%lu&%@",message.fromUid,message.isGroup,message.msgid,message.toUidOrGroupId,(unsigned long)message.type,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=undo&fromUid=%@&isGroup=%lu&msgid=%@&toUidOrGroupId=%@&type=%lu&%@",message.fromUid,(unsigned long)message.conversionType,message.msgid,message.toUidOrGroupId,(unsigned long)message.type,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //拼接消息
             dataDic[@"msgid"] = message.msgid;
             dataDic[@"type"] = @(message.type);
-            if (message.isGroup) {
-                dataDic[@"isGroup"] = @"1";
-            }else{
-                dataDic[@"isGroup"] = @"0";
-            }
-//            dataDic[@"isGroup"] = @(message.isGroup);
+            dataDic[@"isGroup"] = @(message.conversionType);
             dataDic[@"fromUid"] = message.fromUid;
             dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
             dataDic[@"sign"] = sign;

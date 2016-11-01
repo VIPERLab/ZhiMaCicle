@@ -304,8 +304,9 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     //组一：新的好友 群组
-    FriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if (indexPath.section == 0) {
+        FriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:headerIdentifier];
+
         if (indexPath.row == 0) {
             cell.name.text = @"新的朋友";
             cell.avtar.image = [UIImage imageNamed:@"new_friend"];
@@ -320,8 +321,10 @@ static NSString * const headerIdentifier = @"headerIdentifier";
             cell.avtar.image = [UIImage imageNamed:@"group_Icon"];
             cell.unreadLabel.hidden = YES;
         }
+        return cell;
     //好友列表
     }else{
+        FriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
         cell.unreadLabel.hidden = YES;
         NSInteger rowNum = 0;
         for (int i = 0; i < indexPath.section - 1; i++) {
@@ -332,8 +335,10 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         
         ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
         cell.friendModel = friend;
+        return cell;
+
     }
-    return cell;
+//    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

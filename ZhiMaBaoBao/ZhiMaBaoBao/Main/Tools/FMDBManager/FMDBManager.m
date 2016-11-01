@@ -1660,7 +1660,7 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID,@(message.is_read),@(message.sendStatus),message.holderImageUrlString,@(message.isDownLoad),message.videoDownloadUrl];
+        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.conversionType),converseID,@(message.is_read),@(message.sendStatus),message.holderImageUrlString,@(message.isDownLoad),message.videoDownloadUrl];
         if (successFul) {
             NSLog(@"插入消息成功");
         } else {
@@ -1677,7 +1677,7 @@
     NSLog(@"开始查会话表");
     __block BOOL isExist = NO;
     [queue inDatabase:^(FMDatabase *db) {
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@ and converseType = '%zd'",converseID,message.isGroup]];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@ and converseType = '%zd'",converseID,message.conversionType]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         while ([result next]) {
             NSLog(@"存在这个会话");
@@ -1710,7 +1710,7 @@
         converseModel.disturb = NO;
         converseModel.topChat = NO;
         converseModel.unReadCount = 1;
-        converseModel.converseType = message.isGroup;
+        converseModel.converseType = message.conversionType;
         
         opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
         
@@ -1718,7 +1718,7 @@
         //更新这个会话
         NSLog(@"会话存在,更新会话");
         //取出这个会话
-        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID andConverseType:message.isGroup];
+        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID andConverseType:message.conversionType];
         //设置更新内容
         if (![message.fromUid isEqualToString:USERINFO.userID]) {
             converseModel.unReadCount ++;
@@ -1771,7 +1771,7 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.isGroup),converseID,@(message.is_read),@(message.sendStatus),message.holderImageUrlString,@(message.isDownLoad),message.videoDownloadUrl];
+        BOOL successFul = [db executeUpdate:opeartionStr2,message.msgid,@(message.type),message.fromUid,message.toUidOrGroupId,@(message.timeStamp),message.text,@(message.conversionType),converseID,@(message.is_read),@(message.sendStatus),message.holderImageUrlString,@(message.isDownLoad),message.videoDownloadUrl];
         if (successFul) {
             NSLog(@"插入消息成功");
         } else {
@@ -1887,7 +1887,7 @@
             message.msgid = [result stringForColumn:@"msgid"];
             message.type = [result intForColumn:@"type"];
             message.fromUid = [result stringForColumn:@"fromUid"];
-            message.isGroup = [result intForColumn:@"isGroup"];
+            message.conversionType = [result intForColumn:@"isGroup"];
             message.toUidOrGroupId = [result stringForColumn:@"toUidOrGroupId"];
             message.timeStamp = [result intForColumn:@"time"];
             message.text = [result stringForColumn:@"text"];

@@ -23,9 +23,9 @@ typedef NS_OPTIONS(NSUInteger, ConversionType){
 @property (nonatomic, assign) int time;
 
 /**
- *  会话类型  0:单聊  1:群聊
+ *  会话类型  0:单聊  1:群聊  2:活动红包
  */
-@property (nonatomic, assign) BOOL converseType;
+@property (nonatomic, assign) ConversionType converseType;
 
 /**
  *  会话id:收到消息=fromUid , 发送消息=toUid

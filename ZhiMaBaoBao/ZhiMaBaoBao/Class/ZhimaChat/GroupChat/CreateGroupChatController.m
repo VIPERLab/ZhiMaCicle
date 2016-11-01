@@ -290,7 +290,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                 ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
                 
                 if (self.hideFlagBtn) {     //选择好友 ，转发消息
-                    self.transMsg.isGroup = NO; 
+                    self.transMsg.conversionType = ConversionTypeSingle;
                     TransPopView *popView = [[TransPopView alloc] initWithMessage:self.transMsg toUserId:friend.user_Id isGroup:NO];
                     popView.delegate = self;
                     [popView show];
@@ -322,7 +322,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         
         ZhiMaFriendModel *friend = self.searchResultArr[indexPath.row];
         if (self.hideFlagBtn) {     //选择好友 ，转发消息
-            self.transMsg.isGroup = NO;
+            self.transMsg.conversionType = ConversionTypeSingle;
             TransPopView *popView = [[TransPopView alloc] initWithMessage:self.transMsg toUserId:friend.user_Id isGroup:NO];
             popView.delegate = self;
             [popView show];
@@ -794,7 +794,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     //如果转发自己的消息，那么touid为旧消息的touid 如果转发的别人的消息，那么to
     newMsg.toUidOrGroupId = userId;
     newMsg.timeStamp = [NSDate currentTimeStamp];
-    newMsg.isGroup = message.isGroup;
+    newMsg.conversionType = message.conversionType;
     newMsg.text = message.text;
     newMsg.msgid = [NSString generateMessageID];
     newMsg.picUrl = message.picUrl;

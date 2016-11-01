@@ -82,18 +82,18 @@
     //判断对发消息用户是否开启了新消息提醒 -> 播放系统消息提示音
     //1.数据库查会话模型，拿出对该用户设置的的新消息提醒 如果是yes 播放声音
     ConverseModel *conversionModel = nil;
-    if (message.isGroup) {
-        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.toUidOrGroupId andConverseType:message.isGroup];
-    }else{
-        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.isGroup];
+    if (message.conversionType == ConversionTypeGroupChat) {
+        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.toUidOrGroupId andConverseType:message.conversionType];
+    }else if (message.conversionType == ConversionTypeSingle){
+        conversionModel = [FMDBShareManager searchConverseWithConverseID:message.fromUid andConverseType:message.conversionType];
     }
     
     if (!conversionModel.disturb && message.type != MessageTypeSystem) {
-        if (message.isGroup) {
+        if (message.conversionType == ConversionTypeGroupChat) {
             if (![userinfo.currentConversionId isEqualToString:message.toUidOrGroupId]) {
                 [self playSystemAudio];
             }
-        }else{
+        }else if (message.conversionType == ConversionTypeSingle){
             if (![userinfo.currentConversionId isEqualToString:message.fromUid]) {
                 [self playSystemAudio];
             }

@@ -140,7 +140,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     newMsg.toUidOrGroupId = userId;
     newMsg.timeStamp = [NSDate currentTimeStamp];
 #warning 这里的是否为群聊 ，要根据转发的情况来判断
-    newMsg.isGroup = message.isGroup;
+    newMsg.conversionType = message.conversionType;
     newMsg.text = message.text;
     newMsg.msgid = [NSString generateMessageID];
     newMsg.picUrl = message.picUrl;
@@ -188,7 +188,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     }else{  //转发消息
         [self.textField resignFirstResponder];
         ConverseModel *conversion = self.dataArray[indexPath.row];
-        self.message.isGroup = conversion.converseType;     //设置消息是群聊还是单聊
+        self.message.conversionType = conversion.converseType;     //设置消息是群聊还是单聊
         TransPopView *popView = [[TransPopView alloc] initWithMessage:self.message toUserId:conversion.converseId isGroup:conversion.converseType];
         popView.delegate = self;
         [popView show];
