@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZMServiceMessage.h"
+
 
 @interface ServiceSingleMsgCell : UITableViewCell
 
@@ -15,5 +17,7 @@
 @property (nonatomic, strong) UILabel *contentLabel; // 消息文字内容
 @property (nonatomic, strong) UIImageView *msgIV;    // 消息图片
 @property (nonatomic, strong) UILabel *msgTimeLabel; // 消息里面的时间label
+
+@property (nonatomic, strong) ZMServiceMessage *message;
 
 @end

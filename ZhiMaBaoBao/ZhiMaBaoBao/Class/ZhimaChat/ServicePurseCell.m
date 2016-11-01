@@ -60,20 +60,31 @@
     self.purseIV.backgroundColor = RGB(235, 63, 78);
     self.purseIV.layer.borderWidth = 5;
     self.purseIV.layer.borderColor = WHITECOLOR.CGColor;
+    self.purseIV.contentMode =  UIViewContentModeScaleAspectFill;
+    self.purseIV.clipsToBounds  = YES;
     [self.contentView addSubview:self.purseIV];
     
     self.contentLabel = [[UILabel alloc]initWithFrame:CGRectMake(18+12, self.purseIV.frameMaxY+16*scale, width-24, 15)];
     self.contentLabel.textColor = WHITECOLOR;
     self.contentLabel.font = [UIFont systemFontOfSize:15];
     [self.contentView addSubview:self.contentLabel];
+
+}
+
+#pragma mark - data
+
+- (void)setMessage:(ZMServiceMessage *)message
+{
+    [self.purseIV sd_setImageWithURL:[NSURL URLWithString:message.msgPicUrl]];
+    self.titleLabel.text = message.msgTitle;
+    self.contentLabel.text = message.msgContent;
     
-    self.timeLabel.text = @"昨天 13:30";
+    NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    self.timeLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];
     [self.timeLabel sizeToFit];
     self.timeLabel.width += 10;
     self.timeLabel.center = CGPointMake(DEVICEWITH/2, 15+10);
-    
-    self.titleLabel.text = @"十月红包雨，麦当劳邀您共享双十一";
-    self.contentLabel.text = @"陪你一起领红包，1亿红包...";
 }
+
 
 @end
