@@ -188,13 +188,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
         ConverseModel *model = self.dataArray[indexPath.row];
-        
         ConverseCell *cell = [tableView dequeueReusableCellWithIdentifier:ConverseCellReusedID forIndexPath:indexPath];
         cell.model = model;
-        
         return cell;
     }
     
+    //没有网络显示的cell
     ConverseWithouNetworkCell *cell = [tableView dequeueReusableCellWithIdentifier:ConverseWithoutNetworkCellReusedID forIndexPath:indexPath];
     return cell;
 }

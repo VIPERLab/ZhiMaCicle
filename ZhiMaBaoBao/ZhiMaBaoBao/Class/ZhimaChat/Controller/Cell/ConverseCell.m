@@ -18,6 +18,7 @@
     UILabel *_unReadCountLabel;
     UIView *_bottomLineView;
     UIImageView *_disturbIcon;
+    UIImageView *_activityImage;
     int _unReadWidth;
     BOOL hasSubViews;
 }
@@ -80,6 +81,10 @@
     _disturbIcon.image = [UIImage imageNamed:@"newMessageAlret"];
     [self addSubview:_disturbIcon];
     
+    _activityImage = [UIImageView new];
+    _activityImage.image = [UIImage imageNamed:@"activityChatPurse"];
+    [self addSubview:_activityImage];
+    
     hasSubViews = YES;
 }
 
@@ -124,9 +129,6 @@
         hasSubViews = YES;
         _unReadWidth = 10;
         _unReadCountLabel.text = @"";
-        
-        
-        [self setNeedsLayout];
     }
     
     if (model.topChat) {
@@ -140,7 +142,12 @@
     
     _disturbIcon.hidden = !model.disturb;
     
-    [self setNeedsDisplay];
+    if (model.converseType == ConversionTypeActivity) {
+        _converseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
+        _lastConverseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
+    }
+    
+    [self setNeedsLayout];
     
 }
 
@@ -160,9 +167,20 @@
         CGFloat timeH = 13;
         _timeLabel.frame = CGRectMake(timeX, timeY, timeW, timeH);
         
+        CGFloat activityH = 35;
+        CGFloat activityW;
+        if (self.model.converseType == ConversionTypeActivity) {
+            activityW = 25;
+        } else {
+            activityW = 0;
+        }
+        CGFloat activityY = (CGRectGetHeight(self.frame) - activityH) * 0.5;
+        CGFloat activityX = CGRectGetMinX(_timeLabel.frame) - activityW - 10;
+        _activityImage.frame = CGRectMake(activityX, activityY, activityW, activityH);
+        
         CGFloat nameX = CGRectGetMaxX(_iconView.frame) + 10;
         CGFloat nameY = CGRectGetMinY(_iconView.frame);
-        CGFloat nameW = CGRectGetWidth(self.frame) - nameX - timeW - 20;
+        CGFloat nameW = CGRectGetWidth(self.frame) - nameX - timeW - 20 - activityW - 10;
         CGFloat nameH = 30;
         _converseLabel.frame = CGRectMake(nameX, nameY, nameW, nameH);
         
@@ -177,7 +195,7 @@
         
         CGFloat lastX = nameX;
         CGFloat lastY = CGRectGetMaxY(_converseLabel.frame);
-        CGFloat lastW = CGRectGetWidth(self.frame) - lastX - 15 - 20;
+        CGFloat lastW = nameW;
         CGFloat lastH = 20;
         _lastConverseLabel.frame = CGRectMake(lastX, lastY, lastW, lastH);
         
@@ -186,6 +204,8 @@
         CGFloat disturX = CGRectGetWidth(self.frame) - disturbW - 20;
         CGFloat disturY = CGRectGetMinY(_lastConverseLabel.frame) + 5;
         _disturbIcon.frame = CGRectMake(disturX, disturY, disturbW, disturbH);
+        
+        
         
         
         hasSubViews = NO;

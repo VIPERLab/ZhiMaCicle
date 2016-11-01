@@ -138,6 +138,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     
     
     _linkTypeView = [SDLinkTypeView new];
+    _linkTypeView.tapEnable = YES;
     
     
     _timeLabel = [UILabel new];
