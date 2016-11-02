@@ -499,6 +499,7 @@
 		3138F4051DA795990042D100 /* CallKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3138F4041DA795990042D100 /* CallKeyboardController.m */; };
 		314109481DAB247600D6F367 /* NSString+MsgId.m in Sources */ = {isa = PBXBuildFile; fileRef = 314109471DAB247600D6F367 /* NSString+MsgId.m */; };
 		314F04451DC998D900965109 /* DetailInfoHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 314F04441DC998D900965109 /* DetailInfoHeaderView.m */; };
+		314F04481DC9C7EF00965109 /* LGShareToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 314F04471DC9C7EF00965109 /* LGShareToolBar.m */; };
 		315F78561DB5CC93008C8CA7 /* SendLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 315F78551DB5CC93008C8CA7 /* SendLocationController.m */; };
 		315F78581DB5D4F4008C8CA7 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 315F78571DB5D4F4008C8CA7 /* mapapi.bundle */; };
 		315FF57E1DB863E80002CB97 /* hud_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315FF57C1DB863E80002CB97 /* hud_success@2x.png */; };
@@ -1663,6 +1664,8 @@
 		314109471DAB247600D6F367 /* NSString+MsgId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MsgId.m"; sourceTree = "<group>"; };
 		314F04431DC998D900965109 /* DetailInfoHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailInfoHeaderView.h; sourceTree = "<group>"; };
 		314F04441DC998D900965109 /* DetailInfoHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailInfoHeaderView.m; sourceTree = "<group>"; };
+		314F04461DC9C7EF00965109 /* LGShareToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGShareToolBar.h; sourceTree = "<group>"; };
+		314F04471DC9C7EF00965109 /* LGShareToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGShareToolBar.m; sourceTree = "<group>"; };
 		315F78541DB5CC93008C8CA7 /* SendLocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendLocationController.h; sourceTree = "<group>"; };
 		315F78551DB5CC93008C8CA7 /* SendLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendLocationController.m; sourceTree = "<group>"; };
 		315F78571DB5D4F4008C8CA7 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
@@ -5251,6 +5254,8 @@
 			isa = PBXGroup;
 			children = (
 				D55B674F1DC72D3700B47CAB /* miniJLX.TTF */,
+				314F04461DC9C7EF00965109 /* LGShareToolBar.h */,
+				314F04471DC9C7EF00965109 /* LGShareToolBar.m */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -5688,6 +5693,7 @@
 				31B7C75C1D8FB33E00F1883A /* LGLoginController.m in Sources */,
 				319EA01B1DA65214000EE216 /* RemarkController.m in Sources */,
 				31B7C75D1D8FB33E00F1883A /* LGRegisterController.m in Sources */,
+				314F04481DC9C7EF00965109 /* LGShareToolBar.m in Sources */,
 				D53E3DDC1DB704FC001C663B /* PKShortVideoSession.m in Sources */,
 				04EA7D9C1D912872005E5425 /* ZXHybridBinarizer.m in Sources */,
 				31B7C7A01D8FE71F00F1883A /* LGPhoneNumberCell.m in Sources */,

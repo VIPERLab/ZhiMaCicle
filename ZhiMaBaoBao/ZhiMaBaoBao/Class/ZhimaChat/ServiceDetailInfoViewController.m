@@ -9,6 +9,7 @@
 #import "ServiceDetailInfoViewController.h"
 #import "DetailInfoCell.h"
 #import "DetailInfoHeaderView.h"
+#import "LGShareToolBar.h"
 
 @interface ServiceDetailInfoViewController ()<KXActionSheetDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -76,11 +77,15 @@ static NSString *const reuseIdentifier = @"infocell";
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 #pragma mark - tableView delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0 && indexPath.row == 0) { //功能介绍 根据说明计算单元格高度
         NSString *str = self.subTitlesArr[0];
-        CGFloat height = [str sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(DEVICEWITH - 12 * 4 - 80, MAXFLOAT)].height + 5;
+        CGFloat height = [str sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(DEVICEWITH - 12 * 4 - 80, MAXFLOAT)].height + 24;
         if (height < 45) {
             return 45;
         }else{
@@ -159,7 +164,8 @@ static NSString *const reuseIdentifier = @"infocell";
 //关注 、 进入服务号
 - (void)bottomAction{
     if (self.isAttention) { //进入服务号
-        
+        LGShareToolBar *toobar = [LGShareToolBar shareInstance];
+        [toobar show];
     }else{      //关注
         
     }
