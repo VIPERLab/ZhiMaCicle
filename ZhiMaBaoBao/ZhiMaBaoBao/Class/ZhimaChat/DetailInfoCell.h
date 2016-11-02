@@ -12,5 +12,7 @@
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic, copy) NSString *titleText;    //标题
 @property (nonatomic, copy) NSString *subTitleText; //副标题
+@property (nonatomic, assign) BOOL acceptMsg;       //接收消息
+@property (nonatomic, assign) BOOL topChat;         //置顶聊天
 
 @end

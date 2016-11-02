@@ -50,8 +50,20 @@
     
     _switch = [[UISwitch alloc] init];
     _switch.onTintColor = THEMECOLOR;
+    _switch.hidden = YES;
     [_switch addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.contentView addSubview:_switch];
+}
+
+- (void)setAcceptMsg:(BOOL)acceptMsg{
+    
+    _switch.on = acceptMsg;
+    _switch.hidden = NO;
+}
+
+- (void)setTopChat:(BOOL)topChat{
+    _switch.on = topChat;
+    _switch.hidden = NO;
 }
 
 - (void)setTitleText:(NSString *)titleText{
@@ -65,7 +77,6 @@
     
     _subTitle.text = subTitleText;
     _subTitle.hidden = NO;
-    _switch.hidden = YES;
 }
 
 - (void)layoutSubviews{

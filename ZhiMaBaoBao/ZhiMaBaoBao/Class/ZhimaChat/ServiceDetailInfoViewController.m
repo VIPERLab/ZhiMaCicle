@@ -21,6 +21,7 @@ static NSString *const reuseIdentifier = @"infocell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.isAttention = YES;
     
     [self setCustomTitle:@"麦当劳"];
     [self setupNavRightItem];
@@ -62,6 +63,16 @@ static NSString *const reuseIdentifier = @"infocell";
     if (indexPath.section == 0) {   //第一组，有副标题 （功能介绍，帐号主题）
         cell.subTitleText = self.subTitlesArr[indexPath.row];
     }
+    if (indexPath.section == self.titlesArr.count - 1) {    //查看历史消息
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    if (self.isAttention && indexPath.section == 1 && indexPath.row == 0) { //接收消息
+        cell.acceptMsg = YES;
+    }
+    if (self.isAttention && indexPath.section == 1 && indexPath.row == 1) { //置顶服务号
+        cell.topChat = NO;
+    }
+    
     return cell;
 }
 
@@ -95,6 +106,18 @@ static NSString *const reuseIdentifier = @"infocell";
     if (section == self.titlesArr.count - 1) {
         UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 150)];
         footer.backgroundColor = self.tableView.backgroundColor;
+        UIButton *bottomBtn = [[UIButton alloc] initWithFrame:CGRectMake(14, 30, DEVICEWITH - 28, 48)];
+        bottomBtn.layer.cornerRadius = 5.f;
+        bottomBtn.backgroundColor = THEMECOLOR;
+        [bottomBtn setTitleColor:WHITECOLOR forState:UIControlStateNormal];
+        bottomBtn.titleLabel.font = [UIFont systemFontOfSize:17];
+        [bottomBtn addTarget:self action:@selector(bottomAction) forControlEvents:UIControlEventTouchUpInside];
+        [footer addSubview:bottomBtn];
+        if (self.isAttention) {
+            [bottomBtn setTitle:@"进入服务号" forState:UIControlStateNormal];
+        }else{
+            [bottomBtn setTitle:@"关注" forState:UIControlStateNormal];
+        }
         return footer;
     }else{
         return [[UIView alloc] init];
@@ -121,10 +144,30 @@ static NSString *const reuseIdentifier = @"infocell";
     }
 }
 
+#pragma mark - actionSheet delegate
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index{
+    if (index == 0) {       //投诉给朋友
+        
+    }else if (index == 1){  //清空内容
+        
+    }else if (index == 2){  //不在关注
+        
+    }
+}
+
+#pragma mark - 按钮点击方法
+//关注 、 进入服务号
+- (void)bottomAction{
+    if (self.isAttention) { //进入服务号
+        
+    }else{      //关注
+        
+    }
+}
 
 //更多操作
 - (void)moreOperating{
-    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:nil cancellTitle:@"取消" andOtherButtonTitles:@[@"推荐给朋友",@"投诉",@"清空内容",@"不在关注"]];
+    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"推荐给朋友",@"清空内容",@"不在关注"]];
     sheet.delegate = self;
     [sheet show];
 }
@@ -134,7 +177,7 @@ static NSString *const reuseIdentifier = @"infocell";
 - (NSArray *)titlesArr{
     if (!_titlesArr) {
         if (self.isAttention) {
-            _titlesArr = @[@[@"功能介绍",@"帐号主体"],@[@"接收消息",@"置顶公众号"],@[@"查看历史消息"]];
+            _titlesArr = @[@[@"功能介绍",@"帐号主体"],@[@"接收消息",@"置顶服务号"],@[@"查看历史消息"]];
         }else{
             _titlesArr = @[@[@"功能介绍",@"帐号主体"],@[@"查看历史消息"]];
         }
@@ -144,7 +187,7 @@ static NSString *const reuseIdentifier = @"infocell";
 
 - (NSArray *)subTitlesArr{
     if (!_subTitlesArr) {
-        _subTitlesArr = @[@"我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍",@"我是帐号主体"];
+        _subTitlesArr = @[@"我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍",@"我是帐号主体"];
     }
     return _subTitlesArr;
 }
