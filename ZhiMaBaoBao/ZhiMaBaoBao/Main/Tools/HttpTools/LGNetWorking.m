@@ -1007,4 +1007,29 @@
     }];
 }
 
+//查看加好友是否需要验证
++ (void)lookAddFriendShouldAskSuccess:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = USERINFO.sessionId;
+    params[@"userId"] = USERINFO.userID;
+    [HttpTool POST:@"/moblie/getPersonAppSet.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
+//删除群成员的时候调用，用来获取最新的群头像
++ (void)getGroupHeadGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
+
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = USERINFO.sessionId;
+    params[@"groupid"] = groupId;
+    [HttpTool POST:@"/moblie/setGroupHeadphoto.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
 @end

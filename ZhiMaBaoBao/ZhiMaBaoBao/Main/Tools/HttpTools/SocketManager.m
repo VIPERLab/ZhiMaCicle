@@ -19,10 +19,13 @@
 #import "GroupChatModel.h"
 #import "NSString+MsgId.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "JFMyPlayerSound.h"
+#import "RBDMuteSwitch.h"
 
 typedef void (^CompleteBlock)(id data);
-@interface SocketManager ()
-//@property (nonatomic, assign) CompleteBlock complettion;
+@interface SocketManager ()<RBDMuteSwitchDelegate>
+@property(nonatomic,strong)JFMyPlayerSound *myPlaySounde;   //播放系统声音
+
 @end
 
 @implementation SocketManager
@@ -741,7 +744,9 @@ static SocketManager *manager = nil;
             //添加系统消息
             [self addSystemMsgToSqlite:friend];
             
-            [self playSystemAudio];
+            //播放系统声音
+            [[RBDMuteSwitch sharedInstance] setDelegate:self];
+            [[RBDMuteSwitch sharedInstance] detectMuteSwitch];
             
         }else{
             [LCProgressHUD showFailureText:responseData.msg];
@@ -1332,11 +1337,28 @@ static SocketManager *manager = nil;
     return resultStr;
 }
 
-//播放消息提示音(已经判断是声音还是振动提醒)
-- (void)playSystemAudio{
-    if (USERINFO.newMessageNotify) {    //开启了接受信息消息通知
-        if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
-            AudioServicesPlaySystemSound(1007);
+//播放系统声音
+- (void)isMuted:(BOOL)muted{
+    if (muted) {
+        //开启静音模式
+        self.myPlaySounde = [[JFMyPlayerSound alloc] initSystemShake];
+    }else{
+        //关闭静音模式
+        self.myPlaySounde = [[JFMyPlayerSound alloc] initSystemSoundWithName:@"sms-received1" SoundType:@"caf"];
+    }
+    
+    if (USERINFO.newMessageNotify) {
+        if (USERINFO.newMessageVoiceNotify) {
+            if (USERINFO.newMessageShakeNotify) {   //声音跟振动
+                if (muted) {
+                    [self.myPlaySounde play];
+                }else{
+                    [self.myPlaySounde play];
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                }
+            }else{  //只有声音
+                [self.myPlaySounde play];
+            }
         }else{
             if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);

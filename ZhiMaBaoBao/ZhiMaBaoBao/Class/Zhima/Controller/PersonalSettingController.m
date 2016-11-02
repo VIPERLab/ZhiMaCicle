@@ -44,7 +44,6 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [_tableView registerClass:[KXSettingCell class] forCellReuseIdentifier:KXSettingCellReusedID];
-    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -66,9 +65,6 @@
     }
     return cell;
 }
-
-
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 45;
@@ -106,6 +102,9 @@
     if (indexPath.row == 0) {
         // 加我为好友的时候需要验证
         [self upLoadSettingWithFunctionName:@"add_me_need_ask" andValue:ZhiMaSwitch.on];
+        UserInfo *info = [UserInfo read];
+        info.shouldVerify = ZhiMaSwitch.on;
+        [info save];
     } else if (indexPath.row == 1) {
         // 向我推荐通讯录朋友
         [self upLoadSettingWithFunctionName:@"hold_me_push_phonebook" andValue:ZhiMaSwitch.on];

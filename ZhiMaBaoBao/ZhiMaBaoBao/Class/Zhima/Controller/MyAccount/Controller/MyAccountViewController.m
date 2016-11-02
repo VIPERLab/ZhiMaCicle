@@ -36,7 +36,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setupNav];
-    [self setupView];
     
     [self registNotification];
 }
@@ -195,7 +194,7 @@
 }
 #pragma mark - 请求
 - (void)request {
-    [LCProgressHUD showLoadingText:@"正在查询账户"];
+//    [LCProgressHUD showLoadingText:@"正在查询账户"];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer.timeoutInterval = 30.f;
     manager.responseSerializer.acceptableContentTypes = nil;//[NSSet setWithObject:@"text/plain"];
@@ -217,13 +216,28 @@
         NSLog(@"%@",responseObject);
         if ([responseObject[@"code"] integerValue] == 8888) {
             [LCProgressHUD hide];
+            //判断是否处于审核状态
+            if ([responseObject[@"data"][@"open"] integerValue] == 0) {   //处于审核状态，屏蔽该页
+                UIView *cover = [[UIView alloc] initWithFrame:self.view.bounds];
+                cover.backgroundColor = BGCOLOR;
+                [self.view addSubview:cover];
+                
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, (DEVICEHIGHT - 50)/2, DEVICEWITH, 30)];
+                label.text = @"该功能暂未开放";
+                label.textAlignment = NSTextAlignmentCenter;
+                label.font = [UIFont systemFontOfSize:17];
+                [cover addSubview:label];
+                return ;
+            }else{    //正常使用状态
+                [self setupView];
 
-            MyAccountModel *accountModel = [MyAccountModel mj_objectWithKeyValues:responseObject[@"data"]];
-            self.model = accountModel;
-            
-            self.headerView.moneyLabel.text = [NSString stringWithFormat:@"￥%@",accountModel.amount];
-            
-            return ;
+                MyAccountModel *accountModel = [MyAccountModel mj_objectWithKeyValues:responseObject[@"data"]];
+                self.model = accountModel;
+                
+                self.headerView.moneyLabel.text = [NSString stringWithFormat:@"￥%@",accountModel.amount];
+                
+                return ;
+            }
         }
         
         [LCProgressHUD showFailureText:responseObject[@"msg"]];

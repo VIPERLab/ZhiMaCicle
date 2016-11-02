@@ -20,5 +20,5 @@
 - (void)backAction;
 
 //播放系统提示音
-- (void)playSystemAudio;
+//- (void)playSystemAudio;
 @end

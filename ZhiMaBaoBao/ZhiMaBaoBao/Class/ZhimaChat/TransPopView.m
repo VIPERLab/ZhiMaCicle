@@ -85,6 +85,8 @@
     
     UIImageView *avtar = [[UIImageView alloc] init];
     [avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,avtarUrl]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
+    avtar.layer.cornerRadius = 5.f;
+    avtar.clipsToBounds = YES;
     avtar.size = CGSizeMake(avtarS, avtarS);
     avtar.x = pop_margin;
     avtar.y = CGRectGetMaxY(titleLabel.frame) + padding;
@@ -131,6 +133,28 @@
         imageview.y = 10;
         [contentView addSubview:imageview];
         contentView.height = CGRectGetMaxY(imageview.frame);
+    }else if (message.type == MessageTypeActivityPurse){
+        
+        UIImageView *imageIcon = [[UIImageView alloc] init];
+        imageIcon.image = [UIImage imageNamed:@"activityChatPurse"];
+        imageIcon.frame = CGRectMake(pop_margin, 20, 73, 89);
+        [contentView addSubview:imageIcon];
+        
+        //活动标题
+        UILabel *activityTitle = [[UILabel alloc] init];
+        activityTitle.frame = CGRectMake(CGRectGetMaxX(imageIcon.frame)+12, 20, self.containerView.width - pop_margin *2 - 85, 21);
+        activityTitle.textColor = THEMECOLOR;
+        activityTitle.font = MAINFONT;
+        [contentView addSubview:activityTitle];
+        
+        //活动副标题
+        UILabel *subLabel = [[UILabel alloc] init];
+        subLabel.frame = CGRectMake(CGRectGetMaxX(imageIcon.frame)+12, CGRectGetMaxY(activityTitle.frame)+7, self.containerView.width - pop_margin *2 - 85, 21);
+        subLabel.font = [UIFont systemFontOfSize:15];
+        subLabel.textColor = GRAYCOLOR;
+        subLabel.numberOfLines = 2;
+        [contentView addSubview:subLabel];
+        contentView.height = 130;
     }
     
     
@@ -186,7 +210,6 @@
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     [keyWindow addSubview:self];
-
 }
 
 
