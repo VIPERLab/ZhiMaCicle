@@ -342,9 +342,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
         cell.friendModel = friend;
         return cell;
-
     }
-//    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
