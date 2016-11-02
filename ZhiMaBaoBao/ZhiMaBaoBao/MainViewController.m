@@ -56,6 +56,8 @@
     [self addNotifications];
 
     [self judgeAPPVersion];
+    
+    self.canPlayAudio = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated{

@@ -978,4 +978,16 @@
     }];
 }
 
+//删除群成员后，更新群头像
++ (void)updateGroupHeader:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = USERINFO.sessionId;
+    params[@"groupid"] = groupId;
+    [HttpTool POST:@"/moblie/setGroupHeadphoto.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
 @end

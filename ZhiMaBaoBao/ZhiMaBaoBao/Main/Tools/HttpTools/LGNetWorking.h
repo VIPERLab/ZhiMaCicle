@@ -313,4 +313,6 @@
 //获取当前登录用户的二维码
 + (void)getMyQRCodeWithSessionId:(NSString *)sessionId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
+//删除群成员后，更新群头像
++ (void)updateGroupHeader:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 @end

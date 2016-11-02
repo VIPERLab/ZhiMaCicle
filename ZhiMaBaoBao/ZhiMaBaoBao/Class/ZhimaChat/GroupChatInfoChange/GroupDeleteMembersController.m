@@ -149,6 +149,13 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         // 更新群用户表里 群成员的状态 memberState = 1
         [FMDBShareManager saveAllGroupMemberWithArray:self.selectedFriends andGroupChatId:self.groupId];
         
+        //调用http接口- 用来更新群头像
+        [LGNetWorking updateGroupHeader:self.groupId success:^(ResponseData *responseData) {
+            
+        } failure:^(ErrorData *error) {
+            
+        }];
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [LCProgressHUD showSuccessText:@"删除成功"];
         });
