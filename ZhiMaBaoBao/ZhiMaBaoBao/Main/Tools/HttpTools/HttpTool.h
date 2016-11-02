@@ -38,4 +38,7 @@ typedef void(^ChatProgressBlock)(NSProgress *progress);
 // 聊天界面下载视频
 + (void)chatDownLoadVideo:(NSString *)path urlStr:(NSString*)urlStr success:(void (^)(NSDictionary *json))success progress:(void (^)(NSProgress *pro))progress failure:(void (^)(NSError *))errorblock;
 
++ (void)upLoadFileWithURL:(NSString *)url andParams:(NSMutableDictionary *)params andFilePath:(NSString *)filePath success:(void (^)(ResponseData *json))success failure:(void (^)(ErrorData *json))error;
++ (void)downloadFileWithURL:(NSString *)url success:(void (^)(ResponseData *json))success failure:(void (^)(ErrorData *json))errorBlock;
+
 @end

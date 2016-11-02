@@ -8,6 +8,7 @@
 
 #import "ZhiMaCollectionCell.h"
 #import "TQRichTextView.h"
+#import "ZhiMaCollectionVoiceTypeView.h"
 
 @interface ZhiMaCollectionCell ()
 
@@ -19,6 +20,7 @@
     TQRichTextView *_contentLabel;
     UILabel *_timeLabel;
     UIImageView *_picImageView;
+    UIView *_voiceView;
 }
 
 - (void)awakeFromNib {
@@ -67,6 +69,15 @@
     _picImageView.clipsToBounds = YES;
     [self addSubview:_picImageView];
     
+    
+    _voiceView = [ZhiMaCollectionVoiceTypeView new];
+    _voiceView.layer.borderWidth = 0.5;
+    _voiceView.layer.borderColor = [UIColor colorFormHexRGB:@"dedede"].CGColor;
+    _voiceView.layer.cornerRadius = 5;
+    _voiceView.clipsToBounds = YES;
+    _voiceView.backgroundColor = [UIColor colorFormHexRGB:@"f3f4f5"];
+    [self addSubview:_voiceView];
+    
 }
 
 - (void)setModel:(ZhiMaCollectionModel *)model {
@@ -79,13 +90,23 @@
     
     if (model.type == 1) {  // 纯文字
         _picImageView.hidden = YES;
+        _voiceView.hidden = YES;
         _contentLabel.hidden = NO;
         _contentLabel.text = model.content;
         
     } else if (model.type == 3) { // 纯图片
         _contentLabel.hidden = YES;
+        _voiceView.hidden = YES;
         _picImageView.hidden = NO;
         [_picImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.photoUrl]] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+    } else if (model.type == 5) { // 语音
+        _contentLabel.text = @" ";
+        _picImageView.hidden = YES;
+        _contentLabel.hidden = YES;
+        _voiceView.hidden = NO;
+        
+        
+        
     }
 }
 
@@ -112,11 +133,8 @@
     float contentH = [_model.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(contentW, MAXFLOAT)].height;
     if (![_model.content isEqualToString:@""]) {
         contentH = [TQRichTextView getRechTextViewHeightWithText:_contentLabel.text viewWidth:contentW font:[UIFont systemFontOfSize:15] lineSpacing:1.5].height;
-//        contentH = contentH > 45 ? 45 : contentH;
         [_contentLabel setFrame:CGRectMake(contentX, contentY, contentW, contentH)];
     }
-    
-    
     
     
     CGFloat timeW = [_timeLabel.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, 15)].width;
@@ -130,6 +148,12 @@
     CGFloat picW = 240;
     CGFloat picH = 140;
     _picImageView.frame = CGRectMake(picX, picY, picW, picH);
+    
+    CGFloat voiceX = contentX;
+    CGFloat voiceW = contentW;
+    CGFloat voiceH = 60;
+    CGFloat voiceY = (CGRectGetHeight(self.frame) - (CGRectGetMaxY(_userIcon.frame) + 10 - voiceH)) * 0.5;
+    _voiceView.frame = CGRectMake(voiceX, voiceY, voiceW, voiceH);
     
     
 }

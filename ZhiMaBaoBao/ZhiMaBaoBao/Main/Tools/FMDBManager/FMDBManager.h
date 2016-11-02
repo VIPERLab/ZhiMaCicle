@@ -31,6 +31,8 @@ typedef enum : NSUInteger {
     /* ----   群聊相关 ----  */
     ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
     ZhiMa_GroupChat_GroupMenber_Table              //群成员表
+    
+    
 } ZhiMaSqliteTableType;
 
 @interface FMDBManager : NSObject

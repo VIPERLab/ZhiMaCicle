@@ -978,4 +978,33 @@
     }];
 }
 
+
+// 文件上传
++ (void)upLoadFileWithSeccessId:(NSString *)seccessId andCollectionType:(NSString *)collectionType andOppositeId:(NSString *)oppositeId andMsgId:(NSString *)msgId andUserType:(NSString *)userType andPath:(NSString *)filePath success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"sessionId"] = seccessId;
+    params[@"file"] = @"voice.mp3";
+    params[@"fileName"] = @"voice";
+    params[@"collection_type"] = collectionType;
+    params[@"oppositeId"] = oppositeId;
+    params[@"msgid"] = msgId;
+    params[@"usertype"] = userType;
+    params[@"functionName"] = @"voice";
+    
+    [HttpTool upLoadFileWithURL:@"/moblie/upload_file.do" andParams:params andFilePath:filePath success:^(ResponseData *json) {
+        successBlock(json);
+    } failure:^(ErrorData *json) {
+        failureBlock(json);
+    }];
+}
+
+// 文件下载
++ (void)downloadFileWithUrl:(NSString *)url success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
+    [HttpTool downloadFileWithURL:url success:^(ResponseData *json) {
+        successBlock(json);
+    } failure:^(ErrorData *json) {
+        failureBlock(json);
+    }];
+}
+
 @end

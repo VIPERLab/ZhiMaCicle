@@ -37,6 +37,8 @@
         return contentHeight + 80;
     } else if (self.type == 3) { // 纯图片
         return 220;
+    } else if (self.type == 5) { // 语音
+        return 150;
     }
     return 0;
 }

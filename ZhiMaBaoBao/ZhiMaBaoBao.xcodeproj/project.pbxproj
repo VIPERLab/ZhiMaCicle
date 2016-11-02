@@ -48,6 +48,7 @@
 		047F142C1DAC850400684881 /* APAuthV2Info.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F14271DAC850400684881 /* APAuthV2Info.m */; };
 		047F142D1DAC850400684881 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F14291DAC850400684881 /* Order.m */; };
 		04830F691DC74524002F1B66 /* SDLinkTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04830F681DC74524002F1B66 /* SDLinkTypeView.m */; };
+		04830F6C1DC8B0BF002F1B66 /* ZhiMaCollectionVoiceTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04830F6B1DC8B0BF002F1B66 /* ZhiMaCollectionVoiceTypeView.m */; };
 		048593601D9656A700DB3FCD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0485935F1D9656A700DB3FCD /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485937D1D9674B800DB3FCD /* ChangeSexController.m */; };
 		04AB88431DACBF330087502C /* GroupQRCodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB88421DACBF330087502C /* GroupQRCodeController.m */; };
@@ -766,6 +767,8 @@
 		047F14291DAC850400684881 /* Order.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order.m; sourceTree = "<group>"; };
 		04830F671DC74524002F1B66 /* SDLinkTypeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLinkTypeView.h; sourceTree = "<group>"; };
 		04830F681DC74524002F1B66 /* SDLinkTypeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLinkTypeView.m; sourceTree = "<group>"; };
+		04830F6A1DC8B0BF002F1B66 /* ZhiMaCollectionVoiceTypeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhiMaCollectionVoiceTypeView.h; sourceTree = "<group>"; };
+		04830F6B1DC8B0BF002F1B66 /* ZhiMaCollectionVoiceTypeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhiMaCollectionVoiceTypeView.m; sourceTree = "<group>"; };
 		0485935F1D9656A700DB3FCD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0485937C1D9674B800DB3FCD /* ChangeSexController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSexController.h; sourceTree = "<group>"; };
 		0485937D1D9674B800DB3FCD /* ChangeSexController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSexController.m; sourceTree = "<group>"; };
@@ -2065,6 +2068,8 @@
 			children = (
 				040FE2761DA77EDA00EF435F /* ZhiMaCollectionHeaderView.h */,
 				040FE2771DA77EDA00EF435F /* ZhiMaCollectionHeaderView.m */,
+				04830F6A1DC8B0BF002F1B66 /* ZhiMaCollectionVoiceTypeView.h */,
+				04830F6B1DC8B0BF002F1B66 /* ZhiMaCollectionVoiceTypeView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5608,6 +5613,7 @@
 				04EA7AD01D910F89005E5425 /* DNBadgeLabel.m in Sources */,
 				04EA7E2C1D912872005E5425 /* ZXMultiDetector.m in Sources */,
 				04F57AE41D9280BD002A6471 /* SDBrowserImageView.m in Sources */,
+				04830F6C1DC8B0BF002F1B66 /* ZhiMaCollectionVoiceTypeView.m in Sources */,
 				04EA7D861D912872005E5425 /* ZXWifiResultParser.m in Sources */,
 				D544F5621DAF6F9C00E73624 /* ZMCallBoardViewController.m in Sources */,
 				04EA7D5A1D912872005E5425 /* ZXAztecCode.m in Sources */,

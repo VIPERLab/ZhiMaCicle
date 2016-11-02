@@ -70,37 +70,44 @@
     _bottomLineView = bottomLineView;
     [_scrollView addSubview:bottomLineView];
     
-    UIView *lastView;
+    
     if (self.model.type == 1) { // 纯文字
         
-        TQRichTextView *contentLabel = [[TQRichTextView alloc] init];
-        contentLabel.delegage = self;
-        contentLabel.backgroundColor = [UIColor clearColor];
-        contentLabel.textColor = [UIColor blackColor];
-        contentLabel.lineSpacing = 1.5;
-        contentLabel.text = self.model.content;
-        
-        CGFloat contentW = ScreenWidth - 20;
-        CGFloat contentH = [TQRichTextView getRechTextViewHeightWithText:contentLabel.text viewWidth:contentW font:[UIFont systemFontOfSize:15] lineSpacing:1.5].height;
-        [contentLabel setFrame:CGRectMake(20, CGRectGetMaxY(bottomLineView.frame) + 11, contentW, contentH)];
-        [_scrollView addSubview:contentLabel];
-        lastView = contentLabel;
-        
-        UILabel *collectionLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(lastView.frame) + 20, ScreenWidth - 40, 30)];
-        collectionLabel.textColor = [UIColor colorFormHexRGB:@"bcbcbc"];
-        collectionLabel.font = [UIFont systemFontOfSize:12];
-        collectionLabel.text = [NSString stringWithFormat:@"收藏于%@",self.model.time];
-        [_scrollView addSubview:collectionLabel];
-        _scrollView.contentSize = CGSizeMake(ScreenWidth, CGRectGetMaxY(collectionLabel.frame));
+        [self setTextType];
     } else if (self.model.type == 3) { // 图片
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
         [manager downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.model.photoUrl]] options:0 progress:0 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             [self setupPicWithImage:image];
         }];
+    } else if (self.model.type == 5) { //语音类型
+        [self setVoiceType];
     }
 }
 
+// 设置文本类型
+- (void)setTextType {
+    TQRichTextView *contentLabel = [[TQRichTextView alloc] init];
+    contentLabel.delegage = self;
+    contentLabel.backgroundColor = [UIColor clearColor];
+    contentLabel.textColor = [UIColor blackColor];
+    contentLabel.lineSpacing = 1.5;
+    contentLabel.text = self.model.content;
+    
+    CGFloat contentW = ScreenWidth - 20;
+    CGFloat contentH = [TQRichTextView getRechTextViewHeightWithText:contentLabel.text viewWidth:contentW font:[UIFont systemFontOfSize:15] lineSpacing:1.5].height;
+    [contentLabel setFrame:CGRectMake(20, CGRectGetMaxY(_bottomLineView.frame) + 11, contentW, contentH)];
+    [_scrollView addSubview:contentLabel];
+    
+    
+    UILabel *collectionLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(contentLabel.frame) + 20, ScreenWidth - 40, 30)];
+    collectionLabel.textColor = [UIColor colorFormHexRGB:@"bcbcbc"];
+    collectionLabel.font = [UIFont systemFontOfSize:12];
+    collectionLabel.text = [NSString stringWithFormat:@"收藏于%@",self.model.time];
+    [_scrollView addSubview:collectionLabel];
+    _scrollView.contentSize = CGSizeMake(ScreenWidth, CGRectGetMaxY(collectionLabel.frame));
+}
 
+// 设置图片类型布局
 - (void)setupPicWithImage:(UIImage *)image {
     if (image == nil) {
         return;
@@ -135,6 +142,40 @@
     _scrollView.contentSize = CGSizeMake(ScreenWidth, height);
 }
 
+
+// 设置语音类型布局
+- (void)setVoiceType {
+    
+    UIView *voiceView = [[UIView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(_bottomLineView.frame) + 11, ScreenWidth - 40, 60)];
+    voiceView.backgroundColor = [UIColor whiteColor];
+    [_scrollView addSubview:voiceView];
+    
+//    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+//    [button setTitle:@"点我下载" forState:UIControlStateNormal];
+//    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [button addTarget:self action:@selector(downloadButtonDidClick) forControlEvents:UIControlEventTouchUpInside];
+//    [voiceView addSubview:button];
+    
+    UIProgressView *progessView = [[UIProgressView alloc] initWithFrame:CGRectMake(10, (CGRectGetHeight(voiceView.frame) - 30) * 0.5, CGRectGetWidth(voiceView.frame) - 100, 30)];
+    [voiceView addSubview:progessView];
+    progessView.trackTintColor = [UIColor colorFormHexRGB:@"e5e5e5"];
+    progessView.progressTintColor = [UIColor colorFormHexRGB:@"fd686a"];
+//    progessView.progress;
+    [progessView setProgress:0.5 animated:NO];
+    
+}
+
+- (void)downloadButtonDidClick {
+    [LGNetWorking downloadFileWithUrl:self.model.content success:^(ResponseData *responseData) {
+        
+        NSLog(@"%@",responseData.data);
+        NSString *filePath = responseData.data;
+        
+        
+    } failure:^(ErrorData *error) {
+        
+    }];
+}
 
 - (void)rightItemDidClick {
     KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"发给朋友",@"删除"]];
@@ -175,6 +216,8 @@
 - (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index {
     return  [NSURL URLWithString:self.model.photoUrl];
 }
+
+
 
 
 - (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {

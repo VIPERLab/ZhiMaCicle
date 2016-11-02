@@ -213,8 +213,60 @@
         }
     }];
     [task resume];
-    
+}
 
+// 上传文件
++ (void)upLoadFileWithURL:(NSString *)url andParams:(NSMutableDictionary *)params andFilePath:(NSString *)filePath success:(void (^)(ResponseData *json))success failure:(void (^)(ErrorData *json))errorBlock {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@%@",DFAPIURL,url] parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        
+        NSData *imageData = [NSData dataWithContentsOfFile:filePath];//amr 
+        [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"voice.mp3"] mimeType:@"audio/mp3"];
+        
+    } progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        ResponseData *data = [ResponseData mj_objectWithKeyValues:responseObject];
+        success(data);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        ErrorData *data = [ErrorData mj_objectWithKeyValues:error];
+        errorBlock(data);
+        
+    }];
+}
+
+// 下载文件
+
++ (void)downloadFileWithURL:(NSString *)url success:(void (^)(ResponseData *json))success failure:(void (^)(ErrorData *json))errorBlock {
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,url]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+     NSURLSessionDownloadTask *download = [manager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+        //监听下载进度
+        //completedUnitCount 已经下载的数据大小
+        //totalUnitCount     文件数据的中大小
+        NSLog(@"%f",1.0 *downloadProgress.completedUnitCount / downloadProgress.totalUnitCount);
+        
+    } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+        NSString *fullPath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:response.suggestedFilename];
+        NSLog(@"targetPath:%@",targetPath);
+        NSLog(@"fullPath:%@",fullPath);
+        return [NSURL fileURLWithPath:fullPath];
+    } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
+        
+        NSLog(@"%@",filePath);
+        ResponseData *data = [[ResponseData alloc] init];
+        data.data = filePath;
+        success(data);
+        
+    }];
+    [download resume];
 }
 
 
