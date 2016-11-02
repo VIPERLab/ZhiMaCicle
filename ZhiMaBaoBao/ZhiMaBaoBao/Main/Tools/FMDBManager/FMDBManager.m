@@ -16,6 +16,7 @@
 #import "GroupChatModel.h"
 #import "GroupUserModel.h"
 #import "LGMessage.h"
+#import "ZMServiceMessage.h"
 
 @implementation FMDBManager {
     // 朋友圈相关的表
@@ -35,6 +36,10 @@
     //群聊相关的表
     FMDatabaseQueue *group_message_DB;
     FMDatabaseQueue *group_userMenber_DB;
+    
+    //服务号相关的表
+    FMDatabaseQueue *service_DB;
+    FMDatabaseQueue *service_Message_DB;
 }
 
 + (instancetype)shareManager {
@@ -81,6 +86,13 @@
             
         case ZhiMa_GroupChat_GroupMenber_Table:
             return group_userMenber_DB;
+            
+        case ZhiMa_Service_Table:
+            return service_DB;
+            
+        case ZhiMa_Service_Message_Table:
+            return service_Message_DB;
+            
         default:
             NSLog(@"无效参数");
             return nil;
@@ -167,6 +179,18 @@
                     group_userMenber_DB = db_Queue;
                     break;
                 }
+                    
+                case ZhiMa_Service_Table: {                 //服务号信息表
+                    tableName = ZhiMaService_TableName;
+                    tableField = Service_MemberField;
+                    service_DB = db_Queue;
+                }
+                    
+                case ZhiMa_Service_Message_Table: {         //服务号消息表
+                    tableName = ZhiMaService_Message_TableName;
+                    tableField = Service_Message_MemberField;
+                    service_Message_DB = db_Queue;
+                }
                 default:{
                     NSLog(@"无效参数");
                     break;
@@ -246,6 +270,14 @@
             fieldName = GroupChat_MemberFields_Name;
             break;
         }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            fieldName = Service_MemberFields_Name;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
+            fieldName = Service_Message_MemberField;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -317,6 +349,16 @@
             fieldName = GroupChat_MemberFields_Name;
             break;
         }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            fieldName = Service_MemberFields_Name;
+            break;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
+            fieldName = Service_Message_MemberField;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -377,6 +419,14 @@
             tableName = ZhiMaGroupChatMember_Table_Name;
             break;
         }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            break;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -432,6 +482,14 @@
         }
         case ZhiMa_GroupChat_GroupMenber_Table: {
             tableName = ZhiMaGroupChatMember_Table_Name;
+            break;
+        }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            break;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
             break;
         }
         default: {
@@ -510,6 +568,14 @@
         }
         case ZhiMa_GroupChat_GroupMenber_Table: {
             tableName = ZhiMaGroupChatMember_Table_Name;
+            break;
+        }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            break;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
             break;
         }
         default: {
@@ -637,6 +703,10 @@
     //群聊相关的表
     [group_message_DB close];
     [group_userMenber_DB close];
+    
+    //服务号相关的表
+    [service_DB close];
+    [service_Message_DB close];
 }
 
 #pragma mark 获取数据源方法
@@ -2293,5 +2363,12 @@
         }
     }];
 }
+
+
+#pragma mark - 服务号信息
+
+
+#pragma mark - 服务号消息表
+/*  */
 
 @end

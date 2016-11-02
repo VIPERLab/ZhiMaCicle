@@ -224,7 +224,7 @@
     [manager POST:[NSString stringWithFormat:@"%@%@",DFAPIURL,url] parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
         NSData *imageData = [NSData dataWithContentsOfFile:filePath];//amr 
-        [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"voice.mp3"] mimeType:@"audio/mp3"];
+        [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"voice.amr"] mimeType:@"audio/mp3"];
         
     } progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         

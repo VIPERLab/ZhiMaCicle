@@ -10,6 +10,7 @@
 #import "FMDB.h"
 @class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel,GroupUserModel;
 @class SDTimeLineCellModel,SDTimeLineCellCommentItemModel,SDTimeLineCellLikeItemModel;
+@class ZMServiceMessage;
 
 //typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
 
@@ -30,8 +31,11 @@ typedef enum : NSUInteger {
     
     /* ----   群聊相关 ----  */
     ZhiMa_GroupChat_GroupMessage_Table,            //群聊表
-    ZhiMa_GroupChat_GroupMenber_Table              //群成员表
+    ZhiMa_GroupChat_GroupMenber_Table,             //群成员表
     
+    /* ----  服务号相关 ----  */
+    ZhiMa_Service_Table,            //服务号表
+    ZhiMa_Service_Message_Table     //服务号信息表
     
 } ZhiMaSqliteTableType;
 

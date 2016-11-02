@@ -983,7 +983,7 @@
 + (void)upLoadFileWithSeccessId:(NSString *)seccessId andCollectionType:(NSString *)collectionType andOppositeId:(NSString *)oppositeId andMsgId:(NSString *)msgId andUserType:(NSString *)userType andPath:(NSString *)filePath success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"sessionId"] = seccessId;
-    params[@"file"] = @"voice.mp3";
+    params[@"file"] = @"voice.amr";
     params[@"fileName"] = @"voice";
     params[@"collection_type"] = collectionType;
     params[@"oppositeId"] = oppositeId;

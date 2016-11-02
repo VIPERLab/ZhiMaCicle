@@ -404,7 +404,7 @@
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Pic_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Like_Table];
     
-    // 聊天相关表
+    //聊天相关表
     [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_Converse_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_Message_Table];
     
@@ -415,6 +415,10 @@
     //群聊相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_GroupChat_GroupMessage_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_GroupChat_GroupMenber_Table];
+    
+    //服务号相关的表
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Service_Table];
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Service_Message_Table];
 }
 
 // 注册通知
