@@ -182,8 +182,6 @@
 }
 
 
-
-
 - (void)layoutSubviews {
     CGFloat titleX = 10;
     CGFloat titleY = 0;
