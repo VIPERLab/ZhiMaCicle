@@ -117,6 +117,10 @@
  */
 @property (nonatomic, assign) BOOL newMessageNotify;
 
+//加我为朋友时是否需要验证
+@property (nonatomic, assign) BOOL shouldVerify;
+
+
 /**
  *  新消息声音通知
  */

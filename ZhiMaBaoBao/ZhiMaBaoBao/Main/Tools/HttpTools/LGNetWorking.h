@@ -319,5 +319,10 @@
 
 // 文件下载
 + (void)downloadFileWithUrl:(NSString *)url success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+//查看加好友是否需要验证
++ (void)lookAddFriendShouldAskSuccess:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
+//删除群成员的时候调用，用来获取最新的群头像
++ (void)getGroupHeadGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
 @end
