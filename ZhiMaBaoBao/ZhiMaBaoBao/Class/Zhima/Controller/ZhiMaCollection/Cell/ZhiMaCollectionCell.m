@@ -104,9 +104,6 @@
         _picImageView.hidden = YES;
         _contentLabel.hidden = YES;
         _voiceView.hidden = NO;
-        
-        
-        
     }
 }
 

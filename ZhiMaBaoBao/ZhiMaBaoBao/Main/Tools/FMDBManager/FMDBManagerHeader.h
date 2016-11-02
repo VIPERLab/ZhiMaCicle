@@ -95,7 +95,7 @@
 #define Service_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, )"
 #define Service_MemberFields_Name @""
 
-
+// 服务号消息相关
 #define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER, msgid TEXT NOT NULL, time INTEGER, detailMsgTime TEXT, msgTitle TEXT, msgContent TEXT, msgPicUrl TEXT, msgUrl TEXT)"
 #define Service_Message_MemberFields_Name @"type, msgid, time, detailMsgTime, msgTitle, msgContent, msgPicUrl, msgUrl"
 

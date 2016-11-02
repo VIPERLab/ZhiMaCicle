@@ -14,13 +14,16 @@
 #import "WebViewController.h"
 //富文本
 #import "TQRichTextView.h"
-
 #import "ForwardMsgController.h"
 
+#import "AmrPlayerReader.h"
 #import "SDPhotoBrowser.h"
 
-@interface ZhiMaCollectionDetailController () <KXActionSheetDelegate,TQRichTextViewDelegate,SDPhotoBrowserDelegate>
-
+@interface ZhiMaCollectionDetailController () <KXActionSheetDelegate,TQRichTextViewDelegate,SDPhotoBrowserDelegate,FileReaderForMLAudioPlayer>
+@property (nonatomic, strong) AmrPlayerReader *amrReader;
+@property (nonatomic, strong) MLAudioPlayer *player;
+@property (nonatomic, weak) UILabel *timeLabel;
+@property (nonatomic, weak) NSTimer *timer;
 @end
 
 @implementation ZhiMaCollectionDetailController {
@@ -28,6 +31,12 @@
     UIView *_bottomLineView;
     UIImageView *_picView;
     UIView *_contentView;
+    NSString *_voiceFilePath;
+    UIProgressView *_progessView;
+    UIButton *_playButton;
+    
+    double maxTime;
+    double indexTime;
 }
 
 - (void)viewDidLoad {
@@ -43,6 +52,7 @@
 }
 
 - (void)setupNav {
+    indexTime = 0.00;
     [self setCustomTitle:@"详情"];
     
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_more"] style:UIBarButtonItemStylePlain target:self action:@selector(rightItemDidClick)];
@@ -150,32 +160,127 @@
     voiceView.backgroundColor = [UIColor whiteColor];
     [_scrollView addSubview:voiceView];
     
-//    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
-//    [button setTitle:@"点我下载" forState:UIControlStateNormal];
-//    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//    [button addTarget:self action:@selector(downloadButtonDidClick) forControlEvents:UIControlEventTouchUpInside];
-//    [voiceView addSubview:button];
+    UIButton *playButton = [[UIButton alloc] initWithFrame:CGRectMake(10, ((CGRectGetHeight(voiceView.frame) - 30) * 0.5), 32, 30)];
+    _playButton = playButton;
+    [playButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [playButton addTarget:self action:@selector(downloadButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
+    [playButton setImage:[UIImage imageNamed:@"VoicePlay_Normal"] forState:UIControlStateNormal];
+    [playButton setImage:[UIImage imageNamed:@"VoicePlay_Selected"] forState:UIControlStateSelected];
+    [voiceView addSubview:playButton];
     
-    UIProgressView *progessView = [[UIProgressView alloc] initWithFrame:CGRectMake(10, (CGRectGetHeight(voiceView.frame) - 30) * 0.5, CGRectGetWidth(voiceView.frame) - 100, 30)];
+    UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(playButton.frame) + 10, (CGRectGetHeight(voiceView.frame) - 20) * 0.5, 45, 20)];
+    self.timeLabel = timeLabel;
+    timeLabel.font = [UIFont systemFontOfSize:14];
+    timeLabel.textAlignment = NSTextAlignmentCenter;
+    timeLabel.text = @"0.00";
+    timeLabel.textColor = [UIColor lightGrayColor];
+    [voiceView addSubview:timeLabel];
+    
+    CGFloat progessX = CGRectGetMaxX(timeLabel.frame) + 10;
+    UIProgressView *progessView = [[UIProgressView alloc] initWithFrame:CGRectMake(progessX, (CGRectGetHeight(voiceView.frame) - 2) * 0.5, CGRectGetWidth(voiceView.frame) - progessX - 20, 2)];
     [voiceView addSubview:progessView];
+    _progessView = progessView;
     progessView.trackTintColor = [UIColor colorFormHexRGB:@"e5e5e5"];
     progessView.progressTintColor = [UIColor colorFormHexRGB:@"fd686a"];
-//    progessView.progress;
-    [progessView setProgress:0.5 animated:NO];
+    
+    
+    UILabel *collectionLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(voiceView.frame) + 20, ScreenWidth - 40, 30)];
+    collectionLabel.textColor = [UIColor colorFormHexRGB:@"bcbcbc"];
+    collectionLabel.font = [UIFont systemFontOfSize:15];
+    collectionLabel.text = [NSString stringWithFormat:@"收藏于%@",self.model.time];
+    [_scrollView addSubview:collectionLabel];
+    
+    CGFloat height = CGRectGetMaxY(collectionLabel.frame) > ScreenHeight ? CGRectGetMaxY(collectionLabel.frame) : (ScreenHeight - 64);
+    _scrollView.contentSize = CGSizeMake(ScreenWidth, height);
     
 }
 
-- (void)downloadButtonDidClick {
+- (void)downloadButtonDidClick:(UIButton *)sender {
+    if (sender.selected) {
+        return;
+    }
+    if (_voiceFilePath.length) {
+        sender.selected = YES;
+        [self voicePlay];
+        return;
+    }
+    
+    sender.selected = YES;
+    // 没有则下载文件之后播放
     [LGNetWorking downloadFileWithUrl:self.model.content success:^(ResponseData *responseData) {
-        
         NSLog(@"%@",responseData.data);
-        NSString *filePath = responseData.data;
-        
-        
+        NSURL *filePath = responseData.data;
+        _voiceFilePath = [filePath absoluteString];
+        [self voicePlay];
     } failure:^(ErrorData *error) {
         
     }];
 }
+
+- (void)viewWillDisappear:(BOOL)animated {
+    if (self.player.isPlaying) {
+        [self.player stopPlaying];
+        [_timer invalidate];
+    }
+}
+
+- (void)dealloc {
+    
+}
+
+
+#pragma mark - 播放相关
+// 播放录音
+- (void)voicePlay {
+    if (!self.amrReader) {
+        AmrPlayerReader *amrReader = [[AmrPlayerReader alloc]init];
+        self.amrReader = amrReader;
+    }
+    if (!self.player) {
+        MLAudioPlayer *player = [[MLAudioPlayer alloc]init];
+        player.fileReaderDelegate = self.amrReader;
+        self.player = player;
+    }
+    _playButton.userInteractionEnabled = NO;
+    self.amrReader.filePath = _voiceFilePath;
+    maxTime = self.amrReader.duration;
+    [self.player startPlaying];
+    
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerBlock:) userInfo:nil repeats:YES];
+    self.timer = timer;
+    [timer fire];
+}
+
+- (void)timerBlock:(NSTimer *)timer {
+    double currentTime = indexTime;
+    if (currentTime > maxTime) {
+        [self.timer invalidate];
+        self.timeLabel.text = [NSString stringWithFormat:@"0.00"];
+        _playButton.selected = NO;
+        _playButton.userInteractionEnabled = YES;
+        [_progessView setProgress:0 animated:NO];
+        indexTime = 0;
+    } else {
+        indexTime++;
+        self.timeLabel.text = [NSString stringWithFormat:@"%.2f",indexTime];
+        [UIView animateWithDuration:1 animations:^{
+            [_progessView setProgress:(indexTime/maxTime) animated:YES];
+        }];
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 - (void)rightItemDidClick {
     KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"发给朋友",@"删除"]];

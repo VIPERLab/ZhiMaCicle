@@ -251,16 +251,13 @@
         //监听下载进度
         //completedUnitCount 已经下载的数据大小
         //totalUnitCount     文件数据的中大小
-        NSLog(@"%f",1.0 *downloadProgress.completedUnitCount / downloadProgress.totalUnitCount);
+        NSLog(@"下载进度 %f",1.0 *downloadProgress.completedUnitCount / downloadProgress.totalUnitCount);
         
     } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
         NSString *fullPath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:response.suggestedFilename];
-        NSLog(@"targetPath:%@",targetPath);
-        NSLog(@"fullPath:%@",fullPath);
         return [NSURL fileURLWithPath:fullPath];
     } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         
-        NSLog(@"%@",filePath);
         ResponseData *data = [[ResponseData alloc] init];
         data.data = filePath;
         success(data);
