@@ -68,7 +68,8 @@
     
     self.msgIV = [[UIImageView alloc]initWithFrame:CGRectMake(18+12, self.msgTimeLabel.frameMaxY+15*scale, width-24, 178*scale)];
     self.msgIV.backgroundColor = GRAYCOLOR;
-    
+    self.msgIV.contentMode =  UIViewContentModeScaleAspectFill;
+    self.msgIV.clipsToBounds  = YES;
     [self.contentView addSubview:self.msgIV];
     
     self.contentLabel = [[UILabel alloc]initWithFrame:CGRectMake(18+12, self.msgIV.frameMaxY+15*scale, width-24, 15)];
@@ -80,20 +81,32 @@
     lineIV.backgroundColor = htmlColor(@"d9d9d9");
     [self.contentView addSubview:lineIV];
     
-    UILabel*markLabel = [[UILabel alloc]initWithFrame:CGRectMake(18+12, lineIV.frameMaxY+1, width-24, bgIV.frameMaxY-lineIV.frameMaxY-2)];
+    CGFloat height =  bgIV.frameMaxY-lineIV.frameMaxY-2;
+    UILabel*markLabel = [[UILabel alloc]initWithFrame:CGRectMake(18+12, lineIV.frameMaxY+1, width-24-8,height)];
     markLabel.textColor = BLACKCOLOR;
     markLabel.font = [UIFont systemFontOfSize:17];
     markLabel.text = @"阅读全文";
     [self.contentView addSubview:markLabel];
     
-    self.timeLabel.text = @"昨天 13:30";
+    UIImageView*markIV = [[UIImageView alloc]initWithFrame:CGRectMake(DEVICEWITH-18-12-8, lineIV.frameMaxY+1+(height-13)/2, 8, 13)];
+    markIV.image = [UIImage imageNamed:@"arrowRight"];
+    [self.contentView addSubview:markIV];
+    
+}
+
+#pragma mark - data
+
+- (void)setMessage:(ZMServiceMessage *)message
+{
+    [self.msgIV sd_setImageWithURL:[NSURL URLWithString:message.msgPicUrl]];
+    self.titleLabel.text = message.msgTitle;
+    self.contentLabel.text = message.msgContent;
+    self.msgTimeLabel.text = message.detailMsgTime;
+    
+    NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    self.timeLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];
     [self.timeLabel sizeToFit];
     self.timeLabel.width += 10;
     self.timeLabel.center = CGPointMake(DEVICEWITH/2, 15+10);
-    
-    self.titleLabel.text = @"怎么样才能不迟到？";
-    self.contentLabel.text = @"陪你一起领红包，1亿红包...";
-    self.msgTimeLabel.text = @"2016-09-09 16:30";
 }
-
 @end

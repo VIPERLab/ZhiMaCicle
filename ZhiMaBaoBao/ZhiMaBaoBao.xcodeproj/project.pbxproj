@@ -649,6 +649,7 @@
 		D54B2F8E1DC8699800BF4445 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = D54B2F7B1DC8699800BF4445 /* LICENSE */; };
 		D54B2F8F1DC8699800BF4445 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F7C1DC8699800BF4445 /* README.md */; };
 		D54B2F901DC8699800BF4445 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F7F1DC8699800BF4445 /* TTTAttributedLabel.m */; };
+		D54B2F931DC884B500BF4445 /* ServiceMsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D54B2F921DC884B500BF4445 /* ServiceMsgCell.m */; };
 		D54D7F171DB5C30500347AA3 /* ZMImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D54D7F161DB5C30500347AA3 /* ZMImageView.m */; };
 		D55B67421DC6DCBA00B47CAB /* ServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D55B67411DC6DCBA00B47CAB /* ServiceViewController.m */; };
 		D55B67471DC6DD5E00B47CAB /* ZMServiceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D55B67461DC6DD5E00B47CAB /* ZMServiceMessage.m */; };
@@ -1917,6 +1918,8 @@
 		D54B2F7C1DC8699800BF4445 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D54B2F7E1DC8699800BF4445 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		D54B2F7F1DC8699800BF4445 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
+		D54B2F911DC884B500BF4445 /* ServiceMsgCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceMsgCell.h; sourceTree = "<group>"; };
+		D54B2F921DC884B500BF4445 /* ServiceMsgCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceMsgCell.m; sourceTree = "<group>"; };
 		D54D7F151DB5C30500347AA3 /* ZMImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZMImageView.h; sourceTree = "<group>"; };
 		D54D7F161DB5C30500347AA3 /* ZMImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMImageView.m; sourceTree = "<group>"; };
 		D55B67401DC6DCBA00B47CAB /* ServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceViewController.h; sourceTree = "<group>"; };
@@ -5207,6 +5210,8 @@
 				D55B67521DC736DD00B47CAB /* ServiceSingleMsgCell.m */,
 				D55B67541DC7370100B47CAB /* ServiceMoreThanOneMsgCell.h */,
 				D55B67551DC7370100B47CAB /* ServiceMoreThanOneMsgCell.m */,
+				D54B2F911DC884B500BF4445 /* ServiceMsgCell.h */,
+				D54B2F921DC884B500BF4445 /* ServiceMsgCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -5624,6 +5629,7 @@
 				D54B2F8B1DC8699800BF4445 /* MLLabelLayoutManager.m in Sources */,
 				04EA7DEA1D912872005E5425 /* ZXCode93Reader.m in Sources */,
 				D53E3DDF1DB705A6001C663B /* ZMRecordShortVideoView.m in Sources */,
+				D54B2F931DC884B500BF4445 /* ServiceMsgCell.m in Sources */,
 				04EA7E321D912872005E5425 /* ZXMultiFormatWriter.m in Sources */,
 				04EA7D8D1D912872005E5425 /* ZXGenericGF.m in Sources */,
 				04F57AA71D9280BD002A6471 /* TimeLineController.m in Sources */,
