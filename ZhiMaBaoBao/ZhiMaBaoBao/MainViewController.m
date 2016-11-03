@@ -29,7 +29,7 @@
 
 @interface MainViewController ()<SocketManagerDelegate,RBDMuteSwitchDelegate>
 @property (nonatomic, assign) BOOL canPlayAudio;
-@property(nonatomic,strong)JFMyPlayerSound *myPlaySounde;   //系统声音
+@property(nonatomic,strong)JFMyPlayerSound *myPlaySounde;   //系统声音播放器
 
 @end
 
@@ -76,11 +76,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUnread) name:kUpdateUnReadMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bigImageTransform:) name:K_ForwardPhotoNotifation object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomekeyWindow:) name:UIWindowDidBecomeKeyNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activityMsgRecieved:) name:kRecieveActivityMsg object:nil];
 }
 
-#pragma mark - socket 通知回调
-
-//收到新消息
+#pragma mark - 通知回调
+//收到新消息(其他用户发送给自己的消息)
 - (void)newMessageRecieved:(NSNotification *)notification{
     
     LGMessage *message = notification.userInfo[@"message"];
@@ -98,13 +98,13 @@
     if (!conversionModel.disturb && message.type != MessageTypeSystem) {
         if (message.conversionType == ConversionTypeGroupChat) {
             if (![userinfo.currentConversionId isEqualToString:message.toUidOrGroupId]) {
-//                [self playSystemAudio];
+                //播放系统声音
                 [[RBDMuteSwitch sharedInstance] setDelegate:self];
                 [[RBDMuteSwitch sharedInstance] detectMuteSwitch];
             }
         }else if (message.conversionType == ConversionTypeSingle){
             if (![userinfo.currentConversionId isEqualToString:message.fromUid]) {
-//                [self playSystemAudio];
+                //播放系统声音
                 [[RBDMuteSwitch sharedInstance] setDelegate:self];
                 [[RBDMuteSwitch sharedInstance] detectMuteSwitch];
             }
@@ -117,6 +117,13 @@
     
     //更新未读消息
     [self updateUnread];
+}
+
+//收到服务号推送消息
+- (void)activityMsgRecieved:(NSNotification *)notify{
+    ZMServiceMessage *message = notify.userInfo[@"message"];
+    
+#warning 播放声音 更新角标
 }
 
 //添加子控制器
@@ -197,6 +204,7 @@
     
 }
 
+#pragma mark - 成为keywindow代理方法
 - (void)becomekeyWindow:(NSNotification *)notify{
     UserInfo *info = [UserInfo shareInstance];
     UIWindow *window = notify.object;
@@ -214,7 +222,6 @@
     }
 }
 
-
 #pragma mark - 状态栏高度改变时，修改tabbar的Y值
 - (void)adapterstatusBarHeight{
     
@@ -226,39 +233,6 @@
     
     self.tabBar.frame = CGRectMake(0, DEVICEHIGHT - 49 - shouldBeSubtractionHeight, DEVICEWITH, 49);
 }
-
-////播放消息提示音(已经判断是声音还是振动提醒)
-//- (void)playSystemAudio{
-//    
-//    if (USERINFO.newMessageNotify && self.canPlayAudio) {    //开启了接受信息消息通知
-//        if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
-//            if (USERINFO.newMessageShakeNotify) {   //声音跟振动
-////                AudioServicesPlaySystemSound(1007);
-//                SystemSoundID soundID;
-//                NSString *strSoundFile = [[NSBundle mainBundle] pathForResource:@"sms-received1" ofType:@"caf"];
-//                AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:strSoundFile],&soundID);
-//                AudioServicesPlaySystemSound(soundID);
-//                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-//
-//            }else{  //只有声音
-//                SystemSoundID soundID;
-//                NSString *strSoundFile = [[NSBundle mainBundle] pathForResource:@"sms-received1" ofType:@"caf"];
-//                AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:strSoundFile],&soundID);
-//                AudioServicesPlaySystemSound(soundID);
-//            }
-//        }else{
-//            if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
-//                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-//            }
-//        }
-//    }
-//    
-//    //用来解决上线收到多条消息，系统声音一直播放
-//    self.canPlayAudio = NO;
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        self.canPlayAudio = YES;
-//    });
-//}
 
 //播放系统声音
 - (void)isMuted:(BOOL)muted{

@@ -115,7 +115,8 @@
 #define kRecieveNewMessage @"kRecieveNewMessage"
 //新的好友请求
 #define kNewFriendRequest @"kNewFriendRequest"
-//消息发送成功
+//收到活动推送消息
+#define kRecieveActivityMsg @"kRecieveActivityMsg"
 
 //更新未读消息
 #define kUpdateUnReadMessage @"kUpdateUnReadMessage"

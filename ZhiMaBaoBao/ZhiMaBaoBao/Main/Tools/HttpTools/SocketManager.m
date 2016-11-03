@@ -303,13 +303,16 @@ static SocketManager *manager = nil;
             if (messageType == MessageTypeActivityPurse) {
                 purshMsg.type = ServiceMessageTypePurse;
             }else{
-                if (purshMsg.msgArr.count == 1) {
+                if (purshMsg.msgArr.count == 1) {   //只有一条文章消息
                     purshMsg.type = ServiceMessageTypeSingle;
                 }else{
                     purshMsg.type = ServiceMessageTypeMoreThanOne;
                 }
             }
 #warning 将红包消息存到数据库  , 发送通知 更新会话页面
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo[@"message"] = purshMsg;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveActivityMsg object:userInfo];
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
             NSDictionary *resDic = responceData[@"data"];

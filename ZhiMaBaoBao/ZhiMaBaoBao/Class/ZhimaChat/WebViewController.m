@@ -12,7 +12,7 @@
 #import "WebViewJavascriptBridge.h"
 #import "LGShareToolBar.h"
 
-@interface WebViewController () <KXActionSheetDelegate,LGShareBarDelegate>
+@interface WebViewController () <KXActionSheetDelegate,LGShareBarDelegate,WKScriptMessageHandler>
 @property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) UIProgressView *progressView;
 @property WebViewJavascriptBridge *bridge;
@@ -21,14 +21,24 @@
 
 @implementation WebViewController {
     NSString *_urlStr;
+    WKUserContentController *_userCC;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setCustomTitle:@""];
     [self setupNav];
+    [self setupViews];
     
-    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
+    //添加js脚本
+    [_userCC addScriptMessageHandler:self name:@"showMobile"];
+}
+
+- (void)setupViews{
+    _userCC = [[WKUserContentController alloc] init];
+    WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+    config.userContentController = _userCC;
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:config];
     [self.view addSubview:webView];
     self.webView = webView;
     
@@ -53,6 +63,11 @@
 - (void)setupNav {
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_more"] style:UIBarButtonItemStylePlain target:self action:@selector(rightItemDidClick)];
     self.navigationItem.rightBarButtonItem = right;
+    
+}
+
+// 在代理方法中处理对应事件  (js调用原生)
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message{
     
 }
 
