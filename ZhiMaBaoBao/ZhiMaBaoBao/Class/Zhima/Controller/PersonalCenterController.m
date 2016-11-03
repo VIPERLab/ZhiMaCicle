@@ -16,9 +16,6 @@
 #import "ZhiMaCollectionController.h"  //收藏
 #import "PesonalDiscoverController.h"
 
-#import "ServiceDetailInfoViewController.h"
-
-
 #define PersonalCellHeight 45
 #define PersonalCenterCellReusedId @"PersonalCenterCellReusedId"
 
@@ -156,8 +153,7 @@
         
     } else if (indexPath.section == 1 && indexPath.row == self.titleArray.count - 1) {
         //设置中心
-//        KXSettingController *setting = [[KXSettingController alloc] init];
-        ServiceDetailInfoViewController *setting = [[ServiceDetailInfoViewController alloc] init];
+        KXSettingController *setting = [[KXSettingController alloc] init];
         setting.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:setting animated:YES];
     }

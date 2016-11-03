@@ -16,5 +16,5 @@ pod 'RealReachability'
 pod 'AliPay'
 pod 'RHSocketKit'
 pod 'pop', '~> 1.0'
-
+pod 'WebViewJavascriptBridge', '~> 5.0'
 end

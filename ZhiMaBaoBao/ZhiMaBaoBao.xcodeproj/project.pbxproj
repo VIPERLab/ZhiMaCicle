@@ -501,6 +501,7 @@
 		314109481DAB247600D6F367 /* NSString+MsgId.m in Sources */ = {isa = PBXBuildFile; fileRef = 314109471DAB247600D6F367 /* NSString+MsgId.m */; };
 		314F04451DC998D900965109 /* DetailInfoHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 314F04441DC998D900965109 /* DetailInfoHeaderView.m */; };
 		314F04481DC9C7EF00965109 /* LGShareToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 314F04471DC9C7EF00965109 /* LGShareToolBar.m */; };
+		314F044B1DCB242B00965109 /* LGAdjustFontBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 314F044A1DCB242B00965109 /* LGAdjustFontBar.m */; };
 		315F78561DB5CC93008C8CA7 /* SendLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 315F78551DB5CC93008C8CA7 /* SendLocationController.m */; };
 		315F78581DB5D4F4008C8CA7 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 315F78571DB5D4F4008C8CA7 /* mapapi.bundle */; };
 		315FF57E1DB863E80002CB97 /* hud_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315FF57C1DB863E80002CB97 /* hud_success@2x.png */; };
@@ -1681,6 +1682,8 @@
 		314F04441DC998D900965109 /* DetailInfoHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailInfoHeaderView.m; sourceTree = "<group>"; };
 		314F04461DC9C7EF00965109 /* LGShareToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGShareToolBar.h; sourceTree = "<group>"; };
 		314F04471DC9C7EF00965109 /* LGShareToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGShareToolBar.m; sourceTree = "<group>"; };
+		314F04491DCB242B00965109 /* LGAdjustFontBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGAdjustFontBar.h; sourceTree = "<group>"; };
+		314F044A1DCB242B00965109 /* LGAdjustFontBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGAdjustFontBar.m; sourceTree = "<group>"; };
 		315F78541DB5CC93008C8CA7 /* SendLocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendLocationController.h; sourceTree = "<group>"; };
 		315F78551DB5CC93008C8CA7 /* SendLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendLocationController.m; sourceTree = "<group>"; };
 		315F78571DB5D4F4008C8CA7 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
@@ -5329,6 +5332,8 @@
 				D55B674F1DC72D3700B47CAB /* miniJLX.TTF */,
 				314F04461DC9C7EF00965109 /* LGShareToolBar.h */,
 				314F04471DC9C7EF00965109 /* LGShareToolBar.m */,
+				314F04491DCB242B00965109 /* LGAdjustFontBar.h */,
+				314F044A1DCB242B00965109 /* LGAdjustFontBar.m */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -5582,7 +5587,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		819B31C6B685388A18C609E2 /* [CP] Embed Pods Frameworks */ = {
@@ -5775,6 +5780,7 @@
 				D53E3DDC1DB704FC001C663B /* PKShortVideoSession.m in Sources */,
 				04EA7D9C1D912872005E5425 /* ZXHybridBinarizer.m in Sources */,
 				31B7C7A01D8FE71F00F1883A /* LGPhoneNumberCell.m in Sources */,
+				314F044B1DCB242B00965109 /* LGAdjustFontBar.m in Sources */,
 				319069D61D9CE56100D1D6D2 /* FriendProfilecontroller.m in Sources */,
 				04F57AFE1D928154002A6471 /* ComplainSubViewController.m in Sources */,
 				04EA7ACF1D910F89005E5425 /* DNAssetsViewCell.m in Sources */,

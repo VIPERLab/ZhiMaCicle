@@ -13,6 +13,7 @@
 #import "ServiceMoreThanOneMsgCell.h"
 #import "WebViewController.h"
 #import "ZMHalfAlphaViewController.h"
+#import "ServiceDetailInfoViewController.h"
 
 @interface ServiceViewController ()<UITableViewDelegate,UITableViewDataSource,MoreThanOneCellDelegate>
 
@@ -63,6 +64,8 @@
 
 - (void)lookConversionInfo
 {
+    ServiceDetailInfoViewController *vc = [[ServiceDetailInfoViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - get data
