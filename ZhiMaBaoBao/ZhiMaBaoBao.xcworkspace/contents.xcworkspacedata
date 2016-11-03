@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:IMChatServiceMsgCell.h">
-   </FileRef>
-   <FileRef
-      location = "group:IMChatServiceMsgCell.m">
-   </FileRef>
-   <FileRef
       location = "group:ZhiMaBaoBao.xcodeproj">
    </FileRef>
    <FileRef
