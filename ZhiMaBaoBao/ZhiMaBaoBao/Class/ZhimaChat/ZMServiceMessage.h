@@ -17,6 +17,15 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 
 @interface ZMServiceMessage : NSObject
 
+/** 服务号id*/
+@property (nonatomic, copy) NSString *cropid;
+/** 服务号logo*/
+@property (nonatomic, copy) NSString *croplogo;
+/** 服务号名称*/
+@property (nonatomic, copy) NSString *cropname;
+/** 红包说明*/
+@property (nonatomic, copy) NSString *text;
+
 /** 消息类型*/
 @property (nonatomic, assign) ServiceMessageType type;
 /** 消息id*/
@@ -38,5 +47,8 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 @property (nonatomic, copy) NSString *msgUrl;
 // 多条消息（由多个ZMServiceMessage组成）
 @property (nonatomic, strong) NSArray<ZMServiceMessage *>* msgArr;
+
+// 多条消息 的json字符串
+@property (nonatomic, copy) NSString *listJson;
 
 @end

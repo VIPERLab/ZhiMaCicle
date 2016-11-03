@@ -258,16 +258,8 @@ static SocketManager *manager = nil;
                 }
 
             }
-            //文本消息 -> 插入数据库
-            else if (message.type == MessageTypeText){
-#warning 留着进行相关扩展操作
-
-            }
             
-            else if (message.type == MessageTypeImage){
-
-            }
-            
+            //视频消息
             else if (message.type == MessageTypeVideo){
                 
                 NSArray *parmas = [message.text componentsSeparatedByString:@","];
@@ -276,6 +268,15 @@ static SocketManager *manager = nil;
                 message.videoDownloadUrl = parmas[2];
                 message.isDownLoad = [parmas[3] boolValue];
             }
+            
+            //红包活动消息
+            else if (message.type == MessageTypeActivityPurse){
+                //红包消息模型
+                ZMServiceMessage *purseMsg = [[ZMServiceMessage alloc] init];
+                purseMsg = [purseMsg mj_setKeyValues:responceData[@"data"]];
+
+            }
+            
             
             //将消息插入数据库，并更新会话列表  (根据是否为群聊，插入不同的表)
             BOOL success = NO;
