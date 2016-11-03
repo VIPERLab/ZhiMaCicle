@@ -396,14 +396,21 @@
     FMDatabaseQueue *queue3 = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     [queue3 inDatabase:^(FMDatabase *db) {
         NSLog(@"需要更新会话数据库");
-        NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Chat_Converse_Table withColumn:@"serviceMessageType" andColumnType:@"INTEGER"];
-        BOOL success = [db executeUpdate:updataStr1];
-        if (success) {
-            NSLog(@"更新数据库成功");
-        } else {
-            NSLog(@"更新数据库失败");
+        int dbVersion = [db userVersion];
+        if (dbVersion < app_Version) {
+            NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Chat_Converse_Table withColumn:@"serviceMessageType" andColumnType:@"INTEGER"];
+            BOOL success = [db executeUpdate:updataStr1];
+            if (success) {
+                NSLog(@"更新数据库成功");
+            } else {
+                NSLog(@"更新数据库失败");
+            }
+            
+            //设置数据库版本号
+            if (success) {
+                [db setUserVersion:app_Version];
+            }
         }
-        
     }];
     
 }
