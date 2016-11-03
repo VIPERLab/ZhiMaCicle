@@ -292,7 +292,7 @@ static SocketManager *manager = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
             }
         }
-        else if ([actType isEqualToString:@"activityPurse"]){
+        else if ([actType isEqualToString:@"service"]){
             //推送消息类型
             NSInteger messageType = [responceData[@"data"][@"type"] integerValue];
             

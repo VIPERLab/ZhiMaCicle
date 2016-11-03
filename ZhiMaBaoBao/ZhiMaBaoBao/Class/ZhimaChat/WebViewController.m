@@ -9,7 +9,7 @@
 #import "WebViewController.h"
 #import <WebKit/WebKit.h>
 #import "KXActionSheet.h"
-//#import "WebViewJavascriptBridge.h"
+#import "WebViewJavascriptBridge.h"
 #import "LGShareToolBar.h"
 
 @interface WebViewController () <KXActionSheetDelegate,LGShareBarDelegate,WKScriptMessageHandler>
@@ -66,8 +66,7 @@
     
 }
 
-<<<<<<< HEAD
-=======
+
 // 在代理方法中处理对应事件  (js调用原生)
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message{
     
@@ -98,7 +97,6 @@
 }
 
 //加载进度条和标题代理方法
->>>>>>> liugang
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
     if ([keyPath isEqualToString:@"estimatedProgress"]) {
