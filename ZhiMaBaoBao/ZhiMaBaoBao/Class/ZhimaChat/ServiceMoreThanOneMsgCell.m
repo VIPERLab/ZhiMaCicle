@@ -76,7 +76,7 @@
     UIView*headview = [[UIView alloc]initWithFrame:CGRectMake(0, 0, width, 205)];
     
     self.headIV = [[UIImageView alloc]initWithFrame:CGRectMake(12, 12, width-24, 205-24)];
-    self.headIV.backgroundColor = [UIColor greenColor];
+//    self.headIV.backgroundColor = 
     self.headIV.contentMode =  UIViewContentModeScaleAspectFill;
     self.headIV.clipsToBounds  = YES;
     [headview addSubview:self.headIV];
