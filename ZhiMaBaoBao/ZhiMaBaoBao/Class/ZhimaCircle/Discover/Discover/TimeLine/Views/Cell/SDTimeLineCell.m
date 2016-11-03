@@ -324,10 +324,10 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     _picContainerView.sd_layout.topSpaceToView(_moreButton, picContainerTopMargin);
     
     
-    if (model.content_type == 2) { //红包类型
-        NSLog(@"我是红包类型");
-        _linkTypeView.sd_layout.heightIs(150);
-    }
+//    if (model.content_type == 2) { //红包类型
+//        NSLog(@"我是红包类型");
+//        _linkTypeView.sd_layout.heightIs(150);
+//    }
     
     //设置bottomView
     UIView *bottomView;

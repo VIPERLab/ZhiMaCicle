@@ -60,6 +60,7 @@
     self.canPlayAudio = YES;
 }
 
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     //更新未读消息
@@ -268,7 +269,7 @@
             
             NSComparisonResult result = [newVersion compare:oldVersion];
             
-            if (result == NSOrderedDescending) {  //新的版本高于旧版本
+            if (result == NSOrderedDescending) {  //市场版本高于包版本
     
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"有新版本可供更新" message:nil preferredStyle:UIAlertControllerStyleAlert];
                 
@@ -285,6 +286,10 @@
                 [alertController addAction:okAction];
                 
                 [self presentViewController:alertController animated:YES completion:nil];
+            }else if (result == NSOrderedAscending){      //市场版本低于包的版本
+                UserInfo *info = [UserInfo read];
+                info.hidePurse = YES;
+                [info save];
             }
             
         }
