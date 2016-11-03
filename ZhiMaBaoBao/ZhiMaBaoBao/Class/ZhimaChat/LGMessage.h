@@ -26,7 +26,8 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
     MessageTypeAudio,         //语音
     MessageTypeSystem,        //系统消息
     MessageTypeVideo,         //小视频
-    MessageTypeActivityPurse  //活动红包
+    MessageTypeActivityPurse,  //活动红包
+    MessageTypeServiceMsg    //服务消息
 };
 
 //发送状态

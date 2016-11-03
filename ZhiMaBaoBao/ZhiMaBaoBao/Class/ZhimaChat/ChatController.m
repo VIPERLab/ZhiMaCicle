@@ -21,6 +21,7 @@
 #import "SystemChatCell.h"
 #import "IMChatVideoTableViewCell.h"
 #import "IMChatActivityPurseCell.h"
+#import "IMChatServiceMsgCell.h"
 
 #import "ChatRoomInfoController.h" // 聊天室详情
 #import "GroupChatRoomInfoController.h" // 群聊天室详情
@@ -635,9 +636,9 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.messages addObject:message];
     
     LGMessage*message2 = [[LGMessage alloc]init];
-    message2.type = MessageTypeActivityPurse;
-    message2.toUidOrGroupId = USERINFO.userID;
-    message2.fromUid = self.conversionId;
+    message2.type = MessageTypeServiceMsg;
+    message2.toUidOrGroupId = self.conversionId;
+    message2.fromUid = USERINFO.userID;
     message2.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     message.conversionType = ConversionTypeSingle;
     message2.timeStamp = [NSDate currentTimeStamp];
@@ -747,9 +748,15 @@ static NSString *const reuseIdentifier = @"messageCell";
             
             break;
         }
-        case MessageTypeActivityPurse : {
+        case MessageTypeActivityPurse :{
+            
+            rowHeight = needShowTime ? 131+20 : 131;
+            
+            break;
+        }
+        case MessageTypeServiceMsg :{
 
-            rowHeight = needShowTime ? 140+20 : 140;
+            rowHeight = needShowTime ? 143+20 : 143;
             
             break;
         }
@@ -1062,7 +1069,21 @@ static NSString *const reuseIdentifier = @"messageCell";
             picChatCell.indexPath = indexPath;
             
         }
-        
+#pragma mark--MessageTypeServiceMsg
+        else if(fileType == MessageTypeServiceMsg) {
+            IMChatServiceMsgCell *picChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
+            if(!picChatCell) {
+                picChatCell = [[IMChatServiceMsgCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resuseIdentifierString];
+                
+                picChatCell.backgroundColor = WHITECOLOR;
+            }
+            
+            baseChatCell = picChatCell;
+            
+            picChatCell.isMe = isMe;
+            picChatCell.indexPath = indexPath;
+            
+        }
         //头像
         if (baseChatCell.isMe){
             
@@ -1318,9 +1339,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     LGMessage * message = [self.messages objectAtIndex:indexPath.row];
     switch (message.type) {
-        case MessageTypeActivityPurse:
+        case MessageTypeServiceMsg:
         {
-            NSLog(@"活动红包");
             ServiceViewController*vc = [[ServiceViewController alloc]init];
             [self.navigationController pushViewController:vc animated:YES];
         }
