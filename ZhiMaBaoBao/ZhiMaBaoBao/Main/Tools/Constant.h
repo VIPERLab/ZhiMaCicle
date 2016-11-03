@@ -96,7 +96,7 @@
 #import "UIColor+HtmlColorConvert.h"
 
 #import "KXCodingManager.h"
-
+#import "ZMServiceMessage.h"
 #import "UIImageView+WebCache.h"
 #import "BaseViewController.h"
 #import "NSDate+TimeCategory.h"

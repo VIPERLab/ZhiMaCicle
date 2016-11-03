@@ -271,7 +271,10 @@ static SocketManager *manager = nil;
             
             //红包活动消息
             else if (message.type == MessageTypeActivityPurse){
-                
+                //红包消息模型
+                ZMServiceMessage *purseMsg = [[ZMServiceMessage alloc] init];
+                purseMsg = [purseMsg mj_setKeyValues:responceData[@"data"]];
+
             }
             
             
