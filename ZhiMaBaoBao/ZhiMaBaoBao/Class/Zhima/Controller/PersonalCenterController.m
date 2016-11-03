@@ -26,6 +26,7 @@
 
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, strong) NSArray *imageArray;
+@property (nonatomic, assign) BOOL hidePurse;       //隐藏钱包
 
 @end
 
@@ -35,13 +36,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self setCustomRightItems];
     [self setupView];
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    
+    UserInfo *info = [UserInfo read];
+    self.hidePurse = info.hidePurse;
+    
     [_tableView reloadData];
 }
 
@@ -132,25 +136,25 @@
         VC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:VC animated:YES];
         
-    } else if (indexPath.section == 1 && indexPath.row == 1) {
-        //我的账户
+    } else if (indexPath.section == 1 && indexPath.row == 1 && !self.hidePurse) {
+        //钱包
         MyAccountViewController *MeAccVC = [[MyAccountViewController alloc]init];
         MeAccVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:MeAccVC animated:YES];
         
-    } else if (indexPath.section == 1 && indexPath.row == 2) {
+    } else if (indexPath.section == 1 && indexPath.row == self.titleArray.count - 3) {
         // 收藏
         ZhiMaCollectionController *collection = [[ZhiMaCollectionController alloc] init];
         collection.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:collection animated:YES];
         
-    } else if (indexPath.section == 1 && indexPath.row == 3) {
+    } else if (indexPath.section == 1 && indexPath.row == self.titleArray.count - 2) {
         //意见反馈
         LGFeedBackViewController *feedBack = [[LGFeedBackViewController alloc] init];
         feedBack.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:feedBack animated:YES];
         
-    } else if (indexPath.section == 1 && indexPath.row == 4) {
+    } else if (indexPath.section == 1 && indexPath.row == self.titleArray.count - 1) {
         //设置中心
 //        KXSettingController *setting = [[KXSettingController alloc] init];
         ServiceDetailInfoViewController *setting = [[ServiceDetailInfoViewController alloc] init];
@@ -164,14 +168,22 @@
 #pragma mark - lazyLoad 
 - (NSArray *)titleArray {
     if (!_titleArray) {
-        _titleArray = @[@"相册",@"钱包",@"收藏",@"意见",@"设置"];
+        if (self.hidePurse) {
+            _titleArray = @[@"相册",@"收藏",@"意见",@"设置"];
+        }else{
+            _titleArray = @[@"相册",@"钱包",@"收藏",@"意见",@"设置"];
+        }
     }
     return _titleArray;
 }
 
 - (NSArray *)imageArray {
     if (!_imageArray) {
-        _imageArray = @[@"PersonalCenter_Album",@"Personal_MyMoney",@"ZhiMa_Collection_Icon",@"PersonalCenter_Suggest",@"PersonalCenter_Setting"];
+        if (self.hidePurse) {
+            _imageArray = @[@"PersonalCenter_Album",@"ZhiMa_Collection_Icon",@"PersonalCenter_Suggest",@"PersonalCenter_Setting"];
+        }else{
+            _imageArray = @[@"PersonalCenter_Album",@"Personal_MyMoney",@"ZhiMa_Collection_Icon",@"PersonalCenter_Suggest",@"PersonalCenter_Setting"];
+        }
     }
     return _imageArray;
 }

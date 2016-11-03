@@ -493,6 +493,10 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+    UserInfo *info = [UserInfo read];
+    if (!info || !info.sessionId) {
+        return;
+    }
     
     //获取登录状态，判断sessionId是否失效
     [LGNetWorking getProvinceWithSessionID:USERINFO.sessionId block:^(ResponseData *responseData) {
