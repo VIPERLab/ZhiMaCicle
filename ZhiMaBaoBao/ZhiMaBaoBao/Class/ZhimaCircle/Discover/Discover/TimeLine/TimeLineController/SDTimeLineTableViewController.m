@@ -227,7 +227,6 @@
 #pragma mark - 新增说说
 - (void)rightBarButtonItemAction:(UIBarButtonItem *)sender{
     //新增说说
-    
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
     new.circleType = 1;
 //    new.linkValue = @"http://www.baidu.com";
