@@ -11,6 +11,8 @@
 #import "ServiceSingleMsgCell.h"
 #import "ZMServiceMessage.h"
 #import "ServiceMoreThanOneMsgCell.h"
+#import "WebViewController.h"
+#import "ZMHalfAlphaViewController.h"
 
 @interface ServiceViewController ()<UITableViewDelegate,UITableViewDataSource,MoreThanOneCellDelegate>
 
@@ -182,6 +184,7 @@
         case ServiceMessageTypePurse:
         {
             NSLog(@"红包");
+
         }
             break;
         case ServiceMessageTypeSingle:
@@ -199,6 +202,28 @@
 - (void)havetouchCell:(ZMServiceMessage *)message
 {
     NSLog(@"messageID = %@",message.msgid);
+    [self goToWebVCWithUrlString:nil];
+}
+
+- (void)goToWebVCWithUrlString:(NSString*)urlStr
+{
+//    WebViewController*webVC = [[WebViewController alloc]init];
+//    webVC.urlStr = @"www.baidu.com";
+//    [self.navigationController pushViewController:webVC animated:YES];
+    
+//    CATransition *animation = [CATransition animation];
+//    animation.duration = 1.0;
+//    animation.timingFunction = UIViewAnimationCurveEaseInOut;
+//    animation.type = @"rippleEffect";
+//    animation.subtype = kCATransitionFromLeft;
+//    [self.view.window.layer addAnimation:animation forKey:nil];
+
+    ZMHalfAlphaViewController*vc = [[ZMHalfAlphaViewController alloc]init];
+//    [vc setModalTransitionStyle:UIModalTransitionStylePartialCurl];
+    vc.modalPresentationStyle= UIModalPresentationOverCurrentContext;
+    [self presentViewController:vc animated:YES completion:^{
+        vc.view.backgroundColor = [UIColor clearColor];
+    }];
 }
 
 #pragma mark - lazy

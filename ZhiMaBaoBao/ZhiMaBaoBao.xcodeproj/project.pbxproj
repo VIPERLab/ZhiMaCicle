@@ -638,6 +638,17 @@
 		D544F55F1DAF611000E73624 /* ZMCallViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D544F55D1DAF611000E73624 /* ZMCallViewCell.xib */; };
 		D544F5621DAF6F9C00E73624 /* ZMCallBoardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D544F5611DAF6F9C00E73624 /* ZMCallBoardViewController.m */; };
 		D544F5651DAF7F5600E73624 /* CallInfoMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = D544F5641DAF7F5600E73624 /* CallInfoMarkView.m */; };
+		D5461F171DC992E800437B9F /* IMChatServiceMsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5461F161DC992E800437B9F /* IMChatServiceMsgCell.m */; };
+		D5461F1B1DC9C68C00437B9F /* GetPurseView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5461F1A1DC9C68C00437B9F /* GetPurseView.m */; };
+		D5461F1E1DC9C82800437B9F /* ZMHalfAlphaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5461F1D1DC9C82800437B9F /* ZMHalfAlphaViewController.m */; };
+		D5461F211DC9DF5F00437B9F /* NotGetPurseView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5461F201DC9DF5F00437B9F /* NotGetPurseView.m */; };
+		D5461F241DC9E08700437B9F /* NomorePurseView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5461F231DC9E08700437B9F /* NomorePurseView.m */; };
+		D5461F271DC9E66900437B9F /* ZMPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5461F261DC9E66900437B9F /* ZMPasswordView.m */; };
+		D5468C021DCACC36005A62F1 /* PurseLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D5468C011DCACC36005A62F1 /* PurseLabel.m */; };
+		D5468C081DCADD45005A62F1 /* ZMQuestionView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5468C071DCADD45005A62F1 /* ZMQuestionView.m */; };
+		D5468C0B1DCAE7E2005A62F1 /* WrongAnswerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5468C0A1DCAE7E2005A62F1 /* WrongAnswerView.m */; };
+		D5468C0E1DCAE80A005A62F1 /* ChooseAnswerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5468C0D1DCAE80A005A62F1 /* ChooseAnswerView.m */; };
+		D5468C111DCB0A8C005A62F1 /* ZMAnswerLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D5468C101DCB0A8C005A62F1 /* ZMAnswerLabel.m */; };
 		D54B2F801DC8699800BF4445 /* MLEmoji_Expression.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D54B2F5C1DC8699800BF4445 /* MLEmoji_Expression.bundle */; };
 		D54B2F811DC8699800BF4445 /* MLEmoji_Expression.plist in Resources */ = {isa = PBXBuildFile; fileRef = D54B2F5D1DC8699800BF4445 /* MLEmoji_Expression.plist */; };
 		D54B2F821DC8699800BF4445 /* MLEmoji_ExpressionImage.plist in Resources */ = {isa = PBXBuildFile; fileRef = D54B2F5E1DC8699800BF4445 /* MLEmoji_ExpressionImage.plist */; };
@@ -1906,6 +1917,28 @@
 		D544F5611DAF6F9C00E73624 /* ZMCallBoardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMCallBoardViewController.m; sourceTree = "<group>"; };
 		D544F5631DAF7F5600E73624 /* CallInfoMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallInfoMarkView.h; sourceTree = "<group>"; };
 		D544F5641DAF7F5600E73624 /* CallInfoMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallInfoMarkView.m; sourceTree = "<group>"; };
+		D5461F151DC992E800437B9F /* IMChatServiceMsgCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMChatServiceMsgCell.h; sourceTree = "<group>"; };
+		D5461F161DC992E800437B9F /* IMChatServiceMsgCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMChatServiceMsgCell.m; sourceTree = "<group>"; };
+		D5461F191DC9C68C00437B9F /* GetPurseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPurseView.h; sourceTree = "<group>"; };
+		D5461F1A1DC9C68C00437B9F /* GetPurseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPurseView.m; sourceTree = "<group>"; };
+		D5461F1C1DC9C82800437B9F /* ZMHalfAlphaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZMHalfAlphaViewController.h; sourceTree = "<group>"; };
+		D5461F1D1DC9C82800437B9F /* ZMHalfAlphaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMHalfAlphaViewController.m; sourceTree = "<group>"; };
+		D5461F1F1DC9DF5F00437B9F /* NotGetPurseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotGetPurseView.h; sourceTree = "<group>"; };
+		D5461F201DC9DF5F00437B9F /* NotGetPurseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotGetPurseView.m; sourceTree = "<group>"; };
+		D5461F221DC9E08700437B9F /* NomorePurseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NomorePurseView.h; sourceTree = "<group>"; };
+		D5461F231DC9E08700437B9F /* NomorePurseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NomorePurseView.m; sourceTree = "<group>"; };
+		D5461F251DC9E66900437B9F /* ZMPasswordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZMPasswordView.h; sourceTree = "<group>"; };
+		D5461F261DC9E66900437B9F /* ZMPasswordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMPasswordView.m; sourceTree = "<group>"; };
+		D5468C001DCACC36005A62F1 /* PurseLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurseLabel.h; sourceTree = "<group>"; };
+		D5468C011DCACC36005A62F1 /* PurseLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurseLabel.m; sourceTree = "<group>"; };
+		D5468C061DCADD45005A62F1 /* ZMQuestionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZMQuestionView.h; sourceTree = "<group>"; };
+		D5468C071DCADD45005A62F1 /* ZMQuestionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMQuestionView.m; sourceTree = "<group>"; };
+		D5468C091DCAE7E2005A62F1 /* WrongAnswerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WrongAnswerView.h; sourceTree = "<group>"; };
+		D5468C0A1DCAE7E2005A62F1 /* WrongAnswerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WrongAnswerView.m; sourceTree = "<group>"; };
+		D5468C0C1DCAE80A005A62F1 /* ChooseAnswerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseAnswerView.h; sourceTree = "<group>"; };
+		D5468C0D1DCAE80A005A62F1 /* ChooseAnswerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseAnswerView.m; sourceTree = "<group>"; };
+		D5468C0F1DCB0A8C005A62F1 /* ZMAnswerLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZMAnswerLabel.h; sourceTree = "<group>"; };
+		D5468C101DCB0A8C005A62F1 /* ZMAnswerLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMAnswerLabel.m; sourceTree = "<group>"; };
 		D54B2F5C1DC8699800BF4445 /* MLEmoji_Expression.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MLEmoji_Expression.bundle; sourceTree = "<group>"; };
 		D54B2F5D1DC8699800BF4445 /* MLEmoji_Expression.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MLEmoji_Expression.plist; sourceTree = "<group>"; };
 		D54B2F5E1DC8699800BF4445 /* MLEmoji_ExpressionImage.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MLEmoji_ExpressionImage.plist; sourceTree = "<group>"; };
@@ -4340,6 +4373,8 @@
 				D53E3DE11DB7496A001C663B /* IMChatVideoTableViewCell.m */,
 				D58FAF5A1DC493BB002970F6 /* IMChatActivityPurseCell.h */,
 				D58FAF5B1DC493BB002970F6 /* IMChatActivityPurseCell.m */,
+				D5461F151DC992E800437B9F /* IMChatServiceMsgCell.h */,
+				D5461F161DC992E800437B9F /* IMChatServiceMsgCell.m */,
 				D540F3CD1DAB99FA00FF5239 /* SystemChatCell.h */,
 				D540F3CE1DAB99FA00FF5239 /* SystemChatCell.m */,
 			);
@@ -5138,6 +5173,27 @@
 			path = RichTextView;
 			sourceTree = "<group>";
 		};
+		D5461F181DC9C64200437B9F /* Markviews */ = {
+			isa = PBXGroup;
+			children = (
+				D5461F191DC9C68C00437B9F /* GetPurseView.h */,
+				D5461F1A1DC9C68C00437B9F /* GetPurseView.m */,
+				D5461F1F1DC9DF5F00437B9F /* NotGetPurseView.h */,
+				D5461F201DC9DF5F00437B9F /* NotGetPurseView.m */,
+				D5461F221DC9E08700437B9F /* NomorePurseView.h */,
+				D5461F231DC9E08700437B9F /* NomorePurseView.m */,
+				D5461F251DC9E66900437B9F /* ZMPasswordView.h */,
+				D5461F261DC9E66900437B9F /* ZMPasswordView.m */,
+				D5468C061DCADD45005A62F1 /* ZMQuestionView.h */,
+				D5468C071DCADD45005A62F1 /* ZMQuestionView.m */,
+				D5468C091DCAE7E2005A62F1 /* WrongAnswerView.h */,
+				D5468C0A1DCAE7E2005A62F1 /* WrongAnswerView.m */,
+				D5468C0C1DCAE80A005A62F1 /* ChooseAnswerView.h */,
+				D5468C0D1DCAE80A005A62F1 /* ChooseAnswerView.m */,
+			);
+			name = Markviews;
+			sourceTree = "<group>";
+		};
 		D54B2F5B1DC8699800BF4445 /* MLEmojiLabel */ = {
 			isa = PBXGroup;
 			children = (
@@ -5232,6 +5288,8 @@
 				D55B67431DC6DCF400B47CAB /* Model */,
 				D55B67401DC6DCBA00B47CAB /* ServiceViewController.h */,
 				D55B67411DC6DCBA00B47CAB /* ServiceViewController.m */,
+				D5461F1C1DC9C82800437B9F /* ZMHalfAlphaViewController.h */,
+				D5461F1D1DC9C82800437B9F /* ZMHalfAlphaViewController.m */,
 			);
 			name = "ServiceAndPurse(服务号和红包)";
 			sourceTree = "<group>";
@@ -5256,6 +5314,7 @@
 				D55B67551DC7370100B47CAB /* ServiceMoreThanOneMsgCell.m */,
 				D54B2F911DC884B500BF4445 /* ServiceMsgCell.h */,
 				D54B2F921DC884B500BF4445 /* ServiceMsgCell.m */,
+				D5461F181DC9C64200437B9F /* Markviews */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -5263,6 +5322,10 @@
 		D55B674E1DC72D1900B47CAB /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				D5468C001DCACC36005A62F1 /* PurseLabel.h */,
+				D5468C011DCACC36005A62F1 /* PurseLabel.m */,
+				D5468C0F1DCB0A8C005A62F1 /* ZMAnswerLabel.h */,
+				D5468C101DCB0A8C005A62F1 /* ZMAnswerLabel.m */,
 				D55B674F1DC72D3700B47CAB /* miniJLX.TTF */,
 				314F04461DC9C7EF00965109 /* LGShareToolBar.h */,
 				314F04471DC9C7EF00965109 /* LGShareToolBar.m */,
@@ -5562,6 +5625,7 @@
 				04EA798D1D8FBCF3005E5425 /* LGPhoneUpTableViewCell.m in Sources */,
 				04EA7DCA1D912872005E5425 /* ZXAI01392xDecoder.m in Sources */,
 				04EA7DA01D912872005E5425 /* ZXBinarizer.m in Sources */,
+				D5461F1E1DC9C82800437B9F /* ZMHalfAlphaViewController.m in Sources */,
 				04EA7E281D912872005E5425 /* ZXQRCodeBlockPair.m in Sources */,
 				31861E201DBF7EEE0037E4E6 /* UncaughtExceptionHandler.m in Sources */,
 				D58FAF5C1DC493BB002970F6 /* IMChatActivityPurseCell.m in Sources */,
@@ -5611,6 +5675,7 @@
 				04EA7DB01D912872005E5425 /* ZXDataMatrixDecoder.m in Sources */,
 				04EA7E131D912872005E5425 /* ZXPDF417Common.m in Sources */,
 				04EA79E01D90E9F7005E5425 /* KXMoneyController.m in Sources */,
+				D5468C081DCADD45005A62F1 /* ZMQuestionView.m in Sources */,
 				D53E3DD81DB704FC001C663B /* PKVideoDecoder.m in Sources */,
 				D54B2F831DC8699800BF4445 /* MLEmojiLabel.m in Sources */,
 				D53E3DD61DB704FC001C663B /* PKPlayerManager.m in Sources */,
@@ -5630,6 +5695,7 @@
 				04EA7DFB1D912872005E5425 /* ZXUPCEANReader.m in Sources */,
 				04F862181D94DE7100DCC6FE /* NearByPeopleCell.m in Sources */,
 				04F57AEC1D9280BD002A6471 /* DiscoverCurrentLocationController.m in Sources */,
+				D5461F171DC992E800437B9F /* IMChatServiceMsgCell.m in Sources */,
 				04F862121D94DB3000DCC6FE /* NewDiscoverNormalCell.m in Sources */,
 				04EA7ACA1D910F89005E5425 /* NSURL+DNIMagePickerUrlEqual.m in Sources */,
 				04EA7DDB1D912872005E5425 /* ZXRSSExpandedPair.m in Sources */,
@@ -5735,6 +5801,7 @@
 				04EA7E021D912872005E5425 /* ZXPDF417BarcodeValue.m in Sources */,
 				31B7C79E1D8FE71F00F1883A /* LGPhoneHeaderCell.m in Sources */,
 				04EA7E291D912872005E5425 /* ZXQRCodeEncoder.m in Sources */,
+				D5461F241DC9E08700437B9F /* NomorePurseView.m in Sources */,
 				D53E3DCC1DB704FC001C663B /* GPUImageContext.m in Sources */,
 				04EA7E1D1D912872005E5425 /* ZXQRCodeErrorCorrectionLevel.m in Sources */,
 				04EA7DFF1D912872005E5425 /* ZXModulusPoly.m in Sources */,
@@ -5804,6 +5871,7 @@
 				315FF5921DB8994C0002CB97 /* MoreInfoController.m in Sources */,
 				04EA7E2A1D912872005E5425 /* ZXQRCodeMaskUtil.m in Sources */,
 				D53E3DCD1DB704FC001C663B /* GPUImageFramebuffer.m in Sources */,
+				D5468C021DCACC36005A62F1 /* PurseLabel.m in Sources */,
 				31B7C78B1D8FE71100F1883A /* LGQueryModel.m in Sources */,
 				D5C8B3B91D9A1A6D007D6B5C /* IMMorePictureTableViewCell.m in Sources */,
 				04EA7DAF1D912872005E5425 /* ZXDataMatrixDecodedBitStreamParser.m in Sources */,
@@ -5870,8 +5938,11 @@
 				04608FA11DB078CD00F4B9E9 /* ChangeSexCell.m in Sources */,
 				31861E0D1DBDAE850037E4E6 /* LGPickerView.m in Sources */,
 				04EA7D6B1D912872005E5425 /* ZXEmailAddressResultParser.m in Sources */,
+				D5468C0B1DCAE7E2005A62F1 /* WrongAnswerView.m in Sources */,
 				04EA7DE21D912872005E5425 /* ZXRSSPair.m in Sources */,
+				D5461F211DC9DF5F00437B9F /* NotGetPurseView.m in Sources */,
 				04EA7ACC1D910F89005E5425 /* UIView+DNImagePicker.m in Sources */,
+				D5461F1B1DC9C68C00437B9F /* GetPurseView.m in Sources */,
 				04F862C11D95545000DCC6FE /* DiscoverDetailController.m in Sources */,
 				04EA7AD11D910F89005E5425 /* DNBrowserCell.m in Sources */,
 				311CEF701D921F6100BBB1F9 /* CallViewController.m in Sources */,
@@ -5917,6 +5988,7 @@
 				04EA7DCB1D912872005E5425 /* ZXAI01393xDecoder.m in Sources */,
 				04AB88431DACBF330087502C /* GroupQRCodeController.m in Sources */,
 				04EA7DCE1D912872005E5425 /* ZXAI01AndOtherAIs.m in Sources */,
+				D5468C0E1DCAE80A005A62F1 /* ChooseAnswerView.m in Sources */,
 				04F862961D94FC7900DCC6FE /* ChatToolBar.m in Sources */,
 				047F13F61DAB253300684881 /* GroupChatMessageDetailController.m in Sources */,
 				04EA7DBE1D912872005E5425 /* ZXDataMatrixX12Encoder.m in Sources */,
@@ -6050,6 +6122,7 @@
 				04F862981D94FC7900DCC6FE /* RFRecordButton.m in Sources */,
 				D54B2F861DC8699800BF4445 /* NSString+MLLabel.m in Sources */,
 				04EA7E0D1D912872005E5425 /* ZXPDF417.m in Sources */,
+				D5468C111DCB0A8C005A62F1 /* ZMAnswerLabel.m in Sources */,
 				040F82011DB9A50900086A25 /* NewDiscoverDetailController.m in Sources */,
 				04EA7E2D1D912872005E5425 /* ZXMultiFinderPatternFinder.m in Sources */,
 				04F862901D94FC7900DCC6FE /* FaceButton.m in Sources */,
@@ -6061,6 +6134,7 @@
 				04EA7D941D912872005E5425 /* ZXBoolArray.m in Sources */,
 				315F78561DB5CC93008C8CA7 /* SendLocationController.m in Sources */,
 				D54D7F171DB5C30500347AA3 /* ZMImageView.m in Sources */,
+				D5461F271DC9E66900437B9F /* ZMPasswordView.m in Sources */,
 				31B7C78C1D8FE71100F1883A /* LGQueryResModel.m in Sources */,
 				04EA7D891D912872005E5425 /* ZXImage.m in Sources */,
 				047F13F31DAA60EF00684881 /* GroupChatChangeNoticeController.m in Sources */,
