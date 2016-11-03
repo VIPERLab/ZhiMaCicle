@@ -11,6 +11,7 @@
 #import "ServiceSingleMsgCell.h"
 #import "ZMServiceMessage.h"
 #import "ServiceMoreThanOneMsgCell.h"
+#import "ServiceDetailInfoViewController.h"
 
 @interface ServiceViewController ()<UITableViewDelegate,UITableViewDataSource,MoreThanOneCellDelegate>
 
@@ -61,6 +62,8 @@
 
 - (void)lookConversionInfo
 {
+    ServiceDetailInfoViewController *vc = [[ServiceDetailInfoViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - get data

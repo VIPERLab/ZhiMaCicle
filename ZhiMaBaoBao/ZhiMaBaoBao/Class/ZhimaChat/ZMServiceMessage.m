@@ -27,11 +27,11 @@
 }
 
 
-//存消息list的时候 转json字符串用于存储到数据库
-- (void)setMsgArr:(NSArray<ZMServiceMessage *> *)msgArr{
-    _msgArr = msgArr;
-    
-    self.listJson = [msgArr mj_JSONString];
-}
+////存消息list的时候 转json字符串用于存储到数据库
+//- (void)setMsgArr:(NSArray<ZMServiceMessage *> *)msgArr{
+//    _msgArr = msgArr;
+//    
+//    self.listJson = [msgArr mj_JSONString];
+//}
 
 @end

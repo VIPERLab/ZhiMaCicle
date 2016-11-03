@@ -239,9 +239,6 @@ static SocketManager *manager = nil;
             LGMessage *message = [[LGMessage alloc] init];
             message = [message mj_setKeyValues:responceData[@"data"]];
             
-            //推送活动消息
-            ZMServiceMessage *purshMsg = [[ZMServiceMessage alloc] init];
-            
             //语音消息，先解码，然后根据时间戳存到本地，拿到路径存到数据库
             if (message.type == MessageTypeAudio) {
                 NSData *audioData = [[NSData alloc] initWithBase64EncodedString:message.text options:0];
@@ -256,11 +253,11 @@ static SocketManager *manager = nil;
                 message.text = fileName;
                 if ([audioData writeToFile:path atomically:YES]) {
                     NSLog(@"语音写入沙盒成功");
-
+                    
                 }else{
                     NSLog(@"语音写入沙盒失败");
                 }
-
+                
             }
             
             //视频消息
@@ -273,28 +270,16 @@ static SocketManager *manager = nil;
                 message.isDownLoad = [parmas[3] boolValue];
             }
             
-            //红包活动消息
+            //收到的好友转发的活动推送消息
             else if (message.type == MessageTypeActivityPurse || message.type == MessageTypeActivityArticle){
-                //红包消息模型
-                purshMsg = [purshMsg mj_setKeyValues:responceData[@"data"]];
-                //手动设置推送消息类型（红包活动，单条文章，多条文章）
-                if (message.type == MessageTypeActivityPurse) {
-                    purshMsg.type = ServiceMessageTypePurse;
-                }else{
-                    if (purshMsg.msgArr.count == 1) {
-                        purshMsg.type = ServiceMessageTypeSingle;
-                    }else{
-                        purshMsg.type = ServiceMessageTypeMoreThanOne;
-                    }
-                }
-#warning 将红包消息存到数据库
+                
             }
             
             
             //将消息插入数据库，并更新会话列表  (根据是否为群聊，插入不同的表)
             BOOL success = NO;
             if (message.conversionType == ConversionTypeGroupChat) {  //如果是群消息 先从http请求群信息 加入本地数据库
-
+                
                 success = [self addGroupMessage:message groupId:message.toUidOrGroupId];
             } else if (message.conversionType == ConversionTypeSingle) {
                 success = [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
@@ -306,6 +291,25 @@ static SocketManager *manager = nil;
                 userInfo[@"message"] = message;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
             }
+        }
+        else if ([actType isEqualToString:@"activityPurse"]){
+            //推送消息类型
+            NSInteger messageType = [responceData[@"data"][@"type"] integerValue];
+            
+            //推送活动消息
+            ZMServiceMessage *purshMsg = [[ZMServiceMessage alloc] init];
+            purshMsg = [purshMsg mj_setKeyValues:responceData[@"data"]];
+            //手动设置推送消息类型（红包活动，单条文章，多条文章）
+            if (messageType == MessageTypeActivityPurse) {
+                purshMsg.type = ServiceMessageTypePurse;
+            }else{
+                if (purshMsg.msgArr.count == 1) {
+                    purshMsg.type = ServiceMessageTypeSingle;
+                }else{
+                    purshMsg.type = ServiceMessageTypeMoreThanOne;
+                }
+            }
+#warning 将红包消息存到数据库  , 发送通知 更新会话页面
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
             NSDictionary *resDic = responceData[@"data"];
