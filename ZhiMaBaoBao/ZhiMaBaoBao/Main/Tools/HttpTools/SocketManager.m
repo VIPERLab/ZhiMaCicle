@@ -235,8 +235,12 @@ static SocketManager *manager = nil;
         }
         else if ([actType isEqualToString:@"normal"]) {      //普通消息 -> 插入数据库
             
+            //普通消息
             LGMessage *message = [[LGMessage alloc] init];
             message = [message mj_setKeyValues:responceData[@"data"]];
+            
+            //推送活动消息
+            ZMServiceMessage *purshMsg = [[ZMServiceMessage alloc] init];
             
             //语音消息，先解码，然后根据时间戳存到本地，拿到路径存到数据库
             if (message.type == MessageTypeAudio) {
@@ -270,11 +274,20 @@ static SocketManager *manager = nil;
             }
             
             //红包活动消息
-            else if (message.type == MessageTypeActivityPurse){
+            else if (message.type == MessageTypeActivityPurse || message.type == MessageTypeActivityArticle){
                 //红包消息模型
-                ZMServiceMessage *purseMsg = [[ZMServiceMessage alloc] init];
-                purseMsg = [purseMsg mj_setKeyValues:responceData[@"data"]];
-
+                purshMsg = [purshMsg mj_setKeyValues:responceData[@"data"]];
+                //手动设置推送消息类型（红包活动，单条文章，多条文章）
+                if (message.type == MessageTypeActivityPurse) {
+                    purshMsg.type = ServiceMessageTypePurse;
+                }else{
+                    if (purshMsg.msgArr.count == 1) {
+                        purshMsg.type = ServiceMessageTypeSingle;
+                    }else{
+                        purshMsg.type = ServiceMessageTypeMoreThanOne;
+                    }
+                }
+#warning 将红包消息存到数据库
             }
             
             
