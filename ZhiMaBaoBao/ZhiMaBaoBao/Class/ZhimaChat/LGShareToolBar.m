@@ -117,7 +117,7 @@ static LGShareToolBar *toolBar = nil;
 
 //取消按钮点击方法
 - (void)cancelAction{
-    [UIView animateWithDuration:.5 animations:^{
+    [UIView animateWithDuration:.3 animations:^{
         toolBar.y = DEVICEHIGHT;
         _cover.alpha = 0;
     } completion:^(BOOL finished) {
@@ -140,7 +140,7 @@ static LGShareToolBar *toolBar = nil;
     [_clearView addSubview:_cover];
     
     [_clearView addSubview:toolBar];
-    [UIView animateWithDuration:.5 animations:^{
+    [UIView animateWithDuration:.3 animations:^{
         _cover.alpha = 0.3;
         toolBar.y = DEVICEHIGHT - 210;
     }];

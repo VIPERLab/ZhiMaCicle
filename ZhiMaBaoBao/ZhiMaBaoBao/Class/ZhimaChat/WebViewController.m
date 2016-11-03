@@ -9,23 +9,36 @@
 #import "WebViewController.h"
 #import <WebKit/WebKit.h>
 #import "KXActionSheet.h"
+//#import "WebViewJavascriptBridge.h"
+#import "LGShareToolBar.h"
 
-@interface WebViewController () <KXActionSheetDelegate>
+@interface WebViewController () <KXActionSheetDelegate,LGShareBarDelegate,WKScriptMessageHandler>
 @property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) UIProgressView *progressView;
+@property WebViewJavascriptBridge *bridge;
 
 @end
 
 @implementation WebViewController {
     NSString *_urlStr;
+    WKUserContentController *_userCC;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setCustomTitle:@""];
     [self setupNav];
+    [self setupViews];
     
-    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
+    //添加js脚本
+    [_userCC addScriptMessageHandler:self name:@"showMobile"];
+}
+
+- (void)setupViews{
+    _userCC = [[WKUserContentController alloc] init];
+    WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+    config.userContentController = _userCC;
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:config];
     [self.view addSubview:webView];
     self.webView = webView;
     
@@ -53,6 +66,39 @@
     
 }
 
+<<<<<<< HEAD
+=======
+// 在代理方法中处理对应事件  (js调用原生)
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message{
+    
+}
+
+//导航栏右侧按钮点击方法
+- (void)rightItemDidClick {
+//    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"在浏览器中打开"]];
+//    sheet.delegate = self;
+//    [sheet show];
+    
+    LGShareToolBar *shareBar = [LGShareToolBar shareInstance];
+    shareBar.delegate = self;
+    [shareBar show];
+}
+
+
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
+    if (index == 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_urlStr]];
+    }
+}
+
+
+#pragma mark - 分享栏工具代理方法
+- (void)shareAction:(ShareButtonType)btnType{
+    
+}
+
+//加载进度条和标题代理方法
+>>>>>>> liugang
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
     if ([keyPath isEqualToString:@"estimatedProgress"]) {
@@ -69,7 +115,9 @@
                 } completion:^(BOOL finished) {
                     [self.progressView setProgress:0.0f animated:NO];
                 }];
-            }             
+                
+                [self.webView evaluateJavaScript:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '40%'" completionHandler:nil];
+            }
         }
         else
         {
@@ -92,18 +140,6 @@
     else {
         
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
-- (void)rightItemDidClick {
-    KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"在浏览器中打开"]];
-    sheet.delegate = self;
-    [sheet show];
-}
-
-- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
-    if (index == 0) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_urlStr]];
     }
 }
 
