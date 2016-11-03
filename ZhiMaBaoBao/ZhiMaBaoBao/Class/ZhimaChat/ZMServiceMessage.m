@@ -9,6 +9,15 @@
 #import "ZMServiceMessage.h"
 
 @implementation ZMServiceMessage
++ (NSDictionary *)replacedKeyFromPropertyName{
+    return @{
+             @"msgArr":@"list",
+             @"msgTitle":@"text",
+             @"msgContent":@"subject",
+             @"msgPicUrl":@"picurl",
+             @"msgUrl":@"link"
+             };
+}
 
 //存储时间字符串时 转时间戳存一份
 - (void)setMsgtime:(NSString *)msgtime{
@@ -17,5 +26,12 @@
     self.timeStamp = stamp;
 }
 
+
+//存消息list的时候 转json字符串用于存储到数据库
+//- (void)setMsgArr:(NSArray<ZMServiceMessage *> *)msgArr{
+//    _msgArr = msgArr;
+//    
+//    self.listJson = [msgArr mj_JSONString];
+//}
 
 @end

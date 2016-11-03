@@ -636,7 +636,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     [self.messages addObject:message];
     
     LGMessage*message2 = [[LGMessage alloc]init];
-    message2.type = MessageTypeServiceMsg;
+    message2.type = MessageTypeActivityArticle;
     message2.toUidOrGroupId = self.conversionId;
     message2.fromUid = USERINFO.userID;
     message2.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
@@ -754,7 +754,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             
             break;
         }
-        case MessageTypeServiceMsg :{
+        case MessageTypeActivityArticle :{
 
             rowHeight = needShowTime ? 143+20 : 143;
             
@@ -1069,8 +1069,8 @@ static NSString *const reuseIdentifier = @"messageCell";
             picChatCell.indexPath = indexPath;
             
         }
-#pragma mark--MessageTypeServiceMsg
-        else if(fileType == MessageTypeServiceMsg) {
+#pragma mark--MessageTypeActivityArticle
+        else if(fileType == MessageTypeActivityArticle) {
             IMChatServiceMsgCell *picChatCell = [tableView dequeueReusableCellWithIdentifier:resuseIdentifierString];
             if(!picChatCell) {
                 picChatCell = [[IMChatServiceMsgCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resuseIdentifierString];
@@ -1205,9 +1205,25 @@ static NSString *const reuseIdentifier = @"messageCell";
     } else {
         collectionId = message.fromUid;
     }
+    if (message.type == MessageTypeAudio) {
+        NSString *filePath = [NSString stringWithFormat:@"%@%@",AUDIOPATH,message.text];
+        
+        [LGNetWorking upLoadFileWithSeccessId:USERINFO.sessionId andCollectionType:@"5" andOppositeId:message.fromUid andMsgId:message.msgid andUserType:[NSString stringWithFormat:@"%zd",self.converseType +1] andPath:filePath success:^(ResponseData *responseData) {
+            
+            if (responseData.code != 0) {
+                [LCProgressHUD showFailureText:responseData.msg];
+                return ;
+            }
+            [LCProgressHUD showSuccessText:@"收藏成功"];
+            
+        } failure:^(ErrorData *error) {
+            
+        }];
+        return;
+    }
     [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:content andSmallImg:smallImg andBigImage:@"" andSource:@"" andAccount:collectionId andMsgId:message.msgid andFcId:@"" success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:@"暂不支持收藏此类型消息"];
+            [LCProgressHUD showFailureText:responseData.msg];
             return ;
         }
         [LCProgressHUD showSuccessText:@"收藏成功"];
@@ -1339,7 +1355,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     LGMessage * message = [self.messages objectAtIndex:indexPath.row];
     switch (message.type) {
-        case MessageTypeServiceMsg:
+        case MessageTypeActivityArticle:
         {
             ServiceViewController*vc = [[ServiceViewController alloc]init];
             [self.navigationController pushViewController:vc animated:YES];

@@ -36,7 +36,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setupNav];
-    [self setupView];
     
     [self registNotification];
 }
@@ -195,7 +194,7 @@
 }
 #pragma mark - 请求
 - (void)request {
-    [LCProgressHUD showLoadingText:@"正在查询账户"];
+//    [LCProgressHUD showLoadingText:@"正在查询账户"];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer.timeoutInterval = 30.f;
     manager.responseSerializer.acceptableContentTypes = nil;//[NSSet setWithObject:@"text/plain"];
@@ -217,15 +216,14 @@
         NSLog(@"%@",responseObject);
         if ([responseObject[@"code"] integerValue] == 8888) {
             [LCProgressHUD hide];
+                [self setupView];
 
-            MyAccountModel *accountModel = [MyAccountModel mj_objectWithKeyValues:responseObject[@"data"]];
-            self.model = accountModel;
-            
-            self.headerView.moneyLabel.text = [NSString stringWithFormat:@"￥%@",accountModel.amount];
-            
-            return ;
+                MyAccountModel *accountModel = [MyAccountModel mj_objectWithKeyValues:responseObject[@"data"]];
+                self.model = accountModel;
+                self.headerView.moneyLabel.text = [NSString stringWithFormat:@"￥%@",accountModel.amount];
+                
+                return ;
         }
-        
         [LCProgressHUD showFailureText:responseObject[@"msg"]];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         

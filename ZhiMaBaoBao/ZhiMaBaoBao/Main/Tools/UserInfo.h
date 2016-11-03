@@ -111,11 +111,18 @@
 @property (nonatomic, copy) NSString *toPhoneNum;   //拨打的电话号码
 @property (nonatomic, assign) NSInteger callRecordId; //通话记录ID   （上面四个属性用作记录通话时长）
 
+//隐藏钱包，审核的时候用
+@property (nonatomic, assign) BOOL hidePurse;
+
 #pragma mark - 消息通知提示
 /**
  *  新消息通知
  */
 @property (nonatomic, assign) BOOL newMessageNotify;
+
+//加我为朋友时是否需要验证
+@property (nonatomic, assign) BOOL shouldVerify;
+
 
 /**
  *  新消息声音通知

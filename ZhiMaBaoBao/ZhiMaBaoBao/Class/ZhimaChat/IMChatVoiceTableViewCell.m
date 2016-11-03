@@ -97,7 +97,7 @@
         return NO;
     }
     else if (action == @selector(keepItemClicked:)){
-        return NO;
+        return YES;
     }
     else if (action == @selector(deleteItemClicked:)){
         return YES;

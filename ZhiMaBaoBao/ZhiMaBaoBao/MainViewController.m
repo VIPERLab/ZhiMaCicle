@@ -23,10 +23,13 @@
 #import "ForwardMsgController.h"
 
 #import "ZMCallViewController.h"
+#import "JFMyPlayerSound.h"
+#import "RBDMuteSwitch.h"
 
 
-@interface MainViewController ()<SocketManagerDelegate>
- @property (nonatomic, assign) BOOL canPlayAudio;
+@interface MainViewController ()<SocketManagerDelegate,RBDMuteSwitchDelegate>
+@property (nonatomic, assign) BOOL canPlayAudio;
+@property(nonatomic,strong)JFMyPlayerSound *myPlaySounde;   //系统声音
 
 @end
 
@@ -56,7 +59,11 @@
     [self addNotifications];
 
     [self judgeAPPVersion];
+    
+    self.canPlayAudio = YES;
+
 }
+
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -91,11 +98,15 @@
     if (!conversionModel.disturb && message.type != MessageTypeSystem) {
         if (message.conversionType == ConversionTypeGroupChat) {
             if (![userinfo.currentConversionId isEqualToString:message.toUidOrGroupId]) {
-                [self playSystemAudio];
+//                [self playSystemAudio];
+                [[RBDMuteSwitch sharedInstance] setDelegate:self];
+                [[RBDMuteSwitch sharedInstance] detectMuteSwitch];
             }
         }else if (message.conversionType == ConversionTypeSingle){
             if (![userinfo.currentConversionId isEqualToString:message.fromUid]) {
-                [self playSystemAudio];
+//                [self playSystemAudio];
+                [[RBDMuteSwitch sharedInstance] setDelegate:self];
+                [[RBDMuteSwitch sharedInstance] detectMuteSwitch];
             }
         }
     }
@@ -216,13 +227,61 @@
     self.tabBar.frame = CGRectMake(0, DEVICEHIGHT - 49 - shouldBeSubtractionHeight, DEVICEWITH, 49);
 }
 
-//播放消息提示音(已经判断是声音还是振动提醒)
-- (void)playSystemAudio{
+////播放消息提示音(已经判断是声音还是振动提醒)
+//- (void)playSystemAudio{
+//    
+//    if (USERINFO.newMessageNotify && self.canPlayAudio) {    //开启了接受信息消息通知
+//        if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
+//            if (USERINFO.newMessageShakeNotify) {   //声音跟振动
+////                AudioServicesPlaySystemSound(1007);
+//                SystemSoundID soundID;
+//                NSString *strSoundFile = [[NSBundle mainBundle] pathForResource:@"sms-received1" ofType:@"caf"];
+//                AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:strSoundFile],&soundID);
+//                AudioServicesPlaySystemSound(soundID);
+//                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+//
+//            }else{  //只有声音
+//                SystemSoundID soundID;
+//                NSString *strSoundFile = [[NSBundle mainBundle] pathForResource:@"sms-received1" ofType:@"caf"];
+//                AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:strSoundFile],&soundID);
+//                AudioServicesPlaySystemSound(soundID);
+//            }
+//        }else{
+//            if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
+//                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+//            }
+//        }
+//    }
+//    
+//    //用来解决上线收到多条消息，系统声音一直播放
+//    self.canPlayAudio = NO;
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        self.canPlayAudio = YES;
+//    });
+//}
 
-    if (USERINFO.newMessageNotify && self.canPlayAudio) {    //开启了接受信息消息通知
-        if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
-            AudioServicesPlaySystemSound(1007);
-
+//播放系统声音
+- (void)isMuted:(BOOL)muted{
+    if (muted) {
+        //开启静音模式
+        self.myPlaySounde = [[JFMyPlayerSound alloc] initSystemShake];
+    }else{
+        //关闭静音模式
+        self.myPlaySounde = [[JFMyPlayerSound alloc] initSystemSoundWithName:@"sms-received1" SoundType:@"caf"];
+    }
+    
+    if (USERINFO.newMessageNotify && self.canPlayAudio) {
+        if (USERINFO.newMessageVoiceNotify) {
+            if (USERINFO.newMessageShakeNotify) {   //声音跟振动
+                if (muted) {
+                    [self.myPlaySounde play];
+                }else{
+                    [self.myPlaySounde play];
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                }
+            }else{  //只有声音
+                [self.myPlaySounde play];
+            }
         }else{
             if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
@@ -266,7 +325,7 @@
             
             NSComparisonResult result = [newVersion compare:oldVersion];
             
-            if (result == NSOrderedDescending) {  //新的版本高于旧版本
+            if (result == NSOrderedDescending) {  //市场版本高于包版本
     
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"有新版本可供更新" message:nil preferredStyle:UIAlertControllerStyleAlert];
                 
@@ -283,6 +342,10 @@
                 [alertController addAction:okAction];
                 
                 [self presentViewController:alertController animated:YES completion:nil];
+            }else if (result == NSOrderedAscending){      //市场版本低于包的版本
+                UserInfo *info = [UserInfo read];
+                info.hidePurse = YES;
+                [info save];
             }
             
         }

@@ -17,9 +17,10 @@
 #import "GroupChatListController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "ConverseModel.h"
+#import "JFMyPlayerSound.h"
+#import "RBDMuteSwitch.h"
 
-
-@interface FriendsController ()<UITableViewDelegate,UITableViewDataSource>
+@interface FriendsController ()<UITableViewDelegate,UITableViewDataSource,RBDMuteSwitchDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *friends;              //好友列表数组
 @property (nonatomic, strong) NSMutableArray *friendsAfterSort;     //排序后的好友列表数组
@@ -28,6 +29,9 @@
 
 @property (nonatomic, strong) UILabel *unReadLabel;     //未读好友请求角标
 @property (nonatomic, strong) NSMutableArray *nFriends;   //存放新的好友数组
+
+@property(nonatomic,strong)JFMyPlayerSound *myPlaySounde;   //播放系统声音
+
 @end
 
 static NSString * const reuseIdentifier = @"friendListcell";
@@ -241,7 +245,9 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     
     [self.nFriends addObject:neewFriend.user_Id];
     
-    [self playSystemAudio];
+    //播放系统声音
+    [[RBDMuteSwitch sharedInstance] setDelegate:self];
+    [[RBDMuteSwitch sharedInstance] detectMuteSwitch];
     
     //本地存储好友请求数量
     UserInfo *userInfo = [UserInfo read];
@@ -336,9 +342,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
         cell.friendModel = friend;
         return cell;
-
     }
-//    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -430,6 +434,36 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
 
+    }
+}
+
+//播放系统声音
+- (void)isMuted:(BOOL)muted{
+    if (muted) {
+        //开启静音模式
+        self.myPlaySounde = [[JFMyPlayerSound alloc] initSystemShake];
+    }else{
+        //关闭静音模式
+        self.myPlaySounde = [[JFMyPlayerSound alloc] initSystemSoundWithName:@"sms-received1" SoundType:@"caf"];
+    }
+    
+    if (USERINFO.newMessageNotify) {
+        if (USERINFO.newMessageVoiceNotify) {
+            if (USERINFO.newMessageShakeNotify) {   //声音跟振动
+                if (muted) {
+                    [self.myPlaySounde play];
+                }else{
+                    [self.myPlaySounde play];
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                }
+            }else{  //只有声音
+                [self.myPlaySounde play];
+            }
+        }else{
+            if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+        }
     }
 }
 

@@ -19,10 +19,13 @@
 #import "GroupChatModel.h"
 #import "NSString+MsgId.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "JFMyPlayerSound.h"
+#import "RBDMuteSwitch.h"
 
 typedef void (^CompleteBlock)(id data);
-@interface SocketManager ()
-//@property (nonatomic, assign) CompleteBlock complettion;
+@interface SocketManager ()<RBDMuteSwitchDelegate>
+@property(nonatomic,strong)JFMyPlayerSound *myPlaySounde;   //播放系统声音
+
 @end
 
 @implementation SocketManager
@@ -232,8 +235,12 @@ static SocketManager *manager = nil;
         }
         else if ([actType isEqualToString:@"normal"]) {      //普通消息 -> 插入数据库
             
+            //普通消息
             LGMessage *message = [[LGMessage alloc] init];
             message = [message mj_setKeyValues:responceData[@"data"]];
+            
+            //推送活动消息
+            ZMServiceMessage *purshMsg = [[ZMServiceMessage alloc] init];
             
             //语音消息，先解码，然后根据时间戳存到本地，拿到路径存到数据库
             if (message.type == MessageTypeAudio) {
@@ -255,16 +262,8 @@ static SocketManager *manager = nil;
                 }
 
             }
-            //文本消息 -> 插入数据库
-            else if (message.type == MessageTypeText){
-#warning 留着进行相关扩展操作
-
-            }
             
-            else if (message.type == MessageTypeImage){
-
-            }
-            
+            //视频消息
             else if (message.type == MessageTypeVideo){
                 
                 NSArray *parmas = [message.text componentsSeparatedByString:@","];
@@ -273,6 +272,24 @@ static SocketManager *manager = nil;
                 message.videoDownloadUrl = parmas[2];
                 message.isDownLoad = [parmas[3] boolValue];
             }
+            
+            //红包活动消息
+            else if (message.type == MessageTypeActivityPurse || message.type == MessageTypeActivityArticle){
+                //红包消息模型
+                purshMsg = [purshMsg mj_setKeyValues:responceData[@"data"]];
+                //手动设置推送消息类型（红包活动，单条文章，多条文章）
+                if (message.type == MessageTypeActivityPurse) {
+                    purshMsg.type = ServiceMessageTypePurse;
+                }else{
+                    if (purshMsg.msgArr.count == 1) {
+                        purshMsg.type = ServiceMessageTypeSingle;
+                    }else{
+                        purshMsg.type = ServiceMessageTypeMoreThanOne;
+                    }
+                }
+#warning 将红包消息存到数据库
+            }
+            
             
             //将消息插入数据库，并更新会话列表  (根据是否为群聊，插入不同的表)
             BOOL success = NO;
@@ -741,7 +758,9 @@ static SocketManager *manager = nil;
             //添加系统消息
             [self addSystemMsgToSqlite:friend];
             
-            [self playSystemAudio];
+            //播放系统声音
+            [[RBDMuteSwitch sharedInstance] setDelegate:self];
+            [[RBDMuteSwitch sharedInstance] detectMuteSwitch];
             
         }else{
             [LCProgressHUD showFailureText:responseData.msg];
@@ -1332,11 +1351,28 @@ static SocketManager *manager = nil;
     return resultStr;
 }
 
-//播放消息提示音(已经判断是声音还是振动提醒)
-- (void)playSystemAudio{
-    if (USERINFO.newMessageNotify) {    //开启了接受信息消息通知
-        if (USERINFO.newMessageVoiceNotify) {   //开启了声音提醒
-            AudioServicesPlaySystemSound(1007);
+//播放系统声音
+- (void)isMuted:(BOOL)muted{
+    if (muted) {
+        //开启静音模式
+        self.myPlaySounde = [[JFMyPlayerSound alloc] initSystemShake];
+    }else{
+        //关闭静音模式
+        self.myPlaySounde = [[JFMyPlayerSound alloc] initSystemSoundWithName:@"sms-received1" SoundType:@"caf"];
+    }
+    
+    if (USERINFO.newMessageNotify) {
+        if (USERINFO.newMessageVoiceNotify) {
+            if (USERINFO.newMessageShakeNotify) {   //声音跟振动
+                if (muted) {
+                    [self.myPlaySounde play];
+                }else{
+                    [self.myPlaySounde play];
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                }
+            }else{  //只有声音
+                [self.myPlaySounde play];
+            }
         }else{
             if (USERINFO.newMessageShakeNotify) {   //只有振动提醒
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);

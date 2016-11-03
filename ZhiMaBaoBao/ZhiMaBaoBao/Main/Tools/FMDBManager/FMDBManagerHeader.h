@@ -32,7 +32,9 @@
 /*群聊信息表*/
 #define ZhiMaGroupChat_Table_Name @"GroupChat "
 #define ZhiMaGroupChatMember_Table_Name @"GroupChatMember "
-
+/*服务号表*/
+#define ZhiMaService_TableName @"Service "
+#define ZhiMaService_Message_TableName @"ServiceMessage "
 
 //  创建朋友圈table字段
 #define CircleField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, circle_ID INTEGER, userID TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL, content_type INTEGER, article_link TEXT)"
@@ -86,5 +88,15 @@
 //群成员表
 #define GroupChat_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, converseId TEXT NOT NULL, memberId TEXT NOT NULL, memberName TEXT NOT NULL, memberHeader_Photo TEXT NOT NULL, memberGroupState INTEGER)"
 #define GroupChat_MemberFields_Name @"converseId, memberId, memberName, memberHeader_Photo,memberGroupState"
+
+
+
+// 服务号相关
+#define Service_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, avtarUrl TEXT NOT NULL, serviceName TEXT NOT NULL, functionDes TEXT NOT NULL, companyName TEXT NOT NULL, acceptMsg INTEGER, topChat INTEGER, serviceId TEXT NOT NULL)"
+#define Service_MemberFields_Name @"avtarUrl, serviceName, functionDes, companyName, acceptMsg, topChat, serviceId"
+
+// 服务号消息相关
+#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER, msgid TEXT NOT NULL, time INTEGER, detailMsgTime TEXT, msgTitle TEXT, msgContent TEXT, msgPicUrl TEXT, msgUrl TEXT)"
+#define Service_Message_MemberFields_Name @"type, msgid, time, detailMsgTime, msgTitle, msgContent, msgPicUrl, msgUrl"
 
 #endif /* FMDBManagerHeader_h */

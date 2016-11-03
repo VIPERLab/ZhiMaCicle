@@ -229,8 +229,8 @@
     //新增说说
     
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
-    new.circleType = 2;
-    new.linkValue = @"http://www.baidu.com";
+    new.circleType = 1;
+//    new.linkValue = @"http://www.baidu.com";
     new.block = ^() {
         [_tableView.mj_header beginRefreshing];
     };

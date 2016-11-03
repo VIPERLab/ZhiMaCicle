@@ -313,4 +313,18 @@
 //获取当前登录用户的二维码
 + (void)getMyQRCodeWithSessionId:(NSString *)sessionId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 
+
+// 文件上传
++ (void)upLoadFileWithSeccessId:(NSString *)seccessId andCollectionType:(NSString *)collectionType andOppositeId:(NSString *)oppositeId andMsgId:(NSString *)msgId andUserType:(NSString *)userType andPath:(NSString *)filePath success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
+// 文件下载
++ (void)downloadFileWithUrl:(NSString *)url success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+//查看加好友是否需要验证
++ (void)lookAddFriendShouldAskSuccess:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
+//删除群成员的时候调用，用来获取最新的群头像
++ (void)getGroupHeadGroupId:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
+//删除群成员后，更新群头像
++ (void)updateGroupHeader:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 @end

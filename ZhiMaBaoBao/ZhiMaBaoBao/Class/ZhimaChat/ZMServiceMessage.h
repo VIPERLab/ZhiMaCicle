@@ -17,6 +17,13 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 
 @interface ZMServiceMessage : NSObject
 
+/** 服务号id*/
+@property (nonatomic, copy) NSString *cropid;
+/** 服务号logo*/
+@property (nonatomic, copy) NSString *croplogo;
+/** 服务号名称*/
+@property (nonatomic, copy) NSString *cropname;
+
 /** 消息类型*/
 @property (nonatomic, assign) ServiceMessageType type;
 /** 消息id*/
@@ -26,9 +33,12 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 /** 消息发送时间时间戳*/
 @property (nonatomic, assign) NSInteger timeStamp;
 
+
 /** 文章消息里面的时间*/
 @property (nonatomic, copy) NSString *detailMsgTime;
-/** 消息标题*/
+/** 红包消息的红包id*/
+@property (nonatomic, copy) NSString *redId;
+/** 消息标题 （红包说明）*/
 @property (nonatomic, copy) NSString *msgTitle;
 /** 消息内容*/
 @property (nonatomic, copy) NSString *msgContent;
@@ -38,5 +48,8 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 @property (nonatomic, copy) NSString *msgUrl;
 // 多条消息（由多个ZMServiceMessage组成）
 @property (nonatomic, strong) NSArray<ZMServiceMessage *>* msgArr;
+
+// 多条消息 的json字符串
+@property (nonatomic, copy) NSString *listJson;
 
 @end

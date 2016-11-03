@@ -16,6 +16,8 @@
 #import "GroupChatModel.h"
 #import "GroupUserModel.h"
 #import "LGMessage.h"
+#import "ZMServiceMessage.h"
+#import "ServiceInfoModel.h"
 
 @implementation FMDBManager {
     // 朋友圈相关的表
@@ -35,6 +37,10 @@
     //群聊相关的表
     FMDatabaseQueue *group_message_DB;
     FMDatabaseQueue *group_userMenber_DB;
+    
+    //服务号相关的表
+    FMDatabaseQueue *service_DB;
+    FMDatabaseQueue *service_Message_DB;
 }
 
 + (instancetype)shareManager {
@@ -81,6 +87,13 @@
             
         case ZhiMa_GroupChat_GroupMenber_Table:
             return group_userMenber_DB;
+            
+        case ZhiMa_Service_Table:
+            return service_DB;
+            
+        case ZhiMa_Service_Message_Table:
+            return service_Message_DB;
+            
         default:
             NSLog(@"无效参数");
             return nil;
@@ -167,6 +180,18 @@
                     group_userMenber_DB = db_Queue;
                     break;
                 }
+                    
+                case ZhiMa_Service_Table: {                 //服务号信息表
+                    tableName = ZhiMaService_TableName;
+                    tableField = Service_MemberField;
+                    service_DB = db_Queue;
+                }
+                    
+                case ZhiMa_Service_Message_Table: {         //服务号消息表
+                    tableName = ZhiMaService_Message_TableName;
+                    tableField = Service_Message_MemberField;
+                    service_Message_DB = db_Queue;
+                }
                 default:{
                     NSLog(@"无效参数");
                     break;
@@ -246,6 +271,14 @@
             fieldName = GroupChat_MemberFields_Name;
             break;
         }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            fieldName = Service_MemberFields_Name;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
+            fieldName = Service_Message_MemberField;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -317,6 +350,16 @@
             fieldName = GroupChat_MemberFields_Name;
             break;
         }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            fieldName = Service_MemberFields_Name;
+            break;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
+            fieldName = Service_Message_MemberField;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -377,6 +420,14 @@
             tableName = ZhiMaGroupChatMember_Table_Name;
             break;
         }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            break;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -432,6 +483,14 @@
         }
         case ZhiMa_GroupChat_GroupMenber_Table: {
             tableName = ZhiMaGroupChatMember_Table_Name;
+            break;
+        }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            break;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
             break;
         }
         default: {
@@ -510,6 +569,14 @@
         }
         case ZhiMa_GroupChat_GroupMenber_Table: {
             tableName = ZhiMaGroupChatMember_Table_Name;
+            break;
+        }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            break;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
             break;
         }
         default: {
@@ -637,6 +704,10 @@
     //群聊相关的表
     [group_message_DB close];
     [group_userMenber_DB close];
+    
+    //服务号相关的表
+    [service_DB close];
+    [service_Message_DB close];
 }
 
 #pragma mark 获取数据源方法
@@ -1468,7 +1539,7 @@
     NSLog(@"开始查会话表");
     [queue inDatabase:^(FMDatabase *db) {
         
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:@"time > 0 and converseType = '1' order by time desc"];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"time > 0 and converseType = '%zd' order by time desc",ConversionTypeGroupChat]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         
         while ([result next]) {
@@ -2065,7 +2136,7 @@
     [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
     
     // 更新会话
-    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:1];
+    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:ConversionTypeGroupChat];
     if (converseModel.time) {
         converseModel.converseName = model.groupName;
     } else {
@@ -2293,5 +2364,128 @@
         }
     }];
 }
+
+#pragma mark - 服务号类型
+//                    ------------   服务号类型  ----------------
+#pragma mark - 服务号信息
+
+/**
+ *  新增服务号
+ *
+ *  @infoArray 由ServiceInfoModel 组成的数组
+ */
+- (void)saveServiceInfoWithArray:(NSArray <ServiceInfoModel *> *)infoArray {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Table];
+    
+    for (ServiceInfoModel *model in infoArray) {
+        // 查询是否存在该服务号
+        NSLog(@"查询是否存在该服务号");
+        __block BOOL isExist = NO;
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Service_Table withOption:[NSString stringWithFormat:@"serviceId = '%@'",model.serviceId]];
+        [queue inDatabase:^(FMDatabase *db) {
+            FMResultSet *result = [db executeQuery:searchOptionStr];
+            while ([result next]) {
+                isExist = YES;
+            }
+        }];
+        
+        NSString *upDataStr;
+        if (isExist) {
+            NSLog(@"存在该服务号");
+            NSString *option1 = [NSString stringWithFormat:@"avtarUrl = '%@', serviceName = '%@', functionDes = '%@', companyName = '%@', acceptMsg = '%@', topChat '%@'",model.avtarUrl,model.serviceName,model.functionDes,model.companyName,@(model.acceptMsg),@(model.topChat)];
+            upDataStr = [FMDBShareManager alterTable:ZhiMa_Service_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"serviceId = '%@'",model.serviceId]];
+        } else {
+            NSLog(@"不存在该服务号");
+            upDataStr = [FMDBShareManager InsertDataInTable:ZhiMa_Service_Table];
+        }
+        
+        
+        [queue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:upDataStr,model.avtarUrl,model.serviceName,model.functionDes,model.companyName,@(model.acceptMsg),@(model.topChat),model.serviceId];
+            if (success) {
+                NSLog(@"插入/更新 服务号成功");
+            } else {
+                NSLog(@"插入/更新 服务号失败");
+            }
+        }];
+        
+    }
+    
+    
+}
+
+/**
+ *  根据id查询服务号模型
+ *
+ *  @serviceId 服务号id
+ */
+- (ServiceInfoModel *)getServiceByServiceId:(NSString *)serviceId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Table];
+    ServiceInfoModel *model = [[ServiceInfoModel alloc] init];
+    NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Service_Table withOption:[NSString stringWithFormat:@"serviceId = '%@'",serviceId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        while ([result next]) {
+            model.avtarUrl = [result stringForColumn:@"avtarUrl"];
+            model.serviceName = [result stringForColumn:@"serviceName"];
+            model.functionDes = [result stringForColumn:@"functionDes"];
+            model.companyName = [result stringForColumn:@"companyName"];
+            model.acceptMsg = [result intForColumn:@"acceptMsg"];
+            model.topChat = [result intForColumn:@"topChat"];
+            model.serviceId = [result stringForColumn:@"serviceId"];
+        }
+    }];
+    return model;
+}
+
+
+/**
+ *  查询所有的服务号
+ */
+- (NSArray <ServiceInfoModel *> *)getAllServices {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Table];
+    NSMutableArray *modelArray = [NSMutableArray array];
+    NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Service_Table withOption:[NSString stringWithFormat:@"id > 0"]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        while ([result next]) {
+            ServiceInfoModel *model = [[ServiceInfoModel alloc] init];
+            model.avtarUrl = [result stringForColumn:@"avtarUrl"];
+            model.serviceName = [result stringForColumn:@"serviceName"];
+            model.functionDes = [result stringForColumn:@"functionDes"];
+            model.companyName = [result stringForColumn:@"companyName"];
+            model.acceptMsg = [result intForColumn:@"acceptMsg"];
+            model.topChat = [result intForColumn:@"topChat"];
+            model.serviceId = [result stringForColumn:@"serviceId"];
+            [modelArray addObject:model];
+        }
+    }];
+    return modelArray;
+}
+
+/**
+ *  根据id 删除服务号
+ *
+ *  @serviceId 服务号id
+ */
+- (BOOL)deletedServiceBySeviceId:(NSString *)serviecId {
+    __block BOOL isSuccess;
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Table];
+    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_Service_Table withOption:[NSString stringWithFormat:@"serviceId = '%@'",serviecId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"删除服务号成功");
+            isSuccess = YES;
+        } else {
+            NSLog(@"删除服务号失败");
+        }
+    }];
+    return isSuccess;
+}
+
+
+#pragma mark - 服务号消息表
+/*  */
 
 @end
