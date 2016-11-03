@@ -1539,7 +1539,7 @@
     NSLog(@"开始查会话表");
     [queue inDatabase:^(FMDatabase *db) {
         
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:@"time > 0 and converseType = '1' order by time desc"];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"time > 0 and converseType = '%zd' order by time desc",ConversionTypeGroupChat]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         
         while ([result next]) {
@@ -2136,7 +2136,7 @@
     [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
     
     // 更新会话
-    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:1];
+    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:ConversionTypeGroupChat];
     if (converseModel.time) {
         converseModel.converseName = model.groupName;
     } else {
@@ -2479,7 +2479,6 @@
             isSuccess = YES;
         } else {
             NSLog(@"删除服务号失败");
-            
         }
     }];
     return isSuccess;

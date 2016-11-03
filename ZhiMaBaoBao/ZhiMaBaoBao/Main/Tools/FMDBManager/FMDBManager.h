@@ -423,8 +423,8 @@ typedef enum : NSUInteger {
 - (void)deletedGroupMemberWithGroupId:(NSString *)groupId;
 
 
-#pragma mark - 服务号类型
-//                    ------------   服务号类型  ----------------
+#pragma mark - 服务号info
+//                    ------------   服务号info  ----------------
 /**
  *  新增服务号
  *
@@ -451,5 +451,16 @@ typedef enum : NSUInteger {
  *  @serviceId 服务号id
  */
 - (BOOL)deletedServiceBySeviceId:(NSString *)serviecId;
+
+
+
+#pragma mark - 服务号消息表
+//                    ------------   服务号消息表  ----------------
+
+
+
+
+
+
 
 @end
