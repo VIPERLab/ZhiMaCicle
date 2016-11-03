@@ -11,7 +11,11 @@
 @implementation ZMServiceMessage
 + (NSDictionary *)replacedKeyFromPropertyName{
     return @{
-             @"msgArr":@"list"
+             @"msgArr":@"list",
+             @"msgTitle":@"text",
+             @"msgContent":@"subject",
+             @"msgPicUrl":@"picurl",
+             @"msgUrl":@"link"
              };
 }
 
