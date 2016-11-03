@@ -10,7 +10,7 @@
 #import "FMDB.h"
 @class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel,GroupUserModel;
 @class SDTimeLineCellModel,SDTimeLineCellCommentItemModel,SDTimeLineCellLikeItemModel;
-@class ZMServiceMessage;
+@class ZMServiceMessag,ServiceInfoModel;
 
 //typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
 
@@ -421,5 +421,35 @@ typedef enum : NSUInteger {
  *  @param groupId 群id
  */
 - (void)deletedGroupMemberWithGroupId:(NSString *)groupId;
+
+
+#pragma mark - 服务号类型
+//                    ------------   服务号类型  ----------------
+/**
+ *  新增服务号
+ *
+ *  @infoArray 由ServiceInfoModel 组成的数组
+ */
+- (void)saveServiceInfoWithArray:(NSArray <ServiceInfoModel *> *)infoArray;
+
+/**
+ *  根据id查询服务号模型
+ *
+ *  @serviceId 服务号id
+ */
+- (ServiceInfoModel *)getServiceByServiceId:(NSString *)serviceId;
+
+
+/**
+ *  查询所有的服务号
+ */
+- (NSArray <ServiceInfoModel *> *)getAllServices;
+
+/**
+ *  根据id 删除服务号
+ *
+ *  @serviceId 服务号id
+ */
+- (BOOL)deletedServiceBySeviceId:(NSString *)serviecId;
 
 @end

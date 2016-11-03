@@ -297,7 +297,6 @@
         webView.urlStr = url;
         [self.navigationController pushViewController:webView animated:YES];
     }
-    
 }
 
 #pragma mark - 点击手势事件
