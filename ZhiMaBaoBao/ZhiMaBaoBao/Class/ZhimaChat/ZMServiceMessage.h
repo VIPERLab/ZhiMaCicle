@@ -7,7 +7,7 @@
 //
 
 typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
-    ServiceMessageTypePurse  = 0,     //活动红包
+    ServiceMessageTypePurse  = 1,     //活动红包
     ServiceMessageTypeSingle,         //单条消息
     ServiceMessageTypeMoreThanOne     //多条消息
 

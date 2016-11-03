@@ -23,6 +23,8 @@ typedef enum : NSUInteger {
     
     /* ----   会话相关 ----  */
     ZhiMa_Chat_Converse_Table,       //会话列表 的表
+    
+    /* ----   聊天相关 ----  */
     ZhiMa_Chat_Message_Table,        //消息表
     
     /* ----   用户相关 ----  */
@@ -456,9 +458,41 @@ typedef enum : NSUInteger {
 
 #pragma mark - 服务号消息表
 //                    ------------   服务号消息表  ----------------
+/**
+ 保存服务号消息
+
+ @param messageArray 服务号消息模型
+ */
+- (void)saveServiceMessage:(ZMServiceMessage *)ServiceMessage byServiceId:(NSString *)serviceId;
 
 
+/**
+ 根据服务号id 和页数 获取消息数组 （一次5条）
 
+ @param serviceId 服务号id
+ @param page      页码
+
+ @return ZMServiceMessage的模型数组
+ */
+- (NSArray <ZMServiceMessage *> *)getAllServiceMessageByServiceId:(NSString *)serviceId andPageNumber:(int)page;
+
+
+/**
+ 根据messageId 删除服务号消息
+
+ @param messageId messageId
+
+ @return 是否删除成功
+ */
+- (BOOL)deletedServiceMessageByMessageId:(NSString *)messageId;
+
+
+/**
+ 根据serviceId 删除服务号消息
+
+ @param serviceId 服务号id
+ */
+- (void)deletedServiceMessageByServiceId:(NSString *)serviceId;
 
 
 

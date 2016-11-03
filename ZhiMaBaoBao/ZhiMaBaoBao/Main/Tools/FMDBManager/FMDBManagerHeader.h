@@ -63,8 +63,8 @@
 
 
 // 创建 聊天会话 table 字段
-#define Chat_ConverseField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, time INTEGER, converseType INTEGER, converseId TEXT NOT NULL, unReadCount INTEGER, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL)"
-#define Chat_ConverseFields_Name @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent"
+#define Chat_ConverseField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, time INTEGER, converseType INTEGER, converseId TEXT NOT NULL, unReadCount INTEGER, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL,serviceMessageType INTEGER)"
+#define Chat_ConverseFields_Name @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent,serviceMessageType"
 
 
 // 创建 消息表 字段
@@ -96,7 +96,10 @@
 #define Service_MemberFields_Name @"avtarUrl, serviceName, functionDes, companyName, acceptMsg, topChat, serviceId"
 
 // 服务号消息相关
-#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER, msgid TEXT NOT NULL, time INTEGER, detailMsgTime TEXT, msgTitle TEXT, msgContent TEXT, msgPicUrl TEXT, msgUrl TEXT)"
-#define Service_Message_MemberFields_Name @"type, msgid, time, detailMsgTime, msgTitle, msgContent, msgPicUrl, msgUrl"
+//#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER, msgid TEXT NOT NULL, time INTEGER, detailMsgTime TEXT, msgTitle TEXT, msgContent TEXT, msgPicUrl TEXT, msgUrl TEXT,serviceId TEXT NOT NULL)"
+//#define Service_Message_MemberFields_Name @"type, msgid, time, detailMsgTime, msgTitle, msgContent, msgPicUrl, msgUrl, serviceId"
 
+
+#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, serviceId TEXT NOT NULL, msgid TEXT NOT NULL, listJson TEXT NOT NULL)"
+#define Service_Message_MemberFields_Name @"serviceId, msgid, listJson"
 #endif /* FMDBManagerHeader_h */

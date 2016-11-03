@@ -1517,7 +1517,7 @@
         }
         
         [queue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:operationStr,@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+            BOOL success = [db executeUpdate:operationStr,@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.serviceMessageType)];
             if (success) {
                 NSLog(@"插入会话成功");
             } else {
@@ -1554,6 +1554,7 @@
             model.time = [result intForColumn:@"time"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"disturb"];
+            model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
             [dataArray addObject:model];
         }
     }];
@@ -1589,6 +1590,7 @@
             model.time = [result intForColumn:@"time"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"disturb"];
+            model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
             [dataArray addObject:model];
         }
     }];
@@ -1646,6 +1648,7 @@
             model.time = [result intForColumn:@"time"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"disturb"];
+            model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
         }
     }];
     return model;
@@ -1815,7 +1818,7 @@
     }
     
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr,@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+        BOOL successFul = [db executeUpdate:opeartionStr,@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.serviceMessageType)];
         if (successFul) {
             NSLog(@"更新会话成功");
         } else {
@@ -1876,12 +1879,10 @@
     }
     
     NSString *opeartionStr = [NSString string];
-//<<<<<<< HEAD
     NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseHead_photo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];
     NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",converseModel.converseId];
     opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
 
-//=======
 //    if (!isExist) {
 //        //不存在会话列表 ->  创建这个会话
 //        NSLog(@"会话不存在，需要创建");
@@ -1925,7 +1926,7 @@
 //>>>>>>> 9bf8b19acb2fc8582ac33ccf09ae53943fe3fca0
 
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr,@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse];
+        BOOL successFul = [db executeUpdate:opeartionStr,@(converseModel.time),@(converseModel.converseType),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.serviceMessageType)];
         if (successFul) {
             NSLog(@"更新会话成功");
         } else {
@@ -2486,6 +2487,129 @@
 
 
 #pragma mark - 服务号消息表
-/*  */
+//                    ------------   服务号消息表  ----------------
+/**
+ 保存服务号消息
+ 
+ @param messageArray 服务号消息模型
+ */
+- (void)saveServiceMessage:(ZMServiceMessage *)messageModel byServiceId:(NSString *)serviceId; {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Message_Table];
+    
+    NSString *optionStr;
+    optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Service_Message_Table];
+    
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr,serviceId,messageModel.msgid,messageModel.listJson];
+        if (success) {
+            NSLog(@"插入 服务号消息数据库成功");
+        } else {
+            NSLog(@"插入 服务号消息数据库失败");
+        }
+    }];
+    
+    //判断是否存在会话
+    FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    
+    __block BOOL isExist = NO;
+    NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = '%@'",serviceId]];
+    [converseQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:searchOptionStr];
+        while ([result next]) {
+            isExist = YES;
+        }
+    }];
+    
+    NSString *converseStr;
+    if (isExist) {
+        NSLog(@"存在服务号会话");
+        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '1',converseName = '%@',converseContent = '%@', time = '%@'",messageModel.cropname, messageModel.msgTitle,@(messageModel.timeStamp)];
+        converseStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",serviceId]];
+    } else {
+        NSLog(@"不存在服务号会话");
+        converseStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
+    }
+//    @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent"
+    [converseQueue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:converseStr,messageModel.timeStamp,ConversionTypeActivity,@(1),@(0),@(0),messageModel.cropname,messageModel.croplogo,messageModel.msgTitle,messageModel.type];
+        if (success) {
+            NSLog(@"插入服务号会话成功");
+        } else {
+            NSLog(@"插入服务号会话失败");
+        }
+    }];
+    
+}
+
+
+/**
+ 根据服务号id 和页数 获取消息数组 （一次5条）
+ 
+ @param serviceId 服务号id
+ @param page      页码
+ 
+ @return ZMServiceMessage的模型数组
+ */
+- (NSArray <ZMServiceMessage *> *)getAllServiceMessageByServiceId:(NSString *)serviceId andPageNumber:(int)page {
+    NSMutableArray *dataArray = [NSMutableArray array];
+//    "type, msgid, time, detailMsgTime, msgTitle, msgContent, msgPicUrl, msgUrl, serviceId"
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Message_Table];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_Service_Message_Table withOption:[NSString stringWithFormat:@"serviceId = '%@' and id > 0 order by id desc LIMIT (%zd-1)*5,5",serviceId,page]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:optionStr];
+        while ([result next]) {
+            ZMServiceMessage *model = [[ZMServiceMessage alloc] init];
+            model.msgid = [result stringForColumn:@"msgid"];
+            model.listJson = [result stringForColumn:@"listJson"];
+            [dataArray addObject:model];
+        }
+    }];
+    return [dataArray copy];
+}
+
+
+/**
+ 根据messageId 删除服务号消息
+ 
+ @param messageId messageId
+ 
+ @return 是否删除成功
+ */
+- (BOOL)deletedServiceMessageByMessageId:(NSString *)messageId {
+    __block BOOL isSuccess = NO;
+    
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Message_Table];
+    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_Service_Message_Table withOption:[NSString stringWithFormat:@"msgid = '%@'",messageId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"删除消息成功");
+            isSuccess = YES;
+        } else {
+            NSLog(@"删除消息失败");
+        }
+    }];
+    
+    return isSuccess;
+}
+
+
+/**
+ 根据serviceId 删除服务号消息
+ 
+ @param serviceId 服务号id
+ */
+- (void)deletedServiceMessageByServiceId:(NSString *)serviceId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Message_Table];
+    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_Service_Message_Table withOption:[NSString stringWithFormat:@"serviceId = '%@'",serviceId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"删除消息成功");
+        } else {
+            NSLog(@"删除消息失败");
+        }
+    }];
+}
 
 @end

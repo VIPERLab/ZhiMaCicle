@@ -142,7 +142,7 @@
     
     _disturbIcon.hidden = !model.disturb;
     
-    if (model.converseType == ConversionTypeActivity) {
+    if (model.serviceMessageType == 1) {
         _converseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
         _lastConverseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
     }
@@ -169,7 +169,7 @@
         
         CGFloat activityH = 35;
         CGFloat activityW;
-        if (self.model.converseType == ConversionTypeActivity) {
+        if (_model.serviceMessageType == 1) { //红包类型
             activityW = 25;
         } else {
             activityW = 0;

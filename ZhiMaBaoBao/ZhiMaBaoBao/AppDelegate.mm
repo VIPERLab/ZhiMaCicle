@@ -305,6 +305,7 @@
                  apsForProduction:isProduction];
 }
 
+#pragma mark - 数据库迁移
 //数据库迁移
 - (void)moveSQLToNew {
     
@@ -392,10 +393,22 @@
         }
     }];
     
-    
+    FMDatabaseQueue *queue3 = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    [queue3 inDatabase:^(FMDatabase *db) {
+        NSLog(@"需要更新会话数据库");
+        NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Chat_Converse_Table withColumn:@"serviceMessageType" andColumnType:@"INTEGER"];
+        BOOL success = [db executeUpdate:updataStr1];
+        if (success) {
+            NSLog(@"更新数据库成功");
+        } else {
+            NSLog(@"更新数据库失败");
+        }
+        
+    }];
     
 }
 
+#pragma mark - 创建数据库
 //创建数据库表
 - (void)creatMySQL {
     // 朋友圈相关的表

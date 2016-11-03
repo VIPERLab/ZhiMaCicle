@@ -63,4 +63,10 @@ typedef NS_OPTIONS(NSUInteger, ConversionType){
  */
 @property (nonatomic, copy) NSString *lastConverse;
 
+
+/**
+ 服务号消息类型
+ */
+@property (nonatomic, assign) int serviceMessageType;
+
 @end
