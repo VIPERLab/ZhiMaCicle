@@ -65,6 +65,7 @@
 - (void)lookConversionInfo
 {
     ServiceDetailInfoViewController *vc = [[ServiceDetailInfoViewController alloc] init];
+    vc.serviceId = self.conversionModel.converseId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -84,7 +85,6 @@
     }
     
     [self.tableView reloadData];
-    
 }
 
 #pragma mark - tableviewDelegate DataSource

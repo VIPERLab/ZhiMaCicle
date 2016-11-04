@@ -28,8 +28,9 @@
 }
 
 - (void)setupViews{
-    _imgContainer = [[UIView alloc] initWithFrame:CGRectMake(14, 35, 65, 65)];
+    _imgContainer = [[UIView alloc] initWithFrame:CGRectMake(14, 17, 65, 65)];
     _imgContainer.backgroundColor = [UIColor clearColor];
+    _imgContainer.layer.cornerRadius = 33;
     [self addSubview:_imgContainer];
     
     _avtar = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 65, 65)];
@@ -39,7 +40,7 @@
     [_avtar addTapGestureRecognizer:self forAction:@selector(tapAvtar:)];
     [_imgContainer addSubview:_avtar];
     
-    _name = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avtar.frame) + 12, 35, DEVICEWITH - 105, 30)];
+    _name = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_imgContainer.frame) + 12, 35, DEVICEWITH - 105, 30)];
     _name.font = [UIFont systemFontOfSize:17];
     [self addSubview:_name];
 }

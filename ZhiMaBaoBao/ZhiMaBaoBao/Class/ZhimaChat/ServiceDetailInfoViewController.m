@@ -10,11 +10,13 @@
 #import "DetailInfoCell.h"
 #import "DetailInfoHeaderView.h"
 #import "LGShareToolBar.h"
+#import "ServiceInfoModel.h"
 
 @interface ServiceDetailInfoViewController ()<KXActionSheetDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *titlesArr;   //标题数组
 @property (nonatomic, strong) NSArray *subTitlesArr;    //副标题数组
+@property (nonatomic, strong) ServiceInfoModel *infoModel;  //服务号信息model
 @end
 
 static NSString *const reuseIdentifier = @"infocell";
@@ -24,9 +26,17 @@ static NSString *const reuseIdentifier = @"infocell";
     [super viewDidLoad];
     self.isAttention = YES;
     
-    [self setCustomTitle:@"麦当劳"];
+    [self setCustomTitle:@""];
     [self setupNavRightItem];
     [self addAllSubviews];
+    
+    [self requrstData];
+}
+
+//从数据库请求服务号基础信息
+- (void)requrstData{
+    self.infoModel = [FMDBShareManager getServiceByServiceId:self.serviceId];
+    [self.tableView reloadData];
 }
 
 //已经关注该公众号 设置导航栏右侧按钮
@@ -141,7 +151,8 @@ static NSString *const reuseIdentifier = @"infocell";
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     DetailInfoHeaderView *header = [[DetailInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 100)];
     header.backgroundColor = self.tableView.backgroundColor;
-    header.nameText = @"麦当劳";
+    header.nameText = self.infoModel.serviceName;
+    header.avtarUrl = self.infoModel.avtarUrl;
     if (section == 0) {
         return header;
     }else{
@@ -191,11 +202,24 @@ static NSString *const reuseIdentifier = @"infocell";
     return _titlesArr;
 }
 
-- (NSArray *)subTitlesArr{
-    if (!_subTitlesArr) {
-        _subTitlesArr = @[@"我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍",@"我是帐号主体"];
+- (void)setInfoModel:(ServiceInfoModel *)infoModel{
+    _infoModel = infoModel;
+    [self setCustomTitle:self.infoModel.serviceName];
+    //防止元素为nil，插入数组崩溃
+    if (!infoModel.functionDes) {
+        infoModel.functionDes = @"";
     }
-    return _subTitlesArr;
+    if (!infoModel.serviceName) {
+        infoModel.serviceName = @"";
+    }
+    _subTitlesArr = @[infoModel.functionDes,infoModel.companyName];
 }
+
+//- (NSArray *)subTitlesArr{
+//    if (!_subTitlesArr) {
+//        _subTitlesArr = @[@"我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍我是功能介绍",@"我是帐号主体"];
+//    }
+//    return _subTitlesArr;
+//}
 
 @end

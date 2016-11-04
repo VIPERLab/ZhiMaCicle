@@ -2504,7 +2504,7 @@
     optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Service_Message_Table];
     
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:optionStr,serviceId,messageModel.service.sid,messageModel.listJson];
+        BOOL success = [db executeUpdate:optionStr,serviceId,@(messageModel.timeStamp),messageModel.service.sid,messageModel.listJson];
         if (success) {
             NSLog(@"插入 服务号消息数据库成功");
         } else {
@@ -2543,6 +2543,36 @@
             NSLog(@"插入服务号会话失败");
         }
     }];
+    
+    //判断是否存在该服务号基础信息
+    FMDatabaseQueue *serviceQueue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Table];
+    __block BOOL isexist = NO;
+    NSString *searchStr = [FMDBShareManager SearchTable:ZhiMa_Service_Table withOption:[NSString stringWithFormat:@"serviceId = '%@'",serviceId]];
+    [converseQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:searchStr];
+        while ([result next]) {
+            isexist = YES;
+        }
+    }];
+    
+    NSString *serviceStr;
+    if (isexist) {
+        NSLog(@"存在服务号基础信息表");
+        return;
+#warning 以后在做更新
+    }else{
+        NSLog(@"不存在服务号基础信息表");
+        serviceStr = [FMDBShareManager InsertDataInTable:ZhiMa_Service_Table];
+    }
+//    (id INTEGER PRIMARY KEY AUTOINCREMENT, avtarUrl TEXT NOT NULL, serviceName TEXT NOT NULL, functionDes TEXT NOT NULL, companyName TEXT NOT NULL, acceptMsg INTEGER, topChat INTEGER, serviceId TEXT NOT NULL)
+    [serviceQueue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:serviceStr,messageModel.croplogo,messageModel.servicename,messageModel.cropintro,messageModel.cropname,@(1),@(0),serviceId];
+        if (success) {
+            NSLog(@"插入服务号基础信息成功");
+        } else {
+            NSLog(@"插入服务号基础信息失败");
+        }
+    }];
 }
 
 
@@ -2565,6 +2595,7 @@
             ZMServiceMessage *model = [[ZMServiceMessage alloc] init];
             model.service.sid = [result stringForColumn:@"msgid"];
             model.listJson = [result stringForColumn:@"listJson"];
+            model.timeStamp = [result intForColumn:@"time"];
             [dataArray addObject:model];
         }
     }];
