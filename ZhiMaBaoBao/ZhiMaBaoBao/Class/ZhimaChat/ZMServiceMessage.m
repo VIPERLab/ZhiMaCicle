@@ -19,10 +19,17 @@
              };
 }
 
+////存储时间字符串时 转时间戳存一份
+//- (void)setMsgtime:(NSString *)msgtime{
+//    _msgtime = msgtime;
+//    NSInteger stamp = [NSDate cTimestampFromString:msgtime format:@"yyyy-MM-dd HH:mm:ss"];
+//    self.timeStamp = stamp;
+//}
+
 //存储时间字符串时 转时间戳存一份
-- (void)setMsgtime:(NSString *)msgtime{
-    _msgtime = msgtime;
-    NSInteger stamp = [NSDate cTimestampFromString:msgtime format:@"yyyy-MM-dd HH:mm:ss"];
+- (void)setService:(LGServiceModel *)service{
+    _service = service;
+    NSInteger stamp = [NSDate cTimestampFromString:service.msgtime format:@"yyyy-MM-dd HH:mm:ss"];
     self.timeStamp = stamp;
 }
 

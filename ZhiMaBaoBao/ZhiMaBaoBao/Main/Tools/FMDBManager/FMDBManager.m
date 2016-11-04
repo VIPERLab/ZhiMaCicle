@@ -2500,7 +2500,7 @@
     optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Service_Message_Table];
     
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:optionStr,serviceId,messageModel.msgid,messageModel.listJson];
+        BOOL success = [db executeUpdate:optionStr,serviceId,messageModel.service.sid,messageModel.listJson];
         if (success) {
             NSLog(@"插入 服务号消息数据库成功");
         } else {
@@ -2523,7 +2523,7 @@
     NSString *converseStr;
     if (isExist) {
         NSLog(@"存在服务号会话");
-        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '1',converseName = '%@',converseContent = '%@', time = '%@'",messageModel.cropname, messageModel.msgTitle,@(messageModel.timeStamp)];
+        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '1',converseName = '%@',converseContent = '%@', time = '%@'",messageModel.cropname, messageModel.service.text,@(messageModel.timeStamp)];
         converseStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",serviceId]];
     } else {
         NSLog(@"不存在服务号会话");
@@ -2531,7 +2531,7 @@
     }
 //    @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent"
     [converseQueue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:converseStr,messageModel.timeStamp,ConversionTypeActivity,@(1),@(0),@(0),messageModel.cropname,messageModel.croplogo,messageModel.msgTitle,messageModel.type];
+        BOOL success = [db executeUpdate:converseStr,messageModel.timeStamp,ConversionTypeActivity,@(1),@(0),@(0),messageModel.cropname,messageModel.croplogo,messageModel.service.text,messageModel.type];
         if (success) {
             NSLog(@"插入服务号会话成功");
         } else {
@@ -2559,7 +2559,7 @@
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
             ZMServiceMessage *model = [[ZMServiceMessage alloc] init];
-            model.msgid = [result stringForColumn:@"msgid"];
+            model.service.sid = [result stringForColumn:@"msgid"];
             model.listJson = [result stringForColumn:@"listJson"];
             [dataArray addObject:model];
         }

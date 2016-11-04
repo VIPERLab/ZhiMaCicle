@@ -56,8 +56,8 @@
 
 - (void)setMessage:(ZMServiceMessage *)message
 {
-    [self.msgIV sd_setImageWithURL:[NSURL URLWithString:message.msgPicUrl]];
-    self.titleLabel.text = message.msgTitle;
+//    [self.msgIV sd_setImageWithURL:[NSURL URLWithString:message.]];
+    self.titleLabel.text = message.service.text;
 }
 
 @end

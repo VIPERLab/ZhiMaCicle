@@ -75,9 +75,9 @@
 
 - (void)setMessage:(ZMServiceMessage *)message
 {
-    [self.purseIV sd_setImageWithURL:[NSURL URLWithString:message.msgPicUrl]];
-    self.titleLabel.text = message.msgTitle;
-    self.contentLabel.text = message.msgContent;
+//    [self.purseIV sd_setImageWithURL:[NSURL URLWithString:message.msgPicUrl]];
+    self.titleLabel.text = message.service.text;
+//    self.contentLabel.text = message.msgContent;
     
     NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     self.timeLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];

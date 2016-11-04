@@ -72,43 +72,43 @@
 
 - (void)requestMessages
 {
-    for (int i=0; i<3; i++) {
-        ZMServiceMessage*msg = [[ZMServiceMessage alloc]init];
-        msg.msgPicUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-11-01/58185b5f256ed.png";
-        msg.timeStamp = [NSDate currentTimeStamp];
-        msg.detailMsgTime = @"2016-09-30";
-        msg.msgTitle = @"十月红包雨，麦当劳邀您共享双十一";
-        msg.msgContent = @"陪你一起领红包雨";
-        switch (i) {
-            case 0:
-                msg.type = ServiceMessageTypePurse;
-                break;
-            case 1:
-                msg.type = ServiceMessageTypeSingle;
-                break;
-            case 2:{
-                msg.type = ServiceMessageTypeMoreThanOne;
-                NSMutableArray*marr = [NSMutableArray array];
-                for (int j=0; j<3; j++) {
-                    ZMServiceMessage*mmm = [[ZMServiceMessage alloc]init];
-                    mmm.msgPicUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-11-01/58185b5f256ed.png";
-                    mmm.msgTitle = @"听说你过的不好，我就放心了";
-                    mmm.msgid = [NSString stringWithFormat:@"%d",j];
-                    [marr addObject:mmm];
-                }
-                msg.msgArr = marr;
-            }
-                break;
-                
-            default:
-                break;
-        }
-        
-        [self.messages addObject:msg];
-
-    }
-    
-    [self.tableView reloadData];
+//    for (int i=0; i<3; i++) {
+//        ZMServiceMessage *msg = [[ZMServiceMessage alloc]init];
+//        msg.msgPicUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-11-01/58185b5f256ed.png";
+//        msg.timeStamp = [NSDate currentTimeStamp];
+//        msg.detailMsgTime = @"2016-09-30";
+//        msg.msgTitle = @"十月红包雨，麦当劳邀您共享双十一";
+//        msg.msgContent = @"陪你一起领红包雨";
+//        switch (i) {
+//            case 0:
+//                msg.type = ServiceMessageTypePurse;
+//                break;
+//            case 1:
+//                msg.type = ServiceMessageTypeSingle;
+//                break;
+//            case 2:{
+//                msg.type = ServiceMessageTypeMoreThanOne;
+//                NSMutableArray*marr = [NSMutableArray array];
+//                for (int j=0; j<3; j++) {
+//                    ZMServiceMessage*mmm = [[ZMServiceMessage alloc]init];
+//                    mmm.msgPicUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-11-01/58185b5f256ed.png";
+//                    mmm.msgTitle = @"听说你过的不好，我就放心了";
+//                    mmm.msgid = [NSString stringWithFormat:@"%d",j];
+//                    [marr addObject:mmm];
+//                }
+//                msg.msgArr = marr;
+//            }
+//                break;
+//                
+//            default:
+//                break;
+//        }
+//        
+//        [self.messages addObject:msg];
+//
+//    }
+//    
+//    [self.tableView reloadData];
     
 }
 
@@ -125,7 +125,7 @@
             return 55+(DEVICEWITH-36)*700/676;
             break;
         case ServiceMessageTypeMoreThanOne:
-            return 55+205+(msg.msgArr.count-1)*50;
+            return 55+205+(msg.list.count-1)*50;
             break;
         default:
             break;
@@ -204,7 +204,7 @@
 
 - (void)havetouchCell:(ZMServiceMessage *)message
 {
-    NSLog(@"messageID = %@",message.msgid);
+    NSLog(@"messageID = %@",message.service.sid);
     [self goToWebVCWithUrlString:nil];
 }
 
