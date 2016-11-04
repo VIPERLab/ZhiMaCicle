@@ -12,4 +12,6 @@
 
 @interface ServiceViewController : BaseViewController
 
+//会话模型
+@property (nonatomic, strong) ConverseModel *conversionModel;
 @end

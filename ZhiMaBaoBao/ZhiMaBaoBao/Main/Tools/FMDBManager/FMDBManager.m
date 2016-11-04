@@ -280,7 +280,7 @@
         }
         case ZhiMa_Service_Message_Table: {
             tableName = ZhiMaService_Message_TableName;
-            fieldName = Service_Message_MemberField;
+            fieldName = Service_Message_MemberFields_Name;
             break;
         }
         default: {
@@ -2534,15 +2534,15 @@
         converseStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
     }
 //    @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent"
+//     time INTEGER, converseType INTEGER, converseId TEXT NOT NULL, unReadCount INTEGER, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL,serviceMessageType INTEGER)"
     [converseQueue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:converseStr,@(messageModel.timeStamp),ConversionTypeActivity,@(1),@(0),@(0),messageModel.cropname,messageModel.croplogo,messageModel.service.text,messageModel.type];
+        BOOL success = [db executeUpdate:converseStr,@(messageModel.timeStamp),@(ConversionTypeActivity),serviceId,@(1),@(0),@(0),messageModel.cropname,messageModel.croplogo,messageModel.service.text,@(messageModel.type)];
         if (success) {
             NSLog(@"插入服务号会话成功");
         } else {
             NSLog(@"插入服务号会话失败");
         }
     }];
-    
 }
 
 
