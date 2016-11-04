@@ -91,7 +91,7 @@
 {
     ChooseAnswerView*view = [[ChooseAnswerView alloc]initWithFrame:CGRectMake(0, 0, DEVICEWITH, DEVICEHIGHT)];
     view.vc = self;
-    view.answerArr = @[@"20分钟",@"30分钟分钟分钟",@"40分钟"];
+    view.answerArr = @[@"20分钟",@"30分钟分钟分钟",@"40分钟分钟"];
     [self.view addSubview:view];
 }
 
