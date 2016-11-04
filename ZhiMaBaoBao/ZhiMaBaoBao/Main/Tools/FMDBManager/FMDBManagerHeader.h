@@ -93,16 +93,17 @@
 
 
 
-// 服务号相关
+// 服务号基础信息 表
 #define Service_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, avtarUrl TEXT NOT NULL, serviceName TEXT NOT NULL, functionDes TEXT NOT NULL, companyName TEXT NOT NULL, acceptMsg INTEGER, topChat INTEGER, serviceId TEXT NOT NULL)"
 #define Service_MemberFields_Name @"avtarUrl, serviceName, functionDes, companyName, acceptMsg, topChat, serviceId"
 
-// 服务号消息相关
-#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, serviceId TEXT NOT NULL, msgid TEXT NOT NULL, listJson TEXT NOT NULL)"
-#define Service_Message_MemberFields_Name @"serviceId, msgid, listJson"
-
+//服务号消息 表
+#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, serviceId TEXT NOT NULL, time INTEGER ,msgid TEXT NOT NULL, msgType INTEGER NOT NULL,listJson TEXT NOT NULL)"
+#define Service_Message_MemberFields_Name @"serviceId, time, msgid, msgType, listJson"
 
 // 收藏相关
 #define Collection_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, head TEXT NOT NULL, name TEXT NOT NULL, time TEXT NOT NULL, content TEXT, collectionId TEXT NOT NULL, type INTEGER, pic_name TEXT, small_img TEXT, isDownload INTEGER)"
 #define Collection_MemberFields_Name @"head, name, time, content, collectionId, type, pic_name, small_img, isDownload"
+
+
 #endif /* FMDBManagerHeader_h */

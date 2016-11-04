@@ -65,6 +65,7 @@
 - (void)lookConversionInfo
 {
     ServiceDetailInfoViewController *vc = [[ServiceDetailInfoViewController alloc] init];
+    vc.serviceId = self.conversionModel.converseId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -72,47 +73,18 @@
 
 - (void)requestMessages
 {
-//    for (int i=0; i<3; i++) {
-//        ZMServiceMessage *msg = [[ZMServiceMessage alloc]init];
-//        msg.msgPicUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-11-01/58185b5f256ed.png";
-//        msg.timeStamp = [NSDate currentTimeStamp];
-//        msg.detailMsgTime = @"2016-09-30";
-//        msg.msgTitle = @"十月红包雨，麦当劳邀您共享双十一";
-//        msg.msgContent = @"陪你一起领红包雨";
-//        switch (i) {
-//            case 0:
-//                msg.type = ServiceMessageTypePurse;
-//                break;
-//            case 1:
-//                msg.type = ServiceMessageTypeSingle;
-//                break;
-//            case 2:{
-//                msg.type = ServiceMessageTypeMoreThanOne;
-//                NSMutableArray*marr = [NSMutableArray array];
-//                for (int j=0; j<3; j++) {
-//                    ZMServiceMessage*mmm = [[ZMServiceMessage alloc]init];
-//                    mmm.msgPicUrl = @"http://pic.zhimabaobao.com/Public/Upload/2016-11-01/58185b5f256ed.png";
-//                    mmm.msgTitle = @"听说你过的不好，我就放心了";
-//                    mmm.msgid = [NSString stringWithFormat:@"%d",j];
-//                    [marr addObject:mmm];
-//                }
-//                msg.msgArr = marr;
-//            }
-//                break;
-//                
-//            default:
-//                break;
-//        }
-//        
-//        [self.messages addObject:msg];
-//
-//    }
-//    
-//    [self.tableView reloadData];
+    NSMutableArray*marr = [[FMDBShareManager getAllServiceMessageByServiceId:self.conversionModel.converseId andPageNumber:1] mutableCopy];
+    for (int i=0; i<marr.count; i++) {
+        
+        ZMServiceMessage*msg = marr[0];
+        NSArray*dicArr = [msg.listJson jsonObject];
+        msg.list = [LGServiceList mj_objectArrayWithKeyValuesArray:dicArr];
+        
+        [self.messages addObject:msg];
+        
+    }
     
-    self.messages = [[FMDBShareManager getAllServices] mutableCopy];
     [self.tableView reloadData];
-    
 }
 
 #pragma mark - tableviewDelegate DataSource
@@ -145,7 +117,11 @@
 {
     
     ZMServiceMessage*msg = self.messages[indexPath.row];
+    
+    NSLog(@"msg.type = %ld",msg.type);
     switch (msg.type) {
+            
+            
         case ServiceMessageTypePurse:
         {
             ServicePurseCell *servicePurseCell = [tableView dequeueReusableCellWithIdentifier:@"ServicePurseCell"];

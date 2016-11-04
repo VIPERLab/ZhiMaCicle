@@ -380,7 +380,7 @@
         }
         case ZhiMa_Service_Message_Table: {
             tableName = ZhiMaService_Message_TableName;
-            fieldName = Service_Message_MemberField;
+            fieldName = Service_Message_MemberFields_Name;
             break;
         }
         case ZhiMa_Collection_Table: {
@@ -2543,7 +2543,7 @@
     optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Service_Message_Table];
     
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:optionStr,serviceId,messageModel.service.sid,messageModel.listJson];
+        BOOL success = [db executeUpdate:optionStr,serviceId,@(messageModel.timeStamp),messageModel.service.sid,@(messageModel.type),messageModel.listJson];
         if (success) {
             NSLog(@"插入 服务号消息数据库成功");
         } else {
@@ -2582,6 +2582,36 @@
             NSLog(@"插入服务号会话失败");
         }
     }];
+    
+    //判断是否存在该服务号基础信息
+    FMDatabaseQueue *serviceQueue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Table];
+    __block BOOL isexist = NO;
+    NSString *searchStr = [FMDBShareManager SearchTable:ZhiMa_Service_Table withOption:[NSString stringWithFormat:@"serviceId = '%@'",serviceId]];
+    [converseQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:searchStr];
+        while ([result next]) {
+            isexist = YES;
+        }
+    }];
+    
+    NSString *serviceStr;
+    if (isexist) {
+        NSLog(@"存在服务号基础信息表");
+        return;
+#warning 以后在做更新
+    }else{
+        NSLog(@"不存在服务号基础信息表");
+        serviceStr = [FMDBShareManager InsertDataInTable:ZhiMa_Service_Table];
+    }
+//    (id INTEGER PRIMARY KEY AUTOINCREMENT, avtarUrl TEXT NOT NULL, serviceName TEXT NOT NULL, functionDes TEXT NOT NULL, companyName TEXT NOT NULL, acceptMsg INTEGER, topChat INTEGER, serviceId TEXT NOT NULL)
+    [serviceQueue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:serviceStr,messageModel.croplogo,messageModel.servicename,messageModel.cropintro,messageModel.cropname,@(1),@(0),serviceId];
+        if (success) {
+            NSLog(@"插入服务号基础信息成功");
+        } else {
+            NSLog(@"插入服务号基础信息失败");
+        }
+    }];
 }
 
 
@@ -2597,13 +2627,15 @@
     NSMutableArray *dataArray = [NSMutableArray array];
 //    "type, msgid, time, detailMsgTime, msgTitle, msgContent, msgPicUrl, msgUrl, serviceId"
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Message_Table];
-    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_Service_Message_Table withOption:[NSString stringWithFormat:@"serviceId = '%@' and id > 0 order by id desc LIMIT (%zd-1)*5,5",serviceId,page]];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_Service_Message_Table withOption:[NSString stringWithFormat:@"serviceId = '%@' order by id desc LIMIT (%zd-1)*5,5",serviceId,page]];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
             ZMServiceMessage *model = [[ZMServiceMessage alloc] init];
             model.service.sid = [result stringForColumn:@"msgid"];
             model.listJson = [result stringForColumn:@"listJson"];
+            model.timeStamp = [result intForColumn:@"time"];
+            model.type = [result intForColumn:@"msgType"];
             [dataArray addObject:model];
         }
     }];
