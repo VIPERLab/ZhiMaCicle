@@ -110,6 +110,9 @@
 //    
 //    [self.tableView reloadData];
     
+    self.messages = [[FMDBShareManager getAllServices] mutableCopy];
+    [self.tableView reloadData];
+    
 }
 
 #pragma mark - tableviewDelegate DataSource

@@ -75,7 +75,13 @@
 
 - (void)setMessage:(ZMServiceMessage *)message
 {
-//    [self.purseIV sd_setImageWithURL:[NSURL URLWithString:message.msgPicUrl]];
+    NSMutableArray *serviceList = [NSMutableArray array];
+    serviceList = [LGServiceList mj_objectArrayWithKeyValuesArray:message.listJson];
+    LGServiceList *listModel;
+    if (serviceList.count) {
+        listModel = serviceList[0];
+    }
+    [self.purseIV sd_setImageWithURL:[NSURL URLWithString:listModel.picurl]];
     self.titleLabel.text = message.service.text;
 //    self.contentLabel.text = message.msgContent;
     

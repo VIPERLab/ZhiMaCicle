@@ -274,10 +274,12 @@
         case ZhiMa_Service_Table: {
             tableName = ZhiMaService_TableName;
             fieldName = Service_MemberFields_Name;
+            break;
         }
         case ZhiMa_Service_Message_Table: {
             tableName = ZhiMaService_Message_TableName;
             fieldName = Service_Message_MemberField;
+            break;
         }
         default: {
             NSLog(@"无效参数");
@@ -2531,7 +2533,7 @@
     }
 //    @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent"
     [converseQueue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:converseStr,messageModel.timeStamp,ConversionTypeActivity,@(1),@(0),@(0),messageModel.cropname,messageModel.croplogo,messageModel.service.text,messageModel.type];
+        BOOL success = [db executeUpdate:converseStr,@(messageModel.timeStamp),ConversionTypeActivity,@(1),@(0),@(0),messageModel.cropname,messageModel.croplogo,messageModel.service.text,messageModel.type];
         if (success) {
             NSLog(@"插入服务号会话成功");
         } else {

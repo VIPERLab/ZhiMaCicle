@@ -304,7 +304,6 @@ static SocketManager *manager = nil;
             }];
             ZMServiceMessage *serviceMsg = [[ZMServiceMessage alloc] init];
             serviceMsg = [serviceMsg mj_setKeyValues:responceData[@"data"]];
-            serviceMsg.type = serviceMsg.service.type;
             //手动设置推送消息类型（红包活动，单条文章，多条文章）
             if (messageType == MessageTypeActivityPurse) {
                 serviceMsg.type = ServiceMessageTypePurse;
@@ -315,6 +314,8 @@ static SocketManager *manager = nil;
                     serviceMsg.type = ServiceMessageTypeMoreThanOne;
                 }
             }
+            serviceMsg.service.type = serviceMsg.type;
+            serviceMsg.listJson = [serviceMsg.listJson mj_JSONString];
 #warning 将红包消息存到数据库, 发送通知 更新会话页面
             [FMDBShareManager saveServiceMessage:serviceMsg byServiceId:serviceMsg.cropid];
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];

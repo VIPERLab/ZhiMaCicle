@@ -82,7 +82,7 @@ static LGShareToolBar *toolBar = nil;
         //标题
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, btnWH + 7, iconW, 21)];
         title.text = titles[i];
-        title.textColor = GRAYCOLOR;
+        title.textColor = RGB(53, 53, 53);
         title.font = [UIFont systemFontOfSize:12];
         title.textAlignment = NSTextAlignmentCenter;
         [iconView addSubview:title];
