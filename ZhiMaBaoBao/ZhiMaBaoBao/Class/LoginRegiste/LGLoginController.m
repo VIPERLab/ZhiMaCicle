@@ -159,12 +159,7 @@
                 userInfo.newMessageVoiceNotify = YES;
             }
             
-            
-            
             [JPUSHService setTags:[NSSet setWithObject:userInfo.userID] alias:userInfo.userID callbackSelector:nil object:nil];
-            
-            
-            
             
             [userInfo save];
             
