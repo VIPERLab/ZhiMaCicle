@@ -24,7 +24,11 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 /** 服务号logo*/
 @property (nonatomic, copy) NSString *croplogo;
 /** 服务号名称*/
+@property (nonatomic, copy) NSString *servicename;
+/** 帐号主体*/
 @property (nonatomic, copy) NSString *cropname;
+/** 公司简介*/
+@property (nonatomic, copy) NSString *cropintro;
 /** 服务号消息类型*/
 @property (nonatomic, assign) ServiceMessageType type;
 
