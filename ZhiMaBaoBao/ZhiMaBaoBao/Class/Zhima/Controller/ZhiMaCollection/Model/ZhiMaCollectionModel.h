@@ -30,4 +30,6 @@
 
 @property (nonatomic, assign) CGFloat cellHeight;
 
+@property (nonatomic, assign) BOOL isDownload;
+
 @end

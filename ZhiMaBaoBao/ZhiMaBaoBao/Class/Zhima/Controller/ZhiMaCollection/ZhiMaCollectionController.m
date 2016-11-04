@@ -10,11 +10,12 @@
 #import "ZhiMaCollectionHeaderView.h"
 #import "ZhiMaCollectionCell.h"
 
+#import "PKFullScreenPlayerViewController.h"
 #import "ZhiMaCollectionDetailController.h"
 
 #define ZhiMaCollectionCellReusedID @"ZhiMaCollectionCellReusedID"
 
-@interface ZhiMaCollectionController () <UITableViewDelegate,UITableViewDataSource>
+@interface ZhiMaCollectionController () <UITableViewDelegate,UITableViewDataSource,ZhiMaCollectionCellDelegate>
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @end
 
@@ -82,6 +83,7 @@
     ZhiMaCollectionModel *model = self.dataArray[indexPath.section];
     ZhiMaCollectionCell *cell = [tableView dequeueReusableCellWithIdentifier:ZhiMaCollectionCellReusedID forIndexPath:indexPath];
     cell.model = model;
+    cell.delegate = self;
     return cell;
 }
 
@@ -112,36 +114,65 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        return YES;
-    }
-    return NO;
+    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        if (editingStyle == UITableViewCellEditingStyleDelete) {
-            // Delete the row from the data source.
-            ZhiMaCollectionModel *model = self.dataArray[indexPath.row];
-            // 删除
-            [LGNetWorking deletedCircleCollectionWithSessionId:USERINFO.sessionId andCollectionId:model.ID success:^(ResponseData *responseData) {
-                
-                if (responseData.code != 0) {
-                    return ;
-                }
-                
-                [LCProgressHUD showSuccessText:@"删除成功"];
-                [self.dataArray removeObject:model];
-                [_tableView reloadData];
-                
-            } failure:^(ErrorData *error) {
-                
-            }];
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source.
+        ZhiMaCollectionModel *model = self.dataArray[indexPath.section];
+        // 删除
+        [LGNetWorking deletedCircleCollectionWithSessionId:USERINFO.sessionId andCollectionId:model.ID success:^(ResponseData *responseData) {
             
-        }
+            if (responseData.code != 0) {
+                return ;
+            }
+            
+            [LCProgressHUD showSuccessText:@"删除成功"];
+            [self.dataArray removeObject:model];
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationTop];
+            
+        } failure:^(ErrorData *error) {
+            
+        }];
     }
 }
 
+
+#pragma mark - vedioButtonDidClick 
+- (void)vedioButtonDidClick:(ZhiMaCollectionModel *)model {
+    NSArray *strArray = [model.content componentsSeparatedByString:@"/"];
+    NSString *path = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,[strArray lastObject]];
+    if (model.isDownload) {
+        PKFullScreenPlayerViewController *player = [[PKFullScreenPlayerViewController alloc] initWithVideoPath:path previewImage:[UIImage imageNamed:@"Image_placeHolder"]];
+        [self presentViewController:player animated:YES completion:nil];
+        return;
+    } else {
+        [self downloadVedio:model];
+    }
+}
+
+- (void)downloadVedio:(ZhiMaCollectionModel *)model {
+    NSArray *strArray = [model.content componentsSeparatedByString:@"/"];
+    NSString*path = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,[strArray lastObject]];
+    [LGNetWorking chatDownloadVideo:path urlStr:model.content block:^(NSDictionary *responseData) {
+        
+        model.isDownload = YES;
+        PKFullScreenPlayerViewController *player = [[PKFullScreenPlayerViewController alloc] initWithVideoPath:path previewImage:[UIImage imageNamed:@"Image_placeHolder"]];
+        [self presentViewController:player animated:YES completion:nil];
+        return ;
+        
+    } progress:^(NSProgress *progress) {
+        
+        
+    } failure:^(NSError *error) {
+        
+        [LCProgressHUD showFailureText:@"视频加载失败"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+        });
+    }];
+}
 
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {

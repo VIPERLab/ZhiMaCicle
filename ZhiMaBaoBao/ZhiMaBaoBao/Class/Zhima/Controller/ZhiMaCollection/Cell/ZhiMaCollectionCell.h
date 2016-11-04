@@ -8,9 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "ZhiMaCollectionModel.h"
+@class ZhiMaCollectionModel;
+
+@protocol ZhiMaCollectionCellDelegate <NSObject>
+
+@optional
+- (void)vedioButtonDidClick:(ZhiMaCollectionModel *)model;
+
+
+@end
 
 @interface ZhiMaCollectionCell : UITableViewCell
 
 @property (nonatomic, weak) ZhiMaCollectionModel *model;
+
+@property (nonatomic, weak) id <ZhiMaCollectionCellDelegate> delegate;
 
 @end

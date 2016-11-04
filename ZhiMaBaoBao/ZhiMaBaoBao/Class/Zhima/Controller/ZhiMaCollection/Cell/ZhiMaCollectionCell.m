@@ -22,6 +22,7 @@
 @property (nonatomic, strong) HKPieChartView *progressView; // 进度圈
 @property (nonatomic, strong) UIImageView *holderIV; // 视频未下载前显示视频的第一帧图片
 @property (nonatomic, strong) UIButton *sendFailBtn; // 上传失败展示按钮
+@property (nonatomic, assign) CGFloat lastProgress;
 
 @end
 
@@ -32,6 +33,7 @@
     UILabel *_timeLabel;
     UIImageView *_picImageView;
     UIView *_voiceView;
+    BOOL _isDownload;
 }
 
 - (void)awakeFromNib {
@@ -48,6 +50,8 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self setupView];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerError) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerError) name:kChatViewControllerPopOut object:nil];
     }
     return self;
 }
@@ -90,15 +94,16 @@
     [self addSubview:_voiceView];
     
     [self setVideoView];
-    
 }
 
 - (void)setVideoView {
+    
     _playView = [[PKFullScreenPlayerView alloc] init];
     _playView.isMuted = YES;
     _playView.contentMode =  UIViewContentModeScaleAspectFill;
     _playView.layer.cornerRadius = 3;
     _playView.layer.masksToBounds = YES;
+    
     [self addSubview:_playView];
     
     _holderIV = [[UIImageView alloc]initWithFrame:CGRectZero];
@@ -109,11 +114,12 @@
     
     _playBtn = [[UIButton alloc] init];
     [_playBtn setImage:[UIImage imageNamed:@"PK_PlayBtn"] forState:UIControlStateNormal];
-    _playBtn.hidden = YES;
+    _playBtn.hidden = NO;
     [_playBtn addTarget:self action:@selector(btnAction_play) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_playBtn];
     
     _progressView = [[HKPieChartView alloc] init];
+    _progressView.userInteractionEnabled = NO;
     [self addSubview:_progressView];
     
     _sendFailBtn = [[UIButton alloc] init];
@@ -122,12 +128,7 @@
     _sendFailBtn.hidden = YES;
     [self addSubview:_sendFailBtn];
     
-    
-//    self.lastProgress = 0.0;
-    
-    //添加长按手势
-    UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
-    [self addGestureRecognizer:longGesture];
+    self.lastProgress = 0.0;
 }
 
 - (void)setModel:(ZhiMaCollectionModel *)model {
@@ -159,14 +160,44 @@
         _contentLabel.hidden = YES;
         _voiceView.hidden = YES;
         
-        [_holderIV sd_setImageWithURL:[NSURL URLWithString:model.pic_name] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
-        
+        [_holderIV sd_setImageWithURL:[NSURL URLWithString:_model.pic_name] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+//        NSArray *strArray = [self.model.content componentsSeparatedByString:@"/"];
+//        NSString*path = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,[strArray lastObject]];
+//        _playView.videoPath = path;
+
     }
     
     [self setNeedsDisplay];
 }
 
+#pragma mark - vedioAction 
+- (void)btnAction_play {
+//    self.playBtn.hidden = YES;
+//    if (_isDownload) {
+//        [self.playView play];
+//    }else{
+//        [self downloadVedio];
+//    }
+    if ([self.delegate respondsToSelector:@selector(vedioButtonDidClick:)]) {
+        [self.delegate vedioButtonDidClick:self.model];
+    }
+}
 
+
+- (void)playerError
+{
+//    NSLog(@"暂停了");
+//    if (self.playBtn.hidden && _isDownload) {
+//        self.playBtn.hidden = NO;
+//    }
+//    
+//    [self.playView pause];
+    
+}
+
+
+
+#pragma mark - layout布局
 - (void)layoutSubviews {
     
     CGFloat iconW = 32;
@@ -203,16 +234,16 @@
         CGFloat playerY = CGRectGetMaxY(_userIcon.frame) + 10;
         CGFloat playerW = 170;
         CGFloat playerH = playerW;
+        
         _playView.frame = CGRectMake(playerX, playerY, playerW, playerH);
         
         _holderIV.frame = CGRectMake(playerX, playerY, playerW, playerH);
         
-        _playBtn.frame = CGRectMake(playerX, playerY, 50, 50);
+        _playBtn.frame = CGRectMake((CGRectGetWidth(_playView.frame) - 50) * 0.5 + playerX, (CGRectGetHeight(_playView.frame) - 50)* 0.5 + playerY, 50, 50);
         
-        _sendFailBtn.frame = CGRectMake(playerX, playerY, 50, 50);
-        
-        _progressView.frame = CGRectMake(playerX, playerY, 50, 50);
-        
+        _sendFailBtn.frame = CGRectMake((CGRectGetWidth(_playView.frame) - 50) * 0.5 + playerX, (CGRectGetHeight(_playView.frame) - 50)* 0.5 + playerY, 50, 50);
+
+        _progressView.frame = CGRectMake((CGRectGetWidth(_playView.frame) - 50) * 0.5 + playerX, (CGRectGetHeight(_playView.frame) - 50)* 0.5 + playerY, 50, 50);
         
     } else if (self.model.type == 5) { // 语音
         CGFloat voiceX = iconX;
