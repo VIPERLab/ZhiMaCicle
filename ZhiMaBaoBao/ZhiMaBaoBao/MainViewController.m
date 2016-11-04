@@ -73,9 +73,9 @@
     
     [LGNetWorking verfiryAppStatues:bundleVersion success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
-            
+            //返回值 0 为隐藏钱包 1 为打开钱包
             UserInfo *info = [UserInfo read];
-            info.hidePurse = [responseData.data boolValue];
+            info.hidePurse = ![responseData.data boolValue];
             [info save];
         }
 
