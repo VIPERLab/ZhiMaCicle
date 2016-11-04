@@ -185,12 +185,14 @@
                     tableName = ZhiMaService_TableName;
                     tableField = Service_MemberField;
                     service_DB = db_Queue;
+                    break;
                 }
                     
                 case ZhiMa_Service_Message_Table: {         //服务号消息表
                     tableName = ZhiMaService_Message_TableName;
                     tableField = Service_Message_MemberField;
                     service_Message_DB = db_Queue;
+                    break;
                 }
                 default:{
                     NSLog(@"无效参数");

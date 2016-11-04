@@ -8,9 +8,20 @@
 
 #import "ZhiMaCollectionCell.h"
 #import "TQRichTextView.h"
+
 #import "ZhiMaCollectionVoiceTypeView.h"
+#import "PKFullScreenPlayerView.h"
+#import "UIImage+PKShortVideoPlayer.h"
+#import "HKPieChartView.h"
+
+#import <AVFoundation/AVFoundation.h>
 
 @interface ZhiMaCollectionCell ()
+@property (nonatomic, strong) PKFullScreenPlayerView * playView; //视频播放view
+@property (nonatomic, strong) UIButton *playBtn; // 播放按钮
+@property (nonatomic, strong) HKPieChartView *progressView; // 进度圈
+@property (nonatomic, strong) UIImageView *holderIV; // 视频未下载前显示视频的第一帧图片
+@property (nonatomic, strong) UIButton *sendFailBtn; // 上传失败展示按钮
 
 @end
 
@@ -78,6 +89,45 @@
     _voiceView.backgroundColor = [UIColor colorFormHexRGB:@"f3f4f5"];
     [self addSubview:_voiceView];
     
+    [self setVideoView];
+    
+}
+
+- (void)setVideoView {
+    _playView = [[PKFullScreenPlayerView alloc] init];
+    _playView.isMuted = YES;
+    _playView.contentMode =  UIViewContentModeScaleAspectFill;
+    _playView.layer.cornerRadius = 3;
+    _playView.layer.masksToBounds = YES;
+    [self addSubview:_playView];
+    
+    _holderIV = [[UIImageView alloc]initWithFrame:CGRectZero];
+    _holderIV.contentMode =  UIViewContentModeScaleAspectFill;
+    _holderIV.layer.cornerRadius = 3;
+    _holderIV.layer.masksToBounds = YES;
+    [self addSubview:_holderIV];
+    
+    _playBtn = [[UIButton alloc] init];
+    [_playBtn setImage:[UIImage imageNamed:@"PK_PlayBtn"] forState:UIControlStateNormal];
+    _playBtn.hidden = YES;
+    [_playBtn addTarget:self action:@selector(btnAction_play) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_playBtn];
+    
+    _progressView = [[HKPieChartView alloc] init];
+    [self addSubview:_progressView];
+    
+    _sendFailBtn = [[UIButton alloc] init];
+    [_sendFailBtn setImage:[UIImage imageNamed:@"sendFail"] forState:UIControlStateNormal];
+    [_sendFailBtn addTarget:self action:@selector(reloadViewAction) forControlEvents:UIControlEventTouchUpInside];
+    _sendFailBtn.hidden = YES;
+    [self addSubview:_sendFailBtn];
+    
+    
+//    self.lastProgress = 0.0;
+    
+    //添加长按手势
+    UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
+    [self addGestureRecognizer:longGesture];
 }
 
 - (void)setModel:(ZhiMaCollectionModel *)model {
@@ -104,7 +154,16 @@
         _picImageView.hidden = YES;
         _contentLabel.hidden = YES;
         _voiceView.hidden = NO;
+    } else if (model.type == 4) { // 视频样式
+        _picImageView.hidden = YES;
+        _contentLabel.hidden = YES;
+        _voiceView.hidden = YES;
+        
+        [_holderIV sd_setImageWithURL:[NSURL URLWithString:model.pic_name] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+        
     }
+    
+    [self setNeedsDisplay];
 }
 
 
@@ -124,13 +183,43 @@
     CGFloat nameY = _userIcon.center.y - nameH * 0.5;
     _userName.frame = CGRectMake(nameX, nameY, nameW, nameH);
     
-    CGFloat contentX = iconX;
-    CGFloat contentY = CGRectGetMaxY(_userIcon.frame) + 10;
-    CGFloat contentW = CGRectGetWidth(self.frame) - contentX * 2;
-    float contentH = [_model.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(contentW, MAXFLOAT)].height;
-    if (![_model.content isEqualToString:@""]) {
-        contentH = [TQRichTextView getRechTextViewHeightWithText:_contentLabel.text viewWidth:contentW font:[UIFont systemFontOfSize:15] lineSpacing:1.5].height;
-        [_contentLabel setFrame:CGRectMake(contentX, contentY, contentW, contentH)];
+    if (self.model.type == 1) { //文字
+        CGFloat contentX = iconX;
+        CGFloat contentY = CGRectGetMaxY(_userIcon.frame) + 10;
+        CGFloat contentW = CGRectGetWidth(self.frame) - contentX * 2;
+        float contentH = [_model.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(contentW, MAXFLOAT)].height;
+        if (_model.content.length) {
+            contentH = [TQRichTextView getRechTextViewHeightWithText:_contentLabel.text viewWidth:contentW font:[UIFont systemFontOfSize:15] lineSpacing:1.5].height;
+            [_contentLabel setFrame:CGRectMake(contentX, contentY, contentW, contentH)];
+        }
+    } else if (self.model.type == 3) {//图片
+        CGFloat picX = iconX;
+        CGFloat picY = CGRectGetMaxY(_userIcon.frame) + 10;
+        CGFloat picW = 240;
+        CGFloat picH = 140;
+        _picImageView.frame = CGRectMake(picX, picY, picW, picH);
+    } else if (self.model.type == 4) { // 视频
+        CGFloat playerX = iconX;
+        CGFloat playerY = CGRectGetMaxY(_userIcon.frame) + 10;
+        CGFloat playerW = 170;
+        CGFloat playerH = playerW;
+        _playView.frame = CGRectMake(playerX, playerY, playerW, playerH);
+        
+        _holderIV.frame = CGRectMake(playerX, playerY, playerW, playerH);
+        
+        _playBtn.frame = CGRectMake(playerX, playerY, 50, 50);
+        
+        _sendFailBtn.frame = CGRectMake(playerX, playerY, 50, 50);
+        
+        _progressView.frame = CGRectMake(playerX, playerY, 50, 50);
+        
+        
+    } else if (self.model.type == 5) { // 语音
+        CGFloat voiceX = iconX;
+        CGFloat voiceW = CGRectGetWidth(self.frame) - iconX * 2;
+        CGFloat voiceH = 60;
+        CGFloat voiceY = (CGRectGetHeight(self.frame) - (CGRectGetMaxY(_userIcon.frame) + 10 - voiceH)) * 0.5;
+        _voiceView.frame = CGRectMake(voiceX, voiceY, voiceW, voiceH);
     }
     
     
@@ -140,17 +229,6 @@
     CGFloat timeY = nameY;
     _timeLabel.frame = CGRectMake(timeX, timeY, timeW, timeH);
     
-    CGFloat picX = iconX;
-    CGFloat picY = contentY;
-    CGFloat picW = 240;
-    CGFloat picH = 140;
-    _picImageView.frame = CGRectMake(picX, picY, picW, picH);
-    
-    CGFloat voiceX = contentX;
-    CGFloat voiceW = contentW;
-    CGFloat voiceH = 60;
-    CGFloat voiceY = (CGRectGetHeight(self.frame) - (CGRectGetMaxY(_userIcon.frame) + 10 - voiceH)) * 0.5;
-    _voiceView.frame = CGRectMake(voiceX, voiceY, voiceW, voiceH);
     
     
 }

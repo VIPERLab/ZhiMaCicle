@@ -39,6 +39,8 @@
         return 220;
     } else if (self.type == 5) { // 语音
         return 150;
+    } else if (self.type == 4) { // 视频类型
+        return 250;
     }
     return 0;
 }

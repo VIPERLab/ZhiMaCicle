@@ -1187,7 +1187,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 //收藏
 - (void)keepMessageWithIndexPath:(NSIndexPath *)indexPath{
     LGMessage *message = self.messages[indexPath.row];
-    int type;
+    int type = 0;
     NSString *content;
     NSString *smallImg;
     NSString *collectionId;
@@ -1220,16 +1220,30 @@ static NSString *const reuseIdentifier = @"messageCell";
             
         }];
         return;
+    } else if (message.type == MessageTypeText || message.type == MessageTypeImage) {
+        [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:content andSmallImg:smallImg andBigImage:@"" andSource:@"" andAccount:collectionId andMsgId:message.msgid andFcId:@"" success:^(ResponseData *responseData) {
+            if (responseData.code != 0) {
+                [LCProgressHUD showFailureText:responseData.msg];
+                return ;
+            }
+            [LCProgressHUD showSuccessText:@"收藏成功"];
+        } failure:^(ErrorData *error) {
+            NSLog(@"%@",error.msg);
+        }];
+    } else if (message.type == MessageTypeVideo) {
+        type = 4;
+        NSLog(@"小视频收藏");
+        NSLog(@"%@,%@, %@",message.holderImageUrlString, message.videoDownloadUrl,message.text);
+        [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:message.videoDownloadUrl andSmallImg:message.holderImageUrlString andBigImage:message.holderImageUrlString andSource:@"" andAccount:collectionId andMsgId:message.msgid andFcId:@"" success:^(ResponseData *responseData) {
+            if (responseData.code != 0) {
+                [LCProgressHUD showFailureText:responseData.msg];
+                return ;
+            }
+            [LCProgressHUD showSuccessText:@"收藏成功"];
+        } failure:^(ErrorData *error) {
+            NSLog(@"%@",error.msg);
+        }];
     }
-    [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:content andSmallImg:smallImg andBigImage:@"" andSource:@"" andAccount:collectionId andMsgId:message.msgid andFcId:@"" success:^(ResponseData *responseData) {
-        if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:responseData.msg];
-            return ;
-        }
-        [LCProgressHUD showSuccessText:@"收藏成功"];
-    } failure:^(ErrorData *error) {
-        NSLog(@"%@",error.msg);
-    }];
 }
 
 //删除
