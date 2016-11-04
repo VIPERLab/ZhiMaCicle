@@ -15,9 +15,16 @@
 //富文本
 #import "TQRichTextView.h"
 #import "ForwardMsgController.h"
-
+// 语音相关
 #import "AmrPlayerReader.h"
+
+//图片相关
 #import "SDPhotoBrowser.h"
+
+//视频相关
+#import "PKFullScreenPlayerView.h"
+#import "UIImage+PKShortVideoPlayer.h"
+#import "HKPieChartView.h"
 
 @interface ZhiMaCollectionDetailController () <KXActionSheetDelegate,TQRichTextViewDelegate,SDPhotoBrowserDelegate,FileReaderForMLAudioPlayer>
 @property (nonatomic, strong) AmrPlayerReader *amrReader;
@@ -34,7 +41,7 @@
     NSString *_voiceFilePath;
     UIProgressView *_progessView;
     UIButton *_playButton;
-    
+    PKFullScreenPlayerView *_playView;
     double maxTime;
     double indexTime;
 }
@@ -91,9 +98,12 @@
         }];
     } else if (self.model.type == 5) { //语音类型
         [self setVoiceType];
+    } else if (self.model.type == 4) { //视频类型
+        [self setVedioType];
     }
 }
 
+#pragma mark - 文本类型布局
 // 设置文本类型
 - (void)setTextType {
     TQRichTextView *contentLabel = [[TQRichTextView alloc] init];
@@ -117,6 +127,7 @@
     _scrollView.contentSize = CGSizeMake(ScreenWidth, CGRectGetMaxY(collectionLabel.frame));
 }
 
+#pragma mark - 图片类型布局
 // 设置图片类型布局
 - (void)setupPicWithImage:(UIImage *)image {
     if (image == nil) {
@@ -152,7 +163,7 @@
     _scrollView.contentSize = CGSizeMake(ScreenWidth, height);
 }
 
-
+#pragma mark - 语音类型布局
 // 设置语音类型布局
 - (void)setVoiceType {
     
@@ -222,12 +233,39 @@
         [self.player stopPlaying];
         [_timer invalidate];
     }
+    if (_playView) {
+        [_playView pause];
+    }
 }
 
-- (void)dealloc {
+- (void)viewWillAppear:(BOOL)animated {
+    if (_playView) {
+        [_playView play];
+    }
+}
+
+
+
+#pragma mark - 视频类型布局
+- (void)setVedioType {
+    NSArray *strArray = [self.model.content componentsSeparatedByString:@"/"];
+    NSString *path = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,[strArray lastObject]];
+    PKFullScreenPlayerView * playView = [[PKFullScreenPlayerView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(_bottomLineView.frame) + 11, ScreenWidth - 40, ScreenWidth - 40) videoPath:path previewImage:[UIImage imageNamed:@"Image_placeHolder"]];
+    _playView = playView;
+    [_scrollView addSubview:playView];
+    
+    
+    UILabel *collectionLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(playView.frame) + 20, ScreenWidth - 40, 30)];
+    collectionLabel.textColor = [UIColor colorFormHexRGB:@"bcbcbc"];
+    collectionLabel.font = [UIFont systemFontOfSize:15];
+    collectionLabel.text = [NSString stringWithFormat:@"收藏于%@",self.model.time];
+    [_scrollView addSubview:collectionLabel];
+    
+    CGFloat height = CGRectGetMaxY(collectionLabel.frame) > ScreenHeight ? CGRectGetMaxY(collectionLabel.frame) : (ScreenHeight - 64);
+    _scrollView.contentSize = CGSizeMake(ScreenWidth, height);
+    
     
 }
-
 
 #pragma mark - 播放相关
 // 播放录音

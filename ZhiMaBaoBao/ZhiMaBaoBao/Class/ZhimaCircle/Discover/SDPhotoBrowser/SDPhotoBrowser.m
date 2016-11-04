@@ -103,7 +103,7 @@
     NSString *str = url.absoluteString;
     
     if (self.fcId.length) {
-        [LGNetWorking collectionCircleListWithCollectionType:3 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:@"" andBigImage:str andSource:@"" andAccount:self.userId andMsgId:@"" andFcId:self.fcId success:^(ResponseData *responseData) {
+        [LGNetWorking collectionCircleListWithCollectionType:3 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:@"" andBigImage:str andSource:@"" andAccount:self.userId andMsgId:@"" andFcId:self.fcId andUsertype:@"4" success:^(ResponseData *responseData) {
             if (responseData.code != 0) {
                 [LCProgressHUD showFailureText:@"收藏失败"];
                 return ;
@@ -113,7 +113,8 @@
             
         }];
     } else if (self.msgId.length) {
-        [LGNetWorking collectionCircleListWithCollectionType:3 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:@"" andBigImage:str andSource:@"" andAccount:self.userId andMsgId:self.msgId andFcId:@"" success:^(ResponseData *responseData) {
+#warning 这里的userType 需要判断
+        [LGNetWorking collectionCircleListWithCollectionType:3 andSessionId:USERINFO.sessionId andConent:@"" andSmallImg:@"" andBigImage:str andSource:@"" andAccount:self.userId andMsgId:self.msgId andFcId:@"" andUsertype:@"1" success:^(ResponseData *responseData) {
             if (responseData.code != 0) {
                 [LCProgressHUD showFailureText:@"收藏失败"];
                 return ;

@@ -11,6 +11,7 @@
 @class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel,GroupUserModel;
 @class SDTimeLineCellModel,SDTimeLineCellCommentItemModel,SDTimeLineCellLikeItemModel;
 @class ZMServiceMessag,ServiceInfoModel;
+@class ZhiMaCollectionModel;
 
 //typedef void(^ResultBlock)(FMDatabaseQueue *db_Queue, NSString *operationStr);
 
@@ -37,7 +38,10 @@ typedef enum : NSUInteger {
     
     /* ----  服务号相关 ----  */
     ZhiMa_Service_Table,            //服务号表
-    ZhiMa_Service_Message_Table     //服务号信息表
+    ZhiMa_Service_Message_Table,    //服务号信息表
+    
+    /* ----  收藏相关 ----  */
+    ZhiMa_Collection_Table          //收藏表
     
 } ZhiMaSqliteTableType;
 
@@ -495,6 +499,44 @@ typedef enum : NSUInteger {
 - (void)deletedServiceMessageByServiceId:(NSString *)serviceId;
 
 
+#pragma mark - 收藏表
+//                    ------------   收藏表  ----------------
+
+/**
+ 保存所有的收藏模型
+
+ @param collectionArray 收藏模型数据
+ */
+- (void)saveCollectionWithCollectionArray:(NSArray <ZhiMaCollectionModel *>*)collectionArray;
+
+
+/**
+ 获取所有的收藏模型
+
+ @param userId 当前用户的用户id
+
+ @return 收藏模型数组
+ */
+- (NSArray <ZhiMaCollectionModel *>*)getAllCollectionsWithUserId:(NSString *)userId;
+
+
+/**
+ 根据收藏id获取收藏模型
+
+ @param collecionId 收藏id
+
+ @return 数据库中的收藏模型
+ */
+- (ZhiMaCollectionModel *)getCollectionModelWithModelId:(NSString *)collecionId;
+
+
+
+/**
+ 根据收藏id删除收藏模型
+
+ @param collectionId 收藏id
+ */
+- (void)deletedCollectionWithCollectionId:(NSString *)collectionId;
 
 
 @end

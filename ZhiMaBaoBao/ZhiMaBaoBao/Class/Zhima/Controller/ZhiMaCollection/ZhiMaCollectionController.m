@@ -31,7 +31,14 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self getResponData];
+    
+//    self.dataArray = [[FMDBShareManager getAllCollectionsWithUserId:USERINFO.userID] mutableCopy];
+//    if (!self.dataArray.count) {
+        [self getResponData];
+//    } else {
+//        [_tableView reloadData];
+//    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,8 +55,11 @@
             return ;
         }
         
-        self.dataArray = [ZhiMaCollectionModel mj_objectArrayWithKeyValuesArray:responseData.data];
-        
+        NSMutableArray *dataArray = [ZhiMaCollectionModel mj_objectArrayWithKeyValuesArray:responseData.data];
+        self.dataArray = dataArray;
+        dispatch_sync(dispatch_get_global_queue(0, 0), ^{
+            [FMDBShareManager saveCollectionWithCollectionArray:dataArray];
+        });
         
         [_tableView reloadData];
         
@@ -155,8 +165,9 @@
 - (void)downloadVedio:(ZhiMaCollectionModel *)model {
     NSArray *strArray = [model.content componentsSeparatedByString:@"/"];
     NSString*path = [NSString stringWithFormat:@"%@/%@",AUDIOPATH,[strArray lastObject]];
+    [LCProgressHUD showLoadingText:@"下载中"];
     [LGNetWorking chatDownloadVideo:path urlStr:model.content block:^(NSDictionary *responseData) {
-        
+        [LCProgressHUD hide];
         model.isDownload = YES;
         PKFullScreenPlayerViewController *player = [[PKFullScreenPlayerViewController alloc] initWithVideoPath:path previewImage:[UIImage imageNamed:@"Image_placeHolder"]];
         [self presentViewController:player animated:YES completion:nil];
@@ -166,11 +177,7 @@
         
         
     } failure:^(NSError *error) {
-        
         [LCProgressHUD showFailureText:@"视频加载失败"];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-
-        });
     }];
 }
 

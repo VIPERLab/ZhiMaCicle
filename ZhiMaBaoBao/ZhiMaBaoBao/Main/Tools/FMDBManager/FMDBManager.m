@@ -18,7 +18,7 @@
 #import "LGMessage.h"
 #import "ZMServiceMessage.h"
 #import "ServiceInfoModel.h"
-
+#import "ZhiMaCollectionModel.h"
 @implementation FMDBManager {
     // 朋友圈相关的表
     FMDatabaseQueue *circle_DB;
@@ -41,6 +41,9 @@
     //服务号相关的表
     FMDatabaseQueue *service_DB;
     FMDatabaseQueue *service_Message_DB;
+    
+    //收藏相关的表
+    FMDatabaseQueue *collection_DB;
 }
 
 + (instancetype)shareManager {
@@ -93,6 +96,9 @@
             
         case ZhiMa_Service_Message_Table:
             return service_Message_DB;
+            
+        case ZhiMa_Collection_Table:
+            return collection_DB;
             
         default:
             NSLog(@"无效参数");
@@ -194,6 +200,14 @@
                     service_Message_DB = db_Queue;
                     break;
                 }
+                    
+                case ZhiMa_Collection_Table: {
+                    tableName = ZhiMaCollection_TableName;
+                    tableField = Collection_MemberField;
+                    collection_DB = db_Queue;
+                    break;
+                }
+                    
                 default:{
                     NSLog(@"无效参数");
                     break;
@@ -283,6 +297,11 @@
             fieldName = Service_Message_MemberFields_Name;
             break;
         }
+        case ZhiMa_Collection_Table: {
+            tableName = ZhiMaCollection_TableName;
+            fieldName = Collection_MemberFields_Name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -364,6 +383,11 @@
             fieldName = Service_Message_MemberField;
             break;
         }
+        case ZhiMa_Collection_Table: {
+            tableName = ZhiMaCollection_TableName;
+            fieldName = Collection_MemberFields_Name;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -432,6 +456,10 @@
             tableName = ZhiMaService_Message_TableName;
             break;
         }
+        case ZhiMa_Collection_Table: {
+            tableName = ZhiMaCollection_TableName;
+            break;
+        }
         default: {
             NSLog(@"无效参数");
             return @"";
@@ -495,6 +523,10 @@
         }
         case ZhiMa_Service_Message_Table: {
             tableName = ZhiMaService_Message_TableName;
+            break;
+        }
+        case ZhiMa_Collection_Table: {
+            tableName = ZhiMaCollection_TableName;
             break;
         }
         default: {
@@ -581,6 +613,10 @@
         }
         case ZhiMa_Service_Message_Table: {
             tableName = ZhiMaService_Message_TableName;
+            break;
+        }
+        case ZhiMa_Collection_Table: {
+            tableName = ZhiMaCollection_TableName;
             break;
         }
         default: {
@@ -712,6 +748,9 @@
     //服务号相关的表
     [service_DB close];
     [service_Message_DB close];
+    
+    //关闭收藏表
+    [collection_DB close];
 }
 
 #pragma mark 获取数据源方法
@@ -2612,6 +2651,124 @@
             NSLog(@"删除消息成功");
         } else {
             NSLog(@"删除消息失败");
+        }
+    }];
+}
+
+#pragma mark - 收藏表
+//                    ------------   收藏表  ----------------
+
+/**
+ 保存所有的收藏模型
+ 
+ @param collectionArray 收藏模型数据
+ */
+- (void)saveCollectionWithCollectionArray:(NSArray <ZhiMaCollectionModel *>*)collectionArray {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Collection_Table];
+    for (ZhiMaCollectionModel *model in collectionArray) {
+        __block BOOL isExist = NO;
+        NSString *searchStr = [FMDBShareManager SearchTable:ZhiMa_Collection_Table withOption:[NSString stringWithFormat:@"collectionId = %@",model.ID]];
+        [queue inDatabase:^(FMDatabase *db) {
+            FMResultSet *result = [db executeQuery:searchStr];
+            while ([result next]) {
+                isExist = YES;
+            }
+        }];
+        
+        NSString *optionStr;
+        if (isExist) {
+//            NSString *option1 = [NSString stringWithFormat:@"isDownload = '%@'",@(model.isDownload)];
+//            optionStr = [FMDBShareManager alterTable:ZhiMa_Collection_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"collectionId = %@",model.ID]];
+            return;
+        } else {
+            optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Collection_Table];
+        }
+//        @"head, name, time, content, ID, type, pic_name, small_img, isDownload"
+        [queue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:optionStr,model.head,model.name,model.time,model.content,model.ID,@(model.type),model.pic_name,model.small_img,@(model.isDownload)];
+            if (success) {
+                NSLog(@"插入/更新 收藏表成功");
+            } else {
+                NSLog(@"插入/更新 收藏表失败");
+            }
+        }];
+        
+    }
+}
+
+
+/**
+ 获取所有的收藏模型
+ 
+ @param userId 当前用户的用户id
+ 
+ @return 收藏模型数组
+ */
+- (NSArray <ZhiMaCollectionModel *>*)getAllCollectionsWithUserId:(NSString *)userId {
+    NSMutableArray *dataArray = [NSMutableArray array];
+//    @"head, name, time, content, ID, type, pic_name, small_img, isDownload"
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Collection_Table];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_Collection_Table withOption:[NSString stringWithFormat:@"id > 0"]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:optionStr];
+        while ([result next]) {
+            ZhiMaCollectionModel *model = [[ZhiMaCollectionModel alloc] init];
+            model.head = [result stringForColumn:@"head"];
+            model.name = [result stringForColumn:@"name"];
+            model.content = [result stringForColumn:@"content"];
+            model.ID = [result stringForColumn:@"collectionId"];
+            model.pic_name = [result stringForColumn:@"pic_name"];
+            model.small_img = [result stringForColumn:@"small_img"];
+            model.isDownload = [result intForColumn:@"isDownload"];
+            [dataArray addObject:model];
+        }
+    }];
+    return [dataArray copy];
+}
+
+
+/**
+ 根据收藏id获取收藏模型
+ 
+ @param collecionId 收藏id
+ 
+ @return 数据库中的收藏模型
+ */
+- (ZhiMaCollectionModel *)getCollectionModelWithModelId:(NSString *)collecionId {
+    ZhiMaCollectionModel *model = [[ZhiMaCollectionModel alloc] init];
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Collection_Table];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_Collection_Table withOption:[NSString stringWithFormat:@"collectionId = '%@'",collecionId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:optionStr];
+        while ([result next]) {
+            model.head = [result stringForColumn:@"head"];
+            model.name = [result stringForColumn:@"name"];
+            model.content = [result stringForColumn:@"content"];
+            model.ID = [result stringForColumn:@"ID"];
+            model.pic_name = [result stringForColumn:@"pic_name"];
+            model.small_img = [result stringForColumn:@"small_img"];
+            model.isDownload = [result intForColumn:@"isDownload"];
+        }
+    }];
+    return model;
+}
+
+
+
+/**
+ 根据收藏id删除收藏模型
+ 
+ @param collectionId 收藏id
+ */
+- (void)deletedCollectionWithCollectionId:(NSString *)collectionId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Collection_Table];
+    NSString *deletedStr = [FMDBShareManager deletedTableData:ZhiMa_Collection_Table withOption:[NSString stringWithFormat:@"collectionId = '%@'",collectionId]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:deletedStr];
+        if (success) {
+            NSLog(@"删除收藏成功");
+        } else {
+            NSLog(@"删除收藏失败");
         }
     }];
 }

@@ -439,6 +439,9 @@
     //服务号相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_Service_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Service_Message_Table];
+    
+    //收藏相关的表
+    [FMDBShareManager creatTableWithTableType:ZhiMa_Collection_Table];
 }
 
 // 注册通知

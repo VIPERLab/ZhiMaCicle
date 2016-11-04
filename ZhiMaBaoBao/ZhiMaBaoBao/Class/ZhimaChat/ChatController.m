@@ -1205,10 +1205,19 @@ static NSString *const reuseIdentifier = @"messageCell";
     } else {
         collectionId = message.fromUid;
     }
-    if (message.type == MessageTypeAudio) {
+    
+    // 用户类型
+    NSString *userType = [NSString string];
+    if (self.converseType == ConversionTypeSingle) {
+        userType = @"1";
+    } else if (self.converseType == ConversionTypeGroupChat) {
+        userType = @"3";
+    }
+    
+    if (message.type == MessageTypeAudio) {  // 语音收藏
         NSString *filePath = [NSString stringWithFormat:@"%@%@",AUDIOPATH,message.text];
         
-        [LGNetWorking upLoadFileWithSeccessId:USERINFO.sessionId andCollectionType:@"5" andOppositeId:message.fromUid andMsgId:message.msgid andUserType:[NSString stringWithFormat:@"%zd",self.converseType +1] andPath:filePath success:^(ResponseData *responseData) {
+        [LGNetWorking upLoadFileWithSeccessId:USERINFO.sessionId andCollectionType:@"5" andOppositeId:message.fromUid andMsgId:message.msgid andUserType:userType andPath:filePath success:^(ResponseData *responseData) {
             
             if (responseData.code != 0) {
                 [LCProgressHUD showFailureText:responseData.msg];
@@ -1220,8 +1229,8 @@ static NSString *const reuseIdentifier = @"messageCell";
             
         }];
         return;
-    } else if (message.type == MessageTypeText || message.type == MessageTypeImage) {
-        [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:content andSmallImg:smallImg andBigImage:@"" andSource:@"" andAccount:collectionId andMsgId:message.msgid andFcId:@"" success:^(ResponseData *responseData) {
+    } else if (message.type == MessageTypeText || message.type == MessageTypeImage) { // 文字和图片收藏
+        [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:content andSmallImg:smallImg andBigImage:@"" andSource:@"" andAccount:collectionId andMsgId:message.msgid andFcId:@"" andUsertype:userType success:^(ResponseData *responseData) {
             if (responseData.code != 0) {
                 [LCProgressHUD showFailureText:responseData.msg];
                 return ;
@@ -1230,11 +1239,9 @@ static NSString *const reuseIdentifier = @"messageCell";
         } failure:^(ErrorData *error) {
             NSLog(@"%@",error.msg);
         }];
-    } else if (message.type == MessageTypeVideo) {
+    } else if (message.type == MessageTypeVideo) { // 小视频收藏
         type = 4;
-        NSLog(@"小视频收藏");
-        NSLog(@"%@,%@, %@",message.holderImageUrlString, message.videoDownloadUrl,message.text);
-        [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:message.videoDownloadUrl andSmallImg:message.holderImageUrlString andBigImage:message.holderImageUrlString andSource:@"" andAccount:collectionId andMsgId:message.msgid andFcId:@"" success:^(ResponseData *responseData) {
+        [LGNetWorking collectionCircleListWithCollectionType:type andSessionId:USERINFO.sessionId andConent:message.videoDownloadUrl andSmallImg:message.holderImageUrlString andBigImage:message.holderImageUrlString andSource:@"" andAccount:collectionId andMsgId:message.msgid andFcId:@"" andUsertype:userType success:^(ResponseData *responseData) {
             if (responseData.code != 0) {
                 [LCProgressHUD showFailureText:responseData.msg];
                 return ;

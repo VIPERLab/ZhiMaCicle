@@ -950,7 +950,7 @@
         // 调用收藏接口
         SDTimeLineCellModel *model = self.dataArray[self.currentEditingIndexthPath.row];
         NSLog(@"%@",self.contentLabel.text);
-        [LGNetWorking collectionCircleListWithCollectionType:1 andSessionId:USERINFO.sessionId andConent:self.contentLabel.text andSmallImg:@"" andBigImage:@"" andSource:@"" andAccount:model.userId andMsgId:@"" andFcId:model.circle_ID success:^(ResponseData *responseData) {
+        [LGNetWorking collectionCircleListWithCollectionType:1 andSessionId:USERINFO.sessionId andConent:self.contentLabel.text andSmallImg:@"" andBigImage:@"" andSource:@"" andAccount:model.userId andMsgId:@"" andFcId:model.circle_ID andUsertype:@"4" success:^(ResponseData *responseData) {
             if (responseData.code != 0) {
                 [LCProgressHUD showFailureText:@"收藏失败"];
                 return ;

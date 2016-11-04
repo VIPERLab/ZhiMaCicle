@@ -35,6 +35,8 @@
 /*服务号表*/
 #define ZhiMaService_TableName @"Service "
 #define ZhiMaService_Message_TableName @"ServiceMessage "
+/*收藏表*/
+#define ZhiMaCollection_TableName @"Collection "
 
 //  创建朋友圈table字段
 #define CircleField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_nick TEXT NOT NULL, circle_ID INTEGER, userID TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL, content_type INTEGER, article_link TEXT)"
@@ -96,10 +98,11 @@
 #define Service_MemberFields_Name @"avtarUrl, serviceName, functionDes, companyName, acceptMsg, topChat, serviceId"
 
 // 服务号消息相关
-//#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER, msgid TEXT NOT NULL, time INTEGER, detailMsgTime TEXT, msgTitle TEXT, msgContent TEXT, msgPicUrl TEXT, msgUrl TEXT,serviceId TEXT NOT NULL)"
-//#define Service_Message_MemberFields_Name @"type, msgid, time, detailMsgTime, msgTitle, msgContent, msgPicUrl, msgUrl, serviceId"
-
-
 #define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, serviceId TEXT NOT NULL, msgid TEXT NOT NULL, listJson TEXT NOT NULL)"
 #define Service_Message_MemberFields_Name @"serviceId, msgid, listJson"
+
+
+// 收藏相关
+#define Collection_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, head TEXT NOT NULL, name TEXT NOT NULL, time TEXT NOT NULL, content TEXT, collectionId TEXT NOT NULL, type INTEGER, pic_name TEXT, small_img TEXT, isDownload INTEGER)"
+#define Collection_MemberFields_Name @"head, name, time, content, collectionId, type, pic_name, small_img, isDownload"
 #endif /* FMDBManagerHeader_h */

@@ -11,6 +11,9 @@
 
 @interface ZhiMaCollectionDetailController : BaseViewController
 
+
 @property (nonatomic, weak) ZhiMaCollectionModel *model;
+
+@property (nonatomic, copy) NSString *vedioPath;
 
 @end
