@@ -9,6 +9,7 @@
 #import "KXWebViewController.h"
 
 @interface KXWebViewController () <UIWebViewDelegate>
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPressPan;
 
 @end
 
@@ -29,8 +30,26 @@
     webView.delegate = self;
     [self.view addSubview:webView];
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:_htmlURL]];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"userProtocal" ofType:@"html"];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:_htmlURL]];
     [webView loadRequest:request];
+    
+    //拦截webview手势
+    self.longPressPan = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longpress)];
+    self.longPressPan.minimumPressDuration = 0.3;
+    [webView addGestureRecognizer:self.longPressPan];
+    
+    UITapGestureRecognizer *twice = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(longpress)];
+    twice.numberOfTapsRequired = 2;
+    twice.numberOfTouchesRequired = 2;
+    [webView addGestureRecognizer:twice];
+
+}
+
+- (void)longpress{
     
 }
 

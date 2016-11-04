@@ -567,6 +567,7 @@
 		319EA0151DA4FB62000EE216 /* GroupChatListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA0141DA4FB62000EE216 /* GroupChatListController.m */; };
 		319EA0181DA62A44000EE216 /* GroupUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA0171DA62A44000EE216 /* GroupUserModel.m */; };
 		319EA01B1DA65214000EE216 /* RemarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319EA01A1DA65214000EE216 /* RemarkController.m */; };
+		31B3A0271DCC8DB40069D631 /* userProtocal.html in Resources */ = {isa = PBXBuildFile; fileRef = 31B3A0261DCC8DB40069D631 /* userProtocal.html */; };
 		31B7C6FE1D8E91F000F1883A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C6FD1D8E91F000F1883A /* MainViewController.m */; };
 		31B7C71D1D8E96A100F1883A /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7021D8E96A100F1883A /* PersonalCenterController.m */; };
 		31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C70E1D8E96A100F1883A /* ConversationController.m */; };
@@ -1786,6 +1787,7 @@
 		319EA0171DA62A44000EE216 /* GroupUserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupUserModel.m; sourceTree = "<group>"; };
 		319EA0191DA65214000EE216 /* RemarkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemarkController.h; sourceTree = "<group>"; };
 		319EA01A1DA65214000EE216 /* RemarkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemarkController.m; sourceTree = "<group>"; };
+		31B3A0261DCC8DB40069D631 /* userProtocal.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = userProtocal.html; sourceTree = "<group>"; };
 		31B7C6FC1D8E91F000F1883A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		31B7C6FD1D8E91F000F1883A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		31B7C7011D8E96A100F1883A /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
@@ -4291,6 +4293,7 @@
 		310B83231D8E7B0100A0F408 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				31B3A0261DCC8DB40069D631 /* userProtocal.html */,
 				3169576C1D91195100140126 /* Sounds */,
 				310B83241D8E7B0100A0F408 /* main.m */,
 				31B7C7261D8F816A00F1883A /* Zhimabaobao.pch */,
@@ -5510,6 +5513,7 @@
 				D53E3DCF1DB704FC001C663B /* PK_Camera_Turn@2x.png in Resources */,
 				319EA0121DA4E13D000EE216 /* AvtarAndNameCell.xib in Resources */,
 				31B7C7B81D90031D00F1883A /* YiKeyBoardView.xib in Resources */,
+				31B3A0271DCC8DB40069D631 /* userProtocal.html in Resources */,
 				31B7C75F1D8FB33E00F1883A /* LGRessetPassController.xib in Resources */,
 				319EA0091DA49A4F000EE216 /* CreateGroupListCell.xib in Resources */,
 				D540F9031DB871C000C9775A /* shadow@2x.png in Resources */,
