@@ -361,7 +361,7 @@
         }
         case ZhiMa_Service_Message_Table: {
             tableName = ZhiMaService_Message_TableName;
-            fieldName = Service_Message_MemberField;
+            fieldName = Service_Message_MemberFields_Name;
             break;
         }
         default: {
@@ -2558,7 +2558,7 @@
     NSMutableArray *dataArray = [NSMutableArray array];
 //    "type, msgid, time, detailMsgTime, msgTitle, msgContent, msgPicUrl, msgUrl, serviceId"
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Message_Table];
-    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_Service_Message_Table withOption:[NSString stringWithFormat:@"serviceId = '%@' and id > 0 order by id desc LIMIT (%zd-1)*5,5",serviceId,page]];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_Service_Message_Table withOption:[NSString stringWithFormat:@"serviceId = '%@' order by id desc LIMIT (%zd-1)*5,5",serviceId,page]];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
