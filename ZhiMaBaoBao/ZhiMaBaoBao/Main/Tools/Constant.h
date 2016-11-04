@@ -69,13 +69,6 @@
 //生成签名的apikey
 #define APIKEY @"apikey=yihezhaizhima20162018"
 
-//请将下面的KEY修改成自己申请的七牛相关信息
-#define ACCESSKEY @"iPbM0LbSWcdj9p1PgXk0CEAQIKup1LNiDTyGJMF7"
-#define BUBBULE @"ikantech"
-#define BUBBLUE_URL @"http://ikantech.qiniudn.com/"
-#define SECRETKEY @"TpsPj9dMHqVj6V9wAOukhJ-eeKXJlFKJPVW0L89O"
-
-
 //常用头文件
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
