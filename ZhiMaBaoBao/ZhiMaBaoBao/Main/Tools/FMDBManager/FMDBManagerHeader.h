@@ -100,6 +100,6 @@
 //#define Service_Message_MemberFields_Name @"type, msgid, time, detailMsgTime, msgTitle, msgContent, msgPicUrl, msgUrl, serviceId"
 
 //服务号消息 表
-#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, serviceId TEXT NOT NULL, time INTEGER ,msgid TEXT NOT NULL, listJson TEXT NOT NULL)"
-#define Service_Message_MemberFields_Name @"serviceId, time, msgid, listJson"
+#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, serviceId TEXT NOT NULL, time INTEGER ,msgid TEXT NOT NULL, msgType INTEGER NOT NULL,listJson TEXT NOT NULL)"
+#define Service_Message_MemberFields_Name @"serviceId, time, msgid, msgType, listJson"
 #endif /* FMDBManagerHeader_h */

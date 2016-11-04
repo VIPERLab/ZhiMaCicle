@@ -2504,7 +2504,7 @@
     optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Service_Message_Table];
     
     [queue inDatabase:^(FMDatabase *db) {
-        BOOL success = [db executeUpdate:optionStr,serviceId,@(messageModel.timeStamp),messageModel.service.sid,messageModel.listJson];
+        BOOL success = [db executeUpdate:optionStr,serviceId,@(messageModel.timeStamp),messageModel.service.sid,@(messageModel.type),messageModel.listJson];
         if (success) {
             NSLog(@"插入 服务号消息数据库成功");
         } else {
@@ -2596,6 +2596,7 @@
             model.service.sid = [result stringForColumn:@"msgid"];
             model.listJson = [result stringForColumn:@"listJson"];
             model.timeStamp = [result intForColumn:@"time"];
+            model.type = [result intForColumn:@"msgType"];
             [dataArray addObject:model];
         }
     }];
