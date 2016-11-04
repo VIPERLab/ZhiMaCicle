@@ -55,11 +55,34 @@
     
     [self addNotifications];
 
+    //检查更新
     [self judgeAPPVersion];
     
+    //检查是否隐藏红包
+    [self judgeHidePurse];
+    
     self.canPlayAudio = YES;
+    
 }
 
+//检查是否隐藏红包
+- (void)judgeHidePurse{
+    //bundle的版本
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *bundleVersion = infoDict[@"CFBundleShortVersionString"];
+    
+    [LGNetWorking verfiryAppStatues:bundleVersion success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            
+            UserInfo *info = [UserInfo read];
+            info.hidePurse = [responseData.data boolValue];
+            [info save];
+        }
+
+    } failure:^(ErrorData *error) {
+        
+    }];
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -287,9 +310,9 @@
                 
                 [self presentViewController:alertController animated:YES completion:nil];
             }else if (result == NSOrderedAscending){      //市场版本低于包的版本
-                UserInfo *info = [UserInfo read];
-                info.hidePurse = YES;
-                [info save];
+//                UserInfo *info = [UserInfo read];
+//                info.hidePurse = YES;
+//                [info save];
             }
             
         }
