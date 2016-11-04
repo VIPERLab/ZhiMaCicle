@@ -316,9 +316,10 @@ static SocketManager *manager = nil;
             }
             serviceMsg.service.type = serviceMsg.type;
             
-//            LGServiceList *listModel = serviceMsg.list[0];
-//            serviceMsg.listJson = [listModel mj_JSONString];
-            serviceMsg.listJson = [serviceMsg.list mj_JSONString];
+            //推送消息list数组
+            NSArray *lists = responceData[@"data"][@"list"];
+            serviceMsg.listJson = [lists mj_JSONString];
+            
             [FMDBShareManager saveServiceMessage:serviceMsg byServiceId:serviceMsg.cropid];
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
             userInfo[@"message"] = serviceMsg;

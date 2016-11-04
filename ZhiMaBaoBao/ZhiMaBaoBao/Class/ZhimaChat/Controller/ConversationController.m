@@ -8,9 +8,9 @@
 
 #import "ConversationController.h"
 #import "ChatController.h"
-
 #import "ConverseCell.h"
 #import "ConverseWithouNetworkCell.h"
+#import "ServiceViewController.h"
 
 
 #define ConverseCellReusedID @"ConverseCellReusedID"
@@ -55,6 +55,7 @@
 - (void)notification {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList:) name:kRecieveNewMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList:) name:kSendMessageStateCall object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshConversionList:) name:kRecieveActivityMsg object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRecovery) name:K_NetworkRecoveryNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withoutNetwork) name:K_WithoutNetWorkNotification object:nil];
 }
@@ -216,15 +217,23 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
-        ConverseModel *model = self.dataArray[indexPath.row];
-        ChatController *vc = [[ChatController alloc] init];
-        vc.conversionId = model.converseId;
-        vc.conversionName = model.converseName;
-        vc.converseType = model.converseType;
-        vc.numOfUnread = model.unReadCount;
-        vc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:vc animated:YES];
         
+        ConverseModel *model = self.dataArray[indexPath.row];
+        if (model.converseType == ConversionTypeActivity) {
+            ServiceViewController *vc = [[ServiceViewController alloc] init];
+            vc.conversionModel = model;
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            ChatController *vc = [[ChatController alloc] init];
+            vc.conversionId = model.converseId;
+            vc.conversionName = model.converseName;
+            vc.converseType = model.converseType;
+            vc.numOfUnread = model.unReadCount;
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+
         //清除未读消息
         [FMDBShareManager setConverseUnReadCountZero:model.converseId];
 //        model.unReadCount = -1;
@@ -232,7 +241,6 @@
     }
     
     // 点击了没有网络
-    
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
