@@ -82,8 +82,8 @@
         listModel = serviceList[0];
     }
     [self.purseIV sd_setImageWithURL:[NSURL URLWithString:listModel.picurl]];
-    self.titleLabel.text = message.service.text;
-//    self.contentLabel.text = message.msgContent;
+    self.titleLabel.text = listModel.subject;
+    self.contentLabel.text = listModel.subsubject;
     
     NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     self.timeLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];

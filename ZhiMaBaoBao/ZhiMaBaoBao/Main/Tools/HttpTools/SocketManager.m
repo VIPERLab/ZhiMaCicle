@@ -315,8 +315,11 @@ static SocketManager *manager = nil;
                 }
             }
             serviceMsg.service.type = serviceMsg.type;
-            serviceMsg.listJson = [serviceMsg.listJson mj_JSONString];
-#warning 将红包消息存到数据库, 发送通知 更新会话页面
+            
+            //推送消息list数组
+            NSArray *lists = responceData[@"data"][@"list"];
+            serviceMsg.listJson = [lists mj_JSONString];
+            
             [FMDBShareManager saveServiceMessage:serviceMsg byServiceId:serviceMsg.cropid];
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
             userInfo[@"message"] = serviceMsg;
