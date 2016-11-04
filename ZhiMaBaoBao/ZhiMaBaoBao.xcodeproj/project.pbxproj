@@ -603,6 +603,8 @@
 		31B7C7B71D90031D00F1883A /* YiKeyBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7B51D90031D00F1883A /* YiKeyBoardView.m */; };
 		31B7C7B81D90031D00F1883A /* YiKeyBoardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31B7C7B61D90031D00F1883A /* YiKeyBoardView.xib */; };
 		31B7C7BC1D900A6F00F1883A /* CallBottombar.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B7C7BB1D900A6F00F1883A /* CallBottombar.m */; };
+		31F9BB4A1DCB3E2100AB8637 /* LGServiceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31F9BB491DCB3E2100AB8637 /* LGServiceModel.m */; };
+		31F9BB4D1DCB3FD300AB8637 /* LGServiceList.m in Sources */ = {isa = PBXBuildFile; fileRef = 31F9BB4C1DCB3FD300AB8637 /* LGServiceList.m */; };
 		9D4903A7551EC331016D9D3A /* Pods_ZhiMaBaoBao.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF1AD7B94550139D0811527 /* Pods_ZhiMaBaoBao.framework */; };
 		D53E3DCA1DB704FC001C663B /* UIImage+PKShortVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DA31DB704FC001C663B /* UIImage+PKShortVideoPlayer.m */; };
 		D53E3DCB1DB704FC001C663B /* GLProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = D53E3DA61DB704FC001C663B /* GLProgram.m */; };
@@ -1853,6 +1855,10 @@
 		31B7C7B61D90031D00F1883A /* YiKeyBoardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = YiKeyBoardView.xib; path = ../View/YiKeyBoardView.xib; sourceTree = "<group>"; };
 		31B7C7BA1D900A6F00F1883A /* CallBottombar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallBottombar.h; sourceTree = "<group>"; };
 		31B7C7BB1D900A6F00F1883A /* CallBottombar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallBottombar.m; sourceTree = "<group>"; };
+		31F9BB481DCB3E2100AB8637 /* LGServiceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGServiceModel.h; sourceTree = "<group>"; };
+		31F9BB491DCB3E2100AB8637 /* LGServiceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGServiceModel.m; sourceTree = "<group>"; };
+		31F9BB4B1DCB3FD300AB8637 /* LGServiceList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGServiceList.h; sourceTree = "<group>"; };
+		31F9BB4C1DCB3FD300AB8637 /* LGServiceList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGServiceList.m; sourceTree = "<group>"; };
 		7AF1AD7B94550139D0811527 /* Pods_ZhiMaBaoBao.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZhiMaBaoBao.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D53E3DA21DB704FC001C663B /* UIImage+PKShortVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PKShortVideoPlayer.h"; sourceTree = "<group>"; };
 		D53E3DA31DB704FC001C663B /* UIImage+PKShortVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PKShortVideoPlayer.m"; sourceTree = "<group>"; };
@@ -5302,6 +5308,10 @@
 			children = (
 				D55B67451DC6DD5E00B47CAB /* ZMServiceMessage.h */,
 				D55B67461DC6DD5E00B47CAB /* ZMServiceMessage.m */,
+				31F9BB481DCB3E2100AB8637 /* LGServiceModel.h */,
+				31F9BB491DCB3E2100AB8637 /* LGServiceModel.m */,
+				31F9BB4B1DCB3FD300AB8637 /* LGServiceList.h */,
+				31F9BB4C1DCB3FD300AB8637 /* LGServiceList.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -6139,6 +6149,7 @@
 				04EA7AD31D910F89005E5425 /* DNSendButton.m in Sources */,
 				04EA7D941D912872005E5425 /* ZXBoolArray.m in Sources */,
 				315F78561DB5CC93008C8CA7 /* SendLocationController.m in Sources */,
+				31F9BB4A1DCB3E2100AB8637 /* LGServiceModel.m in Sources */,
 				D54D7F171DB5C30500347AA3 /* ZMImageView.m in Sources */,
 				D5461F271DC9E66900437B9F /* ZMPasswordView.m in Sources */,
 				31B7C78C1D8FE71100F1883A /* LGQueryResModel.m in Sources */,
@@ -6170,6 +6181,7 @@
 				04EA7DD91D912872005E5425 /* ZXRSSExpandedGeneralAppIdDecoder.m in Sources */,
 				311CEFB01D937BE700BBB1F9 /* MLAudioRecorder.m in Sources */,
 				041595D71DB70EC5002C0F66 /* KXKeyBoardView.m in Sources */,
+				31F9BB4D1DCB3FD300AB8637 /* LGServiceList.m in Sources */,
 				04EA7DA91D912872005E5425 /* ZXPlanarYUVLuminanceSource.m in Sources */,
 				D53E3DDB1DB704FC001C663B /* PKShortVideoRecorder.m in Sources */,
 				04EA7B281D912692005E5425 /* UIImage+YiExtension.m in Sources */,

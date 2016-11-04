@@ -14,6 +14,8 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 };
 
 #import <Foundation/Foundation.h>
+#import "LGServiceModel.h"
+#import "LGServiceList.h"
 
 @interface ZMServiceMessage : NSObject
 
@@ -23,31 +25,37 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 @property (nonatomic, copy) NSString *croplogo;
 /** 服务号名称*/
 @property (nonatomic, copy) NSString *cropname;
-
-/** 消息类型*/
+/** 服务号消息类型*/
 @property (nonatomic, assign) ServiceMessageType type;
+
+
 /** 消息id*/
-@property (nonatomic, copy) NSString *msgid;
+//@property (nonatomic, copy) NSString *msgid;
 /** 消息时间*/
-@property (nonatomic, copy) NSString *msgtime;
+//@property (nonatomic, copy) NSString *msgtime;
 /** 消息发送时间时间戳*/
 @property (nonatomic, assign) NSInteger timeStamp;
 
 
-/** 文章消息里面的时间*/
-@property (nonatomic, copy) NSString *detailMsgTime;
-/** 红包消息的红包id*/
-@property (nonatomic, copy) NSString *redId;
-/** 消息标题 （红包说明）*/
-@property (nonatomic, copy) NSString *msgTitle;
-/** 消息内容*/
-@property (nonatomic, copy) NSString *msgContent;
-/** 消息图片*/
-@property (nonatomic, copy) NSString *msgPicUrl;
-/** 消息详情的链接*/
-@property (nonatomic, copy) NSString *msgUrl;
+// ------------------------ service字段 --------------------------
+@property (nonatomic, strong) LGServiceModel *service;
+
+
+// ------------------------ list字段 -----------------------------
+///** 文章消息里面的时间*/
+//@property (nonatomic, copy) NSString *detailMsgTime;
+///** 红包消息的红包id*/
+//@property (nonatomic, copy) NSString *redId;
+///** 消息标题 （红包说明）*/
+//@property (nonatomic, copy) NSString *msgTitle;
+///** 消息内容*/
+//@property (nonatomic, copy) NSString *msgContent;
+///** 消息图片*/
+//@property (nonatomic, copy) NSString *msgPicUrl;
+///** 消息详情的链接*/
+//@property (nonatomic, copy) NSString *msgUrl;
 // 多条消息（由多个ZMServiceMessage组成）
-@property (nonatomic, strong) NSArray<ZMServiceMessage *>* msgArr;
+@property (nonatomic, strong) NSArray<LGServiceList *> *list;
 
 // 多条消息 的json字符串
 @property (nonatomic, copy) NSString *listJson;

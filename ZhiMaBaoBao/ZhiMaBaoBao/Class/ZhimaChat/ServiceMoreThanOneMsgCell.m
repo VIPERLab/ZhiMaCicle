@@ -103,10 +103,10 @@
 
 - (void)setMessage:(ZMServiceMessage *)message
 {
-    self.messages = [message.msgArr mutableCopy];
-    ZMServiceMessage*msg = self.messages[0];
-    [self.headIV sd_setImageWithURL:[NSURL URLWithString:msg.msgPicUrl]];
-    self.headLabel.text = msg.msgTitle;
+//    self.messages = [message.msgArr mutableCopy];
+//    ZMServiceMessage*msg = self.messages[0];
+//    [self.headIV sd_setImageWithURL:[NSURL URLWithString:msg.msgPicUrl]];
+//    self.headLabel.text = msg.msgTitle;
     
     NSString*timeStr = [NSDate dateStrFromCstampTime:message.timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     self.timeLabel.text = [NSString timeStringChangeToZMTimeString:timeStr];

@@ -294,24 +294,32 @@ static SocketManager *manager = nil;
         }
         else if ([actType isEqualToString:@"service"]){
             //推送消息类型
-            NSInteger messageType = [responceData[@"data"][@"type"] integerValue];
+            NSInteger messageType = [responceData[@"data"][@"service"][@"type"] integerValue];
             
             //推送活动消息
-            ZMServiceMessage *purshMsg = [[ZMServiceMessage alloc] init];
-            purshMsg = [purshMsg mj_setKeyValues:responceData[@"data"]];
+            [ZMServiceMessage mj_setupObjectClassInArray:^NSDictionary *{
+                return @{
+                         @"list":@"LGServiceList"
+                         };
+            }];
+            ZMServiceMessage *serviceMsg = [[ZMServiceMessage alloc] init];
+            serviceMsg = [serviceMsg mj_setKeyValues:responceData[@"data"]];
             //手动设置推送消息类型（红包活动，单条文章，多条文章）
             if (messageType == MessageTypeActivityPurse) {
-                purshMsg.type = ServiceMessageTypePurse;
+                serviceMsg.type = ServiceMessageTypePurse;
             }else{
-                if (purshMsg.msgArr.count == 1) {   //只有一条文章消息
-                    purshMsg.type = ServiceMessageTypeSingle;
+                if (serviceMsg.list.count == 1) {   //只有一条文章消息
+                    serviceMsg.type = ServiceMessageTypeSingle;
                 }else{
-                    purshMsg.type = ServiceMessageTypeMoreThanOne;
+                    serviceMsg.type = ServiceMessageTypeMoreThanOne;
                 }
             }
-#warning 将红包消息存到数据库  , 发送通知 更新会话页面
+            serviceMsg.service.type = serviceMsg.type;
+            serviceMsg.listJson = [serviceMsg.listJson mj_JSONString];
+#warning 将红包消息存到数据库, 发送通知 更新会话页面
+            [FMDBShareManager saveServiceMessage:serviceMsg byServiceId:serviceMsg.cropid];
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-            userInfo[@"message"] = purshMsg;
+            userInfo[@"message"] = serviceMsg;
             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveActivityMsg object:userInfo];
         }
         else if ([actType isEqualToString:@"addfriend"]){   //好友请求
