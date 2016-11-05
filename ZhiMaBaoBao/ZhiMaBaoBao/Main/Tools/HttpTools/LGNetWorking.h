@@ -327,4 +327,7 @@
 
 //删除群成员后，更新群头像
 + (void)updateGroupHeader:(NSString *)groupId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
+//如果是审核状态-- 隐藏『钱包』
++ (void)verfiryAppStatues:(NSString *)verion success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 @end

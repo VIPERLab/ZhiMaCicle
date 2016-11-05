@@ -1033,5 +1033,16 @@
     }];
 }
 
+//如果是审核状态-- 隐藏『钱包』
++ (void)verfiryAppStatues:(NSString *)verion success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"version"] = verion;
+    [HttpTool POST:@"/moblie/openPhonePay.do" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
 
 @end
