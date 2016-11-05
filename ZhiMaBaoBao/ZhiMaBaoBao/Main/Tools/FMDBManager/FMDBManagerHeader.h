@@ -102,8 +102,8 @@
 #define Service_Message_MemberFields_Name @"serviceId, time, msgid, msgType, listJson"
 
 // 收藏相关
-#define Collection_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, head TEXT NOT NULL, name TEXT NOT NULL, time TEXT NOT NULL, content TEXT, collectionId TEXT NOT NULL, type INTEGER, pic_name TEXT, small_img TEXT, isDownload INTEGER)"
-#define Collection_MemberFields_Name @"head, name, time, content, collectionId, type, pic_name, small_img, isDownload"
+#define Collection_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, head TEXT NOT NULL, name TEXT NOT NULL, time TEXT NOT NULL, content TEXT, collectionId TEXT NOT NULL, type INTEGER, pic_name TEXT, small_img TEXT, isDownload INTEGER, locationUrl TEXT)"
+#define Collection_MemberFields_Name @"head, name, time, content, collectionId, type, pic_name, small_img, isDownload, locationUrl"
 
 
 #endif /* FMDBManagerHeader_h */

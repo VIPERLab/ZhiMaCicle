@@ -2711,13 +2711,13 @@
         if (isExist) {
 //            NSString *option1 = [NSString stringWithFormat:@"isDownload = '%@'",@(model.isDownload)];
 //            optionStr = [FMDBShareManager alterTable:ZhiMa_Collection_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"collectionId = %@",model.ID]];
-            return;
+            continue;
         } else {
             optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Collection_Table];
         }
 //        @"head, name, time, content, ID, type, pic_name, small_img, isDownload"
         [queue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:optionStr,model.head,model.name,model.time,model.content,model.ID,@(model.type),model.pic_name,model.small_img,@(model.isDownload)];
+            BOOL success = [db executeUpdate:optionStr,model.head,model.name,model.time,model.content,model.ID,@(model.type),model.pic_name,model.small_img,@(model.isDownload),model.locationUrl];
             if (success) {
                 NSLog(@"插入/更新 收藏表成功");
             } else {
@@ -2752,6 +2752,8 @@
             model.pic_name = [result stringForColumn:@"pic_name"];
             model.small_img = [result stringForColumn:@"small_img"];
             model.isDownload = [result intForColumn:@"isDownload"];
+            model.locationUrl = [result stringForColumn:@"locationUrl"];
+            model.type = [result intForColumn:@"type"];
             [dataArray addObject:model];
         }
     }];
@@ -2776,10 +2778,12 @@
             model.head = [result stringForColumn:@"head"];
             model.name = [result stringForColumn:@"name"];
             model.content = [result stringForColumn:@"content"];
-            model.ID = [result stringForColumn:@"ID"];
+            model.ID = [result stringForColumn:@"collectionId"];
             model.pic_name = [result stringForColumn:@"pic_name"];
             model.small_img = [result stringForColumn:@"small_img"];
             model.isDownload = [result intForColumn:@"isDownload"];
+            model.locationUrl = [result stringForColumn:@"locationUrl"];
+            model.type = [result intForColumn:@"type"];
         }
     }];
     return model;

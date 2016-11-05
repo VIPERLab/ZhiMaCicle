@@ -32,4 +32,6 @@
 
 @property (nonatomic, assign) BOOL isDownload;
 
+@property (nonatomic, copy) NSString *locationUrl;
+
 @end

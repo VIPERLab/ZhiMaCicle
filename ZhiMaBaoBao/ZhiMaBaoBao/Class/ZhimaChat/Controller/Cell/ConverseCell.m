@@ -145,6 +145,9 @@
     if (model.serviceMessageType == 1) {
         _converseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
         _lastConverseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
+    } else {
+        _converseLabel.textColor = [UIColor blackColor];
+        _lastConverseLabel.textColor = [UIColor blackColor];
     }
     
     [self setNeedsLayout];
