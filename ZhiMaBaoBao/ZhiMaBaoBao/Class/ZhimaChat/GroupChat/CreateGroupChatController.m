@@ -33,6 +33,8 @@
 @property (nonatomic, strong) GroupChatModel *groupChatModel;
 
 @property (nonatomic, assign) CGFloat lastOffset;   //上一次scrollview偏移量
+
+@property (nonatomic, assign) int j;
 @end
 
 
@@ -465,43 +467,55 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     }
 }
 
+
+- (void)test{
+    _j ++;
+    //假数据 - 建一个199人的群聊
+    NSMutableArray *uidsArr = [NSMutableArray array];
+    for (int i = 10000 + _j*200; i<10199 + _j*200; i++) {
+        NSString *userId = [NSString stringWithFormat:@"%d",i];
+        [uidsArr addObject:userId];
+    }
+    NSString *userIds = [uidsArr componentsJoinedByString:@","];
+    
+    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"8a9a53d85833725c01583ce378960018" success:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            [LCProgressHUD hide];
+            //生成群聊数据模型
+            [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                return @{
+                         @"groupUserVos":@"GroupUserModel"
+                         };
+            }];
+            self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+            self.groupChatModel.myGroupName = USERINFO.username;
+            //新建一个群会话，插入数据库
+            [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+            
+            //通过socket创建群聊
+            [uidsArr addObject:USERINFO.userID];
+            NSString *socketUids = [uidsArr componentsJoinedByString:@","];
+            [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
+        }
+    } failure:^(ErrorData *error) {
+        [LCProgressHUD showFailureText:error.msg];
+    }];
+    
+    
+    if (_j < 4) {
+        [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
+
+    }else{
+        [self jumpGroupChat];
+        return;
+    }
+
+}
 //选择完毕，发起群聊
 - (void)createGroupChatAction{
     if (self.selectedFriends.count == 0) {
-        
-        //假数据 - 建一个999人的群聊
-        NSMutableArray *uidsArr = [NSMutableArray array];
-        for (int i = 0; i<999; i++) {
-            NSString *userId = [NSString stringWithFormat:@"%d",i];
-            [uidsArr addObject:userId];
-        }
-        NSString *userIds = [uidsArr componentsJoinedByString:@","];
-        
-        [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
-            if (responseData.code == 0) {
-                [LCProgressHUD hide];
-                //生成群聊数据模型
-                [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
-                    return @{
-                             @"groupUserVos":@"GroupUserModel"
-                             };
-                }];
-                self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-                self.groupChatModel.myGroupName = USERINFO.username;
-                //新建一个群会话，插入数据库
-                [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
-                
-//                [userIdArr addObject:USERINFO.userID];
-//                NSString *socketUids = [userIdArr componentsJoinedByString:@","];
-                //通过socket创建群聊
-                [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:userIds];
-                
-                //跳转到群聊天页面
-                [self jumpGroupChat];
-            }
-        } failure:^(ErrorData *error) {
-            [LCProgressHUD showFailureText:error.msg];
-        }];
+        _j = 1;
+        [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
 
         return;
     }

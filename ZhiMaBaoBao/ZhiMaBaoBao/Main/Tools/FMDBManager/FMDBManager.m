@@ -2364,10 +2364,10 @@
  */
 - (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupChatId {
     NSLog(@"----开始插入群信息");
-    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
+//    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
         FMDatabaseQueue *queuq = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
         for (GroupUserModel *model in array) {
-            
+                        
             //查询是否存在该条群成员信息
             BOOL isExist = [FMDBShareManager isGroupMemberWithGroupChatId:groupChatId andMemberId:model.userId];
             
@@ -2391,7 +2391,7 @@
                 }
             }];
         }
-    });
+//    });
     
     NSLog(@"----群信息插入结束");
 }
