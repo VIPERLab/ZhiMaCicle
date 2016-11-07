@@ -400,12 +400,13 @@ typedef enum : NSUInteger {
 
 #pragma mark - 群成员信息表
 //                    ------------   群成员信息表  ----------------
+
 /**
- *  保存群成员信息，如果成员存在，则更新成员名称和头像
- *
- *  @param array   群成员数组
- *  @param groupId 群聊id
- *
+ 保存群成员表 - 执行群成员查询和群成员插入
+
+ @param array   GroupUserModel 模型数组
+ @param groupId 群id
+ @param block   回调函数
  */
 - (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupId withComplationBlock:(ComplationBlock)block;
 

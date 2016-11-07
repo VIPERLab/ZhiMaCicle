@@ -2254,18 +2254,22 @@
 //    [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
     
     // 更新会话
-//    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:ConversionTypeGroupChat];
-//    if (converseModel.time) {
-//        converseModel.converseName = model.groupName;
-//    } else {
-//        converseModel.time = [NSDate cTimestampFromString:model.create_time format:@"yyyy-MM-dd HH:mm:ss"];
-//        converseModel.converseType = 1;
-//        converseModel.converseId = converseID;
-//        converseModel.unReadCount = 0;
-//        converseModel.converseName = model.groupName;
-//        converseModel.converseHead_photo = model.groupAvtar;
-//        converseModel.lastConverse = @" ";
-//    }
+    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:ConversionTypeGroupChat];
+    if (converseModel.time) {
+        converseModel.converseName = model.groupName;
+        [FMDBShareManager alterConverseListDataWhtDataArray:@[converseModel] withComplationBlock:nil];
+    } else {
+        converseModel.time = [NSDate cTimestampFromString:model.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+        converseModel.converseType = 1;
+        converseModel.converseId = converseID;
+        converseModel.unReadCount = 0;
+        converseModel.converseName = model.groupName;
+        converseModel.converseHead_photo = model.groupAvtar;
+        converseModel.lastConverse = @" ";
+        
+        [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+    }
+    
     return isSuccess;
 }
 
@@ -2377,7 +2381,7 @@
                 opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMenber_Table];
             }
             
-            BOOL success = [db executeUpdate:opeartionStr,groupChatId,model.userId,model.friend_nick,model.head_photo,model.memberGroupState];
+            BOOL success = [db executeUpdate:opeartionStr,groupChatId,model.userId,model.friend_nick,model.head_photo,@(model.memberGroupState)];
             if (success) {
                 NSLog(@"更新群成员成功");
             } else {
