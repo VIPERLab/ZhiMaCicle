@@ -171,7 +171,7 @@
         // 更新群用户表里 群成员的状态 memberState = 1
         GroupUserModel *model = self.currentCell.model;
         model.memberGroupState = 1;
-        [FMDBShareManager saveAllGroupMemberWithArray:@[model] andGroupChatId:self.groupId];
+        [FMDBShareManager saveAllGroupMemberWithArray:@[model] andGroupChatId:self.groupId withComplationBlock:nil];
     }
 }
 

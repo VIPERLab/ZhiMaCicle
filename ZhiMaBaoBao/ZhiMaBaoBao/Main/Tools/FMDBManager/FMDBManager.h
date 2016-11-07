@@ -407,7 +407,7 @@ typedef enum : NSUInteger {
  *  @param groupId 群聊id
  *
  */
-- (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupId;
+- (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupId withComplationBlock:(ComplationBlock)block;
 
 /**
  *  根据群id 和用户id 查询群成员表是否有这个人

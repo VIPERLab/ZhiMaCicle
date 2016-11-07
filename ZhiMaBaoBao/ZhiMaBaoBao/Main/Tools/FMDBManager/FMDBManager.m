@@ -1630,11 +1630,15 @@
                 NSLog(@"插入会话成功");
             } else {
                 NSLog(@"插入会话失败");
-                block(NO);
+                if (block) {
+                    block(NO);
+                }
                 break;
             }
         }
-        block(YES);
+        if (block) {
+            block(YES);
+        }
     }];
 }
 
@@ -1661,11 +1665,15 @@
                 NSLog(@"更新会话成功");
             }else {
                 NSLog(@"更新会话失败");
-                block(NO);
+                if (block) {
+                    block(NO);
+                }
                 break;
             }
         }
-        block(YES);
+        if (block) {
+            block(YES);
+        }
     }];
 }
 
@@ -2208,7 +2216,7 @@
     // 查询是否存在该群表
     __block BOOL isExist = NO;
     [queue inDatabase:^(FMDatabase *db) {
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = %@",converseID]];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = '%@'",converseID]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         while ([result next]) {
             NSLog(@"查表成功1");
@@ -2243,22 +2251,21 @@
     }];
     
     // 异步存储群组成员信息
-    [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
+//    [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
     
     // 更新会话
-    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:ConversionTypeGroupChat];
-    if (converseModel.time) {
-        converseModel.converseName = model.groupName;
-    } else {
-        converseModel.time = [NSDate cTimestampFromString:model.create_time format:@"yyyy-MM-dd HH:mm:ss"];
-        converseModel.converseType = 1;
-        converseModel.converseId = converseID;
-        converseModel.unReadCount = 0;
-        converseModel.converseName = model.groupName;
-        converseModel.converseHead_photo = model.groupAvtar;
-        converseModel.lastConverse = @" ";
-    }
-    [FMDBShareManager alterConverseListDataWhtDataArray:@[converseModel] withComplationBlock:nil];
+//    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:ConversionTypeGroupChat];
+//    if (converseModel.time) {
+//        converseModel.converseName = model.groupName;
+//    } else {
+//        converseModel.time = [NSDate cTimestampFromString:model.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+//        converseModel.converseType = 1;
+//        converseModel.converseId = converseID;
+//        converseModel.unReadCount = 0;
+//        converseModel.converseName = model.groupName;
+//        converseModel.converseHead_photo = model.groupAvtar;
+//        converseModel.lastConverse = @" ";
+//    }
     return isSuccess;
 }
 
@@ -2302,7 +2309,7 @@
     
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
     [queue inDatabase:^(FMDatabase *db) {
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = %@",groupId]];
+        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMessage_Table withOption:[NSString stringWithFormat:@"groupId = '%@'",groupId]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         while ([result next]) {
             NSLog(@"查表成功2");
@@ -2342,33 +2349,49 @@
  *  @param groupId 群聊id
  *
  */
-- (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupChatId {
+- (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupChatId withComplationBlock:(ComplationBlock)block {
     NSLog(@"----开始插入群信息");
-        FMDatabaseQueue *queuq = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-        [queuq inDatabase:^(FMDatabase *db) {
-            for (GroupUserModel *model in array) {
-                //查询是否存在该条群成员信息
-                BOOL isExist = [FMDBShareManager isGroupMemberWithGroupChatId:groupChatId andMemberId:model.userId];
-                NSString *opeartionStr;
-                if (isExist) {
-                    NSLog(@"存在成员信息");
-                    NSString *option1 = [NSString stringWithFormat:@"memberName = '%@', memberHeader_Photo = '%@', memberGroupState = '%@'",model.friend_nick,model.head_photo,@(model.memberGroupState)];
-                    NSString *option2 = [NSString stringWithFormat:@"converseId = '%@' and memberId = '%@'",groupChatId, model.userId];
-                    opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMenber_Table withOpton1:option1 andOption2:option2];
-                } else {
-                    NSLog(@"不存在成员信息");
-                    opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMenber_Table];
-                }
-                
-                BOOL success = [db executeUpdate:opeartionStr];
-                if (success) {
-                    NSLog(@"更新群成员成功");
-                } else {
-                    NSLog(@"更新群成员失败");
-                    break;
-                }
+    
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
+    [queue inDatabase:^(FMDatabase *db) {
+        for (GroupUserModel *model in array) {
+            //查询是否存在该条群成员信息
+            __block BOOL isExist = NO;
+            NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@' and memberId = '%@'",groupChatId, model.userId]];
+            
+            FMResultSet *result = [db executeQuery:optionStr];
+            while ([result next]) {
+                NSLog(@"查询群聊成员成功");
+                isExist = YES;
             }
-        }];
+            
+            
+            NSString *opeartionStr;
+            if (isExist) {
+                NSLog(@"存在成员信息");
+                NSString *option1 = [NSString stringWithFormat:@"memberName = '%@', memberHeader_Photo = '%@', memberGroupState = '%@'",model.friend_nick,model.head_photo,@(model.memberGroupState)];
+                NSString *option2 = [NSString stringWithFormat:@"converseId = '%@' and memberId = '%@'",groupChatId, model.userId];
+                opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMenber_Table withOpton1:option1 andOption2:option2];
+            } else {
+                NSLog(@"不存在成员信息");
+                opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMenber_Table];
+            }
+            
+            BOOL success = [db executeUpdate:opeartionStr,groupChatId,model.userId,model.friend_nick,model.head_photo,model.memberGroupState];
+            if (success) {
+                NSLog(@"更新群成员成功");
+            } else {
+                NSLog(@"更新群成员失败");
+                if (block) {
+                    block(NO);
+                }
+                break;
+            }
+        }
+        if (block) {
+            block(YES);
+        }
+    }];
     NSLog(@"----群信息插入结束");
 }
 
