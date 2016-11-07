@@ -2359,6 +2359,14 @@
                     NSLog(@"不存在成员信息");
                     opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMenber_Table];
                 }
+                
+                BOOL success = [db executeUpdate:opeartionStr];
+                if (success) {
+                    NSLog(@"更新群成员成功");
+                } else {
+                    NSLog(@"更新群成员失败");
+                    break;
+                }
             }
         }];
     NSLog(@"----群信息插入结束");
