@@ -57,7 +57,7 @@
     [self.contentView addSubview:self.titleLabel];
     
     self.purseIV = [[UIImageView alloc]initWithFrame:CGRectMake(18+12, self.titleLabel.frameMaxY+27*scale, width-24, 180*scale)];
-    self.purseIV.backgroundColor = RGB(235, 63, 78);
+//    self.purseIV.backgroundColor = RGB(235, 63, 78);
     self.purseIV.layer.borderWidth = 5;
     self.purseIV.layer.borderColor = WHITECOLOR.CGColor;
     self.purseIV.contentMode =  UIViewContentModeScaleAspectFill;
