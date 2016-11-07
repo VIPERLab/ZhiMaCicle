@@ -818,14 +818,19 @@ static SocketManager *manager = nil;
             }];
             GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             groupChatModel.myGroupName = USERINFO.username;
-            //异步存储群成员信息
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
-                    //存群信息
-                    [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupId];
-                    
-                }];
-            });
+            
+            //如果存在群成员信息表 （通过是否存在群信息表判断）
+            GroupChatModel *chatModel = [FMDBShareManager getGroupChatMessageByGroupId:groupId];
+            if (!chatModel.groupId) {
+                //异步存储群成员信息
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                    [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
+                        //存群信息
+                        [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupId];
+                        
+                    }];
+                });
+            }
 
             block(groupChatModel.groupUserVos);
         }
@@ -839,7 +844,7 @@ static SocketManager *manager = nil;
     
     //判断数据库是否存在群成员表 （通过群信息表判断） -> 不存在 从网络加载数据  存到数据库
     GroupChatModel *chatModel = [FMDBShareManager getGroupChatMessageByGroupId:groupId];
-    if (!chatModel) {
+    if (!chatModel.groupId) {
         //加载群信息
         [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
