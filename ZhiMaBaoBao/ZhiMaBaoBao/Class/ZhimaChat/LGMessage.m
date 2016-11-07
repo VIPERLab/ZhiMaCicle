@@ -11,6 +11,12 @@
 
 @implementation LGMessage
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName{
+    return @{
+             @"conversionType":@"isGroup"
+             };
+}
+
 //判断消息是否未用户自己发送
 - (BOOL)isUser{
 //    if ([self.from isEqualToString:USERINFO.uphone]) {

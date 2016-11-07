@@ -2344,9 +2344,7 @@
  */
 - (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupChatId {
     NSLog(@"----开始插入群信息");
-    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
         FMDatabaseQueue *queuq = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-        
         [queuq inDatabase:^(FMDatabase *db) {
             for (GroupUserModel *model in array) {
                 //查询是否存在该条群成员信息
@@ -2361,19 +2359,8 @@
                     NSLog(@"不存在成员信息");
                     opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMenber_Table];
                 }
-                
-                BOOL success = [db executeUpdate:opeartionStr,groupChatId,model.userId,model.friend_nick,model.head_photo,@(model.memberGroupState)];
-                if (success) {
-                    NSLog(@"插入群成员成功");
-                } else {
-                    NSLog(@"插入群成员失败");
-                    break;
-                }
             }
         }];
-        
-    });
-    
     NSLog(@"----群信息插入结束");
 }
 

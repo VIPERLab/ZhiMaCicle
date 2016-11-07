@@ -419,10 +419,10 @@ static SocketManager *manager = nil;
         }
         else if ([actType isEqualToString:@"updategroupuser"]){ //群用户修改群昵称
 #warning 更新数据库群成员列表
-            NSDictionary *resDic = responceData[@"data"];
-            NSString *userId = resDic[@"uid"];
-            NSString *groupId = resDic[@"groupid"];
-            NSString *name = resDic[@"group_user_nick"];
+//            NSDictionary *resDic = responceData[@"data"];
+//            NSString *userId = resDic[@"uid"];
+//            NSString *groupId = resDic[@"groupid"];
+//            NSString *name = resDic[@"group_user_nick"];
             
         }
         else if ([actType isEqualToString:@"nofriend"]){ //对方把你删除好友，
