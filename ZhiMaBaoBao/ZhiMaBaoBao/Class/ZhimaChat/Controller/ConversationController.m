@@ -220,11 +220,14 @@
         
         ConverseModel *model = self.dataArray[indexPath.row];
         if (model.converseType == ConversionTypeActivity) {
-            ServiceViewController *vc = [[ServiceViewController alloc] init];
-            vc.conversionModel = model;
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
+            //隐藏红包类型会话
+
+//            ServiceViewController *vc = [[ServiceViewController alloc] init];
+//            vc.conversionModel = model;
+//            vc.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:vc animated:YES];
         }else{
+        
             ChatController *vc = [[ChatController alloc] init];
             vc.conversionId = model.converseId;
             vc.conversionName = model.converseName;
@@ -236,8 +239,7 @@
 
         //清除未读消息
         [FMDBShareManager setConverseUnReadCountZero:model.converseId];
-//        model.unReadCount = -1;
-//        [FMDBShareManager saveConverseListDataWithDataArray:@[model]];
+
     }
     
     // 点击了没有网络
