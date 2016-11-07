@@ -469,7 +469,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
 
 - (void)test{
-    _j ++;
+    
     //假数据 - 建一个199人的群聊
     NSMutableArray *uidsArr = [NSMutableArray array];
     for (int i = 10000 + _j*200; i<10199 + _j*200; i++) {
@@ -478,7 +478,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     }
     NSString *userIds = [uidsArr componentsJoinedByString:@","];
     
-    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"8a9a53d85833725c01583ce378960018" success:^(ResponseData *responseData) {
+    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
             //生成群聊数据模型
@@ -500,9 +500,9 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:error.msg];
     }];
+    _j ++;
     
-    
-    if (_j < 4) {
+    if (_j < 5) {
         [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
 
     }else{
@@ -514,7 +514,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 //选择完毕，发起群聊
 - (void)createGroupChatAction{
     if (self.selectedFriends.count == 0) {
-        _j = 1;
+        _j = 0;
         [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
 
         return;
