@@ -819,9 +819,11 @@ static SocketManager *manager = nil;
             }];
             GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             groupChatModel.myGroupName = USERINFO.username;
-            [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
-                
-            }];
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
+                }];
+            });
+
             block(groupChatModel.groupUserVos);
         }
     } failure:^(ErrorData *error) {

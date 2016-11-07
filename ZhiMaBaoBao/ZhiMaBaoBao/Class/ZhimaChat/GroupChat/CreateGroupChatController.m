@@ -469,7 +469,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
 
 - (void)test{
-    
+    _j ++;
+
     //假数据 - 建一个199人的群聊
     NSMutableArray *uidsArr = [NSMutableArray array];
     for (int i = 10000 + _j*200; i<10199 + _j*200; i++) {
@@ -478,7 +479,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     }
     NSString *userIds = [uidsArr componentsJoinedByString:@","];
     
-    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
+    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"8a9a53d85833725c01583db51fc20032" success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
             //生成群聊数据模型
@@ -498,6 +499,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                         //
                         //                            });
                         //                            [FMDBShareManager ];
+                        [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                     }
                 }];
             });
@@ -510,7 +512,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:error.msg];
     }];
-    _j ++;
     
     if (_j < 5) {
         [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
@@ -526,7 +527,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     if (self.selectedFriends.count == 0) {
         _j = 0;
         [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
-
+        
         return;
     }
     

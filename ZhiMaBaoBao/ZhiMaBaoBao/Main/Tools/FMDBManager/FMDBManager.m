@@ -2365,7 +2365,7 @@
             
             FMResultSet *result = [db executeQuery:optionStr];
             while ([result next]) {
-                NSLog(@"查询群聊成员成功");
+                NSLog(@"查询群聊成员成功3");
                 isExist = YES;
             }
             
@@ -2436,7 +2436,7 @@
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
-            NSLog(@"查询群聊成员成功");
+            NSLog(@"查询群聊成员成功1");
             GroupUserModel *model = [[GroupUserModel alloc] init];
             model.userId = [result stringForColumn:@"memberId"];
             model.friend_nick = [result stringForColumn:@"memberName"];
@@ -2466,7 +2466,7 @@
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
-            NSLog(@"查询群聊成员成功");
+            NSLog(@"查询群聊成员成功2");
             model.userId = [result stringForColumn:@"memberId"];
             model.friend_nick = [result stringForColumn:@"memberName"];
             model.head_photo = [result stringForColumn:@"memberHeader_Photo"];
