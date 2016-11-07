@@ -19,7 +19,7 @@
 
 @property (nonatomic, strong) UITableView *tableView; // 列表
 @property (nonatomic, strong) NSMutableArray *messages; //消息数组
-
+   
 @end
 
 @implementation ServiceViewController
@@ -34,7 +34,7 @@
     [self initTableview];
     [self setupNavRightItem];
     [self requestMessages];
-
+    
 }
 
 

@@ -628,24 +628,25 @@ static NSString *const reuseIdentifier = @"messageCell";
         self.tableView.mj_header = nil;
     }
     
-//    //测试活动红包用
-//    LGMessage*message = [[LGMessage alloc]init];
-//    message.type = MessageTypeActivityPurse;
-//    message.toUidOrGroupId = USERINFO.userID;
-//    message.fromUid = self.conversionId;
-//    message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-//    message.conversionType = ConversionTypeSingle;
-//    message.timeStamp = [NSDate currentTimeStamp];
-//    [self.messages addObject:message];
-//    
-//    LGMessage*message2 = [[LGMessage alloc]init];
-//    message2.type = MessageTypeActivityArticle;
-//    message2.toUidOrGroupId = self.conversionId;
-//    message2.fromUid = USERINFO.userID;
-//    message2.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-//    message.conversionType = ConversionTypeSingle;
-//    message2.timeStamp = [NSDate currentTimeStamp];
-//    [self.messages addObject:message2];
+    //测试活动红包用
+  //  LGMessage*message = [[LGMessage alloc]init];
+  //  message.type = MessageTypeActivityPurse;
+  //  message.toUidOrGroupId = USERINFO.userID;
+  //  message.fromUid = self.conversionId;
+  //  message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+  //  message.conversionType = ConversionTypeSingle;
+  //  message.timeStamp = [NSDate currentTimeStamp];
+  //  [self.messages addObject:message];
+    
+  //  LGMessage*message2 = [[LGMessage alloc]init];
+  //  message2.type = MessageTypeActivityArticle;
+  // message2.toUidOrGroupId = self.conversionId;
+  // message2.fromUid = USERINFO.userID;
+  //  message2.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
+  //  message.conversionType = ConversionTypeSingle;
+  //  message2.timeStamp = [NSDate currentTimeStamp];
+  // [self.messages addObject:message2];
+
 
     [self.tableView reloadData];
     // tableview 滑到底端

@@ -629,6 +629,91 @@
     return updataStr;
 }
 
+
+// 为表新建索引
+- (BOOL)creatIndexInTable:(ZhiMaSqliteTableType)type withString:(NSString *)str {
+    __block BOOL isSuccess = NO;
+    
+    NSString *optionStr = [NSString string];
+    NSString *tableName = [NSString string];  //表名
+    switch (type) {
+        case ZhiMa_Circle_Table: {
+            tableName = ZhiMaCicle_Talbe_Name;
+            break;
+        }
+        case ZhiMa_Circle_Comment_Table: {
+            tableName = ZhiMaCicleComment_Table_Name;
+            break;
+        }
+        case ZhiMa_Circle_Pic_Table: {
+            tableName = ZhiMaCirclePic_Table_Name;
+            break;
+        }
+        case ZhiMa_Circle_Like_Table: {
+            tableName = ZhiMaCircleLike_Table_Name;
+            break;
+        }
+        case ZhiMa_Chat_Converse_Table: {
+            tableName = ZhiMaChatConvence_Table_Name;
+            break;
+        }
+        case ZhiMa_Chat_Message_Table: {
+            tableName = ZhiMaChatMessage_Table_Name;
+            break;
+        }
+        case ZhiMa_User_Message_Table: {
+            tableName = ZhiMaUserMessage_Table_Name;
+            break;
+        }
+        case ZhiMa_NewFriend_Message_Table: {
+            tableName = ZhiMaNewFriend_Table_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMessage_Table: {
+            tableName = ZhiMaGroupChat_Table_Name;
+            break;
+        }
+        case ZhiMa_GroupChat_GroupMenber_Table: {
+            tableName = ZhiMaGroupChatMember_Table_Name;
+            break;
+        }
+        case ZhiMa_Service_Table: {
+            tableName = ZhiMaService_TableName;
+            break;
+        }
+        case ZhiMa_Service_Message_Table: {
+            tableName = ZhiMaService_Message_TableName;
+            break;
+        }
+        case ZhiMa_Collection_Table: {
+            tableName = ZhiMaCollection_TableName;
+            break;
+        }
+        default: {
+            NSLog(@"无效参数");
+            return NO;
+            break;
+        }
+    }
+    
+    optionStr = [NSString stringWithFormat:@"create index Indexes on %@(%@)",tableName,str];
+    
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:type];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"新建索引成功");
+            isSuccess = YES;
+        } else {
+            NSLog(@"新建索引失败");
+        }
+    }];
+    
+    
+    
+    return isSuccess;
+}
+
 #pragma mark - 动态取出模型的所有属性
 - (NSArray *)getPropertyNameArrayWith:(id)model {
     // 动态获取模型的属性名
@@ -1993,7 +2078,7 @@
     NSMutableArray *dataArray = [NSMutableArray array];
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
 //    NSString *option = [NSString stringWithFormat:@"converseId = %@ order by time desc LIMIT (%zd-1)*20,20",converseID,pageNumber];
-    NSString *option = [NSString stringWithFormat:@"converseId = %@ order by id desc LIMIT (%zd-1)*20,20",converseID,pageNumber];
+    NSString *option = [NSString stringWithFormat:@"converseId = '%@' order by time desc LIMIT (%zd-1)*20,20",converseID,pageNumber];
     NSString *opeartionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Message_Table withOption:option];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:opeartionStr];
@@ -2279,7 +2364,7 @@
  */
 - (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupChatId {
     NSLog(@"----开始插入群信息");
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
         FMDatabaseQueue *queuq = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
         for (GroupUserModel *model in array) {
             
@@ -2290,7 +2375,7 @@
             if (isExist) {
                 NSLog(@"存在成员信息");
                 NSString *option1 = [NSString stringWithFormat:@"memberName = '%@', memberHeader_Photo = '%@', memberGroupState = '%@'",model.friend_nick,model.head_photo,@(model.memberGroupState)];
-                NSString *option2 = [NSString stringWithFormat:@"converseId = %@ and memberId = %@",groupChatId, model.userId];
+                NSString *option2 = [NSString stringWithFormat:@"converseId = '%@' and memberId = '%@'",groupChatId, model.userId];
                 opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMenber_Table withOpton1:option1 andOption2:option2];
             } else {
                 NSLog(@"不存在成员信息");
@@ -2322,7 +2407,7 @@
 - (BOOL)isGroupMemberWithGroupChatId:(NSString *)groupId andMemberId:(NSString *)memberId {
     __block BOOL successFul = NO;
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = %@ and memberId = %@",groupId, memberId]];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@' and memberId = '%@'",groupId, memberId]];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
@@ -2372,7 +2457,7 @@
  */
 - (GroupUserModel *)getGroupMemberWithMemberId:(NSString *)memberId andConverseId:(NSString *)converseId {
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"memberId = %@ and converseId = %@",memberId,converseId]];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"memberId = '%@' and converseId = '%@'",memberId,converseId]];
     GroupUserModel *model = [[GroupUserModel alloc] init];
     NSLog(@"-----");
     [queue inDatabase:^(FMDatabase *db) {
