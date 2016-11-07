@@ -479,7 +479,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     }
     NSString *userIds = [uidsArr componentsJoinedByString:@","];
     
-    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"8a9a53d85833725c01583db51fc20032" success:^(ResponseData *responseData) {
+    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
             //生成群聊数据模型
@@ -494,39 +494,50 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
                     if (success) {
-                        //群成员信息存储完毕，创建会话
-                        //                            dispatch_async(dispatch_get_main_queue(), ^{
-                        //
-                        //                            });
-                        //                            [FMDBShareManager ];
-                        [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            //存群信息
+                            [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+                            
+                            //创建会话
+                            ConverseModel *converseModel  = [[ConverseModel alloc] init];
+                            converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+                            converseModel.converseType = 1;
+                            converseModel.converseId = self.groupChatModel.groupId;
+                            converseModel.unReadCount = 0;
+                            converseModel.converseName = self.groupChatModel.groupName;
+                            converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
+                            converseModel.lastConverse = @" ";
+                            [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                            //通过socket创建群聊
+                            [uidsArr addObject:USERINFO.userID];
+                            NSString *socketUids = [uidsArr componentsJoinedByString:@","];
+                            [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
+                            [self jumpGroupChat];
+                        });
                     }
                 }];
             });
-            
-            //通过socket创建群聊
-            [uidsArr addObject:USERINFO.userID];
-            NSString *socketUids = [uidsArr componentsJoinedByString:@","];
-            [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
+
         }
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:error.msg];
     }];
     
-    if (_j < 5) {
-        [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
-
-    }else{
-        [self jumpGroupChat];
-        return;
-    }
+//    if (_j < 5) {
+////        [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
+//
+//    }else{
+//        [self jumpGroupChat];
+//        return;
+//    }
 
 }
 //选择完毕，发起群聊
 - (void)createGroupChatAction{
     if (self.selectedFriends.count == 0) {
         _j = 0;
-        [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
+        [self performSelector:@selector(test) withObject:nil afterDelay:1.0];
         
         return;
     }

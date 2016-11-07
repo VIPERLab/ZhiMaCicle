@@ -2208,7 +2208,7 @@
 
 #pragma mark - 群聊信息表
 //                    ------------   群聊信息表  ----------------
-// 根据群model 保存到群表 和群成员表
+// 根据群model 保存到群信息表
 - (BOOL)saveGroupChatInfo:(GroupChatModel *)model andConverseID:(NSString *)converseID {
     __block BOOL isSuccess = YES;
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMessage_Table];
@@ -2238,7 +2238,6 @@
         opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMessage_Table];
     }
     
-    
     // 创建/更新 群信息表
     [queue inDatabase:^(FMDatabase *db) {
         BOOL success = [db executeUpdate:opeartionStr,model.groupId,model.groupName,model.notice,@(model.topChat),@(model.disturb),@(model.saveToMailList),model.myGroupName,@(model.saveToMailList),model.groupAvtar];
@@ -2249,26 +2248,6 @@
             isSuccess = NO;
         }
     }];
-    
-    // 异步存储群组成员信息
-//    [FMDBShareManager saveAllGroupMemberWithArray:model.groupUserVos andGroupChatId:model.groupId];
-    
-    // 更新会话
-    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:model.groupId andConverseType:ConversionTypeGroupChat];
-    if (converseModel.time) {
-        converseModel.converseName = model.groupName;
-        [FMDBShareManager alterConverseListDataWhtDataArray:@[converseModel] withComplationBlock:nil];
-    } else {
-        converseModel.time = [NSDate cTimestampFromString:model.create_time format:@"yyyy-MM-dd HH:mm:ss"];
-        converseModel.converseType = 1;
-        converseModel.converseId = converseID;
-        converseModel.unReadCount = 0;
-        converseModel.converseName = model.groupName;
-        converseModel.converseHead_photo = model.groupAvtar;
-        converseModel.lastConverse = @" ";
-        
-        [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
-    }
     
     return isSuccess;
 }
