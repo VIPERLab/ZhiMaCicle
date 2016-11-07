@@ -159,6 +159,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         //根据群聊id,去取对应群表中自己的群成员数据 （判断是否已被剔除群聊）
         GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:self.conversionId];
+        NSLog(@"---------%@",USERINFO.userID);
         if (!userModel.userId) {
             self.notInGroup = YES;  //如果群成员表不存在该用户，标记被不在该群
         }else{

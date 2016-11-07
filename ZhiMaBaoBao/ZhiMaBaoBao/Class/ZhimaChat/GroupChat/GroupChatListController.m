@@ -14,6 +14,9 @@
 #import "ChatController.h"
 #import "TransPopView.h"
 
+//测试用 - 后续删除
+#import "GroupUserModel.h"
+
 @interface GroupChatListController ()<UITableViewDelegate,UITableViewDataSource,TransPopViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArr;
@@ -34,6 +37,22 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     userinfo.groupChatVC = self;
 }
 
+//测试数据库耗时时间
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    NSMutableArray *models = [NSMutableArray array];
+    for (int i = 0; i < 1000; i++) {
+        GroupUserModel *model = [[GroupUserModel alloc] init];
+        model.userId = [NSString stringWithFormat:@"%d",i];
+        model.friend_nick = [NSString stringWithFormat:@"我是昵称%d",i];
+        model.head_photo = @"hhhhhhh";
+        [models addObject:model];
+    }
+    
+    //converseId TEXT NOT NULL, memberId TEXT NOT NULL, memberName TEXT NOT NULL, memberHeader_Photo TEXT NOT NULL, memberGroupState INTEGER
+//    [FMDBShareManager saveAllGroupMemberWithArray:models andGroupChatId:<#(NSString *)#>];
+}
 //没有数据时的view
 - (void)addNodataView{
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(30, 300, DEVICEWITH - 60, 50)];
