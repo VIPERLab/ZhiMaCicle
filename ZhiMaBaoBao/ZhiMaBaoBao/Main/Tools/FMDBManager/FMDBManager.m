@@ -2078,7 +2078,7 @@
     NSMutableArray *dataArray = [NSMutableArray array];
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
 //    NSString *option = [NSString stringWithFormat:@"converseId = %@ order by time desc LIMIT (%zd-1)*20,20",converseID,pageNumber];
-    NSString *option = [NSString stringWithFormat:@"converseId = %@ order by time desc LIMIT (%zd-1)*20,20",converseID,pageNumber];
+    NSString *option = [NSString stringWithFormat:@"converseId = '%@' order by time desc LIMIT (%zd-1)*20,20",converseID,pageNumber];
     NSString *opeartionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Message_Table withOption:option];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:opeartionStr];
@@ -2375,7 +2375,7 @@
             if (isExist) {
                 NSLog(@"存在成员信息");
                 NSString *option1 = [NSString stringWithFormat:@"memberName = '%@', memberHeader_Photo = '%@', memberGroupState = '%@'",model.friend_nick,model.head_photo,@(model.memberGroupState)];
-                NSString *option2 = [NSString stringWithFormat:@"converseId = %@ and memberId = %@",groupChatId, model.userId];
+                NSString *option2 = [NSString stringWithFormat:@"converseId = '%@' and memberId = '%@'",groupChatId, model.userId];
                 opeartionStr = [FMDBShareManager alterTable:ZhiMa_GroupChat_GroupMenber_Table withOpton1:option1 andOption2:option2];
             } else {
                 NSLog(@"不存在成员信息");
@@ -2407,7 +2407,7 @@
 - (BOOL)isGroupMemberWithGroupChatId:(NSString *)groupId andMemberId:(NSString *)memberId {
     __block BOOL successFul = NO;
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = %@ and memberId = %@",groupId, memberId]];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"converseId = '%@' and memberId = '%@'",groupId, memberId]];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
@@ -2457,7 +2457,7 @@
  */
 - (GroupUserModel *)getGroupMemberWithMemberId:(NSString *)memberId andConverseId:(NSString *)converseId {
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"memberId = %@ and converseId = %@",memberId,converseId]];
+    NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"memberId = '%@' and converseId = '%@'",memberId,converseId]];
     GroupUserModel *model = [[GroupUserModel alloc] init];
     NSLog(@"-----");
     [queue inDatabase:^(FMDatabase *db) {
