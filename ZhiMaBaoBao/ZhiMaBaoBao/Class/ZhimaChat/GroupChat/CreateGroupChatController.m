@@ -489,8 +489,18 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             }];
             self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             self.groupChatModel.myGroupName = USERINFO.username;
-            //新建一个群会话，插入数据库
-            [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+            //异步存储群成员信息
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
+                    if (success) {
+                        //群成员信息存储完毕，创建会话
+                        //                            dispatch_async(dispatch_get_main_queue(), ^{
+                        //
+                        //                            });
+                        //                            [FMDBShareManager ];
+                    }
+                }];
+            });
             
             //通过socket创建群聊
             [uidsArr addObject:USERINFO.userID];
@@ -550,7 +560,21 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                 self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                 self.groupChatModel.myGroupName = USERINFO.username;
                 //新建一个群会话，插入数据库
-                [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+//                [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+                
+                //异步存储群成员信息
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                    [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
+                        if (success) {
+                            //群成员信息存储完毕，创建会话
+//                            dispatch_async(dispatch_get_main_queue(), ^{
+//                                
+//                            });
+//                            [FMDBShareManager ];
+                        }
+                    }];
+                });
+                
                 
                 [userIdArr addObject:USERINFO.userID];
                 NSString *socketUids = [userIdArr componentsJoinedByString:@","];
