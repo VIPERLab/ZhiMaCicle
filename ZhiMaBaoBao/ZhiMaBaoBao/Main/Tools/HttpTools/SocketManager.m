@@ -507,7 +507,7 @@ static SocketManager *manager = nil;
             systemMsg.text = [NSString stringWithFormat:@"你被\"%@\"移出了群聊",model.friend_nick];
             
             //将状态改为 被剔出群
-            [FMDBShareManager saveAllGroupMemberWithArray:models andGroupChatId:groupId];
+            [FMDBShareManager saveAllGroupMemberWithArray:models andGroupChatId:groupId withComplationBlock:nil];
         }
         
         //发送系统消息
@@ -634,7 +634,7 @@ static SocketManager *manager = nil;
                         
                         if (usermodel.userId.length) {
                             usermodel.memberGroupState = NO;
-                            [FMDBShareManager saveAllGroupMemberWithArray:@[usermodel] andGroupChatId:groupId];
+                            [FMDBShareManager saveAllGroupMemberWithArray:@[usermodel] andGroupChatId:groupId withComplationBlock:nil];
                         }
                         
                         //发送通知，即时标记出席了当前群
@@ -819,7 +819,9 @@ static SocketManager *manager = nil;
             }];
             GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             groupChatModel.myGroupName = USERINFO.username;
-            [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId];
+            [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
+                
+            }];
             block(groupChatModel.groupUserVos);
         }
     } failure:^(ErrorData *error) {
