@@ -448,8 +448,11 @@
     [FMDBShareManager creatTableWithTableType:ZhiMa_Collection_Table];
     
     //为数据库新增索引
-    [FMDBShareManager creatIndexInTable:ZhiMa_Chat_Converse_Table withString:@"converseId,converseType"];
-    [FMDBShareManager creatIndexInTable:ZhiMa_GroupChat_GroupMenber_Table withString:@"converseId,memberId"];
+    [FMDBShareManager creatIndexInTable:ZhiMa_Chat_Converse_Table withString:@"converseId,converseType" andIndexName:@"ConverseIndex"];
+    [FMDBShareManager creatIndexInTable:ZhiMa_GroupChat_GroupMenber_Table withString:@"converseId,memberId" andIndexName:@"GroupMemberIndex"];
+    [FMDBShareManager creatIndexInTable:ZhiMa_Circle_Comment_Table withString:@"circle_ID" andIndexName:@"CircleCommentIndex"];
+    [FMDBShareManager creatIndexInTable:ZhiMa_Circle_Pic_Table withString:@"circle_ID" andIndexName:@"CirclePicIndex"];
+    [FMDBShareManager creatIndexInTable:ZhiMa_Circle_Like_Table withString:@"circle_ID" andIndexName:@"CircleLikeIndex"];
 }
 
 // 注册通知

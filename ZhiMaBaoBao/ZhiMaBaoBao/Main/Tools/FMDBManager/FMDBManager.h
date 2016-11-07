@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
+
+typedef void(^ComplationBlock)(BOOL success);
+
 @class ConverseModel,LGMessage,ZhiMaFriendModel,GroupChatModel,GroupUserModel;
 @class SDTimeLineCellModel,SDTimeLineCellCommentItemModel,SDTimeLineCellLikeItemModel;
 @class ZMServiceMessag,ServiceInfoModel;
@@ -71,7 +74,7 @@ typedef enum : NSUInteger {
 - (NSString *)updataTable:(ZhiMaSqliteTableType)type withColumn:(NSString *)column andColumnType:(NSString *)columnType;
 
 // 为表新建索引
-- (BOOL)creatIndexInTable:(ZhiMaSqliteTableType)type withString:(NSString *)str;
+- (BOOL)creatIndexInTable:(ZhiMaSqliteTableType)type withString:(NSString *)str andIndexName:(NSString *)indexName;
 
 /**
  *   关闭所有表
@@ -256,7 +259,18 @@ typedef enum : NSUInteger {
  *
  *  @param dataArray 数据数组 <ConverseModel *>
  */
-- (void)saveConverseListDataWithDataArray:(NSArray <ConverseModel *> *)dataArray;
+- (void)saveConverseListDataWithDataArray:(NSArray <ConverseModel *> *)dataArray withComplationBlock:(ComplationBlock)block;
+
+
+
+
+/**
+ 更新会话 - 不执行查询操作
+
+ @param dataArray 模型数组
+ @param block     成功/失败回调
+ */
+- (void)alterConverseListDataWhtDataArray:(NSArray <ConverseModel *>*)dataArray withComplationBlock:(ComplationBlock)block;
 
 
 /**

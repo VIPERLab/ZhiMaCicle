@@ -96,7 +96,7 @@
 
 //  保存会话信息
 - (void)saveDataToSqlist:(NSArray *)dataArray {
-    [FMDBShareManager saveConverseListDataWithDataArray:dataArray];
+    [FMDBShareManager saveConverseListDataWithDataArray:dataArray withComplationBlock:nil];
 }
 
 - (void)setupView {
