@@ -70,6 +70,9 @@ typedef enum : NSUInteger {
 // 更新数据库
 - (NSString *)updataTable:(ZhiMaSqliteTableType)type withColumn:(NSString *)column andColumnType:(NSString *)columnType;
 
+// 为表新建索引
+- (BOOL)creatIndexInTable:(ZhiMaSqliteTableType)type withString:(NSString *)str;
+
 /**
  *   关闭所有表
  */

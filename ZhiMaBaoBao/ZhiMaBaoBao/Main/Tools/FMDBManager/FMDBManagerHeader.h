@@ -59,18 +59,18 @@
 
 
 // 创建朋友圈点赞 ----- 字段名
-#define CirCle_LikeField @"( userName TEXT NOT NULL, userId TEXT NOT NULL, userPhoto TEXT NOT NULL, circle_ID TEXT NOT NULL)"
+#define CirCle_LikeField @"(userName TEXT NOT NULL, userId TEXT NOT NULL, userPhoto TEXT NOT NULL, circle_ID TEXT NOT NULL)"
 // 取 ----  点赞字段 -- 名
 #define CirCle_LikeFields_Name @"userName, userId, userPhoto, circle_ID"
 
 
 // 创建 聊天会话 table 字段
-#define Chat_ConverseField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, time INTEGER, converseType INTEGER, converseId TEXT NOT NULL, unReadCount INTEGER, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL,serviceMessageType INTEGER, PRIMARY KEY ('converseId'))"
+#define Chat_ConverseField @"(time INTEGER, converseType INTEGER, converseId TEXT NOT NULL, unReadCount INTEGER, topChat INTEGER, disturb INTEGER, converseName TEXT NOT NULL, converseHead_photo TEXT NOT NULL, converseContent TEXT NOT NULL,serviceMessageType INTEGER, PRIMARY KEY ('converseId'))"
 #define Chat_ConverseFields_Name @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent,serviceMessageType"
 
 
 // 创建 消息表 字段
-#define Chat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, msgid TEXT NOT NULL, type INTEGER, fromUid TEXT NOT NULL, toUidOrGroupId TEXT NOT NULL, time INTEGER, text TEXT NOT NULL, isGroup INTEGER, converseId TEXT NOT NULL, is_read INTEGER, sendStatus INTEGER, holderImageUrlString TEXT, isDownLoad INTEGER, videoDownloadUrl TEXT)"
+#define Chat_MessageField @"(msgid TEXT NOT NULL PRIMARY KEY, type INTEGER, fromUid TEXT NOT NULL, toUidOrGroupId TEXT NOT NULL, time INTEGER, text TEXT NOT NULL, isGroup INTEGER, converseId TEXT NOT NULL, is_read INTEGER, sendStatus INTEGER, holderImageUrlString TEXT, isDownLoad INTEGER, videoDownloadUrl TEXT)"
 #define Chat_MessageFields_name @"msgid,type,fromUid,toUidOrGroupId,time,text,isGroup,converseId,is_read,sendStatus,holderImageUrlString,isDownLoad,videoDownloadUrl"
 
 

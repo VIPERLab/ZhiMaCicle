@@ -315,6 +315,10 @@
 //        return;
 //    }
     
+    
+    
+    
+    
     // 更新消息数据库
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
@@ -442,6 +446,10 @@
     
     //收藏相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_Collection_Table];
+    
+    //为数据库新增索引
+    [FMDBShareManager creatIndexInTable:ZhiMa_Chat_Converse_Table withString:@"converseId,converseType"];
+    [FMDBShareManager creatIndexInTable:ZhiMa_GroupChat_GroupMenber_Table withString:@"converseId,memberId"];
 }
 
 // 注册通知
