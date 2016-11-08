@@ -107,8 +107,8 @@
 
 #pragma mark - 服务号消息
 //服务号消息 表
-#define Service_Message_MemberField @"(serviceId TEXT NOT NULL, time INTEGER ,msgid TEXT NOT NULL, msgType INTEGER NOT NULL,listJson TEXT NOT NULL, PRIMARY KEY ('serviceId' ASC) ON CONFLICT REPLACE)"
-#define Service_Message_MemberFields_Name @"serviceId, time, msgid, msgType, listJson"
+#define Service_Message_MemberField @"(serviceId TEXT NOT NULL, time INTEGER ,sid TEXT NOT NULL, msgType INTEGER NOT NULL,listJson TEXT NOT NULL, PRIMARY KEY ('serviceId' ASC) ON CONFLICT REPLACE)"
+#define Service_Message_MemberFields_Name @"serviceId, time, sid, msgType, listJson"
 
 
 #pragma mark - 收藏

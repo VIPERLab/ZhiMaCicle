@@ -2325,7 +2325,7 @@
 - (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupChatId withComplationBlock:(ComplationBlock)block {
     NSLog(@"----开始插入群信息");
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
-    [queue inDatabase:^(FMDatabase *db) {
+     [queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSThread *thread = [NSThread currentThread];
         BOOL isSuccess = YES;
         for (GroupUserModel *model in array) {
@@ -2700,7 +2700,7 @@
         FMResultSet *result = [db executeQuery:optionStr];
         while ([result next]) {
             ZMServiceMessage *model = [[ZMServiceMessage alloc] init];
-            model.service.sid = [result stringForColumn:@"msgid"];
+            model.service.sid = [result stringForColumn:@"sid"];
             model.listJson = [result stringForColumn:@"listJson"];
             model.timeStamp = [result intForColumn:@"time"];
             model.type = [result intForColumn:@"msgType"];
@@ -2722,7 +2722,7 @@
     __block BOOL isSuccess = NO;
     
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Service_Message_Table];
-    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_Service_Message_Table withOption:[NSString stringWithFormat:@"msgid = '%@'",messageId]];
+    NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_Service_Message_Table withOption:[NSString stringWithFormat:@"sid = '%@'",messageId]];
     [queue inDatabase:^(FMDatabase *db) {
         BOOL success = [db executeUpdate:optionStr];
         if (success) {
