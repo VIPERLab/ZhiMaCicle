@@ -314,7 +314,7 @@
                 
                 label.sd_layout
                 .leftSpaceToView(buttonView, 8)
-                .widthIs(size.width)
+                .widthIs(size.width + 1)
                 .topEqualToView(buttonView)
                 .heightIs(size.height);
             }

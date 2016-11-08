@@ -33,11 +33,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     
     self.dataArray = [[FMDBShareManager getAllCollectionsWithUserId:USERINFO.userID] mutableCopy];
-    if (!self.dataArray.count) {
-        [self getResponData];
-    } else {
-        [_tableView reloadData];
-    }
+
+    [_tableView reloadData];
+    
+    
+    [self getResponData];
     
 }
 

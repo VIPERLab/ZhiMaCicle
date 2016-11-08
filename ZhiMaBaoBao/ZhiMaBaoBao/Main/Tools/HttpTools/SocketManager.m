@@ -827,7 +827,7 @@ static SocketManager *manager = nil;
             if (![FMDBShareManager isGroupChatExist:groupId]) {
                 //异步存储群成员信息
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                    [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
+                        [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
                         //存群信息
                         [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupId];
                         

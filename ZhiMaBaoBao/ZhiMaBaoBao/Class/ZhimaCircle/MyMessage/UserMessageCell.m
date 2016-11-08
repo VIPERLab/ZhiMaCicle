@@ -135,12 +135,10 @@
     
     //获取文字高度
     CGFloat contentHeight = [self changeStationWidth:self.contentLabel.text anWidthTxtt:[UIScreen mainScreen].bounds.size.width - (CGRectGetMaxX(self.iconView.frame) + 70) anfont:14];
-    self.contentLabel.frame = CGRectMake(CGRectGetMaxX(self.iconView.frame) + 5, CGRectGetMaxY(self.nameLabel.frame) + 5, [UIScreen mainScreen].bounds.size.width - (CGRectGetMaxX(self.iconView.frame) + 70), contentHeight);
+    self.contentLabel.frame = CGRectMake(CGRectGetMaxX(self.iconView.frame) + 5, CGRectGetMaxY(self.nameLabel.frame) + 5, [UIScreen mainScreen].bounds.size.width - (CGRectGetMaxX(self.iconView.frame) + 80), contentHeight);
     
     
     self.creatTimeLabel.frame = CGRectMake(CGRectGetMinX(self.nameLabel.frame), CGRectGetMaxY(self.contentLabel.frame) + 5, 200, 20);
-    
-    
     
     self.bottomLineView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - 0.5, CGRectGetWidth(self.frame), 0.5);
     

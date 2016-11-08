@@ -1396,15 +1396,21 @@
             } else {
                 NSLog(@"插入用户失败");
                 if (block) {
-                    block(NO);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        block(NO);
+                    });
                     isSuccess = NO;
                     break;
                 }
             }
         }
-        if (isSuccess && block) {
-            block(YES);
-        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (isSuccess && block) {
+                block(YES);
+            }
+        });
+        
     }];
 }
 
@@ -1590,15 +1596,20 @@
             } else {
                 NSLog(@"插入/更新 新好友失败");
                 if (block) {
-                    block(NO);
+                    
                     isSuccess = NO;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        block(NO);
+                    });
                     break;
                 }
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (isSuccess && block) {
+                    block(YES);
+                }
+            });
             
-            if (isSuccess && block) {
-                block(YES);
-            }
         }
     }];
     
@@ -1641,15 +1652,21 @@
             } else {
                 NSLog(@"插入会话失败");
                 if (block) {
-                    block(NO);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        block(NO);
+                    });
+                    
                     isSuccess = NO;
                 }
                 break;
             }
         }
-        if (block && isSuccess) {
-            block(YES);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (block && isSuccess) {
+                block(YES);
+            }
+        });
+        
     }];
 }
 
@@ -1678,15 +1695,21 @@
             }else {
                 NSLog(@"更新会话失败");
                 if (block) {
-                    block(NO);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        block(NO);
+                    });
+                    
                     isSuccess = NO;
                 }
                 break;
             }
         }
-        if (block && isSuccess) {
-            block(YES);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (block && isSuccess) {
+                block(YES);
+            }
+        });
+        
     }];
 }
 
@@ -2331,16 +2354,21 @@
                 NSLog(@"更新群成员成功");
             } else {
                 NSLog(@"更新群成员失败");
+                isSuccess = NO;
                 if (block) {
-                    block(NO);
-                    isSuccess = NO;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        block(NO);
+                    });
                 }
                 break;
             }
         }
-        if (block && isSuccess) {
-            block(YES);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (block && isSuccess) {
+                block(YES);
+            }
+        });
+        
     }];
     NSLog(@"----群信息插入结束");
 }
@@ -2747,13 +2775,11 @@
         
         NSString *optionStr;
         if (isExist) {
-//            NSString *option1 = [NSString stringWithFormat:@"isDownload = '%@'",@(model.isDownload)];
-//            optionStr = [FMDBShareManager alterTable:ZhiMa_Collection_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"collectionId = %@",model.ID]];
             continue;
         } else {
             optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Collection_Table];
         }
-//        @"head, name, time, content, ID, type, pic_name, small_img, isDownload"
+
         [queue inDatabase:^(FMDatabase *db) {
             BOOL success = [db executeUpdate:optionStr,model.head,model.name,model.time,model.content,model.ID,@(model.type),model.pic_name,model.small_img,@(model.isDownload),model.locationUrl];
             if (success) {
@@ -2791,6 +2817,7 @@
             model.small_img = [result stringForColumn:@"small_img"];
             model.isDownload = [result intForColumn:@"isDownload"];
             model.locationUrl = [result stringForColumn:@"locationUrl"];
+            model.time = [result stringForColumn:@"time"];
             model.type = [result intForColumn:@"type"];
             [dataArray addObject:model];
         }
@@ -2822,6 +2849,7 @@
             model.isDownload = [result intForColumn:@"isDownload"];
             model.locationUrl = [result stringForColumn:@"locationUrl"];
             model.type = [result intForColumn:@"type"];
+            model.time = [result stringForColumn:@"time"];
         }
     }];
     return model;

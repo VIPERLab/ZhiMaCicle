@@ -105,7 +105,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             
             //更新会话表 （头像）
             FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-            NSString *option1 = [NSString stringWithFormat:@"converseHead_photo = '%@'",self.friend.user_Head_photo];
+            NSString *option1 = [NSString stringWithFormat:@"converseLogo = '%@'",self.friend.user_Head_photo];
             NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",self.userId];
             NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
             [queue inDatabase:^(FMDatabase *db) {
