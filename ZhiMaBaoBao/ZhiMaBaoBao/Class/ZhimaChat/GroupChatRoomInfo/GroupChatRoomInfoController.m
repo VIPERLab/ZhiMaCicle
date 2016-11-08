@@ -52,7 +52,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     [self setupView];
     
@@ -69,9 +68,11 @@
 
 // 拉取网络上最新的数据
 - (void)dataRequst {
+    NSLog(@"---------------1");
     [LCProgressHUD showLoadingText:@"请稍等..."];
     [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.converseId success:^(ResponseData *responseData) {
-        
+        NSLog(@"---------------2");
+
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:responseData.msg];
             return ;

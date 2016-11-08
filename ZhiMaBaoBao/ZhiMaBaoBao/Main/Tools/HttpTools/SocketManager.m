@@ -483,7 +483,6 @@ static SocketManager *manager = nil;
 //收到从群组删除用户 actuid:操作者id   uids:被删除用户的id
 - (void)deleteGroupUser:(NSString *)groupId actUid:(NSString *)actUid uids:(NSString *)uids{
     
-    [self gengrateGroupInfo:groupId completion:^(NSArray *groupUsers) {
         LGMessage *systemMsg = [[LGMessage alloc] init];
         //从群表cha用户数据
         NSArray *uidsArr = [uids componentsSeparatedByString:@","];
@@ -525,7 +524,6 @@ static SocketManager *manager = nil;
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         userInfo[@"message"] = systemMsg;
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
-    }];
 }
 
 //从群成员数组中取出对应id的用户数据模型
@@ -808,6 +806,7 @@ static SocketManager *manager = nil;
 
 //通过groupid生成群信息表，不添加会话  -- （方便查询群成员昵称）
 - (void)gengrateGroupInfo:(NSString *)groupId completion:(CompleteBlock)block{
+    
     //加载群信息
     [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
@@ -824,6 +823,18 @@ static SocketManager *manager = nil;
                 }];
             });
 
+            //如果存在群成员信息表 （通过是否存在群信息表判断）
+            if (![FMDBShareManager isGroupChatExist:groupId]) {
+                //异步存储群成员信息
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                    [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
+                        //存群信息
+                        [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupId];
+                        
+                    }];
+                });
+            }
+
             block(groupChatModel.groupUserVos);
         }
     } failure:^(ErrorData *error) {
@@ -834,8 +845,8 @@ static SocketManager *manager = nil;
 //插入一条群消息到本地数据库
 - (BOOL)addGroupMessage:(LGMessage *)message groupId:(NSString *)groupId{
     
-    //判断数据库是否存在该群会话 -> 不存在 从网络加载数据  存到数据库
-    if (![FMDBShareManager isConverseIsExist:groupId]) {
+    //判断数据库是否存在群成员表 （通过群信息表判断） -> 不存在 从网络加载数据  存到数据库
+    if (![FMDBShareManager isGroupChatExist:groupId]) {
         //加载群信息
         [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
@@ -848,16 +859,31 @@ static SocketManager *manager = nil;
                 GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                 
                 
-                //新建一个群会话，插入数据库
-                [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
-                
-                //保存群消息到数据库
-                [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-                
-                //发送通知，刷新会话列表
-                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                userInfo[@"message"] = message;
-                [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                //开线程异步存群成员信息
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                    [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
+                        //群成员保存完毕，保存群信息到数据库,新建会话，保存群消息记录
+                            //保存群信息
+                            [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
+                            //创建会话
+                            ConverseModel *converseModel  = [[ConverseModel alloc] init];
+                            converseModel.time = [NSDate cTimestampFromString:groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+                            converseModel.converseType = 1;
+                            converseModel.converseId = groupChatModel.groupId;
+                            converseModel.unReadCount = 0;
+                            converseModel.converseName = groupChatModel.groupName;
+                            converseModel.converseHead_photo = groupChatModel.groupAvtar;
+                            converseModel.lastConverse = @" ";
+                            [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                            //保存群消息到数据库
+                            [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+                            
+                            //发送通知，刷新会话列表
+                            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                            userInfo[@"message"] = message;
+                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                    }];
+                });
             }
         } failure:^(ErrorData *error) {
             

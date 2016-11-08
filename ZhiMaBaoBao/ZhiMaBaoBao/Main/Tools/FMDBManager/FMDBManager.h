@@ -388,7 +388,14 @@ typedef enum : NSUInteger {
  */
 - (void)deletedGroupInfoWithGroupId:(NSString *)groupId;
 
+/**
+ 判断是否存在这个群
 
+ @param groupId 群id
+
+ @return 返回是否查询成功
+ */
+- (BOOL)isGroupChatExist:(NSString *)groupId;
 
 
 #pragma mark - 群成员信息表
