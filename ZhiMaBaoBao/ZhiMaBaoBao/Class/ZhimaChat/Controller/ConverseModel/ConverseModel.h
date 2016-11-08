@@ -10,7 +10,7 @@
 typedef NS_OPTIONS(NSUInteger, ConversionType){
     ConversionTypeSingle = 0,       // 单聊
     ConversionTypeGroupChat ,       // 群聊
-    ConversionTypeActivity          // 红包活动
+    ConversionTypeActivity          // 服务号
 };
 
 #import <Foundation/Foundation.h>
@@ -23,7 +23,7 @@ typedef NS_OPTIONS(NSUInteger, ConversionType){
 @property (nonatomic, assign) int time;
 
 /**
- *  会话类型  0:单聊  1:群聊  2:活动红包
+ *  会话类型  0:单聊  1:群聊  2:服务号
  */
 @property (nonatomic, assign) ConversionType converseType;
 
@@ -65,7 +65,7 @@ typedef NS_OPTIONS(NSUInteger, ConversionType){
 
 
 /**
- 服务号消息类型
+ 服务号消息类型 - 判断是否红包类型
  */
 @property (nonatomic, assign) int serviceMessageType;
 

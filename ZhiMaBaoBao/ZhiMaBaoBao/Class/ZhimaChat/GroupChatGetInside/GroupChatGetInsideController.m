@@ -48,7 +48,7 @@
         }];
         GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
         self.groupChatModel = groupChatModel;
-        self.groupChatModel.myGroupName = USERINFO.username;
+        
         
         [self setupView];
         
@@ -117,7 +117,7 @@
             }];
             GroupChatModel *model  = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             self.groupChatModel = model;
-            model.myGroupName = USERINFO.username;
+            
             //保存群会话信息，插入数据库
             [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupId];
             

@@ -13,6 +13,11 @@
  /** 群成员昵称*/
 @property (nonatomic, copy) NSString *friend_nick;
 
+/**
+ 群成员在群聊中的自定义名字
+ */
+@property (nonatomic, copy) NSString *memberGroupName;
+
  /** 群成员头像*/
 @property (nonatomic, copy) NSString *head_photo;
 

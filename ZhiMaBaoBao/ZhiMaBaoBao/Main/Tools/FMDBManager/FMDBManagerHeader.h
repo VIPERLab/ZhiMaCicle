@@ -14,7 +14,8 @@
 
 // 数据库路径
 #define ZhiMa_SqlitePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:[NSString stringWithFormat:@"ZhiMa%@.sqlite",USERINFO.userID]]
-
+// 新的数据库路径
+#define ZhiMa_NEW_SqlitePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:[NSString stringWithFormat:@"ZhiMa-%@.sqlite",USERINFO.userID]]
 
 
 //  表名
@@ -27,13 +28,13 @@
 #define ZhiMaChatConvence_Table_Name @"ChatConverse "
 #define ZhiMaChatMessage_Table_Name @"ChatMessage "
 /*用户表*/
-#define ZhiMaUserMessage_Table_Name @"UserMessage "
-#define ZhiMaNewFriend_Table_Name @"NewFriend "
+#define ZhiMaUserMessage_Table_Name @"Friends "
+#define ZhiMaNewFriend_Table_Name @"NewFriends "
 /*群聊信息表*/
-#define ZhiMaGroupChat_Table_Name @"GroupChat "
-#define ZhiMaGroupChatMember_Table_Name @"GroupChatMember "
+#define ZhiMaGroupChat_Table_Name @"GroupInfo "
+#define ZhiMaGroupChatMember_Table_Name @"GroupMember "
 /*服务号表*/
-#define ZhiMaService_TableName @"Service "
+#define ZhiMaService_TableName @"ServiceInfo "
 #define ZhiMaService_Message_TableName @"ServiceMessage "
 /*收藏表*/
 #define ZhiMaCollection_TableName @"Collection "
@@ -63,44 +64,54 @@
 // 取 ----  点赞字段 -- 名
 #define CirCle_LikeFields_Name @"userName, userId, userPhoto, circle_ID"
 
-
+#pragma mark - 会话
 // 创建 聊天会话 table 字段
-#define Chat_ConverseField @"(time INTEGER, converseType INTEGER, converseId TEXT, unReadCount INTEGER, topChat INTEGER, disturb INTEGER, converseName TEXT, converseHead_photo TEXT, converseContent TEXT,serviceMessageType INTEGER, PRIMARY KEY ('converseId'))"
-#define Chat_ConverseFields_Name @"time,converseType,converseId,unReadCount,topChat,disturb,converseName,converseHead_photo,converseContent,serviceMessageType"
+#define Chat_ConverseField @"(converseId TEXT, converseType INTEGER, converseName TEXT, converseLogo TEXT, converseContent TEXT, unReadCount INTEGER, topChat INTEGER, noDisturb INTEGER, time INTEGER,serviceMessageType INTEGER, PRIMARY KEY ('converseId') ON CONFLICT REPLACE)"
+#define Chat_ConverseFields_Name @"converseId,converseType,converseName,converseLogo,converseContent,unReadCount,topChat,noDisturb,time,serviceMessageType"
 
 
+#pragma mark - 消息
 // 创建 消息表 字段
-#define Chat_MessageField @"(msgid TEXT NOT NULL PRIMARY KEY, type INTEGER, fromUid TEXT NOT NULL, toUidOrGroupId TEXT NOT NULL, time INTEGER, text TEXT NOT NULL, isGroup INTEGER, converseId TEXT NOT NULL, is_read INTEGER, sendStatus INTEGER, holderImageUrlString TEXT, isDownLoad INTEGER, videoDownloadUrl TEXT)"
-#define Chat_MessageFields_name @"msgid,type,fromUid,toUidOrGroupId,time,text,isGroup,converseId,is_read,sendStatus,holderImageUrlString,isDownLoad,videoDownloadUrl"
+#define Chat_MessageField @"(converseId TEXT, msgid TEXT NOT NULL, converseType INTEGER DEFAULT 0, type INTEGER DEFAULT 0, fromUid TEXT, toUidOrGroupId TEXT, subject TEXT, text TEXT, sendStatus INTEGER DEFAULT 1, isRead INTEGER DEFAULT 0, link TEXT, holderImageUrl TEXT, isDownLoad INTEGER DEFAULT 0, videoUrl TEXT, time INTEGER, PRIMARY KEY ('msgid') ON CONFLICT REPLACE)"
+#define Chat_MessageFields_name @"converseId ,msgid,converseType ,type ,fromUid ,toUidOrGroupId ,subject ,text ,sendStatus ,isRead,link ,holderImageUrl ,isDownLoad ,videoUrl ,time"
 
 
-// 用户表
-#define User_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, user_Name TEXT NOT NULL, user_Id TEXT NOT NULL, user_Head_photo TEXT NOT NULL, user_NickName TEXT)"
-#define User_MessageFields_name @"user_Name, user_Id, user_Head_photo, user_NickName";
+#pragma mark - 好友信息表
+// 好友信息表
+#define User_MessageField @"(userId TEXT NOT NULL, userName TEXT NOT NULL, defineName TEXT, userPhoto TEXT, PRIMARY KEY ('userId') ON CONFLICT REPLACE)"
+#define User_MessageFields_name @"userId, userName, defineName, userPhoto";
 
 
+#pragma mark - 新好友
 // 新的好友 表
-#define NewFrend_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, user_Name TEXT NOT NULL, user_Id TEXT NOT NULL, user_Head_photo TEXT NOT NULL, status INTEGER, userId TEXT NOT NULL)"
-#define NewFriend_MessageFields_Name @"user_Name, user_Id, user_Head_photo, status, userId"
+#define NewFrend_MessageField @"(userId TEXT NOT NULL, userPhoto TEXT, userName TEXT, status INTEGER DEFAULT 0,  PRIMARY KEY ('userId') ON CONFLICT REPLACE)"
+#define NewFriend_MessageFields_Name @"userId, userPhoto, userName, status"
 
+
+
+#pragma mark - 群信息
 //群聊信息表
-#define GroupChat_MessageField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER, groupAvtar TEXT)"
-#define GroupChat_MessageFields_name @"groupId, groupName, notice, topChat, disturb, saveToMailList, myGroupName, showMemberName, groupAvtar"
+#define GroupChat_MessageField @"(groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT, groupPhoto TEXT, topChat INTEGER DEFAULT 0, noDisutrb INTEGER DEFAULT 0, saveToMailList INTEGER DEFAULT 0, showMemberName INTEGER DEFAULT 0, PRIMARY KEY ('groupId' ASC) ON CONFLICT REPLACE)"
+#define GroupChat_MessageFields_name @"groupId, groupName, notice, groupPhoto, topChat, noDisutrb, saveToMailList, showMemberName"
 
+#pragma mark - 群成员
 //群成员表
-#define GroupChat_MemberField @"(converseId TEXT NOT NULL, memberId TEXT NOT NULL, memberName TEXT NOT NULL, memberHeader_Photo TEXT NOT NULL, memberGroupState INTEGER)"
-#define GroupChat_MemberFields_Name @"converseId, memberId, memberName, memberHeader_Photo,memberGroupState"
+#define GroupChat_MemberField @"(groupId TEXT NOT NULL, memberId TEXT NOT NULL, memberName TEXT NOT NULL, memberGroupName TEXT NOT NULL, memberPhoto TEXT, memberGroupState INTEGER)"
+#define GroupChat_MemberFields_Name @"groupId, memberId, memberName, memberGroupName, memberPhoto,memberGroupState"
 
 
-
+#pragma mark - 服务号信息
 // 服务号基础信息 表
-#define Service_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, avtarUrl TEXT NOT NULL, serviceName TEXT NOT NULL, functionDes TEXT NOT NULL, companyName TEXT NOT NULL, acceptMsg INTEGER, topChat INTEGER, serviceId TEXT NOT NULL)"
-#define Service_MemberFields_Name @"avtarUrl, serviceName, functionDes, companyName, acceptMsg, topChat, serviceId"
+#define Service_MemberField @"(serviceId TEXT NOT NULL, serviceName TEXT NOT NULL, serviceLogo TEXT NOT NULL, serviceIntro TEXT, serviceMaster TEXT NOT NULL, serviceTel TEXT, serviceRange TEXT, serviceLongitude  TEXT, serviceLantitude TEXT, serviceReceiveMsg INTEGER DEFAULT 1, PRIMARY KEY ('serviceId' ASC))"
+#define Service_MemberFields_Name @"serviceId, serviceName, serviceLogo, serviceIntro, serviceMaster, serviceTel, serviceRange, serviceLongitude, serviceLantitude, serviceReceiveMsg"
 
+#pragma mark - 服务号消息
 //服务号消息 表
-#define Service_Message_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, serviceId TEXT NOT NULL, time INTEGER ,msgid TEXT NOT NULL, msgType INTEGER NOT NULL,listJson TEXT NOT NULL)"
+#define Service_Message_MemberField @"(serviceId TEXT NOT NULL, time INTEGER ,msgid TEXT NOT NULL, msgType INTEGER NOT NULL,listJson TEXT NOT NULL, PRIMARY KEY ('serviceId' ASC) ON CONFLICT REPLACE)"
 #define Service_Message_MemberFields_Name @"serviceId, time, msgid, msgType, listJson"
 
+
+#pragma mark - 收藏
 // 收藏相关
 #define Collection_MemberField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, head TEXT NOT NULL, name TEXT NOT NULL, time TEXT NOT NULL, content TEXT, collectionId TEXT NOT NULL, type INTEGER, pic_name TEXT, small_img TEXT, isDownload INTEGER, locationUrl TEXT)"
 #define Collection_MemberFields_Name @"head, name, time, content, collectionId, type, pic_name, small_img, isDownload, locationUrl"

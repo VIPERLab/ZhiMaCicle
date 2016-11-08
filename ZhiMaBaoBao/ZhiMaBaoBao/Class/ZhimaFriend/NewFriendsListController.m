@@ -56,13 +56,12 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
             for (ZhiMaFriendModel *model in self.friendsArr) {  //从网络拉取的新的好友，status 设置为NO
                 model.status = NO;
             }
-            [FMDBShareManager saveNewFirendsWithArray:self.friendsArr andUserId:USERINFO.userID];
-            self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
+            [FMDBShareManager saveNewFirendsWithArray:self.friendsArr withComplationBlock:nil];
             [self.tableView reloadData];
             
         }else{
             //如果没有数据，直接从数据库拉取
-            self.friendsArr = [[FMDBShareManager getAllNewFriendsByUserId:USERINFO.userID] mutableCopy];
+            self.friendsArr = [[FMDBShareManager getAllNewFriends] mutableCopy];
             [self.tableView reloadData];
         }
     } failure:^(ErrorData *error) {
@@ -111,7 +110,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
-            [FMDBShareManager saveUserMessageWithMessageArray:@[friend]];
+            [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil];
             [[SocketManager shareInstance] agreeFriendRequest:friend.user_Id];
             
             
@@ -120,7 +119,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 
             //添加好友成功 -- 更新数据库 新的好友表  和好友表
             netFriend.status = YES;
-            [FMDBShareManager upDataNewFriendsMessageByFriendModel:netFriend];
+            [FMDBShareManager saveNewFirendsWithArray:@[netFriend] withComplationBlock:nil];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             
         }else{

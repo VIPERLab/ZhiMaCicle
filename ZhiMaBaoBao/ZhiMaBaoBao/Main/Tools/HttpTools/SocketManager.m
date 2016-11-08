@@ -687,7 +687,7 @@ static SocketManager *manager = nil;
                 
                 //新建一个群会话，插入数据库  (直接修改群名称)
                 GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-                groupChatModel.myGroupName = USERINFO.username;
+                
                 groupChatModel.groupName = groupName;
                 [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
                 
@@ -771,7 +771,7 @@ static SocketManager *manager = nil;
             ZhiMaFriendModel *friend = [ZhiMaFriendModel mj_objectWithKeyValues:responseData.data];
             
             //插入好友到数据库
-            [FMDBShareManager saveUserMessageWithMessageArray:@[friend]];
+            [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil];
             
             //添加系统消息
             [self addSystemMsgToSqlite:friend];
@@ -818,7 +818,7 @@ static SocketManager *manager = nil;
                          };
             }];
             GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-            groupChatModel.myGroupName = USERINFO.username;
+            
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
                 }];
@@ -846,7 +846,7 @@ static SocketManager *manager = nil;
                              };
                 }];
                 GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-                groupChatModel.myGroupName = USERINFO.username;
+                
                 
                 //新建一个群会话，插入数据库
                 [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];

@@ -94,7 +94,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         
         //删除数据库旧数据，插入新数据
         [FMDBShareManager deletedAllUserMessage];
-        [FMDBShareManager saveUserMessageWithMessageArray:self.friends];
+        [FMDBShareManager saveUserMessageWithMessageArray:self.friends withComplationBlock:nil];
         
         //更新会话表用户头像和昵称
         NSArray *allConversions = [FMDBShareManager getChatConverseDataInArray];
@@ -255,7 +255,6 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     [userInfo save];
     
     //插入数据库，显示未读角标
-//    [FMDBShareManager upDataNewFriendsMessageByFriendModel:friend];
     self.unReadLabel.hidden = NO;
     self.unReadLabel.text = [NSString stringWithFormat:@"%d",USERINFO.unReadCount];
     if (USERINFO.unReadCount == 0) {
@@ -285,7 +284,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
         
         //更新数据库，然后刷新列表
-        [FMDBShareManager saveUserMessageWithMessageArray:self.friends];
+        [FMDBShareManager saveUserMessageWithMessageArray:self.friends withComplationBlock:nil];
 
         [self friendsListSort];
 

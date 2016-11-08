@@ -76,6 +76,17 @@ typedef enum : NSUInteger {
 // 为表新建索引
 - (BOOL)creatIndexInTable:(ZhiMaSqliteTableType)type withString:(NSString *)str andIndexName:(NSString *)indexName;
 
+
+/**
+ 把旧的数据迁移到新的数据库表上
+
+ @param oldPath 旧的数据库路径
+ @param newPath 新的数据库路径
+
+ @return 是否迁移成功
+ */
+- (BOOL)moveDataToNewSQLWithOldPath:(NSString *)oldPath toNewPath:(NSString *)newPath;
+
 /**
  *   关闭所有表
  */
@@ -157,7 +168,7 @@ typedef enum : NSUInteger {
  *
  *  @return 是否插入成功
  */
-- (BOOL)saveUserMessageWithMessageArray:(NSArray <ZhiMaFriendModel *> *)userMessageArray;
+- (void)saveUserMessageWithMessageArray:(NSArray <ZhiMaFriendModel *> *)userMessageArray withComplationBlock:(ComplationBlock)block;
 
 /**
  *  查询所有的消息
@@ -209,7 +220,7 @@ typedef enum : NSUInteger {
  *
  *  @return 新的好友模型数组
  */
-- (NSArray <ZhiMaFriendModel *> *)getAllNewFriendsByUserId:(NSString *)userID;
+- (NSArray <ZhiMaFriendModel *> *)getAllNewFriends;
 
 
 /**
@@ -218,23 +229,13 @@ typedef enum : NSUInteger {
  *  @param dataArray 新的好友信息数组
  *  @param userId    当前用户id
  */
-- (void)saveNewFirendsWithArray:(NSArray <ZhiMaFriendModel *>*)dataArray andUserId:(NSString *)userId;
+- (void)saveNewFirendsWithArray:(NSArray <ZhiMaFriendModel *>*)dataArray withComplationBlock:(ComplationBlock)block;
 
 /**
  *  根据好友id删除新的好友
  *  @param userId    当前用户id
  */
 - (void)deleteNewFriendByUseid:(NSString *)userId;
-
-/**
- *  更新新的好友模型
- *
- *  @param model 新的好友模型
- *
- *  @return 是否更新成功
- */
-- (BOOL)upDataNewFriendsMessageByFriendModel:(ZhiMaFriendModel *)model;
-
 
 
 #pragma mark - 会话相关
@@ -377,14 +378,6 @@ typedef enum : NSUInteger {
  *
  */
 - (GroupChatModel *)getGroupChatMessageByGroupId:(NSString *)groupId;
-
-/**
- *  是否存在群
- *
- *  @param groupId   群id
- *
- */
-- (BOOL)isGroupChatExist:(NSString *)groupId;
 
 
 /**

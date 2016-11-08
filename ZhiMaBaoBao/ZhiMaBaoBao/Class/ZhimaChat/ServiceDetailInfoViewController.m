@@ -152,7 +152,7 @@ static NSString *const reuseIdentifier = @"infocell";
     DetailInfoHeaderView *header = [[DetailInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWITH, 100)];
     header.backgroundColor = self.tableView.backgroundColor;
     header.nameText = self.infoModel.serviceName;
-    header.avtarUrl = self.infoModel.avtarUrl;
+    header.avtarUrl = self.infoModel.serviceLogo;
     if (section == 0) {
         return header;
     }else{
@@ -206,13 +206,13 @@ static NSString *const reuseIdentifier = @"infocell";
     _infoModel = infoModel;
     [self setCustomTitle:self.infoModel.serviceName];
     //防止元素为nil，插入数组崩溃
-    if (!infoModel.functionDes) {
-        infoModel.functionDes = @"";
+    if (!infoModel.serviceIntro) {
+        infoModel.serviceIntro = @"";
     }
     if (!infoModel.serviceName) {
         infoModel.serviceName = @"";
     }
-    _subTitlesArr = @[infoModel.functionDes,infoModel.companyName];
+    _subTitlesArr = @[infoModel.serviceIntro,infoModel.serviceMaster];
 }
 
 //- (NSArray *)subTitlesArr{

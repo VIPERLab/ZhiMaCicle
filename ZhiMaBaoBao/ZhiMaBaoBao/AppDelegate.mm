@@ -92,7 +92,7 @@
         [self creatMySQL];
     }
     //迁移数据库
-    [self moveSQLToNew];
+//    [self moveSQLToNew];
     
     [self notification];
     
@@ -314,11 +314,7 @@
 //    if ([USERINFO.appVersion isEqualToString:version]) {
 //        return;
 //    }
-    
-    
-    
-    
-    
+
     // 更新消息数据库
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
@@ -444,12 +440,25 @@
     [FMDBShareManager creatTableWithTableType:ZhiMa_Service_Table];
     [FMDBShareManager creatTableWithTableType:ZhiMa_Service_Message_Table];
     
+    
     //收藏相关的表
     [FMDBShareManager creatTableWithTableType:ZhiMa_Collection_Table];
     
-    //为数据库新增索引
+    // 为数据库新增索引
+    [self creatSQLIndex];
+    
+}
+
+#pragma mark - 为数据库新增索引
+// 新增索引
+- (void)creatSQLIndex {
+    //会话数据库新增索引
     [FMDBShareManager creatIndexInTable:ZhiMa_Chat_Converse_Table withString:@"converseId,converseType" andIndexName:@"ConverseIndex"];
-    [FMDBShareManager creatIndexInTable:ZhiMa_GroupChat_GroupMenber_Table withString:@"converseId,memberId" andIndexName:@"GroupMemberIndex"];
+    
+    //群成员数据库新增索引
+    [FMDBShareManager creatIndexInTable:ZhiMa_GroupChat_GroupMenber_Table withString:@"groupId,memberId" andIndexName:@"GroupMemberIndex"];
+    
+    //朋友圈新增索引
     [FMDBShareManager creatIndexInTable:ZhiMa_Circle_Comment_Table withString:@"circle_ID" andIndexName:@"CircleCommentIndex"];
     [FMDBShareManager creatIndexInTable:ZhiMa_Circle_Pic_Table withString:@"circle_ID" andIndexName:@"CirclePicIndex"];
     [FMDBShareManager creatIndexInTable:ZhiMa_Circle_Like_Table withString:@"circle_ID" andIndexName:@"CircleLikeIndex"];

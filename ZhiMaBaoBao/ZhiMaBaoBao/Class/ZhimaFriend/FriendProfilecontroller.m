@@ -116,8 +116,8 @@ static NSString *const btnIdentifier = @"btnIdentifier";
                 //插入好友到数据库
                 //添加好友成功 -- 更新数据库 新的好友表  和好友表
                 self.friend.status = YES;
-                [FMDBShareManager upDataNewFriendsMessageByFriendModel:self.friend];
-                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend]];
+                [FMDBShareManager saveNewFirendsWithArray:@[self.friend] withComplationBlock:nil];
+                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend] withComplationBlock:nil];
             }
 
         }else{
@@ -311,7 +311,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 //将好友加入数据库好友列表
-                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend]];
+                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend] withComplationBlock:nil];
                 [[SocketManager shareInstance] agreeFriendRequest:self.userId];
                 [self addSystemMsgToSqlite:self.friend];
                 //重新加载数据 -> 刷新

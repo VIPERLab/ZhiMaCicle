@@ -489,7 +489,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                          };
             }];
             self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-            self.groupChatModel.myGroupName = USERINFO.username;
             //异步存储群成员信息
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
@@ -559,7 +558,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                              };
                 }];
                 self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-                self.groupChatModel.myGroupName = USERINFO.username;
                 //新建一个群会话，插入数据库
 //                [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                 
@@ -607,7 +605,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                  };
                     }];
                     self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-                    self.groupChatModel.myGroupName = USERINFO.username;
+                    
                     //新建一个群会话，插入数据库
                     [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                     
@@ -639,7 +637,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                  };
                     }];
                     self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-                    self.groupChatModel.myGroupName = USERINFO.username;
+                    
                     //保存群会话信息，插入数据库
                     [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
 

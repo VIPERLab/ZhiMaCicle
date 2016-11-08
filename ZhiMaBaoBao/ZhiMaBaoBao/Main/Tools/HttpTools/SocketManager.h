@@ -9,7 +9,6 @@
 //static NSString *HOST = @"192.168.1.248"; //socket
 //static NSString *HOST = @"192.168.1.249"; //测试环境
 static NSString *HOST = @"112.74.143.151"; //测试环境
-
 //static NSString *HOST = @"im.zhimabaobao.com"; //正式环境
 static const uint16_t PORT = 9093;
 

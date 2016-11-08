@@ -92,7 +92,7 @@
                      };
         }];
         self.groupModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-        self.groupModel.myGroupName = USERINFO.username;
+        
         
         //将群组放在数组第一个
         [self dealGroupMembers];

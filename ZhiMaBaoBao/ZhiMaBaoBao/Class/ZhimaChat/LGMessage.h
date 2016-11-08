@@ -78,7 +78,10 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
 /** 语音时长 给安卓用的*/
 @property (nonatomic, assign) NSInteger audioLength;
 
- /** 消息内容*/
+
+/**
+ 消息内容 （或链接描述）
+ */
 @property (nonatomic, copy) NSString *text;
  /** 签名*/
 //@property (nonatomic, copy) NSString *sign;
@@ -120,5 +123,17 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
 @property (nonatomic, copy) NSString  *holderImageUrlString;
 @property (nonatomic, assign)BOOL isDownLoad; //是否已存在本地
 @property (nonatomic, copy) NSString *videoDownloadUrl; //视频下载路径
+
+
+/**
+ 链接主题
+ */
+@property (nonatomic, copy) NSString *subject;
+
+
+/**
+ 链接地址
+ */
+@property (nonatomic, copy) NSString *link;
 
 @end
