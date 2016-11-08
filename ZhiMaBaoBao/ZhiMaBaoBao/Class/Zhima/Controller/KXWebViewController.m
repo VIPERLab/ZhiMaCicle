@@ -30,11 +30,11 @@
     webView.delegate = self;
     [self.view addSubview:webView];
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"userProtocal" ofType:@"html"];
-    NSURL *url = [NSURL fileURLWithPath:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//    NSString *path = [[NSBundle mainBundle] pathForResource:@"userProtocal" ofType:@"html"];
+//    NSURL *url = [NSURL fileURLWithPath:path];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
-//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:_htmlURL]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:_htmlURL]];
     [webView loadRequest:request];
     
     //拦截webview手势

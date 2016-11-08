@@ -106,8 +106,6 @@
         // 更新群信息内容
         [FMDBShareManager saveGroupChatInfo:self.groupModel andConverseID:self.converseId];
         
-        //更新会话
-        
         [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
         
         if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {

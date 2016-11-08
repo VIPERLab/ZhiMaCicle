@@ -90,7 +90,7 @@
 - (void)statusValueChange:(UISwitch *)statusSwitch {
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     NSString *option1 = [NSString string];
-    NSString *option2 = [NSString stringWithFormat:@"converseId = %@",self.converseId];
+    NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",self.converseId];
     if (self.indexPath.section == 2 && self.indexPath.row == 0) {
         // 设置消息免打扰
         option1 = [NSString stringWithFormat:@"disturb = '%zd'",statusSwitch.on];

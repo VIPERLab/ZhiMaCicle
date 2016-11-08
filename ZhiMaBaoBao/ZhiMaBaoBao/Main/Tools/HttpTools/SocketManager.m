@@ -859,7 +859,6 @@ static SocketManager *manager = nil;
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
                         //群成员保存完毕，保存群信息到数据库,新建会话，保存群消息记录
-                        dispatch_async(dispatch_get_main_queue(), ^{
                             //保存群信息
                             [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
                             //创建会话
@@ -879,7 +878,6 @@ static SocketManager *manager = nil;
                             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
                             userInfo[@"message"] = message;
                             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
-                        });
                     }];
                 });
             }
