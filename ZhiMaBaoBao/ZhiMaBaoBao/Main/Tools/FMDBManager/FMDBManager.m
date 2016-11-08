@@ -2005,7 +2005,7 @@
     
     
     // 取出会话模型
-    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:message.toUidOrGroupId andConverseType:1];
+    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:message.toUidOrGroupId andConverseType:ConversionTypeGroupChat];
     
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
 
@@ -2280,7 +2280,7 @@
         }
     }];
     
-    model.groupUserVos = [FMDBShareManager getAllGroupMenberWithGroupId:groupId];
+//    model.groupUserVos = [FMDBShareManager getAllGroupMenberWithGroupId:groupId];
     
     return model;
 }

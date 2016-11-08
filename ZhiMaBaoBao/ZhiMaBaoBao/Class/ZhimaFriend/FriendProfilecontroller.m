@@ -327,7 +327,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 //添加系统消息"你已添加了xx,现在可以开始聊天了"
 - (void)addSystemMsgToSqlite:(ZhiMaFriendModel *)friend{
     LGMessage *systemMsg = [[LGMessage alloc] init];
-    systemMsg.text = [NSString stringWithFormat:@"你已添加了%@,现在可以开始聊天了。",friend.user_Name];
+    systemMsg.text = [NSString stringWithFormat:@"你已添加了%@,现在可以开始聊天了",friend.user_Name];
     systemMsg.fromUid = USERINFO.userID;
     systemMsg.toUidOrGroupId = friend.user_Id;
     systemMsg.type = MessageTypeSystem;

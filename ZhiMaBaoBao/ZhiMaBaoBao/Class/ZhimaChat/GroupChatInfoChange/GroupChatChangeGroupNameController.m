@@ -87,7 +87,20 @@
     [LGNetWorking setupGroup:USERINFO.sessionId groupId:self.groupModel.groupId functionName:@"group_name" value:self.groupModel.groupName success:^(ResponseData *responseData) {
         
         if (responseData.code == 0) {
-            [FMDBShareManager saveGroupChatInfo:self.groupModel andConverseID:self.groupModel.groupId];
+            
+            //更新会话名称
+            FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+            NSString *optionStr1 = [NSString stringWithFormat:@"converseName = '%@'",self.groupModel.groupName];
+            NSString *optionStr2 = [NSString stringWithFormat:@"converseId = '%@'",self.groupModel.groupId];
+            NSString *converseOption = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:optionStr2];
+            [converseQueue inDatabase:^(FMDatabase *db) {
+                BOOL success = [db executeUpdate:converseOption];
+                if (success) {
+                    NSLog(@"更新会话成功");
+                } else {
+                    NSLog(@"更新会话失败");
+                }
+            }];
             
             //socket发送"修改群名"消息,通知群用户修改群名称  -> 插入一条系统消息到数据库
             [[SocketManager shareInstance] renameGroup:self.groupModel.groupId name:self.groupModel.groupName];
@@ -101,6 +114,7 @@
             systemMsg.msgid = [NSString generateMessageID];
             systemMsg.conversionType = ConversionTypeGroupChat;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
+            
             [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:self.groupModel.groupId];
             
             //发送通知，即时更新相应的页面

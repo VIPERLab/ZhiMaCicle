@@ -479,6 +479,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     }
     NSString *userIds = [uidsArr componentsJoinedByString:@","];
     
+    [LCProgressHUD showLoadingText:@"正在发起群聊..."];
+    
     [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
@@ -494,7 +496,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
                     if (success) {
-                        
                         dispatch_async(dispatch_get_main_queue(), ^{
                             //存群信息
                             [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
@@ -518,6 +519,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     }
                 }];
             });
+            
+            
 
         }
     } failure:^(ErrorData *error) {
@@ -537,14 +540,13 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 - (void)createGroupChatAction{
     if (self.selectedFriends.count == 0) {
         _j = 0;
-        [self performSelector:@selector(test) withObject:nil afterDelay:1.0];
+        [self performSelector:@selector(test) withObject:nil afterDelay:0];
         
         return;
     }
     
-    //拼接自己的userId和好友userId
+    //拼接好友的userId
     NSMutableArray *userIdArr = [NSMutableArray array];
-//    [userIdArr addObject:USERINFO.userID];
     for (ZhiMaFriendModel *model in self.selectedFriends) {
         [userIdArr addObject:model.user_Id];
     }
@@ -571,30 +573,38 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                 }];
                 self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                 self.groupChatModel.myGroupName = USERINFO.username;
-                //新建一个群会话，插入数据库
-//                [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                 
                 //异步存储群成员信息
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
                         if (success) {
-                            //群成员信息存储完毕，创建会话
-//                            dispatch_async(dispatch_get_main_queue(), ^{
-//                                
-//                            });
-//                            [FMDBShareManager ];
+                            
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                //存群信息
+                                [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+                                
+                                //创建会话
+                                ConverseModel *converseModel  = [[ConverseModel alloc] init];
+                                converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+                                converseModel.converseType = 1;
+                                converseModel.converseId = self.groupChatModel.groupId;
+                                converseModel.unReadCount = 0;
+                                converseModel.converseName = self.groupChatModel.groupName;
+                                converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
+                                converseModel.lastConverse = @" ";
+                                [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                                
+                                [userIdArr addObject:USERINFO.userID];
+                                NSString *socketUids = [userIdArr componentsJoinedByString:@","];
+                                //通过socket创建群聊
+                                [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
+                                
+                                //跳转到群聊天页面
+                                [self jumpGroupChat];
+                            });
                         }
                     }];
                 });
-                
-                
-                [userIdArr addObject:USERINFO.userID];
-                NSString *socketUids = [userIdArr componentsJoinedByString:@","];
-                //通过socket创建群聊
-                [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
-                
-                //跳转到群聊天页面
-                [self jumpGroupChat];
             }
         } failure:^(ErrorData *error) {
             [LCProgressHUD showFailureText:error.msg];
@@ -619,14 +629,39 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     }];
                     self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                     self.groupChatModel.myGroupName = USERINFO.username;
-                    //新建一个群会话，插入数据库
-                    [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                     
-                    //通过socket创建群聊
-                    [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:userIds];
-                    
-                    //跳转到群聊天页面
-                    [self jumpGroupChat];
+                    //异步存储群成员信息
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                        [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
+                            if (success) {
+                                
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    //存群信息
+                                    [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+                                    
+                                    //创建会话
+                                    ConverseModel *converseModel  = [[ConverseModel alloc] init];
+                                    converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+                                    converseModel.converseType = 1;
+                                    converseModel.converseId = self.groupChatModel.groupId;
+                                    converseModel.unReadCount = 0;
+                                    converseModel.converseName = self.groupChatModel.groupName;
+                                    converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
+                                    converseModel.lastConverse = @" ";
+                                    [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                                    
+                                    [userIdArr addObject:USERINFO.userID];
+                                    NSString *socketUids = [userIdArr componentsJoinedByString:@","];
+                                    //通过socket创建群聊
+                                    [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
+                                    
+                                    //跳转到群聊天页面
+                                    [self jumpGroupChat];
+                                });
+                            }
+                        }];
+                    });
+
                 }
             } failure:^(ErrorData *error) {
                 [LCProgressHUD showFailureText:error.msg];
@@ -651,14 +686,54 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     }];
                     self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                     self.groupChatModel.myGroupName = USERINFO.username;
-                    //保存群会话信息，插入数据库
-                    [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
-
-                    //通过socket拉人进群
-                    [[SocketManager shareInstance] addUserToGroup:self.groupChatModel.groupId uids:userIds];
+                    //异步存储群信息，更新会话名称
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                        [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
+//                            if (success) {
+                        
+//                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    //存群信息
+                                    [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
+                                    
+//                                    //创建会话
+//                                    ConverseModel *converseModel  = [[ConverseModel alloc] init];
+//                                    converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+//                                    converseModel.converseType = 1;
+//                                    converseModel.converseId = self.groupChatModel.groupId;
+//                                    converseModel.unReadCount = 0;
+//                                    converseModel.converseName = self.groupChatModel.groupName;
+//                                    converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
+//                                    converseModel.lastConverse = @" ";
+//                                    [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                                    //更新会话名称
+                                    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+                                    NSLog(@"更新会话数据库");
+                                    [queue inDatabase:^(FMDatabase *db){
+                                        NSString *operationStr;
+                                        NSString *option1 = [NSString stringWithFormat:@" converseName = '%@'",self.groupChatModel.groupName];
+                                        NSString *option2 = [NSString stringWithFormat:@"converseId = '%@' and converseType = '%zd'",self.groupId,ConversionTypeGroupChat];
+                                        operationStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
+                                        
+                                        BOOL success = [db executeUpdate:operationStr];
+                                        if (success) {
+                                            NSLog(@"更新会话名称成功");
+                                        }else{
+                                            NSLog(@"更新会话名称成失败");
+                                        }
+                                    }];
+//                                });
+//                            }
+//                        }];
+                    });
+                    
+                    [userIdArr addObject:USERINFO.userID];
+                    NSString *socketUids = [userIdArr componentsJoinedByString:@","];
+                    //通过socket创建群聊
+                    [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
                     
                     //跳转到群聊天页面
                     [self jumpGroupChat];
+
                 }
             } failure:^(ErrorData *error) {
                 [LCProgressHUD showFailureText:error.msg];

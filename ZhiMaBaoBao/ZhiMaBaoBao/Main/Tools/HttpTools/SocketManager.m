@@ -820,8 +820,7 @@ static SocketManager *manager = nil;
             groupChatModel.myGroupName = USERINFO.username;
             
             //如果存在群成员信息表 （通过是否存在群信息表判断）
-            GroupChatModel *chatModel = [FMDBShareManager getGroupChatMessageByGroupId:groupId];
-            if (!chatModel.groupId) {
+            if (![FMDBShareManager isGroupChatExist:groupId]) {
                 //异步存储群成员信息
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
@@ -843,8 +842,7 @@ static SocketManager *manager = nil;
 - (BOOL)addGroupMessage:(LGMessage *)message groupId:(NSString *)groupId{
     
     //判断数据库是否存在群成员表 （通过群信息表判断） -> 不存在 从网络加载数据  存到数据库
-    GroupChatModel *chatModel = [FMDBShareManager getGroupChatMessageByGroupId:groupId];
-    if (!chatModel.groupId) {
+    if (![FMDBShareManager isGroupChatExist:groupId]) {
         //加载群信息
         [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
