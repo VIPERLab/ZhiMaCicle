@@ -822,13 +822,13 @@ static SocketManager *manager = nil;
             //如果存在群成员信息表 （通过是否存在群信息表判断）
             if (![FMDBShareManager isGroupChatExist:groupId]) {
                 //异步存储群成员信息
-                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
                         //存群信息
                         [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupId];
                         
                     }];
-                });
+//                });
             }
 
             block(groupChatModel.groupUserVos);
@@ -856,7 +856,7 @@ static SocketManager *manager = nil;
                 groupChatModel.myGroupName = USERINFO.username;
                 
                 //开线程异步存群成员信息
-                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
                         //群成员保存完毕，保存群信息到数据库,新建会话，保存群消息记录
                             //保存群信息
@@ -879,7 +879,7 @@ static SocketManager *manager = nil;
                             userInfo[@"message"] = message;
                             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
                     }];
-                });
+//                });
             }
         } failure:^(ErrorData *error) {
             
