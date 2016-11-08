@@ -243,6 +243,9 @@
 //查询手机联系人是否开通活芝麻、 或已添加
 + (void)queryPhoneBook:(NSString *)sessionId openfire:(NSString *)openfire flag:(NSString *)action phonedata:(NSString *)jsonData block:(SuccessfulBlock)block;
 
+//设置好友消息置顶和消息免打扰
++ (void)setFriend:(NSString *)sessionID functionName:(NSString *)functionName value:(NSString *)value success:(SuccessfulBlock)success failure:(FailureBlock)failure;
+
 //从后台唤醒的时候，加载是否有未读消息
 + (void)ApplicationWakeUpAtBackgroundWithSessionId:(NSString *)sessionId andUserID:(NSString *)userID andLastMessageID:(NSString *)fcID block:(SuccessfulBlock)block;
 

@@ -502,6 +502,20 @@
     }];
 }
 
+//设置好友消息置顶和消息免打扰
++ (void)setFriend:(NSString *)sessionID functionName:(NSString *)functionName value:(NSString *)value success:(SuccessfulBlock)success failure:(FailureBlock)failure{
+    NSMutableDictionary *parms = [NSMutableDictionary dictionary];
+    parms[@"sessionId"] = sessionID;
+    parms[@"functionName"] = functionName;
+    parms[@"value"] = value;
+    
+    [HttpTool POST:@"/moblie/getsetChatTop_newMsgTip.do" params:parms success:^(ResponseData *responseData) {
+        success(responseData);
+    } failure:^(ErrorData *error) {
+        failure(error);
+    }];
+}
+
 
 + (void)loadPersonalDiscoverDetailWithSessionID:(NSString *)sessionID andTargetOpenFirAccount:(NSString *)openFirAccount andPageNumber:(NSString *)pageNumber block:(SuccessfulBlock)block {
     
