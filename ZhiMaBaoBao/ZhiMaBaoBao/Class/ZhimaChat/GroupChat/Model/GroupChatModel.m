@@ -14,8 +14,14 @@
     return @{
              @"groupId" : @"id",
              @"groupName" : @"groupname",
-             @"groupAvtar" : @"img"
+             @"groupAvtar" : @"img",
+             @"topChat":@"set_chat_top",
+             @"disturb":@"new_msg_tip"
              };
+}
+
+- (void)setDisturb:(BOOL)disturb{
+    _disturb = !disturb;
 }
 
 @end

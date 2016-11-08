@@ -99,12 +99,26 @@
         [self dealGroupMembers];
         
         // 设置群聊的置顶、免打扰
-        self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
-        self.groupModel.topChat = self.converseModel.topChat;
-        self.groupModel.disturb = self.converseModel.disturb;
+//        self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
+//        self.groupModel.topChat = self.converseModel.topChat;
+//        self.groupModel.disturb = self.converseModel.disturb;
         
         // 更新群信息内容
         [FMDBShareManager saveGroupChatInfo:self.groupModel andConverseID:self.converseId];
+        
+        //更新会话的置顶和免打扰  ,topChat,noDisturb
+        FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+        NSString *optionStr1 = [NSString stringWithFormat:@"topChat = %d ,noDisturb = %d",self.groupModel.topChat,self.groupModel.disturb];
+        NSString *optionStr2 = [NSString stringWithFormat:@"converseId = '%@'",self.groupModel.groupId];
+        NSString *converseOption = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:optionStr2];
+        [converseQueue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:converseOption];
+            if (success) {
+                NSLog(@"更新会话置顶和消息免打扰成功");
+            } else {
+                NSLog(@"更新会话置顶和消息免打扰成功");
+            }
+        }];
         
         [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
         
@@ -244,10 +258,10 @@
     if (indexPath.section == 2 || (indexPath.section == 3 && indexPath.row == 1)) {
         if (indexPath.section == 2 && indexPath.row == 0) {
             // 是否消息免打扰
-            cell.statusSwitch.on = self.converseModel.disturb;
+            cell.statusSwitch.on = self.groupModel.disturb;
         } else if (indexPath.section == 2 && indexPath.row == 1) {
             // 是否置顶
-            cell.statusSwitch.on = self.converseModel.topChat;
+            cell.statusSwitch.on = self.groupModel.topChat;
         } else if (indexPath.section == 2 && indexPath.row == 2) {
             // 保存到通讯录
             cell.statusSwitch.on = self.groupModel.saveToMailList;

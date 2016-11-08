@@ -2326,12 +2326,14 @@
     NSLog(@"----开始插入群信息");
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
     [queue inDatabase:^(FMDatabase *db) {
+        NSThread *thread = [NSThread currentThread];
         BOOL isSuccess = YES;
         for (GroupUserModel *model in array) {
             //查询是否存在该条群成员信息
             __block BOOL isExist = NO;
             NSString *optionStr = [FMDBShareManager SearchTable:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"groupId = '%@' and memberId = '%@'",groupChatId, model.userId]];
-            
+            NSLog(@"current thread %@",thread);
+
             FMResultSet *result = [db executeQuery:optionStr];
             while ([result next]) {
                 NSLog(@"查询群聊成员成功3");
