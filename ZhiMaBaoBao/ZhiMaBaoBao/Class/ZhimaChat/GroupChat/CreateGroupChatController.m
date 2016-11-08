@@ -492,7 +492,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             }];
             self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             //异步存储群成员信息
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//            dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
                     if (success) {
                         dispatch_async(dispatch_get_main_queue(), ^{
@@ -518,7 +518,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
                     }
                 }];
-            });
+//            });
 
 
         }

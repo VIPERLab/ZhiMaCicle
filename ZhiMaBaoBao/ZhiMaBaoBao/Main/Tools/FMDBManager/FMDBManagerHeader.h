@@ -96,7 +96,7 @@
 
 #pragma mark - 群成员
 //群成员表
-#define GroupChat_MemberField @"(groupId TEXT NOT NULL, memberId TEXT NOT NULL, memberName TEXT NOT NULL, memberGroupName TEXT NOT NULL, memberPhoto TEXT, memberGroupState INTEGER)"
+#define GroupChat_MemberField @"(groupId TEXT NOT NULL, memberId TEXT NOT NULL, memberName TEXT NOT NULL, memberGroupName TEXT, memberPhoto TEXT, memberGroupState INTEGER)"
 #define GroupChat_MemberFields_Name @"groupId, memberId, memberName, memberGroupName, memberPhoto,memberGroupState"
 
 

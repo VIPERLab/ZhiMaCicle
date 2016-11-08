@@ -818,10 +818,10 @@ static SocketManager *manager = nil;
             }];
             GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//            dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
                 }];
-            });
+//            });
 
             //如果存在群成员信息表 （通过是否存在群信息表判断）
             if (![FMDBShareManager isGroupChatExist:groupId]) {
