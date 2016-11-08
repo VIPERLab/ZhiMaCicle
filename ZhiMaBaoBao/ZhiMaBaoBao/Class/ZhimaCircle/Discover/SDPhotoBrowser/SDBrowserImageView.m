@@ -9,10 +9,11 @@
 #import "SDBrowserImageView.h"
 #import "UIImageView+WebCache.h"
 #import "SDPhotoBrowserConfig.h"
+#import "HKPieChartView.h"
 
 @implementation SDBrowserImageView
 {
-    __weak SDWaitingView *_waitingView;
+    __weak HKPieChartView *_waitingView;
     BOOL _didCheckSize;
     UIScrollView *_scroll;
 //    UIImageView *self.scrollImageView;
@@ -87,15 +88,18 @@
 - (void)setProgress:(CGFloat)progress
 {
     _progress = progress;
-    _waitingView.progress = progress;
+//    _waitingView.progress = progress;
+    [_waitingView updatePercent:progress*100 lastProgress:0 animation:NO];
 
 }
 
 - (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder
 {
-    SDWaitingView *waiting = [[SDWaitingView alloc] init];
-    waiting.bounds = CGRectMake(0, 0, 100, 100);
-    waiting.mode = SDWaitingViewProgressMode;
+    HKPieChartView *waiting = [[HKPieChartView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
+
+//    SDWaitingView *waiting = [[SDWaitingView alloc] init];
+//    waiting.bounds = CGRectMake(0, 0, 100, 100);
+//    waiting.mode = SDWaitingViewProgressMode;
     _waitingView = waiting;
     [self addSubview:waiting];
     
