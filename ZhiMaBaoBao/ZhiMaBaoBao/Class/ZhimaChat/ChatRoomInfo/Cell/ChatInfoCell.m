@@ -77,7 +77,7 @@
     NSString *option2 = [NSString stringWithFormat:@"converseId = %@",self.converseID];
     if (self.indexPath.row == 0) {
         // 新消息提醒 disturb
-        option1 = [NSString stringWithFormat:@"disturb = '%zd'",statusSwitch.on];
+        option1 = [NSString stringWithFormat:@"noDisturb = '%zd'",statusSwitch.on];
         [self valueChangeActionWithFunctionName:@"new_msg_tip" andValut:!statusSwitch.on];
     } else if (self.indexPath.row == 1) {
         // 消息置顶 topChat

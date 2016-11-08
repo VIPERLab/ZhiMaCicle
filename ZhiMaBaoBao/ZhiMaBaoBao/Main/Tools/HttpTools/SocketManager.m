@@ -817,22 +817,17 @@ static SocketManager *manager = nil;
                          };
             }];
             GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-            
-//            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
-                }];
-//            });
 
             //如果存在群成员信息表 （通过是否存在群信息表判断）
-            if (![FMDBShareManager isGroupChatExist:groupId]) {
+            ConverseModel *model = [FMDBShareManager searchConverseWithConverseID:groupId andConverseType:ConversionTypeGroupChat];
+            if (!model.converseId) {
                 //异步存储群成员信息
-//                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
                         //存群信息
                         [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupId];
-                        
                     }];
-//                });
+                });
             }
 
             block(groupChatModel.groupUserVos);
@@ -846,7 +841,8 @@ static SocketManager *manager = nil;
 - (BOOL)addGroupMessage:(LGMessage *)message groupId:(NSString *)groupId{
     
     //判断数据库是否存在群成员表 （通过群信息表判断） -> 不存在 从网络加载数据  存到数据库
-    if (![FMDBShareManager isGroupChatExist:groupId]) {
+    ConverseModel *model = [FMDBShareManager searchConverseWithConverseID:groupId andConverseType:ConversionTypeGroupChat];
+    if (!model.converseId) {
         //加载群信息
         [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
@@ -858,9 +854,8 @@ static SocketManager *manager = nil;
                 }];
                 GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
                 
-                
                 //开线程异步存群成员信息
-//                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
                         //群成员保存完毕，保存群信息到数据库,新建会话，保存群消息记录
                             //保存群信息
@@ -883,7 +878,7 @@ static SocketManager *manager = nil;
                             userInfo[@"message"] = message;
                             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
                     }];
-//                });
+                });
             }
         } failure:^(ErrorData *error) {
             

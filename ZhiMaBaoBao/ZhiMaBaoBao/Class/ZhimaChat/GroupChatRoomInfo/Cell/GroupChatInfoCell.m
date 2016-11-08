@@ -93,7 +93,7 @@
     NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",self.converseId];
     if (self.indexPath.section == 2 && self.indexPath.row == 0) {
         // 设置消息免打扰
-        option1 = [NSString stringWithFormat:@"disturb = '%zd'",statusSwitch.on];
+        option1 = [NSString stringWithFormat:@"noDisturb = '%zd'",statusSwitch.on];
         [self valueChangeActionWithFunctionName:@"new_msg_tip" andValut:!statusSwitch.on];
         
     } else if (self.indexPath.section == 2 && self.indexPath.row == 1) {

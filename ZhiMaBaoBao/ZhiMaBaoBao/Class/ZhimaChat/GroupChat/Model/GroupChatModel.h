@@ -10,7 +10,7 @@
 #import "GroupUserModel.h"
 @class GroupUserModel;
 @interface GroupChatModel : NSObject
-//groupId TEXT NOT NULL, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, disturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER
+//groupId TEXT NOT NULL, groupId TEXT NOT NULL, groupName TEXT NOT NULL, notice TEXT NOT NULL, topChat INTEGER, noDisturb INTEGER, saveToMailList INTEGER, myGroupName TEXT NOT NULL, showMemberName INTEGER
 
 /* 群聊id */
 @property (nonatomic, copy) NSString *groupId;
