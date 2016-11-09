@@ -1917,6 +1917,7 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
     [messageQueue inDatabase:^(FMDatabase *db) {
+        NSLog(@"--------------------- 插入消息表")
         BOOL successFul = [db executeUpdate:opeartionStr2,converseID,message.msgid,@(message.conversionType),@(message.type),message.fromUid,message.toUidOrGroupId,message.subject,message.text,@(message.sendStatus), @(message.is_read),message.holderImageUrlString,message.link,@(message.isDownLoad),message.videoDownloadUrl,@(message.timeStamp)];
         if (successFul) {
             NSLog(@"插入消息成功");
