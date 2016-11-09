@@ -339,25 +339,65 @@ static SocketManager *manager = nil;
                 message.isDownLoad = [parmas[3] boolValue];
             }
             
+            //生成会话模型 用作创建/更新会话
+            ConverseModel *converse = [[ConverseModel alloc] init];
+            converse.converseHead_photo = message.converseLogo;
+            converse.converseType = message.conversionType;
+            converse.lastConverse = message.text;
+            converse.messageType = message.type;
+            
+            //生成群成员信息模型 用作插群成员表
+            GroupUserModel *groupUser = [[GroupUserModel alloc] init];
+            groupUser.userId = message.fromUid;
+            groupUser.friend_nick = message.fromUserName;
+            groupUser.head_photo = message.fromUserPhoto;
+            
             //根据（单聊、群聊、服务号）三种消息类型处理消息
             //单聊（1.插消息表、2.插会话表、3.更新UI）
             if (message.conversionType == ConversionTypeSingle) {
-                //生成会话模型
-                ConverseModel *converse = [[ConverseModel alloc] init];
-                converse.converseName = message.fromUserName;
-                converse.converseHead_photo = message.fromUserPhoto;
-                converse.converseType = message.conversionType;
-                converse.lastConverse = message.text;
+                converse.converseId = message.fromUid;
+                //从好友数据库取好友模型，赋值备注给会话名
+                ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:message.fromUid];
+                converse.converseName = friend.displayName;
                 
+                //1.插消息表
+                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+                //2.插会话表
+                [FMDBShareManager saveConverseListDataWithDataArray:@[converse] withComplationBlock:nil];
+                //3.发送通知更新UI
             }
             //群聊
             else if (message.conversionType == ConversionTypeGroupChat){
-                
+                converse.converseId = message.toUidOrGroupId;
+                converse.converseName = message.converseName;
+                //系统消息
+                if (message.type == MessageTypeSystem) {
+                    //1.插消息表
+                    [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+                    //2.插群成员表
+                    [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
+                    //3.有会话更新会话，没有会话不处理
+                    [FMDBShareManager alertConverseListDataWithDataArray:@[converse] withComplationBlock:nil];
+                }else{ //普通消息
+                    //1.插消息表
+                    [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+                    //2.插群成员表
+                    [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
+                    //3.有会话更新会话，没有会话创建会话
+                    [FMDBShareManager saveConverseListDataWithDataArray:@[converse] withComplationBlock:nil];
+                }
+
             }
             //服务号
             else if (message.conversionType == ConversionTypeActivity){
+                converse.converseName = message.converseName;
                 
             }
+            
+            //统一发送通知、更新UI
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo[@"message"] = message;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
             
             
             //语音消息，先解码，然后根据时间戳存到本地，拿到路径存到数据库

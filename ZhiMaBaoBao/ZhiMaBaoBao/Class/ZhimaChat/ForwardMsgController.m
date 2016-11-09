@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *containArray;     //拷贝一份数据源，用作搜索匹配
+@property (nonatomic, strong) ConverseModel *selectedConverse;  //点击选中的会话模型
 @end
 
 static NSString *const headerReuseIdentifier = @"headerReuseIdentifier";
@@ -144,6 +145,16 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     newMsg.text = message.text;
     newMsg.msgid = [NSString generateMessageID];
     newMsg.picUrl = message.picUrl;
+    
+    newMsg.fromUserPhoto = USERINFO.head_photo;
+    newMsg.fromUserName = USERINFO.username;
+    newMsg.converseName = USERINFO.username;
+    newMsg.converseLogo = USERINFO.head_photo;
+    //如果是群聊消息 -- 发送群聊的"名称"、"头像"
+    if (self.selectedConverse.converseType == ConversionTypeGroupChat) {
+        newMsg.converseName = self.selectedConverse.converseName;
+        newMsg.converseLogo = self.selectedConverse.converseHead_photo;
+    }
     return newMsg;
 }
 
@@ -188,6 +199,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     }else{  //转发消息
         [self.textField resignFirstResponder];
         ConverseModel *conversion = self.dataArray[indexPath.row];
+        self.selectedConverse = conversion;
         self.message.conversionType = conversion.converseType;     //设置消息是群聊还是单聊
         TransPopView *popView = [[TransPopView alloc] initWithMessage:self.message toUserId:conversion.converseId isGroup:conversion.converseType];
         popView.delegate = self;

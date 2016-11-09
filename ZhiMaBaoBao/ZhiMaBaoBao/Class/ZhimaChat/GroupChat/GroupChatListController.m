@@ -20,6 +20,7 @@
 @interface GroupChatListController ()<UITableViewDelegate,UITableViewDataSource,TransPopViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArr;
+@property (nonatomic, strong) ConverseModel *selectedConverse;      //点击选中的会话模型
 @end
 
 static NSString *const reuseIdentifier = @"groupChatListCell";
@@ -146,7 +147,7 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ConverseModel *groupModel = self.dataArr[indexPath.row];
-
+    self.selectedConverse = groupModel;
     if (self.isBigImageTrans) {
         TransPopView *popView = [[TransPopView alloc] initWithMessage:self.transMsg toUserId:groupModel.converseId isGroup:YES];
         popView.delegate = self;
@@ -203,6 +204,16 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     newMsg.text = message.text;
     newMsg.msgid = [NSString generateMessageID];
     newMsg.picUrl = message.picUrl;
+    
+    newMsg.fromUserPhoto = USERINFO.head_photo;
+    newMsg.fromUserName = USERINFO.username;
+    newMsg.converseName = USERINFO.username;
+    newMsg.converseLogo = USERINFO.head_photo;
+    //如果是群聊消息 -- 发送群聊的"名称"、"头像"
+    if (self.selectedConverse.converseType == ConversionTypeGroupChat) {
+        newMsg.converseName = self.selectedConverse.converseName;
+        newMsg.converseLogo = self.selectedConverse.converseHead_photo;
+    }
     return newMsg;
 }
 
