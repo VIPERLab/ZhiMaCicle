@@ -363,7 +363,7 @@ static SocketManager *manager = nil;
                 //1.插消息表
                 [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
                 //2.插会话表
-                [FMDBShareManager saveConverseListDataWithDataArray:@[converse] withComplationBlock:nil];
+                [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
                 //3.发送通知更新UI
             }
             //群聊
@@ -377,14 +377,14 @@ static SocketManager *manager = nil;
                     //2.插群成员表
                     [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
                     //3.有会话更新会话，没有会话不处理
-                    [FMDBShareManager alertConverseListDataWithDataArray:@[converse] withComplationBlock:nil];
+                    [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
                 }else{ //普通消息
                     //1.插消息表
                     [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
                     //2.插群成员表
                     [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
                     //3.有会话更新会话，没有会话创建会话
-                    [FMDBShareManager saveConverseListDataWithDataArray:@[converse] withComplationBlock:nil];
+                    [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
                 }
 
             }
@@ -1032,7 +1032,7 @@ static SocketManager *manager = nil;
                             converseModel.converseName = groupChatModel.groupName;
                             converseModel.converseHead_photo = groupChatModel.groupAvtar;
                             converseModel.lastConverse = @" ";
-                            [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                            [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
                             //保存群消息到数据库
                             [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
                             
@@ -1095,7 +1095,7 @@ static SocketManager *manager = nil;
                             converseModel.converseName = groupChatModel.groupName;
                             converseModel.converseHead_photo = groupChatModel.groupAvtar;
                             converseModel.lastConverse = @" ";
-                            [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                            [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
                             //保存群消息到数据库
                             [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
                             

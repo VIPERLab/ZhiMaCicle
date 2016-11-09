@@ -527,7 +527,7 @@
     [HttpTool POST:@"/moblie/getFriendCircleByUserId.do" params:parms success:^(ResponseData *responseData) {
         block(responseData);
     } failure:^(ErrorData *error) {
-//        responseData
+
     }];
 }
 

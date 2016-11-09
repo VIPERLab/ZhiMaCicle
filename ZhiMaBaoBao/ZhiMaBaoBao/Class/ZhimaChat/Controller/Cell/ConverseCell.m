@@ -110,7 +110,7 @@
     } else if (model.messageType == MessageTypeAudio) {
         _lastConverseLabel.text = @"[语音]";
     } else if (model.messageType == MessageTypeActivityPurse) {
-        _lastConverseLabel.text = @"[红包]";
+        _lastConverseLabel.text = @"[芝麻红包]";
     } else if (model.messageType == MessageTypeVideo) {
         _lastConverseLabel.text = @"[视频]";
     } else if (model.messageType == MessageTypeActivityArticle) {

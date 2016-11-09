@@ -38,14 +38,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.pageNumber = 0;
+    self.pageNumber = 1;
     [self setupView];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self setupHeaderAndFooterRefresh];
+    [self loadRequest];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,15 +53,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+
 - (void)setupView {
     
     if ([USERINFO.userID isEqualToString:self.userID]) {
         [self setupRightBarButton];
-
     }
     
     [self setCustomTitle:@"相册"];
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight) style:UITableViewStyleGrouped];
     self.tableView = tableView;
     [self.view addSubview:tableView];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -73,12 +75,14 @@
     [tableView registerClass:[PersonalDiscoverCell class] forCellReuseIdentifier:PersonalDiscoverTableViewCellReusedID];
     
     
+    
     //设置头部
     SDTimeLineTableHeaderView *headerView = [SDTimeLineTableHeaderView new];
     headerView.delegate = self;
     self.headerView = headerView;
-    headerView.frame = CGRectMake(0, 0, 0, ScreenWidth);
+    headerView.frame = CGRectMake(0, 0, ScreenWidth, ScreenWidth);
     self.tableView.tableHeaderView = headerView;
+    
     
 }
 
@@ -101,7 +105,7 @@
     
     PersonalDiscoverCellModel *model = self.dataArray[indexPath.section];
     
-    PersonalDiscoverPhotoModel *photoModel = model.imglist[indexPath.row];
+    PersonalDiscoverModel *photoModel = model.imglist[indexPath.row];
     
     PersonalDiscoverCell *cell = [tableView dequeueReusableCellWithIdentifier:PersonalDiscoverTableViewCellReusedID forIndexPath:indexPath];
     cell.openFirAccount = self.userID;
@@ -123,7 +127,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     PersonalDiscoverCellModel *model = self.dataArray[indexPath.section];
-    PersonalDiscoverPhotoModel *photoModel = model.imglist[indexPath.row];
+    PersonalDiscoverModel *photoModel = model.imglist[indexPath.row];
     return photoModel.cellHight;
 }
 
@@ -155,7 +159,6 @@
     }
 
     DiscoverDetailController *dc = [[DiscoverDetailController alloc] init];
-//    NewDiscoverDetailController *dc = [[NewDiscoverDetailController alloc] init];
     dc.sessionId = USERINFO.sessionId;
     dc.ID = [NSString stringWithFormat:@"%zd",cell.model.ID];
     dc.indexPath = indexPath;
@@ -166,14 +169,18 @@
 
 #pragma mark - 网络请求
 - (void)loadRequest {
-    
-    
     [LGNetWorking loadPersonalDiscoverDetailWithSessionID:self.sessionID andTargetOpenFirAccount:self.userID andPageNumber:[NSString stringWithFormat:@"%zd",self.pageNumber] block:^(ResponseData *responseData) {
         [self.tableView.mj_footer endRefreshing];
         if (responseData == nil || responseData.data == nil || !responseData) {
             NSLog(@"网络请求失败");
             return;
         }
+        
+        
+        self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            self.pageNumber++;
+            [self loadRequest];
+        }];
         
         //没有更多数据
         if (responseData.code == 23 || responseData.code == 29) {
@@ -211,16 +218,9 @@
         for (PersonalDiscoverCellModel *model in dataArray) {
             NSMutableArray *photoListArray = [NSMutableArray array];
             for (NSInteger index = 0; index < model.imglist.count; index ++) {
-                PersonalDiscoverPhotoModel *photoList = [PersonalDiscoverPhotoModel mj_objectWithKeyValues:model.imglist[index]];
+                PersonalDiscoverModel *photoList = [PersonalDiscoverModel mj_objectWithKeyValues:model.imglist[index]];
                 photoList.imageList = [self changeImageStringToImageArrayWithString:photoList.img_s];
                 [photoListArray addObject:photoList];
-                
-                if (![photoList.img_s isEqualToString:@""]) {
-                    photoList.cellHight = 80;
-                } else {
-                    CGFloat cellHight = [self changeStationWidth:photoList.content anWidthTxtt:300 anfont:15];
-                    photoList.cellHight = cellHight + 15;
-                }
             }
             model.imglist = photoListArray;
         }
@@ -252,17 +252,6 @@
 }
 
 
-- (void)setupHeaderAndFooterRefresh {
-    if (!self.tableView.mj_footer) {
-        self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-            self.pageNumber++;
-            [self loadRequest];
-        }];
-        [self.tableView.mj_footer beginRefreshing];
-    } else {
-        [self loadRequest];
-    }
-}
 
 
 

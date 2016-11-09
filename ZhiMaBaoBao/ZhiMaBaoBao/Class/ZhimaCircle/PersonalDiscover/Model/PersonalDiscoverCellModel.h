@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PersonalDiscoverPhotoModel.h"
+#import "PersonalDiscoverModel.h"
 #import "MJExtension.h"
 
 @interface PersonalDiscoverCellModel : NSObject
@@ -24,7 +24,7 @@
 
 
 
-@property (nonatomic, strong) NSArray <PersonalDiscoverPhotoModel *> *imglist;
+@property (nonatomic, strong) NSArray <PersonalDiscoverModel *> *imglist;
 
 
 

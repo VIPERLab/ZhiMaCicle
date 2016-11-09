@@ -100,7 +100,7 @@ typedef enum : NSUInteger {
 
 
 #pragma mark - 设置模型
-- (void)setModel:(PersonalDiscoverPhotoModel *)model {
+- (void)setModel:(PersonalDiscoverModel *)model {
     _model = model;
     
     NSLog(@"%zd",model.imageList.count);
@@ -118,7 +118,6 @@ typedef enum : NSUInteger {
     } else {                      //没有图片
         _photoButton.hidden = YES;
         _countLabel.hidden = YES;
-        
     }
     
     if (_model.imageList.count == 0 || _model.imageList.count == 1) {

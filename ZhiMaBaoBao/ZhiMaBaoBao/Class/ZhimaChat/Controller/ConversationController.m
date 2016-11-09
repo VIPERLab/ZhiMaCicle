@@ -94,10 +94,6 @@
     [_tableView reloadData];
 }
 
-//  保存会话信息
-- (void)saveDataToSqlist:(NSArray *)dataArray {
-    [FMDBShareManager saveConverseListDataWithDataArray:dataArray withComplationBlock:nil];
-}
 
 - (void)setupView {
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];

@@ -121,27 +121,31 @@ typedef enum : NSUInteger {
  */
 - (SDTimeLineCellModel *)getCircleContentWithCircleID:(NSString *)circleId;
 
+
 /**
- *  不看某个用户的朋友圈
- *
- *  @return 某个用户的id
+ 不看某个用户的朋友圈
+
+ @param userId 某个用户的id
  */
 - (void)deletedCircleWithUserId:(NSString *)userId;
+
 /**
- *  根据朋友圈ID 删除评论和点赞数据库
- *
- *  @param circleID 朋友圈ID
+ 根据朋友圈ID 删除评论和点赞数据库
+
+ @param circleID 朋友圈ID
  */
 - (void)deletedCircleCommentItemsAndLikeItemsByCircleID:(NSString *)circleID;
 
+
 /**
- *  根据朋友圈的ID 删除对应的朋友圈、点赞、评论 和图片
- *
- *  @param circleID 朋友圈id
- *
- *  @return 是否操作成功
+ 根据朋友圈的ID 删除对应的朋友圈、点赞、评论 和图片
+
+ @param circleID 朋友圈id
+
+ @return 是否操作成功
  */
 - (BOOL)deleteCircleDataWithCircleID:(NSString *)circleID;
+
 
 /**
  *  插入一个 模型数组 到评论数据库
@@ -259,19 +263,19 @@ typedef enum : NSUInteger {
 /**
  保存会话列表 - 不执行查询操作
  
- @param dataArray 会话模型数组
+ @param dataArray 会话模型
  @param block     回调 - 主线程回调
  */
-- (void)saveConverseListDataWithDataArray:(NSArray <ConverseModel *> *)dataArray withComplationBlock:(ComplationBlock)block;
+- (void)saveConverseListDataWithModel:(ConverseModel *)converseModel withComplationBlock:(ComplationBlock)block;
 
 
 /**
  更新会话 - 只执行查询、更新操作，不创建会话
 
- @param dataArray 会话模型数组
+ @param dataArray 会话模型
  @param block     回调 - 主线程回调
  */
-- (void)alertConverseListDataWithDataArray:(NSArray <ConverseModel *>*)dataArray withComplationBlock:(ComplationBlock)block;
+- (void)alertConverseListDataWithModel:(ConverseModel *)converseModel withComplationBlock:(ComplationBlock)block;
 
 /**
  *  是否存在这个会话

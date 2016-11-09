@@ -26,7 +26,7 @@
 @interface PersonalDiscoverCell : UITableViewCell
 
 
-@property (nonatomic, weak) PersonalDiscoverPhotoModel *model;
+@property (nonatomic, weak) PersonalDiscoverModel *model;
 @property (nonatomic, copy) NSString *openFirAccount;
 
 @property (nonatomic, copy) NSString *year;

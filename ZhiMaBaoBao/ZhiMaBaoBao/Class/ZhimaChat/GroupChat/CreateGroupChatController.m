@@ -508,7 +508,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                             converseModel.converseName = self.groupChatModel.groupName;
                             converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
                             converseModel.lastConverse = @" ";
-                            [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                            [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
                             //通过socket创建群聊
                             [uidsArr addObject:USERINFO.userID];
                             NSString *socketUids = [uidsArr componentsJoinedByString:@","];
@@ -588,7 +588,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 converseModel.converseName = self.groupChatModel.groupName;
                                 converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
                                 converseModel.lastConverse = @" ";
-                                [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                                [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
                                 
                                 [userIdArr addObject:USERINFO.userID];
                                 NSString *socketUids = [userIdArr componentsJoinedByString:@","];
@@ -644,7 +644,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                     converseModel.converseName = self.groupChatModel.groupName;
                                     converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
                                     converseModel.lastConverse = @" ";
-                                    [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                                    [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
                                     
                                     [userIdArr addObject:USERINFO.userID];
                                     NSString *socketUids = [userIdArr componentsJoinedByString:@","];

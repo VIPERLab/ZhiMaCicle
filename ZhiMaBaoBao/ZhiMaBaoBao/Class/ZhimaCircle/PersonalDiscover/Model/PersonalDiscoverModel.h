@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MJExtension.h"
 
-@interface PersonalDiscoverPhotoModel : NSObject
+@interface PersonalDiscoverModel : NSObject
 
 @property (nonatomic, assign) NSInteger content_type; //1是文字， 2是链接
 

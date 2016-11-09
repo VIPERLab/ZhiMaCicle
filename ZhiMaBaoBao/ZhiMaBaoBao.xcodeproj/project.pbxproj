@@ -413,7 +413,7 @@
 		04F57AED1D9280BD002A6471 /* KXCurrentLocationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A811D9280BD002A6471 /* KXCurrentLocationModel.m */; };
 		04F57AF61D9280BD002A6471 /* PersonalDiscoverCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A9B1D9280BD002A6471 /* PersonalDiscoverCell.m */; };
 		04F57AF71D9280BD002A6471 /* PersonalDiscoverCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57A9E1D9280BD002A6471 /* PersonalDiscoverCellModel.m */; };
-		04F57AF81D9280BD002A6471 /* PersonalDiscoverPhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57AA01D9280BD002A6471 /* PersonalDiscoverPhotoModel.m */; };
+		04F57AF81D9280BD002A6471 /* PersonalDiscoverModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57AA01D9280BD002A6471 /* PersonalDiscoverModel.m */; };
 		04F57AF91D9280BD002A6471 /* PesonalDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57AA21D9280BD002A6471 /* PesonalDiscoverController.m */; };
 		04F57AFE1D928154002A6471 /* ComplainSubViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57AFB1D928154002A6471 /* ComplainSubViewController.m */; };
 		04F57AFF1D928154002A6471 /* ComplainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F57AFD1D928154002A6471 /* ComplainViewController.m */; };
@@ -1512,8 +1512,8 @@
 		04F57A9B1D9280BD002A6471 /* PersonalDiscoverCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalDiscoverCell.m; sourceTree = "<group>"; };
 		04F57A9D1D9280BD002A6471 /* PersonalDiscoverCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalDiscoverCellModel.h; sourceTree = "<group>"; };
 		04F57A9E1D9280BD002A6471 /* PersonalDiscoverCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalDiscoverCellModel.m; sourceTree = "<group>"; };
-		04F57A9F1D9280BD002A6471 /* PersonalDiscoverPhotoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalDiscoverPhotoModel.h; sourceTree = "<group>"; };
-		04F57AA01D9280BD002A6471 /* PersonalDiscoverPhotoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalDiscoverPhotoModel.m; sourceTree = "<group>"; };
+		04F57A9F1D9280BD002A6471 /* PersonalDiscoverModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalDiscoverModel.h; sourceTree = "<group>"; };
+		04F57AA01D9280BD002A6471 /* PersonalDiscoverModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalDiscoverModel.m; sourceTree = "<group>"; };
 		04F57AA11D9280BD002A6471 /* PesonalDiscoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PesonalDiscoverController.h; sourceTree = "<group>"; };
 		04F57AA21D9280BD002A6471 /* PesonalDiscoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PesonalDiscoverController.m; sourceTree = "<group>"; };
 		04F57AFA1D928154002A6471 /* ComplainSubViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComplainSubViewController.h; sourceTree = "<group>"; };
@@ -3956,8 +3956,8 @@
 			children = (
 				04F57A9D1D9280BD002A6471 /* PersonalDiscoverCellModel.h */,
 				04F57A9E1D9280BD002A6471 /* PersonalDiscoverCellModel.m */,
-				04F57A9F1D9280BD002A6471 /* PersonalDiscoverPhotoModel.h */,
-				04F57AA01D9280BD002A6471 /* PersonalDiscoverPhotoModel.m */,
+				04F57A9F1D9280BD002A6471 /* PersonalDiscoverModel.h */,
+				04F57AA01D9280BD002A6471 /* PersonalDiscoverModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -5664,7 +5664,7 @@
 				316957471D90D3DE00140126 /* KXPersonalCenterCell.m in Sources */,
 				04EA7E121D912872005E5425 /* ZXPDF417HighLevelEncoder.m in Sources */,
 				04EA7DD51D912872005E5425 /* ZXRSSExpandedDecodedInformation.m in Sources */,
-				04F57AF81D9280BD002A6471 /* PersonalDiscoverPhotoModel.m in Sources */,
+				04F57AF81D9280BD002A6471 /* PersonalDiscoverModel.m in Sources */,
 				04F8628A1D94FC7900DCC6FE /* ChatToolBarItem.m in Sources */,
 				041750A01DA499B600DCD7A9 /* ChatInfoCell.m in Sources */,
 				D54B2F881DC8699800BF4445 /* MLTextAttachment.m in Sources */,

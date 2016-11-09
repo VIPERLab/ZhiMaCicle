@@ -7,7 +7,7 @@
 //
 
 //消息指令类型
-typedef NS_OPTIONS(NSUInteger, ActType) {
+typedef NS_OPTIONS(NSInteger, ActType) {
     ActTypeKickuser = 0,        //相同用户登录，剔除之前的登录用户
     ActTypeNormal,              //普通消息
     ActTypeAddfriend,           //好友请求
@@ -16,11 +16,10 @@ typedef NS_OPTIONS(NSUInteger, ActType) {
     ActTypeDeluserfromgroup,    //从群组删除用户
     ActTypeRenamegroup,         //修改群名片，所有群成员都会同步修改
     ActTypeUndomsg              //撤销消息，收到消息的用户都将删除消息
-
 };
 
 //普通消息类型
-typedef NS_OPTIONS(NSUInteger, MessageType) {
+typedef NS_OPTIONS(NSInteger, MessageType) {
     MessageTypeSystem = -1,     //系统消息
     MessageTypeText  = 0,       //文本消息
     MessageTypeImage,           //图片
@@ -32,7 +31,7 @@ typedef NS_OPTIONS(NSUInteger, MessageType) {
 };
 
 //发送状态
-typedef NS_OPTIONS(NSUInteger, SendStatus){
+typedef NS_OPTIONS(NSInteger, SendStatus){
     IMRequesting = 1,       // 请求
     IMRequestFaile = 2,     // 请求失败
     IMRequestSuccessed = 3  // 成功
