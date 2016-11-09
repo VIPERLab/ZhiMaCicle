@@ -919,6 +919,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 - (void)transformMessage:(LGMessage *)message toUserId:(NSString *)userId{
     //生成一个新的消息模型
     LGMessage *newMsg = [self generateNewMessage:message to:userId];
+    
     [[SocketManager shareInstance] sendMessage:newMsg];
     
     UserInfo *info = [UserInfo shareInstance];
@@ -946,6 +947,16 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     newMsg.text = message.text;
     newMsg.msgid = [NSString generateMessageID];
     newMsg.picUrl = message.picUrl;
+    
+    newMsg.converseName = USERINFO.username;
+    newMsg.converseLogo = USERINFO.head_photo;
+    newMsg.fromUserPhoto = USERINFO.head_photo;
+    newMsg.fromUserName = USERINFO.username;
+//    //如果是群聊消息 -- 发送群聊的"名称"、"头像"
+//    if (message.conversionType == ConversionTypeGroupChat) {
+//        message.converseName = self.groupModel.groupName;
+//        message.converseLogo = self.groupModel.groupAvtar;
+//    }
     return newMsg;
 }
 
