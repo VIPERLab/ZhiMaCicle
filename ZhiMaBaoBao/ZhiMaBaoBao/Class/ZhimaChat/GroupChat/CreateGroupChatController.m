@@ -481,7 +481,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     [LCProgressHUD showLoadingText:@"正在发起群聊..."];
     
-    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"8a9a53d85842d55c015842ee8bbb0013" success:^(ResponseData *responseData) {
+    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
             //生成群聊数据模型
@@ -492,7 +492,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             }];
             self.groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             //异步存储群成员信息
-//            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
                     if (success) {
                         dispatch_async(dispatch_get_main_queue(), ^{
@@ -513,26 +513,24 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                             [uidsArr addObject:USERINFO.userID];
                             NSString *socketUids = [uidsArr componentsJoinedByString:@","];
                             [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
-//                            [self jumpGroupChat];
+                            [self jumpGroupChat];
                         });
 
                     }
                 }];
-//            });
-
-
+            });
         }
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:error.msg];
     }];
     
-    if (_j < 5) {
-        [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
-
-    }else{
-        [self jumpGroupChat];
-        return;
-    }
+//    if (_j < 5) {
+//        [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
+//
+//    }else{
+//        [self jumpGroupChat];
+//        return;
+//    }
 
 }
 //选择完毕，发起群聊
