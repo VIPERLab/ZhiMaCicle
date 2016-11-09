@@ -25,7 +25,7 @@
 typedef void (^CompleteBlock)(id data);
 @interface SocketManager ()<RBDMuteSwitchDelegate>
 @property(nonatomic,strong)JFMyPlayerSound *myPlaySounde;   //播放系统声音
-
+@property (nonatomic, strong) NSMutableArray *offlineMessages;
 @end
 
 @implementation SocketManager
@@ -105,9 +105,80 @@ static SocketManager *manager = nil;
         UserInfo *userInfo = [UserInfo shareInstance];
         userInfo.networkUnReachable = NO;
         
+        //上线拉取离线消息
+        [self getOfflineMessage];
+        
     } else {
         UserInfo *userInfo = [UserInfo shareInstance];
         userInfo.networkUnReachable = YES;
+    }
+}
+
+//获取离线消息
+- (void)getOfflineMessage{
+    if (USERINFO.userID.length) {
+        [self.offlineMessages removeAllObjects];
+//        [LCProgressHUD showLoadingText:@"收取中..."];
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.requestSerializer.timeoutInterval = 30.0f;
+        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
+        
+        //生成签名
+        if (USERINFO.userID.length) {
+            NSString *str = [NSString stringWithFormat:@"uid=%@&apikey=yihezhaizhima20162018",USERINFO.userID];
+            //生成签名
+            NSString *sign = [[str md5Encrypt] uppercaseString];
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            params[@"uid"] = USERINFO.userID;
+            params[@"sign"] = sign;
+            
+            [manager POST:[NSString stringWithFormat:@"%@/Api/Offline/getmsg",CHATPICURL] parameters:params progress:0 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                
+                if (responseObject) {
+                    if ([responseObject[@"code"] integerValue] == 8888) {
+                        NSArray *data = responseObject[@"data"];
+                        for (NSDictionary *dic in data) {
+                            LGMessage *message = [[LGMessage alloc] init];
+                            message = [message mj_setKeyValues:dic[@"data"]];
+//                            message.actType = dic[@"acttype"];
+                            [self.offlineMessages addObject:message];
+                        }
+                        dispatch_queue_t conCurrentGlobalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+                        dispatch_queue_t mainQueue = dispatch_get_main_queue();
+                        dispatch_group_t groupQueue = dispatch_group_create();
+                        NSLog(@"current task");
+                        dispatch_group_async(groupQueue, conCurrentGlobalQueue, ^{
+                            for (LGMessage *message in self.offlineMessages) {
+                                NSLog(@"--------------- current thred %@",[NSThread currentThread]);
+
+                                if (message.conversionType == ConversionTypeSingle) {
+                                    [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
+                                }else if (message.conversionType == ConversionTypeGroupChat){
+//                                    [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+                                    
+                                    [self addOfflineGroupMessage:message groupId:message.toUidOrGroupId];
+                                }
+                            }
+                        });
+
+                        dispatch_group_notify(groupQueue, mainQueue, ^{
+                            NSLog(@"groupQueue中的任务 都执行完成,回到主线程更新UI");
+                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil];
+                        });
+
+                    }else{
+                        
+                    }
+                    NSLog(@"-------%@",responseObject);
+                }else{
+                    
+                }
+                
+            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                
+            }];
+        }
     }
 }
 
@@ -804,7 +875,7 @@ static SocketManager *manager = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
 }
 
-//通过groupid生成群信息表，不添加会话  -- （方便查询群成员昵称）
+//收到拉人进群-- 消息处理
 - (void)gengrateGroupInfo:(NSString *)groupId completion:(CompleteBlock)block{
     
     //加载群信息
@@ -837,12 +908,75 @@ static SocketManager *manager = nil;
     }];
 }
 
+//插入离线群消息到本地数据库
+- (void)addOfflineGroupMessage:(LGMessage *)message groupId:(NSString *)groupId{
+    
+    //判断数据库是否存在群成员表 （通过群信息表判断） -> 不存在 从网络加载数据  存到数据库
+    //    ConverseModel *model = [FMDBShareManager searchConverseWithConverseID:groupId andConverseType:ConversionTypeGroupChat];
+    if (![FMDBShareManager isConverseIsExist:groupId]) {
+        //加载群信息
+        [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
+            if (responseData.code == 0) {
+                //生成群聊数据模型
+                [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+                    return @{
+                             @"groupUserVos":@"GroupUserModel"
+                             };
+                }];
+                GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+                
+                //开线程异步存群成员信息
+//                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                    [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
+//                        dispatch_queue_t subQueue = dispatch_queue_create("com.dullgrass.serialQueue", DISPATCH_QUEUE_CONCURRENT);
+//                        dispatch_sync(subQueue, ^{
+                            //群成员保存完毕，保存群信息到数据库,新建会话，保存群消息记录
+                            //保存群信息
+                            [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
+                            //创建会话
+                            ConverseModel *converseModel  = [[ConverseModel alloc] init];
+                            converseModel.time = [NSDate cTimestampFromString:groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+                            converseModel.converseType = 1;
+                            converseModel.converseId = groupChatModel.groupId;
+                            converseModel.unReadCount = 0;
+                            converseModel.converseName = groupChatModel.groupName;
+                            converseModel.converseHead_photo = groupChatModel.groupAvtar;
+                            converseModel.lastConverse = @" ";
+                            [FMDBShareManager saveConverseListDataWithDataArray:@[converseModel] withComplationBlock:nil];
+                            //保存群消息到数据库
+                            [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+                            
+                            //发送通知，刷新会话列表
+//                            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+//                            userInfo[@"message"] = message;
+//                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+                
+//                        });
+//                    }];
+//                });
+            }
+        } failure:^(ErrorData *error) {
+            
+        }];
+    }else{
+        //保存群消息到数据库
+        [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
+        
+        //发送通知，刷新会话列表
+//        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+//        userInfo[@"message"] = message;
+//        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+    }
+    //群消息直接在这里发通知，就不在收到新消息处发送通知了  所以返回no
+}
+
+
 //插入一条群消息到本地数据库
 - (BOOL)addGroupMessage:(LGMessage *)message groupId:(NSString *)groupId{
     
     //判断数据库是否存在群成员表 （通过群信息表判断） -> 不存在 从网络加载数据  存到数据库
-    ConverseModel *model = [FMDBShareManager searchConverseWithConverseID:groupId andConverseType:ConversionTypeGroupChat];
-    if (!model.converseId) {
+//    ConverseModel *model = [FMDBShareManager searchConverseWithConverseID:groupId andConverseType:ConversionTypeGroupChat];
+    if (![FMDBShareManager isConverseIsExist:groupId]) {
         //加载群信息
         [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
@@ -857,7 +991,9 @@ static SocketManager *manager = nil;
                 //开线程异步存群成员信息
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
-                        //群成员保存完毕，保存群信息到数据库,新建会话，保存群消息记录
+                        dispatch_queue_t subQueue = dispatch_queue_create("com.dullgrass.serialQueue", DISPATCH_QUEUE_CONCURRENT);
+                        dispatch_sync(subQueue, ^{
+                            //群成员保存完毕，保存群信息到数据库,新建会话，保存群消息记录
                             //保存群信息
                             [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
                             //创建会话
@@ -877,6 +1013,8 @@ static SocketManager *manager = nil;
                             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
                             userInfo[@"message"] = message;
                             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+
+                        });
                     }];
                 });
             }
@@ -1422,6 +1560,13 @@ static SocketManager *manager = nil;
             }
         }
     }
+}
+
+- (NSMutableArray *)offlineMessages{
+    if (!_offlineMessages) {
+        _offlineMessages = [NSMutableArray array];
+    }
+    return _offlineMessages;
 }
 
 - (void)dealloc{
