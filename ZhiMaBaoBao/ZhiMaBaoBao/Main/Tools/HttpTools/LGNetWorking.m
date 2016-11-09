@@ -1058,5 +1058,19 @@
     }];
 }
 
+//获取离线消息
++ (void)getOfflineMessage:(NSString *)userId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock{
+    //生成签名
+    NSString *sign = [NSString stringWithFormat:@"uid=%@&apikey=yihezhaizhima20162018",userId];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"uid"] = userId;
+    params[@"sign"] = sign;
+    [HttpTool POST:@"/Api/Offline/getmsg" params:params success:^(ResponseData *responseData) {
+        successBlock(responseData);
+    } failure:^(ErrorData *error) {
+        failureBlock(error);
+    }];
+}
+
 
 @end

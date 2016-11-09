@@ -333,4 +333,7 @@
 
 //如果是审核状态-- 隐藏『钱包』
 + (void)verfiryAppStatues:(NSString *)verion success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
+
+//获取离线消息
++ (void)getOfflineMessage:(NSString *)userId success:(SuccessfulBlock)successBlock failure:(FailureBlock)failureBlock;
 @end
