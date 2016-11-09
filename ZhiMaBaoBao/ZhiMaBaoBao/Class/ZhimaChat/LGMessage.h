@@ -55,16 +55,22 @@ typedef NS_OPTIONS(NSUInteger, SendStatus){
 
  /** 指令类型*/
 @property (nonatomic, assign) ActType actType;
- /** 消息id*/
-@property (nonatomic, copy) NSString *msgid;
  /** 消息类型*/
 @property (nonatomic, assign) MessageType type;
+/** 消息所属会话类型*/
+@property (nonatomic, assign) ConversionType conversionType;
+/** 消息id*/
+@property (nonatomic, copy) NSString *msgid;
  /** 消息发送者id*/
 @property (nonatomic, copy) NSString *fromUid;
-
- /** 消息所属会话类型*/
-@property (nonatomic, assign) ConversionType conversionType;
-
+ /** 消息发送者名称*/
+@property (nonatomic, copy) NSString *fromUserName;
+ /** 消息发送者头像*/
+@property (nonatomic, copy) NSString *fromUserPhoto;
+ /** 会话名称*/
+@property (nonatomic, copy) NSString *converseName;
+ /** 会话头像*/
+@property (nonatomic, copy) NSString *converseLogo;
  /** 消息接收者id(如果是群则是群id) */
 @property (nonatomic, copy) NSString *toUidOrGroupId;
 

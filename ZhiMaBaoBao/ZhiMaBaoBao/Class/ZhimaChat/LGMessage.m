@@ -13,7 +13,11 @@
 
 + (NSDictionary *)mj_replacedKeyFromPropertyName{
     return @{
-             @"conversionType":@"isGroup"
+             @"conversionType":@"converseType",
+             @"actType":@"acttype",
+             @"holderImageUrlString":@"holderImageUrl",
+             @"videoDownloadUrl":@"videoUrl",
+             @"timeStamp":@"time"
              };
 }
 
@@ -51,11 +55,17 @@
     }
 }
 
-//存储时间字符串时 转时间戳存一份
-- (void)setMsgtime:(NSString *)msgtime{
-    _msgtime = msgtime;
-    NSInteger stamp = [NSDate cTimestampFromString:msgtime format:@"yyyy-MM-dd HH:mm:ss"];
-    self.timeStamp = stamp;
+//储存时间戳时，转成时间格式字符串
+- (void)setTimeStamp:(NSInteger)timeStamp{
+    _timeStamp = timeStamp;
+    self.msgtime = [NSDate dateStrFromCstampTime:timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 }
+
+////存储时间字符串时 转时间戳存一份
+//- (void)setMsgtime:(NSString *)msgtime{
+//    _msgtime = msgtime;
+//    NSInteger stamp = [NSDate cTimestampFromString:msgtime format:@"yyyy-MM-dd HH:mm:ss"];
+//    self.timeStamp = stamp;
+//}
 
 @end

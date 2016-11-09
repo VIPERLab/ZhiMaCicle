@@ -306,9 +306,59 @@ static SocketManager *manager = nil;
         }
         else if ([actType isEqualToString:@"normal"]) {      //普通消息 -> 插入数据库
             
-            //普通消息
+            //消息
             LGMessage *message = [[LGMessage alloc] init];
             message = [message mj_setKeyValues:responceData[@"data"]];
+            
+            //如果是语音消息和视频消息 --> 先进行解析处理
+            if (message.type == MessageTypeAudio) {
+                NSData *audioData = [[NSData alloc] initWithBase64EncodedString:message.text options:0];
+                
+                //沙盒路径
+                NSString *sandboxPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+                //根据当前时间和发送者uid 拼接语音文件名
+                NSInteger stamp = [NSDate currentTimeStamp];
+                NSString *fileName = [NSString stringWithFormat:@"%@-%@.amr",[NSDate dateStrFromCstampTime:stamp withDateFormat:@"yyyy-MM-dd-hh-mm-ss-SSS"],message.fromUid];
+                //语音文件路径
+                NSString *path = [NSString stringWithFormat:@"%@/%@",sandboxPath,fileName];
+                message.text = fileName;
+                if ([audioData writeToFile:path atomically:YES]) {
+                    NSLog(@"语音写入沙盒成功");
+                }else{
+                    NSLog(@"语音写入沙盒失败");
+                }
+                
+            }
+            //视频消息
+            else if (message.type == MessageTypeVideo){
+                
+                NSArray *parmas = [message.text componentsSeparatedByString:@","];
+                message.text = parmas[0];
+                message.holderImageUrlString = parmas[1];
+                message.videoDownloadUrl = parmas[2];
+                message.isDownLoad = [parmas[3] boolValue];
+            }
+            
+            //根据（单聊、群聊、服务号）三种消息类型处理消息
+            //单聊（1.插消息表、2.插会话表、3.更新UI）
+            if (message.conversionType == ConversionTypeSingle) {
+                //生成会话模型
+                ConverseModel *converse = [[ConverseModel alloc] init];
+                converse.converseName = message.fromUserName;
+                converse.converseHead_photo = message.fromUserPhoto;
+                converse.converseType = message.conversionType;
+                converse.lastConverse = message.text;
+                
+            }
+            //群聊
+            else if (message.conversionType == ConversionTypeGroupChat){
+                
+            }
+            //服务号
+            else if (message.conversionType == ConversionTypeActivity){
+                
+            }
+            
             
             //语音消息，先解码，然后根据时间戳存到本地，拿到路径存到数据库
             if (message.type == MessageTypeAudio) {
