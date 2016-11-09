@@ -860,110 +860,61 @@
 #pragma mark - 朋友圈相关
 //                              ----------   朋友圈相关
 // 存所有朋友圈信息
-- (BOOL)saveCircleDataWithDataArray:(NSArray *)dataArray {
-    __block BOOL successFul = YES;
-    //插入数据
+- (void)saveCircleDataWithDataArray:(NSArray *)dataArray {
+    FMDatabaseQueue *cicleQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
+    FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
+    FMDatabaseQueue *picQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Pic_Table];
+    FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
+    
+    
     for (SDTimeLineCellModel *cellModel in dataArray) {
-        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
         NSLog(@"开始查朋友圈表");
-        __block BOOL isExist = NO;
-        [queue inDatabase:^(FMDatabase *db) {
-            NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",cellModel.circle_ID]];
-            FMResultSet *result = [db executeQuery:searchOptionStr];
-            
-            while ([result next]) {
-                NSLog(@"查表成功3");
-                isExist = YES;
-            }
-            
-        }];
         NSString *operationStr;
-        if (isExist) {
-            NSLog(@"存在这条朋友圈数据，更新时间");
-            NSString *option1 = [NSString stringWithFormat:@"create_time = '%@'",cellModel.create_time];
-            NSString *option2 = [NSString stringWithFormat:@"circle_ID = %@",cellModel.circle_ID];
-            operationStr = [FMDBShareManager alterTable:ZhiMa_Circle_Table withOpton1:option1 andOption2:option2];
-        } else {
-            NSLog(@"不存在这条朋友圈数据，需要插入");
-            operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Table];
-        }
-        
-        [queue inDatabase:^(FMDatabase *db) {
+        operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Table];
+        [cicleQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
             BOOL success = [db executeUpdate:operationStr,cellModel.friend_nick,cellModel.circle_ID,cellModel.userId,cellModel.content,cellModel.current_location,cellModel.create_time,cellModel.head_photo,@(cellModel.content_type),cellModel.article_link];
             if (success) {
                 NSLog(@"插入朋友圈成功");
             } else {
                 NSLog(@"插入朋友圈失败");
-                successFul = NO;
             }
-            
         }];
-        
-        if (!successFul) {
-            return NO;
-        }
         
         //插入评论
         for (SDTimeLineCellCommentItemModel *commentModel in cellModel.commentList) {
             NSLog(@"开始查评论表");
             //查询是否存在评论
-            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
-            __block BOOL isExist = NO;
-            [queue inDatabase:^(FMDatabase *db) {
-                NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"fcid = %@",commentModel.ID]];
-                FMResultSet *result = [db executeQuery:searchOptionStr];
-                
-                while ([result next]) {
-                    NSLog(@"查表成功4");
-                    isExist = YES;
-                }
-                
-            }];
-            
             NSString *operationStr;
-            if (isExist) {
-                NSLog(@"存在这条评论数据，不做操作");
-            } else {
-                NSLog(@"不存在这条评论数据，需要插入");
-                operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Comment_Table];
-                
-                [queue inDatabase:^(FMDatabase *db) {
-                    BOOL success = [db executeUpdate:operationStr,commentModel.friend_nick,commentModel.ID,commentModel.comment,commentModel.reply_friend_nick,commentModel.reply_id,commentModel.head_photo,commentModel.create_time,cellModel.circle_ID,commentModel.userId];
-                    if (success) {
-                        NSLog(@"插入评论成功");
-                    } else {
-                        NSLog(@"插入评论失败");
-                        successFul = NO;
-                    }
-                    
-                }];
-            }
+            NSLog(@"不存在这条评论数据，需要插入");
+            operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Comment_Table];
+            
+            [commentQueue inDatabase:^(FMDatabase *db) {
+                BOOL success = [db executeUpdate:operationStr,commentModel.friend_nick,commentModel.ID,commentModel.comment,commentModel.reply_friend_nick,commentModel.reply_id,commentModel.head_photo,commentModel.create_time,cellModel.circle_ID,commentModel.userId];
+                if (success) {
+                    NSLog(@"插入评论成功");
+                } else {
+                    NSLog(@"插入评论失败");
+                }
+            }];
         }
         
-        if (!successFul) {
-            return NO;
-        }
         
         //插入图片
         for (SDTimeLineCellPicItemModel *picModel in cellModel.imglist) {
-            FMDatabaseQueue *picQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Pic_Table];
-            
             NSLog(@"开始查图片表");
             __block BOOL isExist = NO;
             [picQueue inDatabase:^(FMDatabase *db) {
                 NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Pic_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",cellModel.circle_ID]];
                 FMResultSet *result = [db executeQuery:searchOptionStr];
                 while ([result next]) {
-                    NSLog(@"查表成功5");
-                    NSString *imageURL = [result stringForColumn:@"img_url"];
-                    if ([imageURL isEqualToString:picModel.img_url]) {
-                        isExist = YES;
-                    }
+                    NSLog(@"查图片表成功");
+                    isExist = YES;
                 }
             }];
             
             if (isExist) {
                 NSLog(@"存在这条图片数据，不做操作");
+                continue;
             } else {
                 NSLog(@"不存在这条图片数据，需要插入");
                 operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Pic_Table];
@@ -973,29 +924,21 @@
                         NSLog(@"插入图片成功");
                     } else {
                         NSLog(@"插入图片失败");
-                        successFul = NO;
                     }
                     
                 }];
             }
         }
         
-        if (!successFul) {
-            return NO;
-        }
-        
         //插入点赞
         for (SDTimeLineCellLikeItemModel *likeModel in cellModel.likeItemsArray) {
-            
-            FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
-            
             NSLog(@"开始查点赞表");
             __block BOOL isExist = NO;
             [likeQueue inDatabase:^(FMDatabase *db) {
                 NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = %@ and userId = %@",cellModel.circle_ID,likeModel.userId]];
                 FMResultSet *result = [db executeQuery:searchOptionStr];
                 while ([result next]) {
-                    NSLog(@"查表成功6");
+                    NSLog(@"查点赞表成功");
                     isExist = YES;
                 }
             }];
@@ -1003,6 +946,7 @@
             
             if (isExist) {
                 NSLog(@"存在这条点赞数据，不做操作");
+                continue;
             } else {
                 NSLog(@"不存在这条点赞数据，需要插入");
                 operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Like_Table];
@@ -1012,17 +956,12 @@
                         NSLog(@"插入点赞成功");
                     } else {
                         NSLog(@"插入点赞失败");
-                        successFul = NO;
                     }
                 }];
             }
         }
         
-        if (!successFul) {
-            return NO;
-        }
     }
-    return YES;
 }
 
 /**
@@ -1030,11 +969,14 @@
  */
 - (NSArray *)getCirCleDataInArrayWithPage:(int)pageNumber {
     
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
-    NSString *operationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Table withOption:[NSString stringWithFormat:@"circle_ID > 0 order by circle_ID desc LIMIT (%zd-1)*30,30",pageNumber]];
+    FMDatabaseQueue *circleQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
+    FMDatabaseQueue *likeQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
+    FMDatabaseQueue *commentQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
+    FMDatabaseQueue *picQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Pic_Table];
     
+    NSString *operationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Table withOption:[NSString stringWithFormat:@"circle_ID > 0 order by circle_ID desc LIMIT (%zd-1)*30,30",pageNumber]];
     NSMutableArray *cellModelArray = [NSMutableArray array];
-    [queue inDatabase:^(FMDatabase *db) {
+    [circleQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:operationStr];
         while ([result next]) {
             SDTimeLineCellModel *model = [[SDTimeLineCellModel alloc] init];
@@ -1051,12 +993,11 @@
         }
     }];
     
+    
     for (SDTimeLineCellModel *cellModel in cellModelArray) {
-        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Comment_Table];
-        
+        //取出评论
         NSString *operationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Comment_Table withOption:[NSString stringWithFormat:@"circle_ID = '%@'",cellModel.circle_ID]];
-        
-        [queue inDatabase:^(FMDatabase *db) {
+        [commentQueue inDatabase:^(FMDatabase *db) {
             NSMutableArray *commentListArray = [NSMutableArray array];
             FMResultSet *result = [db executeQuery:operationStr];
             while ([result next]) {
@@ -1074,15 +1015,12 @@
             cellModel.commentList = commentListArray;
         }];
         
-    }
-    
-    for (SDTimeLineCellModel *cellModel in cellModelArray) {
-        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Pic_Table];
-        NSString *operationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Pic_Table withOption:[NSString stringWithFormat:@"circle_ID = '%@'",cellModel.circle_ID]];
         
-        [queue inDatabase:^(FMDatabase *db) {
+        //取出图片
+        NSString *PicOperationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Pic_Table withOption:[NSString stringWithFormat:@"circle_ID = '%@'",cellModel.circle_ID]];
+        [picQueue inDatabase:^(FMDatabase *db) {
             NSMutableArray *commentListArray = [NSMutableArray array];
-            FMResultSet *result = [db executeQuery:operationStr];
+            FMResultSet *result = [db executeQuery:PicOperationStr];
             while ([result next]) {
                 SDTimeLineCellPicItemModel *model = [[SDTimeLineCellPicItemModel alloc] init];
                 model.weuser_id = [result stringForColumn:@"weuser_id"];
@@ -1092,15 +1030,13 @@
             }
             cellModel.imglist = commentListArray;
         }];
-    }
-    
-    for (SDTimeLineCellModel *cellModel in cellModelArray) {
-        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Like_Table];
-        NSString *operationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = '%@'",cellModel.circle_ID]];
         
-        [queue inDatabase:^(FMDatabase *db) {
+        
+        //取出点赞
+        NSString *likeOperationStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Like_Table withOption:[NSString stringWithFormat:@"circle_ID = '%@'",cellModel.circle_ID]];
+        [likeQueue inDatabase:^(FMDatabase *db) {
             NSMutableArray *likeItemArray = [NSMutableArray array];
-            FMResultSet *result = [db executeQuery:operationStr];
+            FMResultSet *result = [db executeQuery:likeOperationStr];
             while ([result next]) {
                 SDTimeLineCellLikeItemModel *model = [[SDTimeLineCellLikeItemModel alloc] init];
                 model.userName = [result stringForColumn:@"userName"];
@@ -1110,7 +1046,6 @@
             cellModel.likeItemsArray = likeItemArray;
         }];
     }
-    
     return cellModelArray;
 }
 
@@ -1633,10 +1568,12 @@
 
 #pragma mark - 会话相关
 //                    -----------   会话表  ----------------
+
 /**
- *  保存会话列表数据
- *
- *  @param dataArray 数据数组 <ConverseModel *>
+ 保存会话列表
+
+ @param dataArray 会话模型数组
+ @param block     回调
  */
 - (void)saveConverseListDataWithDataArray:(NSArray *)dataArray withComplationBlock:(ComplationBlock)block {
     NSLog(@"插入数据库");
@@ -1646,7 +1583,7 @@
         for (ConverseModel *converseModel in dataArray) {
             NSString *operationStr;
             operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
-            BOOL success = [db executeUpdate:operationStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.unReadCount),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType)];
+            BOOL success = [db executeUpdate:operationStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.unReadCount),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType),@(converseModel.messageType)];
             if (success) {
                 NSLog(@"插入会话成功");
             } else {
@@ -1655,63 +1592,62 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         block(NO);
                     });
-                    
                     isSuccess = NO;
                 }
                 break;
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (block && isSuccess) {
+        if (block && isSuccess) {
+            dispatch_async(dispatch_get_main_queue(), ^{
                 block(YES);
-            }
-        });
-        
+            });
+        }
     }];
 }
 
-
 /**
- 更新会话列表  - 不执行查询操作。
+ 更新会话 - 只执行查询、更新操作，不创建会话
  
- @param dataArray 模型数组
- 
- @return 是否更新成功
+ @param dataArray 会话模型数组
+ @param block     回调 - 主线程回调
  */
-- (void)alterConverseListDataWhtDataArray:(NSArray <ConverseModel *>*)dataArray withComplationBlock:(ComplationBlock)block {
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-    NSLog(@"更新会话数据库");
-    [queue inDatabase:^(FMDatabase *db) {
-        BOOL isSuccess = YES;
-        for (ConverseModel *converseModel in dataArray) {
-            NSString *operationStr;
-            NSString *option1 = [NSString stringWithFormat:@"time = '%@', converseId = '%@', unReadCount = '%@', topChat = '%@', noDisturb = '%@', converseName = '%@', converseContent = '%@'",@(converseModel.time),converseModel.converseId,@(converseModel.unReadCount),@(converseModel.topChat), @(converseModel.disturb), converseModel.converseName,converseModel.lastConverse];
-            NSString *option2 = [NSString stringWithFormat:@"converseId = '%@' and converseType = '%zd'",converseModel.converseId,converseModel.converseType];
-            operationStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
-        
-            BOOL success = [db executeUpdate:operationStr];
+- (void)alertConverseListDataWithDataArray:(NSArray <ConverseModel *>*)dataArray withComplationBlock:(ComplationBlock)block {
+    FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    
+    
+    [converseQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        BOOL isSuccess = NO;
+        for (ConverseModel *model in dataArray) {
+            
+            ConverseModel *oldModel = [FMDBShareManager searchConverseWithConverseID:model.converseId andConverseType:model.converseType];
+            model.unReadCount = oldModel.unReadCount;
+            
+            NSString *option1 = [NSString stringWithFormat:@"converseName = '%@' , converseLogo = '%@', converseContent = '%@', unReadCount = '%@', time = '%@',serviceMessageType = '%@',messageType = '%@'",model.converseName,model.converseHead_photo,model.lastConverse,@(model.unReadCount + 1),@(model.time),@(model.serviceMessageType),@(model.messageType)];
+            NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = '%@' and converseType = '%zd'",model.converseId,model.converseType]];
+            
+            BOOL success = [db executeUpdate:optionStr];
             if (success) {
                 NSLog(@"更新会话成功");
-            }else {
+                isSuccess = YES;
+            } else {
                 NSLog(@"更新会话失败");
                 if (block) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         block(NO);
                     });
-                    
-                    isSuccess = NO;
                 }
-                break;
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (block && isSuccess) {
+        
+        if (isSuccess && block) {
+            dispatch_async(dispatch_get_main_queue(), ^{
                 block(YES);
-            }
-        });
+            });
+        }
         
     }];
 }
+
 
 
 /**
@@ -1728,7 +1664,7 @@
         NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"time > 0 and converseType = '%zd' order by time desc",ConversionTypeGroupChat]];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         while ([result next]) {
-            NSLog(@"查表成功8");
+            NSLog(@"查会话表成功8");
             ConverseModel *model = [[ConverseModel alloc] init];
             model.converseId = [result stringForColumn:@"converseId"];
             model.converseType = [result intForColumn:@"converseType"];
@@ -1740,6 +1676,7 @@
             model.disturb = [result intForColumn:@"noDisturb"];
             model.time = [result intForColumn:@"time"];
             model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
+            model.messageType = [result intForColumn:@"messageType"];
             [dataArray addObject:model];
         }
     }];
@@ -1759,7 +1696,6 @@
     NSMutableArray *dataArray = [NSMutableArray array];
     NSLog(@"开始查会话表");
     [queue inDatabase:^(FMDatabase *db) {
-        
         NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:@"time > 0 order by time desc"];
         FMResultSet *result = [db executeQuery:searchOptionStr];
         while ([result next]) {
@@ -1783,7 +1719,6 @@
     NSMutableArray *topModelArray = [NSMutableArray array];
     // 把模型数组中，置顶的放到最前面
     for (ConverseModel *model in dataArray) {
-        
         if (model.topChat) {
             [topModelArray addObject:model];
         }
@@ -1793,7 +1728,6 @@
     for (ConverseModel *model in topModelArray) {
         [dataArray removeObject:model];
     }
-    
     
     
     // 在按顺序把置顶模型放到数组顶部
@@ -1854,7 +1788,6 @@
         while ([result next]) {
             isExist = YES;
         }
-        
     }];
     
     

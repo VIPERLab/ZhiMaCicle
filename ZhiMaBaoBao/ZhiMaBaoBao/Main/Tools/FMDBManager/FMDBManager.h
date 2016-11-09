@@ -94,19 +94,20 @@ typedef enum : NSUInteger {
 
 #pragma mark - 朋友圈存、取操作
 //                    ------------   朋友圈表  ----------------
-/**
- *  把朋友圈数据存储到数据库
- *
- *  @param dataArray 模型数组
- *
- *  @return 是否存储成功
- */
-- (BOOL)saveCircleDataWithDataArray:(NSArray <SDTimeLineCellModel *>*)dataArray;
 
 /**
- *  获取所有的朋友圈
- *
- *  @return 朋友圈数组
+ 存储朋友圈模型到数据库
+
+ @param dataArray 模型数组
+ */
+- (void)saveCircleDataWithDataArray:(NSArray <SDTimeLineCellModel *>*)dataArray;
+
+/**
+ 获取所有的朋友圈
+
+ @param pageNumber 页码
+
+ @return 朋友圈模型数组
  */
 - (NSArray <SDTimeLineCellModel *> *)getCirCleDataInArrayWithPage:(int)pageNumber;
 
@@ -256,23 +257,21 @@ typedef enum : NSUInteger {
 - (NSArray <ConverseModel *> *)getAllGroupChatDataInArray;
 
 /**
- *  保存会话列表数据
- *
- *  @param dataArray 数据数组 <ConverseModel *>
+ 保存会话列表 - 不执行查询操作
+ 
+ @param dataArray 会话模型数组
+ @param block     回调 - 主线程回调
  */
 - (void)saveConverseListDataWithDataArray:(NSArray <ConverseModel *> *)dataArray withComplationBlock:(ComplationBlock)block;
 
 
-
-
 /**
- 更新会话 - 不执行查询操作
+ 更新会话 - 只执行查询、更新操作，不创建会话
 
- @param dataArray 模型数组
- @param block     成功/失败回调
+ @param dataArray 会话模型数组
+ @param block     回调 - 主线程回调
  */
-- (void)alterConverseListDataWhtDataArray:(NSArray <ConverseModel *>*)dataArray withComplationBlock:(ComplationBlock)block;
-
+- (void)alertConverseListDataWithDataArray:(NSArray <ConverseModel *>*)dataArray withComplationBlock:(ComplationBlock)block;
 
 /**
  *  是否存在这个会话

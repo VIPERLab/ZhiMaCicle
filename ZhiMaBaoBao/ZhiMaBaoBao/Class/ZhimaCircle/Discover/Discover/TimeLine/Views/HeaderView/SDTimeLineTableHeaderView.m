@@ -97,7 +97,7 @@
 
 - (void)setBJImage:(NSString *)BJImage {
     _BJImage = BJImage;
-    [_backgroundImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,BJImage]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+    [_backgroundImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,BJImage]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@""]];
 }
 
 - (void)backGroundImageViewDidClick:(UIButton *)sender {

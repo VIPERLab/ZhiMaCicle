@@ -40,14 +40,14 @@
 #define ZhiMaCollection_TableName @"Collection "
 
 //  创建朋友圈table字段
-#define CircleField @"( friend_nick TEXT NOT NULL, circle_ID INTEGER, userID TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL, content_type INTEGER, article_link TEXT, PRIMARY KEY ('circle_ID'))"
+#define CircleField @"( friend_nick TEXT NOT NULL, circle_ID INTEGER, userID TEXT NOT NULL, content TEXT NOT NULL, current_location TEXT NOT NULL, create_time TEXT NOT NULL, head_photo TEXT NOT NULL, content_type INTEGER, article_link TEXT, PRIMARY KEY ('circle_ID') ON CONFLICT REPLACE)"
 // 取朋友圈table的字段名
 #define CircleFiels_Name @"friend_nick, circle_ID, userID, content, current_location, create_time, head_photo, content_type, article_link"
 
 
 
 // 创建 --- 评论字段
-#define Circle_CommentField @"( friend_nick TEXT NOT NULL, fcid TEXT NOT NULL, comment TEXT NOT NULL, reply_friend_nick TEXT NOT NULL, reply_id TEXT NOT NULL, head_photo TEXT NOT NULL, create_time TEXT NOT NULL, circle_ID TEXT NOT NULL, userID TEXT NOT NULL)"
+#define Circle_CommentField @"( friend_nick TEXT NOT NULL, fcid TEXT NOT NULL, comment TEXT NOT NULL, reply_friend_nick TEXT NOT NULL, reply_id TEXT NOT NULL, head_photo TEXT NOT NULL, create_time TEXT NOT NULL, circle_ID TEXT NOT NULL, userID TEXT NOT NULL, PRIMARY KEY ('fcid') ON CONFLICT REPLACE)"
 // 取 ----  评论字段 -- 名
 #define Circle_CommentFields_Name @"friend_nick, fcid, comment, reply_friend_nick, reply_id, head_photo, create_time, circle_ID, userID"
 
@@ -66,8 +66,8 @@
 
 #pragma mark - 会话
 // 创建 聊天会话 table 字段
-#define Chat_ConverseField @"(converseId TEXT, converseType INTEGER, converseName TEXT, converseLogo TEXT, converseContent TEXT, unReadCount INTEGER, topChat INTEGER, noDisturb INTEGER, time INTEGER,serviceMessageType INTEGER, PRIMARY KEY ('converseId') ON CONFLICT REPLACE)"
-#define Chat_ConverseFields_Name @"converseId,converseType,converseName,converseLogo,converseContent,unReadCount,topChat,noDisturb,time,serviceMessageType"
+#define Chat_ConverseField @"(converseId TEXT, converseType INTEGER, converseName TEXT, converseLogo TEXT, converseContent TEXT, unReadCount INTEGER, topChat INTEGER, noDisturb INTEGER, time INTEGER,serviceMessageType INTEGER,messageType INTEGER DEFAULT 0, PRIMARY KEY ('converseId') ON CONFLICT REPLACE)"
+#define Chat_ConverseFields_Name @"converseId,converseType,converseName,converseLogo,converseContent,unReadCount,topChat,noDisturb,time,serviceMessageType,messageType"
 
 
 #pragma mark - 消息

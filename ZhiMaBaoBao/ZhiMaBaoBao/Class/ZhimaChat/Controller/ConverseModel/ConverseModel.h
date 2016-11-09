@@ -20,7 +20,7 @@ typedef NS_OPTIONS(NSUInteger, ConversionType){
 /**
  *  时间
  */
-@property (nonatomic, assign) int time;
+@property (nonatomic, assign) NSInteger time;
 
 /**
  *  会话类型  0:单聊  1:群聊  2:服务号
@@ -68,5 +68,11 @@ typedef NS_OPTIONS(NSUInteger, ConversionType){
  服务号消息类型 - 判断是否红包类型
  */
 @property (nonatomic, assign) int serviceMessageType;
+
+
+/**
+ 最后一条文本的 消息类型 文字、语音、图片、链接
+ */
+@property (nonatomic, assign) int messageType;
 
 @end

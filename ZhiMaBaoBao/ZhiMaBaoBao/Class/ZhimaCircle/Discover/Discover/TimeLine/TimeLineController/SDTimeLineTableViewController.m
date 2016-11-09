@@ -315,7 +315,6 @@
         if (responseData.code != 0) {
             // 失败则展示数据库中下一页的数据  异步获取下一页数据
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                //存数据到朋友圈表
                 NSArray *newDataArray = [FMDBShareManager getCirCleDataInArrayWithPage:self.pageNumber];
                 
                 if (newDataArray.count == 0) {
@@ -691,10 +690,6 @@
                 [copyArray removeObjectAtIndex:index];
                 
                 SDTimeLineCellLikeItemModel *likeModel = [[SDTimeLineCellLikeItemModel alloc] init];
-                if (!model.friend_nick) {
-                    model.friend_nick = @"未命名";
-                }
-                
                 likeModel.userName = model.friend_nick;
                 likeModel.userId = model.userId;
                 [likeItemsArray addObject:likeModel];
@@ -704,12 +699,6 @@
         
         //循环结束之后，把筛选剩下的评论数赋值回去
         commentListArray = [copyArray mutableCopy];
-        
-        for (SDTimeLineCellCommentItemModel *model in commentListArray) {
-            if (!model.friend_nick) {
-                model.friend_nick = @"未命名";
-            }
-        }
         
         //得到最新的Model
         model.likeItemsArray = [likeItemsArray mutableCopy];
