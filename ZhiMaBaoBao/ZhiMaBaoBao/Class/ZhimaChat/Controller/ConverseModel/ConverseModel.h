@@ -73,6 +73,6 @@ typedef NS_OPTIONS(NSUInteger, ConversionType){
 /**
  最后一条文本的 消息类型 文字、语音、图片、链接
  */
-@property (nonatomic, assign) int messageType;
+@property (nonatomic, assign) MessageType messageType;
 
 @end

@@ -1860,7 +1860,6 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        NSLog(@"--------------------- 插入消息表");
         BOOL successFul = [db executeUpdate:opeartionStr2,converseID,message.msgid,@(message.conversionType),@(message.type),message.fromUid,message.toUidOrGroupId,message.subject,message.text,@(message.sendStatus), @(message.is_read),message.holderImageUrlString,message.link,@(message.isDownLoad),message.videoDownloadUrl,@(message.timeStamp)];
         if (successFul) {
             NSLog(@"插入消息成功");
@@ -1868,159 +1867,18 @@
             NSLog(@"插入消息失败");
         }
     }];
-    
-    
-    //查询这个消息对应的会话是否存在
-    // converseID = userID 根据这个id 取出用户表对应的用户数据
-    ZhiMaFriendModel *userModel = [FMDBShareManager getUserMessageByUserID:converseID];
-    
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-    NSLog(@"开始查会话表");
-    __block BOOL isExist = NO;
-    [queue inDatabase:^(FMDatabase *db) {
-        NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Chat_Converse_Table withOption:[NSString stringWithFormat:@"converseId = %@ and converseType = '%zd'",converseID,message.conversionType]];
-        FMResultSet *result = [db executeQuery:searchOptionStr];
-        while ([result next]) {
-            NSLog(@"存在这个会话");
-            isExist = YES;
-        }
-    }];
-    
-    //更新会话模型
-    ConverseModel *converseModel = [[ConverseModel alloc] init];
-    converseModel.time = message.timeStamp;
-    converseModel.converseHead_photo = userModel.user_Head_photo;
-    converseModel.converseName = userModel.displayName;
-    if (message.type == MessageTypeText || message.type == MessageTypeSystem) {
-        converseModel.lastConverse = message.text;
-    }else if (message.type == MessageTypeImage){
-        converseModel.lastConverse = @"[图片]";
-    }else if (message.type == MessageTypeAudio){
-        converseModel.lastConverse = @"[语音]";
-    }else if (message.type == MessageTypeVideo){
-        converseModel.lastConverse = @"[视频]";
-    }
-    
-    
-    NSString *opeartionStr = [NSString string];
-    if (!isExist) {
-        //不存在会话列表 ->  创建这个会话
-        NSLog(@"会话不存在，需要创建");
-        
-        converseModel.converseId = converseID;
-        converseModel.disturb = NO;
-        converseModel.topChat = NO;
-        converseModel.unReadCount = 1;
-        converseModel.converseType = message.conversionType;
-        
-        opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
-        
-    } else {
-        //更新这个会话
-        NSLog(@"会话存在,更新会话");
-        //取出这个会话
-        converseModel = [FMDBShareManager searchConverseWithConverseID:converseID andConverseType:message.conversionType];
-        //设置更新内容
-        if (![message.fromUid isEqualToString:USERINFO.userID]) {
-            converseModel.unReadCount ++;
-        }
-        converseModel.time = message.timeStamp;
-        converseModel.lastConverse = message.text;
-        converseModel.converseHead_photo = userModel.user_Head_photo;
-        converseModel.converseName = userModel.displayName;
-        if (message.type == MessageTypeText || message.type == MessageTypeSystem) {
-            converseModel.lastConverse = message.text;
-        }else if (message.type == MessageTypeImage){
-            converseModel.lastConverse = @"[图片]";
-        }else if (message.type == MessageTypeAudio){
-            converseModel.lastConverse = @"[语音]";
-        }else if (message.type == MessageTypeVideo){
-            converseModel.lastConverse = @"[视频]";
-        }
-        
-        NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseLogo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];
-        NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",converseModel.converseId];
-        
-        opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
-    }
-    
-    [queue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.unReadCount),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType)];
-        if (successFul) {
-            NSLog(@"更新会话成功");
-        } else {
-            NSLog(@"更新会话失败");
-            success = NO;
-        }
-    }];
-    
     return success;
 }
 
 
 /**
- *  插入一个新消息到消息列表 （群专用）
+ *  插入一个新消息到消息列表 （群专用）已弃用  请转用 -saveMessage:toConverseID:
  *
  *  @param groupId   群id
  *
  */
 - (BOOL)saveGroupChatMessage:(LGMessage *)message andConverseId:(NSString *)converseID {
-    
-    __block BOOL success = YES;   //消息是否插入成功
-    
-    //先把消息插入到消息表
-    FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
-    NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
-    [messageQueue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr2,converseID,message.msgid,@(message.conversionType),@(message.type),message.fromUid,message.toUidOrGroupId,message.subject,message.text,@(message.sendStatus), @(message.is_read),message.holderImageUrlString,message.link,@(message.isDownLoad),message.videoDownloadUrl,@(message.timeStamp)];
-        if (successFul) {
-            NSLog(@"插入消息成功");
-        } else {
-            NSLog(@"插入消息失败");
-        }
-    }];
-    
-    
-    // 取出会话模型
-    ConverseModel *converseModel = [FMDBShareManager searchConverseWithConverseID:message.toUidOrGroupId andConverseType:ConversionTypeGroupChat];
-    
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-
-    //更新这个会话
-    NSLog(@"更新会话");
-    //更新会话模型
-    converseModel.time = message.timeStamp;
-    
-    if (![message.fromUid isEqualToString:USERINFO.userID]) {
-        converseModel.unReadCount ++;
-    }
-    
-    if (message.type == MessageTypeText || message.type == MessageTypeSystem) {
-        converseModel.lastConverse = message.text;
-    }else if (message.type == MessageTypeImage){
-        converseModel.lastConverse = @"[图片]";
-    }else if (message.type == MessageTypeAudio){
-        converseModel.lastConverse = @"[语音]";
-    }else if (message.type == MessageTypeVideo){
-        converseModel.lastConverse = @"[视频]";
-    }
-    
-    NSString *opeartionStr = [NSString string];
-    NSString *option1 = [NSString stringWithFormat:@"unReadCount = '%@', converseName = '%@', converseContent = '%@', time = '%@',converseLogo = '%@'",@(converseModel.unReadCount),converseModel.converseName,converseModel.lastConverse, @(converseModel.time),converseModel.converseHead_photo];
-    NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",converseModel.converseId];
-    opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
-
-    [queue inDatabase:^(FMDatabase *db) {
-        BOOL successFul = [db executeUpdate:opeartionStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.unReadCount),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType)];
-        if (successFul) {
-            NSLog(@"更新会话成功");
-        } else {
-            NSLog(@"更新会话失败");
-            success = NO;
-        }
-    }];
-    
-    return success;
+    return [self saveMessage:message toConverseID:converseID];
 }
 
 
@@ -2061,11 +1919,11 @@
 }
 
 /**
- *  更新消息模型
- *
- *  @param message 新的消息
- *
- *  @return 是否更新成功
+ 更新消息模型
+ 
+ @param message 新的消息
+ 
+ @return 是否更新成功
  */
 - (BOOL)upDataMessageStatusWithMessage:(LGMessage *)message {
     __block BOOL isSuccess = NO;
@@ -2083,7 +1941,6 @@
             NSLog(@"更新消息失败");
         }
     }];
-    
     return isSuccess;
 }
 

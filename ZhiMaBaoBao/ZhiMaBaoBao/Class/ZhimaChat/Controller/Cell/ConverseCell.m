@@ -92,17 +92,43 @@
 - (void)setModel:(ConverseModel *)model {
     _model = model;
     NSString *urlStr = [NSString stringWithFormat:@"%@%@",DFAPIURL,model.converseHead_photo];
-    if (model.converseType) {
+    // 群聊、单聊、服务号头像显示
+    if (model.converseType == 1) {        // 群聊
         [_iconView sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            
         }];
-    }else{
+    } else if (model.converseType == 0) { // 单聊
         [_iconView sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+    } else if (model.converseType == 2) { // 服务号
+        [_iconView sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Image_placeHolder"]];
+    }
+    
+    // 判断最后一条消息的类型
+    if (model.messageType == MessageTypeText || model.messageType == MessageTypeSystem) {
+        _lastConverseLabel.text = model.lastConverse;
+    } else if (model.messageType == MessageTypeImage) {
+        _lastConverseLabel.text = @"[图片]";
+    } else if (model.messageType == MessageTypeAudio) {
+        _lastConverseLabel.text = @"[语音]";
+    } else if (model.messageType == MessageTypeActivityPurse) {
+        _lastConverseLabel.text = @"[红包]";
+    } else if (model.messageType == MessageTypeVideo) {
+        _lastConverseLabel.text = @"[视频]";
+    } else if (model.messageType == MessageTypeActivityArticle) {
+        _lastConverseLabel.text = @"系统消息";
+    }
+    
+    // 是否红包类型
+    if (model.serviceMessageType == 1) {
+        _converseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
+        _lastConverseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
+    } else {
+        _converseLabel.textColor = [UIColor blackColor];
+        _lastConverseLabel.textColor = [UIColor blackColor];
     }
     
     _converseLabel.text = model.converseName;
     
-    _lastConverseLabel.text = model.lastConverse;
+    
     
     if (model.unReadCount < 1) {
         _unReadCountLabel.hidden = YES;
@@ -141,14 +167,6 @@
     hasSubViews = YES;
     
     _disturbIcon.hidden = !model.disturb;
-    
-    if (model.serviceMessageType == 1) {
-        _converseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
-        _lastConverseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
-    } else {
-        _converseLabel.textColor = [UIColor blackColor];
-        _lastConverseLabel.textColor = [UIColor blackColor];
-    }
     
     [self setNeedsLayout];
     

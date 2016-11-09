@@ -1359,6 +1359,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         
         //更新消息表中该条消息
+        [FMDBShareManager saveMessage:systemMsg toConverseID:@""];
         [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
         //如果是撤销的最后一条 更新会话列表最后一条消息显示
         if (indecPath.row == self.messages.count - 1) {

@@ -308,17 +308,19 @@ typedef enum : NSUInteger {
 #pragma mark - 消息相关
 //                    ------------   消息表  ----------------
 /**
- *  插入消息->消息表，并 更新/创建 会话表
- *
- *  @param message      消息模型
- *  @param converseMode 会话模型
+ 插入一个消息到消息表
+ 
+ @param message    消息模型
+ @param converseID 会话id/ 群ID
+
+ @return 是否插入成功
  */
 - (BOOL)saveMessage:(LGMessage *)message toConverseID:(NSString *)converseID;
 
 
 
 /**
- *  插入一个新消息到消息列表 （群专用）
+ *  插入一个新消息到消息列表 （群专用）已弃用  请转用 -saveMessage:toConverseID:
  *
  *  @param groupId   群id
  *
@@ -327,27 +329,30 @@ typedef enum : NSUInteger {
 
 
 /**
- *  根据会话id 获取消息列表
- *
- *  @param converseID 会话id
- *
- *  @return 一个消息模型数组 <LGMessage *>
+ 根据会话id 回去消息数组
+
+ @param converseID 会话id
+ @param pageNumber 页数
+
+ @return 消息模型数组 <LGMessage *>
  */
 - (NSArray <LGMessage *> *)getMessageDataWithConverseID:(NSString *)converseID andPageNumber:(int)pageNumber;
 
+
 /**
- *  根据会话ID删除消息
- *
- *  @param converseID 会话id
+ 根据会话ID删除消息
+
+ @param converseID 会话id
  */
 - (void)deleteMessageFormMessageTableByConverseID:(NSString *)converseID;
 
+
 /**
- *  更新消息模型
- *
- *  @param message 新的消息
- *
- *  @return 是否更新成功
+ 更新消息模型
+
+ @param message 新的消息
+
+ @return 是否更新成功
  */
 - (BOOL)upDataMessageStatusWithMessage:(LGMessage *)message;
 
