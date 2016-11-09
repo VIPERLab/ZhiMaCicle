@@ -1622,6 +1622,16 @@
             ConverseModel *oldModel = [FMDBShareManager searchConverseWithConverseID:model.converseId andConverseType:model.converseType];
             model.unReadCount = oldModel.unReadCount;
             
+            if (oldModel.converseName.length) {
+                if (block) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        block(NO);
+                    });
+                }
+                break;
+            }
+            
+            
             NSString *option1 = [NSString stringWithFormat:@"converseName = '%@' , converseLogo = '%@', converseContent = '%@', unReadCount = '%@', time = '%@',serviceMessageType = '%@',messageType = '%@'",model.converseName,model.converseHead_photo,model.lastConverse,@(model.unReadCount + 1),@(model.time),@(model.serviceMessageType),@(model.messageType)];
             NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = '%@' and converseType = '%zd'",model.converseId,model.converseType]];
             
@@ -1850,7 +1860,7 @@
     FMDatabaseQueue *messageQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
     NSString *opeartionStr2 = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Message_Table];
     [messageQueue inDatabase:^(FMDatabase *db) {
-        NSLog(@"--------------------- 插入消息表")
+        NSLog(@"--------------------- 插入消息表");
         BOOL successFul = [db executeUpdate:opeartionStr2,converseID,message.msgid,@(message.conversionType),@(message.type),message.fromUid,message.toUidOrGroupId,message.subject,message.text,@(message.sendStatus), @(message.is_read),message.holderImageUrlString,message.link,@(message.isDownLoad),message.videoDownloadUrl,@(message.timeStamp)];
         if (successFul) {
             NSLog(@"插入消息成功");
