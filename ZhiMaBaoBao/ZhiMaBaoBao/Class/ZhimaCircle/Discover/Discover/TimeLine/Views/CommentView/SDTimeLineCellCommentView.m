@@ -196,7 +196,7 @@
     _likeLabel.hidden = NO;
     
     NSTextAttachment *attach = [NSTextAttachment new];
-    attach.image = [UIImage imageNamed:@"Discover_Like"];
+    attach.image = [UIImage imageNamed:@"Discover_Like_Sel"];
     attach.bounds = CGRectMake(0, -3, 15, 14);
     NSAttributedString *likeIcon = [NSAttributedString attributedStringWithAttachment:attach];
     

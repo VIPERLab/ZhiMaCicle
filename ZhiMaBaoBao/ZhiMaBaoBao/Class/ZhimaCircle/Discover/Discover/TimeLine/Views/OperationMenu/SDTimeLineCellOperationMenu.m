@@ -30,7 +30,7 @@
     self.layer.cornerRadius = 5;
     self.backgroundColor = SDColor(69, 74, 76, 1);
     
-    _likeButton = [self creatButtonWithTitle:@"赞" image:[UIImage imageNamed:@"Discover_Like"] selImage:[UIImage imageNamed:@""] target:self selector:@selector(likeButtonClicked:)];
+    _likeButton = [self creatButtonWithTitle:@"赞" image:[UIImage imageNamed:@"Discover_Like"] selImage:[UIImage imageNamed:@"Discover_Like_Sel"] target:self selector:@selector(likeButtonClicked:)];
     
     [_likeButton setTitle:@"取消" forState:UIControlStateSelected];
     

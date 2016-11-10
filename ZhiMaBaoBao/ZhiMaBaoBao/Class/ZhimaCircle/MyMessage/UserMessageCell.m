@@ -8,7 +8,7 @@
 
 #import "UserMessageCell.h"
 #import "UIImageView+WebCache.h"
-#import "MLLinkLabel.h"
+#import "TQRichTextView.h"
 #import "UIColor+My.h"
 @interface UserMessageCell ()
 
@@ -16,7 +16,9 @@
 
 @property (nonatomic, weak) UILabel *nameLabel;         //评论名字
 
-@property (nonatomic, weak) MLLinkLabel *contentLabel;      //评论内容
+@property (nonatomic, weak) TQRichTextView *contentLabel;      //评论内容
+
+@property (nonatomic, weak) UIImageView *likeImage;     //点赞图片
 
 @property (nonatomic, weak) UILabel *creatTimeLabel;    //创建时间
 
@@ -58,10 +60,12 @@
     self.nameLabel = nameLabel;
     [self addSubview:nameLabel];
     
-    MLLinkLabel *contentLabel = [[MLLinkLabel alloc] init];
+    TQRichTextView *contentLabel = [[TQRichTextView alloc] init];
     contentLabel.font = [UIFont systemFontOfSize:14];
-    contentLabel.numberOfLines = 0;
     self.contentLabel = contentLabel;
+    _contentLabel.lineSpacing = 1.5;
+    _contentLabel.backgroundColor = [UIColor clearColor];
+    _contentLabel.textColor = [UIColor blackColor];
     [self addSubview:contentLabel];
     
     UILabel *creaetTimeLabel = [[UILabel alloc] init];
@@ -70,6 +74,10 @@
     [self addSubview:creaetTimeLabel];
     
     
+    UIImageView *likeImage = [[UIImageView alloc] init];
+    likeImage.image = [UIImage imageNamed:@"Discover_Like_Sel"];
+    self.likeImage = likeImage;
+    [self addSubview:likeImage];
     
     
     UIView *bottomLineView = [[UIView alloc] init];
@@ -124,7 +132,10 @@
     }
     
     if (model.type == 2) {
-        self.contentLabel.text = @"赞";
+        self.likeImage.hidden = NO;
+        self.contentLabel.text = @" ";
+    } else {
+        self.likeImage.hidden = YES;
     }
 }
 
@@ -134,8 +145,12 @@
     self.nameLabel.frame = CGRectMake(CGRectGetMaxX(self.iconView.frame) + 5, 10, 300, 15);
     
     //获取文字高度
-    CGFloat contentHeight = [self changeStationWidth:self.contentLabel.text anWidthTxtt:[UIScreen mainScreen].bounds.size.width - (CGRectGetMaxX(self.iconView.frame) + 70) anfont:14];
-    self.contentLabel.frame = CGRectMake(CGRectGetMaxX(self.iconView.frame) + 5, CGRectGetMaxY(self.nameLabel.frame) + 5, [UIScreen mainScreen].bounds.size.width - (CGRectGetMaxX(self.iconView.frame) + 80), contentHeight);
+//    CGFloat contentHeight = [self changeStationWidth:self.contentLabel.text anWidthTxtt:[UIScreen mainScreen].bounds.size.width - (CGRectGetMaxX(self.iconView.frame) + 70) anfont:14];
+    
+    CGFloat contentH = [TQRichTextView getRechTextViewHeightWithText:_contentLabel.text viewWidth:[UIScreen mainScreen].bounds.size.width - (CGRectGetMaxX(self.iconView.frame) + 80) font:[UIFont systemFontOfSize:15] lineSpacing:1.5].height;
+    self.contentLabel.frame = CGRectMake(CGRectGetMaxX(self.iconView.frame) + 5, CGRectGetMaxY(self.nameLabel.frame) + 5, [UIScreen mainScreen].bounds.size.width - (CGRectGetMaxX(self.iconView.frame) + 80), contentH);
+    
+    self.likeImage.frame = CGRectMake(CGRectGetMinX(self.contentLabel.frame) , CGRectGetMinY(self.contentLabel.frame) + 3, 17, 16);
     
     
     self.creatTimeLabel.frame = CGRectMake(CGRectGetMinX(self.nameLabel.frame), CGRectGetMaxY(self.contentLabel.frame) + 5, 200, 20);
