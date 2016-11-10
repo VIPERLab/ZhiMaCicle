@@ -308,7 +308,9 @@
         
         for (UILabel *label in buttonView.subviews) {
             if ([label isKindOfClass:[UILabel class]]) {
+                //计算字符串高度
 //                CGSize size = [label.text sizeWithFont:[UIFont boldSystemFontOfSize:14] maxSize:CGSizeMake(width, MAXFLOAT)];
+                //计算attributedText高度
                 CGSize size = [self sizeLabelToFit:label.attributedText width:width height:16];
                 buttonView.sd_layout.heightIs(size.height);
                 
@@ -429,10 +431,6 @@
         }
     }
 }
-
-
-
-
 
 //正则筛选
 - (void)setContentLinkText:(UILabel *)label andModel:(SDTimeLineCellCommentItemModel *)model {
@@ -590,7 +588,6 @@
                     NSString*faceName = [faceDic objectForKey:emojiStr];
                     
                     [muAstr appendAttributedString:[self replaceEmojiWithString:faceName]];
-                    
                     
                     offsetIndex += faceName.length - 1;
                 }

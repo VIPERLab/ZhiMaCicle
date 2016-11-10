@@ -133,7 +133,7 @@ goto check;
 
         CFRelease(line);
         
-        if (lineRange.location==0 && lineRange.length==0) {// 防止无限循环
+        if (lineRange.length==0) {// 防止无限循环
             drawFlag = NO;
         }
         

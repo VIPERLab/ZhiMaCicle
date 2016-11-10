@@ -1373,39 +1373,38 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [LCProgressHUD hide];
+        LGMessage *systemMsg = [[LGMessage alloc] init];
+        systemMsg.text = @"你撤回了一条消息";
+        systemMsg.converseId = self.conversionId;
+        systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
+        systemMsg.fromUid = USERINFO.userID;
+        systemMsg.type = MessageTypeSystem;
+        systemMsg.msgid = message.msgid;
+        systemMsg.conversionType = message.conversionType;
+        systemMsg.timeStamp = message.timeStamp;//[NSDate currentTimeStamp];
         
-//        LGMessage *systemMsg = [[LGMessage alloc] init];
-//        systemMsg.text = @"你撤回了一条消息";
-//        systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
-//        systemMsg.fromUid = USERINFO.userID;
-//        systemMsg.type = MessageTypeSystem;
-////        systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
-//        systemMsg.msgid = message.msgid;
-//        systemMsg.conversionType = message.conversionType;
-//        systemMsg.timeStamp = [NSDate currentTimeStamp];
-//        
-//        NSInteger num = indecPath.row+1;
-//
-//        [self.messages insertObject:systemMsg atIndex:num];
-//
-//        self.selectedIndexPath = indecPath;
-//        
-//        [self.messages removeObjectAtIndex:self.selectedIndexPath.row];
-//        [self.tableView reloadData];
+        NSInteger num = indecPath.row+1;
+
+        [self.messages insertObject:systemMsg atIndex:num];
+
+        self.selectedIndexPath = indecPath;
+        
+        [self.messages removeObjectAtIndex:self.selectedIndexPath.row];
+        [self.tableView reloadData];
         
         
         //更新消息表中该条消息
-//        [FMDBShareManager saveMessage:systemMsg toConverseID:@""];
-//        [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
-        //如果是撤销的最后一条 更新会话列表最后一条消息显示
-//        if (indecPath.row == self.messages.count - 1) {
-//            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-//            NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];
-//            NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",systemMsg.toUidOrGroupId]];
-//            [queue inDatabase:^(FMDatabase *db) {
-//                [db executeUpdate:upDataStr];
-//            }];
-//        }
+        [FMDBShareManager saveMessage:systemMsg toConverseID:self.conversionId];
+        [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
+//        如果是撤销的最后一条 更新会话列表最后一条消息显示
+        if (indecPath.row == self.messages.count - 1) {
+            FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+            NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];
+            NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",systemMsg.toUidOrGroupId]];
+            [queue inDatabase:^(FMDatabase *db) {
+                [db executeUpdate:upDataStr];
+            }];
+        }
     });
 }
 

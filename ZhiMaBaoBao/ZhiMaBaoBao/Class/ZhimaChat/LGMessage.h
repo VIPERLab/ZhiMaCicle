@@ -16,10 +16,10 @@ typedef NS_OPTIONS(NSInteger, ActType) {
     ActTypeDeluserfromgroup,    //从群组删除用户
     ActTypeQuitgroup,           //退出群聊
     ActTypeRenamegroup,         //修改群名片，所有群成员都会同步修改
-    ActTypeUndomsg,              //撤销消息，收到消息的用户都将删除消息
     ActTypeNofriend,            //不是好友
     ActTypeNoallow,             //不允许看朋友圈
     ActTypeInBlacklist,         //被拉入黑名单
+    ActTypeUndomsg,              //撤销消息，收到消息的用户都将删除消息
     ActTypeKickuser ,           //相同用户登录，剔除之前的登录用户
     ActTypeNotIngroup           //没有出席群
 };
