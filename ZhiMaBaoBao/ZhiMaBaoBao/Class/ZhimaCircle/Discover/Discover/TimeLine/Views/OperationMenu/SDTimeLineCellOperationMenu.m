@@ -76,8 +76,7 @@
     return btn;
 }
 
-- (void)likeButtonClicked:(UIButton *)sender
-{
+- (void)likeButtonClicked:(UIButton *)sender {
     sender.selected = !sender.selected;
     if (self.likeButtonClickedOperation) {
         self.likeButtonClickedOperation(self);
@@ -85,8 +84,7 @@
     self.show = NO;
 }
 
-- (void)commentButtonClicked
-{
+- (void)commentButtonClicked {
     if (self.commentButtonClickedOperation) {
         self.commentButtonClickedOperation();
     }

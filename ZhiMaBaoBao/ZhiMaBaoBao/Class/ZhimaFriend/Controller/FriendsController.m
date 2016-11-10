@@ -23,27 +23,22 @@
 @interface FriendsController ()<UITableViewDelegate,UITableViewDataSource,RBDMuteSwitchDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *friends;              //好友列表数组
-@property (nonatomic, strong) NSMutableArray *friendsAfterSort;     //排序后的好友列表数组
-@property (nonatomic, strong) NSMutableArray *sectionsArr;             //排序后好友名称首字母
-@property (nonatomic, strong) NSMutableArray *countOfSectionArr;       //每组的好友个数
+@property (atomic, strong) NSMutableArray *friendsAfterSort;     //排序后的好友列表数组
+@property (atomic, strong) NSMutableArray *sectionsArr;             //排序后好友名称首字母
+@property (atomic, strong) NSMutableArray *countOfSectionArr;       //每组的好友个数
 
 @property (nonatomic, strong) UILabel *unReadLabel;     //未读好友请求角标
 @property (nonatomic, strong) NSMutableArray *nFriends;   //存放新的好友数组
 
 @property(nonatomic,strong)JFMyPlayerSound *myPlaySounde;   //播放系统声音
 
+
 @end
 
 static NSString * const reuseIdentifier = @"friendListcell";
 static NSString * const headerIdentifier = @"headerIdentifier";
-@implementation FriendsController
-
-- (instancetype)init{
-    self = [super init];
-    if (self) {
-        [self requestFriendsList];
-    }
-    return self;
+@implementation FriendsController {
+    dispatch_queue_t _updataQueue; //刷新队列
 }
 
 - (void)viewDidLoad {
@@ -51,6 +46,12 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
     [self setCustomRightItems];
     [self addSubviews];
+    [self requestFriendsList];
+    
+    //创建串行队列
+    _updataQueue =  dispatch_queue_create("upDataUserQueue", DISPATCH_QUEUE_SERIAL);
+    
+    
     
     //监听新的好友请求消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveFriendRequest:) name:kNewFriendRequest object:nil];
@@ -58,10 +59,16 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestHasAgreed) name:kOtherAgreeMyFrendRequest object:nil];
 }
 
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self requestFriendsList];
+    [self getDataFormSQL];
 }
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+}
+
 
 - (void)viewDidDisappear:(BOOL)animated{
     [self.nFriends removeAllObjects];
@@ -79,13 +86,21 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     self.tableView = tableView;
 }
 
+- (void)getDataFormSQL {
+    self.friends = [[FMDBShareManager getAllUserMessageInArray] mutableCopy];
+    [self.tableView reloadData];
+    
+    
+    [self requestFriendsList];
+    
+}
+
 //请求好友列表
 - (void)requestFriendsList{
-    [self clearAllArray];
-    //先从数据库拉取好友列表 从网络请求加载最新数据更新数据库
-    self.friends = [[FMDBShareManager getAllUserMessageInArray] mutableCopy];
-    [self friendsListSort];
+//    [self clearAllArray];
     
+    
+    NSLog(@"--%@",[NSThread currentThread]);
     [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
 
         self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
@@ -95,50 +110,52 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         if (!self.friends.count) {
             return ;
         }
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
+        dispatch_async(_updataQueue, ^{
             [FMDBShareManager deletedAllUserMessage];
-            [FMDBShareManager saveUserMessageWithMessageArray:self.friends withComplationBlock:nil];
+            [FMDBShareManager saveUserMessageWithMessageArray:self.friends withComplationBlock:nil andIsUpdata:NO];
                 
-                NSLog(@"------ chaxun333  %@",[NSThread currentThread]);
+            NSLog(@"------ chaxun333  %@",[NSThread currentThread]);
 
-                //更新会话表用户头像和昵称
-                NSArray *allConversions = [FMDBShareManager getChatConverseDataInArray];
-                //1.取出所有单聊的会话
-                NSMutableArray *singleConversions = [NSMutableArray array];
-                for (ConverseModel *model in allConversions) {
-                    if (!model.converseType) {
-                        [singleConversions addObject:model];
-                    }
+            //更新会话表用户头像和昵称
+            NSArray *allConversions = [FMDBShareManager getChatConverseDataInArray];
+            //1.取出所有单聊的会话
+            NSMutableArray *singleConversions = [NSMutableArray array];
+            for (ConverseModel *model in allConversions) {
+                if (!model.converseType) {
+                    [singleConversions addObject:model];
                 }
-                /*
-                //2.更新单聊所有单聊会话的用户头像和昵称
-                for (ConverseModel *model in singleConversions) {
-                    ZhiMaFriendModel *mFriend = nil;
-                    //遍历好友数组，取出对应id的好友模型
-                    for (ZhiMaFriendModel *friend in self.friends) {
-                        if ([model.converseId isEqualToString:friend.user_Id]) {
-                            mFriend = friend;
-                            break;
-                        }
-                    }
-                    
-                    //如果查到了好友数据，则更新会话列表
-                    if (mFriend) {
-                        NSLog(@"------ 更新  %@",[NSThread currentThread]);
-
-                        //更新数据库会话表
-                        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-                        NSString *optionStr1 = [NSString stringWithFormat:@"converseLogo = '%@',converseName = '%@'",mFriend.user_Head_photo,mFriend.displayName];
-                        NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",model.converseId]];
-                        [queue inDatabase:^(FMDatabase *db) {
-                            [db executeUpdate:upDataStr];
-                        }];
-                    }
-                 
-                    
-                }
-                 */
+            }
         });
+            /*
+            //2.更新单聊所有单聊会话的用户头像和昵称
+            for (ConverseModel *model in singleConversions) {
+                ZhiMaFriendModel *mFriend = nil;
+                //遍历好友数组，取出对应id的好友模型
+                for (ZhiMaFriendModel *friend in self.friends) {
+                    if ([model.converseId isEqualToString:friend.user_Id]) {
+                        mFriend = friend;
+                        break;
+                    }
+                }
+                
+                //如果查到了好友数据，则更新会话列表
+                if (mFriend) {
+                    NSLog(@"------ 更新  %@",[NSThread currentThread]);
+
+                    //更新数据库会话表
+                    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+                    NSString *optionStr1 = [NSString stringWithFormat:@"converseLogo = '%@',converseName = '%@'",mFriend.user_Head_photo,mFriend.displayName];
+                    NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",model.converseId]];
+                    [queue inDatabase:^(FMDatabase *db) {
+                        [db executeUpdate:upDataStr];
+                    }];
+                }
+             
+                
+            }
+             */
+        
         
     } failure:^(ErrorData *error) {
 
@@ -148,13 +165,13 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 - (void)clearAllArray{
     [self.friends removeAllObjects];
     [self.sectionsArr removeAllObjects];
+    //拼音相关
     [self.friendsAfterSort removeAllObjects];
     [self.countOfSectionArr removeAllObjects];
 }
 
 //好友列表排序分组
 - (void)friendsListSort{
-
     //清空数组
     [self.friendsAfterSort removeAllObjects];
     [self.sectionsArr removeAllObjects];
@@ -224,6 +241,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
             }
         }
     }
+    
     [self.tableView reloadData];
 }
 
@@ -294,7 +312,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
         
         //更新数据库，然后刷新列表
-        [FMDBShareManager saveUserMessageWithMessageArray:self.friends withComplationBlock:nil];
+        [FMDBShareManager saveUserMessageWithMessageArray:self.friends withComplationBlock:nil andIsUpdata:YES];
 
         [self friendsListSort];
 

@@ -695,7 +695,7 @@ static SocketManager *manager = nil;
             ZhiMaFriendModel *friend = [ZhiMaFriendModel mj_objectWithKeyValues:responseData.data];
             
             //插入好友到数据库
-            [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil];
+            [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil andIsUpdata:YES];
             
             //添加系统消息
             [self addSystemMsgToSqlite:friend];

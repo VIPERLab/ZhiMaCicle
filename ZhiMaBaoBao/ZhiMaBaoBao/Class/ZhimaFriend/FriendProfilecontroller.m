@@ -117,7 +117,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
                 //添加好友成功 -- 更新数据库 新的好友表  和好友表
                 self.friend.status = YES;
                 [FMDBShareManager saveNewFirendsWithArray:@[self.friend] withComplationBlock:nil];
-                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend] withComplationBlock:nil];
+                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend] withComplationBlock:nil andIsUpdata:YES];
             }
 
         }else{
@@ -312,7 +312,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 //将好友加入数据库好友列表
-                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend] withComplationBlock:nil];
+                [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend] withComplationBlock:nil andIsUpdata:NO];
                 //转换成芝麻友数据模型
                 ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
                 friend.user_Id = self.userId;

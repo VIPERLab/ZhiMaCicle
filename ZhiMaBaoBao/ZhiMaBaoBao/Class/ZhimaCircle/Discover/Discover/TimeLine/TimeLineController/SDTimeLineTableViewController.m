@@ -107,43 +107,22 @@
     [self setupNav];
     [self setupView];
     [self notification];
+    [self setupUpHeaderAndFooter];
     [self getDataFromSQL];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    
+}
 
 - (void)viewDidAppear:(BOOL)animated {
     [self setupKeyBoard];
     self.tipsNewMessage.show = YES;
-//    __weak typeof(self) weakSelf = self;
-//    if (!_refreshHeader.superview) {
-//        
-//        _refreshHeader = [SDTimeLineRefreshHeader refreshHeaderWithCenter:CGPointMake(40, 45)];
-//        _refreshHeader.scrollView = self.tableView;
-//        [_refreshHeader setRefreshingBlock:^{
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                [weakSelf setupNewData];
-//            });
-//        }];
-//        [self.tableView.superview addSubview:_refreshHeader];
-//    } else {
-//        [self.tableView.superview bringSubviewToFront:_refreshHeader];
-//    }
-//    
-//    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
-//    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
-//        _refreshHeader.refreshState = SDWXRefreshViewStateRefreshing;
-//    } else {
-//        _refreshHeader.refreshState = SDWXRefreshViewStateNormal;
-//    }
-//
-//    
-//    // 上拉加载
-//    _refreshFooter = [SDTimeLineRefreshFooter refreshFooterWithRefreshingText:@"正在加载数据..."];
-//    [_refreshFooter addToScrollView:self.tableView refreshOpration:^{
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [weakSelf loadMoreData];
-//        });
-//    }];
+    
+    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
+    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
+        [_tableView.mj_header beginRefreshing];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -153,8 +132,6 @@
 }
 
 - (void)dealloc {
-//    [_refreshHeader removeFromSuperview];
-//    [_refreshFooter removeFromSuperview];
     
     [self.chatKeyBoard removeFromSuperview];
     _chatKeyBoard = nil;
@@ -229,9 +206,12 @@
     //新增说说
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
     new.circleType = 1;
-//    new.linkValue = @"http://www.baidu.com";
-    new.block = ^() {
-        [_tableView.mj_header beginRefreshing];
+    new.block = ^(SDTimeLineCellModel *model) {
+        [self.dataArray insertObject:model atIndex:0];
+        [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        UserInfo *info = [UserInfo read];
+        info.lastFcID = model.circle_ID;
+        [info save];
     };
     [self.navigationController pushViewController:new animated:YES];
     
@@ -242,12 +222,6 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self setupNewData];
     }];
-    
-    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
-    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
-        [_tableView.mj_header beginRefreshing];
-    }
-    
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         [self loadMoreData];
     }];
@@ -258,7 +232,6 @@
 - (void)setupNewData {
     //加载未读消息数
     __weak typeof(self) weakSelf = self;
-//    __weak typeof(_refreshHeader) weakHeader = _refreshHeader;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
     //下拉页数置1
@@ -292,7 +265,7 @@
             
         });
         
-        
+        self.circleheadphoto = @"";
         [self.tableView reloadDataWithExistedHeightCache];
         [self.tableView reloadData];
         
@@ -406,7 +379,6 @@
         //返回主线程更新ui
         dispatch_async(dispatch_get_main_queue(), ^{
             // 获取所有朋友圈的数据
-            [self setupUpHeaderAndFooter];
             [self.tableView reloadDataWithExistedHeightCache];
             [self.tableView reloadData];
         });
@@ -565,37 +537,7 @@
     
 }
 
-// -----  点赞
-- (void)didClickLikeButtonInCell:(SDTimeLineCell *)cell andMenu:(SDTimeLineCellOperationMenu *)menu
-{
-    
-    [self DiscoverLikeOrComment:cell andComment:@""];
-    
-    NSIndexPath *index = [self.tableView indexPathForCell:cell];
-    SDTimeLineCellModel *model = self.dataArray[index.row];
-    NSMutableArray *temp = [NSMutableArray arrayWithArray:model.likeItemsArray];
-    
-    if (!model.isLiked) {  //未赞
-        menu.isLike = NO;
-        SDTimeLineCellLikeItemModel *likeModel = [SDTimeLineCellLikeItemModel new];
-        likeModel.userName = USERINFO.username;
-        likeModel.userId = USERINFO.userID;
-        [temp addObject:likeModel];
-        model.liked = YES;
-    } else {               //已赞
-        menu.isLike = YES;
-        SDTimeLineCellLikeItemModel *tempLikeModel = nil;
-        for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
-            if ([likeModel.userId isEqualToString:USERINFO.userID]) {
-                tempLikeModel = likeModel;
-                break;
-            }
-        }
-        [temp removeObject:tempLikeModel];
-        model.liked = NO;
-    }
-    model.likeItemsArray = [temp copy];
-}
+
 
 #pragma mark - 回复别人的评论
 - (void)DidClickCommentOtherButton:(SDTimeLineCell *)cell andCommentItem:(SDTimeLineCellCommentItemModel *)commentModel andCommentView:(UIView *)commentView {
@@ -654,7 +596,12 @@
     }
 }
 
-#pragma mark - 发送评论信息
+#pragma mark - 点赞
+- (void)didClickLikeButtonInCell:(SDTimeLineCell *)cell andMenu:(SDTimeLineCellOperationMenu *)menu {
+    [self DiscoverLikeOrComment:cell andComment:@""];
+}
+
+#pragma mark - 评论
 - (void)chatKeyBoardSendText:(NSString *)text {
     [self DiscoverLikeOrComment:[self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath] andComment:text];
 }
@@ -668,12 +615,11 @@
     if ([_currentCommenterUserID isEqualToString:@""]) {
         _currentCommenterUserID = @"0";
     }
-    
+     [self.chatKeyBoard keyboardDownForComment];
     [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.circle_ID andComment:comment andReply_userId:_currentCommenterUserID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:responseData.msg];
-            [self.chatKeyBoard keyboardDownForComment];
+//            [LCProgressHUD showFailureText:responseData.msg];
             return;
         }
         
@@ -715,7 +661,7 @@
         
         [self.tableView reloadRowsAtIndexPaths:@[_currentEditingIndexthPath] withRowAnimation:UITableViewRowAnimationNone];
         self.currentCommenterUserID = @"";
-        [self.chatKeyBoard keyboardDownForComment];
+       
     }];
     
 }

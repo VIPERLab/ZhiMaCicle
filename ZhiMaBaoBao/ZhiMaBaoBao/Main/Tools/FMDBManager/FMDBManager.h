@@ -173,7 +173,7 @@ typedef enum : NSUInteger {
  *
  *  @return 是否插入成功
  */
-- (void)saveUserMessageWithMessageArray:(NSArray <ZhiMaFriendModel *> *)userMessageArray withComplationBlock:(ComplationBlock)block;
+- (void)saveUserMessageWithMessageArray:(NSArray <ZhiMaFriendModel *> *)userMessageArray withComplationBlock:(ComplationBlock)block andIsUpdata:(BOOL)updata;
 
 /**
  *  查询所有的消息
@@ -269,6 +269,18 @@ typedef enum : NSUInteger {
 - (void)saveConverseListDataWithModel:(ConverseModel *)converseModel withComplationBlock:(ComplationBlock)block;
 
 
+
+/**
+ 更新会话数据库中的 converseContent 和 Time 字段
+
+ @param andTime    converseContent
+ @param time       time
+ @param converseId 会话id
+ */
+- (void)alertConverseTextAndTimeWithConverseModel:(ConverseModel *)converseModel;
+
+
+
 /**
  更新会话 - 只执行查询、更新操作，不创建会话
 
@@ -333,7 +345,7 @@ typedef enum : NSUInteger {
 
 
 /**
- 根据会话id 回去消息数组
+ 根据会话id 查询消息
 
  @param converseID 会话id
  @param pageNumber 页数
@@ -359,6 +371,14 @@ typedef enum : NSUInteger {
  @return 是否更新成功
  */
 - (BOOL)upDataMessageStatusWithMessage:(LGMessage *)message;
+
+
+/**
+ 撤销消息专用 - 普通消息 -> 系统消息
+
+ @param message 系统消息
+ */
+- (void)revokeNormalMessageToSystemMessage:(LGMessage *)message;
 
 /**
  *  根据消息ID删除消息

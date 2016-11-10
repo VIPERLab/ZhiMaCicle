@@ -13,6 +13,7 @@
 #import "PersonalDiscoverCell.h"
 #import "NSString+FontSize.h"
 #import "LGNetWorking.h"   //网络请求工具类
+#import "SDTimeLineCellModel.h"
 
 #import "UserMessageController.h" //个人消息
 #import "DiscoverDetailController.h"  //朋友圈详情
@@ -259,7 +260,7 @@
 - (void)PersonalDiscoverCellFirstCellDidClick {
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
     new.circleType = 1;
-    new.block = ^() {
+    new.block = ^(SDTimeLineCellModel *model) {
         
     };
     [self.navigationController pushViewController:new animated:YES];

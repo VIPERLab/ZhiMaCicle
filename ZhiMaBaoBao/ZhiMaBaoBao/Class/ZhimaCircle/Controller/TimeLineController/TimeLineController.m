@@ -12,11 +12,14 @@
 #import "NearByPeopleController.h"
 #import "ScanQRCodeController.h"
 
+#import "RotationPushAnimation.h"
+
 #define ZhiMaCicleCellReusedID @"ZhiMaCicleCellReusedID"
 
-@interface TimeLineController () <UITableViewDelegate,UITableViewDataSource>
+@interface TimeLineController () <UITableViewDelegate,UITableViewDataSource,UIViewControllerTransitioningDelegate,UINavigationControllerDelegate>
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, strong) NSArray *iconArray;
+
 @end
 
 @implementation TimeLineController {
@@ -30,6 +33,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self setCustomRightItems];
     [self setupView];
     [self notification];
@@ -114,7 +118,12 @@
         timeLine.unReadCount = _unReadCount;
         timeLine.circleheadphoto = _circleheadphoto;
         timeLine.hidesBottomBarWhenPushed = YES;
+        
+        // 自定义转场动画
+//        self.navigationController.delegate = self;
+        
         [self.navigationController pushViewController:timeLine animated:YES];
+//        [self presentViewController:timeLine animated:YES completion:nil];
         
     } else if (indexPath.section == 1 && indexPath.row == 0 ) {
         //扫一扫
@@ -162,6 +171,14 @@
     }
 }
 
+// 转场
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC {
+    if (operation == UINavigationControllerOperationPush){ // 就是在这里判断是哪种动画类型
+        return [[RotationPushAnimation alloc] init]; // 返回push动画的类
+    }else{
+        return nil;
+    }
+}
 
 
 #pragma mark - 未读消息

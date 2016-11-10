@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
+@class SDTimeLineCellModel;
 
-typedef void(^returnBlock)();
+typedef void(^returnBlock)(SDTimeLineCellModel *model);
 
 @interface NewDiscoverController : BaseViewController
 
