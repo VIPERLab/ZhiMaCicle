@@ -1309,7 +1309,7 @@
         BOOL isSuccess = YES;
         for (ZhiMaFriendModel *model in userMessageArray) {
             __block BOOL isExist = NO;
-            
+            NSLog(@"------ chaxun  %@",[NSThread currentThread]);
             NSString *searchOpeartionStr = [FMDBShareManager SearchTable:ZhiMa_User_Message_Table withOption:[NSString stringWithFormat:@"userId = '%@'",model.user_Id]];
             FMResultSet *result =[db executeQuery:searchOpeartionStr];
             while ([result next]) {
@@ -1334,6 +1334,8 @@
                 NSLog(@"插入用户失败");
                 if (block) {
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        NSLog(@"------ chaxun11  %@",[NSThread currentThread]);
+
                         block(NO);
                     });
                     isSuccess = NO;
@@ -1342,12 +1344,12 @@
             }
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (isSuccess && block) {
+        if (isSuccess && block){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"------ chaxun44  %@",[NSThread currentThread]);
                 block(YES);
-            }
-        });
-        
+            });
+        }
     }];
 }
 
@@ -1584,7 +1586,7 @@
     // 判断是否存在会话
     BOOL isExist = [self isConverseIsExist:converseModel.converseId];
     if (isExist) {  //更新会话
-        [self saveConverseListDataWithModel:converseModel withComplationBlock:nil];
+        [self alertConverseListDataWithModel:converseModel withComplationBlock:nil];
         return;
     }
     
@@ -1620,10 +1622,11 @@
  @param block     回调 - 主线程回调
  */
 - (void)alertConverseListDataWithModel:(ConverseModel *)model withComplationBlock:(ComplationBlock)block {
+    ConverseModel *oldModel = [FMDBShareManager searchConverseWithConverseID:model.converseId andConverseType:model.converseType];
+
     FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     [converseQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         BOOL isSuccess = NO;
-        ConverseModel *oldModel = [FMDBShareManager searchConverseWithConverseID:model.converseId andConverseType:model.converseType];
         model.unReadCount = oldModel.unReadCount;
         
         if (oldModel.converseName.length) {

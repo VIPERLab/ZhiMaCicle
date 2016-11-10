@@ -92,43 +92,53 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         //刷新tableview
         [self friendsListSort];
         
-        //删除数据库旧数据，插入新数据
-        [FMDBShareManager deletedAllUserMessage];
-        [FMDBShareManager saveUserMessageWithMessageArray:self.friends withComplationBlock:nil];
-        
-        //更新会话表用户头像和昵称
-        NSArray *allConversions = [FMDBShareManager getChatConverseDataInArray];
-        //1.取出所有单聊的会话
-        NSMutableArray *singleConversions = [NSMutableArray array];
-        for (ConverseModel *model in allConversions) {
-            if (!model.converseType) {
-                [singleConversions addObject:model];
-            }
+        if (!self.friends.count) {
+            return ;
         }
-        //2.更新单聊所有单聊会话的用户头像和昵称
-        for (ConverseModel *model in singleConversions) {
-            ZhiMaFriendModel *mFriend = nil;
-            //遍历好友数组，取出对应id的好友模型
-            for (ZhiMaFriendModel *friend in self.friends) {
-                if ([model.converseId isEqualToString:friend.user_Id]) {
-                    mFriend = friend;
-                    break;
-                }
-            }
-            
-            //如果查到了好友数据，则更新会话列表
-            if (mFriend) {
-                //更新数据库会话表
-                FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-                NSString *optionStr1 = [NSString stringWithFormat:@"converseLogo = '%@',converseName = '%@'",mFriend.user_Head_photo,mFriend.displayName];
-                NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",model.converseId]];
-                [queue inDatabase:^(FMDatabase *db) {
-                    [db executeUpdate:upDataStr];
-                }];
-            }
-            
-        }
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [FMDBShareManager deletedAllUserMessage];
+            [FMDBShareManager saveUserMessageWithMessageArray:self.friends withComplationBlock:nil];
+                
+                NSLog(@"------ chaxun333  %@",[NSThread currentThread]);
 
+                //更新会话表用户头像和昵称
+                NSArray *allConversions = [FMDBShareManager getChatConverseDataInArray];
+                //1.取出所有单聊的会话
+                NSMutableArray *singleConversions = [NSMutableArray array];
+                for (ConverseModel *model in allConversions) {
+                    if (!model.converseType) {
+                        [singleConversions addObject:model];
+                    }
+                }
+                /*
+                //2.更新单聊所有单聊会话的用户头像和昵称
+                for (ConverseModel *model in singleConversions) {
+                    ZhiMaFriendModel *mFriend = nil;
+                    //遍历好友数组，取出对应id的好友模型
+                    for (ZhiMaFriendModel *friend in self.friends) {
+                        if ([model.converseId isEqualToString:friend.user_Id]) {
+                            mFriend = friend;
+                            break;
+                        }
+                    }
+                    
+                    //如果查到了好友数据，则更新会话列表
+                    if (mFriend) {
+                        NSLog(@"------ 更新  %@",[NSThread currentThread]);
+
+                        //更新数据库会话表
+                        FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+                        NSString *optionStr1 = [NSString stringWithFormat:@"converseLogo = '%@',converseName = '%@'",mFriend.user_Head_photo,mFriend.displayName];
+                        NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",model.converseId]];
+                        [queue inDatabase:^(FMDatabase *db) {
+                            [db executeUpdate:upDataStr];
+                        }];
+                    }
+                 
+                    
+                }
+                 */
+        });
         
     } failure:^(ErrorData *error) {
 
