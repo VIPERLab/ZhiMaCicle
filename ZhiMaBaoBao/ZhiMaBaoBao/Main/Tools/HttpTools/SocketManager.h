@@ -148,14 +148,14 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  *
  *  @param friendId 好友id
  */
-- (void)addFriend:(NSString *)friendId;
+- (void)addFriend:(ZhiMaFriendModel *)friendModel;
 
 /**
  *  同意好友请求
  *
  *  @param friendId 好友id
  */
-- (void)agreeFriendRequest:(NSString *)friendId;
+- (void)agreeFriendRequest:(ZhiMaFriendModel *)friendModel;
 
 //直接调用https接口
 ///**

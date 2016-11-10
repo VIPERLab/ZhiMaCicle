@@ -1637,7 +1637,6 @@
             }
         }
         
-        
         NSString *option1 = [NSString stringWithFormat:@"converseName = '%@' , converseLogo = '%@', converseContent = '%@', unReadCount = '%@', time = '%@',serviceMessageType = '%@',messageType = '%@'",model.converseName,model.converseHead_photo,model.lastConverse,@(model.unReadCount + 1),@(model.time),@(model.serviceMessageType),@(model.messageType)];
         NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = '%@' and converseType = '%zd'",model.converseId,model.converseType]];
         

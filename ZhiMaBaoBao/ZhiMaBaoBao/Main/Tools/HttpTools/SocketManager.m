@@ -381,7 +381,7 @@ static SocketManager *manager = nil;
                         [FMDBShareManager saveAllGroupMemberWithArray:@[myInfo] andGroupChatId:converse.converseId withComplationBlock:nil];
                     }
                     //3.有会话更新会话，没有会话不处理
-                    [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+                    [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
                 }else{ //普通消息
                     //1.插消息表
                     [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
@@ -1020,21 +1020,21 @@ static SocketManager *manager = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
-////添加好友
-//- (void)addFriend:(NSString *)friendId{
-//    NSData *data = [self generateFriendActType:FriendActTypeAdd friendId:friendId];
-//    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-//    req.object = data;
-//    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-//}
-//
-////同意好友请求
-//- (void)agreeFriendRequest:(NSString *)friendId{
-//    NSData *data = [self generateFriendActType:FriendActTypeAgreee friendId:friendId];
-//    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-//    req.object = data;
-//    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-//}
+//添加好友
+- (void)addFriend:(ZhiMaFriendModel *)friendModel{
+    NSData *data = [self generateFriendActType:FriendActTypeAdd friendModel:friendModel];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
+
+//同意好友请求
+- (void)agreeFriendRequest:(ZhiMaFriendModel *)friendModel{
+    NSData *data = [self generateFriendActType:FriendActTypeAgreee friendModel:friendModel];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+}
 //
 ////加入黑名单
 //- (void)dragToBlack:(NSString *)friendId{
@@ -1300,7 +1300,7 @@ static SocketManager *manager = nil;
 }
 
 //生成好友操作相关的消息数据包
-- (NSData *)generateFriendActType:(FriendActType)type friendId:(NSString *)friendId friendName:(NSString *)friendName{
+- (NSData *)generateFriendActType:(FriendActType)type friendModel:(ZhiMaFriendModel *)friend{
     NSMutableDictionary *request = [NSMutableDictionary dictionary];
     //data字段里面的数据
     NSMutableDictionary *dataDic = [NSMutableDictionary dictionary];
@@ -1343,19 +1343,19 @@ static SocketManager *manager = nil;
         dataDic[@"fromUid"] = USERINFO.userID;
         dataDic[@"fromUserName"] = USERINFO.username;
         dataDic[@"fromUserPhoto"] = USERINFO.head_photo;
-        dataDic[@"frienduid"] = friendId;
-        dataDic[@"friendUserName"] = friendName;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&friendUserName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&%@",controllerName,methodName,friendId,friendName,USERINFO.userID,USERINFO.username,USERINFO.head_photo,APIKEY];
+        dataDic[@"frienduid"] = friend.user_Id;
+        dataDic[@"friendUserName"] = friend.user_Name;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&friendUserName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&%@",controllerName,methodName,friend.user_Id,friend.user_Name,USERINFO.userID,USERINFO.username,USERINFO.head_photo,APIKEY];
     }else if (type == FriendActTypeAgreee){
         dataDic[@"fromUid"] = USERINFO.userID;
         dataDic[@"fromUserName"] = USERINFO.username;
-        dataDic[@"fromUserPhoto"] = USERINFO.head_photo;
-        dataDic[@"frienduid"] = friendId;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&%@",controllerName,methodName,friendId,USERINFO.userID,USERINFO.username,USERINFO.head_photo,APIKEY];
+//        dataDic[@"fromUserPhoto"] = USERINFO.head_photo;
+        dataDic[@"frienduid"] = friend.user_Id;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&fromUid=%@&fromUserName=%@&%@",controllerName,methodName,friend.user_Id,USERINFO.userID,USERINFO.username,APIKEY];
     }
     else{
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&uid=%@&%@",controllerName,methodName,friendId,USERINFO.userID,APIKEY];
-        dataDic[@"frienduid"] = friendId;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&uid=%@&%@",controllerName,methodName,friend.user_Id,USERINFO.userID,APIKEY];
+        dataDic[@"frienduid"] = friend.user_Id;
         dataDic[@"uid"] = USERINFO.userID;
 
     }
