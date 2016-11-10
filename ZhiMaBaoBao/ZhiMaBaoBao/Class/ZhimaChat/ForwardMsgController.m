@@ -148,8 +148,8 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     
     newMsg.fromUserPhoto = USERINFO.head_photo;
     newMsg.fromUserName = USERINFO.username;
-    newMsg.converseName = USERINFO.username;
-    newMsg.converseLogo = USERINFO.head_photo;
+    newMsg.converseName = self.selectedConverse.converseName;
+    newMsg.converseLogo = self.selectedConverse.converseHead_photo;
     //如果是群聊消息 -- 发送群聊的"名称"、"头像"
     if (self.selectedConverse.converseType == ConversionTypeGroupChat) {
         newMsg.converseName = self.selectedConverse.converseName;

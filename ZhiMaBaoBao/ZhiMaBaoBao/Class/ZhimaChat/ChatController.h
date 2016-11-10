@@ -18,6 +18,8 @@
  *  会话名称
  */
 @property (nonatomic, copy) NSString *conversionName;
+//会话头像
+@property (nonatomic, copy) NSString *converseLogo;
 
 //未读消息条数
 @property (nonatomic, assign)NSInteger numOfUnread;

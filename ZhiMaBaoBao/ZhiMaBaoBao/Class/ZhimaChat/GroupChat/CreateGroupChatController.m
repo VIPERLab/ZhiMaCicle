@@ -34,6 +34,8 @@
 
 @property (nonatomic, assign) CGFloat lastOffset;   //上一次scrollview偏移量
 
+@property (nonatomic, strong) ZhiMaFriendModel *selectedFriend;     //点击选中的好友
+
 @property (nonatomic, assign) int j;
 @end
 
@@ -290,6 +292,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                 rowNum += indexPath.row;
                 
                 ZhiMaFriendModel *friend = self.friendsAfterSort[rowNum];
+                self.selectedFriend = friend;
                 
                 if (self.hideFlagBtn) {     //选择好友 ，转发消息
                     self.transMsg.conversionType = ConversionTypeSingle;
@@ -515,7 +518,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                             [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
                             [self jumpGroupChat];
                         });
-
                     }
                 }];
             });
@@ -739,6 +741,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     ChatController *vc = [[ChatController alloc] init];
     vc.conversionId = self.groupChatModel.groupId;
+    vc.converseLogo = self.groupChatModel.groupAvtar;
+    vc.conversionName = self.groupChatModel.groupName;
     vc.converseType = YES;
     vc.hidesBottomBarWhenPushed = YES;
     ConversationController *conversationVC = userinfo.conversationVC;
@@ -948,8 +952,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     newMsg.msgid = [NSString generateMessageID];
     newMsg.picUrl = message.picUrl;
     
-    newMsg.converseName = USERINFO.username;
-    newMsg.converseLogo = USERINFO.head_photo;
+    newMsg.converseName = self.selectedFriend.displayName;
+    newMsg.converseLogo = self.selectedFriend.user_Head_photo;
     newMsg.fromUserPhoto = USERINFO.head_photo;
     newMsg.fromUserName = USERINFO.username;
 //    //如果是群聊消息 -- 发送群聊的"名称"、"头像"
