@@ -17,3 +17,27 @@
 }
 
 @end
+
+@implementation GroupActModel
+
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        self.fromUsername = USERINFO.username;
+        self.fromUserPhoto = USERINFO.head_photo;
+        self.fromUid = USERINFO.userID;
+    }
+    return self;
+}
+
+- (void)setGroupLogo:(NSString *)groupLogo{
+    _groupLogo = groupLogo;
+    self.converseLogo = groupLogo;
+}
+
+- (void)setGroupName:(NSString *)groupName{
+    _groupName = groupName;
+    self.converseName = groupName;
+}
+
+@end

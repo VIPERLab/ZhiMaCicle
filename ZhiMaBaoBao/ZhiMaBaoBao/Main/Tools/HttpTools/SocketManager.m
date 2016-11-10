@@ -191,11 +191,8 @@ static SocketManager *manager = nil;
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
     
-    if (message.conversionType == ConversionTypeSingle) {
-        message.converseId = message.fromUid;
-    }else if (message.conversionType == ConversionTypeGroupChat){
-        message.converseId = message.toUidOrGroupId;
-    }
+    //赋值会话id
+    message.converseId = message.toUidOrGroupId;
     
     //是错误信息 （在被踢出的群里发信息）
     if (message.errorMsg) {
@@ -977,84 +974,84 @@ static SocketManager *manager = nil;
 }
 
 //建群
-- (void)createGtoup:(NSString *)groupId uids:(NSString *)uids{
-    NSData *data = [self generateGroupActType:GroupActTypeAddUser groupId:groupId uids:uids];
+- (void)createGtoup:(GroupActModel *)actModel{
+    NSData *data = [self generateGroupActType:GroupActTypeCreate groupActModel:actModel];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
 //邀请用户到群
-- (void)addUserToGroup:(NSString *)groupId uids:(NSString *)uids{
-    NSData *data = [self generateGroupActType:GroupActTypeAddUser groupId:groupId uids:uids];
+- (void)addUserToGroup:(GroupActModel *)actModel{
+    NSData *data = [self generateGroupActType:GroupActTypeAddUser groupActModel:actModel];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
 //扫码进群
-- (void)scanCodeToGroup:(NSString *)groupId uids:(NSString *)uids{
-    NSData *data = [self generateGroupActType:GroupActTypeSaoma groupId:groupId uids:uids];
+- (void)scanCodeToGroup:(GroupActModel *)actModel{
+    NSData *data = [self generateGroupActType:GroupActTypeSaoma groupActModel:actModel];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
 //从群组删除用户
-- (void)delUserFromGroup:(NSString *)groupId uids:(NSString *)uids{
-    NSData *data = [self generateGroupActType:GroupActTypeDelUser groupId:groupId uids:uids];
+- (void)delUserFromGroup:(GroupActModel *)actModel{
+    NSData *data = [self generateGroupActType:GroupActTypeDelUser groupActModel:actModel];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
 //退出群
-- (void)delGroup:(NSString *)groupId uid:(NSString *)uid{
-    NSData *data = [self generateGroupActType:GroupActTypeDelGroup groupId:groupId uids:uid];
+- (void)delGroup:(GroupActModel *)actModel{
+    NSData *data = [self generateGroupActType:GroupActTypeDelGroup groupActModel:actModel];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
 //群重命名
-- (void)renameGroup:(NSString *)groupId name:(NSString *)name{
-    NSData *data = [self generateGroupActType:GroupActTypeReName groupId:groupId uids:name];
+- (void)renameGroup:(GroupActModel *)actModel{
+    NSData *data = [self generateGroupActType:GroupActTypeReName groupActModel:actModel];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
 }
 
-//添加好友
-- (void)addFriend:(NSString *)friendId{
-    NSData *data = [self generateFriendActType:FriendActTypeAdd friendId:friendId];
-    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = data;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-}
-
-//同意好友请求
-- (void)agreeFriendRequest:(NSString *)friendId{
-    NSData *data = [self generateFriendActType:FriendActTypeAgreee friendId:friendId];
-    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = data;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-}
-
-//加入黑名单
-- (void)dragToBlack:(NSString *)friendId{
-    NSData *data = [self generateFriendActType:FriendActTypeBlack friendId:friendId];
-    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = data;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-}
-
-//用户修改资料
-- (void)updateProfile{
-    NSData *data = [self generateFriendActType:FriendActTypeUpdate friendId:USERINFO.userID];
-    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-    req.object = data;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-}
+////添加好友
+//- (void)addFriend:(NSString *)friendId{
+//    NSData *data = [self generateFriendActType:FriendActTypeAdd friendId:friendId];
+//    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+//    req.object = data;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+//}
+//
+////同意好友请求
+//- (void)agreeFriendRequest:(NSString *)friendId{
+//    NSData *data = [self generateFriendActType:FriendActTypeAgreee friendId:friendId];
+//    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+//    req.object = data;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+//}
+//
+////加入黑名单
+//- (void)dragToBlack:(NSString *)friendId{
+//    NSData *data = [self generateFriendActType:FriendActTypeBlack friendId:friendId];
+//    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+//    req.object = data;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+//}
+//
+////用户修改资料
+//- (void)updateProfile{
+//    NSData *data = [self generateFriendActType:FriendActTypeUpdate friendId:USERINFO.userID];
+//    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+//    req.object = data;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+//}
 
 //不让对方看自己的朋友圈
 - (void)notAllowFriendCircle:(NSString *)friendId{
@@ -1088,10 +1085,10 @@ static SocketManager *manager = nil;
             request[@"method_name"] = @"bind_uid";
             
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=LoginController&method_name=bind_uid&uid=%@&%@",uid,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=LoginController&method_name=bind_uid&fromUid=%@&%@",uid,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //生成data
-            dataDic[@"uid"] = uid;
+            dataDic[@"fromUid"] = uid;
             dataDic[@"sign"] = sign;
 
         }
@@ -1101,7 +1098,7 @@ static SocketManager *manager = nil;
             //拼接控制器和方法名
             request[@"controller_name"] = @"HeartbeatController";
             request[@"method_name"] = @"check";
-            dataDic[@"uid"] = uid;
+            dataDic[@"fromUid"] = uid;
             
         }
             
@@ -1142,14 +1139,18 @@ static SocketManager *manager = nil;
             request[@"controller_name"] = @"MessageController";
             request[@"method_name"] = @"undo";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=undo&fromUid=%@&isGroup=%lu&msgid=%@&toUidOrGroupId=%@&type=%lu&%@",message.fromUid,(unsigned long)message.conversionType,message.msgid,message.toUidOrGroupId,(unsigned long)message.type,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=undo&acttype=%zd&converseId=%@&converseType=%zd&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&msgid=%@&toUidOrGroupId=%@&type=%ld&%@",message.actType,message.converseId,message.conversionType,message.fromUid,message.fromUserName,message.fromUserPhoto,message.msgid,message.toUidOrGroupId,(long)message.type,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             //拼接消息
-            dataDic[@"msgid"] = message.msgid;
-            dataDic[@"type"] = @(message.type);
-            dataDic[@"isGroup"] = @(message.conversionType);
+            dataDic[@"acttype"] = @(message.actType);
+            dataDic[@"converseId"] = message.converseId;
+            dataDic[@"converseType"] = @(message.conversionType);
             dataDic[@"fromUid"] = message.fromUid;
+            dataDic[@"fromUserName"] = message.fromUserName;
+            dataDic[@"fromUserPhoto"] = message.fromUserPhoto;
+            dataDic[@"msgid"] = message.msgid;
             dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
+            dataDic[@"type"] = @(message.type);
             dataDic[@"sign"] = sign;
         }
             break;
@@ -1177,7 +1178,7 @@ static SocketManager *manager = nil;
 }
 
 //生成群操作相关的消息数据请求包
-- (NSData *)generateGroupActType:(GroupActType)type groupId:(NSString *)groupId uids:(NSString *)uids{
+- (NSData *)generateGroupActType:(GroupActType)type groupActModel:(GroupActModel *)model{
     
     NSMutableDictionary *request = [NSMutableDictionary dictionary];
     //data字段里面的数据
@@ -1188,14 +1189,11 @@ static SocketManager *manager = nil;
     
     switch (type) {
             
-        case GroupActTypeCreate:{       //建群
-            methodName = @"addUserToGroup";
-        }
-            
-            break;
+        //建群 邀请用户到群 扫码进群
+        case GroupActTypeCreate:
         case GroupActTypeAddUser:
         case GroupActTypeSaoma:
-        {      //邀请用户到群
+        {
             methodName = @"addUserToGroup";
         }
             
@@ -1227,35 +1225,48 @@ static SocketManager *manager = nil;
     request[@"controller_name"] = controllerName;
     request[@"method_name"] = methodName;
     NSString *str = nil;
-    
-    //拼接消息 (如果是群重命名 dataDic拼接"groupname" ，其他拼接"uids"）
-    if (type == GroupActTypeReName) {
-        dataDic[@"groupname"] = uids;
-        dataDic[@"uid"] = USERINFO.userID;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&groupname=%@&uid=%@&%@",controllerName,methodName,groupId,uids,USERINFO.userID,APIKEY];
+    //创群、拉人、扫码拉人
+    if (type == GroupActTypeCreate || type == GroupActTypeAddUser || type == GroupActTypeSaoma){
+        if (type == GroupActTypeCreate) {
+            dataDic[@"act"]= @"create";
+        }else if (type == GroupActTypeAddUser){
+            dataDic[@"act"] = @"add";
+        }else{
+            dataDic[@"act"] = @"scan";
+        }
+        dataDic[@"fromUid"] = model.fromUid;
+        dataDic[@"converseLogo"] = model.converseLogo;
+        dataDic[@"converseName"] = model.converseName;
+        dataDic[@"fromUserName"] = model.fromUsername;
+        dataDic[@"fromUserPhoto"] = model.fromUserPhoto;
+        dataDic[@"groupid"] = model.groupId;
+        dataDic[@"groupLogo"] = model.groupLogo;
+        dataDic[@"groupName"] = model.groupName;
+        dataDic[@"uids"] = model.uids;
+        dataDic[@"usernames"]= model.usernames;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupid=%@&groupLogo=%@&groupName=%@&uids=%@&usernames=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.fromUid,model.fromUsername,model.fromUserPhoto,model.groupId,model.groupLogo,model.groupName,model.uids,model.usernames,APIKEY];
+    }else if (type == GroupActTypeDelUser){
+        dataDic[@"fromUid"] = model.fromUid;
+        dataDic[@"fromUserName"] = model.fromUsername;
+        dataDic[@"groupid"] = model.groupId;
+        dataDic[@"groupLogo"] = model.groupLogo;
+        dataDic[@"groupName"] = model.groupName;
+        dataDic[@"uids"] = model.uids;
+        dataDic[@"usernames"]= model.usernames;
+        
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&fromUid=%@&fromUserName=%@&groupid=%@&groupLogo=%@&groupName=%@&uids=%@&usernames=%@&%@",controllerName,methodName,model.fromUid,model.fromUsername,model.groupId,model.groupLogo,model.groupName,model.uids,model.usernames,APIKEY];
+    }else if (type == GroupActTypeDelGroup || type == GroupActTypeReName){
+        dataDic[@"fromUid"] = model.fromUid;
+        dataDic[@"fromUserName"] = model.fromUsername;
+        dataDic[@"groupid"] = model.groupId;
+        dataDic[@"groupLogo"] = model.groupLogo;
+        dataDic[@"groupName"] = model.groupName;
+
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&fromUid=%@&fromUserName=%@&groupid=%@&groupLogo=%@&groupName=%@&%@",controllerName,methodName,model.fromUid,model.fromUsername,model.groupId,model.groupLogo,model.groupName,APIKEY];
     }
-    else if (type == GroupActTypeCreate || type == GroupActTypeDelUser || type == GroupActTypeAddUser){
-        dataDic[@"uids"]= uids;
-        dataDic[@"actuid"] = USERINFO.userID; //操作者的uid
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&actuid=%@&groupid=%@&uids=%@&%@",controllerName,methodName,USERINFO.userID,groupId,uids,APIKEY];
-    }
-    else if (type == GroupActTypeSaoma){
-        dataDic[@"uids"] = USERINFO.userID;
-        dataDic[@"actuid"] = USERINFO.userID; //操作者的uid
-        dataDic[@"jid"] = uids;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&actuid=%@&groupid=%@&jid=%@&uids=%@&%@",controllerName,methodName,USERINFO.userID,groupId,uids,USERINFO.userID,APIKEY];
-    }
-    else if (type == GroupActTypeDelGroup){
-        dataDic[@"uid"] = uids;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&uid=%@&%@",controllerName,methodName,groupId,uids,APIKEY];
-    }
-    else {
-        dataDic[@"uids"]= uids;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&groupid=%@&uids=%@&%@",controllerName,methodName,groupId,uids,APIKEY];
-    }
+
     //生成签名
     NSString *sign = [[str md5Encrypt] uppercaseString];
-    dataDic[@"groupid"] = groupId;
     dataDic[@"sign"] = sign;
     //拼接完整的request包
     request[@"data"] = dataDic;
@@ -1290,7 +1301,7 @@ static SocketManager *manager = nil;
 }
 
 //生成好友操作相关的消息数据包
-- (NSData *)generateFriendActType:(FriendActType)type friendId:(NSString *)friendId{
+- (NSData *)generateFriendActType:(FriendActType)type friendId:(NSString *)friendId friendName:(NSString *)friendName{
     NSMutableDictionary *request = [NSMutableDictionary dictionary];
     //data字段里面的数据
     NSMutableDictionary *dataDic = [NSMutableDictionary dictionary];
@@ -1329,16 +1340,20 @@ static SocketManager *manager = nil;
     request[@"method_name"] = methodName;
     //生成签名
     NSString *str = nil;
-    if (type == FriendActTypeUpdate) {
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&uid=%@&%@",controllerName,methodName,USERINFO.userID,APIKEY];
-        dataDic[@"uid"] = USERINFO.userID;
-
+    if (type == FriendActTypeAdd) {
+        dataDic[@"fromUid"] = USERINFO.userID;
+        dataDic[@"fromUserName"] = USERINFO.username;
+        dataDic[@"fromUserPhoto"] = USERINFO.head_photo;
+        dataDic[@"frienduid"] = friendId;
+        dataDic[@"friendUserName"] = friendName;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&friendUserName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&%@",controllerName,methodName,friendId,friendName,USERINFO.userID,USERINFO.username,USERINFO.head_photo,APIKEY];
+    }else if (type == FriendActTypeAgreee){
+        dataDic[@"fromUid"] = USERINFO.userID;
+        dataDic[@"fromUserName"] = USERINFO.username;
+        dataDic[@"fromUserPhoto"] = USERINFO.head_photo;
+        dataDic[@"frienduid"] = friendId;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&%@",controllerName,methodName,friendId,USERINFO.userID,USERINFO.username,USERINFO.head_photo,APIKEY];
     }
-//    else if (type == FriendActTypeAgreee){
-//        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&uid=%@&%@",controllerName,methodName,USERINFO.userID,friendId,APIKEY];
-//        dataDic[@"frienduid"] = USERINFO.userID;
-//        dataDic[@"uid"] = friendId;
-//    }
     else{
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&uid=%@&%@",controllerName,methodName,friendId,USERINFO.userID,APIKEY];
         dataDic[@"frienduid"] = friendId;

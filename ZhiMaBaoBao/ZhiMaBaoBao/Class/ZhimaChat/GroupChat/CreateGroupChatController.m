@@ -513,9 +513,10 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                             converseModel.lastConverse = @" ";
                             [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
                             //通过socket创建群聊
-                            [uidsArr addObject:USERINFO.userID];
-                            NSString *socketUids = [uidsArr componentsJoinedByString:@","];
-                            [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
+                            
+                            GroupActModel *actModel = [[GroupActModel alloc] init];
+                            
+//                            [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
                             [self jumpGroupChat];
                         });
                     }
@@ -544,11 +545,16 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         return;
     }
     
-    //拼接好友的userId
+    //拼接好友的userId,username
     NSMutableArray *userIdArr = [NSMutableArray array];
+    NSMutableArray *userNameArr = [NSMutableArray array];
     for (ZhiMaFriendModel *model in self.selectedFriends) {
         [userIdArr addObject:model.user_Id];
+        [userNameArr addObject:model.user_Name];
     }
+    
+    NSString *userIds = [userIdArr componentsJoinedByString:@","];
+    NSString *usernames = [userNameArr componentsJoinedByString:@","];
     
     //直接拉群
     if (self.selectedMembers.count == 0) {
@@ -558,7 +564,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             return;
         }
         
-        NSString *userIds = [userIdArr componentsJoinedByString:@","];
         
         [LCProgressHUD showLoadingText:@"准备开始群聊..."];
         [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
@@ -592,10 +597,14 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 converseModel.lastConverse = @" ";
                                 [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
                                 
-                                [userIdArr addObject:USERINFO.userID];
-                                NSString *socketUids = [userIdArr componentsJoinedByString:@","];
                                 //通过socket创建群聊
-                                [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
+                                GroupActModel *actModel = [[GroupActModel alloc] init];
+                                actModel.uids = userIds;
+                                actModel.usernames = usernames;
+                                actModel.groupId = self.groupChatModel.groupId;
+                                actModel.groupLogo = self.groupChatModel.groupAvtar;
+                                actModel.groupName = self.groupChatModel.groupName;
+                                [[SocketManager shareInstance] createGtoup:actModel];
                                 
                                 //跳转到群聊天页面
                                 [self jumpGroupChat];
@@ -648,10 +657,14 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                     converseModel.lastConverse = @" ";
                                     [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
                                     
-                                    [userIdArr addObject:USERINFO.userID];
-                                    NSString *socketUids = [userIdArr componentsJoinedByString:@","];
                                     //通过socket创建群聊
-                                    [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
+                                    GroupActModel *actModel = [[GroupActModel alloc] init];
+                                    actModel.uids = userIds;
+                                    actModel.usernames = usernames;
+                                    actModel.groupId = self.groupChatModel.groupId;
+                                    actModel.groupLogo = self.groupChatModel.groupAvtar;
+                                    actModel.groupName = self.groupChatModel.groupName;
+                                    [[SocketManager shareInstance] createGtoup:actModel];
                                     
                                     //跳转到群聊天页面
                                     [self jumpGroupChat];
@@ -713,13 +726,15 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                         }];
                     });
                     
-                    [userIdArr addObject:USERINFO.userID];
-                    NSString *socketUids = [userIdArr componentsJoinedByString:@","];
-                    //通过socket创建群聊
-//                    [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
-                    
                     //通过socket拉人进群
-                    [[SocketManager shareInstance] addUserToGroup:self.groupChatModel.groupId uids:userIds];
+                    GroupActModel *actModel = [[GroupActModel alloc] init];
+                    actModel.uids = userIds;
+                    actModel.usernames = usernames;
+                    actModel.groupId = self.groupChatModel.groupId;
+                    actModel.groupLogo = self.groupChatModel.groupAvtar;
+                    actModel.groupName = self.groupChatModel.groupName;
+                    [[SocketManager shareInstance] addUserToGroup:actModel];
+                    
                     
                     //跳转到群聊天页面
                     [self jumpGroupChat];

@@ -103,7 +103,7 @@
             }];
             
             //socket发送"修改群名"消息,通知群用户修改群名称  -> 插入一条系统消息到数据库
-            [[SocketManager shareInstance] renameGroup:self.groupModel.groupId name:self.groupModel.groupName];
+//            [[SocketManager shareInstance] renameGroup:self.groupModel.groupId name:self.groupModel.groupName];
             
             LGMessage *systemMsg = [[LGMessage alloc] init];
             systemMsg.actType = ActTypeRenamegroup;
