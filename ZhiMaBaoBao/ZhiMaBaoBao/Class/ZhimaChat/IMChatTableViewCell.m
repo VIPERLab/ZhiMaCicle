@@ -139,8 +139,9 @@
                                                              lineSpacing:1.5
                                                                realWidth:&realWidth];
     if (realWidth == 0) {
-        realWidth = 21;
+        realWidth = 25;
     }
+    
     realWidth = realContentViewHeight<20 ? realWidth+1: realWidth; //单行如果有表情的时候最后的表情可能显示不下，so +1
     [_chatMessageView setFrameSize:CGSizeMake(realWidth, realContentViewHeight)];
     
