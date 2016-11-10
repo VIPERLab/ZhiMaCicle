@@ -537,39 +537,7 @@
     
 }
 
-// -----  点赞
-- (void)didClickLikeButtonInCell:(SDTimeLineCell *)cell andMenu:(SDTimeLineCellOperationMenu *)menu
-{
-    
-    [self DiscoverLikeOrComment:cell andComment:@""];
-    
-    NSIndexPath *index = [self.tableView indexPathForCell:cell];
-    SDTimeLineCellModel *model = self.dataArray[index.row];
-    NSMutableArray *temp = [NSMutableArray arrayWithArray:model.likeItemsArray];
-    
-    if (!model.isLiked) {  //未赞
-        menu.isLike = NO;
-        SDTimeLineCellLikeItemModel *likeModel = [SDTimeLineCellLikeItemModel new];
-        likeModel.userName = USERINFO.username;
-        likeModel.userId = USERINFO.userID;
-        [temp addObject:likeModel];
-        model.liked = YES;
-    } else {               //已赞
-        menu.isLike = YES;
-        SDTimeLineCellLikeItemModel *tempLikeModel = nil;
-        for (SDTimeLineCellLikeItemModel *likeModel in model.likeItemsArray) {
-            if ([likeModel.userId isEqualToString:USERINFO.userID]) {
-                tempLikeModel = likeModel;
-                break;
-            }
-        }
-        [temp removeObject:tempLikeModel];
-        model.liked = NO;
-    }
-    model.likeItemsArray = [temp copy];
-    [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationNone];
-    [self.chatKeyBoard keyboardDownForComment];
-}
+
 
 #pragma mark - 回复别人的评论
 - (void)DidClickCommentOtherButton:(SDTimeLineCell *)cell andCommentItem:(SDTimeLineCellCommentItemModel *)commentModel andCommentView:(UIView *)commentView {
@@ -628,7 +596,12 @@
     }
 }
 
-#pragma mark - 发送评论信息
+#pragma mark - 点赞
+- (void)didClickLikeButtonInCell:(SDTimeLineCell *)cell andMenu:(SDTimeLineCellOperationMenu *)menu {
+    [self DiscoverLikeOrComment:cell andComment:@""];
+}
+
+#pragma mark - 评论
 - (void)chatKeyBoardSendText:(NSString *)text {
     [self DiscoverLikeOrComment:[self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath] andComment:text];
 }
@@ -642,12 +615,11 @@
     if ([_currentCommenterUserID isEqualToString:@""]) {
         _currentCommenterUserID = @"0";
     }
-    
+     [self.chatKeyBoard keyboardDownForComment];
     [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.circle_ID andComment:comment andReply_userId:_currentCommenterUserID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:responseData.msg];
-            [self.chatKeyBoard keyboardDownForComment];
+//            [LCProgressHUD showFailureText:responseData.msg];
             return;
         }
         
@@ -687,9 +659,9 @@
         // 保存新的点赞
         [FMDBShareManager saveLikeItemsInLikeTable:model.likeItemsArray andCircleID:model.circle_ID];
         
-//        [self.tableView reloadRowsAtIndexPaths:@[_currentEditingIndexthPath] withRowAnimation:UITableViewRowAnimationNone];
-//        self.currentCommenterUserID = @"";
-//        [self.chatKeyBoard keyboardDownForComment];
+        [self.tableView reloadRowsAtIndexPaths:@[_currentEditingIndexthPath] withRowAnimation:UITableViewRowAnimationNone];
+        self.currentCommenterUserID = @"";
+       
     }];
     
 }

@@ -1974,6 +1974,26 @@
     return isSuccess;
 }
 
+/**
+ 撤销消息专用 - 普通消息 -> 系统消息
+ 
+ @param message 系统消息
+ */
+- (void)revokeNormalMessageToSystemMessage:(LGMessage *)message {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
+//    onverseId ,msgid,converseType ,type ,fromUid ,toUidOrGroupId ,subject ,text ,s
+    NSString *option1 = [NSString stringWithFormat:@"type = '%@', time = '%@', text = '%@'",@(message.type),@(message.timeStamp),message.text];
+    NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Message_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"msgid = '%@'",message.msgid]];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:optionStr];
+        if (success) {
+            NSLog(@"更新消息成功");
+        } else {
+            NSLog(@"更新消息失败");
+        }
+    }];
+}
+
 
 /**
  清空某会话的聊天记录

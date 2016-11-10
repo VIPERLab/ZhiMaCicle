@@ -345,7 +345,7 @@ typedef enum : NSUInteger {
 
 
 /**
- 根据会话id 回去消息数组
+ 根据会话id 查询消息
 
  @param converseID 会话id
  @param pageNumber 页数
@@ -371,6 +371,14 @@ typedef enum : NSUInteger {
  @return 是否更新成功
  */
 - (BOOL)upDataMessageStatusWithMessage:(LGMessage *)message;
+
+
+/**
+ 撤销消息专用 - 普通消息 -> 系统消息
+
+ @param message 系统消息
+ */
+- (void)revokeNormalMessageToSystemMessage:(LGMessage *)message;
 
 /**
  *  根据消息ID删除消息
