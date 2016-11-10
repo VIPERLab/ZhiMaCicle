@@ -163,6 +163,7 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
         ChatController *vc = [[ChatController alloc] init];
         vc.conversionId = groupModel.converseId;
         vc.conversionName = groupModel.converseName;
+        vc.converseLogo = groupModel.converseHead_photo;
         vc.converseType = groupModel.converseType;
         vc.hidesBottomBarWhenPushed = YES;
         ConversationController *conversationVC = userInfo.conversationVC;
@@ -207,8 +208,8 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     
     newMsg.fromUserPhoto = USERINFO.head_photo;
     newMsg.fromUserName = USERINFO.username;
-    newMsg.converseName = USERINFO.username;
-    newMsg.converseLogo = USERINFO.head_photo;
+    newMsg.converseName = self.selectedConverse.converseName;
+    newMsg.converseLogo = self.selectedConverse.converseHead_photo;
     //如果是群聊消息 -- 发送群聊的"名称"、"头像"
     if (self.selectedConverse.converseType == ConversionTypeGroupChat) {
         newMsg.converseName = self.selectedConverse.converseName;

@@ -110,12 +110,6 @@
     [_tableView registerClass:[ConverseWithouNetworkCell class] forCellReuseIdentifier:ConverseWithoutNetworkCellReusedID];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    ChatController *vc = [[ChatController alloc] init];
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
 //收到新消息-从数据库加载最新数据刷新列表
 - (void)refreshConversionList:(NSNotification *)notify{
 //    LGMessage *recieveMsg = notify.userInfo[@"message"];
@@ -231,6 +225,7 @@
             ChatController *vc = [[ChatController alloc] init];
             vc.conversionId = model.converseId;
             vc.conversionName = model.converseName;
+            vc.converseLogo = model.converseHead_photo;
             vc.converseType = model.converseType;
             vc.numOfUnread = model.unReadCount;
             vc.hidesBottomBarWhenPushed = YES;

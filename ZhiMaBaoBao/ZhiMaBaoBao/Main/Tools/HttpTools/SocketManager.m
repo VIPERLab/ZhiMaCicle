@@ -191,6 +191,11 @@ static SocketManager *manager = nil;
 //发送消息
 - (void)sendMessage:(LGMessage *)message{
     
+    if (message.conversionType == ConversionTypeSingle) {
+        message.converseId = message.fromUid;
+    }else if (message.conversionType == ConversionTypeGroupChat){
+        message.converseId = message.toUidOrGroupId;
+    }
     
     //处理过后的发送给socket的message
     LGMessage *sendMsg = [[LGMessage alloc] init];
@@ -215,7 +220,6 @@ static SocketManager *manager = nil;
         NSData *data = [NSData dataWithContentsOfFile:path];
         
         //转换成base64编码
-//        NSString *base64 = [NSData base64StringFromData:data];
         NSString *base64 = [data base64EncodedStringWithOptions:0];
         
         //将text转换为base64 发送给socket
@@ -227,7 +231,6 @@ static SocketManager *manager = nil;
         sendMsg.timeStamp = message.timeStamp;
         sendMsg.text = base64;
         sendMsg.audioLength = message.audioLength;
-        
         
     }
     //文本消息
@@ -246,42 +249,56 @@ static SocketManager *manager = nil;
         sendMsg.msgid = message.msgid;
         sendMsg.conversionType = message.conversionType;
         sendMsg.timeStamp = message.timeStamp;
-        
+        sendMsg.holderImageUrlString = message.holderImageUrlString;
+        sendMsg.videoDownloadUrl = message.videoDownloadUrl;
+        sendMsg.isDownLoad = NO;
+        sendMsg.text = message.text;
         //拼接text (本地路径：text , 第一帧图片路径：holderImageUrlString , 视频下载路径：videoDownloadUrl , 是否存在本地：isDownLoad 发送时设置为no)
 //        sendMsg.holderImageUrlString = message.holderImageUrlString;
 //        sendMsg.videoDownloadUrl = message.videoDownloadUrl;
 //        sendMsg.isDownLoad = NO;
         
-        //拼接完整的text
-        sendMsg.text = [NSString stringWithFormat:@"%@,%@,%@,%d",message.text,message.holderImageUrlString,message.videoDownloadUrl,sendMsg.isDownLoad];
+//        //拼接完整的text
+//        sendMsg.text = [NSString stringWithFormat:@"%@,%@,%@,%d",message.text,message.holderImageUrlString,message.videoDownloadUrl,sendMsg.isDownLoad];
     }
+    
+    //增加发送者的'昵称'、'头像'、'会话名称'、'会话头像'
+    sendMsg.fromUserPhoto = message.fromUserPhoto;
+    sendMsg.fromUserName = message.fromUserName;
+    sendMsg.converseName = message.converseName;
+    sendMsg.converseLogo = message.converseLogo;
+    sendMsg.converseId = message.converseId;
     
     //根据网络状态-- 标记消息发送状态
     UserInfo *userInfo = [UserInfo shareInstance];
     message.sendStatus = !userInfo.networkUnReachable;
     
-    //插入消息数据库
-    BOOL success = NO;
-    if (message.conversionType == ConversionTypeGroupChat) {
-        success = [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-    } else if (message.conversionType == ConversionTypeSingle) {
-        success = [FMDBShareManager saveMessage:message toConverseID:message.toUidOrGroupId];
-    }
+    //生成会话模型 用作创建/更新会话
+    ConverseModel *converse = [[ConverseModel alloc] init];
+    converse.converseHead_photo = message.converseLogo;
+    converse.converseType = message.conversionType;
+    converse.lastConverse = message.text;
+    converse.messageType = message.type;
+    converse.converseId = message.toUidOrGroupId;
+    converse.converseName = message.converseName;
+    converse.time = message.timeStamp;
+    //插入消息数据库、更新会话(新版本)
+    //1.插消息表
+    [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+    //2.插会话表
+    [FMDBShareManager saveConverseListDataWithDataArray:@[converse] withComplationBlock:nil];
+    
+    //发送消息状态回调通知
+    NSDictionary *infoDic = @{@"message":message};
+    [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageStateCall object:nil userInfo:infoDic];
 
-    if (success) {
-        
-        //发送消息状态回调通知
-        NSDictionary *infoDic = @{@"message":message};
-        [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageStateCall object:nil userInfo:infoDic];
-        
-        //插入数据库成功 - socket发送消息
-        //根据消息模型生成固定格式数据包
-        NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:sendMsg];
-        RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
-        req.object = data;
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-        
-    }
+    //插入数据库成功 - socket发送消息
+    //根据消息模型生成固定格式数据包
+    NSData *data = [self generateRequest:RequestTypeMessage uid:USERINFO.userID message:sendMsg];
+    RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
+    req.object = data;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
+    
 }
 
 //收到消息
@@ -345,13 +362,14 @@ static SocketManager *manager = nil;
             converse.converseType = message.conversionType;
             converse.lastConverse = message.text;
             converse.messageType = message.type;
+            converse.time = message.timeStamp;
             
             //生成群成员信息模型 用作插群成员表
             GroupUserModel *groupUser = [[GroupUserModel alloc] init];
             groupUser.userId = message.fromUid;
             groupUser.friend_nick = message.fromUserName;
             groupUser.head_photo = message.fromUserPhoto;
-            
+
             //根据（单聊、群聊、服务号）三种消息类型处理消息
             //单聊（1.插消息表、2.插会话表、3.更新UI）
             if (message.conversionType == ConversionTypeSingle) {
@@ -376,6 +394,23 @@ static SocketManager *manager = nil;
                     [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
                     //2.插群成员表
                     [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
+                    //收到被拉进群 （将自己的信息插入群成员表）
+                    if (message.actType == ActTypeUpdategroupnum) {
+                        GroupUserModel *myInfo = [[GroupUserModel alloc] init];
+                        myInfo.userId = USERINFO.userID;
+                        myInfo.friend_nick = USERINFO.username;
+                        myInfo.head_photo = USERINFO.head_photo;
+                        [FMDBShareManager saveAllGroupMemberWithArray:@[myInfo] andGroupChatId:converse.converseId withComplationBlock:nil];
+                    }
+                    //收到被踢出群聊 (将自己的群状态改为未出席该群)
+                    if (message.actType == ActTypeDeluserfromgroup && ![message.fromUid isEqualToString:USERINFO.userID]) {
+                        GroupUserModel *myInfo = [[GroupUserModel alloc] init];
+                        myInfo.userId = USERINFO.userID;
+                        myInfo.friend_nick = USERINFO.username;
+                        myInfo.head_photo = USERINFO.head_photo;
+                        myInfo.memberGroupState = YES;
+                        [FMDBShareManager saveAllGroupMemberWithArray:@[myInfo] andGroupChatId:converse.converseId withComplationBlock:nil];
+                    }
                     //3.有会话更新会话，没有会话不处理
                     [FMDBShareManager alertConverseListDataWithDataArray:@[converse] withComplationBlock:nil];
                 }else{ //普通消息
@@ -393,13 +428,13 @@ static SocketManager *manager = nil;
                 converse.converseName = message.converseName;
                 
             }
-            
+                   
             //统一发送通知、更新UI
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
             userInfo[@"message"] = message;
             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
             
-            
+            /*
             //语音消息，先解码，然后根据时间戳存到本地，拿到路径存到数据库
             if (message.type == MessageTypeAudio) {
                 NSData *audioData = [[NSData alloc] initWithBase64EncodedString:message.text options:0];
@@ -452,7 +487,10 @@ static SocketManager *manager = nil;
                 userInfo[@"message"] = message;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
             }
+             */
         }
+        
+        /*
         else if ([actType isEqualToString:@"service"]){
             //推送消息类型
             NSInteger messageType = [responceData[@"data"][@"service"][@"type"] integerValue];
@@ -638,6 +676,7 @@ static SocketManager *manager = nil;
             userInfo[@"deleteUid"] = friendId;
             [[NSNotificationCenter defaultCenter] postNotificationName:K_NotLookMyCircleNotification object:nil userInfo:userInfo];
         }
+         */
     }
 }
 
@@ -1373,16 +1412,35 @@ static SocketManager *manager = nil;
             request[@"controller_name"] = @"MessageController";
             request[@"method_name"] = @"sendmsg";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&fromUid=%@&isGroup=%lu&msgid=%@&text=%@&time=%ld&toUidOrGroupId=%@&type=%zd&%@",message.fromUid,(unsigned long)message.conversionType,message.msgid,message.text,(long)message.audioLength,message.toUidOrGroupId,message.type,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&concerseId=%@&converseLogo=%@&converseName=%@&converseType=%zd&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&holderImageUrl=%@&link=%@&msgid=%@&subject=%@&text=%@&toUidOrGroupId=%@&type=%ld&videoUrl=%@&voiceLength=%ld&%@",message.converseId,message.converseLogo,message.converseName,message.conversionType,message.fromUid,message.fromUserName,message.fromUserPhoto,message.holderImageUrlString,message.link,message.msgid,message.subject,message.text,message.toUidOrGroupId,(long)message.type,message.videoDownloadUrl,(long)message.audioLength,APIKEY];;
+//            if (message.type == MessageTypeText || message.type == MessageTypeImage) {
+//                str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&concerseId=%@&converseLogo=%@&converseName=%@&converseType=%zd&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&msgid=%@&text=%@&toUidOrGroupId=%@&type=%ld&voiceLength=%ld&%@",message.converseId,message.converseLogo,message.converseName,message.conversionType,message.fromUid,message.fromUserName,message.fromUserPhoto,message.msgid,message.text,message.toUidOrGroupId,(long)message.type,(long)message.audioLength,APIKEY];
+//            }else if (message.type == MessageTypeAudio){
+//                str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&concerseId=%@&converseLogo=%@&converseName=%@&converseType=%zd&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&msgid=%@&text=%@&toUidOrGroupId=%@&type=%ld&voiceLength=%ld&%@",message.converseId,message.converseLogo,message.converseName,message.conversionType,message.fromUid,message.fromUserName,message.fromUserPhoto,message.msgid,message.text,message.toUidOrGroupId,(long)message.type,(long)message.audioLength,APIKEY];
+//            }else if (message.type == MessageTypeVideo){
+//                str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&concerseId=%@&converseLogo=%@&converseName=%@&converseType=%zd&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&holderImageUrl=%@&msgid=%@&text=%@&toUidOrGroupId=%@&type=%ld&videoUrl=%@&%@",message.converseId,message.converseLogo,message.converseName,message.conversionType,message.fromUid,message.fromUserName,message.fromUserPhoto,message.holderImageUrlString,message.msgid,message.text,message.toUidOrGroupId,(long)message.type,message.videoDownloadUrl,APIKEY];
+//            }else if (message.type == MessageTypeActivityPurse || message.type == MessageTypeActivityArticle){
+//                str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=sendmsg&concerseId=%@&converseLogo=%@&converseName=%@&converseType=%zd&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&link=%@&msgid=%@&subject=%@&text=%@&toUidOrGroupId=%@&type=%ld&%@",message.converseId,message.converseLogo,message.converseName,message.conversionType,message.fromUid,message.fromUserName,message.fromUserPhoto,message.link,message.msgid,message.subject,message.text,message.toUidOrGroupId,(long)message.type,APIKEY];
+//            }
+            
             sign = [[str md5Encrypt] uppercaseString];
             //拼接消息
-            dataDic[@"msgid"] = message.msgid;
-            dataDic[@"type"] = @(message.type);
-            dataDic[@"isGroup"] = @(message.conversionType);
+            dataDic[@"concerseId"] = message.converseId;
+            dataDic[@"converseLogo"] = message.converseLogo;
+            dataDic[@"converseName"] = message.converseName;
+            dataDic[@"converseType"] = @(message.conversionType);
             dataDic[@"fromUid"] = message.fromUid;
-            dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
+            dataDic[@"fromUserName"] = message.fromUserName;
+            dataDic[@"fromUserPhoto"] = message.fromUserPhoto;
+            dataDic[@"holderImageUrl"] = message.holderImageUrlString;
+            dataDic[@"link"] = message.link;
+            dataDic[@"msgid"] = message.msgid;
+            dataDic[@"subject"] = message.subject;
             dataDic[@"text"] = message.text;
-            dataDic[@"time"] = @(message.audioLength);
+            dataDic[@"toUidOrGroupId"] = message.toUidOrGroupId;
+            dataDic[@"type"] = @(message.type);
+            dataDic[@"videoUrl"] = message.videoDownloadUrl;
+            dataDic[@"voiceLength"] = @(message.audioLength);
             dataDic[@"sign"] = sign;
             
         }

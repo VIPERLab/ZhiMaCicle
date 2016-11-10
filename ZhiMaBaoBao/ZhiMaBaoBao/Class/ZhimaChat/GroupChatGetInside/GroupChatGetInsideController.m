@@ -143,6 +143,7 @@
             ChatController *vc = [[ChatController alloc] init];
             vc.conversionId = model.groupId;
             vc.conversionName = model.groupName;
+            vc.converseLogo = model.groupAvtar;
             vc.converseType = YES;
             vc.hidesBottomBarWhenPushed = YES;
             ConversationController *conversationVC = userInfo.conversationVC;
@@ -167,6 +168,7 @@
     ChatController *vc = [[ChatController alloc] init];
     vc.conversionId = groupModel.converseId;
     vc.conversionName = groupModel.converseName;
+    vc.converseLogo = groupModel.converseHead_photo;
     vc.converseType = groupModel.converseType;
     vc.hidesBottomBarWhenPushed = YES;
     

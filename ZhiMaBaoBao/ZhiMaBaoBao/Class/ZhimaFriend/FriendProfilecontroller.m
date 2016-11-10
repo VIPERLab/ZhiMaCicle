@@ -301,6 +301,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         ChatController *vc = [[ChatController alloc] init];
         vc.conversionId = self.friend.user_Id;
         vc.conversionName = self.friend.displayName;
+        vc.converseLogo = self.friend.user_Head_photo;
         vc.hidesBottomBarWhenPushed = YES;
 //        [self.navigationController pushViewController:vc animated:YES];
         ConversationController *conversationVC = userInfo.conversationVC;

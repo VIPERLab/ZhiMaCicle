@@ -869,8 +869,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                         LGMessage *chat = [self.messages objectAtIndex:theCell.indexPath.row];
                         chat.fromUserPhoto = USERINFO.head_photo;
                         chat.fromUserName = USERINFO.username;
-                        chat.converseName = USERINFO.username;
-                        chat.converseLogo = USERINFO.head_photo;
+                        chat.converseName = self.conversionName;
+                        chat.converseLogo = self.converseLogo;
                         //如果是群聊消息 -- 发送群聊的"名称"、"头像"
                         if (self.converseType == ConversionTypeGroupChat) {
                             chat.converseName = self.groupModel.groupName;
@@ -932,8 +932,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                         chat.errorMsg = self.notInGroup;    //新增错误信息标记
                         chat.fromUserPhoto = USERINFO.head_photo;
                         chat.fromUserName = USERINFO.username;
-                        chat.converseName = USERINFO.username;
-                        chat.converseLogo = USERINFO.head_photo;
+                        chat.converseName = self.conversionName;
+                        chat.converseLogo = self.converseLogo;
                         //如果是群聊消息 -- 发送群聊的"名称"、"头像"
                         if (self.converseType == ConversionTypeGroupChat) {
                             chat.converseName = self.groupModel.groupName;
@@ -1001,8 +1001,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                         chat.errorMsg = self.notInGroup;    //新增错误信息标记
                         chat.fromUserPhoto = USERINFO.head_photo;
                         chat.fromUserName = USERINFO.username;
-                        chat.converseName = USERINFO.username;
-                        chat.converseLogo = USERINFO.head_photo;
+                        chat.converseName = self.conversionName;
+                        chat.converseLogo = self.converseLogo;
                         //如果是群聊消息 -- 发送群聊的"名称"、"头像"
                         if (self.converseType == ConversionTypeGroupChat) {
                             chat.converseName = self.groupModel.groupName;
@@ -1071,8 +1071,8 @@ static NSString *const reuseIdentifier = @"messageCell";
 //                        if (chat.isDownLoad) { // 推送失败的情况
                         chat.fromUserPhoto = USERINFO.head_photo;
                         chat.fromUserName = USERINFO.username;
-                        chat.converseName = USERINFO.username;
-                        chat.converseLogo = USERINFO.head_photo;
+                        chat.converseName = self.conversionName;
+                        chat.converseLogo = self.converseLogo;
                         //如果是群聊消息 -- 发送群聊的"名称"、"头像"
                         if (self.converseType == ConversionTypeGroupChat) {
                             chat.converseName = self.groupModel.groupName;
@@ -1489,8 +1489,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.isSending = YES;
     message.fromUserPhoto = USERINFO.head_photo;
     message.fromUserName = USERINFO.username;
-    message.converseName = USERINFO.username;
-    message.converseLogo = USERINFO.head_photo;
+    message.converseName = self.conversionName;
+    message.converseLogo = self.converseLogo;
     //如果是群聊消息 -- 发送群聊的"名称"、"头像"
     if (self.converseType == ConversionTypeGroupChat) {
         message.converseName = self.groupModel.groupName;
@@ -1583,8 +1583,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     
     message.fromUserPhoto = USERINFO.head_photo;
     message.fromUserName = USERINFO.username;
-    message.converseName = USERINFO.username;
-    message.converseLogo = USERINFO.head_photo;
+    message.converseName = self.conversionName;
+    message.converseLogo = self.converseLogo;
     //如果是群聊消息 -- 发送群聊的"名称"、"头像"
     if (self.converseType == ConversionTypeGroupChat) {
         message.converseName = self.groupModel.groupName;
@@ -1827,8 +1827,8 @@ static NSString *const reuseIdentifier = @"messageCell";
         
         message.fromUserPhoto = USERINFO.head_photo;
         message.fromUserName = USERINFO.username;
-        message.converseName = USERINFO.username;
-        message.converseLogo = USERINFO.head_photo;
+        message.converseName = self.conversionName;
+        message.converseLogo = self.converseLogo;
         //如果是群聊消息 -- 发送群聊的"名称"、"头像"
         if (self.converseType == ConversionTypeGroupChat) {
             message.converseName = self.groupModel.groupName;
@@ -1992,8 +1992,8 @@ static NSString *const reuseIdentifier = @"messageCell";
             message.errorMsg = self.notInGroup;    //新增错误信息标记
             message.fromUserPhoto = USERINFO.head_photo;
             message.fromUserName = USERINFO.username;
-            message.converseName = USERINFO.username;
-            message.converseLogo = USERINFO.head_photo;
+            message.converseName = self.conversionName;
+            message.converseLogo = self.converseLogo;
             //如果是群聊消息 -- 发送群聊的"名称"、"头像"
             if (self.converseType == ConversionTypeGroupChat) {
                 message.converseName = self.groupModel.groupName;
