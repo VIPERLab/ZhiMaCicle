@@ -94,6 +94,7 @@
 #import "BaseViewController.h"
 #import "NSDate+TimeCategory.h"
 #import "BaseNavigationController.h"
+#import "GroupUserModel.h"
 
 #import "KXActionSheet.h"
 #import "SocketManager.h"

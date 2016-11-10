@@ -15,6 +15,8 @@
 
 @interface GroupChatGetInsideController ()
 @property (nonatomic, weak) GroupChatModel *groupChatModel;
+@property (nonatomic, copy) NSString *userName; //扫码人的用户名
+
 @end
 
 @implementation GroupChatGetInsideController
@@ -25,6 +27,15 @@
     [self setGroupModel];
     [self setCustomTitle:@""];
     
+    self.userName = @"";
+    //获取扫码id的username
+    [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.qrCodeUserId block:^(ResponseData *responseData) {
+        if (responseData.code == 0) {
+            self.userName = responseData.data[@"username"];
+        }
+    } failure:^(ErrorData *error) {
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -122,7 +133,15 @@
             [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupId];
             
             //通过socket拉人进群
-            [[SocketManager shareInstance] scanCodeToGroup:self.groupChatModel.groupId uids:self.qrCodeUserId];
+            GroupActModel *actModel = [[GroupActModel alloc] init];
+            actModel.uids = self.qrCodeUserId;
+            actModel.usernames = self.userName;
+            actModel.groupId = self.groupChatModel.groupId;
+            actModel.groupLogo = self.groupChatModel.groupAvtar;
+            actModel.groupName = self.groupChatModel.groupName;
+            [[SocketManager shareInstance] addUserToGroup:actModel];
+            
+            
             
             //跳转到群聊天页面
             [self jumpGroupChat];

@@ -35,3 +35,27 @@
 
 
 @end
+
+//群操作模型 （群相关操作时用于发送给socket）
+@interface GroupActModel : NSObject
+ /** 操作者ID*/
+@property (nonatomic, copy) NSString *fromUid;
+ /** 会话头像*/
+@property (nonatomic, copy) NSString *converseLogo;
+ /** 会话名称*/
+@property (nonatomic, copy) NSString *converseName;
+ /** 发送者姓名*/
+@property (nonatomic, copy) NSString *fromUsername;
+ /** 发送者头像*/
+@property (nonatomic, copy) NSString *fromUserPhoto;
+ /** 群id*/
+@property (nonatomic, copy) NSString *groupId;
+ /** 群头像*/
+@property (nonatomic, copy) NSString *groupLogo;
+ /** 群名称*/
+@property (nonatomic, copy) NSString *groupName;
+ /** 被操作的用户id*/
+@property (nonatomic, copy) NSString *uids;
+ /** 被操作的用户姓名*/
+@property (nonatomic, copy) NSString *usernames;
+@end

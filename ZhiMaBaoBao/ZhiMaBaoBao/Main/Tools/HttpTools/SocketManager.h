@@ -99,24 +99,24 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  *  @param groupId 群id  （调用https接口获取群id）
  *  @param uids    群成员id （用逗号拼接）
  */
-- (void)createGtoup:(NSString *)groupId uids:(NSString *)uids;
+- (void)createGtoup:(GroupActModel *)actModel;
 
 /**
  *  邀请用户到群
  */
-- (void)addUserToGroup:(NSString *)groupId uids:(NSString *)uids;
+- (void)addUserToGroup:(GroupActModel *)actModel;
 
 /**
  *  扫码进群
  */
-- (void)scanCodeToGroup:(NSString *)groupId uids:(NSString *)uids;
+- (void)scanCodeToGroup:(GroupActModel *)actModel;
 
 /**
  *  从群组删除用户
  *  @param groupId 群id
  *  @param uids    群成员id  (删除群组：传uid, 群重命名：传新的群名称)
  */
-- (void)delUserFromGroup:(NSString *)groupId uids:(NSString *)uids;
+- (void)delUserFromGroup:(GroupActModel *)actModel;
 
 /**
  *  删除群组（退出群）
@@ -124,7 +124,7 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  *  @param groupId 群id
  *  @param uid     用户id
  */
-- (void)delGroup:(NSString *)groupId uid:(NSString *)uid;
+- (void)deleteGroup:(GroupActModel *)actModel;
 
 /**
  *  群重命名
@@ -132,7 +132,7 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
  *  @param groupId 群id
  *  @param name    群名称
  */
-- (void)renameGroup:(NSString *)groupId name:(NSString *)name;
+- (void)renameGroup:(GroupActModel *)actModel;
 
 /**
  *  群用户更新昵称

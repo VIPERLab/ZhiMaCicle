@@ -141,7 +141,9 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
             model.memberGroupState = YES;
         }
         NSString *userIds = [uids componentsJoinedByString:@","];
-        [[SocketManager shareInstance] delUserFromGroup:self.groupId uids:userIds];
+        
+        GroupActModel *actModel = [[GroupActModel alloc] init];
+//        [[SocketManager shareInstance] delUserFromGroup:self.groupId uids:userIds];
         
         [self.membersArr removeObjectsInArray:self.selectedFriends];
         [_tableView reloadData];

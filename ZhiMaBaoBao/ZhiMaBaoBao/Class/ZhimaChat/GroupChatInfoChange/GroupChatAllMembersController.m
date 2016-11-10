@@ -161,7 +161,8 @@
     NSLog(@"%zd",buttonIndex);
     if (buttonIndex == 1) {
         //删除好友
-        [[SocketManager shareInstance] delUserFromGroup:self.groupId uids:self.currentCell.model.userId];
+        GroupActModel *actModel = [[GroupActModel alloc] init];
+//        [[SocketManager shareInstance] delUserFromGroup:self.groupId uids:self.currentCell.model.userId];
         NSIndexPath *indexPath = [_tableView indexPathForCell:self.currentCell];
         
         
