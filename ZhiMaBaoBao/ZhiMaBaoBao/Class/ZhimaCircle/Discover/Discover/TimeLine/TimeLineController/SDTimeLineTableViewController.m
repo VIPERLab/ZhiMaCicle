@@ -107,13 +107,21 @@
     [self setupNav];
     [self setupView];
     [self notification];
-    [self getDataFromSQL];
+    [self setupUpHeaderAndFooter];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self getDataFromSQL];
+}
 
 - (void)viewDidAppear:(BOOL)animated {
     [self setupKeyBoard];
     self.tipsNewMessage.show = YES;
+    
+    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
+    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
+        [_tableView.mj_header beginRefreshing];
+    }
 //    __weak typeof(self) weakSelf = self;
 //    if (!_refreshHeader.superview) {
 //        
@@ -242,12 +250,6 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self setupNewData];
     }];
-    
-    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
-    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
-        [_tableView.mj_header beginRefreshing];
-    }
-    
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         [self loadMoreData];
     }];
@@ -406,7 +408,7 @@
         //返回主线程更新ui
         dispatch_async(dispatch_get_main_queue(), ^{
             // 获取所有朋友圈的数据
-            [self setupUpHeaderAndFooter];
+            
             [self.tableView reloadDataWithExistedHeightCache];
             [self.tableView reloadData];
         });

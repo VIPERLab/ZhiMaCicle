@@ -35,6 +35,7 @@
 		04608FA11DB078CD00F4B9E9 /* ChangeSexCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04608FA01DB078CD00F4B9E9 /* ChangeSexCell.m */; };
 		04787AE91D9CFF4B000A0DB5 /* KXActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */; };
 		04787AF61D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */; };
+		047EFDD01DD419910085B9D4 /* RotationPushAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 047EFDCF1DD419910085B9D4 /* RotationPushAnimation.m */; };
 		047F13F01DAA4BDE00684881 /* GroupChatChangeGroupNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */; };
 		047F13F31DAA60EF00684881 /* GroupChatChangeNoticeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F21DAA60EF00684881 /* GroupChatChangeNoticeController.m */; };
 		047F13F61DAB253300684881 /* GroupChatMessageDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F51DAB253300684881 /* GroupChatMessageDetailController.m */; };
@@ -763,6 +764,8 @@
 		04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXActionSheet.m; sourceTree = "<group>"; };
 		04787AF41D9E13FB000A0DB5 /* ConverseWithouNetworkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseWithouNetworkCell.h; sourceTree = "<group>"; };
 		04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseWithouNetworkCell.m; sourceTree = "<group>"; };
+		047EFDCE1DD419910085B9D4 /* RotationPushAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationPushAnimation.h; sourceTree = "<group>"; };
+		047EFDCF1DD419910085B9D4 /* RotationPushAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotationPushAnimation.m; sourceTree = "<group>"; };
 		047F13EE1DAA4BDE00684881 /* GroupChatChangeGroupNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatChangeGroupNameController.h; sourceTree = "<group>"; };
 		047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatChangeGroupNameController.m; sourceTree = "<group>"; };
 		047F13F11DAA60EF00684881 /* GroupChatChangeNoticeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatChangeNoticeController.h; sourceTree = "<group>"; };
@@ -2250,6 +2253,16 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		047EFDCD1DD417750085B9D4 /* TransitionAnimation(转场动画) */ = {
+			isa = PBXGroup;
+			children = (
+				047EFDCE1DD419910085B9D4 /* RotationPushAnimation.h */,
+				047EFDCF1DD419910085B9D4 /* RotationPushAnimation.m */,
+			);
+			name = "TransitionAnimation(转场动画)";
+			path = TransitionAnimation;
+			sourceTree = "<group>";
+		};
 		047F13ED1DAA4BAF00684881 /* GroupChatInfoChange(修改群聊信息内页) */ = {
 			isa = PBXGroup;
 			children = (
@@ -3709,6 +3722,7 @@
 		04F579C31D9280BD002A6471 /* ZhimaCircle(芝麻圈) */ = {
 			isa = PBXGroup;
 			children = (
+				047EFDCD1DD417750085B9D4 /* TransitionAnimation(转场动画) */,
 				04F579CE1D9280BD002A6471 /* Controller(根控制器) */,
 				04F862C51D9554AA00DCC6FE /* MyMessage */,
 				04F8621C1D94FB1E00DCC6FE /* ScranQRCode(扫一扫) */,
@@ -5835,6 +5849,7 @@
 				04EA7D5D1D912872005E5425 /* ZXAztecSimpleToken.m in Sources */,
 				D53E3DD41DB704FC001C663B /* PKFullScreenPlayerView.m in Sources */,
 				04F862891D94FC7900DCC6FE /* FaceSourceManager.m in Sources */,
+				047EFDD01DD419910085B9D4 /* RotationPushAnimation.m in Sources */,
 				04EA7DB51D912872005E5425 /* ZXDataMatrixC40Encoder.m in Sources */,
 				041595EA1DB75C65002C0F66 /* PinyinFormatter.m in Sources */,
 				04EA7DDD1D912872005E5425 /* ZXRSSExpandedRow.m in Sources */,
