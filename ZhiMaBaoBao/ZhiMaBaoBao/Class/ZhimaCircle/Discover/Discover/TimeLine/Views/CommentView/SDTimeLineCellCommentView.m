@@ -32,6 +32,8 @@
 #import "MLLinkLabel.h"
 #import "UIColor+My.h"
 #import "KXCodingManager.h"
+#import "FaceThemeModel.h"
+
 
 
 @interface SDTimeLineCellCommentView () <MLLinkLabelDelegate,UIAlertViewDelegate>
@@ -127,8 +129,6 @@
         label.font = [UIFont systemFontOfSize:14];
         label.delegate = self;
         [commentButtonView addSubview:label];
-        
-        
         
     }
     
@@ -308,8 +308,8 @@
         
         for (UILabel *label in buttonView.subviews) {
             if ([label isKindOfClass:[UILabel class]]) {
-                CGSize size = [label.text sizeWithFont:[UIFont boldSystemFontOfSize:14] maxSize:CGSizeMake(width, MAXFLOAT)];
-                
+//                CGSize size = [label.text sizeWithFont:[UIFont boldSystemFontOfSize:14] maxSize:CGSizeMake(width, MAXFLOAT)];
+                CGSize size = [self sizeLabelToFit:label.attributedText width:width height:16];
                 buttonView.sd_layout.heightIs(size.height);
                 
                 label.sd_layout
@@ -322,6 +322,17 @@
     }
     
     [self setupAutoHeightWithBottomView:lastTopView bottomMargin:5];
+}
+
+- (CGSize)sizeLabelToFit:(NSAttributedString *)aString width:(CGFloat)width height:(CGFloat)height {
+    UILabel *tempLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, width, height)];
+    tempLabel.attributedText = aString;
+    tempLabel.font = [UIFont systemFontOfSize:14]; //如果不设置字体 直接用字符串的attribute属性 计算不准确
+    tempLabel.numberOfLines = 0;
+    [tempLabel sizeToFit];
+    CGSize size = tempLabel.frame.size;
+    size = CGSizeMake((size.width), (size.height));
+    return size;
 }
 
 - (void)setFrame:(CGRect)frame {
@@ -459,9 +470,9 @@
 
 // 正则获取 网址
 - (void)setContentLinkText:(SDTimeLineCellCommentItemModel *)model andLabel:(MLLinkLabel *)label {
+
     // 正则筛选网页
-    label.attributedText = model.attributedContent;
-    
+
     NSMutableAttributedString *attrStr = [model.attributedContent mutableCopy];
     
     NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
@@ -493,6 +504,9 @@
         [label addLink:link];
 
     }
+    
+    // 表情匹配放最后。 在前面会被网页筛选给冲掉
+    label.attributedText =  [self analyzeText:model.attributedContent.string];
 }
 
 - (void)didClickLink:(MLLink *)link linkText:(NSString *)linkText linkLabel:(MLLinkLabel *)linkLabel {
@@ -533,6 +547,97 @@
     return NO;
 }
 
+- (NSMutableAttributedString *)analyzeText:(NSString *)string
+{
+    NSString *markL = @"[";
+    NSString *markR = @"]";
+    NSMutableArray *stack = [[NSMutableArray alloc] init];
+    NSMutableAttributedString* muAstr = [[NSMutableAttributedString alloc]init];
+    
+    //偏移索引 由于会把长度大于1的字符串替换成一个空白字符。这里要记录每次的偏移了索引。以便简历下一次替换的正确索引
+    int offsetIndex = 0;
+    
+    for (int i = 0; i < string.length; i++)
+    {
+        NSString *s = [string substringWithRange:NSMakeRange(i, 1)];
+        
+        if (([s isEqualToString:markL]) || ((stack.count > 0) && [stack[0] isEqualToString:markL]))
+        {
+            if (([s isEqualToString:markL]) && ((stack.count > 0) && [stack[0] isEqualToString:markL]))
+            {
+                for (NSString *c in stack)
+                {
+                    [muAstr appendAttributedString:[[NSAttributedString alloc]initWithString:c]];
+                }
+                [stack removeAllObjects];
+            }
+            
+            [stack addObject:s];
+            
+            if ([s isEqualToString:markR] || (i == string.length - 1))
+            {
+                NSMutableString *emojiStr = [[NSMutableString alloc] init];
+                for (NSString *c in stack)
+                {
+                    [emojiStr appendString:c];
+                }
+                
+                if ([[self emojiStringArray] containsObject:emojiStr])
+                {
+                    
+                    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"face" ofType:@"plist"];
+                    NSDictionary *faceDic = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+                    NSString*faceName = [faceDic objectForKey:emojiStr];
+                    
+                    [muAstr appendAttributedString:[self replaceEmojiWithString:faceName]];
+                    
+                    
+                    offsetIndex += faceName.length - 1;
+                }
+                else
+                {
+                    [muAstr appendAttributedString:[[NSAttributedString alloc]initWithString:emojiStr]];
+                    
+                }
+                
+                [stack removeAllObjects];
+            }
+        }
+        else
+        {
+            [muAstr appendAttributedString:[[NSAttributedString alloc]initWithString:s]];
+            
+        }
+    }
+    
+    return muAstr;
+}
+
+- (NSAttributedString*)replaceEmojiWithString:(NSString*)string
+{
+    NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+    attch.image = [UIImage imageNamed:string];//@"f_static_000"];
+    attch.bounds = CGRectMake(0, 0, 15, 15);
+    NSAttributedString *str = [NSAttributedString attributedStringWithAttachment:attch];
+    return str;
+}
+
+- (NSArray *) emojiStringArray
+{
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"face" ofType:@"plist"];
+    NSDictionary *faceDic = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+    NSArray *allkeys = faceDic.allKeys;
+    
+    NSMutableArray *modelsArr = [NSMutableArray array];
+    
+    for (int i = 0; i < allkeys.count; ++i) {
+        NSString *name = allkeys[i];
+        FaceModel *fm = [[FaceModel alloc] init];
+        fm.faceTitle = name;
+        [modelsArr addObject:fm.faceTitle];
+    }
+    return modelsArr;
+}
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

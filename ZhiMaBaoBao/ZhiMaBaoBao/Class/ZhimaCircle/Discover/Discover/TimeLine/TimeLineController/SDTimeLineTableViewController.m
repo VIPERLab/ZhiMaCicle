@@ -206,9 +206,12 @@
     //新增说说
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
     new.circleType = 1;
-//    new.linkValue = @"http://www.baidu.com";
-    new.block = ^() {
-        [_tableView.mj_header beginRefreshing];
+    new.block = ^(SDTimeLineCellModel *model) {
+        [self.dataArray insertObject:model atIndex:0];
+        [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        UserInfo *info = [UserInfo read];
+        info.lastFcID = model.circle_ID;
+        [info save];
     };
     [self.navigationController pushViewController:new animated:YES];
     
@@ -262,7 +265,7 @@
             
         });
         
-        
+        self.circleheadphoto = @"";
         [self.tableView reloadDataWithExistedHeightCache];
         [self.tableView reloadData];
         
@@ -564,6 +567,8 @@
         model.liked = NO;
     }
     model.likeItemsArray = [temp copy];
+    [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationNone];
+    [self.chatKeyBoard keyboardDownForComment];
 }
 
 #pragma mark - 回复别人的评论
@@ -682,9 +687,9 @@
         // 保存新的点赞
         [FMDBShareManager saveLikeItemsInLikeTable:model.likeItemsArray andCircleID:model.circle_ID];
         
-        [self.tableView reloadRowsAtIndexPaths:@[_currentEditingIndexthPath] withRowAnimation:UITableViewRowAnimationNone];
-        self.currentCommenterUserID = @"";
-        [self.chatKeyBoard keyboardDownForComment];
+//        [self.tableView reloadRowsAtIndexPaths:@[_currentEditingIndexthPath] withRowAnimation:UITableViewRowAnimationNone];
+//        self.currentCommenterUserID = @"";
+//        [self.chatKeyBoard keyboardDownForComment];
     }];
     
 }

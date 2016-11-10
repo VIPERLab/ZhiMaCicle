@@ -11,7 +11,7 @@
 #import "NewDiscoverHeaderView.h"    // 图文样式头部视图
 #import "NewDiscoverLinkTypeView.h"  // 链接类型头部样式
 #import "KXCurrentLocationModel.h"
-
+#import "SDTimeLineCellModel.h"
 
 #import "DiscoverCurrentLocationController.h" //所在位置
 #import "ChooseWhoCanSeeController.h" //选择可见范围
@@ -515,9 +515,12 @@
         
         //插入自己发布的朋友圈
         UserInfo *info = [UserInfo read];
+        NSString *fcid = [NSString stringWithFormat:@"%zd",[responseData.data integerValue]];
+        
+        SDTimeLineCellModel *model = [SDTimeLineCellModel mj_objectWithKeyValues:responseData.data_temp];
         
         FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
-        NSString *fcid = [NSString stringWithFormat:@"%zd",[responseData.data integerValue]];
+        
         NSString *optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Table];
         [queue inDatabase:^(FMDatabase *db) {
             
@@ -547,7 +550,7 @@
             }];
         }
         
-        self.block();
+        self.block(model);
         [self.navigationController popViewControllerAnimated:YES];
     }];
 }

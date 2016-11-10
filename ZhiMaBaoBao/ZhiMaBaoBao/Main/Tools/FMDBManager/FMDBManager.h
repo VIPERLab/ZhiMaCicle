@@ -173,7 +173,7 @@ typedef enum : NSUInteger {
  *
  *  @return 是否插入成功
  */
-- (void)saveUserMessageWithMessageArray:(NSArray <ZhiMaFriendModel *> *)userMessageArray withComplationBlock:(ComplationBlock)block;
+- (void)saveUserMessageWithMessageArray:(NSArray <ZhiMaFriendModel *> *)userMessageArray withComplationBlock:(ComplationBlock)block andIsUpdata:(BOOL)updata;
 
 /**
  *  查询所有的消息
@@ -267,6 +267,18 @@ typedef enum : NSUInteger {
  @param block     回调 - 主线程回调
  */
 - (void)saveConverseListDataWithModel:(ConverseModel *)converseModel withComplationBlock:(ComplationBlock)block;
+
+
+
+/**
+ 更新会话数据库中的 converseContent 和 Time 字段
+
+ @param andTime    converseContent
+ @param time       time
+ @param converseId 会话id
+ */
+- (void)alertConverseTextAndTimeWithConverseModel:(ConverseModel *)converseModel;
+
 
 
 /**
