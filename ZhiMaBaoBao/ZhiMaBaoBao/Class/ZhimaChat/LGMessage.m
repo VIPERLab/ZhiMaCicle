@@ -34,6 +34,10 @@
     self = [super init];
     if (self) {
         self.audioLength = 0;
+        self.link = @"";
+        self.videoDownloadUrl = @"";
+        self.holderImageUrlString = @"";
+        self.subject = @"";
     }
     return self;
 }
