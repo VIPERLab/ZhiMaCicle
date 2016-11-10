@@ -284,7 +284,7 @@ static SocketManager *manager = nil;
     NSDictionary *responceData = [data mj_JSONObject];
 
     NSLog(@"\n从socket接收到的数据responceData :%@\n json:%@ \n",responceData,jsonStr);
-    if (data.length) {
+    if (responceData) {
 
         //解析消息
         LGMessage *message = [[LGMessage alloc] init];
@@ -349,9 +349,19 @@ static SocketManager *manager = nil;
                 converse.converseName = friend.displayName;
                 
                 //1.插消息表
-                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+                if (message.actType == ActTypeUndomsg) {
+                    //如果是撤销类型 （只更新消息内容）
+                    [FMDBShareManager revokeNormalMessageToSystemMessage:message];
+                }else{
+                    [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+                }
                 //2.插会话表
-                [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+                if (message.type == MessageTypeSystem) {
+                    //如果是系统消息，不更新会话头像、会话名
+                    [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+                }else{
+                    [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+                }
                 //3.发送通知更新UI
             }
             //群聊
@@ -360,7 +370,12 @@ static SocketManager *manager = nil;
                 //系统消息
                 if (message.type == MessageTypeSystem) {
                     //1.插消息表
-                    [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+                    if (message.actType == ActTypeUndomsg) {
+                        //如果是撤销类型 （只更新消息内容）
+                        [FMDBShareManager revokeNormalMessageToSystemMessage:message];
+                    }else{
+                        [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+                    }
                     //2.插群成员表
                     [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
                     //收到被拉进群 （将自己的信息插入群成员表）
@@ -951,11 +966,8 @@ static SocketManager *manager = nil;
         RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
         req.object = data;
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSocketPacketRequest object:req];
-        
     }
-
 }
-
 
 //删除消息
 - (void)deleteMessage:(LGMessage *)message{
