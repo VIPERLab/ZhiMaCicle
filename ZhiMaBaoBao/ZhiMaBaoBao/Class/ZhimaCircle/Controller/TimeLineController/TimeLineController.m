@@ -47,10 +47,6 @@
     }
 }
 
-//- (void)viewWillAppear:(BOOL)animated {
-//    self.tabBarController.tabBar.hidden = NO;
-//}
-
 // ----  通知
 - (void)notification {
     //未读消息数
@@ -122,6 +118,7 @@
         timeLine.unReadCount = _unReadCount;
         timeLine.circleheadphoto = _circleheadphoto;
         timeLine.hidesBottomBarWhenPushed = YES;
+        
         // 自定义转场动画
 //        self.navigationController.delegate = self;
         

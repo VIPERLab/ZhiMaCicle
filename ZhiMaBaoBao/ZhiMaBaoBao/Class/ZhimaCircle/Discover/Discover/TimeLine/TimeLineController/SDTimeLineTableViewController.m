@@ -108,10 +108,11 @@
     [self setupView];
     [self notification];
     [self setupUpHeaderAndFooter];
+    [self getDataFromSQL];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self getDataFromSQL];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -122,36 +123,6 @@
     if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
         [_tableView.mj_header beginRefreshing];
     }
-//    __weak typeof(self) weakSelf = self;
-//    if (!_refreshHeader.superview) {
-//        
-//        _refreshHeader = [SDTimeLineRefreshHeader refreshHeaderWithCenter:CGPointMake(40, 45)];
-//        _refreshHeader.scrollView = self.tableView;
-//        [_refreshHeader setRefreshingBlock:^{
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                [weakSelf setupNewData];
-//            });
-//        }];
-//        [self.tableView.superview addSubview:_refreshHeader];
-//    } else {
-//        [self.tableView.superview bringSubviewToFront:_refreshHeader];
-//    }
-//    
-//    //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
-//    if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
-//        _refreshHeader.refreshState = SDWXRefreshViewStateRefreshing;
-//    } else {
-//        _refreshHeader.refreshState = SDWXRefreshViewStateNormal;
-//    }
-//
-//    
-//    // 上拉加载
-//    _refreshFooter = [SDTimeLineRefreshFooter refreshFooterWithRefreshingText:@"正在加载数据..."];
-//    [_refreshFooter addToScrollView:self.tableView refreshOpration:^{
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [weakSelf loadMoreData];
-//        });
-//    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -161,8 +132,6 @@
 }
 
 - (void)dealloc {
-//    [_refreshHeader removeFromSuperview];
-//    [_refreshFooter removeFromSuperview];
     
     [self.chatKeyBoard removeFromSuperview];
     _chatKeyBoard = nil;
@@ -260,7 +229,6 @@
 - (void)setupNewData {
     //加载未读消息数
     __weak typeof(self) weakSelf = self;
-//    __weak typeof(_refreshHeader) weakHeader = _refreshHeader;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
     //下拉页数置1
@@ -408,7 +376,6 @@
         //返回主线程更新ui
         dispatch_async(dispatch_get_main_queue(), ^{
             // 获取所有朋友圈的数据
-            
             [self.tableView reloadDataWithExistedHeightCache];
             [self.tableView reloadData];
         });

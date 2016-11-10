@@ -1298,7 +1298,7 @@
 //                    -----------   用户表  ----------------
 
 /**
- 往用户表插入数据
+ 往用户表插入数据 - 查询并创建
 
  @param userMessageArray 数组模型
  @param block            插入完成回调
@@ -1584,7 +1584,7 @@
     // 判断是否存在会话
     BOOL isExist = [self isConverseIsExist:converseModel.converseId];
     if (isExist) {  //更新会话
-        [self saveConverseListDataWithModel:converseModel withComplationBlock:nil];
+        [self alertConverseListDataWithModel:converseModel withComplationBlock:nil];
         return;
     }
     
@@ -1620,10 +1620,10 @@
  @param block     回调 - 主线程回调
  */
 - (void)alertConverseListDataWithModel:(ConverseModel *)model withComplationBlock:(ComplationBlock)block {
+    ConverseModel *oldModel = [FMDBShareManager searchConverseWithConverseID:model.converseId andConverseType:model.converseType];
     FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     [converseQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         BOOL isSuccess = NO;
-        ConverseModel *oldModel = [FMDBShareManager searchConverseWithConverseID:model.converseId andConverseType:model.converseType];
         model.unReadCount = oldModel.unReadCount;
         
         if (oldModel.converseName.length) {
@@ -1632,6 +1632,7 @@
                     block(NO);
                 });
             }
+            return ;
         }
         
         

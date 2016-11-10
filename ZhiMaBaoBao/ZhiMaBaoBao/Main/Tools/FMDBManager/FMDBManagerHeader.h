@@ -17,22 +17,25 @@
 // 新的数据库路径
 #define ZhiMa_NEW_SqlitePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:[NSString stringWithFormat:@"ZhiMa-%@.sqlite",USERINFO.userID]]
 
-
 //  表名
 /*朋友圈表*/
 #define ZhiMaCicle_Talbe_Name @"Circle "
 #define ZhiMaCicleComment_Table_Name @"Circle_Comment "
 #define ZhiMaCirclePic_Table_Name @"Circle_Pic "
 #define ZhiMaCircleLike_Table_Name @"Circle_Like "
+
 /*消息表*/
 #define ZhiMaChatConvence_Table_Name @"ChatConverse "
 #define ZhiMaChatMessage_Table_Name @"ChatMessage "
+
 /*用户表*/
 #define ZhiMaUserMessage_Table_Name @"Friends "
 #define ZhiMaNewFriend_Table_Name @"NewFriends "
+
 /*群聊信息表*/
 #define ZhiMaGroupChat_Table_Name @"GroupInfo "
 #define ZhiMaGroupChatMember_Table_Name @"GroupMember "
+
 /*服务号表*/
 #define ZhiMaService_TableName @"ServiceInfo "
 #define ZhiMaService_Message_TableName @"ServiceMessage "

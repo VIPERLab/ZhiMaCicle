@@ -286,7 +286,7 @@ static SocketManager *manager = nil;
     //1.插消息表
     [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
     //2.插会话表
-    [FMDBShareManager saveConverseListDataWithDataArray:@[converse] withComplationBlock:nil];
+    [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
     
     //发送消息状态回调通知
     NSDictionary *infoDic = @{@"message":message};
