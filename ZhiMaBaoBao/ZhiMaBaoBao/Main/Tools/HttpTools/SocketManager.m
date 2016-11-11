@@ -336,7 +336,11 @@ static SocketManager *manager = nil;
         if (message.conversionType == ConversionTypeSingle) {
             ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:message.fromUid];
             converse.converseId = message.fromUid;
-            converse.converseName = friend.displayName;
+            converse.converseName = message.fromUserName;
+            if (friend.user_Id) {
+                converse.converseName = friend.displayName;
+            }
+            
         }
         //群聊
         else if (message.conversionType == ConversionTypeGroupChat){
@@ -377,12 +381,13 @@ static SocketManager *manager = nil;
                 parmas[@"friend"] = friend;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kNewFriendRequest object:nil userInfo:parmas];
                 
-                //保存新的好友
+                //保存新的好友到数据库
                 friend.friend_type = 1;
                 [FMDBShareManager saveNewFirendsWithArray:@[friend] withComplationBlock:nil];
             }
                 break;
             case ActTypeDofriend:{      //同意好友请求
+                converse.converseHead_photo = message.fromUserPhoto;
                 [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
                 [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
             }
@@ -1474,7 +1479,7 @@ static SocketManager *manager = nil;
         dataDic[@"groupName"] = model.groupName;
         dataDic[@"uids"] = model.uids;
         dataDic[@"usernames"]= model.usernames;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupid=%@&groupLogo=%@&groupName=%@&uids=%@&usernames=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.fromUid,model.fromUsername,model.fromUserPhoto,model.groupId,model.groupLogo,model.groupName,model.uids,model.usernames,APIKEY];
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.fromUid,model.fromUsername,model.fromUserPhoto,model.groupLogo,model.groupName,model.groupId,model.uids,model.usernames,APIKEY];
     }else if (type == GroupActTypeDelUser){
         dataDic[@"fromUid"] = model.fromUid;
         dataDic[@"fromUserName"] = model.fromUsername;
@@ -1484,7 +1489,7 @@ static SocketManager *manager = nil;
         dataDic[@"uids"] = model.uids;
         dataDic[@"usernames"]= model.usernames;
         
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&fromUid=%@&fromUserName=%@&groupid=%@&groupLogo=%@&groupName=%@&uids=%@&usernames=%@&%@",controllerName,methodName,model.fromUid,model.fromUsername,model.groupId,model.groupLogo,model.groupName,model.uids,model.usernames,APIKEY];
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&fromUid=%@&fromUserName=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&%@",controllerName,methodName,model.fromUid,model.fromUsername,model.groupLogo,model.groupName,model.groupId,model.uids,model.usernames,APIKEY];
     }else if (type == GroupActTypeDelGroup || type == GroupActTypeReName){
         dataDic[@"fromUid"] = model.fromUid;
         dataDic[@"fromUserName"] = model.fromUsername;
@@ -1492,7 +1497,7 @@ static SocketManager *manager = nil;
         dataDic[@"groupLogo"] = model.groupLogo;
         dataDic[@"groupName"] = model.groupName;
 
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&fromUid=%@&fromUserName=%@&groupid=%@&groupLogo=%@&groupName=%@&%@",controllerName,methodName,model.fromUid,model.fromUsername,model.groupId,model.groupLogo,model.groupName,APIKEY];
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&fromUid=%@&fromUserName=%@&groupLogo=%@&groupName=%@&groupid=%@&%@",controllerName,methodName,model.fromUid,model.fromUsername,model.groupLogo,model.groupName,model.groupId,APIKEY];
     }
 
     //生成签名

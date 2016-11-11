@@ -586,16 +586,35 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 //存群信息
                                 [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                                 
+                                //拼接被邀请人姓名
+                                NSMutableArray *namesArr = [NSMutableArray array];
+                                for (GroupUserModel *groupUser in self.groupChatModel.groupUserVos) {
+                                    if (![groupUser.userId isEqualToString:USERINFO.userID]) {
+                                        [namesArr addObject:groupUser.friend_nick];
+                                    }
+                                }
+                                NSString *names = [namesArr componentsJoinedByString:@","];
+                                
                                 //创建会话
                                 ConverseModel *converseModel  = [[ConverseModel alloc] init];
                                 converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
                                 converseModel.converseType = 1;
                                 converseModel.converseId = self.groupChatModel.groupId;
-                                converseModel.unReadCount = 0;
                                 converseModel.converseName = self.groupChatModel.groupName;
                                 converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
-                                converseModel.lastConverse = @" ";
+                                converseModel.lastConverse = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",names];
                                 [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
+                                
+                                //生成系统消息
+                                LGMessage *systemMsg = [[LGMessage alloc] init];
+                                systemMsg.text = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",names];
+                                systemMsg.fromUid = USERINFO.userID;
+                                systemMsg.toUidOrGroupId = self.groupChatModel.groupId;
+                                systemMsg.type = MessageTypeSystem;
+                                systemMsg.msgid = [NSString generateMessageID];
+                                systemMsg.conversionType = ConversionTypeSingle;
+                                systemMsg.timeStamp = [NSDate currentTimeStamp];
+                                [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupChatModel.groupId];
                                 
                                 //通过socket创建群聊
                                 GroupActModel *actModel = [[GroupActModel alloc] init];
