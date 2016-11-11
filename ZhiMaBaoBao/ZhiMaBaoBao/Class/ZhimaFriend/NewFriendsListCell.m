@@ -24,13 +24,13 @@
     self.name.text = friendModel.user_Name;
     self.subText.text = @"对方请求添加你为朋友";
     
-    if (friendModel.status) {   //已添加好友
+    if (friendModel.friend_type == 2) {   //已添加好友
         [self.acceptBtn setTitle:@"已添加" forState:UIControlStateNormal];
         [self.acceptBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
         self.acceptBtn.backgroundColor = [UIColor clearColor];
         self.acceptBtn.enabled = NO;
     }
-    else{
+    else if (friendModel.friend_type == 1) {
         [self.acceptBtn setTitle:@"接受" forState:UIControlStateNormal];
         [self.acceptBtn setTitleColor:WHITECOLOR forState:UIControlStateNormal];
         self.acceptBtn.backgroundColor = THEMECOLOR;

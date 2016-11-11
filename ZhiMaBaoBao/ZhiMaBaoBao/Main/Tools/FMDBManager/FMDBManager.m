@@ -1492,7 +1492,7 @@
             model.user_Name = [result stringForColumn:@"userName"];
             model.user_Id = [result stringForColumn:@"userId"];
             model.user_Head_photo = [result stringForColumn:@"userPhoto"];
-            model.status = [result intForColumn:@"status"];
+            model.friend_type = [result intForColumn:@"status"];
             [dataArray addObject:model];
         }
     }];
@@ -1522,7 +1522,7 @@
             NSString *optionStr = [NSString string];
             if (isExist) {
                 NSLog(@"存在新好友");
-                NSString *option1 = [NSString stringWithFormat:@"userName = '%@', userPhoto = '%@', status = '%@'",model.user_Name,model.user_Head_photo,@(model.status)];
+                NSString *option1 = [NSString stringWithFormat:@"userName = '%@', userPhoto = '%@', status = '%@'",model.user_Name,model.user_Head_photo,@(model.friend_type)];
                 NSString *option2 = [NSString stringWithFormat:@"userId = '%@'",model.user_Id];
                 optionStr = [FMDBShareManager alterTable:ZhiMa_NewFriend_Message_Table withOpton1:option1 andOption2:option2];
                 
@@ -1530,7 +1530,7 @@
                 NSLog(@"不存在新好友，需要插入");
                 optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_NewFriend_Message_Table];
             }
-            BOOL success = [db executeUpdate:optionStr,model.user_Id,model.user_Head_photo,model.user_Name,@(model.status)];
+            BOOL success = [db executeUpdate:optionStr,model.user_Id,model.user_Head_photo,model.user_Name,@(model.friend_type)];
             if (success) {
                 NSLog(@"插入/更新 新好友成功");
             } else {
