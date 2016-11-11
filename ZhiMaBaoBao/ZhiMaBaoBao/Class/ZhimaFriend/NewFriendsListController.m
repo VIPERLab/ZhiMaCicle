@@ -49,24 +49,24 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 //请求新的好友列表数据 - 如果没有从网络加载
 - (void)requestNewFriendsList{
     
-    //从数据库加载新的好友
-    [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
-        if (responseData.code == 0) {
-            self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
-            for (ZhiMaFriendModel *model in self.friendsArr) {  //从网络拉取的新的好友，status 设置为NO
-                model.status = NO;
-            }
-            [FMDBShareManager saveNewFirendsWithArray:self.friendsArr withComplationBlock:nil];
-            [self.tableView reloadData];
-            
-        }else{
+//    //从数据库加载新的好友
+//    [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
+//        if (responseData.code == 0) {
+//            self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
+//            for (ZhiMaFriendModel *model in self.friendsArr) {  //从网络拉取的新的好友，status 设置为NO
+//                model.status = NO;
+//            }
+//            [FMDBShareManager saveNewFirendsWithArray:self.friendsArr withComplationBlock:nil];
+//            [self.tableView reloadData];
+//            
+//        }else{
             //如果没有数据，直接从数据库拉取
             self.friendsArr = [[FMDBShareManager getAllNewFriends] mutableCopy];
             [self.tableView reloadData];
-        }
-    } failure:^(ErrorData *error) {
-        [LCProgressHUD showFailureText:@"网络好像出错了哦[^_^]"];
-    }];
+//        }
+//    } failure:^(ErrorData *error) {
+//        [LCProgressHUD showFailureText:@"网络好像出错了哦[^_^]"];
+//    }];
  }
 
 /**
@@ -98,29 +98,28 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
  *  接受好友请求
  */
 - (void)acceptNewFriendRequest:(NSIndexPath *)indexPath{
-    //从网络加载的好友模型
-    ZhiMaFriendModel *netFriend = self.friendsArr[indexPath.row];
+//    //从网络加载的好友模型
+    ZhiMaFriendModel *friend = self.friendsArr[indexPath.row];
     //从数据库加载的好友模型
-    ZhiMaFriendModel *sqlitFriend = [FMDBShareManager getUserMessageByUserID:netFriend.user_Id];
+//    ZhiMaFriendModel *sqlitFriend = [FMDBShareManager getUserMessageByUserID:netFriend.user_Id];
     
-    //如果数据库有，就用数据库的好友模型
-    ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
-    friend = sqlitFriend.user_Id.length ? sqlitFriend : netFriend;
+//    //如果数据库有，就用数据库的好友模型
+//    ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
+//    friend = sqlitFriend.user_Id.length ? sqlitFriend : netFriend;
+//    friend = netFriend;
     [LCProgressHUD showLoadingText:@"请稍等..."];
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
-
-            [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil andIsUpdata:YES];
-            [[SocketManager shareInstance] agreeFriendRequest:friend];
-            
+            friend.friend_type = FriendTypeFriends;
             
             //添加系统消息"你已添加了xx,现在可以开始聊天了"
             [self addSystemMsgToSqlite:friend];
+            [[SocketManager shareInstance] agreeFriendRequest:friend];
 
             //添加好友成功 -- 更新数据库 新的好友表  和好友表
-            netFriend.status = YES;
-            [FMDBShareManager saveNewFirendsWithArray:@[netFriend] withComplationBlock:nil];
+            [FMDBShareManager saveNewFirendsWithArray:@[friend] withComplationBlock:nil];
+            [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil andIsUpdata:YES];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             
         }else{
@@ -132,14 +131,26 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 //添加系统消息"你已添加了xx,现在可以开始聊天了"
 - (void)addSystemMsgToSqlite:(ZhiMaFriendModel *)friend{
     LGMessage *systemMsg = [[LGMessage alloc] init];
-    systemMsg.text = [NSString stringWithFormat:@"你已添加了%@,现在可以开始聊天了。",friend.user_Name];
+    systemMsg.text = [NSString stringWithFormat:@"你已添加了%@,现在可以开始聊天了",friend.user_Name];
     systemMsg.fromUid = USERINFO.userID;
     systemMsg.toUidOrGroupId = friend.user_Id;
     systemMsg.type = MessageTypeSystem;
     systemMsg.msgid = [NSString generateMessageID];
     systemMsg.conversionType = ConversionTypeSingle;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
+    
+    ConverseModel *converse = [[ConverseModel alloc] init];
+    converse.converseId = friend.user_Id;
+    converse.converseName = friend.user_Name;
+    converse.converseHead_photo = friend.user_Head_photo;
+    converse.converseType = ConversionTypeSingle;
+    converse.lastConverse = systemMsg.text;
+    converse.messageType = MessageTypeSystem;
+    converse.time = [NSDate currentTimeStamp];
+    
+    //保存系统消息，创建会话
     [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
+    [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     userInfo[@"message"] = systemMsg;
