@@ -289,7 +289,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     }
     else if (self.friendType == FriendTypeNotFriend){   //不是好友 -> 添加到通讯录
         SocketManager *manager = [SocketManager shareInstance];
-        [manager addFriend:self.friend.user_Id];
+        [manager addFriend:self.friend];
         [LCProgressHUD showSuccessText:@"请求发送成功"];
     }
     else if (self.friendType == FriendTypeFriends){     //好友 -> 发消息
@@ -313,7 +313,10 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             if (responseData.code == 0) {
                 //将好友加入数据库好友列表
                 [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend] withComplationBlock:nil andIsUpdata:NO];
-                [[SocketManager shareInstance] agreeFriendRequest:self.userId];
+                //转换成芝麻友数据模型
+                ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
+                friend.user_Id = self.userId;
+                [[SocketManager shareInstance] agreeFriendRequest:friend];
                 [self addSystemMsgToSqlite:self.friend];
                 //重新加载数据 -> 刷新
                 [self requestFriendProfile:YES];
