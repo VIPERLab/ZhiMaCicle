@@ -614,6 +614,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 systemMsg.msgid = [NSString generateMessageID];
                                 systemMsg.conversionType = ConversionTypeSingle;
                                 systemMsg.timeStamp = [NSDate currentTimeStamp];
+                                systemMsg.actType = ActTypeDeluserfromgroup;
                                 [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupChatModel.groupId];
                                 
                                 //通过socket创建群聊

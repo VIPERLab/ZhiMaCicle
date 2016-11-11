@@ -142,8 +142,8 @@ static NSString *const reuseIdentifier = @"messageCell";
     if (self.converseType == ConversionTypeSingle) {   //单聊
 //        ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
         ConverseModel *converse = [FMDBShareManager searchConverseWithConverseID:self.conversionId andConverseType:ConversionTypeSingle];
-        [self setCustomTitle:converse.converseName];
-        self.friendHeadPic = converse.converseHead_photo;
+        [self setCustomTitle:self.conversionName];
+        self.friendHeadPic = self.converseLogo;
         //即时更新用户头像
         NSMutableArray *indexPaths = [NSMutableArray array];
         for (int i = 0; i < self.messages.count; i ++) {
@@ -1482,12 +1482,12 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.text = text;
 //    message.toUidOrGroupId =  @"12790";//self.conversionId;
     message.toUidOrGroupId =  self.conversionId;
-    message.fromUid = USERINFO.userID;
     message.type = MessageTypeText;
     message.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
     message.conversionType = self.converseType;
     message.timeStamp = [NSDate currentTimeStamp];
     message.isSending = YES;
+    message.fromUid = USERINFO.userID;
     message.fromUserPhoto = USERINFO.head_photo;
     message.fromUserName = USERINFO.username;
     message.converseName = self.conversionName;

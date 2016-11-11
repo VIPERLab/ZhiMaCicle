@@ -135,15 +135,37 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         [LCProgressHUD showLoadingText:@"请稍等..."];
         
         //删除好友
-        NSMutableArray *uids = [NSMutableArray array];
+        NSMutableArray *uidsArr = [NSMutableArray array];
+        NSMutableArray *namesArr = [NSMutableArray array];
         for (GroupUserModel *model in self.selectedFriends) {
-            [uids addObject:model.userId];
-            model.memberGroupState = YES;
+            [uidsArr addObject:model.userId];
+            [namesArr addObject:model.friend_nick];
+//            model.memberGroupState = YES;
         }
-        NSString *userIds = [uids componentsJoinedByString:@","];
+        NSString *userIds = [uidsArr componentsJoinedByString:@","];
+        NSString *names = [namesArr componentsJoinedByString:@","];
         
+        //添加系统消息
+        LGMessage *systemMsg = [[LGMessage alloc] init];
+        systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移除了群聊",names];
+        systemMsg.fromUid = USERINFO.userID;
+        systemMsg.toUidOrGroupId = self.groupId;
+        systemMsg.type = MessageTypeSystem;
+        systemMsg.msgid = [NSString generateMessageID];
+        systemMsg.conversionType = ConversionTypeSingle;
+        systemMsg.timeStamp = [NSDate currentTimeStamp];
+        [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupId];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":systemMsg}];
+        
+        //通过socket删除群成员群聊
         GroupActModel *actModel = [[GroupActModel alloc] init];
-//        [[SocketManager shareInstance] delUserFromGroup:self.groupId uids:userIds];
+        actModel.uids = userIds;
+        actModel.usernames = names;
+        actModel.groupId = self.groupId;
+        actModel.groupLogo = self.groupLogo;
+        actModel.groupName = self.groupName;
+        [[SocketManager shareInstance] delUserFromGroup:actModel];
         
         [self.membersArr removeObjectsInArray:self.selectedFriends];
         [_tableView reloadData];
@@ -153,7 +175,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         
         //调用http接口，获取最新群头像
         [LGNetWorking getGroupHeadGroupId:self.groupId success:^(ResponseData *responseData) {
-            
         } failure:^(ErrorData *error) {
         }];
         

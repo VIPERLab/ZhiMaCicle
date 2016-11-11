@@ -441,6 +441,8 @@
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     vc.membersArr = [self.groupModel.groupUserVos mutableCopy];
     vc.groupId = self.groupModel.groupId;
+    vc.groupLogo = self.groupModel.groupAvtar;
+    vc.groupName = self.groupModel.groupName;
     [self presentViewController:nav animated:YES completion:nil];
 }
 

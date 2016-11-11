@@ -114,7 +114,6 @@
             systemMsg.msgid = [NSString generateMessageID];
             systemMsg.conversionType = ConversionTypeGroupChat;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
-            
             [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:self.groupModel.groupId];
             
             //发送通知，即时更新相应的页面
