@@ -140,9 +140,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     //通过id查数据库最新会话名->设置为标题
     //1.先通过id查会话
     if (self.converseType == ConversionTypeSingle) {   //单聊
-        ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
-        [self setCustomTitle:friendModel.displayName];
-        self.friendHeadPic = friendModel.user_Head_photo;
+//        ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
+        ConverseModel *converse = [FMDBShareManager searchConverseWithConverseID:self.conversionId andConverseType:ConversionTypeSingle];
+        [self setCustomTitle:converse.converseName];
+        self.friendHeadPic = converse.converseHead_photo;
         //即时更新用户头像
         NSMutableArray *indexPaths = [NSMutableArray array];
         for (int i = 0; i < self.messages.count; i ++) {
@@ -157,9 +158,11 @@ static NSString *const reuseIdentifier = @"messageCell";
         }
 
     } else if (self.converseType == ConversionTypeGroupChat) {
-        GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
-        [self setCustomTitle:groupModel.groupName];
-        self.groupModel = groupModel;
+//        GroupChatModel *groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.conversionId];
+//        [self setCustomTitle:groupModel.groupName];
+//        self.groupModel = groupModel;
+        ConverseModel *converse = [FMDBShareManager searchConverseWithConverseID:self.conversionId andConverseType:ConversionTypeGroupChat];
+        [self setCustomTitle:converse.converseName];
         
         //根据群聊id,去取对应群表中自己的群成员数据 （判断是否已被剔除群聊）
         GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:self.conversionId];
@@ -699,7 +702,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (BOOL)needShowTime:(NSInteger)time1 time2:(NSInteger)time2
 {
-    NSInteger num = time2 - time1;
+    NSInteger num = time2/1000 - time1/1000;
     BOOL needShowTime = YES;
     needShowTime = num >= DiffTimeThreeMins*60;
     return needShowTime;
@@ -872,8 +875,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                         chat.converseLogo = self.converseLogo;
                         //如果是群聊消息 -- 发送群聊的"名称"、"头像"
                         if (self.converseType == ConversionTypeGroupChat) {
-                            chat.converseName = self.groupModel.groupName;
-                            chat.converseLogo = self.groupModel.groupAvtar;
+                            chat.converseName = self.conversionName;
+                            chat.converseLogo = self.converseLogo;
                         }
                         SocketManager* socket = [SocketManager shareInstance];
                         [socket reSendMessage:chat];
@@ -935,8 +938,8 @@ static NSString *const reuseIdentifier = @"messageCell";
                         chat.converseLogo = self.converseLogo;
                         //如果是群聊消息 -- 发送群聊的"名称"、"头像"
                         if (self.converseType == ConversionTypeGroupChat) {
-                            chat.converseName = self.groupModel.groupName;
-                            chat.converseLogo = self.groupModel.groupAvtar;
+                            chat.converseName = self.conversionName;
+                            chat.converseLogo = self.converseLogo;
                         }
                         if (chat.text) { // 推送失败的情况
                             SocketManager* socket = [SocketManager shareInstance];
@@ -1002,11 +1005,11 @@ static NSString *const reuseIdentifier = @"messageCell";
                         chat.fromUserName = USERINFO.username;
                         chat.converseName = self.conversionName;
                         chat.converseLogo = self.converseLogo;
-                        //如果是群聊消息 -- 发送群聊的"名称"、"头像"
-                        if (self.converseType == ConversionTypeGroupChat) {
-                            chat.converseName = self.groupModel.groupName;
-                            chat.converseLogo = self.groupModel.groupAvtar;
-                        }
+//                        //如果是群聊消息 -- 发送群聊的"名称"、"头像"
+//                        if (self.converseType == ConversionTypeGroupChat) {
+//                            chat.converseName = self.conversionName;
+//                            chat.converseLogo = self.groupModel.groupAvtar;
+//                        }
                         SocketManager* socket = [SocketManager shareInstance];
                         [socket reSendMessage:chat];
                         
@@ -1072,11 +1075,11 @@ static NSString *const reuseIdentifier = @"messageCell";
                         chat.fromUserName = USERINFO.username;
                         chat.converseName = self.conversionName;
                         chat.converseLogo = self.converseLogo;
-                        //如果是群聊消息 -- 发送群聊的"名称"、"头像"
-                        if (self.converseType == ConversionTypeGroupChat) {
-                            chat.converseName = self.groupModel.groupName;
-                            chat.converseLogo = self.groupModel.groupAvtar;
-                        }
+//                        //如果是群聊消息 -- 发送群聊的"名称"、"头像"
+//                        if (self.converseType == ConversionTypeGroupChat) {
+//                            chat.converseName = self.groupModel.groupName;
+//                            chat.converseLogo = self.groupModel.groupAvtar;
+//                        }
                             SocketManager* socket = [SocketManager shareInstance];
                             [socket reSendMessage:chat];
                             
@@ -1489,11 +1492,11 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUserName = USERINFO.username;
     message.converseName = self.conversionName;
     message.converseLogo = self.converseLogo;
-    //如果是群聊消息 -- 发送群聊的"名称"、"头像"
-    if (self.converseType == ConversionTypeGroupChat) {
-        message.converseName = self.groupModel.groupName;
-        message.converseLogo = self.groupModel.groupAvtar;
-    }
+//    //如果是群聊消息 -- 发送群聊的"名称"、"头像"
+//    if (self.converseType == ConversionTypeGroupChat) {
+//        message.converseName = self.groupModel.groupName;
+//        message.converseLogo = self.groupModel.groupAvtar;
+//    }
     
 //    [self.messages addObject:message];
 //    
@@ -1583,11 +1586,11 @@ static NSString *const reuseIdentifier = @"messageCell";
     message.fromUserName = USERINFO.username;
     message.converseName = self.conversionName;
     message.converseLogo = self.converseLogo;
-    //如果是群聊消息 -- 发送群聊的"名称"、"头像"
-    if (self.converseType == ConversionTypeGroupChat) {
-        message.converseName = self.groupModel.groupName;
-        message.converseLogo = self.groupModel.groupAvtar;
-    }
+//    //如果是群聊消息 -- 发送群聊的"名称"、"头像"
+//    if (self.converseType == ConversionTypeGroupChat) {
+//        message.converseName = self.groupModel.groupName;
+//        message.converseLogo = self.groupModel.groupAvtar;
+//    }
 
     SocketManager* socket = [SocketManager shareInstance];
     [socket sendMessage:message];
@@ -1827,11 +1830,11 @@ static NSString *const reuseIdentifier = @"messageCell";
         message.fromUserName = USERINFO.username;
         message.converseName = self.conversionName;
         message.converseLogo = self.converseLogo;
-        //如果是群聊消息 -- 发送群聊的"名称"、"头像"
-        if (self.converseType == ConversionTypeGroupChat) {
-            message.converseName = self.groupModel.groupName;
-            message.converseLogo = self.groupModel.groupAvtar;
-        }
+//        //如果是群聊消息 -- 发送群聊的"名称"、"头像"
+//        if (self.converseType == ConversionTypeGroupChat) {
+//            message.converseName = self.groupModel.groupName;
+//            message.converseLogo = self.groupModel.groupAvtar;
+//        }
         [[SocketManager shareInstance] sendMessage:message];
         
     }progress:^(NSProgress *progress) {
@@ -1992,11 +1995,11 @@ static NSString *const reuseIdentifier = @"messageCell";
             message.fromUserName = USERINFO.username;
             message.converseName = self.conversionName;
             message.converseLogo = self.converseLogo;
-            //如果是群聊消息 -- 发送群聊的"名称"、"头像"
-            if (self.converseType == ConversionTypeGroupChat) {
-                message.converseName = self.groupModel.groupName;
-                message.converseLogo = self.groupModel.groupAvtar;
-            }
+//            //如果是群聊消息 -- 发送群聊的"名称"、"头像"
+//            if (self.converseType == ConversionTypeGroupChat) {
+//                message.converseName = self.groupModel.groupName;
+//                message.converseLogo = self.groupModel.groupAvtar;
+//            }
             SocketManager* socket = [SocketManager shareInstance];
             [socket sendMessage:message];
             

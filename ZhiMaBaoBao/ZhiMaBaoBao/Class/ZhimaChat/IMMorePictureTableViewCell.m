@@ -172,7 +172,7 @@
     else if (action == @selector(undoItemClicked:)){   //撤回 - 是我发的消息（时间间隔不超过两分钟）时展示撤回按钮
         //判断是不是两分钟之内
         NSInteger currentStamp = [NSDate currentTimeStamp];
-        BOOL canUndo = (currentStamp - self.message.timeStamp) < 120;
+        BOOL canUndo = (currentStamp - self.message.timeStamp)/1000 < 120;
         return self.isMe && canUndo;
     }
     

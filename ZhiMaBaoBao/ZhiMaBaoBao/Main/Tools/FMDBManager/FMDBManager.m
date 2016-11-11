@@ -1732,7 +1732,7 @@
             model.unReadCount = [result intForColumn:@"unReadCount"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"noDisturb"];
-            model.time = [result intForColumn:@"time"];
+            model.time = [result longForColumn:@"time"];
             model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
             model.messageType = [result intForColumn:@"messageType"];
             [dataArray addObject:model];
@@ -1767,7 +1767,7 @@
             model.unReadCount = [result intForColumn:@"unReadCount"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"noDisturb"];
-            model.time = [result intForColumn:@"time"];
+            model.time = [result longForColumn:@"time"];
             model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
             model.messageType = [result intForColumn:@"messageType"];
             [dataArray addObject:model];
@@ -1824,7 +1824,7 @@
             model.unReadCount = [result intForColumn:@"unReadCount"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"noDisturb"];
-            model.time = [result intForColumn:@"time"];
+            model.time = [result longForColumn:@"time"];
             model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
             model.messageType = [result intForColumn:@"messageType"];
         }
@@ -1961,7 +1961,7 @@
             message.holderImageUrlString = [result stringForColumn:@"holderImageUrl"];
             message.isDownLoad = [result intForColumn:@"isDownLoad"];
             message.videoDownloadUrl = [result stringForColumn:@"videoUrl"];
-            message.timeStamp = [result intForColumn:@"time"];
+            message.timeStamp = [result longForColumn:@"time"];
             [dataArray addObject:message];
         }
     }];
@@ -2570,7 +2570,7 @@
             ZMServiceMessage *model = [[ZMServiceMessage alloc] init];
             model.service.sid = [result stringForColumn:@"sid"];
             model.listJson = [result stringForColumn:@"listJson"];
-            model.timeStamp = [result intForColumn:@"time"];
+            model.timeStamp = [result longForColumn:@"time"];
             model.type = [result intForColumn:@"msgType"];
             [dataArray addObject:model];
         }

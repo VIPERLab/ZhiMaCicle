@@ -15,7 +15,7 @@ typedef NS_OPTIONS(NSInteger, ActType) {
     ActTypeUpdategroupnum,      //更新群用户数 （拉人进群）
     ActTypeDeluserfromgroup,    //从群组删除用户
     ActTypeQuitgroup,           //退出群聊
-    ActTypeRenamegroup,         //修改群名片，所有群成员都会同步修改
+    ActTypeRenamegroup,         //修改群名称
     ActTypeNofriend,            //不是好友
     ActTypeNoallow,             //不允许看朋友圈
     ActTypeInBlacklist,         //被拉入黑名单
