@@ -21,6 +21,8 @@
 //点击头像事件
 - (void)DidClickLikeItemButton:(SDTimeLineCellLikeItemModel *)likeModel;
 
+- (void)commentViewDidClickMLLink:(NSString *)linkValue andLinkType:(int)type;
+
 @end
 
 @interface DiscoverDetailHeaderView : UIView

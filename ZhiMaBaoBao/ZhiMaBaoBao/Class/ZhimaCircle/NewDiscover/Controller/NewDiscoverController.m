@@ -515,7 +515,11 @@
         
         //插入自己发布的朋友圈
         UserInfo *info = [UserInfo read];
+        
+        
         NSString *fcid = [NSString stringWithFormat:@"%zd",[responseData.data integerValue]];
+        info.lastFcID = fcid;
+        [info save];
         
         SDTimeLineCellModel *model = [SDTimeLineCellModel mj_objectWithKeyValues:responseData.data_temp];
         

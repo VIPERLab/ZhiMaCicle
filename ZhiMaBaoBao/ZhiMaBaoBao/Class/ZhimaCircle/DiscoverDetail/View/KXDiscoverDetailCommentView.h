@@ -19,6 +19,8 @@
 
 // -- 点击头像
 - (void)KXDiscoverDetailCommentViewDidClickLikeView:(UIView *)likeView andLikeModel:(SDTimeLineCellLikeItemModel *)likeItemModel;
+
+- (void)commentViewDidClickMLLink:(NSString *)linkValue andLinkType:(int)type;
 @end
 
 

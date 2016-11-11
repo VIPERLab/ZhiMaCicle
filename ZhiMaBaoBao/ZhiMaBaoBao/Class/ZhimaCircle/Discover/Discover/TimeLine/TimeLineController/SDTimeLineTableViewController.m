@@ -53,7 +53,8 @@
 #define kTimeLineTableViewCellId @"SDTimeLineCell"
 
 
-@interface SDTimeLineTableViewController () <SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,KXDiscoverNewMessageViewDelegate,UITableViewDelegate,UITableViewDataSource,KXCopyViewDelegate,KXActionSheetDelegate,DNImagePickerControllerDelegate>
+@interface SDTimeLineTableViewController () <UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,UITableViewDelegate,UITableViewDataSource,UINavigationControllerDelegate,KXDiscoverNewMessageViewDelegate,KXCopyViewDelegate,KXActionSheetDelegate,DNImagePickerControllerDelegate,SDTimeLineCellDelegate,SDTimeLineTableHeaderViewDelegate,ChatKeyBoardDelegate, ChatKeyBoardDataSource>
+
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) SDTimeLineTableHeaderView *headerView;  //头部视图
 
@@ -111,17 +112,13 @@
     [self getDataFromSQL];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-}
-
 - (void)viewDidAppear:(BOOL)animated {
     [self setupKeyBoard];
     self.tipsNewMessage.show = YES;
     
     //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
     if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
-        [_tableView.mj_header beginRefreshing];
+        [self setupNewData];
     }
 }
 
@@ -176,27 +173,23 @@
 #pragma mark - 注册通知
 - (void)notification {
     
-    
     // 长按文字、图片回调
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(longPressContentLabel:) name:KDiscoverLongPressContentNotification object:nil];
     
     //接收未读消息通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(upLoadUnReadMessage:) name:K_UpDataUnReadCountNotification object:nil];
     
-    //更新朋友圈数据通知
+    //更新朋友圈数据通知 -- 用于不看别人朋友圈/别人不让我看他朋友圈
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDataFromSQL) name:K_UpDataCircleDataNotification object:nil];
     
-    //点击了评论人 或者 被评论人 的通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KDiscoverCommenterNotification object:nil];
-    
-    //点击点赞人的名字
+    //点击用户的名字
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UserNameLabelDidClick:) name:KUserNameLabelNotification object:nil];
     
-    //点击了评论链接通知
+    //点击了链接通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commentURLDidClick:) name:KDiscoverCommentURLNotification object:nil];
     
-    //链接类型的朋友圈 点击事件
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(linkTypeCircleDidClick:) name:KCircleLinkTypeDidClickNotification object:nil];
+    //更新某个数据源模型的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshCircleData:) name:K_ReFreshCircleDataNotification object:nil];
 }
 
 
@@ -209,12 +202,8 @@
     new.block = ^(SDTimeLineCellModel *model) {
         [self.dataArray insertObject:model atIndex:0];
         [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        UserInfo *info = [UserInfo read];
-        info.lastFcID = model.circle_ID;
-        [info save];
     };
     [self.navigationController pushViewController:new animated:YES];
-    
 }
 
 #pragma mark - 设置下拉和上啦刷新控件
@@ -237,10 +226,7 @@
     //下拉页数置1
     weakSelf.pageNumber = 1;
     NSString *pageNumber = [NSString stringWithFormat:@"%zd",weakSelf.pageNumber];
-    NSString *sectionID = USERINFO.sessionId;
-    NSString *userID = USERINFO.userID;
-    
-    [LGNetWorking loadMyDiscoverWithSectionID:sectionID andMyCheatAcount:userID andPageCount:pageNumber block:^(ResponseData *responseData) {
+    [LGNetWorking loadMyDiscoverWithSectionID:USERINFO.sessionId andMyCheatAcount:USERINFO.userID andPageCount:pageNumber block:^(ResponseData *responseData) {
         [_tableView.mj_header endRefreshing];
         
         if (responseData.code != 0 || responseData == nil || responseData.data == nil) {
@@ -276,6 +262,9 @@
 
 //上啦刷新
 - (void)loadMoreData {
+    //查看是否有未读消息
+    [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
+    
     self.pageNumber++;
     NSString *pageNumber = [NSString stringWithFormat:@"%zd",self.pageNumber];
     
@@ -318,11 +307,17 @@
             [_tableView.mj_footer endRefreshingWithNoMoreData];
             return ;
         }
-        
+        NSArray *delCircleIDArray = [NSString mj_objectArrayWithKeyValuesArray:responseData.data_temp[@"dataList"]];
         // 异步 存数据 到朋友圈数据库
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            //删除已删除的朋友圈
+            for (NSString *circleID in delCircleIDArray) {
+                [FMDBShareManager deleteCircleDataWithCircleID:circleID];
+            }
+            
             //存数据到朋友圈表
             [FMDBShareManager saveCircleDataWithDataArray:dataArray];
+            
         });
         
         [self.tableView reloadData];
@@ -355,6 +350,19 @@
     
 }
 
+#pragma mark - 更新某个数据源
+- (void)refreshCircleData:(NSNotification *)notification {
+    SDTimeLineCellModel *newModel = notification.userInfo[@"circleModel"];
+    for (NSInteger index = 0; index < self.dataArray.count; index++) {
+        SDTimeLineCellModel *model = self.dataArray[index];
+        if ([model.circle_ID isEqualToString:newModel.circle_ID]) {
+            [self.dataArray replaceObjectAtIndex:index withObject:newModel];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        }
+    }
+}
+
 #pragma mark - 加载未读消息数
 - (void)upLoadUnReadMessage:(NSNotification *)notification {
     //进入前台的时候请求未读消息
@@ -363,6 +371,8 @@
     if (![headphoto isEqualToString:@""] && unReadCount) {
         self.headPhoto = headphoto;
         self.unReadCount = unReadCount;
+        self.tipsNewMessage.hidden = NO;
+        [self.tipsNewMessage showNewMessageViewWith:self.headPhoto andNewMessageCount:self.unReadCount];
     }
 }
 
@@ -411,13 +421,9 @@
 #pragma mark -- ChatKeyBoardDataSource
 - (NSArray<ChatToolBarItem *> *)chatKeyBoardToolbarItems {
     ChatToolBarItem *item1 = [ChatToolBarItem barItemWithKind:kBarItemFace normal:@"face" high:@"face_HL" select:@"keyboard"];
-    
     ChatToolBarItem *item2 = [ChatToolBarItem barItemWithKind:kBarItemVoice normal:@"voice" high:@"voice_HL" select:@"keyboard"];
-    
     ChatToolBarItem *item3 = [ChatToolBarItem barItemWithKind:kBarItemMore normal:@"more_ios" high:@"more_ios_HL" select:nil];
-    
     ChatToolBarItem *item4 = [ChatToolBarItem barItemWithKind:kBarItemSwitchBar normal:@"switchDown" high:nil select:nil];
-    
     return @[item1, item2, item3, item4];
 }
 
@@ -477,12 +483,14 @@
             //有图片且有未读消息
         if (!self.tipsNewMessage) {
             self.tipsNewMessage = [[KXDiscoverNewMessageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40 )];
+            self.tipsNewMessage.delegate = self;
         }
-        self.tipsNewMessage.hidden = YES;
-        [self.tipsNewMessage showNewMessageViewWith:self.headPhoto andNewMessageCount:self.unReadCount];
-        self.tipsNewMessage.delegate = self;
-        if (self.unReadCount != 0 && ![self.headPhoto isEqualToString:@""]) {
+        
+        if (![self.headPhoto isEqualToString:@""] && self.unReadCount) {
             self.tipsNewMessage.hidden = NO;
+            [self.tipsNewMessage showNewMessageViewWith:self.headPhoto andNewMessageCount:self.unReadCount];
+        } else {
+            self.tipsNewMessage.hidden = YES;
         }
         
         return self.tipsNewMessage;
@@ -638,7 +646,7 @@
                 SDTimeLineCellLikeItemModel *likeModel = [[SDTimeLineCellLikeItemModel alloc] init];
                 likeModel.userName = model.friend_nick;
                 likeModel.userId = model.userId;
-                [likeItemsArray addObject:likeModel];
+                [likeItemsArray insertObject:likeModel atIndex:0];
                 
             }
         }
@@ -649,6 +657,7 @@
         //得到最新的Model
         model.likeItemsArray = [likeItemsArray mutableCopy];
         model.commentList = [commentListArray mutableCopy];
+        
         
         // 删除点赞和评论
         [FMDBShareManager deletedCircleCommentItemsAndLikeItemsByCircleID:model.circle_ID];
@@ -784,14 +793,8 @@
     [self.navigationController pushViewController:personal animated:YES];
 }
 
-// 点击了评论的网址
+// 点击了网址
 - (void)commentURLDidClick:(NSNotification *)notification {
-    WebViewController *webView = [[WebViewController alloc] init];
-    webView.urlStr = notification.userInfo[@"linkValue"];
-    [self.navigationController pushViewController:webView animated:YES];
-}
-
-- (void)linkTypeCircleDidClick:(NSNotification *)notification {
     WebViewController *webView = [[WebViewController alloc] init];
     webView.urlStr = notification.userInfo[@"linkValue"];
     [self.navigationController pushViewController:webView animated:YES];
@@ -966,11 +969,6 @@
             [self.navigationController presentViewController:picker animated:YES completion:nil];
             return;
         }
-//        DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
-//        imagePicker.imagePickerDelegate = self;
-//        imagePicker.kDNImageFlowMaxSeletedNumber = 1;
-//        imagePicker.filterType = DNImagePickerFilterTypePhotos;
-//        [self presentViewController:imagePicker animated:YES completion:nil];
     }
 }
 

@@ -52,7 +52,7 @@
         self.backgroundColor = [UIColor colorFormHexRGB:@"f3f4f6"];
     }];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:KCircleLinkTypeDidClickNotification object:nil userInfo:@{ @"linkValue" : self.linkValue}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentURLNotification object:nil userInfo:@{ @"linkValue" : self.linkValue}];
 }
 
 - (void)setTapEnable:(BOOL)tapEnable {

@@ -15,7 +15,7 @@
 #import "SDAutoLayout.h"
 #import "UIColor+My.h"
 
-@interface KXDiscoverDetailCommentView ()
+@interface KXDiscoverDetailCommentView () <KXCommentListViewDelegate>
 
 // --- 控件存放数组
 @property (nonatomic, strong) NSMutableArray *likeButtonArray;
@@ -73,6 +73,7 @@
     
     for (NSInteger index = 0; index < commentItemArray.count; index++) {
         KXCommentListView *commentView = [KXCommentListView new];
+        commentView.delegate = self;
         commentView.tag = index;
         [self.commentViewArray addObject:commentView];
         [self addSubview:commentView];
@@ -122,7 +123,7 @@
     if (self.likeItemArray.count) {
         if (!_likeImage) {
             _likeImage = [[UIImageView alloc] init];
-            _likeImage.image = [UIImage imageNamed:@"Discover_Like"];
+            _likeImage.image = [UIImage imageNamed:@"Discover_Like_Sel"];
             [self addSubview:_likeImage];
         }
         _likeImage.hidden = NO;
@@ -257,6 +258,13 @@
 - (void)likeItemButtonDidClick:(UIButton *)sender {
     if ([self.delegate respondsToSelector:@selector(KXDiscoverDetailCommentViewDidClickLikeView:andLikeModel:)]) {
         [self.delegate KXDiscoverDetailCommentViewDidClickLikeView:self.likeButtonArray[sender.tag] andLikeModel:self.likeItemArray[sender.tag]];
+    }
+}
+
+
+- (void)DidClickLinkeWithLinkValue:(NSString *)linkValue andType:(int)type {
+    if ([self.delegate respondsToSelector:@selector(commentViewDidClickMLLink:andLinkType:)]) {
+        [self.delegate commentViewDidClickMLLink:linkValue andLinkType:type];
     }
 }
 

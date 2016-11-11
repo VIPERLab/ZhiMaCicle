@@ -223,7 +223,11 @@ NSString *const kDiscoverDetailOperationButtonClickedNotification = @"DiscoverDe
     }
 }
 
-
+- (void)commentViewDidClickMLLink:(NSString *)linkValue andLinkType:(int)type {
+    if ([self.delegate respondsToSelector:@selector(commentViewDidClickMLLink:andLinkType:)]) {
+        [self.delegate commentViewDidClickMLLink:linkValue andLinkType:type];
+    }
+}
 
 
 #pragma mark - 模型赋值

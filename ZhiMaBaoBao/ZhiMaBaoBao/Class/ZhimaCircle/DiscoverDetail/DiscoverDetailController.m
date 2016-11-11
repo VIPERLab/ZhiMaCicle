@@ -11,7 +11,7 @@
 #import "DiscoverDetailHeaderView.h"
 
 #import "SDTimeLineCellModel.h"
-
+#import "WebViewController.h"
 #import "PesonalDiscoverController.h"
 
 #import "LGNetWorking.h"
@@ -102,6 +102,15 @@
         
         [self setupModelWithResponseData:responseData];
         
+        
+        //更新数据库
+        [FMDBShareManager deletedCircleCommentItemsAndLikeItemsByCircleID:self.model.circle_ID];
+        [FMDBShareManager saveCircleDataWithDataArray:@[self.model]];
+        
+        //通知朋友圈页面更新数据
+        [[NSNotificationCenter defaultCenter] postNotificationName:K_ReFreshCircleDataNotification object:nil userInfo:@{ @"circleModel" : self.model}];
+        
+        
         weakSelf.headerView.model = self.model;
         [weakSelf updataScrollViewContentSize];
         
@@ -133,7 +142,7 @@
                     likeModel.userName = model.friend_nick;
                     likeModel.userId = model.userId;
                     likeModel.userPhoto = model.head_photo;
-                    [likeItemsArray addObject:likeModel];
+                    [likeItemsArray insertObject:likeModel atIndex:0];
                 }
             }
             model.likeItemsArray = likeItemsArray;
@@ -158,6 +167,22 @@
 
 
 #pragma mark - 事件传递(评论、删除)
+- (void)commentViewDidClickMLLink:(NSString *)linkValue andLinkType:(int)type {
+    if (type == 0) { //个人
+        PesonalDiscoverController *person = [[PesonalDiscoverController alloc] init];
+        person.userID = linkValue;
+        person.sessionID = USERINFO.sessionId;
+        [self.navigationController pushViewController:person animated:YES];
+    } else if (type == 1) { //链接
+        WebViewController *web = [[WebViewController alloc] init];
+        web.urlStr = linkValue;
+        [self.navigationController pushViewController:web animated:YES];
+    }
+    
+}
+
+
+
 // -----    删除朋友圈按钮
 - (void)DiscoverDetailDeletedButtonDidClick:(DiscoverDetailHeaderView *)view {
     
@@ -177,7 +202,7 @@
 
 // ------   评论按钮
 - (void)DiscoverDetailOperationButtonDidClickComment:(DiscoverDetailHeaderView *)view {
-    self.commentUserID = view.model.userId;
+    self.commentUserID = @"0";
     self.chatKeyBoard.placeHolder = @"";
     [self.chatKeyBoard keyboardUpforComment];
 }
@@ -248,7 +273,6 @@
         }
         
         [self.chatKeyBoard keyboardDownForComment];
-        
         [self getDetail];
         
     }];

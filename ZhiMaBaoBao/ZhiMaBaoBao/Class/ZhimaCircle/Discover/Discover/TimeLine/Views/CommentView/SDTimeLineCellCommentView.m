@@ -309,7 +309,7 @@
         for (UILabel *label in buttonView.subviews) {
             if ([label isKindOfClass:[UILabel class]]) {
                 //计算字符串高度
-//                CGSize size = [label.text sizeWithFont:[UIFont boldSystemFontOfSize:14] maxSize:CGSizeMake(width, MAXFLOAT)];
+
                 //计算attributedText高度
                 CGSize size = [self sizeLabelToFit:label.attributedText width:width height:16];
                 buttonView.sd_layout.heightIs(size.height);
@@ -511,7 +511,7 @@
     if ([self isUrlStr:linkText]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentURLNotification object:nil userInfo:@{@"linkValue" : link.linkValue}];
     } else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommenterNotification object:nil userInfo:@{@"userId" : link.linkValue}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:KUserNameLabelNotification object:nil userInfo:@{@"userId" : link.linkValue}];
     }
 }
 

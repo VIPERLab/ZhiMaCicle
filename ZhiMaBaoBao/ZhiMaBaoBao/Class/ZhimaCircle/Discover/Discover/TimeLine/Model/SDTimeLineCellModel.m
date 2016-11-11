@@ -80,7 +80,7 @@ extern CGFloat maxContentLabelHeight;
                     
                     likeModel.userName = model.friend_nick;
                     likeModel.userId = model.userId;
-                    [likeItemsArray addObject:likeModel];
+                    [likeItemsArray insertObject:likeModel atIndex:0];
                     
                     //判断是否点赞了
                     if (!cellModel.liked) {

@@ -117,6 +117,8 @@
         SDTimeLineTableViewController *timeLine = [[SDTimeLineTableViewController alloc] init];
         timeLine.unReadCount = _unReadCount;
         timeLine.circleheadphoto = _circleheadphoto;
+        timeLine.headPhoto = _unReadHeadphoto;
+
         timeLine.hidesBottomBarWhenPushed = YES;
         
         // 自定义转场动画

@@ -38,32 +38,26 @@
  */
 #define K_UpDataHeaderPhotoNotification @"KUpDataHeaderPhotoNotification"
 
-/* 不让对方看自己的朋友圈
- * info @{deleteUid : 需要删除的朋友圈}
- */
-#define K_NotLookMyCircleNotification @"KNotLookMyCircleNotification"
 
 
 
+#pragma mark - 朋友圈消息通知
 //                    ------ 朋友圈消息通知 --------
 // 更新朋友圈通知
 #define K_UpDataCircleDataNotification @"KUpDataCircleDataNotification"
 
 
-
+/**
+ 更新朋友圈数据源通知
+ info @{ circleModel : 新的朋友圈数据模型 }
+ */
+#define K_ReFreshCircleDataNotification @"KReFreshCircleDataNotification"
 
 /**
- *  点击了点赞人的名字的通知  富文本通知
- *  info @{openFirAccount : 点击点赞人的openFirAccount}
+ 点击了用户的名字的通知
+ info @{ userId : 点击的用户的userId }
  */
 #define KUserNameLabelNotification @"K_UserNameLabelNotification"
-
-/*
- *  评论框，点击了名字
- *  info @{ userId : 点击的人的UserId }
- */
-#define KDiscoverCommenterNotification @"K_DiscoverCommenterNotification"
-
 
 /*
  * 评论框点击了链接
@@ -72,19 +66,28 @@
 #define KDiscoverCommentURLNotification @"K_DiscoverCommentURLNotification"
 
 
+/* 不让对方看自己的朋友圈
+ * info @{deleteUid : 需要删除的朋友圈}
+ */
+#define K_NotLookMyCircleNotification @"K_NotLookMyCircleNotification"
+
+
 // ---- 评论别人的通知
 #define KCommentOtherNotification @"KCommentOtherNotification"
 
-// ---- 朋友圈长按文字文本通知
-// info :  @"contentLabel" : 文本控件 、 @"cell" : 当前文本所在的cell
+/**
+ 朋友圈长按文字文本通知
+
+ info @{ contentLabel : 文本控件,  cell : 当前文本所在的cell}
+ */
 #define KDiscoverLongPressContentNotification @"K_DiscoverLongPressContentNotification"
 
 #define KDiscoverDisLongPressContentNotificaion @"K_DiscoverDisLongPressContentNotificaion"
 
 #define KDiscoverCommentViewClickNotification @"K_DiscoverCommentViewClickNotification"
 
-// 朋友圈链接类型点击事件
-#define KCircleLinkTypeDidClickNotification @"K_CircleLinkTypeDidClickNotification"
+
+#pragma mark - 发布新朋友圈通知
 //                    ------ 发布朋友圈通知 --------
 // ---- 取消响应通知
 // userInfo : { CurrentSelectedButton : 当前选中的按钮 }
@@ -95,6 +98,7 @@
 #define K_ForwardPhotoNotifation @"KForwardPhotoNotifation"
 
 
+#pragma mark - 登录通知
 //                    ------ 登录通知 --------
 //登录成功，跳转到主控制器
 #define LOGIN_SUCCESS @"login_success"
@@ -106,6 +110,7 @@
 #define Show_Login @"shouldLogin"
 
 
+#pragma mark - 消息通知
 //                    ------ 消息通知 --------
 //相同的用户登录
 #define kOtherLogin @"kOtherLogin"
