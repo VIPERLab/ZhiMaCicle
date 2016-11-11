@@ -215,8 +215,6 @@ static SocketManager *manager = nil;
     sendMsg.timeStamp = message.timeStamp;
     sendMsg.fromUserPhoto = message.fromUserPhoto;
     sendMsg.fromUserName = message.fromUserName;
-    sendMsg.converseName = USERINFO.username;
-    sendMsg.converseLogo = USERINFO.head_photo;
     sendMsg.converseId = message.converseId;
     sendMsg.text = message.text;
     sendMsg.audioLength = message.audioLength;
@@ -239,6 +237,14 @@ static SocketManager *manager = nil;
     else if (message.type == MessageTypeVideo){
         sendMsg.isDownLoad = NO;
         sendMsg.text = message.text;
+    }
+    
+    if (message.conversionType == ConversionTypeSingle) {
+        sendMsg.converseName = USERINFO.username;
+        sendMsg.converseLogo = USERINFO.head_photo;
+    }else if (message.conversionType == ConversionTypeGroupChat){
+        sendMsg.converseName = message.converseName;
+        sendMsg.converseLogo = message.converseLogo;
     }
     
     //根据网络状态-- 标记消息发送状态
@@ -345,7 +351,7 @@ static SocketManager *manager = nil;
         //群聊
         else if (message.conversionType == ConversionTypeGroupChat){
             //赋值会话id 会话名称
-            converse.converseId = message.toUidOrGroupId;
+            converse.converseId = message.converseId;
             converse.converseName = message.converseName;
             //赋值群成员模型
             groupUser.userId = message.fromUid;
@@ -399,7 +405,7 @@ static SocketManager *manager = nil;
                 break;
             case ActTypeUpdategroupnum:{    //更新群用户数 （拉人进群）
                 [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-                [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+                [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
             }
                 break;
             case ActTypeDeluserfromgroup:{  //从群组删除用户
