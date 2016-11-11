@@ -363,7 +363,7 @@ static SocketManager *manager = nil;
                 }else{
                     [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
                 }
-                //3.发送通知更新UI
+                
             }
             //群聊
             else if (message.conversionType == ConversionTypeGroupChat){

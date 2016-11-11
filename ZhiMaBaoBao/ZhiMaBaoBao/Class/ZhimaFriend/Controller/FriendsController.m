@@ -55,6 +55,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     
     //监听新的好友请求消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveFriendRequest:) name:kNewFriendRequest object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveFriendRequest:) name:kRecieveNewMessage object:nil];
     //我发送的好友请求对方已经同意
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestHasAgreed) name:kOtherAgreeMyFrendRequest object:nil];
 }
