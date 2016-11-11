@@ -94,7 +94,6 @@
     [_tableView reloadData];
 }
 
-
 - (void)setupView {
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
@@ -159,7 +158,19 @@
 //        self.timeCount += 0.1;
 //    });
 //    dispatch_resume(self.timer);
+    LGMessage *message = notify.userInfo[@"message"];
+    ConverseModel *converse = [[ConverseModel alloc] init];
+    if (message.actType == ActTypeDeluserfromgroup || message.actType == ActTypeRenamegroup) {
+        converse.lastConverse = message.text;
+        converse.time = message.timeStamp;
+        converse.converseId = message.toUidOrGroupId;
+        [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+    }
+
     [self getDataFormSqlist];
+    
+    
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

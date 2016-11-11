@@ -335,8 +335,8 @@ static SocketManager *manager = nil;
         //根据（单聊、群聊、服务号）三种消息类型处理消息
         if (message.conversionType == ConversionTypeSingle) {
             ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:message.fromUid];
-            converse.converseId = message.fromUid;
-            converse.converseName = message.fromUserName;
+            converse.converseId = message.toUidOrGroupId;
+            converse.converseName = message.converseName;
             if (friend.user_Id) {
                 converse.converseName = friend.displayName;
             }
@@ -387,7 +387,7 @@ static SocketManager *manager = nil;
             }
                 break;
             case ActTypeDofriend:{      //同意好友请求
-                converse.converseHead_photo = message.fromUserPhoto;
+                converse.converseId = message.fromUid;
                 [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
                 [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
             }
@@ -403,7 +403,8 @@ static SocketManager *manager = nil;
             }
                 break;
             case ActTypeDeluserfromgroup:{  //从群组删除用户
-                
+                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+                [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
             }
                 break;
             case ActTypeQuitgroup:{          //退出群聊
@@ -429,7 +430,14 @@ static SocketManager *manager = nil;
             }
                 break;
             case ActTypeInBlacklist:{       //被拉入黑名单
+                converse.converseId = message.converseId;
+                message.msgid = [NSString generateMessageID];
+                message.timeStamp = [NSDate currentTimeStamp];
+                message.sendStatus = NO;
+                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+                [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
                 
+//                [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageStateCall object:nil userInfo:@{@"message":message}];
             }
                 break;
             case ActTypeUndomsg:{            //撤销消息
