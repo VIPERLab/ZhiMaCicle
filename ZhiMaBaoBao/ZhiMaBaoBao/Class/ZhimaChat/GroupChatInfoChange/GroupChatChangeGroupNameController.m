@@ -116,6 +116,17 @@
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:self.groupModel.groupId];
             
+            //通过socket创建群聊
+            GroupActModel *actModel = [[GroupActModel alloc] init];
+            actModel.fromUid = USERINFO.userID;
+            actModel.fromUsername = USERINFO.username;
+            actModel.groupId = self.groupModel.groupId;
+            actModel.groupLogo = self.groupModel.groupAvtar;
+            actModel.groupName = self.groupModel.groupName;
+            [[SocketManager shareInstance] renameGroup:actModel];
+
+            
+            
             //发送通知，即时更新相应的页面
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
             userInfo[@"message"] = systemMsg;

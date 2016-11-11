@@ -418,6 +418,7 @@ static SocketManager *manager = nil;
             }
                 break;
             case ActTypeRenamegroup:{       //修改群名称
+                message.msgid = [NSString generateMessageID];
                 [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
                 [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
             }
