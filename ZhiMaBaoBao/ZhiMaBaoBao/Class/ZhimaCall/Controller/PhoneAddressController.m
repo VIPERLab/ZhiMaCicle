@@ -495,8 +495,13 @@
 
 - (void)addNewFriend:(NSInteger)row{
     LGQueryResModel *model = self.nameAry[row];
+    //转换成好友模型
+    ZhiMaFriendModel *friendModel = [[ZhiMaFriendModel alloc] init];
+    friendModel.user_Id = model.userId;
+    friendModel.user_Name = model.username;
+    friendModel.head_photo = model.headphoto;
     SocketManager *manager = [SocketManager shareInstance];
-    [manager addFriend:model.userId];
+    [manager addFriend:friendModel];
     [LCProgressHUD showSuccessText:@"请求发送成功"];
 }
 

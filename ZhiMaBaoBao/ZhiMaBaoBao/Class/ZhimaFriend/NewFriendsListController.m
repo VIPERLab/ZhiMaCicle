@@ -110,8 +110,9 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
+
             [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil andIsUpdata:YES];
-            [[SocketManager shareInstance] agreeFriendRequest:friend.user_Id];
+            [[SocketManager shareInstance] agreeFriendRequest:friend];
             
             
             //添加系统消息"你已添加了xx,现在可以开始聊天了"
