@@ -319,11 +319,11 @@ static SocketManager *manager = nil;
             //视频消息
             else if (message.type == MessageTypeVideo){
                 
-                NSArray *parmas = [message.text componentsSeparatedByString:@","];
-                message.text = parmas[0];
-                message.holderImageUrlString = parmas[1];
-                message.videoDownloadUrl = parmas[2];
-                message.isDownLoad = [parmas[3] boolValue];
+//                NSArray *parmas = [message.text componentsSeparatedByString:@","];
+//                message.text = parmas[0];
+//                message.holderImageUrlString = parmas[1];
+//                message.videoDownloadUrl = parmas[2];
+//                message.isDownLoad = [parmas[3] boolValue];
             }
             
             //生成会话模型 用作创建/更新会话
@@ -333,7 +333,6 @@ static SocketManager *manager = nil;
             converse.lastConverse = message.text;
             converse.messageType = message.type;
             converse.time = message.timeStamp;
-            converse.converseId = message.converseId;
             
             //生成群成员信息模型 用作插群成员表
             GroupUserModel *groupUser = [[GroupUserModel alloc] init];
@@ -344,6 +343,8 @@ static SocketManager *manager = nil;
             //根据（单聊、群聊、服务号）三种消息类型处理消息
             //单聊（1.插消息表、2.插会话表、3.更新UI）
             if (message.conversionType == ConversionTypeSingle) {
+                converse.converseId = message.fromUid;
+
                 //从好友数据库取好友模型，赋值备注给会话名
                 ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:message.fromUid];
                 converse.converseName = friend.displayName;
@@ -366,6 +367,7 @@ static SocketManager *manager = nil;
             }
             //群聊
             else if (message.conversionType == ConversionTypeGroupChat){
+                converse.converseId = message.toUidOrGroupId;
                 converse.converseName = message.converseName;
                 //系统消息
                 if (message.type == MessageTypeSystem) {
@@ -562,7 +564,6 @@ static SocketManager *manager = nil;
                         NSString *bondName = [bondNamesArr componentsJoinedByString:@","];
                         tbondName = [NSString stringWithFormat:@"你和\"%@\"",bondName];
                     }
-                    
                     
                     if (containMe) {
                         

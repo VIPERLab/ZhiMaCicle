@@ -1379,7 +1379,6 @@ static NSString *const reuseIdentifier = @"messageCell";
         systemMsg.toUidOrGroupId =  message.toUidOrGroupId;
         systemMsg.fromUid = USERINFO.userID;
         systemMsg.type = MessageTypeSystem;
-//        systemMsg.msgid = [NSString stringWithFormat:@"%@%@",USERINFO.userID,[self generateMessageID]];
         systemMsg.msgid = message.msgid;
         systemMsg.conversionType = message.conversionType;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
@@ -1394,11 +1393,10 @@ static NSString *const reuseIdentifier = @"messageCell";
         [self.tableView reloadData];
         
         
-//        更新消息表中该条消息
-        [FMDBShareManager saveMessage:systemMsg toConverseID:@""];
+        //更新消息表中该条消息
         [FMDBShareManager upDataMessageStatusWithMessage:systemMsg];
         
-//        如果是撤销的最后一条 更新会话列表最后一条消息显示
+        //如果是撤销的最后一条 更新会话列表最后一条消息显示
         if (indecPath.row == self.messages.count - 1) {
             FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
             NSString *optionStr1 = [NSString stringWithFormat:@"converseContent = '%@'",systemMsg.text];

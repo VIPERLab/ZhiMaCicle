@@ -1629,7 +1629,7 @@
         BOOL isSuccess = NO;
         model.unReadCount = oldModel.unReadCount;
         
-        if (oldModel.converseName.length) {
+        if (!oldModel.converseName.length) {
             if (block) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     block(NO);
