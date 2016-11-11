@@ -190,6 +190,9 @@
     
     //更新某个数据源模型的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshCircleData:) name:K_ReFreshCircleDataNotification object:nil];
+    
+    //删除自己发布的朋友圈通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(delMyCircle:) name:K_DelMyCircleNotification object:nil];
 }
 
 
@@ -502,7 +505,7 @@
     if (section == 0) {
 //        if (self.unReadCount != 0 && ![self.headPhoto isEqualToString:@""]) {
             //有图片且有未读消息
-            return 40;
+        return 40;
 //        }
     }
     return 0.1;
@@ -647,7 +650,6 @@
                 likeModel.userName = model.friend_nick;
                 likeModel.userId = model.userId;
                 [likeItemsArray insertObject:likeModel atIndex:0];
-                
             }
         }
         
@@ -798,6 +800,18 @@
     WebViewController *webView = [[WebViewController alloc] init];
     webView.urlStr = notification.userInfo[@"linkValue"];
     [self.navigationController pushViewController:webView animated:YES];
+}
+
+#pragma mark - 收到删除自己朋友圈的通知
+- (void)delMyCircle:(NSNotification *)notification {
+    NSString *circleId = notification.userInfo[@"circleId"];
+    for (NSInteger index = 0; index < self.dataArray.count; index++) {
+        SDTimeLineCellModel *model = self.dataArray[index];
+        if ([model.circle_ID isEqualToString:circleId]) {
+            [self.dataArray removeObject:model];
+            [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+        }
+    }
 }
 
 

@@ -51,6 +51,7 @@
     [_userName setTitleColor:[UIColor colorFormHexRGB:@"576b95"] forState:UIControlStateNormal];
     [_userName addTarget:self action:@selector(iconViewDidClick:) forControlEvents:UIControlEventTouchUpInside];
     _userName.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    _userName.titleLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:_userName];
     
     
@@ -136,7 +137,7 @@
     _userName.sd_layout
     .topEqualToView(_iconView)
     .leftSpaceToView(_iconView,10)
-    .widthIs([model.friend_nick sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth - timeWidth - 100, 17)].width)
+    .widthIs([model.friend_nick sizeWithFont:[UIFont boldSystemFontOfSize:15] maxSize:CGSizeMake(ScreenWidth - timeWidth - 100, 17)].width)
     .heightIs(17);
     
     _contentLabel.sd_layout
@@ -356,7 +357,7 @@
 - (void)iconViewDidClick:(UIButton *)sender {
     sender.backgroundColor = [UIColor lightGrayColor];
     [UIView animateWithDuration:0.3 animations:^{
-        sender.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
+        sender.backgroundColor = [UIColor clearColor];
     }];
     if ([self.delegate respondsToSelector:@selector(DidClickLinkeWithLinkValue:andType:)]) {
         [self.delegate DidClickLinkeWithLinkValue:self.model.userId andType:0];

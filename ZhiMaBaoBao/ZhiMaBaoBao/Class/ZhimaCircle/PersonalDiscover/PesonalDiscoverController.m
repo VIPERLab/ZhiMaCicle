@@ -163,6 +163,12 @@
     dc.sessionId = USERINFO.sessionId;
     dc.ID = [NSString stringWithFormat:@"%zd",cell.model.ID];
     dc.indexPath = indexPath;
+    dc.deletedBlock = ^(NSIndexPath *delIndexPath, NSString *circleId) {
+        PersonalDiscoverCellModel *model = self.dataArray[delIndexPath.section];
+        [model.imglist removeObjectAtIndex:delIndexPath.row];
+        [_tableView deleteRowsAtIndexPaths:@[delIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    };
+    
     [self.navigationController pushViewController:dc animated:YES];
     
 }

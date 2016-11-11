@@ -45,6 +45,7 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
+    [LCProgressHUD hide];
     _geocodesearch.delegate = nil; // 不用时，置nil
     _locationService.delegate = nil;
 }

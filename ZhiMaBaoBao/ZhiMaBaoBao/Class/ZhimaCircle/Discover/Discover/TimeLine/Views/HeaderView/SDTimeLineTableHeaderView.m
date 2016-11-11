@@ -45,7 +45,7 @@
     _nameLabel = [UILabel new];
     _nameLabel.textColor = [UIColor whiteColor];
     _nameLabel.textAlignment = NSTextAlignmentRight;
-    _nameLabel.font = [UIFont boldSystemFontOfSize:15];
+    _nameLabel.font = [UIFont boldSystemFontOfSize:16];
     [self addSubview:_nameLabel];
     
     

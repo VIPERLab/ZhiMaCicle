@@ -72,6 +72,15 @@
 #define K_NotLookMyCircleNotification @"K_NotLookMyCircleNotification"
 
 
+/**
+ 删除自己的某条朋友圈
+ 
+ info @{ circleId : 要删除的朋友圈id }
+ */
+#define K_DelMyCircleNotification @"KDelMyCircleNotification"
+
+
+
 // ---- 评论别人的通知
 #define KCommentOtherNotification @"KCommentOtherNotification"
 

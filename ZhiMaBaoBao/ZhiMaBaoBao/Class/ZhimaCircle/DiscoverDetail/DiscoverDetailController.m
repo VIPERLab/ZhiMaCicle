@@ -112,7 +112,10 @@
         
         
         weakSelf.headerView.model = self.model;
-        [weakSelf updataScrollViewContentSize];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf updataScrollViewContentSize];
+        });
+        
         
     }];
     
@@ -160,7 +163,7 @@
 - (void)updataScrollViewContentSize {
     CGFloat headerHeight = CGRectGetMaxY(_headerView.frame) + 15;
     
-    headerHeight = headerHeight > [UIScreen mainScreen].bounds.size.height ? headerHeight : [UIScreen mainScreen].bounds.size.height;
+    headerHeight = headerHeight > ([UIScreen mainScreen].bounds.size.height - 64) ? headerHeight : ([UIScreen mainScreen].bounds.size.height - 64);
     self.scrollView.contentSize = CGSizeMake(0, headerHeight);
 }
 
@@ -378,6 +381,7 @@
         
         if (responseData.code != 0) {
             NSLog(@"请求失败");
+            [LCProgressHUD showFailureText:responseData.msg];
             return ;
         }
         
@@ -386,6 +390,11 @@
         }
         
         [FMDBShareManager deleteCircleDataWithCircleID:self.model.circle_ID];
+        if (self.deletedBlock) {
+            self.deletedBlock(self.indexPath,self.ID);
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:K_DelMyCircleNotification object:nil userInfo:@{ @"circleId" : self.ID }];
         
         [self.navigationController popViewControllerAnimated:YES];
         
@@ -402,9 +411,7 @@
 }
 
 #pragma mark - 清除键盘
-- (void)viewWillDisappear:(BOOL)animated
-{
-    
+- (void)viewWillDisappear:(BOOL)animated {
     [self.chatKeyBoard removeFromSuperview];
     _chatKeyBoard = nil;
 }

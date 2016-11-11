@@ -79,7 +79,7 @@ NSString *const kDiscoverDetailOperationButtonClickedNotification = @"DiscoverDe
     [deleteButton setTitleColor:[UIColor colorFormHexRGB:@"576b95"] forState:UIControlStateNormal];
     deleteButton.titleLabel.font = [UIFont systemFontOfSize:11];
     [self addSubview:deleteButton];
-    [deleteButton addTarget:self action:@selector(deleteButtonDidClick) forControlEvents:UIControlEventTouchUpInside];
+    [deleteButton addTarget:self action:@selector(deleteButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
     
     SDWeiXinPhotoContainerView *picContainerView = [[SDWeiXinPhotoContainerView alloc] init];
     self.picContainerView = picContainerView;
@@ -182,7 +182,11 @@ NSString *const kDiscoverDetailOperationButtonClickedNotification = @"DiscoverDe
 
 
 #pragma mark - 删除事件
-- (void)deleteButtonDidClick {
+- (void)deleteButtonDidClick:(UIButton *)sender {
+    sender.backgroundColor = [UIColor lightGrayColor];
+    [UIView animateWithDuration:0.3 animations:^{
+        sender.backgroundColor = [UIColor clearColor];
+    }];
     if ([self.delegate respondsToSelector:@selector(DiscoverDetailDeletedButtonDidClick:)]) {
         [self.delegate DiscoverDetailDeletedButtonDidClick:self];
     }

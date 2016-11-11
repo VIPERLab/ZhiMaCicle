@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-typedef void(^DeletedBlock)();
+typedef void(^DeletedBlock)(NSIndexPath *indexPath, NSString *circleId);
 
 @protocol DiscoverDetailControllerDelegate <NSObject>
 

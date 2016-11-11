@@ -24,7 +24,7 @@
 
 
 
-@property (nonatomic, strong) NSArray <PersonalDiscoverModel *> *imglist;
+@property (nonatomic, strong) NSMutableArray <PersonalDiscoverModel *> *imglist;
 
 
 

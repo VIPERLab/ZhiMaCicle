@@ -246,12 +246,12 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if ((netWorkStatus && indexPath.section == 0) || indexPath.section == 1) {
         if (editingStyle == UITableViewCellEditingStyleDelete) {
-            // Delete the row from the data source.
+            
             ConverseModel *model = self.dataArray[indexPath.row];
             //数据库删除该条会话
             [FMDBShareManager deleteConverseWithConverseId:model.converseId];
-            
-            [self getDataFormSqlist];
+            [self.dataArray removeObject:model];
+            [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             
         }
     }

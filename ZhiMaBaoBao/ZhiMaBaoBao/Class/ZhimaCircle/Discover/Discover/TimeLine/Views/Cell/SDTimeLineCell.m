@@ -149,7 +149,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     [_complainButton setTitle:@"投诉" forState:UIControlStateNormal];
     [_complainButton setTitleColor:[UIColor colorFormHexRGB:@"576b95"] forState:UIControlStateNormal];
     _complainButton.titleLabel.font = [UIFont systemFontOfSize:11];
-    [_complainButton addTarget:self action:@selector(complainButtonDidClick) forControlEvents:UIControlEventTouchUpInside];
+    [_complainButton addTarget:self action:@selector(complainButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
     
     _operationMenu = [SDTimeLineCellOperationMenu new];
     __weak typeof(self) weakSelf = self;
@@ -516,7 +516,11 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 }
 
 #pragma mark - 投诉按钮
-- (void)complainButtonDidClick {
+- (void)complainButtonDidClick:(UIButton *)sender {
+    sender.backgroundColor = [UIColor lightGrayColor];
+    [UIView animateWithDuration:0.3 animations:^{
+        sender.backgroundColor = [UIColor clearColor];
+    }];
     if ([self.delegate respondsToSelector:@selector(didClickComplainButton:)]) {
         [self.delegate didClickComplainButton:self];
     }
