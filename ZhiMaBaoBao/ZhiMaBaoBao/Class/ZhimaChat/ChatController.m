@@ -235,7 +235,7 @@ static NSString *const reuseIdentifier = @"messageCell";
         if (message.actType == ActTypeUndomsg) {
             NSMutableArray*marr = [self.messages mutableCopy];
             for (LGMessage*msg in marr) {
-                if ([msg.msgid isEqualToString:message.undoMsgid]) {
+                if ([msg.msgid isEqualToString:message.msgid]) {
                     NSInteger index = [self.messages indexOfObject:msg];
                     [self.messages replaceObjectAtIndex:index withObject:message];
 
