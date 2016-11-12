@@ -54,9 +54,9 @@
     
     NSInteger maxCount;
     if (self.isGroupCreater) {
-        maxCount = self.modelArray.count + 2 > self.MaxCount ? self.MaxCount : self.modelArray.count + 2;
+        maxCount = self.modelArray.count> self.MaxCount ? self.MaxCount  + 2 : self.modelArray.count + 2;
     } else {
-        maxCount = self.modelArray.count + 1 > self.MaxCount ? self.MaxCount : self.modelArray.count + 1;
+        maxCount = self.modelArray.count> self.MaxCount ? self.MaxCount  + 1 : self.modelArray.count + 1;
     }
     for (NSInteger index = 0; index < maxCount; index++) {
         
