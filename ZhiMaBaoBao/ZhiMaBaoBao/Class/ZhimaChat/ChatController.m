@@ -140,10 +140,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     //通过id查数据库最新会话名->设置为标题
     //1.先通过id查会话
     if (self.converseType == ConversionTypeSingle) {   //单聊
-//        ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
-        ConverseModel *converse = [FMDBShareManager searchConverseWithConverseID:self.conversionId andConverseType:ConversionTypeSingle];
-        [self setCustomTitle:self.conversionName];
-        self.friendHeadPic = self.converseLogo;
+        ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
+//        ConverseModel *converse = [FMDBShareManager searchConverseWithConverseID:self.conversionId andConverseType:ConversionTypeSingle];
+        [self setCustomTitle:friendModel.displayName];
+        self.friendHeadPic = friendModel.head_photo;
         //即时更新用户头像
         NSMutableArray *indexPaths = [NSMutableArray array];
         for (int i = 0; i < self.messages.count; i ++) {

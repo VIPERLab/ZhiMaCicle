@@ -313,7 +313,7 @@ static SocketManager *manager = nil;
         ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
         friend.user_Id = message.fromUid;
         friend.user_Name = message.fromUserName;
-        friend.user_Head_photo = message.fromUserPhoto;
+        friend.head_photo = message.fromUserPhoto;
         //自己的群成员信息 (用于被拉进群，将自己存入群成员表)
         GroupUserModel *user = [[GroupUserModel alloc] init];
         
@@ -354,7 +354,7 @@ static SocketManager *manager = nil;
         //群聊
         else if (message.conversionType == ConversionTypeGroupChat){
             //赋值会话id 会话名称
-            converse.converseId = message.toUidOrGroupId;
+            converse.converseId = message.converseId;
             converse.converseName = message.converseName;
             //赋值群成员模型
             groupUser.userId = message.fromUid;
@@ -448,14 +448,12 @@ static SocketManager *manager = nil;
             }
                 break;
             case ActTypeInBlacklist:{       //被拉入黑名单
-                converse.converseId = message.converseId;
+#warning //服务器返回错误 ->  后面修改为converseId
+                converse.converseId = message.toUidOrGroupId;
                 message.msgid = [NSString generateMessageID];
                 message.timeStamp = [NSDate currentTimeStamp];
-                message.sendStatus = NO;
                 [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
                 [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
-                
-//                [[NSNotificationCenter defaultCenter] postNotificationName:kSendMessageStateCall object:nil userInfo:@{@"message":message}];
             }
                 break;
             case ActTypeUndomsg:{            //撤销消息

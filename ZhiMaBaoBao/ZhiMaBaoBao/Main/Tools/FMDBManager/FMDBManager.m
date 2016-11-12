@@ -1450,7 +1450,7 @@
             model.user_NickName = [result stringForColumn:@"defineName"];
             model.user_Name = [result stringForColumn:@"userName"];
             model.user_Id = [result stringForColumn:@"userId"];
-            model.user_Head_photo = [result stringForColumn:@"userPhoto"];
+            model.head_photo = [result stringForColumn:@"userPhoto"];
         }
     }];
     return model;
