@@ -45,11 +45,11 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // 单行显示多少个图标
-    NSInteger num = ScreenWidth > 375 ? 5 : 4;
+    NSInteger num = ScreenWidth > 320 ? 5 : 4;
     // 横向间距
-    CGFloat  ww = (ScreenWidth - num*58)/(num+1);
+    CGFloat  ww = (ScreenWidth - num*50)/(num+1);
     
-    CGFloat iconW = 58;
+    CGFloat iconW = 50;
     CGFloat iconH = iconW;
     
     NSInteger maxCount;
