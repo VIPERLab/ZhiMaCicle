@@ -865,14 +865,9 @@ static SocketManager *manager = nil;
     request[@"method_name"] = methodName;
     NSString *str = nil;
     //创群、拉人、扫码拉人
-    if (type == GroupActTypeCreate || type == GroupActTypeAddUser || type == GroupActTypeSaoma){
-        if (type == GroupActTypeCreate) {
-            dataDic[@"act"]= @"create";
-        }else if (type == GroupActTypeAddUser){
-            dataDic[@"act"] = @"add";
-        }else{
-            dataDic[@"act"] = @"scan";
-        }
+    if (type == GroupActTypeSaoma){
+
+        dataDic[@"act"] = @"scan";
         dataDic[@"fromUid"] = model.uids;
         dataDic[@"converseLogo"] = model.converseLogo;
         dataDic[@"converseName"] = model.converseName;
@@ -884,7 +879,26 @@ static SocketManager *manager = nil;
         dataDic[@"uids"] = model.fromUid;
         dataDic[@"usernames"]= model.fromUsername;
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.uids,model.usernames,model.fromUserPhoto,model.groupLogo,model.groupName,model.groupId,model.fromUid,model.fromUsername,APIKEY];
-    }else if (type == GroupActTypeDelUser){
+    }else if (type == GroupActTypeCreate || type == GroupActTypeAddUser){
+        if (type == GroupActTypeCreate) {
+            dataDic[@"act"]= @"create";
+        }else if (type == GroupActTypeAddUser){
+            dataDic[@"act"] = @"add";
+        }
+
+        dataDic[@"fromUid"] = model.fromUid;
+        dataDic[@"converseLogo"] = model.converseLogo;
+        dataDic[@"converseName"] = model.converseName;
+        dataDic[@"fromUserName"] = model.fromUsername;
+        dataDic[@"fromUserPhoto"] = model.fromUserPhoto;
+        dataDic[@"groupid"] = model.groupId;
+        dataDic[@"groupLogo"] = model.groupLogo;
+        dataDic[@"groupName"] = model.groupName;
+        dataDic[@"uids"] = model.uids;
+        dataDic[@"usernames"]= model.usernames;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.fromUid,model.fromUsername,model.fromUserPhoto,model.groupLogo,model.groupName,model.groupId,model.uids,model.usernames,APIKEY];
+    }
+    else if (type == GroupActTypeDelUser){
         dataDic[@"fromUid"] = model.fromUid;
         dataDic[@"fromUserName"] = model.fromUsername;
         dataDic[@"groupid"] = model.groupId;
