@@ -44,8 +44,12 @@
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    // 单行显示多少个图标
+    NSInteger num = ScreenWidth > 375 ? 5 : 4;
+    // 横向间距
+    CGFloat  ww = (ScreenWidth - num*58)/(num+1);
     
-    CGFloat iconW = (ScreenWidth - 20 * 5) / 4;
+    CGFloat iconW = 58;
     CGFloat iconH = iconW;
     
     NSInteger maxCount;
@@ -56,23 +60,24 @@
     }
     for (NSInteger index = 0; index < maxCount; index++) {
         
-        int line = index % 4;  // 列
-        int row = (int)index / 4;   // 行
+        NSInteger line = index % num;  // 列
+        NSInteger row = (NSInteger)index / num;   // 行
         
         UIButton *iconView = [[UIButton alloc] init];
-        
+        iconView.layer.cornerRadius = 5;
+        iconView.layer.masksToBounds = YES;
         [self addSubview:iconView];
         iconView.tag = index;
         
-        CGFloat iconX = (iconW + 20) * line + 20;
+        CGFloat iconX = (iconW + ww) * line + ww;
         CGFloat iconY = (iconH + 45) * row + 15;
         iconView.frame = CGRectMake(iconX, iconY, iconW, iconH);
         [iconView addTarget:self action:@selector(buttonDidClick:) forControlEvents:UIControlEventTouchUpInside];
         
         UILabel *titleLabel = [UILabel new];
         titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.font = [UIFont systemFontOfSize:13];
-        titleLabel.textColor = [UIColor lightGrayColor];
+        titleLabel.font = [UIFont systemFontOfSize:12];
+        titleLabel.textColor = [UIColor darkGrayColor];
         titleLabel.frame = CGRectMake(iconX, CGRectGetMaxY(iconView.frame), iconW, 30);
         [self addSubview:titleLabel];
         
