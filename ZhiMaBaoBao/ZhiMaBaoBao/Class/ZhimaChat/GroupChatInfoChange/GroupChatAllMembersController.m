@@ -68,7 +68,7 @@
 //        [rightBtn addTarget:self action:@selector(delGroupMembers) forControlEvents:UIControlEventTouchUpInside];
         
     } else {
-//        [self setCustomTitle:[NSString stringWithFormat:@"群成员(%zd)",self.membersArray.count]];
+        [self setCustomTitle:[NSString stringWithFormat:@"群成员(%@)",self.totalNum]];
         [rightBtn setTitle:@"添加" forState:UIControlStateNormal];
         [rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
         [rightBtn addTarget:self action:@selector(addGroupMembers) forControlEvents:UIControlEventTouchUpInside];
