@@ -344,7 +344,7 @@ static SocketManager *manager = nil;
         //根据（单聊、群聊、服务号）三种消息类型处理消息
         if (message.conversionType == ConversionTypeSingle) {
             ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:message.fromUid];
-            converse.converseId = message.toUidOrGroupId;
+            converse.converseId = message.fromUid;
             converse.converseName = message.converseName;
             if (friend.user_Id) {
                 converse.converseName = friend.displayName;
@@ -354,7 +354,7 @@ static SocketManager *manager = nil;
         //群聊
         else if (message.conversionType == ConversionTypeGroupChat){
             //赋值会话id 会话名称
-            converse.converseId = message.converseId;
+            converse.converseId = message.toUidOrGroupId;
             converse.converseName = message.converseName;
             //赋值群成员模型
             groupUser.userId = message.fromUid;
