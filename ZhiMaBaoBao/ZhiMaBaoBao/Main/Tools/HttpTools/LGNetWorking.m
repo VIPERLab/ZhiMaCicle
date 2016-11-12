@@ -480,6 +480,19 @@
     }];
 }
 
++ (void)getGroupInfo:(NSString *)sessionId groupId:(NSString *)groupId page:(NSInteger)page success:(SuccessfulBlock)success failure:(FailureBlock)failure{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"sessionId"] = sessionId;
+    param[@"groupid"] = groupId;
+    param[@"pageNumber"] = [NSString stringWithFormat:@"%ld",page];
+    
+    [HttpTool POST:@"/moblie/getGroupDetailPage.do" params:param success:^(ResponseData *json) {
+        success(json);
+    } failure:^(ErrorData *error) {
+        failure(error);
+    }];
+}
+
 /**
  *  设置群信息
  *

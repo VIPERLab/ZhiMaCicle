@@ -63,7 +63,84 @@
         self.isGroupCreater = YES;
     }
     
-    [self dataRequst];
+//    [self dataRequst];
+    [self dataRequstMembers];
+}
+
+- (void)dataRequstMembers
+{
+    [LCProgressHUD showLoadingText:@"请稍等..."];
+    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.converseId page:1 success:^(ResponseData *responseData) {
+        NSLog(@"---------------2");
+        
+        if (responseData.code != 0) {
+            [LCProgressHUD showFailureText:responseData.msg];
+            return ;
+        }
+        
+        if (responseData.code == 81) {
+            [LCProgressHUD showFailureText:responseData.msg];
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+        
+        [LCProgressHUD hide];
+        
+        //生成群聊数据模型
+        [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+            return @{
+                     @"groupUserVos":@"GroupUserModel"
+                     };
+        }];
+        self.groupModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+        
+        
+        //将群组放在数组第一个
+        [self dealGroupMembers];
+        
+        // 设置群聊的置顶、免打扰
+        //        self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
+        //        self.groupModel.topChat = self.converseModel.topChat;
+        //        self.groupModel.disturb = self.converseModel.disturb;
+        
+        // 更新群信息内容
+        [FMDBShareManager saveGroupChatInfo:self.groupModel andConverseID:self.converseId];
+        
+        //更新会话的置顶和免打扰  ,topChat,noDisturb
+        FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+        NSString *optionStr1 = [NSString stringWithFormat:@"topChat = %d ,noDisturb = %d",self.groupModel.topChat,self.groupModel.disturb];
+        NSString *optionStr2 = [NSString stringWithFormat:@"converseId = '%@'",self.groupModel.groupId];
+        NSString *converseOption = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:optionStr2];
+        [converseQueue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:converseOption];
+            if (success) {
+                NSLog(@"更新会话置顶和消息免打扰成功");
+            } else {
+                NSLog(@"更新会话置顶和消息免打扰成功");
+            }
+        }];
+        
+        [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%@)",self.groupModel.num]];
+        
+        if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
+            self.isGroupCreater = YES;
+            self.MaxCount = 39;
+        } else {
+            self.MaxCount = 40;
+        }
+        
+        // 设置尾部
+        GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
+        footer.delegate = self;
+        _tableView.tableFooterView = footer;
+        [_tableView reloadData];
+        
+        //        [self getDataFormSQL];
+        
+    } failure:^(ErrorData *error) {
+        
+    }];
+
 }
 
 // 拉取网络上最新的数据
@@ -312,6 +389,7 @@
         GroupChatAllMembersController *members = [[GroupChatAllMembersController alloc] init];
         members.membersArray = [self.groupModel.groupUserVos mutableCopy];
         members.groupId = self.groupModel.groupId;
+        [members setCustomTitle:[NSString stringWithFormat:@"群成员(%@)",self.groupModel.num]];
         [self.navigationController pushViewController:members animated:YES];
         
     } else if (indexPath.section == 1 && indexPath.row == 0) {
@@ -447,7 +525,7 @@
 #pragma mark - lazyLoad
 - (NSArray *)titleArray {
     if (self.groupModel) {
-        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%zd)",self.groupModel.groupUserVos.count]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"],@[@"投诉"]];
+        _titleArray = @[@[@"",[NSString stringWithFormat:@"全部群成员(%@)",self.groupModel.num]],@[@"群聊名称",@"群二维码"],@[@"消息免打扰",@"置顶聊天"],@[@"清空聊天记录"],@[@"投诉"]];
     }
     return _titleArray;
 }
