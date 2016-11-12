@@ -98,15 +98,9 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
  *  接受好友请求
  */
 - (void)acceptNewFriendRequest:(NSIndexPath *)indexPath{
-//    //从网络加载的好友模型
+    //从网络加载的好友模型
     ZhiMaFriendModel *friend = self.friendsArr[indexPath.row];
-    //从数据库加载的好友模型
-//    ZhiMaFriendModel *sqlitFriend = [FMDBShareManager getUserMessageByUserID:netFriend.user_Id];
-    
-//    //如果数据库有，就用数据库的好友模型
-//    ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
-//    friend = sqlitFriend.user_Id.length ? sqlitFriend : netFriend;
-//    friend = netFriend;
+
     [LCProgressHUD showLoadingText:@"请稍等..."];
     [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {

@@ -655,7 +655,7 @@ static SocketManager *manager = nil;
 }
 
 //退出群
-- (void)delGroup:(GroupActModel *)actModel{
+- (void)deleteGroup:(GroupActModel *)actModel{
     NSData *data = [self generateGroupActType:GroupActTypeDelGroup groupActModel:actModel];
     RHSocketPacketRequest *req = [[RHSocketPacketRequest alloc] init];
     req.object = data;
@@ -990,9 +990,9 @@ static SocketManager *manager = nil;
     }else if (type == FriendActTypeAgreee){
         dataDic[@"fromUid"] = USERINFO.userID;
         dataDic[@"fromUserName"] = USERINFO.username;
-//        dataDic[@"fromUserPhoto"] = USERINFO.head_photo;
+        dataDic[@"fromUserPhoto"] = USERINFO.head_photo;
         dataDic[@"frienduid"] = friend.user_Id;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&fromUid=%@&fromUserName=%@&%@",controllerName,methodName,friend.user_Id,USERINFO.userID,USERINFO.username,APIKEY];
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&%@",controllerName,methodName,friend.user_Id,USERINFO.userID,USERINFO.username,USERINFO.head_photo,APIKEY];
     }
     else{
         str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&frienduid=%@&uid=%@&%@",controllerName,methodName,friend.user_Id,USERINFO.userID,APIKEY];
