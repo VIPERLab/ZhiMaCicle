@@ -124,9 +124,9 @@
         
         if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
             self.isGroupCreater = YES;
-            self.MaxCount = 39;
+            self.MaxCount = 38;
         } else {
-            self.MaxCount = 40;
+            self.MaxCount = 39;
         }
         
         // 设置尾部
@@ -355,12 +355,14 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         CGFloat iconW = 50;
         CGFloat num = ScreenWidth > 320 ? 5.0 : 4.0;
+        
+        NSInteger members = self.groupModel.groupUserVos.count > self.MaxCount ? self.MaxCount:self.groupModel.groupUserVos.count;
 
         CGFloat line;
         if (self.isGroupCreater) {
-            line = (self.groupModel.groupUserVos.count + 2) / num;
+            line = (members + 2) / num;
         } else {
-            line = (self.groupModel.groupUserVos.count + 1) / num;
+            line = (members + 1) / num;
         }
         
         int temp = (int)line;
