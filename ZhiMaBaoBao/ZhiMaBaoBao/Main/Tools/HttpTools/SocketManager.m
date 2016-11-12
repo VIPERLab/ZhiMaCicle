@@ -137,34 +137,33 @@ static SocketManager *manager = nil;
                 
                 if (responseObject) {
                     if ([responseObject[@"code"] integerValue] == 8888) {
-                        NSArray *data = responseObject[@"data"];
-                        for (NSDictionary *dic in data) {
-                            LGMessage *message = [[LGMessage alloc] init];
-                            message = [message mj_setKeyValues:dic];
-//                            message.actType = dic[@"acttype"];
-//                            [self.offlineMessages addObject:message];
-                            [self recieveMessage:message];
-                        }
-//                        dispatch_queue_t conCurrentGlobalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-//                        dispatch_queue_t mainQueue = dispatch_get_main_queue();
-//                        dispatch_group_t groupQueue = dispatch_group_create();
-//                        NSLog(@"current task");
-//                        dispatch_group_async(groupQueue, conCurrentGlobalQueue, ^{
-//                            for (LGMessage *message in self.offlineMessages) {
-//                                NSLog(@"--------------- current thred %@",[NSThread currentThread]);
-//
-//                                if (message.conversionType == ConversionTypeSingle) {
-//                                    [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
-//                                }else if (message.conversionType == ConversionTypeGroupChat){
-//                                    
-//                                }
-//                            }
-//                        });
-//
-//                        dispatch_group_notify(groupQueue, mainQueue, ^{
-//                            NSLog(@"groupQueue中的任务 都执行完成,回到主线程更新UI");
-//                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil];
-//                        });
+//                        NSArray *data = responseObject[@"data"];
+//                        for (NSDictionary *dic in data) {
+//                            LGMessage *message = [[LGMessage alloc] init];
+//                            message = [message mj_setKeyValues:dic];
+////                            message.actType = dic[@"acttype"];
+////                            [self.offlineMessages addObject:message];
+//                            [self recieveMessage:message];
+//                        }
+                        dispatch_queue_t conCurrentGlobalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+                        dispatch_queue_t mainQueue = dispatch_get_main_queue();
+                        dispatch_group_t groupQueue = dispatch_group_create();
+                        NSLog(@"current task");
+                        dispatch_group_async(groupQueue, conCurrentGlobalQueue, ^{
+                            NSArray *data = responseObject[@"data"];
+                            for (NSDictionary *dic in data) {
+                                LGMessage *message = [[LGMessage alloc] init];
+                                message = [message mj_setKeyValues:dic];
+                                //                            message.actType = dic[@"acttype"];
+                                //                            [self.offlineMessages addObject:message];
+                                [self recieveMessage:message];
+                            }
+                        });
+
+                        dispatch_group_notify(groupQueue, mainQueue, ^{
+                            NSLog(@"groupQueue中的任务 都执行完成,回到主线程更新UI");
+                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil];
+                        });
 
                     }else{
                         
@@ -462,9 +461,9 @@ static SocketManager *manager = nil;
         }
         
         //统一发送通知、更新UI
-        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-        userInfo[@"message"] = message;
-        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+//        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+//        userInfo[@"message"] = message;
+//        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
 
 }
 
