@@ -874,17 +874,17 @@ static SocketManager *manager = nil;
         }else{
             dataDic[@"act"] = @"scan";
         }
-        dataDic[@"fromUid"] = model.fromUid;
+        dataDic[@"fromUid"] = model.uids;
         dataDic[@"converseLogo"] = model.converseLogo;
         dataDic[@"converseName"] = model.converseName;
-        dataDic[@"fromUserName"] = model.fromUsername;
+        dataDic[@"fromUserName"] = model.usernames;
         dataDic[@"fromUserPhoto"] = model.fromUserPhoto;
         dataDic[@"groupid"] = model.groupId;
         dataDic[@"groupLogo"] = model.groupLogo;
         dataDic[@"groupName"] = model.groupName;
-        dataDic[@"uids"] = model.uids;
-        dataDic[@"usernames"]= model.usernames;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.fromUid,model.fromUsername,model.fromUserPhoto,model.groupLogo,model.groupName,model.groupId,model.uids,model.usernames,APIKEY];
+        dataDic[@"uids"] = model.fromUid;
+        dataDic[@"usernames"]= model.fromUsername;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.uids,model.usernames,model.fromUserPhoto,model.groupLogo,model.groupName,model.groupId,model.fromUid,model.fromUsername,APIKEY];
     }else if (type == GroupActTypeDelUser){
         dataDic[@"fromUid"] = model.fromUid;
         dataDic[@"fromUserName"] = model.fromUsername;

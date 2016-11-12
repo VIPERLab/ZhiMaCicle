@@ -143,7 +143,7 @@
     _contentLabel.sd_layout
     .topSpaceToView(_userName,5)
     .leftEqualToView(_userName)
-    .widthIs(size.width)
+    .rightSpaceToView(self,10)
     .heightIs(size.height);
     
     

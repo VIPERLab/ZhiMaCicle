@@ -112,9 +112,6 @@
         UIButton *commentButtonView = [[UIButton alloc] init];
         [commentButtonView addTarget:self action:@selector(commentButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
         
-//        UITapGestureRecognizer *panGesuture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentButtonDidClick:)];
-//        [commentButtonView addGestureRecognizer:panGesuture];
-        
         UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(commentViewDidLongPress:)];
         [commentButtonView addGestureRecognizer:longPressGesture];
         [self addSubview:commentButtonView];
@@ -144,21 +141,24 @@
                 if (!model.attributedContent) {
                     model.attributedContent = [self generateAttributedStringWithCommentItemModel:model];
                 }
-//                label.attributedText = model.attributedContent;
                 
                 label.backgroundColor = [UIColor clearColor];
                 
-                if ([self isUrlStr:model.comment]) {
-                    label.userInteractionEnabled = YES;
-                } else {
-                    label.userInteractionEnabled = NO;
-                }
                 
                 
                 //清除所有链接
                 [label.links removeAllObjects];
                 
                 [self setContentLinkText:model andLabel:label];
+                
+//                if (![self isUrlStr:model.comment]) {
+                MLLink *commentLink = [MLLink linkWithType:0 value:model.comment range:[self findTargetStr:model.comment inStr:[model.attributedContent string]]];
+                commentLink.linkTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
+                [commentLink setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+                    [self commentButtonDidClick:buttonView];
+                }];
+                [label addLink:commentLink];
+//                }
                 
                 //设置文本链接
                 MLLink *fistNameLink = [MLLink linkWithType:MLLinkTypeURL value:model.userId range:[self findTargetStr:model.friend_nick inStr:[model.attributedContent string]]];
@@ -168,13 +168,16 @@
                 if (model.reply_friend_nick.length) {
                     //设置文本链接
                     secondNameLink = [MLLink linkWithType:MLLinkTypePhoneNumber value:model.reply_id range:[self findTargetStr:model.reply_friend_nick inStr:[model.attributedContent string]]];
-//                    [label addLink:secondNameLink];
                 }
+                
                 if (secondNameLink) {
                     [label addLinks:@[fistNameLink,secondNameLink]];
                 } else {
                     [label addLinks:@[fistNameLink]];
                 }
+                
+                
+                
                 
             }
         }
@@ -293,13 +296,13 @@
     for (int i = 0; i < self.commentItemsArray.count; i++) {   //设置Label的frame
         
         //文本的最大长度
-        CGFloat width = [UIScreen mainScreen].bounds.size.width - 80;
+        CGFloat width = [UIScreen mainScreen].bounds.size.width - 85;
         
         UIButton *buttonView = self.commentLabelsArray[i];
         
         buttonView.sd_layout
         .leftSpaceToView(self,0)
-        .rightSpaceToView(self,margin)
+        .rightSpaceToView(self,0)
         .topSpaceToView(lastTopView,5);
 //        .heightIs(commentHight);
         
@@ -313,7 +316,6 @@
                 //计算attributedText高度
                 CGSize size = [self sizeLabelToFit:label.attributedText width:width height:16];
                 buttonView.sd_layout.heightIs(size.height);
-                
                 label.sd_layout
                 .leftSpaceToView(buttonView, 8)
                 .widthIs(size.width + 1)

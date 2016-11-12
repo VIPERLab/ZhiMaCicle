@@ -55,7 +55,6 @@
     [self addSubview:_converseLabel];
     
     _lastConverseLabel = [UILabel new];
-    _lastConverseLabel.textColor = [UIColor colorFormHexRGB:@"9b9b9b"];
     _lastConverseLabel.font = [UIFont systemFontOfSize:15];
     [self addSubview:_lastConverseLabel];
     
@@ -123,7 +122,7 @@
         _lastConverseLabel.textColor = [UIColor colorFormHexRGB:@"ec3f38"];
     } else {
         _converseLabel.textColor = [UIColor blackColor];
-        _lastConverseLabel.textColor = [UIColor blackColor];
+        _lastConverseLabel.textColor = [UIColor colorFormHexRGB:@"9b9b9b"];
     }
     
     _converseLabel.text = model.converseName;

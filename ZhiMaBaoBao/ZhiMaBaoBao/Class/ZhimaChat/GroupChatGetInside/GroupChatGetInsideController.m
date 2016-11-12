@@ -139,7 +139,7 @@
             actModel.groupId = self.groupChatModel.groupId;
             actModel.groupLogo = self.groupChatModel.groupAvtar;
             actModel.groupName = self.groupChatModel.groupName;
-            [[SocketManager shareInstance] addUserToGroup:actModel];
+            [[SocketManager shareInstance] scanCodeToGroup:actModel];
             
             
             
