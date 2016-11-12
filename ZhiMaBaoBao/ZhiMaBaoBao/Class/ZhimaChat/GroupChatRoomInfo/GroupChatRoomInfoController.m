@@ -353,8 +353,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0 && indexPath.row == 0) {
-        CGFloat iconW = 58;
-        NSInteger num = ScreenWidth > 375 ? 5 : 4;
+        CGFloat iconW = 50;
+        CGFloat num = ScreenWidth > 320 ? 5.0 : 4.0;
 
         CGFloat line;
         if (self.isGroupCreater) {
