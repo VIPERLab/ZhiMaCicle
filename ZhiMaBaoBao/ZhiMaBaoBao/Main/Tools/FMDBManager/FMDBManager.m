@@ -1596,7 +1596,7 @@
         BOOL isSuccess = YES;
         NSString *operationStr;
         operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
-        BOOL success = [db executeUpdate:operationStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.unReadCount),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType),@(converseModel.messageType)];
+        BOOL success = [db executeUpdate:operationStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(1),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType),@(converseModel.messageType)];
         if (success) {
             NSLog(@"插入会话成功");
         } else {

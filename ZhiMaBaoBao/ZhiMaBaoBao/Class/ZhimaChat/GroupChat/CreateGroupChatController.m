@@ -484,7 +484,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     [LCProgressHUD showLoadingText:@"正在发起群聊..."];
     
-    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
+    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"8a9a53d85857696c015857dcb5fd0020" success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
             //生成群聊数据模型
@@ -507,17 +507,32 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                             converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
                             converseModel.converseType = 1;
                             converseModel.converseId = self.groupChatModel.groupId;
-                            converseModel.unReadCount = 0;
                             converseModel.converseName = self.groupChatModel.groupName;
                             converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
-                            converseModel.lastConverse = @" ";
+                            converseModel.lastConverse = [NSString stringWithFormat:@"你邀请加入了群聊"];
                             [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
+                            
+                            //生成系统消息
+                            LGMessage *systemMsg = [[LGMessage alloc] init];
+                            systemMsg.text = [NSString stringWithFormat:@"你邀请加入了群聊"];
+                            systemMsg.fromUid = USERINFO.userID;
+                            systemMsg.toUidOrGroupId = self.groupChatModel.groupId;
+                            systemMsg.type = MessageTypeSystem;
+                            systemMsg.msgid = [NSString generateMessageID];
+                            systemMsg.conversionType = ConversionTypeSingle;
+                            systemMsg.timeStamp = [NSDate currentTimeStamp];
+                            systemMsg.actType = ActTypeDeluserfromgroup;
+                            [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupChatModel.groupId];
+                            
                             //通过socket创建群聊
-                            
                             GroupActModel *actModel = [[GroupActModel alloc] init];
-                            
-//                            [[SocketManager shareInstance] createGtoup:self.groupChatModel.groupId uids:socketUids];
-                            [self jumpGroupChat];
+                            actModel.uids = userIds;
+                            actModel.usernames = @"hhh";
+                            actModel.groupId = self.groupChatModel.groupId;
+                            actModel.groupLogo = self.groupChatModel.groupAvtar;
+                            actModel.groupName = self.groupChatModel.groupName;
+                            [[SocketManager shareInstance] createGtoup:actModel];
+//                            [self jumpGroupChat];
                         });
                     }
                 }];
@@ -527,13 +542,13 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         [LCProgressHUD showFailureText:error.msg];
     }];
     
-//    if (_j < 5) {
-//        [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
-//
-//    }else{
-//        [self jumpGroupChat];
-//        return;
-//    }
+    if (_j < 5) {
+        [self performSelector:@selector(test) withObject:nil afterDelay:1.5];
+
+    }else{
+        [self jumpGroupChat];
+        return;
+    }
 
 }
 //选择完毕，发起群聊
