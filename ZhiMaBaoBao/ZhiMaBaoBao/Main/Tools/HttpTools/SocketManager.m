@@ -140,32 +140,31 @@ static SocketManager *manager = nil;
                         NSArray *data = responseObject[@"data"];
                         for (NSDictionary *dic in data) {
                             LGMessage *message = [[LGMessage alloc] init];
-                            message = [message mj_setKeyValues:dic[@"data"]];
+                            message = [message mj_setKeyValues:dic];
 //                            message.actType = dic[@"acttype"];
-                            [self.offlineMessages addObject:message];
+//                            [self.offlineMessages addObject:message];
+                            [self recieveMessage:message];
                         }
-                        dispatch_queue_t conCurrentGlobalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-                        dispatch_queue_t mainQueue = dispatch_get_main_queue();
-                        dispatch_group_t groupQueue = dispatch_group_create();
-                        NSLog(@"current task");
-                        dispatch_group_async(groupQueue, conCurrentGlobalQueue, ^{
-                            for (LGMessage *message in self.offlineMessages) {
-                                NSLog(@"--------------- current thred %@",[NSThread currentThread]);
-
-                                if (message.conversionType == ConversionTypeSingle) {
-                                    [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
-                                }else if (message.conversionType == ConversionTypeGroupChat){
-//                                    [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-                                    
-                                    [self addOfflineGroupMessage:message groupId:message.toUidOrGroupId];
-                                }
-                            }
-                        });
-
-                        dispatch_group_notify(groupQueue, mainQueue, ^{
-                            NSLog(@"groupQueue中的任务 都执行完成,回到主线程更新UI");
-                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil];
-                        });
+//                        dispatch_queue_t conCurrentGlobalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+//                        dispatch_queue_t mainQueue = dispatch_get_main_queue();
+//                        dispatch_group_t groupQueue = dispatch_group_create();
+//                        NSLog(@"current task");
+//                        dispatch_group_async(groupQueue, conCurrentGlobalQueue, ^{
+//                            for (LGMessage *message in self.offlineMessages) {
+//                                NSLog(@"--------------- current thred %@",[NSThread currentThread]);
+//
+//                                if (message.conversionType == ConversionTypeSingle) {
+//                                    [FMDBShareManager saveMessage:message toConverseID:message.fromUid];
+//                                }else if (message.conversionType == ConversionTypeGroupChat){
+//                                    
+//                                }
+//                            }
+//                        });
+//
+//                        dispatch_group_notify(groupQueue, mainQueue, ^{
+//                            NSLog(@"groupQueue中的任务 都执行完成,回到主线程更新UI");
+//                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil];
+//                        });
 
                     }else{
                         
@@ -281,22 +280,9 @@ static SocketManager *manager = nil;
 }
 
 //收到消息
-- (void)detectSocketPacketResponse:(NSNotification *)notif
+- (void)recieveMessage:(LGMessage *)message
 {
-    //解析消息模型
-    NSDictionary *userInfo = notif.userInfo;
-    RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
-    NSData *data = [rsp dataWithPacket];
-    NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSDictionary *responceData = [data mj_JSONObject];
 
-    NSLog(@"\n从socket接收到的数据responceData :%@\n json:%@ \n",responceData,jsonStr);
-    if (responceData) {
-
-        //解析消息
-        LGMessage *message = [[LGMessage alloc] init];
-        message = [message mj_setKeyValues:responceData];
-        
         //生成会话模型 用作创建/更新会话
         ConverseModel *converse = [[ConverseModel alloc] init];
         converse.converseHead_photo = message.converseLogo;
@@ -337,7 +323,7 @@ static SocketManager *manager = nil;
         }
         //视频消息
         else if (message.type == MessageTypeVideo){
-
+            
         }
         
         
@@ -371,7 +357,7 @@ static SocketManager *manager = nil;
             user.friend_nick = USERINFO.username;
             user.head_photo = USERINFO.head_photo;
             user.groupId = converse.converseId;
-
+            
         }
         //服务号
         else if (message.conversionType == ConversionTypeActivity){
@@ -440,11 +426,11 @@ static SocketManager *manager = nil;
             }
                 break;
             case ActTypeNoallow:{           //不允许看朋友圈
-                NSDictionary *resDic = responceData[@"data"];
-                NSString *friendId = resDic[@"delUid"];
-                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                userInfo[@"deleteUid"] = friendId;
-                [[NSNotificationCenter defaultCenter] postNotificationName:K_NotLookMyCircleNotification object:nil userInfo:userInfo];
+//                NSDictionary *resDic = responceData[@"data"];
+//                NSString *friendId = resDic[@"delUid"];
+//                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+//                userInfo[@"deleteUid"] = friendId;
+//                [[NSNotificationCenter defaultCenter] postNotificationName:K_NotLookMyCircleNotification object:nil userInfo:userInfo];
             }
                 break;
             case ActTypeInBlacklist:{       //被拉入黑名单
@@ -474,11 +460,34 @@ static SocketManager *manager = nil;
             default:
                 break;
         }
-               
+        
         //统一发送通知、更新UI
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         userInfo[@"message"] = message;
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
+
+}
+
+
+//收到消息
+- (void)detectSocketPacketResponse:(NSNotification *)notif
+{
+    //解析消息模型
+    NSDictionary *userInfo = notif.userInfo;
+    RHSocketPacketResponse *rsp = userInfo[@"RHSocketPacket"];
+    NSData *data = [rsp dataWithPacket];
+    NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSDictionary *responceData = [data mj_JSONObject];
+
+    NSLog(@"\n从socket接收到的数据responceData :%@\n json:%@ \n",responceData,jsonStr);
+    if (responceData) {
+
+        //解析消息
+        LGMessage *message = [[LGMessage alloc] init];
+        message = [message mj_setKeyValues:responceData];
+        
+        [self recieveMessage:message];
+        
     }
 }
 
