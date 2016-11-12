@@ -462,7 +462,13 @@
         //调用http接口
         [LGNetWorking setupGroup:USERINFO.sessionId groupId:self.groupModel.groupId functionName:@"quit_group" value:@"1" success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
-//                [[SocketManager shareInstance] delGroup:self.groupModel.groupId uid:USERINFO.userID];
+                GroupActModel *actModel = [[GroupActModel alloc] init];
+                actModel.fromUid = USERINFO.userID;
+                actModel.fromUsername = USERINFO.username;
+                actModel.groupId = self.groupModel.groupId;
+                actModel.groupName = self.groupModel.groupName;
+                actModel.groupLogo = self.groupModel.groupAvtar;
+                [[SocketManager shareInstance] deleteGroup:actModel];
                 [FMDBShareManager deleteMessageFormMessageTableByConverseID:self.groupModel.groupId];
                 [FMDBShareManager deleteConverseWithConverseId:self.groupModel.groupId];
                 
