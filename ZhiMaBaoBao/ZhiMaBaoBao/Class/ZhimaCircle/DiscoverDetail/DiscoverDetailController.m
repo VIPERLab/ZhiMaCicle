@@ -46,11 +46,6 @@
     self.scrollView.contentOffset = CGPointMake(0, 0);
     self.scrollView.contentSize = CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     self.view = scrollView;
-    
-    //成为评论框的通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commentViewDidClick:) name:KCommentOtherNotification object:nil];
-    
-    [self setupKeyBoard];
 }
 
 
@@ -61,10 +56,13 @@
     [self setCustomTitle:@"详情"];
     self.view.backgroundColor = [UIColor whiteColor];
     
+    //成为评论框的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commentViewDidClick:) name:KCommentOtherNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self setupKeyBoard];
     [self updataScrollViewContentSize];
 }
 
@@ -107,7 +105,7 @@
         [FMDBShareManager deletedCircleCommentItemsAndLikeItemsByCircleID:self.model.circle_ID];
         [FMDBShareManager saveCircleDataWithDataArray:@[self.model]];
         
-        //通知朋友圈页面更新数据
+        //通知朋友圈页面更新该朋友圈的数据
         [[NSNotificationCenter defaultCenter] postNotificationName:K_ReFreshCircleDataNotification object:nil userInfo:@{ @"circleModel" : self.model}];
         
         
@@ -163,7 +161,7 @@
 - (void)updataScrollViewContentSize {
     CGFloat headerHeight = CGRectGetMaxY(_headerView.frame) + 15;
     
-    headerHeight = headerHeight > ([UIScreen mainScreen].bounds.size.height - 64) ? headerHeight : ([UIScreen mainScreen].bounds.size.height - 64);
+    headerHeight = headerHeight > ([UIScreen mainScreen].bounds.size.height - 64) ? headerHeight : ([UIScreen mainScreen].bounds.size.height - 64 + 10);
     self.scrollView.contentSize = CGSizeMake(0, headerHeight);
 }
 
@@ -302,7 +300,6 @@
     self.chatKeyBoard.keyBoardStyle = KeyBoardStyleComment;
     self.chatKeyBoard.allowVoice = NO;
     self.chatKeyBoard.placeHolder = @"请输入消息";
-    //    [self.view addSubview:self.chatKeyBoard];
     [[UIApplication sharedApplication].keyWindow addSubview:self.chatKeyBoard];
 }
 
@@ -329,6 +326,9 @@
     
     //不超过屏幕一半，就不让移动
     if (cellMaxY < window.bounds.size.height * 0.5) {
+        if (!self.chatKeyBoard) {
+            [self setupKeyBoard];
+        }
         [self.chatKeyBoard keyboardUpforComment];
         return;
     }

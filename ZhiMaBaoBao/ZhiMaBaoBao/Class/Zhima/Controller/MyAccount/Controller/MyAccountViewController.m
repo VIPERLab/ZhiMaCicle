@@ -42,10 +42,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-//    if (self.model.ID.length == 0) {
     [self request];
-//    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,7 +56,6 @@
 
 - (void)registNotification {
     [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(PaySuccess) name:@"PaySuccess" object:nil];
-
 }
 
 
@@ -72,12 +68,11 @@
     [headerView setButtonWithArray:@[@"MyAccount_Tick",@"MyAccount_Money",@"MyAccount_CreadCar"] andSubTitleArray:@[@"付款",@"零钱",@"银行卡"] andSubTitleColor:[UIColor whiteColor]];
     [self.view addSubview:headerView];
 
-    
-    UIView *headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headerView.frame) + 30, [UIScreen mainScreen].bounds.size.width, 100)];
-    headerView2.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:headerView2];
-    
-    [self setupHeaderView:headerView2];
+#warning 隐藏电话卡充值 和 现金充值
+//    UIView *headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headerView.frame) + 30, [UIScreen mainScreen].bounds.size.width, 100)];
+//    headerView2.backgroundColor = [UIColor whiteColor];
+//    [self.view addSubview:headerView2];
+//    [self setupHeaderView:headerView2];
     
 }
 

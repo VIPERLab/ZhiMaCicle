@@ -78,7 +78,6 @@
     _model = model;
     
 #warning 需要优化由于autoLayout导致的线程阻塞问题
-    
     [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,model.head_photo]] forState:UIControlStateNormal];
     
     [_userName setTitle:model.friend_nick forState:UIControlStateNormal];
@@ -91,6 +90,16 @@
     [_contentLabel.links removeAllObjects];
     
     [self setContentLinkText:model andLabel:_contentLabel];
+    
+    
+    MLLink *commentLink = [MLLink linkWithType:0 value:model.comment range:[self findTargetStr:model.comment inStr:[model.attributedContent string]]];
+    commentLink.linkTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
+    [commentLink setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+        [self viewDidClick:_bjButton];
+    }];
+    [_contentLabel addLink:commentLink];
+    
+    [self setCommentURLLink:model andLabel:_contentLabel];
     
     //设置文本链接
     MLLink *fistNameLink = [MLLink linkWithType:MLLinkTypeURL value:model.userId range:[self findTargetStr:model.friend_nick inStr:[model.attributedContent string]]];
@@ -261,6 +270,23 @@
     
     // 表情匹配放最后。 在前面会被网页筛选给冲掉
     label.attributedText =  [self analyzeText:model.attributedContent.string];
+}
+
+// 设置链接
+- (void)setCommentURLLink:(SDTimeLineCellCommentItemModel *)model andLabel:(MLLinkLabel *)label {
+    // 正则筛选网页
+    NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+    
+    NSError *error;
+    
+    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:str options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSArray *resultArray = [expression matchesInString:model.attributedContent.string options:0 range:NSMakeRange(0, model.attributedContent.string.length)];
+    for (NSTextCheckingResult * match in resultArray) {
+        NSString * subStringForMatch = [model.attributedContent.string substringWithRange:match.range];
+        MLLink *link = [MLLink linkWithType:MLLinkTypeEmail value:subStringForMatch range:[model.attributedContent.string rangeOfString:subStringForMatch]];
+        [label addLink:link];
+    }
 }
 
 - (NSMutableAttributedString *)analyzeText:(NSString *)string

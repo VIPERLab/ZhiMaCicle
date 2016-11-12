@@ -151,6 +151,7 @@
                 
                 [self setContentLinkText:model andLabel:label];
                 
+                
 //                if (![self isUrlStr:model.comment]) {
                 MLLink *commentLink = [MLLink linkWithType:0 value:model.comment range:[self findTargetStr:model.comment inStr:[model.attributedContent string]]];
                 commentLink.linkTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
@@ -159,6 +160,8 @@
                 }];
                 [label addLink:commentLink];
 //                }
+                
+                [self setCommentURLLink:model andLabel:label];
                 
                 //设置文本链接
                 MLLink *fistNameLink = [MLLink linkWithType:MLLinkTypeURL value:model.userId range:[self findTargetStr:model.friend_nick inStr:[model.attributedContent string]]];
@@ -455,7 +458,7 @@
         
         dict[NSFontAttributeName] = [UIFont systemFontOfSize:14.0];
         
-        dict[NSForegroundColorAttributeName] = [UIColor blueColor];
+        dict[NSForegroundColorAttributeName] = [UIColor colorFormHexRGB:@"546993"];
         
         NSMutableAttributedString * temStr = [[NSMutableAttributedString alloc]initWithString:subStringForMatch attributes:dict];
         
@@ -472,7 +475,6 @@
 - (void)setContentLinkText:(SDTimeLineCellCommentItemModel *)model andLabel:(MLLinkLabel *)label {
 
     // 正则筛选网页
-
     NSMutableAttributedString *attrStr = [model.attributedContent mutableCopy];
     
     NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
@@ -491,7 +493,7 @@
         
         dict[NSFontAttributeName] = [UIFont systemFontOfSize:14.0];
         
-        dict[NSForegroundColorAttributeName] = [UIColor blueColor];
+        dict[NSForegroundColorAttributeName] = [UIColor colorFormHexRGB:@"546993"];
         
         NSMutableAttributedString *temStr = [[NSMutableAttributedString alloc] initWithString:subStringForMatch attributes:dict];
         
@@ -499,14 +501,27 @@
         
         [attrStr replaceCharactersInRange:match.range withAttributedString:temStr];
         label.attributedText = attrStr;
-        
-        MLLink *link = [MLLink linkWithType:MLLinkTypeEmail value:subStringForMatch range:[model.attributedContent.string rangeOfString:subStringForMatch]];
-        [label addLink:link];
-
     }
     
     // 表情匹配放最后。 在前面会被网页筛选给冲掉
     label.attributedText =  [self analyzeText:model.attributedContent.string];
+}
+
+// 设置链接
+- (void)setCommentURLLink:(SDTimeLineCellCommentItemModel *)model andLabel:(MLLinkLabel *)label {
+    // 正则筛选网页
+    NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+    
+    NSError *error;
+    
+    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:str options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSArray *resultArray = [expression matchesInString:model.attributedContent.string options:0 range:NSMakeRange(0, model.attributedContent.string.length)];
+    for (NSTextCheckingResult * match in resultArray) {
+        NSString * subStringForMatch = [model.attributedContent.string substringWithRange:match.range];
+        MLLink *link = [MLLink linkWithType:MLLinkTypeEmail value:subStringForMatch range:[model.attributedContent.string rangeOfString:subStringForMatch]];
+        [label addLink:link];
+    }
 }
 
 - (void)didClickLink:(MLLink *)link linkText:(NSString *)linkText linkLabel:(MLLinkLabel *)linkLabel {

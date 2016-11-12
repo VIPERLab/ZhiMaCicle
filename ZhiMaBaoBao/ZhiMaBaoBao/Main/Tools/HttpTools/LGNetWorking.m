@@ -768,7 +768,6 @@
 + (void)queryPhoneBook:(NSString *)sessionId openfire:(NSString *)openfire flag:(NSString *)action phonedata:(NSString *)jsonData block:(SuccessfulBlock)block{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"sessionId"] = sessionId;
-    param[@"openfireaccount"] = openfire;
     param[@"action"] = action;
     param[@"phonedata"] = jsonData;
     [HttpTool POST:@"/moblie/getPhoneContacts.do" params:param success:^(ResponseData *json) {
@@ -790,7 +789,7 @@
     [HttpTool POST:@"/moblie/getUnreadMessageNum.do" params:params success:^(ResponseData *json) {
         block(json);
     } failure:^(ErrorData *error) {
-    
+        
         
     }];
 }

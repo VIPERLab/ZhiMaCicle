@@ -595,11 +595,10 @@
                 for (SDTimeLineCellModel *model in self.dataArray) {
                     if ([model.circle_ID isEqualToString:_tempCell.model.circle_ID]) {
                         [self.dataArray removeObject:model];
+                        [_tableView deleteRowsAtIndexPaths:@[[_tableView indexPathForCell:_tempCell]] withRowAnimation:UITableViewRowAnimationBottom];
                         break;
                     }
                 }
-                
-                [self.tableView reloadData];
                 
             }];
 
@@ -841,9 +840,6 @@
             }
             
         }];
-        
-        
-        
         for (SDTimeLineCellCommentItemModel *model in cellModel.commentList) {
             if ([model.ID isEqualToString:commentModel.ID]) {
                 [cellModel.commentList removeObject:model];

@@ -143,14 +143,12 @@
 }
 
 - (void)requestData{
-//    [LCProgressHUD showLoadingText:@"正在加载..."];
-    if (self.contactsArr) {
-        [self.contactsArr removeAllObjects];
-    }
-    
+    [LCProgressHUD showLoadingText:@"正在加载..."];
+    NSLog(@"开始请求");
     [LGNetWorking queryPhoneBook:USERINFO.sessionId openfire:USERINFO.userID flag:@"check" phonedata:self.jsonStr block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
         if (responseData.code == 0) {
+            NSLog(@"请求结束");
             self.contactsArr = [LGQueryResModel mj_objectArrayWithKeyValuesArray:responseData.data];
             self.containArray = [NSArray arrayWithArray:self.contactsArr];
             [self queryResultCompare];
@@ -159,6 +157,7 @@
 }
 
 - (void)getContacts{
+    NSLog(@"----- 开始");
     //这个变量用于记录授权是否成功，即用户是否允许我们访问通讯录
     int __block tip=0;
     //声明一个通讯簿的引用
@@ -289,15 +288,18 @@
     self.jsonStr = [jsonArr mj_JSONString];
     
     self.dataArr = [NSArray arrayWithArray:self.contactsArr];
-    [self setSequenceOfContacts];
+    
+    if (!self.isAddPhoneFriend) {
+        [self setSequenceOfContacts];
+    }
+    
+    NSLog(@"----- 结束");
 }
 
 //查询结果排序
 - (void)queryResultCompare{
     
-    if (self.nameAry.count) {
-        [self.nameAry removeAllObjects];
-    }
+    [self.nameAry removeAllObjects];
     
     //排序
     for (int i = 0; i < self.contactsArr.count; i++) {
@@ -359,6 +361,7 @@
         }
     }
     [self.tableView reloadData];
+    
 }
 
 
