@@ -160,7 +160,7 @@
 //    dispatch_resume(self.timer);
     LGMessage *message = notify.userInfo[@"message"];
     ConverseModel *converse = [[ConverseModel alloc] init];
-    if (message.actType == ActTypeDeluserfromgroup || message.actType == ActTypeRenamegroup) {
+    if (message.actType == ActTypeDeluserfromgroup || message.actType == ActTypeRenamegroup || message.actType == ActTypeUpdategroupnum) {
         converse.lastConverse = message.text;
         converse.time = message.timeStamp;
         converse.converseId = message.toUidOrGroupId;

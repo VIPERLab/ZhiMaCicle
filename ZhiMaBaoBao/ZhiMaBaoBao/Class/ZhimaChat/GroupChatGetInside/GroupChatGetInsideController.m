@@ -129,10 +129,23 @@
             GroupChatModel *model  = [GroupChatModel mj_objectWithKeyValues:responseData.data];
             self.groupChatModel = model;
             
+            //添加系统消息
+            LGMessage *systemMsg = [[LGMessage alloc] init];
+            systemMsg.text = [NSString stringWithFormat:@"你通过扫描\"%@\"分享的二维码加入了群聊",self.userName];
+            systemMsg.fromUid = USERINFO.userID;
+            systemMsg.toUidOrGroupId = self.groupId;
+            systemMsg.type = MessageTypeSystem;
+            systemMsg.msgid = [NSString generateMessageID];
+            systemMsg.conversionType = ConversionTypeSingle;
+            systemMsg.timeStamp = [NSDate currentTimeStamp];
+            systemMsg.actType = ActTypeUpdategroupnum;
+            [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupId];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":systemMsg}];
+            
             //保存群会话信息，插入数据库
             [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupId];
             
-            //通过socket拉人进群
+            //通过socket扫码进群
             GroupActModel *actModel = [[GroupActModel alloc] init];
             actModel.uids = self.qrCodeUserId;
             actModel.usernames = self.userName;
@@ -140,7 +153,6 @@
             actModel.groupLogo = self.groupChatModel.groupAvtar;
             actModel.groupName = self.groupChatModel.groupName;
             [[SocketManager shareInstance] addUserToGroup:actModel];
-            
             
             
             //跳转到群聊天页面

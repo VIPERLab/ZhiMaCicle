@@ -338,7 +338,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     systemMsg.msgid = [NSString generateMessageID];
     systemMsg.conversionType = ConversionTypeSingle;
     systemMsg.timeStamp = [NSDate currentTimeStamp];
-    
+    systemMsg.actType = ActTypeDofriend;
     [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];

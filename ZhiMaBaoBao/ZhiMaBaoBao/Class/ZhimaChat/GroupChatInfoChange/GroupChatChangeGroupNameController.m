@@ -102,9 +102,6 @@
                 }
             }];
             
-            //socket发送"修改群名"消息,通知群用户修改群名称  -> 插入一条系统消息到数据库
-//            [[SocketManager shareInstance] renameGroup:self.groupModel.groupId name:self.groupModel.groupName];
-            
             LGMessage *systemMsg = [[LGMessage alloc] init];
             systemMsg.actType = ActTypeRenamegroup;
             systemMsg.text = [NSString stringWithFormat:@"你修改群名为\"%@\"",self.groupModel.groupName];
@@ -125,7 +122,6 @@
             actModel.groupName = self.groupModel.groupName;
             [[SocketManager shareInstance] renameGroup:actModel];
 
-            
             
             //发送通知，即时更新相应的页面
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];

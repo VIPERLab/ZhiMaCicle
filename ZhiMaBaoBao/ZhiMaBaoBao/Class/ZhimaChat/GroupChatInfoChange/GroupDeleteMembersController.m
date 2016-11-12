@@ -154,8 +154,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         systemMsg.msgid = [NSString generateMessageID];
         systemMsg.conversionType = ConversionTypeSingle;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
+        systemMsg.actType = ActTypeDeluserfromgroup;
         [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupId];
-        
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":systemMsg}];
         
         //通过socket删除群成员群聊
@@ -175,6 +175,9 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         
         //调用http接口，获取最新群头像
         [LGNetWorking getGroupHeadGroupId:self.groupId success:^(ResponseData *responseData) {
+            if (responseData.code == 0) {
+                NSLog(@"-----删除成员更新头像成功");
+            }
         } failure:^(ErrorData *error) {
         }];
         
