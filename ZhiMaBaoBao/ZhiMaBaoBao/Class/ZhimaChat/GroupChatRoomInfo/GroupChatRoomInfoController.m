@@ -389,7 +389,7 @@
         GroupChatAllMembersController *members = [[GroupChatAllMembersController alloc] init];
         members.membersArray = [self.groupModel.groupUserVos mutableCopy];
         members.groupId = self.groupModel.groupId;
-        [members setCustomTitle:[NSString stringWithFormat:@"群成员(%@)",self.groupModel.num]];
+        members.totalNum = self.groupModel.num;
         [self.navigationController pushViewController:members animated:YES];
         
     } else if (indexPath.section == 1 && indexPath.row == 0) {

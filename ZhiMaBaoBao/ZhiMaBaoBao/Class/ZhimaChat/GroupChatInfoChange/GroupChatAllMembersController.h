@@ -16,4 +16,6 @@
 
 @property (nonatomic, assign) BOOL isDeletedMembers;
 
+@property (nonatomic, copy)NSString* totalNum; //总人数
+
 @end
