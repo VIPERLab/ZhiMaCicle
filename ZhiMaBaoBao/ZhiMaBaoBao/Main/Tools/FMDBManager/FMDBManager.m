@@ -1666,13 +1666,13 @@
 
 
 /**
- 更新会话数据库中的 converseContent 和 Time 字段
+ 更新会话数据库中的 converseContent 和 Time 字段 (不存在会话不创建会话)
  
  @param andTime    converseContent
  @param time       time
  @param converseId 会话id
  */
-- (void)alertConverseTextAndTimeWithConverseModel:(ConverseModel *)converseModel {
+- (void)alertConverseTextAndTimeWithConverseModel:(ConverseModel *)converseModel{
     
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     
@@ -1690,21 +1690,21 @@
             }
         }];
         return;
-    }else{
-        //创建会话
-        [queue inDatabase:^(FMDatabase *db) {
-            BOOL isSuccess = YES;
-            NSString *operationStr;
-            operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
-            BOOL success = [db executeUpdate:operationStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.unReadCount),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType),@(converseModel.messageType)];
-            if (success) {
-                NSLog(@"插入会话成功");
-            } else {
-                NSLog(@"插入会话失败");
-            }
-        }];
     }
-    
+//    else{
+//        //创建会话
+//        [queue inDatabase:^(FMDatabase *db) {
+//            BOOL isSuccess = YES;
+//            NSString *operationStr;
+//            operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
+//            BOOL success = [db executeUpdate:operationStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(converseModel.unReadCount),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType),@(converseModel.messageType)];
+//            if (success) {
+//                NSLog(@"插入会话成功");
+//            } else {
+//                NSLog(@"插入会话失败");
+//            }
+//        }];
+//    }
 }
 
 

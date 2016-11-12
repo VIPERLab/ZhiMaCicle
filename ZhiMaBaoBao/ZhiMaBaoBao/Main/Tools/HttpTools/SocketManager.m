@@ -215,7 +215,6 @@ static SocketManager *manager = nil;
     sendMsg.timeStamp = message.timeStamp;
     sendMsg.fromUserPhoto = message.fromUserPhoto;
     sendMsg.fromUserName = message.fromUserName;
-    sendMsg.converseId = message.converseId;
     sendMsg.text = message.text;
     sendMsg.audioLength = message.audioLength;
     sendMsg.holderImageUrlString = message.holderImageUrlString;
@@ -240,9 +239,11 @@ static SocketManager *manager = nil;
     }
     
     if (message.conversionType == ConversionTypeSingle) {
+        sendMsg.converseId = message.fromUid;
         sendMsg.converseName = USERINFO.username;
         sendMsg.converseLogo = USERINFO.head_photo;
     }else if (message.conversionType == ConversionTypeGroupChat){
+        sendMsg.converseId = message.toUidOrGroupId;
         sendMsg.converseName = message.converseName;
         sendMsg.converseLogo = message.converseLogo;
     }

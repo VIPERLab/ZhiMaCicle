@@ -738,18 +738,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupChatModel.groupId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":systemMsg}];
                     
-//#warning 
-//                    //创建会话
-//                    ConverseModel *converseModel  = [[ConverseModel alloc] init];
-//                    converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
-//                    converseModel.converseType = 1;
-//                    converseModel.converseId = self.groupChatModel.groupId;
-//                    converseModel.unReadCount = 0;
-//                    converseModel.converseName = self.groupChatModel.groupName;
-//                    converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
-//                    converseModel.lastConverse = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",usernames];
-//                    [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converseModel];
-                    
                     //通过socket创建群聊
                     GroupActModel *actModel = [[GroupActModel alloc] init];
                     actModel.uids = userIds;
