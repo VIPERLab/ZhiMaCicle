@@ -165,12 +165,13 @@ typedef NS_OPTIONS(NSUInteger, FriendActType) {
 // */
 //- (void)delFriend:(NSString *)friendId;
 
-/**
- *  加入黑名单
- *
- *  @param friendId 好友id
- */
-- (void)dragToBlack:(NSString *)friendId;
+//直接调用https接口
+///**
+// *  加入黑名单
+// *
+// *  @param friendId 好友id
+// */
+//- (void)dragToBlack:(NSString *)friendId;
 
 /**
  *  不让对方看自己的朋友圈
