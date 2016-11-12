@@ -8,7 +8,7 @@
 
 #import "GroupChatAllMembersController.h"
 #import "GroupAllMemberCell.h"
-
+#import "GroupChatModel.h"
 
 #import "FriendProfilecontroller.h"
 #import "CreateGroupChatController.h"
@@ -20,6 +20,8 @@
 
 @property (nonatomic, weak) GroupUserModel *currentModel;
 @property (nonatomic, weak) GroupAllMemberCell *currentCell;
+@property (nonatomic, assign)NSInteger currentPage; //当前页
+
 @end
 
 @implementation GroupChatAllMembersController {
@@ -39,6 +41,7 @@
             }
         }
     }
+    self.currentPage = 1;
     
     [self setupNav];
     [self setupView];
@@ -65,7 +68,7 @@
 //        [rightBtn addTarget:self action:@selector(delGroupMembers) forControlEvents:UIControlEventTouchUpInside];
         
     } else {
-        [self setCustomTitle:[NSString stringWithFormat:@"群成员(%zd)",self.membersArray.count]];
+//        [self setCustomTitle:[NSString stringWithFormat:@"群成员(%zd)",self.membersArray.count]];
         [rightBtn setTitle:@"添加" forState:UIControlStateNormal];
         [rightBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
         [rightBtn addTarget:self action:@selector(addGroupMembers) forControlEvents:UIControlEventTouchUpInside];
@@ -84,6 +87,69 @@
     
     [_tableView registerClass:[GroupAllMemberCell class] forCellReuseIdentifier:GroupChatMembersCellReusedID];
     
+    
+    MJRefreshAutoNormalFooter*footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreRefreshOrderList)];
+    [footer setTitle:@"已全部加载完" forState:MJRefreshStateNoMoreData];
+    _tableView.mj_footer = footer;
+    
+}
+
+- (void)loadMoreRefreshOrderList
+{
+    self.currentPage ++;
+    [self dataRequstMembers];
+    
+}
+
+- (void)dataRequstMembers
+{
+    
+    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.groupId page:self.currentPage success:^(ResponseData *responseData) {
+        
+        if (responseData.code != 0) {
+            if (responseData.code == 29) {
+                [_tableView.mj_footer endRefreshingWithNoMoreData];
+                return ;
+            }
+            
+            [LCProgressHUD showFailureText:responseData.msg];
+            return ;
+        }
+        
+        if (responseData.code == 81) {
+            [LCProgressHUD showFailureText:responseData.msg];
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+        
+        [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+            return @{
+                     @"groupUserVos":@"GroupUserModel"
+                     };
+        }];
+        GroupChatModel *groupModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+        NSArray*arr = groupModel.groupUserVos;
+        
+        if (arr.count<40  || !arr) {
+            [_tableView.mj_footer endRefreshingWithNoMoreData];
+
+        }
+        
+        for (int i=0; i<arr.count; i++) {
+            GroupUserModel*model = arr[i];
+            [self.membersArray addObject:model];
+        }
+
+        [_tableView.mj_footer endRefreshing];
+
+        
+        [_tableView reloadData];
+        
+    } failure:^(ErrorData *error) {
+        
+        [_tableView.mj_footer endRefreshing];
+
+    }];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

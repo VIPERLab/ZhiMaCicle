@@ -39,6 +39,8 @@
  /** 群成员上限*/
 @property (nonatomic, assign) NSInteger maxnum;
 
+@property (nonatomic, copy) NSString *num;  //群人数
+
  /** 更新时间*/
 @property (nonatomic, copy) NSString *update_time;
 
