@@ -35,12 +35,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self setCustomTitle:@"芝麻"];
+    [self setNaviTitle:@"芝麻"];
     
     if ([USERINFO.sessionId isEqualToString:@"0"]) {
         [self setupVisiterView];
         return;
     }
+
     [self setCustomRightItems];
     [self setupView];
 }

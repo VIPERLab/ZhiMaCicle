@@ -179,6 +179,12 @@
 /** 当前删除好友jid*/
 @property (nonatomic, copy) NSString *deleteJid;
 
+/**
+ *  判断是否是游客模式  在登录或者注册完成后dismiss控制器
+ *  但是！其他地方不能根据这个参数去判断是否是游客。 根据sessionId是否为0来判断
+ */
+@property (nonatomic, assign) BOOL isVisitor;
+
 
 + (instancetype)shareInstance;
 

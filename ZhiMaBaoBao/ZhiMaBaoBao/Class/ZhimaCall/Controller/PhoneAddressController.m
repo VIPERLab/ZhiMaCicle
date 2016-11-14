@@ -497,6 +497,12 @@
 }
 
 - (void)addNewFriend:(NSInteger)row{
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
+    
     LGQueryResModel *model = self.nameAry[row];
     //转换成好友模型
     ZhiMaFriendModel *friendModel = [[ZhiMaFriendModel alloc] init];

@@ -23,7 +23,6 @@
     [super viewDidLoad];
     self.view.backgroundColor = BGCOLOR;
     self.navigationController.navigationBar.tintColor = THEMECOLOR;
-    
 
     
     // 进去前台通知
@@ -43,6 +42,15 @@
     [LCProgressHUD hide];
 }
 
+- (void)setNaviTitle:(NSString*)title
+{
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 40)];
+    titleLabel.text = title;
+    titleLabel.textColor = THEMECOLOR;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont systemFontOfSize:17];
+    self.navigationItem.titleView = titleLabel;
+}
 
 //自定义标题
 - (void)setCustomTitle:(NSString *)title {

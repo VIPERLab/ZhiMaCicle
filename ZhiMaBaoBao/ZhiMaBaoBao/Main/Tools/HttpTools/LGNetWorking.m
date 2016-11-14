@@ -107,8 +107,7 @@
     [HttpTool POST:@"/moblie/savehead_nick_invite.do"
            params:@{@"sessionId":sessionId,
                     @"headphoto":headerUrl,
-                    @"nickname":nickName,
-                    @"invite_code":code}
+                    @"nickname":nickName}
           success:^(ResponseData *json) {
         
         block(json);
