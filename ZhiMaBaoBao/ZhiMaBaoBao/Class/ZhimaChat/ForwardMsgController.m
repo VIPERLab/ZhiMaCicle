@@ -32,7 +32,6 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     [self setNavBackItem];
     [self addAllSubviews];
     [self getDataFormSqlist];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchMatchResult) name:UITextFieldTextDidChangeNotification object:nil];
 }
 
@@ -70,7 +69,6 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     UIView *separtor = [[UIView alloc] initWithFrame:CGRectMake(0, 49, DEVICEWITH, 1)];
     separtor.backgroundColor = SEPARTORCOLOR;
     [searchView addSubview:separtor];
-    
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(searchView.frame), DEVICEWITH, DEVICEHIGHT - searchView.height - 49) style:UITableViewStylePlain];
     [tableView registerNib:[UINib nibWithNibName:@"AvtarAndNameCell" bundle:nil] forCellReuseIdentifier:reuseIdentifier];
@@ -143,7 +141,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     newMsg.holderImage = message.holderImage;
     newMsg.videoDownloadUrl = message.videoDownloadUrl;
     newMsg.holderImageUrlString = message.holderImageUrlString;
-    newMsg.isDownLoad = NO;
+    newMsg.isDownLoad = message.isDownLoad;
     newMsg.fromUserPhoto = USERINFO.head_photo;
     newMsg.fromUserName = USERINFO.username;
     newMsg.converseName = self.selectedConverse.converseName;

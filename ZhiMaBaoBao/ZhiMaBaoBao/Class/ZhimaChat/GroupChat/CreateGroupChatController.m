@@ -995,7 +995,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     newMsg.holderImage = message.holderImage;
     newMsg.videoDownloadUrl = message.videoDownloadUrl;
     newMsg.holderImageUrlString = message.holderImageUrlString;
-    newMsg.isDownLoad = NO;
+    newMsg.isDownLoad = message.isDownLoad;
     
     newMsg.converseName = self.selectedFriend.displayName;
     newMsg.converseLogo = self.selectedFriend.head_photo;

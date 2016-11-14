@@ -102,7 +102,12 @@
         
     }else{
         if (_isMe) {
-            self.playBtn.hidden = YES;
+            if (self.progressView.hidden) {
+                self.playBtn.hidden = NO;
+                
+            }else{
+                self.playBtn.hidden = YES;
+            }
         }else{
             self.playBtn.hidden = NO;
         }

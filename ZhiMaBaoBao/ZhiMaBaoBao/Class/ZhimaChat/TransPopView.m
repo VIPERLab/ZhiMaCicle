@@ -117,7 +117,7 @@
         contentLabel.numberOfLines = 2;
         contentLabel.textColor = GRAYCOLOR;
         contentLabel.font = [UIFont systemFontOfSize:15];
-        contentLabel.frame = CGRectMake(pop_margin, 0, self.containerView.width - pop_margin *2, 60);
+        contentLabel.frame = CGRectMake(pop_margin, 0, self.containerView.width - pop_margin *2 - 60, 60);
         [contentView addSubview:contentLabel];
         contentView.height = CGRectGetMaxY(contentLabel.frame);
 
@@ -160,11 +160,16 @@
         imageview.layer.cornerRadius = 5.f;
         imageview.contentMode = UIViewContentModeScaleAspectFill;
         imageview.clipsToBounds = YES;
-        imageview.image = message.holderImage;
-        imageview.size = CGSizeMake(100, 100);
-        imageview.x = (self.containerView.width - 100)/2;
+        [imageview sd_setImageWithURL:[NSURL URLWithString:message.holderImageUrlString]];
+        imageview.size = CGSizeMake(150, 100);
+        imageview.x = (self.containerView.width - 150)/2;
         imageview.y = 10;
         [contentView addSubview:imageview];
+        
+        UIImageView *playBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"PK_PlayBtn"]];
+        playBtn.frame = CGRectMake(60, 35, 30, 30);
+        [imageview addSubview:playBtn];
+    
         contentView.height = CGRectGetMaxY(imageview.frame);
     }
     
