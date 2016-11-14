@@ -118,7 +118,7 @@ static SocketManager *manager = nil;
 - (void)getOfflineMessage{
     if (USERINFO.userID.length) {
         [self.offlineMessages removeAllObjects];
-//        [LCProgressHUD showLoadingText:@"收取中..."];
+        //        [LCProgressHUD showLoadingText:@"收取中..."];
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         manager.requestSerializer.timeoutInterval = 30.0f;
         manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
@@ -141,30 +141,30 @@ static SocketManager *manager = nil;
                         for (NSDictionary *dic in data) {
                             LGMessage *message = [[LGMessage alloc] init];
                             message = [message mj_setKeyValues:dic];
-//                            message.actType = dic[@"acttype"];
-//                            [self.offlineMessages addObject:message];
+                            //                            message.actType = dic[@"acttype"];
+                            //                            [self.offlineMessages addObject:message];
                             [self recieveMessage:message];
                         }
-//                        dispatch_queue_t conCurrentGlobalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-//                        dispatch_queue_t mainQueue = dispatch_get_main_queue();
-//                        dispatch_group_t groupQueue = dispatch_group_create();
-//                        NSLog(@"current task");
-//                        dispatch_group_async(groupQueue, conCurrentGlobalQueue, ^{
-//                            NSArray *data = responseObject[@"data"];
-//                            for (NSDictionary *dic in data) {
-//                                LGMessage *message = [[LGMessage alloc] init];
-//                                message = [message mj_setKeyValues:dic];
-//                                //                            message.actType = dic[@"acttype"];
-//                                //                            [self.offlineMessages addObject:message];
-//                                [self recieveMessage:message];
-//                            }
-//                        });
-//
-//                        dispatch_group_notify(groupQueue, mainQueue, ^{
-//                            NSLog(@"groupQueue中的任务 都执行完成,回到主线程更新UI");
-//                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil];
-//                        });
-
+                        //                        dispatch_queue_t conCurrentGlobalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+                        //                        dispatch_queue_t mainQueue = dispatch_get_main_queue();
+                        //                        dispatch_group_t groupQueue = dispatch_group_create();
+                        //                        NSLog(@"current task");
+                        //                        dispatch_group_async(groupQueue, conCurrentGlobalQueue, ^{
+                        //                            NSArray *data = responseObject[@"data"];
+                        //                            for (NSDictionary *dic in data) {
+                        //                                LGMessage *message = [[LGMessage alloc] init];
+                        //                                message = [message mj_setKeyValues:dic];
+                        //                                //                            message.actType = dic[@"acttype"];
+                        //                                //                            [self.offlineMessages addObject:message];
+                        //                                [self recieveMessage:message];
+                        //                            }
+                        //                        });
+                        //
+                        //                        dispatch_group_notify(groupQueue, mainQueue, ^{
+                        //                            NSLog(@"groupQueue中的任务 都执行完成,回到主线程更新UI");
+                        //                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil];
+                        //                        });
+                        
                     }else{
                         
                     }
@@ -179,7 +179,6 @@ static SocketManager *manager = nil;
         }
     }
 }
-
 
 //手动断开socket
 -(void)disconnect{
