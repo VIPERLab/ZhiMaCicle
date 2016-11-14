@@ -63,7 +63,7 @@
     }
     
     // 是否有holder图片的路径，没有则代表是正在发送中的视频
-    if (chat.holderImageUrlString) {
+    if (chat.holderImageUrlString.length) {
         
         [self.holderIV sd_setImageWithURL:[NSURL URLWithString:chat.holderImageUrlString] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
 

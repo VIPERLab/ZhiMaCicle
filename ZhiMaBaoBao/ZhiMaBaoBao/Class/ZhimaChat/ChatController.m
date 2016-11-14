@@ -245,6 +245,17 @@ static NSString *const reuseIdentifier = @"messageCell";
                 }
             }
         }else{
+            
+//            //如果是被对方拉入黑名单 或者不是好友
+//            if (message.actType == ActTypeInBlacklist || message.actType ==ActTypeNofriend) {
+//                
+//                NSInteger index = self.messages.count -1;
+//                LGMessage*msg = self.messages[index];
+//                msg.sendStatus = NO;
+//                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+//                [FMDBShareManager upDataMessageStatusWithMessage:msg];
+//            }
+            
             [self.messages addObject:message];
             NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
             NSArray *indexPaths = @[indexpath];
@@ -274,6 +285,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                 NSString *groupName = userInfo[@"otherMsg"];
                 [self setCustomTitle:groupName];
             }
+            
         }
     }
     
