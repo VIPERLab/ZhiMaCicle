@@ -281,6 +281,15 @@
 }
 
 
+//导航栏左侧取消按钮点击方法
+- (void)navBackAction {
+    if (self.navigationController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 #pragma mark - 跳转用户注册协议
 - (void)httpButtonDidClick {
     KXWebViewController *webVC = [[KXWebViewController alloc] init];

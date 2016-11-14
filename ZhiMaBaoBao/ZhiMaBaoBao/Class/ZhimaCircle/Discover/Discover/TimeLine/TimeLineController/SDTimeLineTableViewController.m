@@ -611,11 +611,19 @@
 
 #pragma mark - 点赞
 - (void)didClickLikeButtonInCell:(SDTimeLineCell *)cell andMenu:(SDTimeLineCellOperationMenu *)menu {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
+        return;
+    }
     [self DiscoverLikeOrComment:cell andComment:@""];
 }
 
 #pragma mark - 评论
 - (void)chatKeyBoardSendText:(NSString *)text {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
+        return;
+    }
     [self DiscoverLikeOrComment:[self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath] andComment:text];
 }
 
