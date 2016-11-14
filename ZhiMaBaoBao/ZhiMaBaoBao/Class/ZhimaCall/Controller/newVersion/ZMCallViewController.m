@@ -272,7 +272,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
     if (self.dataArr) {
         [self.dataArr removeAllObjects];
     }
-    
+
     [LGNetWorking getAllCallRecords:USERINFO.sessionId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             self.dataArr = [LGCallRecordModel mj_objectArrayWithKeyValuesArray:responseData.data];

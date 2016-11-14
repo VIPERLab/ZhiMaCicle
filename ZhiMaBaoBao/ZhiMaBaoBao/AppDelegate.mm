@@ -117,7 +117,7 @@
     [self addCallRecordTime];
     
     //如果用户已经登录过，已经有sessionId - 判断用户登录状态
-    if (userInfo.sessionId.length) {
+    if (userInfo.sessionId.length && ![userInfo.sessionId isEqualToString:@"0"]) {
         [self judgeLoginState];
     }
     
@@ -547,7 +547,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     UserInfo *info = [UserInfo read];
-    if (!info || !info.sessionId) {
+    if (!info || !info.sessionId || [info.sessionId isEqualToString:@"0"]) {
         return;
     }
     
