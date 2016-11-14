@@ -72,7 +72,7 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     [searchView addSubview:separtor];
     
     
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(searchView.frame), DEVICEWITH, DEVICEHIGHT - searchView.height) style:UITableViewStylePlain];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(searchView.frame), DEVICEWITH, DEVICEHIGHT - searchView.height - 49) style:UITableViewStylePlain];
     [tableView registerNib:[UINib nibWithNibName:@"AvtarAndNameCell" bundle:nil] forCellReuseIdentifier:reuseIdentifier];
     [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:headerReuseIdentifier];
     tableView.delegate = self;
@@ -118,13 +118,8 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     UserInfo *info = [UserInfo shareInstance];
     if (info.topWindow) {
         [info.topWindow resignKeyWindow];
-//        info.topWindow = nil;
         [info.keyWindow makeKeyAndVisible];
-        
-        UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        
         [LCProgressHUD showSuccessText:@"发送成功"];
-
     }else{
         [self dismissViewControllerAnimated:YES completion:^{
             [LCProgressHUD showSuccessText:@"发送成功"];
@@ -145,7 +140,10 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     newMsg.text = message.text;
     newMsg.msgid = [NSString generateMessageID];
     newMsg.picUrl = message.picUrl;
-    
+    newMsg.holderImage = message.holderImage;
+    newMsg.videoDownloadUrl = message.videoDownloadUrl;
+    newMsg.holderImageUrlString = message.holderImageUrlString;
+    newMsg.isDownLoad = NO;
     newMsg.fromUserPhoto = USERINFO.head_photo;
     newMsg.fromUserName = USERINFO.username;
     newMsg.converseName = self.selectedConverse.converseName;
@@ -249,7 +247,6 @@ static NSString *const reuseIdentifier = @"AvtarAndNameCell";
     UserInfo *info = [UserInfo shareInstance];
     if (info.topWindow) {
         [info.topWindow resignKeyWindow];
-//        info.topWindow = nil;
         [info.keyWindow makeKeyWindow];
     }else{
         [self dismissViewControllerAnimated:YES completion:nil];

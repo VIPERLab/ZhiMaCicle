@@ -92,9 +92,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     self.friends = [[FMDBShareManager getAllUserMessageInArray] mutableCopy];
     [self.tableView reloadData];
     
-    
     [self requestFriendsList];
-    
 }
 
 //请求好友列表
@@ -139,19 +137,20 @@ static NSString * const headerIdentifier = @"headerIdentifier";
                 
                 //如果查到了好友数据，则更新会话列表
                 if (mFriend) {
+
+                    NSLog(@"------ 更新  %@",[NSThread currentThread]);
+                    
                     //更新数据库会话表
                     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-                    NSString *optionStr1 = [NSString stringWithFormat:@"converseLogo = '%@',converseName = '%@'",mFriend.user_Head_photo,mFriend.displayName];
+                    NSString *optionStr1 = [NSString stringWithFormat:@"converseLogo = '%@',converseName = '%@'",mFriend.head_photo,mFriend.displayName];
                     NSString *upDataStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",model.converseId]];
                     [queue inDatabase:^(FMDatabase *db) {
                         [db executeUpdate:upDataStr];
                     }];
                 }
                 
-                
             }
         });
-        
         
     } failure:^(ErrorData *error) {
 

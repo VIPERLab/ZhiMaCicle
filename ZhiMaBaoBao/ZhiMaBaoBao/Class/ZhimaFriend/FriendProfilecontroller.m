@@ -83,7 +83,6 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 //请求好友详细资料
 - (void)requestFriendProfile:(BOOL)addSqlit{
     
-    
     [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             self.hasRequestData = YES;
@@ -105,7 +104,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             
             //更新会话表 （头像）
             FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-            NSString *option1 = [NSString stringWithFormat:@"converseLogo = '%@'",self.friend.user_Head_photo];
+            NSString *option1 = [NSString stringWithFormat:@"converseLogo = '%@'",self.friend.head_photo];
             NSString *option2 = [NSString stringWithFormat:@"converseId = '%@'",self.userId];
             NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
             [queue inDatabase:^(FMDatabase *db) {
@@ -301,7 +300,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         ChatController *vc = [[ChatController alloc] init];
         vc.conversionId = self.friend.user_Id;
         vc.conversionName = self.friend.displayName;
-        vc.converseLogo = self.friend.user_Head_photo;
+        vc.converseLogo = self.friend.head_photo;
         vc.hidesBottomBarWhenPushed = YES;
 //        [self.navigationController pushViewController:vc animated:YES];
         ConversationController *conversationVC = userInfo.conversationVC;
@@ -313,10 +312,14 @@ static NSString *const btnIdentifier = @"btnIdentifier";
             if (responseData.code == 0) {
                 //将好友加入数据库好友列表
                 [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend] withComplationBlock:nil andIsUpdata:NO];
-                //转换成芝麻友数据模型
-                ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
-                friend.user_Id = self.userId;
-                [[SocketManager shareInstance] agreeFriendRequest:friend];
+//                //转换成芝麻友数据模型
+//                ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
+//                friend.user_Id = self.friend.user_Id;
+//                friend.head_photo = self.friend.head_photo;
+//                friend.user_Name = self.friend.user_Name;
+//                friend.friend_type = FriendTypeFriends;
+                self.friend.friend_type = FriendTypeFriends;
+                [[SocketManager shareInstance] agreeFriendRequest:self.friend];
                 [self addSystemMsgToSqlite:self.friend];
                 //重新加载数据 -> 刷新
                 [self requestFriendProfile:YES];
@@ -353,7 +356,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     LGCallingController *vc = [[LGCallingController alloc] init];
     vc.name = self.friend.displayName;
     vc.phoneNum = self.friend.uphone;
-    vc.avtarUrl = self.friend.user_Head_photo;
+    vc.avtarUrl = self.friend.head_photo;
     [self presentViewController:vc animated:YES completion:nil];
 }
 

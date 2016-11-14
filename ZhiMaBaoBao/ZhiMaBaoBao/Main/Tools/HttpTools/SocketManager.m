@@ -376,9 +376,10 @@ static SocketManager *manager = nil;
             }
                 break;
             case ActTypeDofriend:{      //同意好友请求
-                converse.converseId = message.fromUid;
+                message.msgid = [NSString generateMessageID];
                 [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
                 [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+                [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil andIsUpdata:NO];
             }
                 break;
             case ActTypeUpdatefriend:{  //更新好友数据
@@ -419,7 +420,7 @@ static SocketManager *manager = nil;
             }
                 break;
             case ActTypeNoallow:{           //不允许看朋友圈
-//                NSDictionary *resDic = responceData[@"data"];
+//                NSDictionary *resDic = responceData;
 //                NSString *friendId = resDic[@"delUid"];
 //                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
 //                userInfo[@"deleteUid"] = friendId;
@@ -473,7 +474,7 @@ static SocketManager *manager = nil;
     NSDictionary *responceData = [data mj_JSONObject];
 
     NSLog(@"\n从socket接收到的数据responceData :%@\n json:%@ \n",responceData,jsonStr);
-    if (responceData.allKeys.count) {
+    if (responceData) {
 
         //解析消息
         LGMessage *message = [[LGMessage alloc] init];
@@ -481,68 +482,6 @@ static SocketManager *manager = nil;
         
         [self recieveMessage:message isOffline:NO];
     }
-}
-
-//插入离线群消息到本地数据库
-- (void)addOfflineGroupMessage:(LGMessage *)message groupId:(NSString *)groupId{
-    
-    //判断数据库是否存在群成员表 （通过群信息表判断） -> 不存在 从网络加载数据  存到数据库
-    //    ConverseModel *model = [FMDBShareManager searchConverseWithConverseID:groupId andConverseType:ConversionTypeGroupChat];
-    if (![FMDBShareManager isConverseIsExist:groupId]) {
-        //加载群信息
-        [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:groupId success:^(ResponseData *responseData) {
-            if (responseData.code == 0) {
-                //生成群聊数据模型
-                [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
-                    return @{
-                             @"groupUserVos":@"GroupUserModel"
-                             };
-                }];
-                GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-                
-                //开线程异步存群成员信息
-//                dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//                    [FMDBShareManager saveAllGroupMemberWithArray:groupChatModel.groupUserVos andGroupChatId:groupId withComplationBlock:^(BOOL success) {
-//                        dispatch_queue_t subQueue = dispatch_queue_create("com.dullgrass.serialQueue", DISPATCH_QUEUE_CONCURRENT);
-//                        dispatch_sync(subQueue, ^{
-                            //群成员保存完毕，保存群信息到数据库,新建会话，保存群消息记录
-                            //保存群信息
-                            [FMDBShareManager saveGroupChatInfo:groupChatModel andConverseID:groupChatModel.groupId];
-                            //创建会话
-                            ConverseModel *converseModel  = [[ConverseModel alloc] init];
-                            converseModel.time = [NSDate cTimestampFromString:groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
-                            converseModel.converseType = 1;
-                            converseModel.converseId = groupChatModel.groupId;
-                            converseModel.unReadCount = 0;
-                            converseModel.converseName = groupChatModel.groupName;
-                            converseModel.converseHead_photo = groupChatModel.groupAvtar;
-                            converseModel.lastConverse = @" ";
-                            [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
-                            //保存群消息到数据库
-                            [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-                            
-                            //发送通知，刷新会话列表
-//                            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-//                            userInfo[@"message"] = message;
-//                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
-                
-//                        });
-//                    }];
-//                });
-            }
-        } failure:^(ErrorData *error) {
-            
-        }];
-    }else{
-        //保存群消息到数据库
-        [FMDBShareManager saveGroupChatMessage:message andConverseId:message.toUidOrGroupId];
-        
-        //发送通知，刷新会话列表
-//        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-//        userInfo[@"message"] = message;
-//        [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:userInfo];
-    }
-    //群消息直接在这里发通知，就不在收到新消息处发送通知了  所以返回no
 }
 
 #pragma mark - 封装消息操作指令

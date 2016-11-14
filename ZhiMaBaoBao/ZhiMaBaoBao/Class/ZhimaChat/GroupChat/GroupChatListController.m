@@ -205,7 +205,10 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     newMsg.text = message.text;
     newMsg.msgid = [NSString generateMessageID];
     newMsg.picUrl = message.picUrl;
-    
+    newMsg.holderImage = message.holderImage;
+    newMsg.videoDownloadUrl = message.videoDownloadUrl;
+    newMsg.holderImageUrlString = message.holderImageUrlString;
+    newMsg.isDownLoad = NO;
     newMsg.fromUserPhoto = USERINFO.head_photo;
     newMsg.fromUserName = USERINFO.username;
     newMsg.converseName = self.selectedConverse.converseName;

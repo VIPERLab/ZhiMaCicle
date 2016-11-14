@@ -583,7 +583,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         [LCProgressHUD showLoadingText:@"准备开始群聊..."];
         [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
             if (responseData.code == 0) {
-                [LCProgressHUD hide];
                 //生成群聊数据模型
                 [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
                     return @{
@@ -597,13 +596,15 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
                         if (success) {
                             
-                            dispatch_async(dispatch_get_main_queue(), ^{
+                            [LCProgressHUD hide];
+
                                 //存群信息
                                 [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                                 
                                 //创建会话
                                 ConverseModel *converseModel  = [[ConverseModel alloc] init];
-                                converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+//                                converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+                                converseModel.time = [NSDate currentTimeStamp];
                                 converseModel.converseType = 1;
                                 converseModel.converseId = self.groupChatModel.groupId;
                                 converseModel.converseName = self.groupChatModel.groupName;
@@ -634,8 +635,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 
                                 //跳转到群聊天页面
                                 [self jumpGroupChat];
-                            });
-
                         }
                     }];
                 });
@@ -674,7 +673,9 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                     
                                     //创建会话
                                     ConverseModel *converseModel  = [[ConverseModel alloc] init];
-                                    converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+//                                    converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+                                    converseModel.time = [NSDate currentTimeStamp];
+
                                     converseModel.converseType = 1;
                                     converseModel.converseId = self.groupChatModel.groupId;
                                     converseModel.unReadCount = 0;
@@ -848,7 +849,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         ZhiMaFriendModel *friendModel = self.selectedFriends[i];
         UIImageView *avtar = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, imageS, imageS)];
         avtar.userInteractionEnabled = YES;
-        [avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,friendModel.user_Head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
+        [avtar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,friendModel.head_photo]] placeholderImage:[UIImage imageNamed:@"defaultContact"]];
         avtar.x = (imageS + margin) * (i);
         avtar.tag = i;
         [self.imagesView addSubview:avtar];
@@ -970,7 +971,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     UserInfo *info = [UserInfo shareInstance];
     if (info.topWindow) {
         [info.topWindow resignKeyWindow];
-//        info.topWindow = nil;
         [info.keyWindow makeKeyAndVisible];
         [LCProgressHUD showSuccessText:@"发送成功"];
 
@@ -992,9 +992,13 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     newMsg.text = message.text;
     newMsg.msgid = [NSString generateMessageID];
     newMsg.picUrl = message.picUrl;
+    newMsg.holderImage = message.holderImage;
+    newMsg.videoDownloadUrl = message.videoDownloadUrl;
+    newMsg.holderImageUrlString = message.holderImageUrlString;
+    newMsg.isDownLoad = NO;
     
     newMsg.converseName = self.selectedFriend.displayName;
-    newMsg.converseLogo = self.selectedFriend.user_Head_photo;
+    newMsg.converseLogo = self.selectedFriend.head_photo;
     newMsg.fromUserPhoto = USERINFO.head_photo;
     newMsg.fromUserName = USERINFO.username;
 //    //如果是群聊消息 -- 发送群聊的"名称"、"头像"

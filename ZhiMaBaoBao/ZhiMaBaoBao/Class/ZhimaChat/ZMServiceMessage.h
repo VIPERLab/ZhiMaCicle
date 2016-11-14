@@ -38,7 +38,7 @@ typedef NS_OPTIONS(NSUInteger, ServiceMessageType) {
 /** 消息时间*/
 //@property (nonatomic, copy) NSString *msgtime;
 /** 消息发送时间时间戳*/
-@property (nonatomic, assign) NSInteger timeStamp;
+@property (nonatomic, assign) long long timeStamp;
 
 
 // ------------------------ service字段 --------------------------

@@ -20,7 +20,7 @@ typedef NS_OPTIONS(NSUInteger, ConversionType){
 /**
  *  时间
  */
-@property (nonatomic, assign) NSInteger time;
+@property (nonatomic, assign) long long time;
 
 /**
  *  会话类型  0:单聊  1:群聊  2:服务号

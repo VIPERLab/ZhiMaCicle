@@ -30,21 +30,21 @@ static NSDateFormatter *dateFormatter;
     return date;
 }
 
-+ (NSInteger)cTimestampFromDate:(NSDate *)date
++ (long long)cTimestampFromDate:(NSDate *)date
 {
-    UInt64 recordTime = [date timeIntervalSince1970]*1000;
+    long long recordTime = [date timeIntervalSince1970]*1000;
     return recordTime;
 }
 
 
-+(NSInteger)cTimestampFromString:(NSString *)timeStr
++(long long)cTimestampFromString:(NSString *)timeStr
                           format:(NSString *)format
 {
     NSDate *date = [NSDate dateFromString:timeStr format:format];
     return [NSDate cTimestampFromDate:date];
 }
 
-+ (NSString *)dateStrFromCstampTime:(NSInteger)timeStamp
++ (NSString *)dateStrFromCstampTime:(long long)timeStamp
                      withDateFormat:(NSString *)format
 {
     
@@ -60,7 +60,7 @@ static NSDateFormatter *dateFormatter;
     return [dateFormat stringFromDate:date];
 }
 
-+ (NSInteger)currentTimeStamp{
++ (long long)currentTimeStamp{
     NSDate *date = [NSDate date];
     return [NSDate cTimestampFromDate:date];
 }

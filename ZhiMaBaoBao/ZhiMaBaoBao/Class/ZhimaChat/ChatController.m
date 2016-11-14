@@ -141,9 +141,15 @@ static NSString *const reuseIdentifier = @"messageCell";
     //1.先通过id查会话
     if (self.converseType == ConversionTypeSingle) {   //单聊
         ZhiMaFriendModel *friendModel = [FMDBShareManager getUserMessageByUserID:self.conversionId];
-//        ConverseModel *converse = [FMDBShareManager searchConverseWithConverseID:self.conversionId andConverseType:ConversionTypeSingle];
-        [self setCustomTitle:friendModel.displayName];
-        self.friendHeadPic = friendModel.head_photo;
+        //如果存在会话取会话名和会话头像 如果不存在会话取好友表的昵称跟头像
+        ConverseModel *converse = [FMDBShareManager searchConverseWithConverseID:self.conversionId andConverseType:ConversionTypeSingle];
+        if (converse.converseId) {
+            [self setCustomTitle:converse.converseName];
+            self.friendHeadPic = converse.converseHead_photo;
+        }else{
+            [self setCustomTitle:friendModel.displayName];
+            self.friendHeadPic = friendModel.head_photo;
+        }
         //即时更新用户头像
         NSMutableArray *indexPaths = [NSMutableArray array];
         for (int i = 0; i < self.messages.count; i ++) {
@@ -282,7 +288,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             
             //如果是更新群名称，即使更新群名称
             if (message.actType == ActTypeRenamegroup) {
-                NSString *groupName = userInfo[@"otherMsg"];
+                NSString *groupName = message.converseName;
                 [self setCustomTitle:groupName];
             }
             
@@ -290,7 +296,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     }
     
     //自己被剔除群，加入标记
-    if (message.actType == ActTypeDeluserfromgroup) {
+    if (message.actType == ActTypeDeluserfromgroup || message.actType == ActTypeUpdategroupnum) {
         //根据群聊id,去除对应群表中自己的群成员数据 （判断是否已被剔除群聊）
         GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:self.conversionId];
         self.notInGroup = userModel.memberGroupState;

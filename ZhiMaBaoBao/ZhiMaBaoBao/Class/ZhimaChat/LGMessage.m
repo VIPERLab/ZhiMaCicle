@@ -60,7 +60,7 @@
 }
 
 //储存时间戳时，转成时间格式字符串
-- (void)setTimeStamp:(NSInteger)timeStamp{
+- (void)setTimeStamp:(long long)timeStamp{
     _timeStamp = timeStamp;
     self.msgtime = [NSDate dateStrFromCstampTime:timeStamp withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 }
