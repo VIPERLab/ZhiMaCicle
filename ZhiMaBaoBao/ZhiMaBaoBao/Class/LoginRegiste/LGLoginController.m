@@ -133,6 +133,9 @@
 - (void)loginAction{
     [self.view endEditing:YES];
     [LCProgressHUD showLoadingText:LODINGTEXT];
+    
+    
+    
     [LGNetWorking loginWithPhone:self.phoneField.text password:self.passField.text success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             //登录成功
@@ -163,8 +166,14 @@
             
             [userInfo save];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
+            if (oldInfo.isVisitor) {
+
+                [self dismissViewControllerAnimated:YES completion:nil];
+            }else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
+            }
             
+
         }else{
             [LCProgressHUD showFailureText:responseData.msg];
         }

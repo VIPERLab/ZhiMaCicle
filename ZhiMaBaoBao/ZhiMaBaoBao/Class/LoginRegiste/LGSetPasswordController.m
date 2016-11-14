@@ -168,6 +168,7 @@
             
             // 旧的数据
             UserInfo *oldInfo = [UserInfo read];
+            userInfo.isVisitor = oldInfo.isVisitor;
             
             if ([userInfo.userID isEqualToString:oldInfo.userID]) {
                 // 有旧数据

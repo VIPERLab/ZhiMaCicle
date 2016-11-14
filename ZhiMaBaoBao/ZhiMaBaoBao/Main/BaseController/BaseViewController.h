@@ -10,7 +10,10 @@
 
 @interface BaseViewController : UIViewController
 
-//设置标题
+//不带返回按钮
+- (void)setNaviTitle:(NSString *)title;
+
+//设置标题 (带返回按钮)
 - (void)setCustomTitle:(NSString *)title;
 
 //添加右侧items
