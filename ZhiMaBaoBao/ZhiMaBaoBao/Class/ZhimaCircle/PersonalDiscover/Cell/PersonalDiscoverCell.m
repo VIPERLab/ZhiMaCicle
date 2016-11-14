@@ -301,7 +301,7 @@ typedef enum : NSUInteger {
     } else {
         
         self.photoButton.frame = CGRectMake(70, (CGRectGetHeight(self.frame) - 74 )* 0.5, 0, 74);
-        self.contentLabel.frame = CGRectMake(70, 2, [UIScreen mainScreen].bounds.size.width - CGRectGetMaxX(self.photoButton.frame) - 20, textHight + 10);
+        self.contentLabel.frame = CGRectMake(70, 2, [UIScreen mainScreen].bounds.size.width - CGRectGetMaxX(self.photoButton.frame) - 20, self.model.cellHight - 15);
         self.contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
     }
     

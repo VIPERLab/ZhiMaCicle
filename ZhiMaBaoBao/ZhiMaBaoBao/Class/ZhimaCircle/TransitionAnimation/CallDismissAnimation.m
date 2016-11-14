@@ -25,9 +25,6 @@
     
     //获取rect
     CGRect finailRect = [transitionContext finalFrameForViewController:fromVC];
-    NSLog(@"%@",NSStringFromCGRect(finailRect));
-    
-    
     
     //中转view
     UIView * tempView = [transitionContext containerView];

@@ -34,9 +34,10 @@
 #import "KXCodingManager.h"
 #import "FaceThemeModel.h"
 
+#import "KXActionSheet.h"
 
 
-@interface SDTimeLineCellCommentView () <MLLinkLabelDelegate,UIAlertViewDelegate>
+@interface SDTimeLineCellCommentView () <MLLinkLabelDelegate,UIAlertViewDelegate,KXActionSheetDelegate>
 
 @property (nonatomic, strong) NSArray *likeItemsArray; //点赞数组
 @property (nonatomic, strong) NSArray *commentItemsArray;//评论数组
@@ -53,6 +54,7 @@
 
 @implementation SDTimeLineCellCommentView {
     MLLabel *_currentLabel;
+    MLLink *_currentLink;
     NSString *_currentText;
 }
 
@@ -165,13 +167,13 @@
                 [self setCommentURLLink:model andLabel:label];
                 
                 //设置文本链接
-                MLLink *fistNameLink = [MLLink linkWithType:MLLinkTypeURL value:model.userId range:[self findTargetStr:model.friend_nick inStr:[model.attributedContent string]]];
+                MLLink *fistNameLink = [MLLink linkWithType:MLLinkTypeNone value:model.userId range:[self findTargetStr:model.friend_nick inStr:[model.attributedContent string]]];
                 
                 
                 MLLink *secondNameLink;
                 if (model.reply_friend_nick.length) {
                     //设置文本链接
-                    secondNameLink = [MLLink linkWithType:MLLinkTypePhoneNumber value:model.reply_id range:[self findTargetStr:model.reply_friend_nick inStr:[model.attributedContent string]]];
+                    secondNameLink = [MLLink linkWithType:MLLinkTypeNone value:model.reply_id range:[self findTargetStr:model.reply_friend_nick inStr:[model.attributedContent string]]];
                     
                 }
                 
@@ -521,19 +523,41 @@
     NSArray *resultArray = [expression matchesInString:model.attributedContent.string options:0 range:NSMakeRange(0, model.attributedContent.string.length)];
     for (NSTextCheckingResult * match in resultArray) {
         NSString * subStringForMatch = [model.attributedContent.string substringWithRange:match.range];
-        MLLink *link = [MLLink linkWithType:MLLinkTypeEmail value:subStringForMatch range:[model.attributedContent.string rangeOfString:subStringForMatch]];
+        MLLink *link = [MLLink linkWithType:MLLinkTypeURL value:subStringForMatch range:[model.attributedContent.string rangeOfString:subStringForMatch]];
         link.activeLinkTextAttributes = @{NSForegroundColorAttributeName : [UIColor colorFormHexRGB:@"546993"]};
         [label addLink:link];
     }
 }
 
 - (void)didClickLink:(MLLink *)link linkText:(NSString *)linkText linkLabel:(MLLinkLabel *)linkLabel {
-    if ([self isUrlStr:linkText]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentURLNotification object:nil userInfo:@{@"linkValue" : link.linkValue}];
-    } else {
+    _currentLink = link;
+    
+    if (link.linkType == MLLinkTypePhoneNumber) {
+        KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"%@可能是一个电话号码,你可以",link.linkValue] cancellTitle:@"取消" andOtherButtonTitles:@[@"呼叫",@"复制号码"]];
+        sheet.delegate = self;
+        [sheet show];
+    } else if (link.linkType == MLLinkTypeNone) {
+        // 点击了用户
         [[NSNotificationCenter defaultCenter] postNotificationName:KUserNameLabelNotification object:nil userInfo:@{@"userId" : link.linkValue}];
+        
+    } else if (link.linkType == MLLinkTypeURL) {
+        // 点击了链接
+        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentURLNotification object:nil userInfo:@{@"linkValue" : link.linkValue}];
+        
     }
 }
+
+
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
+    if (index == 0) { //呼叫
+        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentPhoneNotification object:nil userInfo:@{@"phoneNumber" : _currentLink.linkValue}];
+    } else if (index == 1) { //复制到粘贴板
+        UIPasteboard *pasboard = [UIPasteboard generalPasteboard];
+        pasboard.string = _currentLink.linkValue;
+        [LCProgressHUD showSuccessText:@"复制到系统粘贴板"];
+    }
+}
+
 
 - (void)didLongPressLink:(MLLink *)link linkText:(NSString *)linkText linkLabel:(MLLinkLabel *)linkLabel {
     _currentLabel = linkLabel;
@@ -542,8 +566,6 @@
     alertView.delegate = self;
     alertView.tag = 100;
     [alertView show];
-    
-
 }
 
 - (BOOL)isUrlStr:(NSString *)urlStr {

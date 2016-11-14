@@ -44,6 +44,9 @@
 #import "LGNetWorking.h" //请求工具类
 #import "WebViewController.h"
 
+//拨号界面
+#import "LGCallingController.h"
+
 // 复制功能View
 #import "KXCopyView.h"
 
@@ -193,6 +196,9 @@
     
     //删除自己发布的朋友圈通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(delMyCircle:) name:K_DelMyCircleNotification object:nil];
+    
+    //点击了可能是电话的东西
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(phoneNumberDidClick:) name:KDiscoverCommentPhoneNotification object:nil];
 }
 
 
@@ -256,6 +262,10 @@
             [FMDBShareManager saveCircleDataWithDataArray:dataArray];
             
         });
+        
+        if (dataArray.count < 30) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        }
         
         self.circleheadphoto = @"";
         [self.tableView reloadDataWithExistedHeightCache];
@@ -624,6 +634,15 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
         return;
     }
+    
+    NSString *tempString = text;
+    NSCharacterSet *doNotWant = [NSCharacterSet characterSetWithCharactersInString:@" "];
+    tempString = [[tempString componentsSeparatedByCharactersInSet:doNotWant] componentsJoinedByString: @""];
+    
+    if ([tempString isEqualToString:@""]) {
+        [LCProgressHUD showFailureText:@"请输入评论内容"];
+        return;
+    }
     [self DiscoverLikeOrComment:[self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath] andComment:text];
 }
 
@@ -636,7 +655,9 @@
     if ([_currentCommenterUserID isEqualToString:@""]) {
         _currentCommenterUserID = @"0";
     }
-     [self.chatKeyBoard keyboardDownForComment];
+    
+    [self.chatKeyBoard keyboardDownForComment];
+    
     [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.circle_ID andComment:comment andReply_userId:_currentCommenterUserID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
@@ -765,6 +786,10 @@
     [self.navigationController pushViewController:personal animated:YES];
 }
 
+
+
+
+
 // ----      点击了投诉按钮
 - (void)didClickComplainButton:(SDTimeLineCell *)cell {
     if ([cell.model.userId isEqualToString:USERINFO.userID]) {
@@ -795,7 +820,7 @@
 }
 
 
-#pragma mark - 用户名的点击
+#pragma mark - 评论框的点击通知
 // ----      点击别人的名字
 - (void)UserNameLabelDidClick:(NSNotification *)notification {
     NSLog(@"%@",notification.userInfo);
@@ -810,6 +835,14 @@
     WebViewController *webView = [[WebViewController alloc] init];
     webView.urlStr = notification.userInfo[@"linkValue"];
     [self.navigationController pushViewController:webView animated:YES];
+}
+
+// 点击了电话
+- (void)phoneNumberDidClick:(NSNotification *)notification {
+    NSString *phoneNumber = notification.userInfo[@"phoneNumber"];
+    LGCallingController *vc = [[LGCallingController alloc] init];
+    vc.phoneNum = phoneNumber;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark - 收到删除自己朋友圈的通知

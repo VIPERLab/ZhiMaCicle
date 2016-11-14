@@ -8,7 +8,7 @@
 
 #import "ChangeUerNameController.h"
 
-@interface ChangeUerNameController ()
+@interface ChangeUerNameController () <UITextFieldDelegate>
 @property (nonatomic, weak) UITextField *textField;
 @end
 
@@ -32,6 +32,23 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveButtonDidClick)];
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    //判断加上输入的字符，是否超过界限
+    NSString *textStr = textField.text;
+    NSString *copyStr = [textField.text substringWithRange:range];
+    if ([copyStr isEqualToString:@""]) {
+        copyStr = [textStr stringByAppendingString:string];
+    } else {
+        copyStr = [textStr substringWithRange:NSMakeRange(0, range.location)];
+    }
+    
+    
+    if (copyStr.length > 20) {
+        return NO;
+    }
+    return YES;
+}\
+
 - (void)setupView {
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake( 0 , 64 + 20, ScreenWidth, 40)];
@@ -45,6 +62,7 @@
     textField.placeholder = @"请输入你的昵称";
     textField.backgroundColor = [UIColor whiteColor];
     textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    textField.delegate = self;
     [view addSubview:textField];
     self.textField = textField;
     
@@ -57,9 +75,15 @@
         [LCProgressHUD showFailureText:@"昵称不能为空"];
         return;
     }
+    
+    NSString *tempString = self.textField.text;
+    NSCharacterSet *doNotWant = [NSCharacterSet characterSetWithCharactersInString:@"[]{}（#%-*+=_）\\|~(＜＞$%^&*)_+ "];
+    tempString = [[tempString componentsSeparatedByCharactersInSet:doNotWant] componentsJoinedByString: @""];
+    
+    
     [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"username" andChangeValue:self.textField.text success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:@"暂不支持表情符号"];
+            [LCProgressHUD showFailureText:responseData.msg];
             return ;
         }
         

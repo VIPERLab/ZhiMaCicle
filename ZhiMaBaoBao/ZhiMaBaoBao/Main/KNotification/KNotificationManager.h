@@ -66,6 +66,13 @@
 #define KDiscoverCommentURLNotification @"K_DiscoverCommentURLNotification"
 
 
+/**
+ 评论框点击了电话号码
+ info @{ phoneNumber : 电话号码 }
+ */
+#define KDiscoverCommentPhoneNotification @"K_DiscoverCommentPhoneNotification"
+
+
 /* 不让对方看自己的朋友圈
  * info @{deleteUid : 需要删除的朋友圈}
  */

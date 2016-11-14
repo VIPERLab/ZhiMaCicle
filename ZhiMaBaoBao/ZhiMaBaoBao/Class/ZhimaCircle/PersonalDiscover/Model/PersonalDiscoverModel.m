@@ -21,7 +21,7 @@
     if (![self.img_s isEqualToString:@""]) {
         cellHeight = 80;
     } else {
-        CGFloat cellHight = [self.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(300, MAXFLOAT)].height;
+        CGFloat cellHight = [self.content sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(300, 70)].height;
         cellHeight = cellHight + 15;
     }
     return cellHeight;

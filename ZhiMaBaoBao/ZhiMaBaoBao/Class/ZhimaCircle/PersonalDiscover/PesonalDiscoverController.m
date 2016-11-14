@@ -232,6 +232,10 @@
             model.imglist = photoListArray;
         }
         
+        if (dataArray.count < 30) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        }
+        
         self.dataArray = dataArray;
         [self.tableView reloadData];
         

@@ -12,7 +12,7 @@
 
 //动画的时间
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
-    return 1.2f;
+    return 0.9f;
 }
 
 
@@ -25,7 +25,6 @@
     
     //获取rect
     CGRect finailRect = [transitionContext finalFrameForViewController:toView];
-    NSLog(@"%@",NSStringFromCGRect(finailRect));
     
     toView.view.frame = CGRectOffset(finailRect, 0, [UIScreen mainScreen].bounds.size.height * 0.5 );
     

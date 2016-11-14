@@ -50,7 +50,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     [self requestFriendsList];
     
     //创建串行队列
-    _updataQueue =  dispatch_queue_create("upDataUserQueue", DISPATCH_QUEUE_SERIAL);
+//    _updataQueue =  dispatch_queue_create("upDataUserQueue", DISPATCH_QUEUE_SERIAL);
     
     
     
@@ -99,9 +99,6 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 //请求好友列表
 - (void)requestFriendsList{
 //    [self clearAllArray];
-    
-    
-    NSLog(@"--%@",[NSThread currentThread]);
     [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
 
         self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
@@ -112,7 +109,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
             return ;
         }
         
-        dispatch_async(_updataQueue, ^{
+        dispatch_async(dispatch_queue_create(0, DISPATCH_QUEUE_SERIAL), ^{
             [FMDBShareManager deletedAllUserMessage];
             [FMDBShareManager saveUserMessageWithMessageArray:self.friends withComplationBlock:nil andIsUpdata:NO];
                 
@@ -127,8 +124,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
                     [singleConversions addObject:model];
                 }
             }
-        });
-            /*
+            
             //2.更新单聊所有单聊会话的用户头像和昵称
             for (ConverseModel *model in singleConversions) {
                 ZhiMaFriendModel *mFriend = nil;
@@ -142,8 +138,6 @@ static NSString * const headerIdentifier = @"headerIdentifier";
                 
                 //如果查到了好友数据，则更新会话列表
                 if (mFriend) {
-                    NSLog(@"------ 更新  %@",[NSThread currentThread]);
-
                     //更新数据库会话表
                     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
                     NSString *optionStr1 = [NSString stringWithFormat:@"converseLogo = '%@',converseName = '%@'",mFriend.user_Head_photo,mFriend.displayName];
@@ -152,10 +146,10 @@ static NSString * const headerIdentifier = @"headerIdentifier";
                         [db executeUpdate:upDataStr];
                     }];
                 }
-             
+                
                 
             }
-             */
+        });
         
         
     } failure:^(ErrorData *error) {
