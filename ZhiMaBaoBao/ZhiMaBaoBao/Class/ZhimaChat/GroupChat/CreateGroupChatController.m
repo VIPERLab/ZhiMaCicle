@@ -484,7 +484,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     [LCProgressHUD showLoadingText:@"正在发起群聊..."];
     
-    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"8a9a53d85857696c015857dcb5fd0020" success:^(ResponseData *responseData) {
+    [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:@"0" success:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
             //生成群聊数据模型
