@@ -77,6 +77,31 @@
     }];
     
     
+    UIButton*visitorsBtn = [[UIButton alloc]init];
+    [visitorsBtn setTitle:@"游客进入" forState:UIControlStateNormal];
+    [visitorsBtn setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
+    visitorsBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+    [self.view addSubview:visitorsBtn];
+    
+    [visitorsBtn addTarget:self action:@selector(visitorAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    [visitorsBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(30);
+        make.width.mas_equalTo(58);
+        make.bottom.mas_equalTo(-25);
+        make.centerX.mas_equalTo(self.view);
+    }];
+    
+    UIImageView*lineIV = [[UIImageView alloc]init];
+    lineIV.backgroundColor = GRAYCOLOR;
+    [visitorsBtn addSubview:lineIV];
+    
+    [lineIV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(1);
+        make.bottom.mas_equalTo(-3);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+    }];
 }
 //注册
 - (void)registerAction{
@@ -87,6 +112,17 @@
 - (void)loginAction{
     LGLoginController *loginVC = [[LGLoginController alloc] init];
     [self.navigationController pushViewController:loginVC animated:YES];
+}
+
+- (void)visitorAction
+{     
+    UserInfo*info = [[UserInfo alloc]init];
+    info.hasLogin = YES;
+    info.sessionId = @"0";
+    [info save];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
+
 }
 
 - (void)dealloc{
