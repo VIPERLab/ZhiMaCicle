@@ -205,6 +205,10 @@
 // 右栏目按钮点击事件
 #pragma mark - 新增说说
 - (void)rightBarButtonItemAction:(UIBarButtonItem *)sender{
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
     //新增说说
     NewDiscoverController *new = [[NewDiscoverController alloc] init];
     new.circleType = 1;
@@ -549,6 +553,11 @@
 // -----  评论
 - (void)didClickcCommentButtonInCell:(SDTimeLineCell *)cell
 {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
+    
     self.isReplayingComment = NO;
     self.currentEditingIndexthPath = [self.tableView indexPathForCell:cell];
     self.currentCommenterUserID = @"";
@@ -565,6 +574,11 @@
 
 #pragma mark - 回复别人的评论
 - (void)DidClickCommentOtherButton:(SDTimeLineCell *)cell andCommentItem:(SDTimeLineCellCommentItemModel *)commentModel andCommentView:(UIView *)commentView {
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
     
     if ([commentModel.userId isEqualToString:USERINFO.userID]) {
         //删除自己的评论
@@ -622,7 +636,7 @@
 #pragma mark - 点赞
 - (void)didClickLikeButtonInCell:(SDTimeLineCell *)cell andMenu:(SDTimeLineCellOperationMenu *)menu {
     if ([USERINFO.sessionId isEqualToString:@"0"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
         return;
     }
     [self DiscoverLikeOrComment:cell andComment:@""];
@@ -630,10 +644,7 @@
 
 #pragma mark - 评论
 - (void)chatKeyBoardSendText:(NSString *)text {
-    if ([USERINFO.sessionId isEqualToString:@"0"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
-        return;
-    }
+    
     
     NSString *tempString = text;
     NSCharacterSet *doNotWant = [NSCharacterSet characterSetWithCharactersInString:@" "];
@@ -749,6 +760,10 @@
 #pragma mark - 用户头像点击事件
 // ----      点击自己的头像
 - (void)SDTimeLineTableHeaderViewHeaderViewDidClick:(SDTimeLineTableHeaderView *)headerView {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
     PesonalDiscoverController *personal = [[PesonalDiscoverController alloc] init];
     personal.sessionID = headerView.sessionID;
     personal.userID = headerView.openFirAccount;
@@ -757,6 +772,10 @@
 
 // -----    点击了背景
 - (void)SDTimeLineTableHeaderViewBackGroundViewDidClick:(SDTimeLineTableHeaderView *)header andBackGround:(UIButton *)backGround {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
     KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:@"" cancellTitle:@"取消" andOtherButtonTitles:@[@"拍一张",@"从相册选择"]];
     sheet.delegate = self;
     sheet.tag = 100;
@@ -766,6 +785,10 @@
 
 // ------   点击了新消息提示框
 - (void)SDTimeLineTableHeaderViewTipsViewDidClick:(KXDiscoverNewMessageView *)newMessage {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
     self.unReadCount = 0;
     self.headPhoto = @"";
     [self.tableView reloadDataWithExistedHeightCache];
@@ -778,6 +801,10 @@
 
 // ----      点击别人的头像
 - (void)didClickUserIconInCell:(SDTimeLineCell *)cell {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
     UserInfo *info = [UserInfo read];
     SDTimeLineCellModel *model = cell.model;
     PesonalDiscoverController *personal = [[PesonalDiscoverController alloc] init];
@@ -792,6 +819,10 @@
 
 // ----      点击了投诉按钮
 - (void)didClickComplainButton:(SDTimeLineCell *)cell {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
     if ([cell.model.userId isEqualToString:USERINFO.userID]) {
         self.tempCell = cell;
         // 删除自己的朋友圈
@@ -805,6 +836,10 @@
 
 // -----    长按头像
 - (void)didLongPressUserIconWithCell:(SDTimeLineCell *)cell {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
     SDTimeLineCellModel *model = cell.model;
     self.complainModel = model;
     if ([model.userId isEqualToString:USERINFO.userID]) {
@@ -823,6 +858,10 @@
 #pragma mark - 评论框的点击通知
 // ----      点击别人的名字
 - (void)UserNameLabelDidClick:(NSNotification *)notification {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
     NSLog(@"%@",notification.userInfo);
     PesonalDiscoverController *personal = [[PesonalDiscoverController alloc] init];
     personal.userID = notification.userInfo[@"userId"];
@@ -839,6 +878,11 @@
 
 // 点击了电话
 - (void)phoneNumberDidClick:(NSNotification *)notification {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
+    NSLog(@"%@",notification.userInfo);
     NSString *phoneNumber = notification.userInfo[@"phoneNumber"];
     LGCallingController *vc = [[LGCallingController alloc] init];
     vc.phoneNum = phoneNumber;
