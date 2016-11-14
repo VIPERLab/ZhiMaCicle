@@ -568,24 +568,6 @@
     [alertView show];
 }
 
-- (BOOL)isUrlStr:(NSString *)urlStr {
-    
-    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:urlStr];
-    
-    NSString *str=@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
-    
-    NSError *error;
-    
-    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:str options:NSRegularExpressionCaseInsensitive error:&error];
-    
-    NSArray *resultArray = [expression matchesInString:attrStr.string options:0 range:NSMakeRange(0, attrStr.string.length)];
-    
-    if (resultArray.count) {
-        return YES;
-    }
-    
-    return NO;
-}
 
 - (NSMutableAttributedString *)analyzeText:(NSString *)string
 {

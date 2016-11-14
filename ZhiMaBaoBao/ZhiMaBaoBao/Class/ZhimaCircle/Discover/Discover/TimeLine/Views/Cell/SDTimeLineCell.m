@@ -41,14 +41,14 @@
 
 #import "NSString+FontSize.h"
 #import "MLLinkLabel.h"
-
+#import "KXActionSheet.h"
 
 const CGFloat contentLabelFontSize = 14;
 CGFloat maxContentLabelHeight = 60; // 根据具体font而定
 
 NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLineCellOperationButtonClickedNotification";
 
-@interface SDTimeLineCell () <SDTimeLineCellCommentViewDelegate,MLLinkLabelDelegate,UIAlertViewDelegate>
+@interface SDTimeLineCell () <SDTimeLineCellCommentViewDelegate,MLLinkLabelDelegate,UIAlertViewDelegate,KXActionSheetDelegate>
 
 @property (nonatomic, assign,getter=isShowCopyView) BOOL showCopyView;
 
@@ -74,6 +74,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     UIImageView *_copyView;
     UIButton *_complainButton;
     SDLinkTypeView *_linkTypeView;
+    MLLink *_currentLink;
 }
 
 
@@ -396,14 +397,6 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
         
         MLLink *link = [MLLink linkWithType:MLLinkTypeURL value:subStringForMatch range:[self.model.content rangeOfString:subStringForMatch]];
         [_contentLabel addLink:link];
-        
-        __weak typeof(self.delegate) weakDelegate = self.delegate;
-        [_contentLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
-            NSLog(@"%@",linkText);
-            if ([weakDelegate respondsToSelector:@selector(didClickContentLink:)]) {
-                [weakDelegate didClickContentLink:linkText];
-            }
-        }];
     }
 }
 
@@ -428,7 +421,31 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     self.currentText = linkText;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"复制到粘贴板" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alertView show];
+}
+
+- (void)didClickLink:(MLLink *)link linkText:(NSString *)linkText linkLabel:(MLLinkLabel *)linkLabel {
+    NSLog(@"%@",link.linkValue);
+    if (link.linkType == MLLinkTypeOther) {
+        if ([self.delegate respondsToSelector:@selector(didClickContentLink:)]) {
+            [self.delegate didClickContentLink:link.linkValue];
+        }
+    } else if (link.linkType == MLLinkTypePhoneNumber) {
+        KXActionSheet *sheet = [[KXActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"%@可能是一个电话号码,你可以",link.linkValue] cancellTitle:@"取消" andOtherButtonTitles:@[@"呼叫",@"复制号码"]];
+        sheet.delegate = self;
+        [sheet show];
+    }
     
+}
+
+
+- (void)KXActionSheet:(KXActionSheet *)sheet andIndex:(NSInteger)index {
+    if (index == 0) { //呼叫
+        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverCommentPhoneNotification object:nil userInfo:@{@"phoneNumber" : _currentLink.linkValue}];
+    } else if (index == 1) { //复制到粘贴板
+        UIPasteboard *pasboard = [UIPasteboard generalPasteboard];
+        pasboard.string = _currentLink.linkValue;
+        [LCProgressHUD showSuccessText:@"复制到系统粘贴板"];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
