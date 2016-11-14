@@ -152,6 +152,7 @@ static SocketManager *manager = nil;
                         dispatch_group_async(groupQueue, conCurrentGlobalQueue, ^{
                             NSArray *data = responseObject[@"data"];
                             for (NSDictionary *dic in data) {
+                                NSLog(@"-----------------------------------%@",[NSThread currentThread]);
                                 LGMessage *message = [[LGMessage alloc] init];
                                 message = [message mj_setKeyValues:dic];
                                 //                            message.actType = dic[@"acttype"];
@@ -162,6 +163,8 @@ static SocketManager *manager = nil;
 
                         dispatch_group_notify(groupQueue, mainQueue, ^{
                             NSLog(@"groupQueue中的任务 都执行完成,回到主线程更新UI");
+                            NSLog(@"-----------------------333333333333------------%@",[NSThread currentThread]);
+
                             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil];
                         });
 
