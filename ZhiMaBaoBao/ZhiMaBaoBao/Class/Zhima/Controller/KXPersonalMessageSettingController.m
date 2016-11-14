@@ -66,14 +66,14 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSArray *titleArray = self.titleArray[section];
     if (section == 2) {
-        if ([USERINFO.is_self_reg isEqualToString:@"1"]) {
-            if (USERINFO.passingBy) {
-                return 2;
-            }
-#warning 这里要记得设置为1
-            return 1;
-        }
-#warning 这里要记得设置为1
+//        if ([USERINFO.is_self_reg isEqualToString:@"1"]) {
+//            if (USERINFO.passingBy) {
+//                return 2;
+//            }
+//#warning 这里要记得设置为1
+//            return 1;
+//        }
+//#warning 这里要记得设置为1
         return 1;
     }
     return titleArray.count;

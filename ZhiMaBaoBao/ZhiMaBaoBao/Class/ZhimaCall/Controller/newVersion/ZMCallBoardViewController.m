@@ -311,12 +311,12 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
     if (_copyView) {
         [_copyView removeFromSuperview];
         _copyView = nil;
-
     }
     
     if ([self.showNumLabel.text isEqualToString:@"请拨号或搜索姓名"]) {
         return;
     }
+    
     if (self.showNumLabel.text.length <= 11  ) {
         self.showNumLabel.text = [self.showNumLabel.text stringByReplacingOccurrencesOfString:@"-" withString:@""];;
     }

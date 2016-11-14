@@ -172,6 +172,7 @@
                 if (model.reply_friend_nick.length) {
                     //设置文本链接
                     secondNameLink = [MLLink linkWithType:MLLinkTypePhoneNumber value:model.reply_id range:[self findTargetStr:model.reply_friend_nick inStr:[model.attributedContent string]]];
+                    
                 }
                 
                 if (secondNameLink) {
@@ -521,6 +522,7 @@
     for (NSTextCheckingResult * match in resultArray) {
         NSString * subStringForMatch = [model.attributedContent.string substringWithRange:match.range];
         MLLink *link = [MLLink linkWithType:MLLinkTypeEmail value:subStringForMatch range:[model.attributedContent.string rangeOfString:subStringForMatch]];
+        link.activeLinkTextAttributes = @{NSForegroundColorAttributeName : [UIColor colorFormHexRGB:@"546993"]};
         [label addLink:link];
     }
 }

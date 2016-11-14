@@ -223,12 +223,11 @@
 //下拉刷新
 - (void)setupNewData {
     //加载未读消息数
-    __weak typeof(self) weakSelf = self;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
+    
     //下拉页数置1
-    weakSelf.pageNumber = 1;
-    NSString *pageNumber = [NSString stringWithFormat:@"%zd",weakSelf.pageNumber];
+    NSString *pageNumber = [NSString stringWithFormat:@"%zd",1];
     [LGNetWorking loadMyDiscoverWithSectionID:USERINFO.sessionId andMyCheatAcount:USERINFO.userID andPageCount:pageNumber block:^(ResponseData *responseData) {
         [_tableView.mj_header endRefreshing];
         
@@ -236,12 +235,16 @@
             return;
         }
         
-        [weakSelf.dataArray removeAllObjects];
+        [self.dataArray removeAllObjects];
         
         NSArray *delCircleIDArray = [NSString mj_objectArrayWithKeyValuesArray:responseData.data_temp[@"dataList"]];
         
         NSArray *dataArray = [SDTimeLineCellModel getModelArrayWithJsonData:responseData andIsUpdata:YES];
+        
+        
         self.dataArray = [dataArray mutableCopy];
+        
+        
         // 异步 存数据 到朋友圈数据库
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             //删除已删除的朋友圈

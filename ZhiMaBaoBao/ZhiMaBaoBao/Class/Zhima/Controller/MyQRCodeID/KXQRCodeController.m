@@ -78,7 +78,7 @@
 #pragma mark - setupView
 - (void)setupView {
     self.view.backgroundColor = [UIColor colorFormHexRGB:@"2e3132"];
-    CGFloat centerHeigth = (ScreenWidth - 60) + 45 + 40;
+    CGFloat centerHeigth = (ScreenWidth - 60) + 45;
     UIView *centerView = [[UIView alloc] initWithFrame:CGRectMake(30, 84 + 64, ScreenWidth - 60, centerHeigth)];
     centerView.backgroundColor = [UIColor whiteColor];
     centerView.layer.cornerRadius = 10;
@@ -129,21 +129,21 @@
 //    imageView.userInteractionEnabled = YES;
 //    [QRCodeView addSubview:imageView];
     
-    
-    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(centerView.frame) - 40, CGRectGetWidth(centerView.frame), 15)];
-    invitedLabel.textAlignment = NSTextAlignmentCenter;
-    invitedLabel.font = [UIFont systemFontOfSize:15];
-    invitedLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
-    invitedLabel.text = [NSString stringWithFormat:@"我的邀请码:%@",USERINFO.invite_code];
-    [self.centerView addSubview:invitedLabel];
-    
-    
-    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(invitedLabel.frame),  CGRectGetWidth(centerView.frame), 20)];
-    tipsLabel.textAlignment = NSTextAlignmentCenter;
-    tipsLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
-    tipsLabel.font = [UIFont systemFontOfSize:15];
-    tipsLabel.text = @"扫一扫上面的二维码图案，加我好友";
-    [self.centerView addSubview:tipsLabel];
+#warning 隐藏邀请码
+//    UILabel *invitedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(centerView.frame) - 40, CGRectGetWidth(centerView.frame), 15)];
+//    invitedLabel.textAlignment = NSTextAlignmentCenter;
+//    invitedLabel.font = [UIFont systemFontOfSize:15];
+//    invitedLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
+//    invitedLabel.text = [NSString stringWithFormat:@"我的邀请码:%@",USERINFO.invite_code];
+//    [self.centerView addSubview:invitedLabel];
+//    
+//    
+//    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(invitedLabel.frame),  CGRectGetWidth(centerView.frame), 20)];
+//    tipsLabel.textAlignment = NSTextAlignmentCenter;
+//    tipsLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
+//    tipsLabel.font = [UIFont systemFontOfSize:15];
+//    tipsLabel.text = @"扫一扫上面的二维码图案，加我好友";
+//    [self.centerView addSubview:tipsLabel];
 }
 
 

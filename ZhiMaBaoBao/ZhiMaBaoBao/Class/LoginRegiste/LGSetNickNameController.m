@@ -98,39 +98,39 @@
         make.right.mas_equalTo(-15);
     }];
     
-    UILabel *verCode = [[UILabel alloc] init];
-    verCode.text = @"邀请码";
-    verCode.textColor = BLACKCOLOR;
-    verCode.font = MAINFONT;
-    [self.view addSubview:verCode];
-    [verCode mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(15);
-        make.top.mas_equalTo(separtor1.mas_bottom).mas_offset(16);
-    }];
+//    UILabel *verCode = [[UILabel alloc] init];
+//    verCode.text = @"邀请码";
+//    verCode.textColor = BLACKCOLOR;
+//    verCode.font = MAINFONT;
+//    [self.view addSubview:verCode];
+//    [verCode mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.mas_equalTo(15);
+//        make.top.mas_equalTo(separtor1.mas_bottom).mas_offset(16);
+//    }];
     
-    UITextField *verField = [[UITextField alloc] init];
-    verField.placeholder = @"可填可不填";
-    phontField.delegate = self;
-    verField.keyboardType = UIKeyboardTypePhonePad;
-    verField.font = MAINFONT;
-    [self.view addSubview:verField];
-    self.codeField = verField;
-    [verField mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(verCode.mas_centerY);
-        make.left.mas_equalTo(self.nickNameField.mas_left);
-        make.width.mas_equalTo(150);
-        make.height.mas_equalTo(40);
-    }];
+//    UITextField *verField = [[UITextField alloc] init];
+//    verField.placeholder = @"可填可不填";
+//    phontField.delegate = self;
+//    verField.keyboardType = UIKeyboardTypePhonePad;
+//    verField.font = MAINFONT;
+//    [self.view addSubview:verField];
+//    self.codeField = verField;
+//    [verField mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.mas_equalTo(verCode.mas_centerY);
+//        make.left.mas_equalTo(self.nickNameField.mas_left);
+//        make.width.mas_equalTo(150);
+//        make.height.mas_equalTo(40);
+//    }];
     
-    UIView *separtor2 = [[UIView alloc] init];
-    separtor2.backgroundColor = SEPARTORCOLOR;
-    [self.view addSubview:separtor2];
-    [separtor2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(verCode.mas_bottom).mas_offset(16);
-        make.left.mas_equalTo(15);
-        make.height.mas_equalTo(1);
-        make.right.mas_equalTo(-15);
-    }];
+//    UIView *separtor2 = [[UIView alloc] init];
+//    separtor2.backgroundColor = SEPARTORCOLOR;
+//    [self.view addSubview:separtor2];
+//    [separtor2 mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(verCode.mas_bottom).mas_offset(16);
+//        make.left.mas_equalTo(15);
+//        make.height.mas_equalTo(1);
+//        make.right.mas_equalTo(-15);
+//    }];
     
     UIButton *submitBtn = [[UIButton alloc] init];
     submitBtn.backgroundColor = THEMECOLOR;
@@ -145,7 +145,7 @@
         make.left.mas_equalTo(15);
         make.right.mas_equalTo(-15);
         make.height.mas_equalTo(48);
-        make.top.mas_equalTo(separtor2.mas_bottom).mas_offset(20);
+        make.top.mas_equalTo(separtor1.mas_bottom).mas_offset(20);
     }];
 }
 /**
