@@ -152,14 +152,15 @@
                 [self setContentLinkText:model andLabel:label];
                 
                 
-//                if (![self isUrlStr:model.comment]) {
+
                 MLLink *commentLink = [MLLink linkWithType:0 value:model.comment range:[self findTargetStr:model.comment inStr:[model.attributedContent string]]];
                 commentLink.linkTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
+                commentLink.activeLinkTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
                 [commentLink setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
                     [self commentButtonDidClick:buttonView];
                 }];
                 [label addLink:commentLink];
-//                }
+
                 
                 [self setCommentURLLink:model andLabel:label];
                 
@@ -636,7 +637,7 @@
     return str;
 }
 
-- (NSArray *) emojiStringArray
+- (NSArray *)emojiStringArray
 {
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"face" ofType:@"plist"];
     NSDictionary *faceDic = [NSDictionary dictionaryWithContentsOfFile:plistPath];

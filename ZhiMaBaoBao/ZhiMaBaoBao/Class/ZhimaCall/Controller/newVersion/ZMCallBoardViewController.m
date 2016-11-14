@@ -19,8 +19,10 @@
 
 #import "PhoneContact.h"
 
+#import "CallDismissAnimation.h"
 
-@interface ZMCallBoardViewController ()<CallInfoMarkViewDelegate,LGPhoneNumberCellDelegate,KXKeyBoardViewDelegate,UITableViewDelegate,UITableViewDataSource,KXCopyViewDelegate>
+
+@interface ZMCallBoardViewController ()<CallInfoMarkViewDelegate,LGPhoneNumberCellDelegate,KXKeyBoardViewDelegate,UITableViewDelegate,UITableViewDataSource,KXCopyViewDelegate,UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, strong) KXKeyBoardView   *keyboardView; //拨号键盘
 @property (nonatomic, strong) CallInfoMarkView *callInfoView; //搜索出的用户信息view
@@ -286,7 +288,12 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
         _copyView = nil;
 
     }
+    self.transitioningDelegate = self;
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    return [[CallDismissAnimation alloc] init];
 }
 
 - (void)callAction {

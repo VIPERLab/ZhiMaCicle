@@ -25,8 +25,10 @@
 #import <AddressBook/ABPerson.h>
 #import <AddressBookUI/ABPersonViewController.h>
 
+#import "CallPresendAnimation.h"
 
-@interface ZMCallViewController ()<UITableViewDelegate,UITableViewDataSource,ZMCallCellDelegate>
+
+@interface ZMCallViewController ()<UITableViewDelegate,UITableViewDataSource,ZMCallCellDelegate,UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArr;      //数据源数组
@@ -70,7 +72,8 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
 
 - (void)initOthers
 {
-    self.navigationItem.title = @"拨打";
+//    self.navigationItem.title = @"拨打";
+    [self setCustomTitle:@"拨打"];
     self.dataArr  = [NSMutableArray array];
     self.matchArr = [NSMutableArray array];
     self.contactsArr = [NSMutableArray array];
@@ -330,9 +333,17 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
 {
     ZMCallBoardViewController*callBoardVC = [[ZMCallBoardViewController alloc]init];
     callBoardVC.contactsArr = self.contactsArr;
+    
+    callBoardVC.transitioningDelegate = self;
     [self presentViewController:callBoardVC animated:YES completion:nil];
 
 }
+
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+    return [[CallPresendAnimation alloc] init];
+}
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {

@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RotationPushAnimation : NSObject <UIViewControllerAnimatedTransitioning>
+@interface CallPresendAnimation : NSObject <UIViewControllerAnimatedTransitioning>
 
 @end

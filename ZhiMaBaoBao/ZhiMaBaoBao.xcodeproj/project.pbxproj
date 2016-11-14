@@ -35,7 +35,7 @@
 		04608FA11DB078CD00F4B9E9 /* ChangeSexCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04608FA01DB078CD00F4B9E9 /* ChangeSexCell.m */; };
 		04787AE91D9CFF4B000A0DB5 /* KXActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */; };
 		04787AF61D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */; };
-		047EFDD01DD419910085B9D4 /* RotationPushAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 047EFDCF1DD419910085B9D4 /* RotationPushAnimation.m */; };
+		047EFDD01DD419910085B9D4 /* CallPresendAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 047EFDCF1DD419910085B9D4 /* CallPresendAnimation.m */; };
 		047F13F01DAA4BDE00684881 /* GroupChatChangeGroupNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */; };
 		047F13F31DAA60EF00684881 /* GroupChatChangeNoticeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F21DAA60EF00684881 /* GroupChatChangeNoticeController.m */; };
 		047F13F61DAB253300684881 /* GroupChatMessageDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047F13F51DAB253300684881 /* GroupChatMessageDetailController.m */; };
@@ -456,6 +456,7 @@
 		04F862CC1D9554AA00DCC6FE /* UserMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862C71D9554AA00DCC6FE /* UserMessageCell.m */; };
 		04F862CD1D9554AA00DCC6FE /* UserMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862C91D9554AA00DCC6FE /* UserMessageController.m */; };
 		04F862CE1D9554AA00DCC6FE /* UserMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */; };
+		04F89ADF1DD95F8200F6ABDB /* CallDismissAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F89ADE1DD95F8200F6ABDB /* CallDismissAnimation.m */; };
 		04FC4D9C1DB5B40300C1E854 /* KXPhotoBrowersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FC4D9B1DB5B40300C1E854 /* KXPhotoBrowersController.m */; };
 		04FC4D9F1DB5B70B00C1E854 /* UINavigationBar+Awesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FC4D9E1DB5B70B00C1E854 /* UINavigationBar+Awesome.m */; };
 		04FC4DA31DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FC4DA21DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m */; };
@@ -764,8 +765,8 @@
 		04787AE81D9CFF4B000A0DB5 /* KXActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXActionSheet.m; sourceTree = "<group>"; };
 		04787AF41D9E13FB000A0DB5 /* ConverseWithouNetworkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverseWithouNetworkCell.h; sourceTree = "<group>"; };
 		04787AF51D9E13FB000A0DB5 /* ConverseWithouNetworkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverseWithouNetworkCell.m; sourceTree = "<group>"; };
-		047EFDCE1DD419910085B9D4 /* RotationPushAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationPushAnimation.h; sourceTree = "<group>"; };
-		047EFDCF1DD419910085B9D4 /* RotationPushAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotationPushAnimation.m; sourceTree = "<group>"; };
+		047EFDCE1DD419910085B9D4 /* CallPresendAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallPresendAnimation.h; sourceTree = "<group>"; };
+		047EFDCF1DD419910085B9D4 /* CallPresendAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallPresendAnimation.m; sourceTree = "<group>"; };
 		047F13EE1DAA4BDE00684881 /* GroupChatChangeGroupNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatChangeGroupNameController.h; sourceTree = "<group>"; };
 		047F13EF1DAA4BDE00684881 /* GroupChatChangeGroupNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatChangeGroupNameController.m; sourceTree = "<group>"; };
 		047F13F11DAA60EF00684881 /* GroupChatChangeNoticeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatChangeNoticeController.h; sourceTree = "<group>"; };
@@ -1599,6 +1600,8 @@
 		04F862C91D9554AA00DCC6FE /* UserMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageController.m; sourceTree = "<group>"; };
 		04F862CA1D9554AA00DCC6FE /* UserMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMessageModel.h; sourceTree = "<group>"; };
 		04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageModel.m; sourceTree = "<group>"; };
+		04F89ADD1DD95F8200F6ABDB /* CallDismissAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallDismissAnimation.h; sourceTree = "<group>"; };
+		04F89ADE1DD95F8200F6ABDB /* CallDismissAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallDismissAnimation.m; sourceTree = "<group>"; };
 		04FC4D9A1DB5B40300C1E854 /* KXPhotoBrowersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPhotoBrowersController.h; sourceTree = "<group>"; };
 		04FC4D9B1DB5B40300C1E854 /* KXPhotoBrowersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPhotoBrowersController.m; sourceTree = "<group>"; };
 		04FC4D9D1DB5B70B00C1E854 /* UINavigationBar+Awesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+Awesome.h"; sourceTree = "<group>"; };
@@ -2256,8 +2259,10 @@
 		047EFDCD1DD417750085B9D4 /* TransitionAnimation(转场动画) */ = {
 			isa = PBXGroup;
 			children = (
-				047EFDCE1DD419910085B9D4 /* RotationPushAnimation.h */,
-				047EFDCF1DD419910085B9D4 /* RotationPushAnimation.m */,
+				047EFDCE1DD419910085B9D4 /* CallPresendAnimation.h */,
+				047EFDCF1DD419910085B9D4 /* CallPresendAnimation.m */,
+				04F89ADD1DD95F8200F6ABDB /* CallDismissAnimation.h */,
+				04F89ADE1DD95F8200F6ABDB /* CallDismissAnimation.m */,
 			);
 			name = "TransitionAnimation(转场动画)";
 			path = TransitionAnimation;
@@ -5849,7 +5854,7 @@
 				04EA7D5D1D912872005E5425 /* ZXAztecSimpleToken.m in Sources */,
 				D53E3DD41DB704FC001C663B /* PKFullScreenPlayerView.m in Sources */,
 				04F862891D94FC7900DCC6FE /* FaceSourceManager.m in Sources */,
-				047EFDD01DD419910085B9D4 /* RotationPushAnimation.m in Sources */,
+				047EFDD01DD419910085B9D4 /* CallPresendAnimation.m in Sources */,
 				04EA7DB51D912872005E5425 /* ZXDataMatrixC40Encoder.m in Sources */,
 				041595EA1DB75C65002C0F66 /* PinyinFormatter.m in Sources */,
 				04EA7DDD1D912872005E5425 /* ZXRSSExpandedRow.m in Sources */,
@@ -6143,6 +6148,7 @@
 				04F57AE51D9280BD002A6471 /* SDPhotoBrowser.m in Sources */,
 				31B7C71F1D8E96A100F1883A /* ConversationController.m in Sources */,
 				04EA7DA31D912872005E5425 /* ZXDecodeHints.m in Sources */,
+				04F89ADF1DD95F8200F6ABDB /* CallDismissAnimation.m in Sources */,
 				04EA7DE51D912872005E5425 /* ZXCodaBarWriter.m in Sources */,
 				0485937E1D9674B800DB3FCD /* ChangeSexController.m in Sources */,
 				311CEF711D921F6100BBB1F9 /* LGCallingController.m in Sources */,

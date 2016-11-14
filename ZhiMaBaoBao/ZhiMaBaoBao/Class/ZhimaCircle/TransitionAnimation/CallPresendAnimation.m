@@ -6,13 +6,13 @@
 //  Copyright © 2016年 liugang. All rights reserved.
 //
 
-#import "RotationPushAnimation.h"
+#import "CallPresendAnimation.h"
 
-@implementation RotationPushAnimation
+@implementation CallPresendAnimation
 
 //动画的时间
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
-    return 1.5f;
+    return 1.2f;
 }
 
 
@@ -23,33 +23,25 @@
     UIViewController *toView = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     toView.view.alpha = 0.0f;
     
-    
     //获取rect
     CGRect finailRect = [transitionContext finalFrameForViewController:toView];
     NSLog(@"%@",NSStringFromCGRect(finailRect));
     
-    toView.view.frame = CGRectOffset(finailRect, [UIScreen mainScreen].bounds.size.width, 0);
-    
+    toView.view.frame = CGRectOffset(finailRect, 0, [UIScreen mainScreen].bounds.size.height * 0.5 );
     
     //中转view
     [[transitionContext containerView] addSubview:toView.view];
     
-    [UIView animateWithDuration:0.6 animations:^{
-        toView.view.frame = CGRectMake(0, 0, finailRect.size.width, finailRect.size.height);
-        toView.view.alpha = 1.0f;
-        toView.tabBarController.tabBar.alpha = 0.0f;
-    } completion:^(BOOL finished) {
-        [transitionContext completeTransition:YES];
-    }];
     
-//    [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.0f usingSpringWithDamping:0.6f initialSpringVelocity:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
-//        
-//        
-//    } completion:^(BOOL finished) {
-//        
-//        
-//        
-//    }];
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.0f usingSpringWithDamping:1.0f initialSpringVelocity:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+        
+        toView.view.frame = finailRect;
+        toView.view.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        
+        [transitionContext completeTransition:YES];
+        
+    }];
 }
 
 @end

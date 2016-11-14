@@ -42,7 +42,12 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self request];
+    if (USERINFO.hasLogin) {
+        [self request];
+    } else {
+        [self setupUnLoginView];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,6 +79,14 @@
 //    [self.view addSubview:headerView2];
 //    [self setupHeaderView:headerView2];
     
+}
+
+- (void)setupUnLoginView {
+    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 100, ScreenWidth, 30)];
+    loginButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [loginButton setTitle:@"登录" forState:UIControlStateNormal];
+    [loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.view addSubview:loginButton];
 }
 
 - (void)setupHeaderView:(UIView *)headerView2 {

@@ -12,11 +12,11 @@
 #import "NearByPeopleController.h"
 #import "ScanQRCodeController.h"
 
-#import "RotationPushAnimation.h"
+//#import "CallPresendAnimation.h"
 
 #define ZhiMaCicleCellReusedID @"ZhiMaCicleCellReusedID"
 
-@interface TimeLineController () <UITableViewDelegate,UITableViewDataSource,UIViewControllerTransitioningDelegate,UINavigationControllerDelegate>
+@interface TimeLineController () <UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, strong) NSArray *iconArray;
 
@@ -174,13 +174,13 @@
 }
 
 // 转场
-- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC {
-    if (operation == UINavigationControllerOperationPush){ // 就是在这里判断是哪种动画类型
-        return [[RotationPushAnimation alloc] init]; // 返回push动画的类
-    }else{
-        return nil;
-    }
-}
+//- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC {
+//    if (operation == UINavigationControllerOperationPush){ // 就是在这里判断是哪种动画类型
+//        return [[CallPresendAnimation alloc] init]; // 返回push动画的类
+//    }else{
+//        return nil;
+//    }
+//}
 
 
 #pragma mark - 未读消息
