@@ -44,7 +44,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+//    [self setCustomTitle:@"芝麻友"];
     [self setCustomRightItems];
     [self addSubviews];
     [self requestFriendsList];

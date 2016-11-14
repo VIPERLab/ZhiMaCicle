@@ -16,6 +16,7 @@
 #import "ZhiMaCollectionController.h"  //收藏
 #import "PesonalDiscoverController.h"
 
+#import "ViciterLoginView.h"
 #define PersonalCellHeight 45
 #define PersonalCenterCellReusedId @"PersonalCenterCellReusedId"
 
@@ -34,6 +35,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    [self setCustomTitle:@"芝麻"];
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [self setupVisiterView];
+        return;
+    }
     [self setCustomRightItems];
     [self setupView];
 }
@@ -44,6 +51,17 @@
     self.hidePurse = info.hidePurse;
     
     [_tableView reloadData];
+}
+
+
+- (void)setupVisiterView {
+    ViciterLoginView *viciter = [[ViciterLoginView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    [viciter setLoginBlock:^{
+        [self loginButtonDidClick:nil];
+    }];
+    [self.view addSubview:viciter];
+    
+    
 }
 
 
@@ -157,7 +175,11 @@
         setting.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:setting animated:YES];
     }
-    
+}
+
+
+- (void)loginButtonDidClick:(UIButton *)sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:Show_Login object:nil];
 }
 
 

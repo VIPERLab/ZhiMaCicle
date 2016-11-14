@@ -457,6 +457,7 @@
 		04F862CD1D9554AA00DCC6FE /* UserMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862C91D9554AA00DCC6FE /* UserMessageController.m */; };
 		04F862CE1D9554AA00DCC6FE /* UserMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */; };
 		04F89ADF1DD95F8200F6ABDB /* CallDismissAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F89ADE1DD95F8200F6ABDB /* CallDismissAnimation.m */; };
+		04F89AE31DD9A23600F6ABDB /* ViciterLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F89AE21DD9A23600F6ABDB /* ViciterLoginView.m */; };
 		04FC4D9C1DB5B40300C1E854 /* KXPhotoBrowersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FC4D9B1DB5B40300C1E854 /* KXPhotoBrowersController.m */; };
 		04FC4D9F1DB5B70B00C1E854 /* UINavigationBar+Awesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FC4D9E1DB5B70B00C1E854 /* UINavigationBar+Awesome.m */; };
 		04FC4DA31DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FC4DA21DB5F7B400C1E854 /* KXPhotoBorwerScrollView.m */; };
@@ -1602,6 +1603,8 @@
 		04F862CB1D9554AA00DCC6FE /* UserMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageModel.m; sourceTree = "<group>"; };
 		04F89ADD1DD95F8200F6ABDB /* CallDismissAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallDismissAnimation.h; sourceTree = "<group>"; };
 		04F89ADE1DD95F8200F6ABDB /* CallDismissAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallDismissAnimation.m; sourceTree = "<group>"; };
+		04F89AE11DD9A23600F6ABDB /* ViciterLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViciterLoginView.h; sourceTree = "<group>"; };
+		04F89AE21DD9A23600F6ABDB /* ViciterLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViciterLoginView.m; sourceTree = "<group>"; };
 		04FC4D9A1DB5B40300C1E854 /* KXPhotoBrowersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KXPhotoBrowersController.h; sourceTree = "<group>"; };
 		04FC4D9B1DB5B40300C1E854 /* KXPhotoBrowersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KXPhotoBrowersController.m; sourceTree = "<group>"; };
 		04FC4D9D1DB5B70B00C1E854 /* UINavigationBar+Awesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+Awesome.h"; sourceTree = "<group>"; };
@@ -4248,6 +4251,15 @@
 			path = MyMessage;
 			sourceTree = "<group>";
 		};
+		04F89AE01DD9A21500F6ABDB /* ViciterLoginView(游客登录视图) */ = {
+			isa = PBXGroup;
+			children = (
+				04F89AE11DD9A23600F6ABDB /* ViciterLoginView.h */,
+				04F89AE21DD9A23600F6ABDB /* ViciterLoginView.m */,
+			);
+			name = "ViciterLoginView(游客登录视图)";
+			sourceTree = "<group>";
+		};
 		04FC4D991DB5B3EE00C1E854 /* PhotoBrower */ = {
 			isa = PBXGroup;
 			children = (
@@ -4740,6 +4752,7 @@
 		31B7C7001D8E96A100F1883A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				04F89AE01DD9A21500F6ABDB /* ViciterLoginView(游客登录视图) */,
 				040FE2691DA771F500EF435F /* ZhiMaCollection(收藏) */,
 				0485936E1D96748600DB3FCD /* ChangeSex(修改性别) */,
 				04F5760D1D9224F2002A6471 /* ModifySign(个性签名) */,
@@ -6215,6 +6228,7 @@
 				310B83251D8E7B0100A0F408 /* main.m in Sources */,
 				04FC4D9F1DB5B70B00C1E854 /* UINavigationBar+Awesome.m in Sources */,
 				04EA7E111D912872005E5425 /* ZXPDF417ErrorCorrection.m in Sources */,
+				04F89AE31DD9A23600F6ABDB /* ViciterLoginView.m in Sources */,
 				04E8F30B1DC322F7008C2174 /* NewDiscoverLinkTypeView.m in Sources */,
 				04EA7B661D91282E005E5425 /* LBXScanWrapper.m in Sources */,
 				04F862C41D95545000DCC6FE /* KXDiscoverDetailCommentView.m in Sources */,
