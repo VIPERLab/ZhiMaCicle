@@ -30,6 +30,7 @@
 #import <CoreTelephony/CTCall.h>
 
 #import "LGLoginController.h"
+#import "LGGuideController.h"
 
 #import "UncaughtExceptionHandler.h"
 
@@ -480,8 +481,17 @@
     
     //被挤下线通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doOtherLogin) name:kOtherLogin object:nil];
-
+    //弹出登录注册界面通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentLoginRegiste) name:kPressentLoginRegiste object:nil];
     
+}
+
+- (void)presentLoginRegiste
+{
+    //弹出登录注册界面
+    LGGuideController*vc = [[LGGuideController alloc]init];
+    UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self.window.rootViewController presentViewController:guideVC animated:YES completion:nil];
 }
 
 - (void)jumpMainController{

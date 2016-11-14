@@ -44,6 +44,9 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setNaviTitle:@"芝麻友"];
+
 
     [self setCustomRightItems];
     [self addSubviews];
@@ -442,6 +445,11 @@ static NSString * const headerIdentifier = @"headerIdentifier";
             
         }else if (indexPath.row == 1){  //新的朋友
             
+            if ([USERINFO.sessionId isEqualToString:@"0"]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+                return;
+            }
+
             NewFriendsListController *vc = [[NewFriendsListController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
@@ -454,6 +462,12 @@ static NSString * const headerIdentifier = @"headerIdentifier";
             [[self.tabBarController.tabBar.items objectAtIndex:1] setBadgeValue:nil];
             
         }else if (indexPath.row == 2){  //群组
+            
+            if ([USERINFO.sessionId isEqualToString:@"0"]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+                return;
+            }
+
             GroupChatListController *vc = [[GroupChatListController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];

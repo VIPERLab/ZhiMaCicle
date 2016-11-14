@@ -197,10 +197,15 @@
             
             [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:nil object:nil];
             
-            
             [LCProgressHUD hide];
-            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
-            
+            if (info.isVisitor) {
+
+                [self dismissViewControllerAnimated:YES completion:nil];
+
+            }else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
+            }
+
         }else{
             [LCProgressHUD showFailureText:responseData.msg];
         }

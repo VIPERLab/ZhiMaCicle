@@ -34,6 +34,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setNaviTitle:@"芝麻"];
+
+    
     [self setCustomRightItems];
     [self setupView];
 }

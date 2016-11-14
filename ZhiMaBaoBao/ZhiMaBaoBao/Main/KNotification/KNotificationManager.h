@@ -123,6 +123,8 @@
 //                    ------ 消息通知 --------
 //相同的用户登录
 #define kOtherLogin @"kOtherLogin"
+//弹登录注册界面
+#define kPressentLoginRegiste @"kPressentLoginRegiste"
 //发送消息状态回调通知
 #define kSendMessageStateCall @"kSendMessageStateCall"
 //收到新消息

@@ -116,13 +116,19 @@
 
 - (void)visitorAction
 {     
-    UserInfo*info = [[UserInfo alloc]init];
+    UserInfo*info = [UserInfo read];
+//    if (info.isVisitor) {
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//        return;
+//    }
+    
     info.hasLogin = YES;
     info.sessionId = @"0";
     info.head_photo = @"image/user_default_head_photo.png";
     info.backgroundImg = @"image/user_default_background_image.jpg";
     info.yuan_head_photo = @"image/user_default_head_photo.png";
     info.username = @"游客";
+    info.isVisitor = YES;
     [info save];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];

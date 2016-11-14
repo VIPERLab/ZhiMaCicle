@@ -33,6 +33,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setNaviTitle:@"聊天"];
+    
     netWorkStatus = YES;
     UserInfo *userInfo = [UserInfo shareInstance];
     userInfo.conversationVC = self;
