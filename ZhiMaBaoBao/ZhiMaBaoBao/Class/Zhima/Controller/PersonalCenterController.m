@@ -30,20 +30,17 @@
 
 @implementation PersonalCenterController {
     UITableView *_tableView;
+    ViciterLoginView *_viciterView;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self setNaviTitle:@"芝麻"];
-    
-    if ([USERINFO.sessionId isEqualToString:@"0"]) {
-        [self setupVisiterView];
-        return;
-    }
 
     [self setCustomRightItems];
     [self setupView];
+    [self setupVisiterView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -51,14 +48,25 @@
     UserInfo *info = [UserInfo read];
     self.hidePurse = info.hidePurse;
     
+    if (![USERINFO.sessionId isEqualToString:@"0"]) {
+        _viciterView.hidden = YES;
+        _tableView.hidden = NO;
+    } else {
+        _viciterView.hidden = NO;
+        _tableView.hidden = YES;
+    }
+    
     [_tableView reloadData];
 }
 
 
 - (void)setupVisiterView {
     ViciterLoginView *viciter = [[ViciterLoginView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    _viciterView = viciter;
     [viciter setLoginBlock:^{
-        [self loginButtonDidClick:nil];
+//        [self loginButtonDidClick:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+
     }];
     [self.view addSubview:viciter];
     

@@ -249,7 +249,7 @@
  *  @param block     
  */
 + (void)getAllCallRecords:(NSString *)sessionId block:(SuccessfulBlock)block{
-    
+   
     [HttpTool POST:@"/moblie/getCallRecords.do"
            params:@{@"sessionId":sessionId }
           success:^(ResponseData *json) {

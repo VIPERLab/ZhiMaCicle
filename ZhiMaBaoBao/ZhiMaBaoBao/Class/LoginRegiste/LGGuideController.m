@@ -102,7 +102,21 @@
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
     }];
+    
+    UserInfo*info = [UserInfo read];
+    if (info.isVisitor) {
+        UIButton*closeBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, 25, 50, 50)];
+        [closeBtn setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+        [closeBtn addTarget:self action:@selector(dissBackAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:closeBtn];
+    }
 }
+
+- (void)dissBackAction
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 //注册
 - (void)registerAction{
     LGRegisterController *registerVC = [[LGRegisterController alloc] init];
@@ -116,13 +130,14 @@
 
 - (void)visitorAction
 {     
-    UserInfo*info = [UserInfo read];
-//    if (info.isVisitor) {
-//        [self dismissViewControllerAnimated:YES completion:nil];
-//        return;
-//    }
+    UserInfo*info = [UserInfo shareInstance];
+    if (info.isVisitor) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
     
     info.hasLogin = YES;
+    info.userID = @"";
     info.sessionId = @"0";
     info.head_photo = @"image/user_default_head_photo.png";
     info.backgroundImg = @"image/user_default_background_image.jpg";
