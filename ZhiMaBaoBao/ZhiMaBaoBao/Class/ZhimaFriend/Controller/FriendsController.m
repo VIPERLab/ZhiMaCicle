@@ -15,6 +15,7 @@
 #import "FriendProfilecontroller.h"
 #import "ConversationController.h"
 #import "GroupChatListController.h"
+#import "PhoneAddressController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "ConverseModel.h"
 #import "JFMyPlayerSound.h"
@@ -328,7 +329,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0) {
-        return 2;
+        return 3;
     }else{
         //取到是哪一组，返回该数组中的个数
         return [[self.countOfSectionArr objectAtIndex:section - 1] integerValue];
@@ -341,6 +342,11 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         FriendsListCell *cell = [tableView dequeueReusableCellWithIdentifier:headerIdentifier];
 
         if (indexPath.row == 0) {
+            cell.name.text = @"手机联系人";
+            cell.avtar.image = [UIImage imageNamed:@"phoneFriend"];
+            cell.unreadLabel.hidden = YES;
+            
+        }else if (indexPath.row == 1) {
             cell.name.text = @"新的朋友";
             cell.avtar.image = [UIImage imageNamed:@"new_friend"];
             if (USERINFO.unReadCount > 0) {
@@ -427,7 +433,15 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
-        if (indexPath.row == 0) {   //新的朋友
+        if (indexPath.row == 0) { //手机联系人
+            //跳转到添加手机联系人页面
+            PhoneAddressController *vc = [[PhoneAddressController alloc] init];
+            vc.isAddPhoneFriend = YES;
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }else if (indexPath.row == 1){  //新的朋友
+            
             NewFriendsListController *vc = [[NewFriendsListController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
@@ -438,7 +452,8 @@ static NSString * const headerIdentifier = @"headerIdentifier";
             [userInfo save];
             self.unReadLabel.hidden = YES;
             [[self.tabBarController.tabBar.items objectAtIndex:1] setBadgeValue:nil];
-        }else if (indexPath.row == 1){  //群组
+            
+        }else if (indexPath.row == 2){  //群组
             GroupChatListController *vc = [[GroupChatListController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
