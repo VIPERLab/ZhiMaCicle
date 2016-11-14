@@ -519,6 +519,12 @@
     
     //，跳转到好友详情
     if (self.isAddPhoneFriend) {
+        
+        if ([USERINFO.sessionId isEqualToString:@"0"]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+            return;
+        }
+        
         NSInteger rowNum = 0;
         for (int i = 0; i < indexPath.section; i++) {
             
