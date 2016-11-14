@@ -168,9 +168,6 @@
     }
 
     [self getDataFormSqlist];
-    
-    
-    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

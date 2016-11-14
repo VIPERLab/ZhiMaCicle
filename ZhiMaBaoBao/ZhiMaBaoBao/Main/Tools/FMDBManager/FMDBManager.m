@@ -1316,9 +1316,9 @@
                 while ([result next]) {
                     isExist = YES;
                 }
-                
+//                userId, userName, defineName, userPhoto
                 NSLog(@"存在用户,需要更新");
-                NSString *option1 = [NSString stringWithFormat:@"user_Name = '%@', user_Head_photo = '%@', defineName = '%@'",model.user_Name,model.user_Head_photo,model.user_NickName];
+                NSString *option1 = [NSString stringWithFormat:@"user_Name = '%@', userPhoto = '%@', defineName = '%@'",model.user_Name,model.head_photo,model.user_NickName];
                 NSString *option2 = [NSString stringWithFormat:@"userId = '%@'",model.user_Id];
                 opeartionStr = [FMDBShareManager alterTable:ZhiMa_User_Message_Table withOpton1:option1 andOption2:option2];
             }
@@ -1371,7 +1371,7 @@
             model.user_NickName = [result stringForColumn:@"defineName"];
             model.user_Name = [result stringForColumn:@"userName"];
             model.user_Id = [result stringForColumn:@"userId"];
-            model.user_Head_photo = [result stringForColumn:@"userPhoto"];
+            model.head_photo = [result stringForColumn:@"userPhoto"];
             [dataArray addObject:model];
         }
     }];
@@ -1389,7 +1389,7 @@
 - (BOOL)upDataUserMessage:(ZhiMaFriendModel *)userMessage {
     __block BOOL isSuccess = YES;
 
-    NSString *option1 = [NSString stringWithFormat:@"userName = '%@', userPhoto = '%@', defineName = '%@'",userMessage.user_Name,userMessage.user_Head_photo,userMessage.user_NickName];
+    NSString *option1 = [NSString stringWithFormat:@"userName = '%@', userPhoto = '%@', defineName = '%@'",userMessage.user_Name,userMessage.head_photo,userMessage.user_NickName];
     NSString *option2 = [NSString stringWithFormat:@"userId = '%@'",userMessage.user_Id];
     NSString *opeartionStr = [FMDBShareManager alterTable:ZhiMa_User_Message_Table withOpton1:option1 andOption2:option2];
     
@@ -1491,7 +1491,7 @@
             ZhiMaFriendModel *model = [[ZhiMaFriendModel alloc] init];
             model.user_Name = [result stringForColumn:@"userName"];
             model.user_Id = [result stringForColumn:@"userId"];
-            model.user_Head_photo = [result stringForColumn:@"userPhoto"];
+            model.head_photo = [result stringForColumn:@"userPhoto"];
             model.friend_type = [result intForColumn:@"status"];
             [dataArray addObject:model];
         }
@@ -1522,7 +1522,7 @@
             NSString *optionStr = [NSString string];
             if (isExist) {
                 NSLog(@"存在新好友");
-                NSString *option1 = [NSString stringWithFormat:@"userName = '%@', userPhoto = '%@', status = '%@'",model.user_Name,model.user_Head_photo,@(model.friend_type)];
+                NSString *option1 = [NSString stringWithFormat:@"userName = '%@', userPhoto = '%@', status = '%@'",model.user_Name,model.head_photo,@(model.friend_type)];
                 NSString *option2 = [NSString stringWithFormat:@"userId = '%@'",model.user_Id];
                 optionStr = [FMDBShareManager alterTable:ZhiMa_NewFriend_Message_Table withOpton1:option1 andOption2:option2];
                 
@@ -1530,7 +1530,7 @@
                 NSLog(@"不存在新好友，需要插入");
                 optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_NewFriend_Message_Table];
             }
-            BOOL success = [db executeUpdate:optionStr,model.user_Id,model.user_Head_photo,model.user_Name,@(model.friend_type)];
+            BOOL success = [db executeUpdate:optionStr,model.user_Id,model.head_photo,model.user_Name,@(model.friend_type)];
             if (success) {
                 NSLog(@"插入/更新 新好友成功");
             } else {
@@ -1732,7 +1732,7 @@
             model.unReadCount = [result intForColumn:@"unReadCount"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"noDisturb"];
-            model.time = [result longForColumn:@"time"];
+            model.time = [result longLongIntForColumn:@"time"];
             model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
             model.messageType = [result intForColumn:@"messageType"];
             [dataArray addObject:model];
@@ -1767,7 +1767,7 @@
             model.unReadCount = [result intForColumn:@"unReadCount"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"noDisturb"];
-            model.time = [result longForColumn:@"time"];
+            model.time = [result longLongIntForColumn:@"time"];
             model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
             model.messageType = [result intForColumn:@"messageType"];
             [dataArray addObject:model];
@@ -1824,7 +1824,7 @@
             model.unReadCount = [result intForColumn:@"unReadCount"];
             model.topChat = [result intForColumn:@"topChat"];
             model.disturb = [result intForColumn:@"noDisturb"];
-            model.time = [result longForColumn:@"time"];
+            model.time = [result longLongIntForColumn:@"time"];
             model.serviceMessageType = [result intForColumn:@"serviceMessageType"];
             model.messageType = [result intForColumn:@"messageType"];
         }
@@ -1962,7 +1962,7 @@
             message.holderImageUrlString = [result stringForColumn:@"holderImageUrl"];
             message.isDownLoad = [result intForColumn:@"isDownLoad"];
             message.videoDownloadUrl = [result stringForColumn:@"videoUrl"];
-            message.timeStamp = [result longForColumn:@"time"];
+            message.timeStamp = [result longLongIntForColumn:@"time"];
             [dataArray addObject:message];
         }
     }];
@@ -2571,7 +2571,7 @@
             ZMServiceMessage *model = [[ZMServiceMessage alloc] init];
             model.service.sid = [result stringForColumn:@"sid"];
             model.listJson = [result stringForColumn:@"listJson"];
-            model.timeStamp = [result longForColumn:@"time"];
+            model.timeStamp = [result longLongIntForColumn:@"time"];
             model.type = [result intForColumn:@"msgType"];
             [dataArray addObject:model];
         }

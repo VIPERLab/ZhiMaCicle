@@ -145,6 +145,16 @@
             //保存群会话信息，插入数据库
             [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupId];
             
+            //创建会话
+            ConverseModel *converseModel  = [[ConverseModel alloc] init];
+            converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
+            converseModel.converseType = 1;
+            converseModel.converseId = self.groupChatModel.groupId;
+            converseModel.converseName = self.groupChatModel.groupName;
+            converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
+            converseModel.lastConverse = [NSString stringWithFormat:@"你通过扫描\"%@\"分享的二维码加入了群聊",self.userName];
+            [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
+            
             //通过socket扫码进群
             GroupActModel *actModel = [[GroupActModel alloc] init];
             actModel.uids = self.qrCodeUserId;

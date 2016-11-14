@@ -85,7 +85,7 @@ typedef NS_OPTIONS(NSInteger, SendStatus){
 @property (nonatomic, copy) NSString *msgtime;
 
  /** 消息发送时间时间戳*/
-@property (nonatomic, assign) NSInteger timeStamp;
+@property (nonatomic, assign) long long timeStamp;
 
 
 /** 语音时长 给安卓用的*/

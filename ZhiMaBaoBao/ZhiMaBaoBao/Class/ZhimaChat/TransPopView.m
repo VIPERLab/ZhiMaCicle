@@ -68,7 +68,7 @@
     }else{
         //通过uid查询好友资料
         ZhiMaFriendModel *model = [FMDBShareManager getUserMessageByUserID:userId];
-        avtarUrl = model.user_Head_photo;
+        avtarUrl = model.head_photo;
         name = model.displayName;
     }
     
@@ -155,6 +155,17 @@
         subLabel.numberOfLines = 2;
         [contentView addSubview:subLabel];
         contentView.height = 130;
+    }else if (message.type == MessageTypeVideo){
+        UIImageView *imageview = [[UIImageView alloc] init];
+        imageview.layer.cornerRadius = 5.f;
+        imageview.contentMode = UIViewContentModeScaleAspectFill;
+        imageview.clipsToBounds = YES;
+        imageview.image = message.holderImage;
+        imageview.size = CGSizeMake(100, 100);
+        imageview.x = (self.containerView.width - 100)/2;
+        imageview.y = 10;
+        [contentView addSubview:imageview];
+        contentView.height = CGRectGetMaxY(imageview.frame);
     }
     
     

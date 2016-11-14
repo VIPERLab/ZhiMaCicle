@@ -61,7 +61,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 //            
 //        }else{
             //如果没有数据，直接从数据库拉取
-            self.friendsArr = [[FMDBShareManager getAllNewFriends] mutableCopy];
+            self.friendsArr = [[[[FMDBShareManager getAllNewFriends] reverseObjectEnumerator] allObjects] mutableCopy];
             [self.tableView reloadData];
 //        }
 //    } failure:^(ErrorData *error) {
@@ -136,7 +136,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     ConverseModel *converse = [[ConverseModel alloc] init];
     converse.converseId = friend.user_Id;
     converse.converseName = friend.user_Name;
-    converse.converseHead_photo = friend.user_Head_photo;
+    converse.converseHead_photo = friend.head_photo;
     converse.converseType = ConversionTypeSingle;
     converse.lastConverse = systemMsg.text;
     converse.messageType = MessageTypeSystem;

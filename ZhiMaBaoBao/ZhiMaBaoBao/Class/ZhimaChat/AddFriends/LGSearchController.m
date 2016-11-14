@@ -120,7 +120,7 @@ static NSString *const reuseIdentifier = @"searchResultCell";
     ChatController *vc = [[ChatController alloc] init];
     vc.conversionId = friendModel.user_Id;
     vc.conversionName = friendModel.displayName;
-    vc.converseLogo = friendModel.user_Head_photo;
+    vc.converseLogo = friendModel.head_photo;
     vc.hidesBottomBarWhenPushed = YES;
     ConversationController *conversationVC = userinfo.conversationVC;
     [conversationVC.navigationController pushViewController:vc animated:YES];

@@ -28,7 +28,7 @@
  *
  *  @return 返回时间戳
  */
-+ (NSInteger)cTimestampFromDate:(NSDate *)date;
++ (long long)cTimestampFromDate:(NSDate *)date;
 
 /**
  *  字符串转时间戳
@@ -38,7 +38,7 @@
  *
  *  @return 返回时间戳的字符串
  */
-+(NSInteger)cTimestampFromString:(NSString *)timeStr
++(long long)cTimestampFromString:(NSString *)timeStr
                           format:(NSString *)format;
 
 
@@ -50,7 +50,7 @@
  *
  *  @return 返回字符串格式时间
  */
-+ (NSString *)dateStrFromCstampTime:(NSInteger)timeStamp
++ (NSString *)dateStrFromCstampTime:(long long)timeStamp
                      withDateFormat:(NSString *)format;
 
 /**
@@ -67,7 +67,7 @@
 /**
  *  获取当前时间戳
  */
-+ (NSInteger)currentTimeStamp;
++ (long long)currentTimeStamp;
 
 
 @end
