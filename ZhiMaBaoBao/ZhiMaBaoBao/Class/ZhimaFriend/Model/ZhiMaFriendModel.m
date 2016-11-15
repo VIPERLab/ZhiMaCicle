@@ -24,7 +24,8 @@
     return @{
              @"user_Name" : @"username",
              @"user_Id" : @"id",
-             @"user_NickName" : @"friend_nick"
+             @"user_NickName" : @"friend_nick",
+             @"user_Head_photo":@"yuan_head_photo"
              };
 }
 @end

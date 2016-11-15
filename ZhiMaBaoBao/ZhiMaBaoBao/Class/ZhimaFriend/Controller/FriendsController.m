@@ -85,7 +85,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
 - (void)getDataFormSQL {
     self.friends = [[FMDBShareManager getAllUserMessageInArray] mutableCopy];
-    [self.tableView reloadData];
+    [self friendsListSort];
     
     [self requestFriendsList];
 }
