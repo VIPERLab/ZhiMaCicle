@@ -230,6 +230,11 @@ char pinyinFirstLetter(unsigned short hanzi)
 	}
 	else
 	{
-		return hanzi;
+        char han = '#';
+        if ((index >= -19903 && index <= -19878) || (index >= -19871 && index <= -19846)) {
+            return hanzi;
+        }else{
+            return han;
+        }
 	}
 }

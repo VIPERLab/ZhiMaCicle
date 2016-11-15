@@ -122,6 +122,7 @@
                     [FMDBShareManager deleteNewFriendByUseid:self.friendInfo.user_Id];
                     [FMDBShareManager deleteConverseWithConverseId:self.friendInfo.user_Id];
                     [FMDBShareManager deleteUserMessageByUserID:self.friendInfo.user_Id];
+                    [FMDBShareManager deletedCircleWithUserId:self.friendInfo.user_Id];
                     [self.navigationController popToRootViewControllerAnimated:YES];
                     
                 }else{
