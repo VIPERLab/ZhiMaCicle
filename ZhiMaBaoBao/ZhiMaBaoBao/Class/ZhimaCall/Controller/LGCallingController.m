@@ -268,7 +268,8 @@
     
     //播放等待提示音、开始查询余额、然后拨打电话
     [self.player play];
-    [self checkAmountAndCall:self.phoneNum name:self.name];
+//    [self checkAmountAndCall:self.phoneNum name:self.name];
+    [self makeCall:self.phoneNum name:self.name];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -346,55 +347,55 @@
     }];
 }
 
-//检查用户是否还有通话余额 - 然后拨打电话
-- (void)checkAmountAndCall:(NSString *)phone name:(NSString *)name {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.requestSerializer.timeoutInterval = 30.f;
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
-    
-    NSString *sign = [NSString stringWithFormat:@"uid=%@&apikey=%@",USERINFO.userID,RECHAPPKEY];
-    NSString *md5Sign = [NSString md5:sign];
-    
-    md5Sign = [md5Sign uppercaseString];
-    
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"uid"] = USERINFO.userID;
-    params[@"sign"] = md5Sign;
-    
-    
-    [manager POST:[NSString stringWithFormat:@"%@/Api/Index/getuser",DFAPIURLTEST] parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@",responseObject);
-        
-        if ([responseObject[@"code"] integerValue] == 8888) {
-            
-            //有话费余额，拨打电话
-            if ([responseObject[@"data"][@"phoneusetime"] integerValue] > 0) {
-                [self makeCall:phone name:name];
-                
-            }else{
-                [LCProgressHUD showFailureText:responseObject[@"data"][@"msg"]];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self dismissViewControllerAnimated:YES completion:nil];
-                });
-            }
-        }else{
-            [LCProgressHUD showFailureText:responseObject[@"msg"]];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self dismissViewControllerAnimated:YES completion:nil];
-            });
-        }
-
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [LCProgressHUD showFailureText:@"网络状态差"];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self dismissViewControllerAnimated:YES completion:nil];
-        });
-    }];
-    
-}
-
+////检查用户是否还有通话余额 - 然后拨打电话
+//- (void)checkAmountAndCall:(NSString *)phone name:(NSString *)name {
+//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//    manager.requestSerializer.timeoutInterval = 30.f;
+//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",nil];
+//    
+//    NSString *sign = [NSString stringWithFormat:@"uid=%@&apikey=%@",USERINFO.userID,RECHAPPKEY];
+//    NSString *md5Sign = [NSString md5:sign];
+//    
+//    md5Sign = [md5Sign uppercaseString];
+//    
+//    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+//    params[@"uid"] = USERINFO.userID;
+//    params[@"sign"] = md5Sign;
+//    
+//    
+//    [manager POST:[NSString stringWithFormat:@"%@/Api/Index/getuser",DFAPIURLTEST] parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
+//        
+//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"%@",responseObject);
+//        
+//        if ([responseObject[@"code"] integerValue] == 8888) {
+//            
+//            //有话费余额，拨打电话
+//            if ([responseObject[@"data"][@"phoneusetime"] integerValue] > 0) {
+//                [self makeCall:phone name:name];
+//                
+//            }else{
+//                [LCProgressHUD showFailureText:responseObject[@"data"][@"msg"]];
+//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                    [self dismissViewControllerAnimated:YES completion:nil];
+//                });
+//            }
+//        }else{
+//            [LCProgressHUD showFailureText:responseObject[@"msg"]];
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                [self dismissViewControllerAnimated:YES completion:nil];
+//            });
+//        }
+//
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        [LCProgressHUD showFailureText:@"网络状态差"];
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [self dismissViewControllerAnimated:YES completion:nil];
+//        });
+//    }];
+//    
+//}
+//
 /**
  *  静音按钮点击
  */
