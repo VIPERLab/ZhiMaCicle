@@ -1679,7 +1679,7 @@
     // 判断是否存在会话
     BOOL isExist = [self isConverseIsExist:converseModel.converseId];
     if (isExist) {  //更新会话
-        NSString *option1 = [NSString stringWithFormat:@"converseContent = '%@', time = '%@'",converseModel.lastConverse,@(converseModel.time)];
+        NSString *option1 = [NSString stringWithFormat:@"converseContent = '%@', time = '%@' , converseName = '%@'",converseModel.lastConverse,@(converseModel.time),converseModel.converseName];
         NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",converseModel.converseId]];
         [queue inDatabase:^(FMDatabase *db) {
             BOOL success = [db executeUpdate:optionStr];

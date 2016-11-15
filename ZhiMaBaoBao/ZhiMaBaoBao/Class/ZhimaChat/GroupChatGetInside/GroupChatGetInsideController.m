@@ -139,6 +139,7 @@
             systemMsg.conversionType = ConversionTypeSingle;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             systemMsg.actType = ActTypeUpdategroupnum;
+            systemMsg.converseName = self.groupChatModel.groupName;
             [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupId];
             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":systemMsg}];
             

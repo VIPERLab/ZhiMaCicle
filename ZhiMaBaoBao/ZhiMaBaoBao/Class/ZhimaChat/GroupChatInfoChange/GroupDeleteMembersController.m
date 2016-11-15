@@ -155,6 +155,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         systemMsg.conversionType = ConversionTypeSingle;
         systemMsg.timeStamp = [NSDate currentTimeStamp];
         systemMsg.actType = ActTypeDeluserfromgroup;
+        systemMsg.converseName = self.groupName;
         [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupId];
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":systemMsg}];
         
