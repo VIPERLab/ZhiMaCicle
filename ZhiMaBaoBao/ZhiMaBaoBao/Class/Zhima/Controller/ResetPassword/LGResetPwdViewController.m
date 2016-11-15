@@ -179,12 +179,12 @@
     }
     
     if (![self.password.text isMatchedByRegex:@"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$"]) {
-        [LCProgressHUD showFailureText:@"请输入6-18位数字和字母组成的密码"];
+        [LCProgressHUD showFailureText:@"请输入数字和英文组成的密码"];
         return;
     }
     
     if (self.oldPassword.text.length < 6 || self.oldPassword.text.length > 18) {
-        [LCProgressHUD showFailureText:@"请输入6-18位数字和字母组成的密码"];
+        [LCProgressHUD showFailureText:@"请输入6至18位的密码"];
         return;
     }
     

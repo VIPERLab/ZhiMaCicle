@@ -71,15 +71,15 @@
 - (void)saveButtonDidClick {
     [self.textField resignFirstResponder];
     [LCProgressHUD showLoadingText:@"正在修改昵称"];
-    if (!self.textField.hasText) {
+    
+    NSString *tempString = self.textField.text;
+    if ([tempString isBlankString]) {
         [LCProgressHUD showFailureText:@"昵称不能为空"];
         return;
     }
-    
-    NSString *tempString = self.textField.text;
     NSCharacterSet *doNotWant = [NSCharacterSet characterSetWithCharactersInString:@"[]{}（#%-*+=_）\\|~(＜＞$%^&*)_+ "];
     tempString = [[tempString componentsSeparatedByCharactersInSet:doNotWant] componentsJoinedByString: @""];
-    if (tempString.length) {
+    if (!tempString.length) {
         [LCProgressHUD showFailureText:@"昵称不能为空"];
         return;
     }
@@ -91,7 +91,7 @@
         }
         
         UserInfo *info = [UserInfo read];
-        info.username = self.textField.text;
+        info.username = tempString;
         [info save];
         [LCProgressHUD showSuccessText:@"修改成功"];
         
