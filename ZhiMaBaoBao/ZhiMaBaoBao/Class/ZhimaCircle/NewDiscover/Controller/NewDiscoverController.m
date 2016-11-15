@@ -109,8 +109,13 @@
 
 - (void)setupNav {
     
-    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(ReleaseButtonDidClick)];
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(ReleaseButtonDidClick:)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+    
+//    UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(ScreenWidth - 100, 0, 100, 40)];
+//    [rightButton setTitle:@"发送" forState:UIControlStateNormal];
+//    [rightButton setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+//    self.navigationItem.rightBarButtonItem.customView = rightButton;
 }
 
 - (void)setupView {
@@ -255,8 +260,9 @@
 
 
 #pragma mark - 发布按钮的点击事件
-- (void)ReleaseButtonDidClick {
+- (void)ReleaseButtonDidClick:(UIBarButtonItem *)sender {
     [self.textView resignFirstResponder];
+    
     if (self.circleType == 1) {  //图文类型判断
         if (!self.textView.text.length && !_imagesArray.count) {
             [LCProgressHUD showFailureText:@"说说内容或图片不能为空"];
@@ -264,7 +270,7 @@
         }
     }
     
-    
+    sender.enabled = NO;
     [self upLoadImageCount:0 andImageArray:_imagesArray];
 }
 
@@ -522,6 +528,7 @@
         [info save];
         
         SDTimeLineCellModel *model = [SDTimeLineCellModel mj_objectWithKeyValues:responseData.data_temp];
+        model.imglist = self.imageItemsArray;
         
         FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
         
