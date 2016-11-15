@@ -182,15 +182,8 @@
                 } else {
                     [label addLinks:@[fistNameLink]];
                 }
-                
-                
-                
-                
             }
         }
-        
-        
-        
     }
 }
 
@@ -224,16 +217,16 @@
         if (i > 0) {
             [attributedText appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
         }
+        
         if (!model.attributedContent) {
             model.attributedContent = [self generateAttributedStringWithLikeItemModel:model];
         }
         
-        
         [attributedText appendAttributedString:model.attributedContent];
-        MLLink *link = [MLLink linkWithType:1 value:model.userId range:[self findTargetStr:model.userName inStr:[attributedText string]]];
+        MLLink *link = [MLLink linkWithType:MLLinkTypeNone value:model.userId range:[self findTargetStr:model.userName inStr:[attributedText string]]];
         [linksArray addObject:link];
-        
     }
+    
     _likeLabel.attributedText = [attributedText copy];
     [_likeLabel addLinks:linksArray];
 }

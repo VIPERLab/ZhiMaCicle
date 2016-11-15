@@ -56,7 +56,6 @@ typedef enum : NSUInteger {
 }
 
 - (void)setupView {
-    self.backgroundColor = [UIColor whiteColor];
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.backgroundView.backgroundColor = [UIColor whiteColor];
@@ -86,7 +85,6 @@ typedef enum : NSUInteger {
     [self addSubview:contentLabel];
     contentLabel.numberOfLines = 3;
     contentLabel.font = [UIFont systemFontOfSize:15];
-    contentLabel.backgroundColor = [UIColor clearColor];
     contentLabel.textColor = [UIColor colorFormHexRGB:@"0f0f0f"];
     
     
@@ -110,12 +108,12 @@ typedef enum : NSUInteger {
     if (model.imageList.count) {  //有图片
         _photoButton.hidden = NO;
         _countLabel.hidden = NO;
-        fontDic = @{NSBackgroundColorAttributeName : [UIColor clearColor], NSForegroundColorAttributeName : [UIColor colorFormHexRGB:@"0f0f0f"]};
+        fontDic = @{NSBackgroundColorAttributeName : [UIColor clearColor]};
         _contentLabel.backgroundColor = [UIColor clearColor];
     } else {      //没有图片
         _photoButton.hidden = YES;
         _countLabel.hidden = YES;
-        fontDic = @{NSBackgroundColorAttributeName : [UIColor colorFormHexRGB:@"f3f3f5"], NSForegroundColorAttributeName : [UIColor colorFormHexRGB:@"0f0f0f"]};
+        fontDic = @{NSBackgroundColorAttributeName : [UIColor colorFormHexRGB:@"f3f3f5"]};
         _contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
     }
     _contentLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@",model.content] attributes:fontDic];
@@ -295,7 +293,11 @@ typedef enum : NSUInteger {
         
         self.photoButton.frame = CGRectMake(70, (CGRectGetHeight(self.frame) - 74 )* 0.5, 74, 74);
         textHight = [self changeStationWidth:self.model.content anWidthTxtt:[UIScreen mainScreen].bounds.size.width - CGRectGetMaxX(self.photoButton.frame) - 20 anfont:15];
-        self.contentLabel.frame = CGRectMake(CGRectGetMaxX(self.photoButton.frame) + 5, 2, [UIScreen mainScreen].bounds.size.width - CGRectGetMaxX(self.photoButton.frame) - 20, textHight);
+        if (self.model.content.length) {
+            self.contentLabel.frame = CGRectMake(CGRectGetMaxX(self.photoButton.frame) + 5, 2, [UIScreen mainScreen].bounds.size.width - CGRectGetMaxX(self.photoButton.frame) - 20, textHight);
+        } else {
+            self.contentLabel.frame = CGRectMake(CGRectGetMaxX(self.photoButton.frame) + 5, 2, [UIScreen mainScreen].bounds.size.width - CGRectGetMaxX(self.photoButton.frame) - 20, 0);
+        }
         
     } else {
         

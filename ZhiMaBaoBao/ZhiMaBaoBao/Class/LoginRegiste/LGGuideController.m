@@ -148,6 +148,7 @@
     info.backgroundImg = @"image/user_default_background_image.jpg";
     info.yuan_head_photo = @"image/user_default_head_photo.png";
     info.username = @"游客";
+    info.signature = @"";
     info.isVisitor = YES;
     [info save];
     
