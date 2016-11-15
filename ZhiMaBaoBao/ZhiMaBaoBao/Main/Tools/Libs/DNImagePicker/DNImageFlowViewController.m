@@ -67,6 +67,7 @@ static NSString* const dnAssetsViewCellReuseIdentifier = @"DNAssetsViewCell";
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:YES];
     self.navigationController.toolbarHidden = YES;
 }
 

@@ -32,6 +32,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
+    [super viewWillAppear:YES];
+    
     self.dataArray = [[FMDBShareManager getAllCollectionsWithUserId:USERINFO.userID] mutableCopy];
 
     [_tableView reloadData];

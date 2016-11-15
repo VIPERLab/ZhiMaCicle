@@ -52,6 +52,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:YES];
     [self storePreviousNavBarAppearance];
     _previousStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:animated];

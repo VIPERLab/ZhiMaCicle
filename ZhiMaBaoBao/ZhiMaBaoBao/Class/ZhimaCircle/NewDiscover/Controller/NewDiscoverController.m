@@ -100,6 +100,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
     [self.navigationController.navigationBar setAlpha:1];
     if (self.circleType == 1) {
         // 图文类型
