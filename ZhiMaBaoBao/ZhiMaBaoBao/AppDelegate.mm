@@ -177,10 +177,6 @@
 - (void)addCallRecordTime{
     UserInfo *info = [UserInfo shareInstance];
     
-    if (!info.toPhoneNum) {
-        return;
-    }
-    
     self.callCenter = [[CTCallCenter alloc] init];
     self.callCenter.callEventHandler = ^(CTCall* call) {
         
@@ -188,6 +184,10 @@
         if ([call.callState isEqualToString:CTCallStateDisconnected])
             
         {
+            
+            if (!info.toPhoneNum) {
+                return;
+            }
             
             NSLog(@"Call has been disconnected");
             
@@ -206,7 +206,6 @@
                     [LCProgressHUD showFailureText:responseData.msg];
                 }
             }];
-            
         }
     };
 }
