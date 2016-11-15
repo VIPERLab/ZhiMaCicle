@@ -55,10 +55,6 @@
         [SocketManager shareInstance].delegate = self;
     }
     
-
-    //添加异常捕获
-//    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
-    
     [self addNotifications];
 
     //检查更新
