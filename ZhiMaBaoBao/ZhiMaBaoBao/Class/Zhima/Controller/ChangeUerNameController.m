@@ -47,7 +47,7 @@
         return NO;
     }
     return YES;
-}\
+}
 
 - (void)setupView {
     
@@ -79,9 +79,12 @@
     NSString *tempString = self.textField.text;
     NSCharacterSet *doNotWant = [NSCharacterSet characterSetWithCharactersInString:@"[]{}（#%-*+=_）\\|~(＜＞$%^&*)_+ "];
     tempString = [[tempString componentsSeparatedByCharactersInSet:doNotWant] componentsJoinedByString: @""];
+    if (tempString.length) {
+        [LCProgressHUD showFailureText:@"昵称不能为空"];
+        return;
+    }
     
-    
-    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"username" andChangeValue:self.textField.text success:^(ResponseData *responseData) {
+    [LGNetWorking upLoadUserDataWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andFunctionName:@"username" andChangeValue:tempString success:^(ResponseData *responseData) {
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:responseData.msg];
             return ;

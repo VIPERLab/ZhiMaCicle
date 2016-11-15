@@ -995,19 +995,20 @@
             
             if (isExist) {
                 NSLog(@"存在这条点赞数据，不做操作");
-                continue;
+                NSString *option1 = [NSString stringWithFormat:@"userName = '%@'",likeModel.userName];
+                operationStr = [FMDBShareManager alterTable:ZhiMa_Circle_Like_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"circle_ID = %@ and userId = %@",cellModel.circle_ID,likeModel.userId]];
             } else {
                 NSLog(@"不存在这条点赞数据，需要插入");
                 operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Like_Table];
-                [likeQueue inDatabase:^(FMDatabase *db) {
-                    BOOL success = [db executeUpdate:operationStr,likeModel.userName,likeModel.userId,@"",cellModel.circle_ID];
-                    if (success) {
-                        NSLog(@"插入点赞成功");
-                    } else {
-                        NSLog(@"插入点赞失败");
-                    }
-                }];
             }
+            [likeQueue inDatabase:^(FMDatabase *db) {
+                BOOL success = [db executeUpdate:operationStr,likeModel.userName,likeModel.userId,@"",cellModel.circle_ID];
+                if (success) {
+                    NSLog(@"插入点赞成功");
+                } else {
+                    NSLog(@"插入点赞失败");
+                }
+            }];
         }
         
     }

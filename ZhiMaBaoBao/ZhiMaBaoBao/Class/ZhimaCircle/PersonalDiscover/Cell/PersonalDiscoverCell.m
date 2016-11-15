@@ -56,6 +56,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)setupView {
+    self.backgroundColor = [UIColor whiteColor];
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.backgroundView.backgroundColor = [UIColor whiteColor];
@@ -102,23 +103,22 @@ typedef enum : NSUInteger {
 #pragma mark - 设置模型
 - (void)setModel:(PersonalDiscoverModel *)model {
     _model = model;
-    
-    NSLog(@"%zd",model.imageList.count);
-    
     [self setupButtonViewWithImageArray:model.imageList];
     
-    
     //评论
-    _contentLabel.text = [NSString stringWithFormat:@" %@",model.content];
-    
-    
+    NSDictionary *fontDic = [NSDictionary dictionary];
     if (model.imageList.count) {  //有图片
         _photoButton.hidden = NO;
         _countLabel.hidden = NO;
-    } else {                      //没有图片
+        fontDic = @{NSBackgroundColorAttributeName : [UIColor clearColor], NSForegroundColorAttributeName : [UIColor colorFormHexRGB:@"0f0f0f"]};
+        _contentLabel.backgroundColor = [UIColor clearColor];
+    } else {      //没有图片
         _photoButton.hidden = YES;
         _countLabel.hidden = YES;
+        fontDic = @{NSBackgroundColorAttributeName : [UIColor colorFormHexRGB:@"f3f3f5"], NSForegroundColorAttributeName : [UIColor colorFormHexRGB:@"0f0f0f"]};
+        _contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
     }
+    _contentLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@",model.content] attributes:fontDic];
     
     if (_model.imageList.count == 0 || _model.imageList.count == 1) {
         _countLabel.hidden = YES;
@@ -296,13 +296,12 @@ typedef enum : NSUInteger {
         self.photoButton.frame = CGRectMake(70, (CGRectGetHeight(self.frame) - 74 )* 0.5, 74, 74);
         textHight = [self changeStationWidth:self.model.content anWidthTxtt:[UIScreen mainScreen].bounds.size.width - CGRectGetMaxX(self.photoButton.frame) - 20 anfont:15];
         self.contentLabel.frame = CGRectMake(CGRectGetMaxX(self.photoButton.frame) + 5, 2, [UIScreen mainScreen].bounds.size.width - CGRectGetMaxX(self.photoButton.frame) - 20, textHight);
-        self.contentLabel.backgroundColor = [UIColor clearColor];
         
     } else {
         
         self.photoButton.frame = CGRectMake(70, (CGRectGetHeight(self.frame) - 74 )* 0.5, 0, 74);
         self.contentLabel.frame = CGRectMake(70, 2, [UIScreen mainScreen].bounds.size.width - CGRectGetMaxX(self.photoButton.frame) - 20, self.model.cellHight - 15);
-        self.contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"f3f3f5"];
+        
     }
     
     

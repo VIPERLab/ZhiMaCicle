@@ -150,7 +150,6 @@
     }
     if (![self.passField.text isEqualToString:self.confirmPassField.text]) {
         [LCProgressHUD showFailureText:@"密码输入不一致"];
-
         return;
     }
     

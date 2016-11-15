@@ -142,7 +142,7 @@
 - (void)layoutSubviews {
     self.iconView.frame = CGRectMake(10, 10, 50, 50);
     
-    self.nameLabel.frame = CGRectMake(CGRectGetMaxX(self.iconView.frame) + 5, 10, 300, 15);
+    self.nameLabel.frame = CGRectMake(CGRectGetMaxX(self.iconView.frame) + 5, 10, CGRectGetWidth(self.frame) - 55 - 85, 15);
     
     //获取文字高度
 //    CGFloat contentHeight = [self changeStationWidth:self.contentLabel.text anWidthTxtt:[UIScreen mainScreen].bounds.size.width - (CGRectGetMaxX(self.iconView.frame) + 70) anfont:14];
