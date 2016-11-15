@@ -23,19 +23,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.userName = @"";
     [self setGroupModel];
     [self setCustomTitle:@""];
-    
-    self.userName = @"";
-    //获取扫码id的username
-    [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.qrCodeUserId block:^(ResponseData *responseData) {
-        if (responseData.code == 0) {
-            self.userName = responseData.data[@"username"];
-        }
-    } failure:^(ErrorData *error) {
-        
-    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,8 +34,8 @@
 }
 
 - (void)setGroupModel {
-    //根据id 查询群信息
-    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.groupId success:^(ResponseData *responseData) {
+    //根据id 查询群信息  查询userId 用户名
+    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.groupId userId:self.qrCodeUserId success:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
             [LCProgressHUD showFailureText:responseData.msg];
@@ -58,11 +48,10 @@
                      };
         }];
         GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+        self.userName = responseData.data[@"swept_name"];
         self.groupChatModel = groupChatModel;
         
-        
         [self setupView];
-        
     } failure:^(ErrorData *error) {
         
     }];
@@ -110,9 +99,7 @@
     button.backgroundColor = THEMECOLOR;
     button.layer.cornerRadius = 5;
     [self.view addSubview:button];
-    
 }
-
 
 - (void)addToGroup {
     [LCProgressHUD showLoadingText:@"准备开始群聊..."];

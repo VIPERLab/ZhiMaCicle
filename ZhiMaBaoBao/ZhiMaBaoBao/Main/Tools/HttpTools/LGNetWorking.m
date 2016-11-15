@@ -466,12 +466,13 @@
  *
  *  @param sessionId sessionId
  *  @param groupId   群组房间id
+ *  @param userId    用户id
  */
-+ (void)getGroupInfo:(NSString *)sessionId groupId:(NSString *)groupId success:(SuccessfulBlock)success failure:(FailureBlock)failure{
++ (void)getGroupInfo:(NSString *)sessionId groupId:(NSString *)groupId userId:(NSString *)userId success:(SuccessfulBlock)success failure:(FailureBlock)failure{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"sessionId"] = sessionId;
     param[@"groupid"] = groupId;
-
+    param[@"userId"] = userId;
     [HttpTool POST:@"/moblie/getGroupDetail.do" params:param success:^(ResponseData *json) {
         success(json);
     } failure:^(ErrorData *error) {

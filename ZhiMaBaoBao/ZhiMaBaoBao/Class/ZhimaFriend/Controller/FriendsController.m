@@ -67,11 +67,6 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     [self getDataFormSQL];
 }
 
-//- (void)viewDidAppear:(BOOL)animated {
-//    
-//}
-
-
 - (void)viewDidDisappear:(BOOL)animated{
     [self.nFriends removeAllObjects];
 }
@@ -186,9 +181,19 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         [self.friendsAfterSort addObject:friend];
     }
     // 按照模型"pinyin"属性 排序数组
-//    self.friendsAfterSort = self.friends;
     NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"pinyin" ascending:YES]];
     [self.friendsAfterSort sortUsingDescriptors:sortDescriptors];
+    
+    //如果第一组是"#" 将"#"放置到最后一组
+    NSArray *temp = [self.friendsAfterSort copy];
+    NSMutableArray *arr = [NSMutableArray array];
+    for (ZhiMaFriendModel *model in temp) {
+        if ([model.pinyin characterAtIndex:0] == '#') {
+            [arr addObject:model];
+            [self.friendsAfterSort removeObject:model];
+        }
+    }
+    [self.friendsAfterSort addObjectsFromArray:arr];
     
     int num = 0;
     
@@ -198,9 +203,8 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         ZhiMaFriendModel *friend = self.friendsAfterSort[i];
         if (i == 0) {
             //第一个数据首字母
-            NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend.pinyin characterAtIndex:0])];
+            NSString *str = [NSString stringWithFormat:@"%c",[friend.pinyin characterAtIndex:0]];
             [self.sectionsArr addObject:[str uppercaseString]];
-//            [self.sectionsArr addObject:friend.headchar];
             //如果只有一个好友
             if (self.friendsAfterSort.count == 1) {
                 [self.countOfSectionArr addObject:@(1)];
@@ -211,8 +215,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
             //取到第二条数据，与第一条数据首字母比较
             ZhiMaFriendModel *friend1 = self.friendsAfterSort[i+1];
 
-//            ![friend1.headchar isEqualToString:friend.headchar]
-            if (pinyinFirstLetter([friend1.pinyin characterAtIndex:0]) != pinyinFirstLetter([friend.pinyin characterAtIndex:0])) {
+            if (([friend1.pinyin characterAtIndex:0]) != ([friend.pinyin characterAtIndex:0])) {
                 
                 NSString *numStr = [NSString stringWithFormat:@"%d",num + 1];
                 [self.countOfSectionArr addObject:numStr];
@@ -222,9 +225,8 @@ static NSString * const headerIdentifier = @"headerIdentifier";
                     [self.countOfSectionArr addObject:@(1)];
                 }
                 
-                NSString *str = [NSString stringWithFormat:@"%c",pinyinFirstLetter([friend1.pinyin characterAtIndex:0])];
+                NSString *str = [NSString stringWithFormat:@"%c",[friend1.pinyin characterAtIndex:0]];
                 [self.sectionsArr addObject:[str uppercaseString]];
-//                [self.sectionsArr addObject:friend1.headchar];
                 num = 0;
             }
             else{

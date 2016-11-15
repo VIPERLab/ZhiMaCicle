@@ -58,14 +58,13 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    
+
     [super viewWillAppear:YES];
-//    [self getDataFormSQL];
+
     if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
         self.isGroupCreater = YES;
     }
     
-//    [self dataRequst];
     [self dataRequstMembers];
 }
 
@@ -145,100 +144,6 @@
 
 }
 
-// 拉取网络上最新的数据
-- (void)dataRequst {
-    
-    [LCProgressHUD showLoadingText:@"请稍等..."];
-    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.converseId success:^(ResponseData *responseData) {
-        
-
-        if (responseData.code != 0) {
-            [LCProgressHUD showFailureText:responseData.msg];
-            return ;
-        }
-        
-        if (responseData.code == 81) {
-            [LCProgressHUD showFailureText:responseData.msg];
-            [self.navigationController popViewControllerAnimated:YES];
-            return;
-        }
-        
-        [LCProgressHUD hide];
-        
-        //生成群聊数据模型
-        [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
-            return @{
-                     @"groupUserVos":@"GroupUserModel"
-                     };
-        }];
-        self.groupModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
-        
-        
-        //将群组放在数组第一个
-        [self dealGroupMembers];
-        
-        // 设置群聊的置顶、免打扰
-//        self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
-//        self.groupModel.topChat = self.converseModel.topChat;
-//        self.groupModel.disturb = self.converseModel.disturb;
-        
-        // 更新群信息内容
-        [FMDBShareManager saveGroupChatInfo:self.groupModel andConverseID:self.converseId];
-        
-        //更新会话的置顶和免打扰  ,topChat,noDisturb
-        FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-        NSString *optionStr1 = [NSString stringWithFormat:@"topChat = %d ,noDisturb = %d",self.groupModel.topChat,self.groupModel.disturb];
-        NSString *optionStr2 = [NSString stringWithFormat:@"converseId = '%@'",self.groupModel.groupId];
-        NSString *converseOption = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:optionStr1 andOption2:optionStr2];
-        [converseQueue inDatabase:^(FMDatabase *db) {
-            BOOL success = [db executeUpdate:converseOption];
-            if (success) {
-                NSLog(@"更新会话置顶和消息免打扰成功");
-            } else {
-                NSLog(@"更新会话置顶和消息免打扰成功");
-            }
-        }];
-        
-        [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
-        
-        if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
-            self.isGroupCreater = YES;
-            self.MaxCount = 39;
-        } else {
-            self.MaxCount = 40;
-        }
-        
-        // 设置尾部
-        GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
-        footer.delegate = self;
-        _tableView.tableFooterView = footer;
-        [_tableView reloadData];
-     
-//        [self getDataFormSQL];
-        
-    } failure:^(ErrorData *error) {
-        
-    }];
-    
-    /*
-    
-    self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
-    
-    // 设置群聊的置顶、免打扰
-    self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
-    self.groupModel.topChat = self.converseModel.topChat;
-    self.groupModel.disturb = self.converseModel.disturb;
-    
-    [self setCustomTitle:[NSString stringWithFormat:@"聊天信息(%zd)",self.groupModel.groupUserVos.count]];
-    // 设置尾部
-    GroupChatInfoFooterView *footer = [[GroupChatInfoFooterView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 85)];
-    footer.delegate = self;
-    _tableView.tableFooterView = footer;
-    [_tableView reloadData];
-     
-     */
-}
-
 - (void)dealGroupMembers{
     NSMutableArray *array = [NSMutableArray array];
     array = [self.groupModel.groupUserVos mutableCopy];
@@ -264,21 +169,6 @@
     if ([GrouperID isEqualToString:USERINFO.userID]) {
         self.isGroupCreater = YES;
     }
-}
-
-- (void)getDataFormSQL {
-    // 获取会话模型
-    
-    self.groupModel = [FMDBShareManager getGroupChatMessageByGroupId:self.converseId];
-    
-    self.groupModel.create_time = [NSDate dateStrFromCstampTime:self.converseModel.time withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    
-    
-    if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
-        self.isGroupCreater = YES;
-    }
-    
-    [_tableView reloadData];
 }
 
 - (void)setupView {
