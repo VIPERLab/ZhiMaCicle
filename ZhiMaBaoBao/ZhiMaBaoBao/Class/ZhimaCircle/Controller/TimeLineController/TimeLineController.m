@@ -123,7 +123,9 @@
     } else if (indexPath.section == 1 && indexPath.row == 0 ) {
         
         if ([USERINFO.sessionId isEqualToString:@"0"]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+            NearByPeopleController *nearBy = [[NearByPeopleController alloc] init];
+            nearBy.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:nearBy animated:YES];
             return;
         }
         
@@ -210,14 +212,18 @@
 
 #pragma mark - lazyLoad
 - (NSArray *)titleArray {
-    if (!_titleArray) {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        _titleArray = @[@[@"朋友圈"],@[@"附近的人"]];
+    } else {
         _titleArray = @[@[@"朋友圈"],@[@"扫一扫",@"附近的人"]];
     }
     return _titleArray;
 }
 
 - (NSArray *)iconArray {
-    if (!_iconArray) {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        _iconArray = @[@[@"Circle"],@[@"nearBy"]];
+    } else {
         _iconArray = @[@[@"Circle"],@[@"saoyisao",@"nearBy"]];
     }
     return _iconArray;
