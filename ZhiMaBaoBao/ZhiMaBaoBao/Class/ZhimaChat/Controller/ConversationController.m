@@ -167,6 +167,7 @@
         converse.lastConverse = message.text;
         converse.time = message.timeStamp;
         converse.converseId = message.toUidOrGroupId;
+        converse.converseName = message.converseName;
         [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
     }
 
