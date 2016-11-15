@@ -13,6 +13,8 @@
 
 @interface BaseViewController ()
 
+@property (nonatomic, strong) UIView *rightView; // 右上角
+
 @end
 
 @implementation BaseViewController {
@@ -34,6 +36,16 @@
     
     UserInfo *userinfo = [UserInfo shareInstance];
     userinfo.currentVC = self;
+    
+    if (!self.rightView) {
+        return;
+    }
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        self.rightView.hidden = YES;
+    }else{
+        self.rightView.hidden = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -82,6 +94,7 @@
     [rightView addSubview:searchBtn];
     [rightView addSubview:addBtn];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightView];
+    self.rightView = rightView;
 }
 
 //返回方法
