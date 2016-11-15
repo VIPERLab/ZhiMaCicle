@@ -2176,6 +2176,9 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)chat_browseChoosePicture:(UIGestureRecognizer *)grz
 {
+    
+    [self.keyboard keyboardDown];
+
     //防止同时点开多张图片 BUG
     if (self.isWatching) {
         return;

@@ -60,7 +60,7 @@
 }
 
 - (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index{
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.friendModel.head_photo]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",DFAPIURL,self.friendModel.user_Head_photo]];
 }
 
 @end

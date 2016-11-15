@@ -906,6 +906,17 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"pinyin" ascending:YES]];
     [self.friendsAfterSort sortUsingDescriptors:sortDescriptors];
     
+    //如果第一组是"#" 将"#"放置到最后一组
+    NSArray *temp = [self.friendsAfterSort copy];
+    NSMutableArray *arr = [NSMutableArray array];
+    for (ZhiMaFriendModel *model in temp) {
+        if ([model.pinyin characterAtIndex:0] == '#') {
+            [arr addObject:model];
+            [self.friendsAfterSort removeObject:model];
+        }
+    }
+    [self.friendsAfterSort addObjectsFromArray:arr];
+    
     int num = 0;
     
     //遍历排序后的数组
