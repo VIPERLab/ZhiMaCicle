@@ -187,7 +187,7 @@
  *  @param sessionId sessionId
  *  @param groupId   群组房间id
  */
-+ (void)getGroupInfo:(NSString *)sessionId groupId:(NSString *)groupId success:(SuccessfulBlock)success failure:(FailureBlock)failure;
++ (void)getGroupInfo:(NSString *)sessionId groupId:(NSString *)groupId userId:(NSString *)userId success:(SuccessfulBlock)success failure:(FailureBlock)failure;
 + (void)getGroupInfo:(NSString *)sessionId groupId:(NSString *)groupId page:(NSInteger)page success:(SuccessfulBlock)success failure:(FailureBlock)failure;
 
 /**
