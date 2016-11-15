@@ -45,6 +45,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
+    [super viewWillAppear:YES];
+    
     UserInfo *info = [UserInfo read];
     self.hidePurse = info.hidePurse;
     

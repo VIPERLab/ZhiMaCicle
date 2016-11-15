@@ -420,11 +420,9 @@ static SocketManager *manager = nil;
             }
                 break;
             case ActTypeNoallow:{           //不允许看朋友圈
-//                NSDictionary *resDic = responceData;
-//                NSString *friendId = resDic[@"delUid"];
-//                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-//                userInfo[@"deleteUid"] = friendId;
-//                [[NSNotificationCenter defaultCenter] postNotificationName:K_NotLookMyCircleNotification object:nil userInfo:userInfo];
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                userInfo[@"deleteUid"] = message.fromUid;
+                [[NSNotificationCenter defaultCenter] postNotificationName:K_NotLookMyCircleNotification object:nil userInfo:userInfo];
             }
                 break;
             case ActTypeInBlacklist:{       //被拉入黑名单
@@ -739,10 +737,10 @@ static SocketManager *manager = nil;
             request[@"controller_name"] = @"MessageController";
             request[@"method_name"] = @"noAllowFriendCircle";
             //生成签名
-            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=noAllowFriendCircle&fromUid=%@&toUid=%@&%@",USERINFO.userID,uid,APIKEY];
+            NSString *str = [NSString stringWithFormat:@"controller_name=MessageController&method_name=noAllowFriendCircle&fromUid=%@&toUidOrGroupId=%@&%@",USERINFO.userID,uid,APIKEY];
             sign = [[str md5Encrypt] uppercaseString];
             dataDic[@"fromUid"] = USERINFO.userID;
-            dataDic[@"toUid"] = uid;
+            dataDic[@"toUidOrGroupId"] = uid;
             dataDic[@"sign"] = sign;
         }
             break;

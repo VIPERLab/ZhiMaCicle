@@ -144,11 +144,9 @@
 
 - (void)requestData{
     [LCProgressHUD showLoadingText:@"正在加载..."];
-    NSLog(@"开始请求");
     [LGNetWorking queryPhoneBook:USERINFO.sessionId openfire:USERINFO.userID flag:@"check" phonedata:self.jsonStr block:^(ResponseData *responseData) {
         [LCProgressHUD hide];
         if (responseData.code == 0) {
-            NSLog(@"请求结束");
             self.contactsArr = [LGQueryResModel mj_objectArrayWithKeyValuesArray:responseData.data];
             self.containArray = [NSArray arrayWithArray:self.contactsArr];
             [self queryResultCompare];
