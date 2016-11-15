@@ -63,6 +63,7 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
     if (!_isKeyBoardShow) {
         _isKeyBoardShow = YES;
         [self.keyboardView showAnimation];

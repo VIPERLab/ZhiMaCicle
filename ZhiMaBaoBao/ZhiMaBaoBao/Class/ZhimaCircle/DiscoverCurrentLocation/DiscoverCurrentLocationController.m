@@ -59,12 +59,14 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
     _geocodesearch.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     _locationService.delegate = self;
     [_locationService startUserLocationService];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
     _geocodesearch.delegate = nil; // 不用时，置nil
     _locationService.delegate = nil;
 }

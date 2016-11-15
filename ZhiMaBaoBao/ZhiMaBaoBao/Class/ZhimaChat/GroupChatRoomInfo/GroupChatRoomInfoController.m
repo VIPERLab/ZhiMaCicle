@@ -58,6 +58,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:YES];
 //    [self getDataFormSQL];
     if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
         self.isGroupCreater = YES;
