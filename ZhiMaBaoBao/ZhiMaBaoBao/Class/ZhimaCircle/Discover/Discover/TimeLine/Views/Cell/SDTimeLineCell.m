@@ -484,10 +484,14 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 #pragma mark - 长按文本、图片
 - (void)longPressContentLabel:(UIGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
-            
-        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverLongPressContentNotification object:nil userInfo:@{@"contentLabel":_contentLabel,@"cell":self}];
-
         
+        UILabel *contentLabel = (UILabel *)gesture.view;
+        contentLabel.backgroundColor = [UIColor colorFormHexRGB:@"c7c7c5"];
+        [UIView animateWithDuration:0.3 animations:^{
+            contentLabel.backgroundColor = [UIColor clearColor];
+        }];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:KDiscoverLongPressContentNotification object:nil userInfo:@{@"contentLabel":_contentLabel,@"cell":self}];
     }
 }
 

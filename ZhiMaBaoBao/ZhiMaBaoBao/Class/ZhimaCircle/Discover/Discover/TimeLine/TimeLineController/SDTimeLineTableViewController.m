@@ -962,6 +962,7 @@
 
 }
 
+/*
 - (void)commentViewDidClick:(NSNotification *)notification {
     
     UILabel *contentLabel = notification.userInfo[@"contentLabel"];
@@ -972,6 +973,7 @@
     [alertView show];
     
 }
+*/
 
 #pragma mark - copyView回调
 - (void)KXCopyViewDidClickWithIndex:(NSInteger)index {
@@ -1001,8 +1003,9 @@
     [UIView animateWithDuration:0.3 animations:^{
         self.currentEditingIndexthPath = nil;
         _copyView.alpha = 0.0;
+        [_copyView removeFromSuperview];
         _copyView = nil;
-        _contentLabel.backgroundColor = [UIColor whiteColor];
+        _contentLabel.backgroundColor = [UIColor clearColor];
     }];
     
 }
@@ -1013,8 +1016,9 @@
     if (_copyView) {
         [UIView animateWithDuration:0.3 animations:^{
             _copyView.alpha = 0.0;
+            [_copyView removeFromSuperview];
             _copyView = nil;
-            _contentLabel.backgroundColor = [UIColor whiteColor];
+            _contentLabel.backgroundColor = [UIColor clearColor];
         }];
     }
     [self.chatKeyBoard keyboardDownForComment];
@@ -1024,8 +1028,9 @@
     if (_copyView) {
         [UIView animateWithDuration:0.3 animations:^{
             _copyView.alpha = 0.0;
+            [_copyView removeFromSuperview];
             _copyView = nil;
-            _contentLabel.backgroundColor = [UIColor whiteColor];
+            _contentLabel.backgroundColor = [UIColor clearColor];
         }];
     }
 }

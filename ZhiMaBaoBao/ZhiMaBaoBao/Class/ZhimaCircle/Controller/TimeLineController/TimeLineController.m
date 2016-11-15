@@ -12,8 +12,6 @@
 #import "NearByPeopleController.h"
 #import "ScanQRCodeController.h"
 
-//#import "CallPresendAnimation.h"
-
 #define ZhiMaCicleCellReusedID @"ZhiMaCicleCellReusedID"
 
 @interface TimeLineController () <UITableViewDelegate,UITableViewDataSource>
@@ -43,8 +41,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     //发送消息更新未读朋友圈和未读消息数
-    
-    if (USERINFO.unReadCount == 0) {
+    if (USERINFO.unReadCount == 0 && ![USERINFO.sessionId isEqualToString:@"0"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:K_UpdataUnReadNotification object:nil];
     }
 }
@@ -53,7 +50,7 @@
 - (void)notification {
     //未读消息数
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unReadCount:) name:K_UpDataUnReadCountNotification object:nil];
-    
+    //未读朋友圈
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unReadCircle:) name:K_UpDataHeaderPhotoNotification object:nil];
     
     // 某人不让我看他朋友圈通知
@@ -120,14 +117,8 @@
         timeLine.unReadCount = _unReadCount;
         timeLine.circleheadphoto = _circleheadphoto;
         timeLine.headPhoto = _unReadHeadphoto;
-
         timeLine.hidesBottomBarWhenPushed = YES;
-        
-        // 自定义转场动画
-//        self.navigationController.delegate = self;
-        
         [self.navigationController pushViewController:timeLine animated:YES];
-//        [self presentViewController:timeLine animated:YES completion:nil];
         
     } else if (indexPath.section == 1 && indexPath.row == 0 ) {
         //扫一扫
@@ -174,16 +165,6 @@
         [self.navigationController pushViewController:nearBy animated:YES];
     }
 }
-
-// 转场
-//- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC {
-//    if (operation == UINavigationControllerOperationPush){ // 就是在这里判断是哪种动画类型
-//        return [[CallPresendAnimation alloc] init]; // 返回push动画的类
-//    }else{
-//        return nil;
-//    }
-//}
-
 
 #pragma mark - 未读消息
 - (void)unReadCount:(NSNotification *)notification {
