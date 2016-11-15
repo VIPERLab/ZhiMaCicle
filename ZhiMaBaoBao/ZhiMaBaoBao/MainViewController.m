@@ -50,8 +50,11 @@
     [self addChildVc:[[PersonalCenterController alloc] init] title:@"芝麻" image:@"lgtabbar_5" selectedImage:@"lgtabbar_5_select"];
     
     //连接socket服务器
-    [[SocketManager shareInstance] connect];
-    [SocketManager shareInstance].delegate = self;
+    if (![USERINFO.sessionId isEqualToString:@"0"]) {
+        [[SocketManager shareInstance] connect];
+        [SocketManager shareInstance].delegate = self;
+    }
+    
 
     //添加异常捕获
 //    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);

@@ -121,6 +121,12 @@
         [self.navigationController pushViewController:timeLine animated:YES];
         
     } else if (indexPath.section == 1 && indexPath.row == 0 ) {
+        
+        if ([USERINFO.sessionId isEqualToString:@"0"]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+            return;
+        }
+        
         //扫一扫
         ScanQRCodeController *QRCode = [[ScanQRCodeController alloc] init];
         

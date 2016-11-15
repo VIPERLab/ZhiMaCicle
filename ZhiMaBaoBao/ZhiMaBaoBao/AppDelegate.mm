@@ -51,11 +51,9 @@
     
     [UncaughtExceptionHandler installUncaughtExceptionHandler:YES showAlert:NO];
     
-    
-    
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+    
     UserInfo *userInfo = [UserInfo read];
     //用户第一次登录
     if (!userInfo.hasLogin || userInfo == nil) {
@@ -75,18 +73,13 @@
         
         MainViewController *mainVC = [[MainViewController alloc] init];
         self.window.rootViewController = mainVC;
-
-//        LGGuideController *vc = [[LGGuideController alloc] init];
-//        UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
-//        self.window.rootViewController = guideVC;
         
     }else{
         //已经登录过，直接跳转到主界面
-        MainViewController *mainVC = [[MainViewController alloc] init];
-        self.window.rootViewController = mainVC;
+        self.window.rootViewController = [[MainViewController alloc] init];
     }
     
-    
+    [self.window makeKeyAndVisible];
     
     //存储app的版本号
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
@@ -139,6 +132,8 @@
     if (userInfo.sessionId.length && ![userInfo.sessionId isEqualToString:@"0"]) {
         [self judgeLoginState];
     }
+    
+    
     
     return YES;
 }
