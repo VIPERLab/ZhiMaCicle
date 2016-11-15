@@ -130,14 +130,19 @@
 
 - (void)visitorAction
 {     
-    UserInfo*info = [UserInfo shareInstance];
+    UserInfo*info = [UserInfo read];
+    
+    if (!info) {
+        info = [UserInfo shareInstance];
+    }
+    
     if (info.isVisitor) {
         [self dismissViewControllerAnimated:YES completion:nil];
         return;
     }
     
     info.hasLogin = YES;
-    info.userID = @"";
+    info.userID = @"0";
     info.sessionId = @"0";
     info.head_photo = @"image/user_default_head_photo.png";
     info.backgroundImg = @"image/user_default_background_image.jpg";
