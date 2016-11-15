@@ -111,6 +111,7 @@
             systemMsg.msgid = [NSString generateMessageID];
             systemMsg.conversionType = ConversionTypeGroupChat;
             systemMsg.timeStamp = [NSDate currentTimeStamp];
+            systemMsg.converseName = self.groupModel.groupName;
             [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:self.groupModel.groupId];
             
             //通过socket创建群聊

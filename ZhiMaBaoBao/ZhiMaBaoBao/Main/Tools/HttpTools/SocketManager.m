@@ -251,7 +251,7 @@ static SocketManager *manager = nil;
     //插入消息数据库、更新会话(新版本)
     //1.插消息表
     [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-    //2.插会话表
+    //2.插会话表 -- 自己发的消息未读数不加1
     [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
     
     //发送消息状态回调通知

@@ -522,6 +522,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                             systemMsg.conversionType = ConversionTypeSingle;
                             systemMsg.timeStamp = [NSDate currentTimeStamp];
                             systemMsg.actType = ActTypeDeluserfromgroup;
+                            systemMsg.converseName = self.groupChatModel.groupName;
                             [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupChatModel.groupId];
                             
                             //通过socket创建群聊
@@ -622,6 +623,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 systemMsg.conversionType = ConversionTypeSingle;
                                 systemMsg.timeStamp = [NSDate currentTimeStamp];
                                 systemMsg.actType = ActTypeDeluserfromgroup;
+                                systemMsg.converseName = self.groupChatModel.groupName;
                                 [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupChatModel.groupId];
                                 
                                 //通过socket创建群聊
@@ -694,6 +696,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                     systemMsg.conversionType = ConversionTypeSingle;
                                     systemMsg.timeStamp = [NSDate currentTimeStamp];
                                     systemMsg.actType = ActTypeDeluserfromgroup;
+                                    systemMsg.converseName = self.groupChatModel.groupName;
                                     [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupChatModel.groupId];
                                     
                                     //通过socket创建群聊
@@ -751,6 +754,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     systemMsg.conversionType = ConversionTypeSingle;
                     systemMsg.timeStamp = [NSDate currentTimeStamp];
                     systemMsg.actType = ActTypeUpdategroupnum;
+                    systemMsg.converseName = self.groupChatModel.groupName;
                     [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupChatModel.groupId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":systemMsg}];
                     
