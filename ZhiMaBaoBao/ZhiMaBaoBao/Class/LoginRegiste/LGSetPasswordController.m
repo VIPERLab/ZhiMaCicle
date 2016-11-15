@@ -129,7 +129,7 @@
 - (void)registerAction{
     [self.view endEditing:YES];
     
-    if (![self.passField.text isMatchedByRegex:@"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$"]) {
+    if (![self.passField.text isMatchedByRegex:@"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$"]) {
         [LCProgressHUD showFailureText:@"请输入数字和字母组成的密码"];
         return;
     }
