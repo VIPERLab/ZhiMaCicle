@@ -58,6 +58,9 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+
+    [super viewWillAppear:YES];
+
     if ([USERINFO.userID isEqualToString:self.groupModel.create_usreid]) {
         self.isGroupCreater = YES;
     }

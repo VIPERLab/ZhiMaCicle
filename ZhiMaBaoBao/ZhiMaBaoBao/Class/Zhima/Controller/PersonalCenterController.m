@@ -66,9 +66,7 @@
     ViciterLoginView *viciter = [[ViciterLoginView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
     _viciterView = viciter;
     [viciter setLoginBlock:^{
-//        [self loginButtonDidClick:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
-
     }];
     [self.view addSubview:viciter];
     

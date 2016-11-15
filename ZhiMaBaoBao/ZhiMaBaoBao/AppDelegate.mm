@@ -59,15 +59,34 @@
     UserInfo *userInfo = [UserInfo read];
     //用户第一次登录
     if (!userInfo.hasLogin || userInfo == nil) {
-        LGGuideController *vc = [[LGGuideController alloc] init];
-        UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
-        self.window.rootViewController = guideVC;
+        
+        if (!userInfo) {
+            userInfo = [UserInfo shareInstance];
+        }
+        userInfo.hasLogin = YES;
+        userInfo.userID = @"0";
+        userInfo.sessionId = @"0";
+        userInfo.head_photo = @"image/user_default_head_photo.png";
+        userInfo.backgroundImg = @"image/user_default_background_image.jpg";
+        userInfo.yuan_head_photo = @"image/user_default_head_photo.png";
+        userInfo.username = @"游客";
+        userInfo.isVisitor = YES;
+        [userInfo save];
+        
+        MainViewController *mainVC = [[MainViewController alloc] init];
+        self.window.rootViewController = mainVC;
+
+//        LGGuideController *vc = [[LGGuideController alloc] init];
+//        UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
+//        self.window.rootViewController = guideVC;
         
     }else{
         //已经登录过，直接跳转到主界面
         MainViewController *mainVC = [[MainViewController alloc] init];
         self.window.rootViewController = mainVC;
     }
+    
+    
     
     //存储app的版本号
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];

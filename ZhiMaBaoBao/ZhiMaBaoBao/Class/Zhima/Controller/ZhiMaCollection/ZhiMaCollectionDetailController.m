@@ -239,6 +239,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
     if (_playView) {
         [_playView play];
     }

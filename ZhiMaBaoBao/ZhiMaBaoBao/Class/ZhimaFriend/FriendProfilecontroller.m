@@ -45,6 +45,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillDisappear:YES];
     [self requestFriendProfile:NO];
 }
 

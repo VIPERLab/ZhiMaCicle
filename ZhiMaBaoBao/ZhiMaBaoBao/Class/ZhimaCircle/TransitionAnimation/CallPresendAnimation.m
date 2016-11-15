@@ -12,7 +12,7 @@
 
 //动画的时间
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.9f;
+    return 0.8f;
 }
 
 

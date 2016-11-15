@@ -67,9 +67,9 @@ static NSString * const headerIdentifier = @"headerIdentifier";
     [self getDataFormSQL];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    
-}
+//- (void)viewDidAppear:(BOOL)animated {
+//    
+//}
 
 
 - (void)viewDidDisappear:(BOOL)animated{
