@@ -87,6 +87,12 @@ typedef enum : NSUInteger {
  */
 - (BOOL)moveDataToNewSQLWithOldPath:(NSString *)oldPath toNewPath:(NSString *)newPath;
 
+
+/**
+ 打开当前用户所有的表
+ */
+- (void)openAllSequliteTable;
+
 /**
  *   关闭所有表
  */
