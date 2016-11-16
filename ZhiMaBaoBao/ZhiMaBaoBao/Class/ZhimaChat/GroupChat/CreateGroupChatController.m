@@ -517,6 +517,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                             systemMsg.text = [NSString stringWithFormat:@"你邀请加入了群聊"];
                             systemMsg.fromUid = USERINFO.userID;
                             systemMsg.toUidOrGroupId = self.groupChatModel.groupId;
+                            systemMsg.converseId = self.groupChatModel.groupId;
                             systemMsg.type = MessageTypeSystem;
                             systemMsg.msgid = [NSString generateMessageID];
                             systemMsg.conversionType = ConversionTypeSingle;
@@ -604,7 +605,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 
                                 //创建会话
                                 ConverseModel *converseModel  = [[ConverseModel alloc] init];
-//                                converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
                                 converseModel.time = [NSDate currentTimeStamp];
                                 converseModel.converseType = 1;
                                 converseModel.converseId = self.groupChatModel.groupId;
@@ -618,6 +618,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 systemMsg.text = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",usernames];
                                 systemMsg.fromUid = USERINFO.userID;
                                 systemMsg.toUidOrGroupId = self.groupChatModel.groupId;
+                                systemMsg.converseId = self.groupChatModel.groupId;
                                 systemMsg.type = MessageTypeSystem;
                                 systemMsg.msgid = [NSString generateMessageID];
                                 systemMsg.conversionType = ConversionTypeSingle;
@@ -668,16 +669,12 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     dispatch_async(dispatch_get_global_queue(0, 0), ^{
                         [FMDBShareManager saveAllGroupMemberWithArray:self.groupChatModel.groupUserVos andGroupChatId:self.groupChatModel.groupId withComplationBlock:^(BOOL success) {
                             if (success) {
-                                
-                                dispatch_async(dispatch_get_main_queue(), ^{
                                     //存群信息
                                     [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                                     
                                     //创建会话
                                     ConverseModel *converseModel  = [[ConverseModel alloc] init];
-//                                    converseModel.time = [NSDate cTimestampFromString:self.groupChatModel.create_time format:@"yyyy-MM-dd HH:mm:ss"];
                                     converseModel.time = [NSDate currentTimeStamp];
-
                                     converseModel.converseType = 1;
                                     converseModel.converseId = self.groupChatModel.groupId;
                                     converseModel.unReadCount = 0;
@@ -691,6 +688,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                     systemMsg.text = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",usernames];
                                     systemMsg.fromUid = USERINFO.userID;
                                     systemMsg.toUidOrGroupId = self.groupChatModel.groupId;
+                                    systemMsg.converseId = self.groupChatModel.groupId;
                                     systemMsg.type = MessageTypeSystem;
                                     systemMsg.msgid = [NSString generateMessageID];
                                     systemMsg.conversionType = ConversionTypeSingle;
@@ -710,8 +708,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                     
                                     //跳转到群聊天页面
                                     [self jumpGroupChat];
-
-                                });
                             }
                         }];
                     });
@@ -723,8 +719,15 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         }else{      //拉人进群
             //拼接选择好友userId
             NSMutableArray *userIdArray = [NSMutableArray array];
+            NSMutableArray *newGroupMemders = [NSMutableArray array];  //新的群成员，群入群成员表
             for (ZhiMaFriendModel *model in self.selectedFriends) {
                 [userIdArray addObject:model.user_Id];
+                GroupUserModel *member = [[GroupUserModel alloc] init];
+                member.userId = model.user_Id;
+                member.friend_nick = model.user_Name;
+                member.groupId = self.groupId;
+                member.head_photo = model.head_photo;
+                [newGroupMemders addObject:member];
             }
             NSString *userIds = [userIdArray componentsJoinedByString:@","];
             
@@ -744,11 +747,15 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     //存群信息
                     [FMDBShareManager saveGroupChatInfo:self.groupChatModel andConverseID:self.groupChatModel.groupId];
                     
+                    //将新成员加入群表
+                    [FMDBShareManager saveAllGroupMemberWithArray:newGroupMemders andGroupChatId:self.groupId withComplationBlock:nil];
+                    
                     //生成系统消息
                     LGMessage *systemMsg = [[LGMessage alloc] init];
                     systemMsg.text = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",usernames];
                     systemMsg.fromUid = USERINFO.userID;
                     systemMsg.toUidOrGroupId = self.groupChatModel.groupId;
+                    systemMsg.converseId = self.groupChatModel.groupId;
                     systemMsg.type = MessageTypeSystem;
                     systemMsg.msgid = [NSString generateMessageID];
                     systemMsg.conversionType = ConversionTypeSingle;
@@ -770,6 +777,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     //跳转到群聊天页面
                     [self jumpGroupChat];
 
+                }else{
+                    [LCProgressHUD showFailureText:responseData.msg];
                 }
             } failure:^(ErrorData *error) {
                 [LCProgressHUD showFailureText:error.msg];

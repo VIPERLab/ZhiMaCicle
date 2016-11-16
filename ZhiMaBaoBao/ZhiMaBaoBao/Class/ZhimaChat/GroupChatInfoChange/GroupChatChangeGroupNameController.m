@@ -105,8 +105,7 @@
             LGMessage *systemMsg = [[LGMessage alloc] init];
             systemMsg.actType = ActTypeRenamegroup;
             systemMsg.text = [NSString stringWithFormat:@"你修改群名为\"%@\"",self.groupModel.groupName];
-            systemMsg.fromUid = USERINFO.userID;
-            systemMsg.toUidOrGroupId = self.groupModel.groupId;
+            systemMsg.converseId = self.groupModel.groupId;
             systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = [NSString generateMessageID];
             systemMsg.conversionType = ConversionTypeGroupChat;

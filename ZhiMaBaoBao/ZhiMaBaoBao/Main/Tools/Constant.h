@@ -57,7 +57,7 @@
 //#define DFAPIURL @"http://zhimachat.yihezhai.cc"
 
 //测试环境
-#define DFAPIURL @"http://testchat.zhimabaobao.com/"
+#define DFAPIURL @"http://tmpzm.zhimabaobao.com/"
 #define CHATPICURL  @"http://tpic.zhimabaobao.com"
 #define DFAPIURLTEST @"http://tfr.zhimabaobao.com"
 

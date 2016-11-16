@@ -36,14 +36,11 @@
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, strong) NSArray *subTitleArray;
 @property (nonatomic, strong) ConverseModel *converseModel;
-
 @property (nonatomic, strong) NSArray <GroupUserModel *>*groupMenberArray;
-
 @property (nonatomic, strong) GroupChatModel *groupModel;   //群聊信息数据模型
-
 @property (nonatomic, assign) int MaxCount;
-
 @property (nonatomic, assign) BOOL isGroupCreater;
+@property (nonatomic, strong) NSArray *allMemberIds;        //所有群成员的id数组
 @end
 
 @implementation GroupChatRoomInfoController {
@@ -94,15 +91,12 @@
                      };
         }];
         self.groupModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+        self.allMemberIds = responseData.data[@"userIds"];
+        //所有群成员的userId
         
         
         //将群组放在数组第一个
         [self dealGroupMembers];
-        
-        // 设置群聊的置顶、免打扰
-        //        self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.converseId andConverseType:YES];
-        //        self.groupModel.topChat = self.converseModel.topChat;
-        //        self.groupModel.disturb = self.converseModel.disturb;
         
         // 更新群信息内容
         [FMDBShareManager saveGroupChatInfo:self.groupModel andConverseID:self.converseId];
@@ -202,9 +196,7 @@
         cell.isGroupCreater = self.isGroupCreater;
         cell.MaxCount = self.MaxCount;
         cell.modelArray = self.groupModel.groupUserVos;
-        
         cell.delegate = self;
-        
         return cell;
     }
     
@@ -409,7 +401,8 @@
     CreateGroupChatController *vc = [[CreateGroupChatController alloc] init];
     vc.fartherVC = self;
     vc.hideFirstSection = self;
-    vc.selectedMembers = originUserIds;
+//    vc.selectedMembers = originUserIds;
+    vc.selectedMembers = self.allMemberIds;
     vc.groupId = self.groupModel.groupId;
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
@@ -419,7 +412,6 @@
     NSLog(@"点击了删除好友");
     GroupDeleteMembersController *vc = [[GroupDeleteMembersController alloc] init];
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
-    vc.membersArr = [self.groupModel.groupUserVos mutableCopy];
     vc.groupId = self.groupModel.groupId;
     vc.groupLogo = self.groupModel.groupAvtar;
     vc.groupName = self.groupModel.groupName;

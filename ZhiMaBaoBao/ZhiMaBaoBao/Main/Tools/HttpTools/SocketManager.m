@@ -137,7 +137,6 @@ static SocketManager *manager = nil;
                 if (responseObject) {
                     if ([responseObject[@"code"] integerValue] == 8888) {
 
-
                         dispatch_queue_t conCurrentGlobalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
                         dispatch_queue_t mainQueue = dispatch_get_main_queue();
                         dispatch_group_t groupQueue = dispatch_group_create();
@@ -271,186 +270,191 @@ static SocketManager *manager = nil;
 - (void)recieveMessage:(LGMessage *)message isOffline:(BOOL)offline
 {
 
-        //生成会话模型 用作创建/更新会话
-        ConverseModel *converse = [[ConverseModel alloc] init];
-        converse.converseHead_photo = message.converseLogo;
-        converse.converseType = message.conversionType;
-        converse.lastConverse = message.text;
-        converse.messageType = message.type;
-        converse.time = message.timeStamp;
-        
-        //生成群成员信息模型 用作插群成员表
-        GroupUserModel *groupUser = [[GroupUserModel alloc] init];
-        //生成群信息模型
-        GroupChatModel *groupInfo = [[GroupChatModel alloc] init];
-        //生成好友模型
-        ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
-        friend.user_Id = message.fromUid;
-        friend.user_Name = message.fromUserName;
-        friend.head_photo = message.fromUserPhoto;
-        //自己的群成员信息 (用于被拉进群，将自己存入群成员表)
-        GroupUserModel *user = [[GroupUserModel alloc] init];
-        
-        //如果是语音消息和视频消息 --> 先进行解析处理
-        if (message.type == MessageTypeAudio) {
-            NSData *audioData = [[NSData alloc] initWithBase64EncodedString:message.text options:0];
-            
-            //沙盒路径
-            NSString *sandboxPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-            //根据当前时间和发送者uid 拼接语音文件名
-            NSInteger stamp = [NSDate currentTimeStamp];
-            NSString *fileName = [NSString stringWithFormat:@"%@-%@.amr",[NSDate dateStrFromCstampTime:stamp withDateFormat:@"yyyy-MM-dd-hh-mm-ss-SSS"],message.fromUid];
-            //语音文件路径
-            NSString *path = [NSString stringWithFormat:@"%@/%@",sandboxPath,fileName];
-            message.text = fileName;
-            if ([audioData writeToFile:path atomically:YES]) {
-                NSLog(@"语音写入沙盒成功");
-            }else{
-                NSLog(@"语音写入沙盒失败");
-            }
-        }
-        //视频消息
-        else if (message.type == MessageTypeVideo){
-            
-        }
-        
-        
-        //根据（单聊、群聊、服务号）三种消息类型处理消息
-        if (message.conversionType == ConversionTypeSingle) {
-            ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:message.fromUid];
-            converse.converseId = message.fromUid;
-            converse.converseName = message.converseName;
-            if (friend.user_Id) {
-                converse.converseName = friend.displayName;
-            }
-            
-        }
-        //群聊
-        else if (message.conversionType == ConversionTypeGroupChat){
-            //赋值会话id 会话名称
-            converse.converseId = message.converseId;
-            converse.converseName = message.converseName;
-            //赋值群成员模型
-            groupUser.userId = message.fromUid;
-            groupUser.groupId = message.toUidOrGroupId;
-            groupUser.friend_nick = message.fromUserName;
-            groupUser.head_photo = message.fromUserPhoto;
-            //赋值群信息模型
-            groupInfo.groupId = message.toUidOrGroupId;
-            groupInfo.groupName = message.converseName;
-            groupInfo.groupAvtar = message.converseLogo;
-            
-            //自己的群成员信息 (用于被拉进群，将自己存入群成员表)
-            user.userId = USERINFO.userID;
-            user.friend_nick = USERINFO.username;
-            user.head_photo = USERINFO.head_photo;
-            user.groupId = converse.converseId;
-            
-        }
-        //服务号
-        else if (message.conversionType == ConversionTypeActivity){
-            converse.converseName = message.converseName;
-            converse.converseId = message.converseId;
-        }
+    //生成会话模型 用作创建/更新会话
+    ConverseModel *converse = [[ConverseModel alloc] init];
+    converse.converseHead_photo = message.converseLogo;
+    converse.converseType = message.conversionType;
+    converse.lastConverse = message.text;
+    converse.messageType = message.type;
+    converse.time = message.timeStamp;
     
-        //根据操作指令进行相关操作和数据库存储
-        switch (message.actType) {
-            case ActTypeNormal:{        //普通消息
-                if (message.conversionType == ConversionTypeGroupChat) {    //保存群成员信息、保存群信息
-                    groupUser.memberGroupState = NO;    //标记为出席群
-                    [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
-                    [FMDBShareManager saveGroupChatInfo:groupInfo andConverseID:converse.converseId];
-                }
-                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-                [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
-            }
-                break;
-            case ActTypeAddfriend:{     //好友请求
-                NSMutableDictionary *parmas = [NSMutableDictionary dictionary];
-                parmas[@"friend"] = friend;
-                [[NSNotificationCenter defaultCenter] postNotificationName:kNewFriendRequest object:nil userInfo:parmas];
-                
-                //保存新的好友到数据库
-                friend.friend_type = 1;
-                [FMDBShareManager saveNewFirendsWithArray:@[friend] withComplationBlock:nil];
-            }
-                break;
-            case ActTypeDofriend:{      //同意好友请求
-                message.msgid = [NSString generateMessageID];
-                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-                [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
-                [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil andIsUpdata:NO];
-            }
-                break;
-            case ActTypeUpdatefriend:{  //更新好友数据
-                
-                
-            }
-                break;
-            case ActTypeUpdategroupnum:{    //更新群用户数 （拉人进群）
-                //将自己的信息存入群成员表
-                user.memberGroupState = NO;
-                message.msgid = [NSString generateMessageID];
-                [FMDBShareManager saveAllGroupMemberWithArray:@[user] andGroupChatId:converse.converseId withComplationBlock:nil];
-                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-                [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
-            }
-                break;
-            case ActTypeDeluserfromgroup:{  //从群组删除用户
-                user.memberGroupState = YES;
-                message.msgid = [NSString generateMessageID];
-                [FMDBShareManager saveAllGroupMemberWithArray:@[user] andGroupChatId:converse.converseId withComplationBlock:nil];
-                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-                [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
-            }
-                break;
-            case ActTypeQuitgroup:{          //退出群聊
-                
-            }
-                break;
-            case ActTypeRenamegroup:{       //修改群名称
-                message.msgid = [NSString generateMessageID];
-                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-                [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
-            }
-                break;
-            case ActTypeNofriend:{          //不是好友
-                [FMDBShareManager revokeNormalMessageToSystemMessage:message];
-                [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
-            }
-                break;
-            case ActTypeNoallow:{           //不允许看朋友圈
-                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                userInfo[@"deleteUid"] = message.fromUid;
-                [[NSNotificationCenter defaultCenter] postNotificationName:K_NotLookMyCircleNotification object:nil userInfo:userInfo];
-            }
-                break;
-            case ActTypeInBlacklist:{       //被拉入黑名单
-                converse.converseId = message.toUidOrGroupId;
-                message.msgid = [NSString generateMessageID];
-                message.timeStamp = [NSDate currentTimeStamp];
-                [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-                [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
-            }
-                break;
-            case ActTypeUndomsg:{            //撤销消息
-                [FMDBShareManager revokeNormalMessageToSystemMessage:message];
-                [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
-            }
-                break;
-            case ActTypeKickuser:{          //相同用户登录，剔除之前的登录用户
-                [[NSNotificationCenter defaultCenter] postNotificationName:kOtherLogin object:nil];
-            }
-                break;
-            case ActTypeNotIngroup:{        //没有出席群
-                groupUser.memberGroupState = YES;
-                [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
-            }
-                break;
-                
-            default:
-                break;
+    //生成群成员信息模型 用作插群成员表
+    GroupUserModel *groupUser = [[GroupUserModel alloc] init];
+    //生成群信息模型
+    GroupChatModel *groupInfo = [[GroupChatModel alloc] init];
+    //生成好友模型
+    ZhiMaFriendModel *friend = [[ZhiMaFriendModel alloc] init];
+    friend.user_Id = message.fromUid;
+    friend.user_Name = message.fromUserName;
+    friend.head_photo = message.fromUserPhoto;
+    //自己的群成员信息 (用于被拉进群，将自己存入群成员表)
+    GroupUserModel *user = [[GroupUserModel alloc] init];
+    
+    //如果是语音消息和视频消息 --> 先进行解析处理
+    if (message.type == MessageTypeAudio) {
+        NSData *audioData = [[NSData alloc] initWithBase64EncodedString:message.text options:0];
+        
+        //沙盒路径
+        NSString *sandboxPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        //根据当前时间和发送者uid 拼接语音文件名
+        NSInteger stamp = [NSDate currentTimeStamp];
+        NSString *fileName = [NSString stringWithFormat:@"%@-%@.amr",[NSDate dateStrFromCstampTime:stamp withDateFormat:@"yyyy-MM-dd-hh-mm-ss-SSS"],message.fromUid];
+        //语音文件路径
+        NSString *path = [NSString stringWithFormat:@"%@/%@",sandboxPath,fileName];
+        message.text = fileName;
+        if ([audioData writeToFile:path atomically:YES]) {
+            NSLog(@"语音写入沙盒成功");
+        }else{
+            NSLog(@"语音写入沙盒失败");
         }
+    }
+    //视频消息
+    else if (message.type == MessageTypeVideo){
+        
+    }
+    
+    
+    //根据（单聊、群聊、服务号）三种消息类型处理消息
+    if (message.conversionType == ConversionTypeSingle) {
+        ZhiMaFriendModel *friend = [FMDBShareManager getUserMessageByUserID:message.fromUid];
+        converse.converseId = message.fromUid;
+        converse.converseName = message.converseName;
+        message.converseId = message.fromUid;
+        if (friend.user_Id) {
+            converse.converseName = friend.displayName;
+        }
+        
+    }
+    //群聊
+    else if (message.conversionType == ConversionTypeGroupChat){
+        //赋值会话id 会话名称
+        converse.converseId = message.converseId;
+        converse.converseName = message.converseName;
+        //赋值群成员模型
+        groupUser.userId = message.fromUid;
+        groupUser.groupId = message.toUidOrGroupId;
+        groupUser.friend_nick = message.fromUserName;
+        groupUser.head_photo = message.fromUserPhoto;
+        //赋值群信息模型
+        groupInfo.groupId = message.toUidOrGroupId;
+        groupInfo.groupName = message.converseName;
+        groupInfo.groupAvtar = message.converseLogo;
+        
+        //自己的群成员信息 (用于被拉进群，将自己存入群成员表)
+        user.userId = USERINFO.userID;
+        user.friend_nick = USERINFO.username;
+        user.head_photo = USERINFO.head_photo;
+        user.groupId = converse.converseId;
+        
+    }
+    //服务号
+    else if (message.conversionType == ConversionTypeActivity){
+        converse.converseName = message.converseName;
+        converse.converseId = message.converseId;
+    }
+
+    //根据操作指令进行相关操作和数据库存储
+    switch (message.actType) {
+        case ActTypeNormal:{        //普通消息
+            if (message.conversionType == ConversionTypeGroupChat) {    //保存群成员信息、保存群信息
+                groupUser.memberGroupState = NO;    //标记为出席群
+                [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
+                [FMDBShareManager saveGroupChatInfo:groupInfo andConverseID:converse.converseId];
+            }
+            [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+            [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+        }
+            break;
+        case ActTypeAddfriend:{     //好友请求
+            NSMutableDictionary *parmas = [NSMutableDictionary dictionary];
+            parmas[@"friend"] = friend;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewFriendRequest object:nil userInfo:parmas];
+            
+            //保存新的好友到数据库
+            friend.friend_type = 1;
+            [FMDBShareManager saveNewFirendsWithArray:@[friend] withComplationBlock:nil];
+        }
+            break;
+        case ActTypeDofriend:{      //同意好友请求
+            message.msgid = [NSString generateMessageID];
+            [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+            [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+            [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil andIsUpdata:NO];
+        }
+            break;
+        case ActTypeUpdatefriend:{  //更新好友数据
+            
+            
+        }
+            break;
+        case ActTypeUpdategroupnum:{    //更新群用户数 （拉人进群）
+            //将自己的信息存入群成员表
+            user.memberGroupState = NO;
+            message.msgid = [NSString generateMessageID];
+            [FMDBShareManager saveAllGroupMemberWithArray:@[user] andGroupChatId:converse.converseId withComplationBlock:nil];
+            //将被拉进群的用户存入群成员表
+            NSMutableArray *groupMembers = [NSMutableArray array];
+            NSArray *membersId = [message.toUidOrGroupId componentsSeparatedByString:@","];
+            
+            [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+            [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
+        }
+            break;
+        case ActTypeDeluserfromgroup:{  //从群组删除用户
+            user.memberGroupState = YES;
+            message.msgid = [NSString generateMessageID];
+            [FMDBShareManager saveAllGroupMemberWithArray:@[user] andGroupChatId:converse.converseId withComplationBlock:nil];
+            [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+            [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
+        }
+            break;
+        case ActTypeQuitgroup:{          //退出群聊
+            
+        }
+            break;
+        case ActTypeRenamegroup:{       //修改群名称
+            message.msgid = [NSString generateMessageID];
+            [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+            [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
+        }
+            break;
+        case ActTypeNofriend:{          //不是好友
+            [FMDBShareManager revokeNormalMessageToSystemMessage:message];
+            [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+        }
+            break;
+        case ActTypeNoallow:{           //不允许看朋友圈
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo[@"deleteUid"] = message.fromUid;
+            [[NSNotificationCenter defaultCenter] postNotificationName:K_NotLookMyCircleNotification object:nil userInfo:userInfo];
+        }
+            break;
+        case ActTypeInBlacklist:{       //被拉入黑名单
+            converse.converseId = message.toUidOrGroupId;
+            message.msgid = [NSString generateMessageID];
+            message.timeStamp = [NSDate currentTimeStamp];
+            [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
+            [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+        }
+            break;
+        case ActTypeUndomsg:{            //撤销消息
+            [FMDBShareManager revokeNormalMessageToSystemMessage:message];
+            [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+        }
+            break;
+        case ActTypeKickuser:{          //相同用户登录，剔除之前的登录用户
+            [[NSNotificationCenter defaultCenter] postNotificationName:kOtherLogin object:nil];
+        }
+            break;
+        case ActTypeNotIngroup:{        //没有出席群
+            groupUser.memberGroupState = YES;
+            [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
+        }
+            break;
+            
+        default:
+            break;
+    }
     
     if (!offline) {
         //统一发送通知、更新UI

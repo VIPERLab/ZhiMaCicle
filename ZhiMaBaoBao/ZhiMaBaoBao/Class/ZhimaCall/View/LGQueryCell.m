@@ -72,6 +72,7 @@
     if (model.isadd == 0) {
         self.flagBtn.selected = NO;
     }else{
+        self.flagBtn.userInteractionEnabled = NO;
         self.flagBtn.selected = YES;
         self.flagBtn.backgroundColor = [UIColor clearColor];
         if (model.isadd == 2) {
@@ -79,7 +80,6 @@
         }
     }
 }
-
 
 - (void)addBtnAction:(UIButton *)sender{
     if ([self.delegate respondsToSelector:@selector(addNewFriend:)]) {
