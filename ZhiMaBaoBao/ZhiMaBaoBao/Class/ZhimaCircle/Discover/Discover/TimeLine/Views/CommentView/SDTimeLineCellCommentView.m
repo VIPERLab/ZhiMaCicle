@@ -80,6 +80,7 @@
     _likeLabel.font = [UIFont systemFontOfSize:14];
     _likeLabel.linkTextAttributes = @{NSForegroundColorAttributeName : [UIColor colorFormHexRGB:@"576b95"]};
     _likeLabel.isAttributedContent = YES;
+    [_likeLabel setLineBreakMode:NSLineBreakByCharWrapping];
     
     
     [_likeLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {

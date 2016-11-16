@@ -154,6 +154,11 @@
     }];
 }
 
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.view endEditing:YES];
+}
+
 - (void)getContacts{
     NSLog(@"----- 开始");
     //这个变量用于记录授权是否成功，即用户是否允许我们访问通讯录
@@ -514,15 +519,9 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     //，跳转到好友详情
     if (self.isAddPhoneFriend) {
-        
-        if ([USERINFO.sessionId isEqualToString:@"0"]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
-            return;
-        }
-        
         NSInteger rowNum = 0;
         for (int i = 0; i < indexPath.section; i++) {
             
@@ -552,8 +551,6 @@
         [self.navigationController pushViewController:vc animated:YES];
  
     }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -575,6 +572,9 @@
     UITextField *textField = notification.object;
     NSString *text = textField.text;
     
+    //变成大写
+    text = [text uppercaseString];
+    
     if (self.isAddPhoneFriend) {
         
         if (self.contactsArr) {
@@ -583,9 +583,13 @@
         
         if (text.length == 0) {
             self.contactsArr = [NSMutableArray arrayWithArray:self.containArray];
-        }else{
+        } else {
             for (LGQueryResModel *model in self.containArray) {
                 if ([model.phonename containsString:text]) {
+                    [self.contactsArr addObject:model];
+                }
+                
+                if ([model.pinyin containsString:text]) {
                     [self.contactsArr addObject:model];
                 }
             }

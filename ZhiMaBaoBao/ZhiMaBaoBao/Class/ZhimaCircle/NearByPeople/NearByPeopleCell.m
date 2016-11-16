@@ -73,7 +73,7 @@
         _iconView.frame = CGRectMake(iconX, iconY, iconW, iconH);
         
         CGFloat nameX = CGRectGetMaxX(_iconView.frame) + 10;
-        CGFloat nameW = CGRectGetWidth(self.frame) - nameX;
+        CGFloat nameW = CGRectGetWidth(self.frame) - nameX - 10;
         CGFloat nameH = 17;
         CGFloat nameY = CGRectGetMinY(_iconView.frame) + 5;
         _nameLabel.frame = CGRectMake(nameX, nameY, nameW, nameH);

@@ -193,6 +193,11 @@ static NSString *const btnIdentifier = @"btnIdentifier";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     //点击跳转到朋友圈
     if (indexPath.section == self.totalSections - 2 && indexPath.row == 2) {
+        if ([USERINFO.sessionId isEqualToString:@"0"]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+            return;
+        }
+        
         PesonalDiscoverController *vc = [[PesonalDiscoverController alloc] init];
         vc.sessionID = USERINFO.sessionId;
         vc.userID = self.friend.user_Id;
@@ -277,6 +282,11 @@ static NSString *const btnIdentifier = @"btnIdentifier";
  *  底部第一个按钮点击方法 根据好友类型判断
  */
 - (void)sendMsgAction{
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
+    
     if (self.friendType == FriendTypeBlack) {   //黑名单 -> 移出黑名单
         [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
@@ -354,6 +364,12 @@ static NSString *const btnIdentifier = @"btnIdentifier";
  *  拨号
  */
 - (void)callBtnAction{
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
+    
     LGCallingController *vc = [[LGCallingController alloc] init];
     vc.name = self.friend.displayName;
     vc.phoneNum = self.friend.uphone;
