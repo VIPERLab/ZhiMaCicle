@@ -96,4 +96,6 @@
 
 @property (nonatomic, copy) NSString *bigimg_url;  //大图URL
 
+@property (nonatomic, copy) NSString *picId; //图片ID
+
 @end

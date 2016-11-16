@@ -166,5 +166,10 @@ extern CGFloat maxContentLabelHeight;
 
 @implementation SDTimeLineCellPicItemModel
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
+    return @{
+             @"picId" : @"id"
+             };
+}
 
 @end

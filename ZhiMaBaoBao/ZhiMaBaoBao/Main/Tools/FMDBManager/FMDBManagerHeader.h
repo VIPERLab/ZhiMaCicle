@@ -57,9 +57,9 @@
 
 
 // 创建朋友圈图片 --- 字段名
-#define CirCle_PicField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, img_url TEXT NOT NULL, bigimg_url TEXT NOT NULL, circle_ID TEXT NOT NULL, weuser_id TEXT NOT NULL)"
+#define CirCle_PicField @"(id INTEGER PRIMARY KEY AUTOINCREMENT, img_url TEXT NOT NULL, bigimg_url TEXT NOT NULL, circle_ID TEXT NOT NULL, weuser_id TEXT NOT NULL, picId TEXT)"
 // 取朋友圈图片 -- 字段
-#define CirCle_PicFields_Name @"img_url, bigimg_url, circle_ID, weuser_id"
+#define CirCle_PicFields_Name @"img_url, bigimg_url, circle_ID, weuser_id, picId"
 
 
 // 创建朋友圈点赞 ----- 字段名

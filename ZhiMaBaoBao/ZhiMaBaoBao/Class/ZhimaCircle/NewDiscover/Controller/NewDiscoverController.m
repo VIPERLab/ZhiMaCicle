@@ -529,14 +529,76 @@
         
         //插入自己发布的朋友圈
         UserInfo *info = [UserInfo read];
-        
-        
         NSString *fcid = [NSString stringWithFormat:@"%zd",[responseData.data integerValue]];
         info.lastFcID = fcid;
         [info save];
         
-        SDTimeLineCellModel *model = [SDTimeLineCellModel mj_objectWithKeyValues:responseData.data_temp];
-        model.imglist = self.imageItemsArray;
+        //插入自己发布的朋友圈
+        SDTimeLineCellModel *cellModel = [SDTimeLineCellModel mj_objectWithKeyValues:responseData.data_temp];
+        
+        //转换数组类型
+        if (cellModel.imglist.count != 0) {
+            NSArray *picArray = [SDTimeLineCellPicItemModel mj_objectArrayWithKeyValuesArray:cellModel.imglist];
+            cellModel.imglist = picArray;
+        }
+        
+        
+        //如果有评论，则转换评论数据类型
+        if (cellModel.commentList.count !=0) {
+            NSMutableArray *commentListArray = [SDTimeLineCellCommentItemModel mj_objectArrayWithKeyValuesArray:cellModel.commentList];
+            
+            NSMutableArray *likeItemsArray = [NSMutableArray array];
+            
+            //需要循环的次数
+            NSInteger count = commentListArray.count -1;
+            
+            //拷贝一份评论数组
+            NSMutableArray *copyArray = [commentListArray mutableCopy];
+            
+            //循环开始
+            for (NSInteger index = count; index >= 0; index--) {
+                
+                //获取原始数据Model
+                SDTimeLineCellCommentItemModel *model = commentListArray[index];
+                
+                
+                if (model.type) {
+                    //如果是点赞，则把MODEL移出拷贝数组，放到like数组
+                    [copyArray removeObjectAtIndex:index];
+                    
+                    SDTimeLineCellLikeItemModel *likeModel = [[SDTimeLineCellLikeItemModel alloc] init];
+                    if (!model.friend_nick) {
+                        model.friend_nick = @"未命名";
+                    }
+                    
+                    likeModel.userName = model.friend_nick;
+                    likeModel.userId = model.userId;
+                    [likeItemsArray insertObject:likeModel atIndex:0];
+                    
+                    //判断是否点赞了
+                    if (!cellModel.liked) {
+                        if ([likeModel.userId isEqualToString:USERINFO.userID]) {
+                            cellModel.liked = YES;
+                        } else {
+                            cellModel.liked = NO;
+                        }
+                    }
+                }
+            }
+            
+            //循环结束之后，把筛选剩下的评论数赋值回去
+            commentListArray = [copyArray mutableCopy];
+            
+            
+            for (SDTimeLineCellCommentItemModel *model in commentListArray) {
+                if (!model.friend_nick) {
+                    model.friend_nick = @"未命名";
+                }
+            }
+            
+            cellModel.likeItemsArray = [likeItemsArray mutableCopy];
+            cellModel.commentList = [commentListArray mutableCopy];
+        }
         
         FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
         
@@ -552,14 +614,14 @@
         }];
         
         //插入图片
-        for (SDTimeLineCellPicItemModel *picModel in self.imageItemsArray) {
+        for (SDTimeLineCellPicItemModel *picModel in cellModel.imglist) {
             FMDatabaseQueue *picQueue = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Pic_Table];
             NSString *operationStr = [NSString string];
             
             operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Pic_Table];
             [picQueue inDatabase:^(FMDatabase *db) {
                 
-                BOOL success = [db executeUpdate:operationStr,picModel.img_url,picModel.bigimg_url,fcid,USERINFO.userID];
+                BOOL success = [db executeUpdate:operationStr,picModel.img_url,picModel.bigimg_url,fcid,picModel.weuser_id,picModel.picId];
                 if (success) {
                     NSLog(@"插入图片成功");
                 } else {
@@ -569,7 +631,7 @@
             }];
         }
         
-        self.block(model);
+        self.block(cellModel);
         [self.navigationController popViewControllerAnimated:YES];
     }];
 }

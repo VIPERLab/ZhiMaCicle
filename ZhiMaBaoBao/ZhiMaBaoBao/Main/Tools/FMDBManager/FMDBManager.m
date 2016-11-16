@@ -953,7 +953,7 @@
             NSLog(@"开始查图片表");
             __block BOOL isExist = NO;
             [picQueue inDatabase:^(FMDatabase *db) {
-                NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Pic_Table withOption:[NSString stringWithFormat:@"circle_ID = %@",cellModel.circle_ID]];
+                NSString *searchOptionStr = [FMDBShareManager SearchTable:ZhiMa_Circle_Pic_Table withOption:[NSString stringWithFormat:@"circle_ID = '%@' and picId = '%@'",cellModel.circle_ID,picModel.picId]];
                 FMResultSet *result = [db executeQuery:searchOptionStr];
                 while ([result next]) {
                     NSLog(@"查图片表成功");
@@ -968,7 +968,7 @@
                 NSLog(@"不存在这条图片数据，需要插入");
                 operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Circle_Pic_Table];
                 [picQueue inDatabase:^(FMDatabase *db) {
-                    BOOL success = [db executeUpdate:operationStr,picModel.img_url,picModel.bigimg_url,cellModel.circle_ID,picModel.weuser_id];
+                    BOOL success = [db executeUpdate:operationStr,picModel.img_url,picModel.bigimg_url,cellModel.circle_ID,picModel.weuser_id,picModel.picId];
                     if (success) {
                         NSLog(@"插入图片成功");
                     } else {
@@ -1076,6 +1076,7 @@
                 model.weuser_id = [result stringForColumn:@"weuser_id"];
                 model.bigimg_url = [result stringForColumn:@"bigimg_url"];
                 model.img_url = [result stringForColumn:@"img_url"];
+                model.picId = [result stringForColumn:@"picId"];
                 [commentListArray addObject:model];
             }
             cellModel.imglist = commentListArray;
@@ -1160,6 +1161,7 @@
             model.weuser_id = [result stringForColumn:@"weuser_id"];
             model.bigimg_url = [result stringForColumn:@"bigimg_url"];
             model.img_url = [result stringForColumn:@"img_url"];
+            model.picId = [result stringForColumn:@"picId"];
             [commentListArray addObject:model];
         }
         cellModel.imglist = commentListArray;
