@@ -322,11 +322,6 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
 // 联系人列表
 - (void)jumpToAddress
 {
-    if ([USERINFO.sessionId isEqualToString:@"0"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
-        return;
-    }
-
     PhoneAddressController *vc = [[PhoneAddressController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
@@ -335,11 +330,6 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
 //拨号界面
 - (void)jumpToCallView
 {
-    if ([USERINFO.sessionId isEqualToString:@"0"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
-        return;
-    }
-    
     ZMCallBoardViewController*callBoardVC = [[ZMCallBoardViewController alloc]init];
     callBoardVC.contactsArr = self.contactsArr;
     

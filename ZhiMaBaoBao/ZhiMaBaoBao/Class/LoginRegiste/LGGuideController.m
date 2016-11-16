@@ -109,6 +109,8 @@
         [closeBtn setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [closeBtn addTarget:self action:@selector(dissBackAction) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:closeBtn];
+        
+        visitorsBtn.hidden = YES;
     }
 }
 
@@ -150,6 +152,7 @@
     info.username = @"游客";
     info.signature = @"";
     info.isVisitor = YES;
+    info.unReadCount = 0;
     [info save];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
