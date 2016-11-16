@@ -515,7 +515,7 @@
     }];
 }
 
-//设置好友消息置顶和消息免打扰
+//获取好友消息置顶和消息免打扰
 + (void)setFriend:(NSString *)sessionID functionName:(NSString *)functionName value:(NSString *)value success:(SuccessfulBlock)success failure:(FailureBlock)failure{
     NSMutableDictionary *parms = [NSMutableDictionary dictionary];
     parms[@"sessionId"] = sessionID;
@@ -730,7 +730,7 @@
  *  @param account      即时聊天账号
  *  @param block
  */
-+ (void)setupFriendFunction:(NSString *)sessionId function:(NSString *)functionName value:(NSString *)value openfireAccount:(NSString *)account block:(SuccessfulBlock)block{
++ (void)setupFriendFunction:(NSString *)sessionId function:(NSString *)functionName value:(NSString *)value userId:(NSString *)account block:(SuccessfulBlock)block{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"sessionId"] = sessionId;
     param[@"functionName"] = functionName;

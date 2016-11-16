@@ -24,4 +24,6 @@
 // 会话id
 @property (nonatomic, copy) NSString *converseID;
 
+@property (nonatomic, copy) NSString *userId;
+
 @end

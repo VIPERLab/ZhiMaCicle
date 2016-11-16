@@ -41,6 +41,15 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+//    int disturb;
+//    int topChat;
+//    [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.userId block:^(ResponseData *responseData) {
+//        if (responseData.code == 0) {
+//            
+//        }
+//    } failure:^(ErrorData *error) {
+//        
+//    }];
     // 取出该条会话的模型
     self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.userId andConverseType:NO];
     [_tableView reloadData];
@@ -85,6 +94,7 @@
     }
     NSArray *titleArray = self.titleArray[indexPath.section];
     ChatInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:CharRoomInfoCellReusedID forIndexPath:indexPath];
+    cell.userId = self.userId;
     cell.title = titleArray[indexPath.row];
     cell.converseID = self.userId;
     if (indexPath.section == 1) {
