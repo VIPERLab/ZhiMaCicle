@@ -69,6 +69,7 @@
         userInfo.yuan_head_photo = @"image/user_default_head_photo.png";
         userInfo.username = @"游客";
         userInfo.isVisitor = YES;
+        userInfo.unReadCount = 0;
         [userInfo save];
         
         MainViewController *mainVC = [[MainViewController alloc] init];

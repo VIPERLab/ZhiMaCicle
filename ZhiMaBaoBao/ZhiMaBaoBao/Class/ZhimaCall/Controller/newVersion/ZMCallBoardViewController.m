@@ -10,6 +10,7 @@
 #import "LGCallingController.h"
 #import "PhoneContactCell.h"
 #import "LGPhoneNumberCell.h"
+#import "LGGuideController.h"
 
 #import "YiKeyBoardView.h"
 #import "KXKeyBoardView.h"
@@ -303,6 +304,12 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
         _copyView = nil;
 
     }
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [self presentLoginRegiste];
+        return;
+    }
+    
     LGCallingController *vc = [[LGCallingController alloc] init];
     vc.phoneNum = self.showNumLabel.text;
     [self presentViewController:vc animated:YES completion:nil];
@@ -407,6 +414,13 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
     if (self.callInfoView.phoneLabel.hidden) {
         return;
     }
+    
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [self presentLoginRegiste];
+        return;
+    }
+    
     PhoneContact*conteact = self.dataArr[0];
     self.selectRow = 0;
     NSString*message = [NSString stringWithFormat:@"\n%@  %@",conteact.name,conteact.phoneNumber];
@@ -419,6 +433,12 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
 
 - (void)makeCall:(NSInteger)row
 {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [self presentLoginRegiste];
+        return;
+    }
+    
+    
     self.selectRow = row;
     PhoneContact*conteact = self.dataArr[row];
     NSString*message = [NSString stringWithFormat:@"\n%@  %@",conteact.name,conteact.phoneNumber];
@@ -462,6 +482,12 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [self presentLoginRegiste];
+        return;
+    }
+    
     self.selectRow = indexPath.row;
     PhoneContact*conteact = self.dataArr[indexPath.row];
     NSString*message = [NSString stringWithFormat:@"\n%@  %@",conteact.name,conteact.phoneNumber];
@@ -487,6 +513,14 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
     lab.font = [UIFont systemFontOfSize:15];
     return lab;
     
+}
+
+- (void)presentLoginRegiste
+{
+    //弹出登录注册界面
+    LGGuideController*vc = [[LGGuideController alloc]init];
+    UINavigationController *guideVC = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:guideVC animated:YES completion:nil];
 }
 
 @end
