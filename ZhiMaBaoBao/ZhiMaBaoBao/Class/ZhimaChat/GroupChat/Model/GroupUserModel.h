@@ -58,4 +58,6 @@
 @property (nonatomic, copy) NSString *uids;
  /** 被操作的用户姓名*/
 @property (nonatomic, copy) NSString *usernames;
+ /** 被操作的用户头像*/
+@property (nonatomic, copy) NSString *userphotos;
 @end

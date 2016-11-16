@@ -719,17 +719,20 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         }else{      //拉人进群
             //拼接选择好友userId
             NSMutableArray *userIdArray = [NSMutableArray array];
+            NSMutableArray *userPhotos = [NSMutableArray array];
             NSMutableArray *newGroupMemders = [NSMutableArray array];  //新的群成员，群入群成员表
             for (ZhiMaFriendModel *model in self.selectedFriends) {
-                [userIdArray addObject:model.user_Id];
                 GroupUserModel *member = [[GroupUserModel alloc] init];
                 member.userId = model.user_Id;
                 member.friend_nick = model.user_Name;
                 member.groupId = self.groupId;
                 member.head_photo = model.head_photo;
                 [newGroupMemders addObject:member];
+                [userPhotos addObject:model.head_photo];
+                [userIdArray addObject:model.user_Id];
             }
             NSString *userIds = [userIdArray componentsJoinedByString:@","];
+            NSString *photos = [userPhotos componentsJoinedByString:@","];
             
             [LCProgressHUD showLoadingText:@"准备开始群聊..."];
             [LGNetWorking addUserToGroup:USERINFO.sessionId userIds:userIds groupId:self.groupId success:^(ResponseData *responseData) {
@@ -769,6 +772,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                     GroupActModel *actModel = [[GroupActModel alloc] init];
                     actModel.uids = userIds;
                     actModel.usernames = usernames;
+                    actModel.userphotos = photos;
                     actModel.groupId = self.groupChatModel.groupId;
                     actModel.groupLogo = self.groupChatModel.groupAvtar;
                     actModel.groupName = self.groupChatModel.groupName;
