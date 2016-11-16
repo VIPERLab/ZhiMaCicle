@@ -106,7 +106,7 @@ static SocketManager *manager = nil;
         userInfo.networkUnReachable = NO;
         
         //上线拉取离线消息
-        [self getOfflineMessage];
+//        [self getOfflineMessage];
         
     } else {
         UserInfo *userInfo = [UserInfo shareInstance];
@@ -393,8 +393,21 @@ static SocketManager *manager = nil;
             message.msgid = [NSString generateMessageID];
             [FMDBShareManager saveAllGroupMemberWithArray:@[user] andGroupChatId:converse.converseId withComplationBlock:nil];
             //将被拉进群的用户存入群成员表
-            NSMutableArray *groupMembers = [NSMutableArray array];
-            NSArray *membersId = [message.toUidOrGroupId componentsSeparatedByString:@","];
+            if (message.userPhotos.length) {
+                NSMutableArray *groupMembers = [NSMutableArray array];
+                NSArray *memberIds = [message.toUidOrGroupId componentsSeparatedByString:@","];
+                NSArray *memberNames = [message.fromUserName componentsSeparatedByString:@","];
+                NSArray *memberPhotos = [message.fromUserPhoto componentsSeparatedByString:@","];
+                for (int i = 0; i<memberIds.count; i++) {
+                    GroupUserModel *member = [[GroupUserModel alloc] init];
+                    member.userId = memberIds[i];
+                    member.friend_nick = memberNames[i];
+                    member.head_photo = memberPhotos[i];
+                    member.groupId = converse.converseId;
+                    [groupMembers addObject:member];
+                }
+                [FMDBShareManager saveAllGroupMemberWithArray:groupMembers andGroupChatId:converse.converseId withComplationBlock:nil];
+            }
             
             [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
             [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
@@ -449,6 +462,10 @@ static SocketManager *manager = nil;
         case ActTypeNotIngroup:{        //没有出席群
             groupUser.memberGroupState = YES;
             [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
+        }
+            break;
+        case ActTypeOfflineMsg:{
+            [self getOfflineMessage];
         }
             break;
             
@@ -819,8 +836,9 @@ static SocketManager *manager = nil;
         dataDic[@"groupLogo"] = model.groupLogo;
         dataDic[@"groupName"] = model.groupName;
         dataDic[@"uids"] = model.fromUid;
-        dataDic[@"usernames"]= model.fromUsername;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.uids,model.usernames,model.fromUserPhoto,model.groupLogo,model.groupName,model.groupId,model.fromUid,model.fromUsername,APIKEY];
+        dataDic[@"usernames"] = model.fromUsername;
+        dataDic[@"userphotos"] = model.userphotos;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&userphotos=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.uids,model.usernames,model.fromUserPhoto,model.groupLogo,model.groupName,model.groupId,model.fromUid,model.fromUsername,model.userphotos,APIKEY];
     }else if (type == GroupActTypeCreate || type == GroupActTypeAddUser){
         if (type == GroupActTypeCreate) {
             dataDic[@"act"]= @"create";
@@ -838,7 +856,8 @@ static SocketManager *manager = nil;
         dataDic[@"groupName"] = model.groupName;
         dataDic[@"uids"] = model.uids;
         dataDic[@"usernames"]= model.usernames;
-        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.fromUid,model.fromUsername,model.fromUserPhoto,model.groupLogo,model.groupName,model.groupId,model.uids,model.usernames,APIKEY];
+        dataDic[@"userphotos"] = model.userphotos;
+        str = [NSString stringWithFormat:@"controller_name=%@&method_name=%@&act=%@&converseLogo=%@&converseName=%@&fromUid=%@&fromUserName=%@&fromUserPhoto=%@&groupLogo=%@&groupName=%@&groupid=%@&uids=%@&usernames=%@&userphotos=%@&%@",controllerName,methodName,dataDic[@"act"],model.converseLogo,model.converseName,model.fromUid,model.fromUsername,model.fromUserPhoto,model.groupLogo,model.groupName,model.groupId,model.uids,model.usernames,model.userphotos,APIKEY];
     }
     else if (type == GroupActTypeDelUser){
         dataDic[@"fromUid"] = model.fromUid;
