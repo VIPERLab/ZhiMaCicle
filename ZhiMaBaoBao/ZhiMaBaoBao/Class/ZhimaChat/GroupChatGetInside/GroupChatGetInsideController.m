@@ -151,7 +151,7 @@
             GroupActModel *actModel = [[GroupActModel alloc] init];
             actModel.uids = self.qrCodeUserId;
             actModel.usernames = self.userName;
-            actModel.userphotos = self.userPhoto;
+            actModel.userphotos = USERINFO.head_photo;
             actModel.groupId = self.groupChatModel.groupId;
             actModel.groupLogo = self.groupChatModel.groupAvtar;
             actModel.groupName = self.groupChatModel.groupName;

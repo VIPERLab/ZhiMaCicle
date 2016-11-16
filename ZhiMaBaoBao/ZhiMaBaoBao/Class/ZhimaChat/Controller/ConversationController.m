@@ -241,7 +241,6 @@
         }
         //清除未读消息
         [FMDBShareManager setConverseUnReadCountZero:model.converseId];
-
     }
     
     // 点击了没有网络
