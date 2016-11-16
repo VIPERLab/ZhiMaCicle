@@ -438,9 +438,11 @@
     [[SocketManager shareInstance] disconnect];
     // 进入后台时，注册极光推送
     UserInfo *info = [UserInfo read];
-    if (info.userID.length && info.hasLogin) {
+    if (info.hasLogin) {
         [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:@selector(tagsAliasCallback:tags:alias:) object:self];
-    }    
+    } else {
+        [JPUSHService setTags:[NSSet setWithObject:@""] alias:@"" callbackSelector:@selector(tagsAliasCallback:tags:alias:) object:self];
+    }
 }
 
 
