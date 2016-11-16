@@ -639,7 +639,7 @@ static NSString *const reuseIdentifier = @"messageCell";
             [self.messages insertObject:message atIndex:0];
             
             if (message.type == MessageTypeImage) {
-                NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",arr.count-1-(long)i],@"url":message.text,@"fromUid":message.fromUid,@"msgid":message.msgid};
+                NSDictionary*dic = @{@"index":[NSString stringWithFormat:@"%ld",arr.count-1-(long)i + (marr.count-1-j)*20],@"url":message.text,@"fromUid":message.fromUid,@"msgid":message.msgid};
                 [self.allImagesInfo insertObject:dic atIndex:0];
             }
         }
