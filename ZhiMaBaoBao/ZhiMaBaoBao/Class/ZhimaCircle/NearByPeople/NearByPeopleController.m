@@ -108,6 +108,7 @@
     cell.name = model.username;
     cell.iconName = model.head_photo;
     cell.distance = model.distance;
+    cell.signature = model.signature;
     return cell;
 }
 
@@ -120,7 +121,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 55;
+    return 65;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
