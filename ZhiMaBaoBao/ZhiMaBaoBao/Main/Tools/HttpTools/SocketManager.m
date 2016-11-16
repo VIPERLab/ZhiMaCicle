@@ -498,7 +498,6 @@ static SocketManager *manager = nil;
         //解析消息
         LGMessage *message = [[LGMessage alloc] init];
         message = [message mj_setKeyValues:responceData];
-        
         [self recieveMessage:message isOffline:NO];
     }
 }
@@ -511,7 +510,6 @@ static SocketManager *manager = nil;
     
     //处理过后的发送给socket的message
     LGMessage *sendMsg = [[LGMessage alloc] init];
-    
     
     //语音消息 -- 发送base64到socket服务器，存语音路径到本地数据库
     if (message.type == MessageTypeAudio) {

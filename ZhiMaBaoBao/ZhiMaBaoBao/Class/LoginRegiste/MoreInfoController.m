@@ -198,6 +198,7 @@ static  NSString *const reuserIdentifier = @"moreInfoCell";
 
                 [self dismissViewControllerAnimated:YES completion:nil];
             }else{
+                [[SocketManager shareInstance] connect];
                 [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
             }
             
