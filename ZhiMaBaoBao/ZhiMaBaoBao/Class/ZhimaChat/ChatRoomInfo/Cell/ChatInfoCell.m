@@ -82,7 +82,7 @@
     } else if (self.indexPath.row == 1) {
         // 消息置顶 topChat
         option1 = [NSString stringWithFormat:@"topChat = '%zd'",statusSwitch.on];
-        [self valueChangeActionWithFunctionName:@"set_chat_top" andValut:!statusSwitch.on];
+        [self valueChangeActionWithFunctionName:@"set_chat_top" andValut:statusSwitch.on];
 
     }
     NSString *opeartionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:option2];
@@ -99,12 +99,11 @@
 
 //调用http,存储置顶和消息免打扰
 - (void)valueChangeActionWithFunctionName:(NSString *)functionName andValut:(int)value {
-    [LGNetWorking setFriend:USERINFO.sessionId functionName:functionName value:[NSString stringWithFormat:@"%d",value] success:^(ResponseData *responseData) {
+    
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:functionName value:[NSString stringWithFormat:@"%d",value] userId:self.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             NSLog(@"成功");
         }
-    } failure:^(ErrorData *error) {
-        
     }];
 }
 

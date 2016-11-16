@@ -113,7 +113,7 @@
 //不让他看我的朋友圈
 - (void)notLookMyCircle:(UISwitch *)sender{
     NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:[NSString stringWithFormat:@"%zd",value] openfireAccount:self.model.userId block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:[NSString stringWithFormat:@"%zd",value] userId:self.model.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             //通知对方用户删除我的朋友圈
             if (sender.on) { // 如果设置为YES
@@ -130,7 +130,7 @@
 //不看他的朋友圈
 - (void)notLookHisCircle:(UISwitch *)sender{
     NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:[NSString stringWithFormat:@"%zd",value] openfireAccount:self.model.userId block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:[NSString stringWithFormat:@"%zd",value] userId:self.model.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             // 删除朋友圈数据库中关于他的朋友圈
             if (sender.on) { // 如果设置为YES

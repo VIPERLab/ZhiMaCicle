@@ -102,7 +102,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     ZhiMaFriendModel *friend = self.friendsArr[indexPath.row];
 
     [LCProgressHUD showLoadingText:@"请稍等..."];
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:friend.user_Id block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" userId:friend.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             [LCProgressHUD hide];
             friend.friend_type = FriendTypeFriends;
