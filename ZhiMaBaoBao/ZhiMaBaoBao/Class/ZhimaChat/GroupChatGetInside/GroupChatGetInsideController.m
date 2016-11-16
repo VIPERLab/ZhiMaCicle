@@ -121,6 +121,7 @@
             systemMsg.text = [NSString stringWithFormat:@"你通过扫描\"%@\"分享的二维码加入了群聊",self.userName];
             systemMsg.fromUid = USERINFO.userID;
             systemMsg.toUidOrGroupId = self.groupId;
+            systemMsg.converseId = self.groupId;
             systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = [NSString generateMessageID];
             systemMsg.conversionType = ConversionTypeSingle;
