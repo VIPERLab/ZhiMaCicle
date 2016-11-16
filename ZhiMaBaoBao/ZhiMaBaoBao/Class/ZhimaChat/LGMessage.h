@@ -21,7 +21,8 @@ typedef NS_OPTIONS(NSInteger, ActType) {
     ActTypeInBlacklist,         //被拉入黑名单
     ActTypeUndomsg,              //撤销消息，收到消息的用户都将删除消息
     ActTypeKickuser ,           //相同用户登录，剔除之前的登录用户
-    ActTypeNotIngroup           //没有出席群
+    ActTypeNotIngroup,           //没有出席群
+    ActTypeOfflineMsg            //有离线消息
 };
 
 //普通消息类型
@@ -91,6 +92,8 @@ typedef NS_OPTIONS(NSInteger, SendStatus){
 /** 语音时长 给安卓用的*/
 @property (nonatomic, assign) NSInteger audioLength;
 
+@property (nonatomic, copy) NSString *userNames;    //被邀请入群的用户名 （多个就拼接）
+@property (nonatomic, copy) NSString *userPhotos;   //被邀请入群的用户头像 （多个就拼接） 这两个字段只在邀请群用户加群的时候用到
 
 /**
  消息内容 （或链接描述）

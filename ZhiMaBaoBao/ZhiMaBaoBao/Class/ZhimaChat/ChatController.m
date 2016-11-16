@@ -238,7 +238,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     LGMessage *message = userInfo[@"message"];
         
     //如果收到的消息为当前会话者发送 ， 直接插入数据源数组
-    if (([message.fromUid isEqualToString:self.conversionId] && message.conversionType == ConversionTypeSingle )|| ([message.toUidOrGroupId isEqualToString:self.conversionId])) {
+    if (([message.converseId isEqualToString:self.conversionId])) {
         if (message.actType == ActTypeUndomsg) {
             NSMutableArray*marr = [self.messages mutableCopy];
             for (LGMessage*msg in marr) {
@@ -2252,11 +2252,12 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    MoreItem *item1 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"位置"];
     MoreItem *item2 = [MoreItem moreItemWithPicName:@"sharemore_pic" highLightPicName:nil itemName:@"图片"];
     MoreItem *item3 = [MoreItem moreItemWithPicName:@"sharemore_video" highLightPicName:nil itemName:@"拍照"];
-    MoreItem *item4 = [MoreItem moreItemWithPicName:@"sharemore_videoPlay" highLightPicName:nil itemName:@"小视频"];
+//    MoreItem *item4 = [MoreItem moreItemWithPicName:@"sharemore_videoPlay" highLightPicName:nil itemName:@"小视频"];
 
-    return @[item2, item3, item4];
-
+//    return @[item2, item3, item4];
+    return @[item2, item3];
 }
+
 - (NSArray<ChatToolBarItem *> *)chatKeyBoardToolbarItems
 {
     ChatToolBarItem *item1 = [ChatToolBarItem barItemWithKind:kBarItemFace normal:@"face" high:@"face_HL" select:@"keyboard"];

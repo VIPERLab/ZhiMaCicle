@@ -348,6 +348,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     systemMsg.text = [NSString stringWithFormat:@"你已添加了%@,现在可以开始聊天了",friend.user_Name];
     systemMsg.fromUid = USERINFO.userID;
     systemMsg.toUidOrGroupId = friend.user_Id;
+    systemMsg.converseId = friend.user_Id;
     systemMsg.type = MessageTypeSystem;
     systemMsg.msgid = [NSString generateMessageID];
     systemMsg.conversionType = ConversionTypeSingle;

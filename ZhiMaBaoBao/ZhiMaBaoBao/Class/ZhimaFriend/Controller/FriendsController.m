@@ -64,6 +64,10 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        return;
+    }
     [self getDataFormSQL];
 }
 

@@ -26,6 +26,7 @@
         self.fromUsername = USERINFO.username;
         self.fromUserPhoto = USERINFO.head_photo;
         self.fromUid = USERINFO.userID;
+        self.userphotos = @"";
     }
     return self;
 }

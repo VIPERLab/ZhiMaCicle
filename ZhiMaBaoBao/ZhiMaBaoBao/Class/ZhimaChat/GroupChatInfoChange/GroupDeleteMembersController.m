@@ -33,8 +33,17 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     [self setCustomTitle:@"删除成员"];
     [self setNavItem];
-    [self addAllSubviews];
     
+    NSArray *allUser = [FMDBShareManager getAllGroupMenberWithGroupId:self.groupId];
+    self.membersArr = [allUser mutableCopy];
+    //移除自己
+    for (GroupUserModel *user in allUser) {
+        if ([user.userId isEqualToString:USERINFO.userID]) {
+            [self.membersArr removeObject:user];
+        }
+    }
+    [self addAllSubviews];
+
     //监听输入框
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchFriends:) name:UITextFieldTextDidChangeNotification object:nil];
 }
@@ -140,7 +149,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         for (GroupUserModel *model in self.selectedFriends) {
             [uidsArr addObject:model.userId];
             [namesArr addObject:model.friend_nick];
-//            model.memberGroupState = YES;
         }
         NSString *userIds = [uidsArr componentsJoinedByString:@","];
         NSString *names = [namesArr componentsJoinedByString:@","];
@@ -150,6 +158,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移除了群聊",names];
         systemMsg.fromUid = USERINFO.userID;
         systemMsg.toUidOrGroupId = self.groupId;
+        systemMsg.converseId = self.groupId;
         systemMsg.type = MessageTypeSystem;
         systemMsg.msgid = [NSString generateMessageID];
         systemMsg.conversionType = ConversionTypeSingle;
@@ -173,6 +182,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         
         // 更新群用户表里 群成员的状态 memberState = 1
         [FMDBShareManager saveAllGroupMemberWithArray:self.selectedFriends andGroupChatId:self.groupId withComplationBlock:nil];
+#warning 从群成员表里面删除数据
         
         //调用http接口，获取最新群头像
         [LGNetWorking getGroupHeadGroupId:self.groupId success:^(ResponseData *responseData) {

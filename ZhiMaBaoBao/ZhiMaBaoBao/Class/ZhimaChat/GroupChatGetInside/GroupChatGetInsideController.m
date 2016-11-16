@@ -16,6 +16,8 @@
 @interface GroupChatGetInsideController ()
 @property (nonatomic, weak) GroupChatModel *groupChatModel;
 @property (nonatomic, copy) NSString *userName; //扫码人的用户名
+@property (nonatomic, copy) NSString *userPhoto; //扫码人的头像
+
 
 @end
 
@@ -49,6 +51,7 @@
         }];
         GroupChatModel *groupChatModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
         self.userName = responseData.data[@"swept_name"];
+        self.userPhoto = responseData.data[@"swept_head_photo"];
         self.groupChatModel = groupChatModel;
         
         [self setupView];
@@ -121,6 +124,7 @@
             systemMsg.text = [NSString stringWithFormat:@"你通过扫描\"%@\"分享的二维码加入了群聊",self.userName];
             systemMsg.fromUid = USERINFO.userID;
             systemMsg.toUidOrGroupId = self.groupId;
+            systemMsg.converseId = self.groupId;
             systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = [NSString generateMessageID];
             systemMsg.conversionType = ConversionTypeSingle;
@@ -147,6 +151,7 @@
             GroupActModel *actModel = [[GroupActModel alloc] init];
             actModel.uids = self.qrCodeUserId;
             actModel.usernames = self.userName;
+            actModel.userphotos = self.userPhoto;
             actModel.groupId = self.groupChatModel.groupId;
             actModel.groupLogo = self.groupChatModel.groupAvtar;
             actModel.groupName = self.groupChatModel.groupName;
