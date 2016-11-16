@@ -644,8 +644,6 @@
 
 #pragma mark - 评论
 - (void)chatKeyBoardSendText:(NSString *)text {
-    
-    
     NSString *tempString = text;
     NSCharacterSet *doNotWant = [NSCharacterSet characterSetWithCharactersInString:@" "];
     tempString = [[tempString componentsSeparatedByCharactersInSet:doNotWant] componentsJoinedByString: @""];
@@ -654,6 +652,13 @@
         [LCProgressHUD showFailureText:@"请输入评论内容"];
         return;
     }
+    
+    if (tempString.length > 1000) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"评论字数应在1000字以内" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+        return;
+    }
+    
     [self DiscoverLikeOrComment:[self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath] andComment:text];
 }
 
@@ -672,7 +677,6 @@
     [LGNetWorking LikeOrCommentDiscoverWithSessionID:USERINFO.sessionId andFcId:model.circle_ID andComment:comment andReply_userId:_currentCommenterUserID block:^(ResponseData *responseData) {
         
         if (responseData.code != 0) {
-//            [LCProgressHUD showFailureText:responseData.msg];
             return;
         }
         
