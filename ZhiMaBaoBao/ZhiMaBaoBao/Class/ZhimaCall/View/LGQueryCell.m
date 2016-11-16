@@ -24,6 +24,9 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        
+//        self.selectionStyle = UITableViewCellSelectionStyleNone;
+
         [self setupUI];
     }
     return self;
@@ -82,6 +85,12 @@
 
 
 - (void)addBtnAction:(UIButton *)sender{
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
+    
     if ([self.delegate respondsToSelector:@selector(addNewFriend:)]) {
         [sender setTitle:@"等待验证" forState:UIControlStateSelected];
         sender.backgroundColor = [UIColor clearColor];

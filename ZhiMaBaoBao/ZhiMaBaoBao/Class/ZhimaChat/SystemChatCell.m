@@ -47,7 +47,7 @@
     _systemLabel.textColor = WHITECOLOR;
     _systemLabel.textAlignment = 1;
     _systemLabel.numberOfLines = 0;
-    _systemLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    _systemLabel.lineBreakMode = NSLineBreakByCharWrapping;
     [self.contentView addSubview:_systemLabel];
     
     _topLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 0, 0)];

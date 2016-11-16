@@ -177,6 +177,12 @@
 
 #pragma 拨号按钮点击代理方法
 - (void)makeCall:(NSInteger)row{
+    
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
+        return;
+    }
+    
     NSString *phoneNumber = self.contact.allPhones[row - 1];
     LGCallingController *vc = [[LGCallingController alloc] init];
     vc.phoneNum = phoneNumber;

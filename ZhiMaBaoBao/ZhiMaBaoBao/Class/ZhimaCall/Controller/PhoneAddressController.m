@@ -95,6 +95,16 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    if (self.isAddPhoneFriend) {
+        
+        [self clearAllData];
+        
+        [self setCustomTitle:@"添加手机联系人"];
+        //获取联系人是否开通芝麻数据
+        [self requestData];
+    }
+
 }
 
 
@@ -113,14 +123,6 @@
     //获取手机通讯录
     [self getContacts];
     
-    if (self.isAddPhoneFriend) {
-        
-        [self clearAllData];
-        
-        [self setCustomTitle:@"添加手机联系人"];
-        //获取联系人是否开通芝麻数据
-        [self requestData];
-    }
 
     
     //监听textField文本改变
@@ -500,11 +502,6 @@
 }
 
 - (void)addNewFriend:(NSInteger)row{
-    
-    if ([USERINFO.sessionId isEqualToString:@"0"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
-        return;
-    }
     
     LGQueryResModel *model = self.nameAry[row];
     //转换成好友模型
