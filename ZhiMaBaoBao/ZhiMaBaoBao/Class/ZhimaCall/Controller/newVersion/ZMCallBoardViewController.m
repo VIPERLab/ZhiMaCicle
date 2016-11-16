@@ -310,6 +310,11 @@ static NSString * const phoneContactIdenty = @"LGPhoneNumberCell";
         return;
     }
     
+    if ([self.showNumLabel.text isEqualToString:@"请拨号或搜索姓名"]) {
+        [LCProgressHUD showFailureText:@"请输入电话号码"];
+        return;
+    }
+    
     LGCallingController *vc = [[LGCallingController alloc] init];
     vc.phoneNum = self.showNumLabel.text;
     [self presentViewController:vc animated:YES completion:nil];
