@@ -543,6 +543,8 @@
         }
         
         
+        
+        
         //如果有评论，则转换评论数据类型
         if (cellModel.commentList.count !=0) {
             NSMutableArray *commentListArray = [SDTimeLineCellCommentItemModel mj_objectArrayWithKeyValuesArray:cellModel.commentList];

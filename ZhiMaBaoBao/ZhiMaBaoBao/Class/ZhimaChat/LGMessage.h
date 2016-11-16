@@ -27,6 +27,7 @@ typedef NS_OPTIONS(NSInteger, ActType) {
 
 //普通消息类型
 typedef NS_OPTIONS(NSInteger, MessageType) {
+    MessageTypeOffline = -2,    //离线消息
     MessageTypeSystem = -1,     //系统消息
     MessageTypeText  = 0,       //文本消息
     MessageTypeImage,           //图片
