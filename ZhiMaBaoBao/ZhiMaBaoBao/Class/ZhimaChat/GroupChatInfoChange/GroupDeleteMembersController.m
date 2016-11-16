@@ -180,9 +180,9 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         [self.membersArr removeObjectsInArray:self.selectedFriends];
         [_tableView reloadData];
         
-        // 更新群用户表里 群成员的状态 memberState = 1
-        [FMDBShareManager saveAllGroupMemberWithArray:self.selectedFriends andGroupChatId:self.groupId withComplationBlock:nil];
-#warning 从群成员表里面删除数据
+        
+        //从群成员表里面删除数据
+        [FMDBShareManager deletedGroupMembersInArray:uidsArr fromGroupId:self.groupId];
         
         //调用http接口，获取最新群头像
         [LGNetWorking getGroupHeadGroupId:self.groupId success:^(ResponseData *responseData) {
