@@ -151,7 +151,9 @@ static SocketManager *manager = nil;
 
                         dispatch_group_notify(groupQueue, mainQueue, ^{
                             NSLog(@"groupQueue中的任务 都执行完成,回到主线程更新UI");
-                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil];
+                            LGMessage *msg = [[LGMessage alloc] init];
+                            msg.type = MessageTypeOffline;
+                            [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":msg}];
                         });
 
                     }else{

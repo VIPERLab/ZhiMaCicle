@@ -301,6 +301,13 @@ static NSString *const reuseIdentifier = @"messageCell";
         GroupUserModel *userModel = [FMDBShareManager getGroupMemberWithMemberId:USERINFO.userID andConverseId:self.conversionId];
         self.notInGroup = userModel.memberGroupState;
     }
+    
+    //收到离线消息
+    if (message.type == MessageTypeOffline) {
+        [self.messages removeAllObjects];
+        self.currentPage = 0;
+        [self requestChatRecord];
+    }
 }
 //消息发送状态回调
 - (void)sendMsgStatuescall:(NSNotification *)notification{
