@@ -239,10 +239,8 @@
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
-
         //清除未读消息
         [FMDBShareManager setConverseUnReadCountZero:model.converseId];
-
     }
     
     // 点击了没有网络

@@ -641,6 +641,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                         }
                     }];
                 });
+            }else{
+                [LCProgressHUD showFailureText:responseData.msg];
             }
         } failure:^(ErrorData *error) {
             [LCProgressHUD showFailureText:error.msg];
@@ -712,6 +714,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                         }];
                     });
 
+                }else{
+                    [LCProgressHUD showFailureText:responseData.msg];
                 }
             } failure:^(ErrorData *error) {
                 [LCProgressHUD showFailureText:error.msg];
