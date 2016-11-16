@@ -114,8 +114,6 @@
         [_contentLabel addLinks:@[fistNameLink]];
     }
     
-    
-    
     _timeLabel.text = model.create_time;
     
     CGFloat maxWidth = [UIScreen mainScreen].bounds.size.width - 95;

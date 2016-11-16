@@ -155,7 +155,7 @@
                 [self setContentLinkText:model andLabel:label];
                 
                 
-
+                //文字评论的点击效果与评论框点击效果一致
                 MLLink *commentLink = [MLLink linkWithType:0 value:model.comment range:[self findTargetStr:model.comment inStr:[model.attributedContent string]]];
                 commentLink.linkTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
                 commentLink.activeLinkTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
@@ -170,12 +170,10 @@
                 //设置文本链接
                 MLLink *fistNameLink = [MLLink linkWithType:MLLinkTypeNone value:model.userId range:[self findTargetStr:model.friend_nick inStr:[model.attributedContent string]]];
                 
-                
                 MLLink *secondNameLink;
                 if (model.reply_friend_nick.length) {
                     //设置文本链接
                     secondNameLink = [MLLink linkWithType:MLLinkTypeNone value:model.reply_id range:[self findTargetStr:model.reply_friend_nick inStr:[model.attributedContent string]]];
-                    
                 }
                 
                 if (secondNameLink) {

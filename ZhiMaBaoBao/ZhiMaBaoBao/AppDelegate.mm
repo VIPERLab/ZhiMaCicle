@@ -34,6 +34,11 @@
 
 #import "UncaughtExceptionHandler.h"
 
+//
+#import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
+#import <ContactsUI/ContactsUI.h>
+
 
 
 @interface AppDelegate () <JPUSHRegisterDelegate>
@@ -51,9 +56,6 @@
     
     [UncaughtExceptionHandler installUncaughtExceptionHandler:YES showAlert:NO];
     
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.backgroundColor = [UIColor whiteColor];
-    
     UserInfo *userInfo = [UserInfo read];
     //用户第一次登录
     if (!userInfo.hasLogin || userInfo == nil) {
@@ -67,19 +69,17 @@
         userInfo.head_photo = @"image/user_default_head_photo.png";
         userInfo.backgroundImg = @"image/user_default_background_image.jpg";
         userInfo.yuan_head_photo = @"image/user_default_head_photo.png";
+        userInfo.signature = @"";
         userInfo.username = @"游客";
         userInfo.isVisitor = YES;
         userInfo.unReadCount = 0;
         [userInfo save];
-        
-        MainViewController *mainVC = [[MainViewController alloc] init];
-        self.window.rootViewController = mainVC;
-        
-    }else{
-        //已经登录过，直接跳转到主界面
-        self.window.rootViewController = [[MainViewController alloc] init];
     }
     
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.backgroundColor = [UIColor whiteColor];
+    MainViewController *mainVC = [[MainViewController alloc] init];
+    self.window.rootViewController = mainVC;
     [self.window makeKeyAndVisible];
     
     //存储app的版本号
@@ -93,6 +93,9 @@
     
     NSLog(@"-----------%@",USERINFO);
     
+    //打开通讯录权限
+    [self addressBookJurisdiction];
+    
     //初始化百度地图
     // 要使用百度地图，请先启动BaiduMapManager
     _mapManager = [[BMKMapManager alloc]init];
@@ -105,8 +108,9 @@
     if (USERINFO.hasLogin) {
         [self creatMySQL];
     }
+    
     //迁移数据库
-//    [self moveSQLToNew];
+    [self moveSQLToNew];
     
     [self notification];
     
@@ -133,10 +137,27 @@
     if (userInfo.sessionId.length && ![userInfo.sessionId isEqualToString:@"0"]) {
         [self judgeLoginState];
     }
-    
-    
-    
     return YES;
+}
+
+
+// 开启获取通讯录权限
+- (void)addressBookJurisdiction {
+    //IOS8授权
+    CNAuthorizationStatus status = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
+    if ( status == CNAuthorizationStatusAuthorized) {
+        //如果已经授权，直接返回
+        return;
+    } else {
+        ABAddressBookRef book = ABAddressBookCreateWithOptions(NULL, NULL);
+        ABAddressBookRequestAccessWithCompletion(book, ^(bool granted, CFErrorRef error) {
+            if (granted) {
+                NSLog(@"授权成功");
+            }else{
+                NSLog(@"授权失败");
+            }
+        });
+    }
 }
 
 - (void)judgeLoginState{
@@ -323,110 +344,6 @@
 #pragma mark - 数据库迁移
 //数据库迁移
 - (void)moveSQLToNew {
-    
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSString *version = infoDict[@"CFBundleShortVersionString"];
-//    if ([USERINFO.appVersion isEqualToString:version]) {
-//        return;
-//    }
-
-    // 更新消息数据库
-    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Message_Table];
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    CGFloat app_Version = [[infoDictionary objectForKey:@"CFBundleShortVersionString"] floatValue];
-    [queue inDatabase:^(FMDatabase *db) {
-        
-        int dbVersion = [db userVersion];
-        if (dbVersion < app_Version) {
-            NSLog(@"需要消息更新数据库");
-            //增加字段  “alter table "表名" add “字段名” “类型” ”  执行这个sql语句就行
-            NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Chat_Message_Table withColumn:@"holderImageUrlString" andColumnType:@"TEXT"];
-            BOOL success = [db executeUpdate:updataStr1];
-            if (success) {
-                NSLog(@"更新数据库成功");
-            } else {
-                NSLog(@"更新数据库失败");
-            }
-            
-            
-            NSString *updataStr2 = [FMDBShareManager updataTable:ZhiMa_Chat_Message_Table withColumn:@"isDownLoad" andColumnType:@"BOOL"];
-            BOOL success2 = [db executeUpdate:updataStr2];
-            if (success2) {
-                NSLog(@"更新数据库成功");
-            } else {
-                NSLog(@"更新数据库失败");
-            }
-            
-            
-            NSString *updataStr3 = [FMDBShareManager updataTable:ZhiMa_Chat_Message_Table withColumn:@"videoDownloadUrl" andColumnType:@"TEXT"];
-            BOOL success3 = [db executeUpdate:updataStr3];
-            if (success3) {
-                NSLog(@"更新数据库成功");
-            } else {
-                NSLog(@"更新数据库失败");
-            }
-            
-            
-            //设置数据库版本号
-            if (success && success2 && success3) {
-                [db setUserVersion:app_Version];
-            }
-            
-        }
-    }];
-    
-    
-    FMDatabaseQueue *queue2 = [FMDBShareManager getQueueWithType:ZhiMa_Circle_Table];
-    [queue2 inDatabase:^(FMDatabase *db) {
-        int dbVersion = [db userVersion];
-        if (dbVersion < app_Version) {
-            //需要更新朋友圈数据库
-            NSLog(@"需要更新朋友圈数据库");
-            
-            NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"content_type" andColumnType:@"INTEGER"];
-            BOOL success = [db executeUpdate:updataStr1];
-            if (success) {
-                NSLog(@"更新数据库成功");
-            } else {
-                NSLog(@"更新数据库失败");
-            }
-            
-            
-            NSString *updataStr2 = [FMDBShareManager updataTable:ZhiMa_Circle_Table withColumn:@"article_link" andColumnType:@"TEXT"];
-            BOOL success2 = [db executeUpdate:updataStr2];
-            if (success2) {
-                NSLog(@"更新数据库成功");
-            } else {
-                NSLog(@"更新数据库失败");
-            }
-            
-            //设置数据库版本号
-            if (success && success2) {
-                [db setUserVersion:app_Version];
-            }
-            
-        }
-    }];
-    
-    FMDatabaseQueue *queue3 = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
-    [queue3 inDatabase:^(FMDatabase *db) {
-        NSLog(@"需要更新会话数据库");
-//        int dbVersion = [db userVersion];
-//        if (dbVersion < app_Version) {
-        NSString *updataStr1 = [FMDBShareManager updataTable:ZhiMa_Chat_Converse_Table withColumn:@"serviceMessageType" andColumnType:@"INTEGER"];
-        BOOL success = [db executeUpdate:updataStr1];
-        if (success) {
-            NSLog(@"更新会话数据库成功");
-        } else {
-            NSLog(@"更新会话数据库失败");
-        }
-            
-//            //设置数据库版本号
-//            if (success) {
-//                [db setUserVersion:app_Version];
-//            }
-//        }
-    }];
     
 }
 

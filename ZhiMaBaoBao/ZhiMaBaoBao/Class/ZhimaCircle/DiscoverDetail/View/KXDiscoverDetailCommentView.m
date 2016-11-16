@@ -148,15 +148,16 @@
         CGFloat row = index / maxButtonInScreen;
         //是否换行
         BOOL isNext = row == self.tempRow ? NO : YES;
-        
+        CGFloat buttonWidth = 35;
+        CGFloat buttonHeight = buttonWidth;
         
         UIButton *button = self.likeButtonArray[index];
         if (!lastButton) {
             button.sd_layout
             .topSpaceToView(self,7)
             .leftSpaceToView(self,30)
-            .widthIs(35)
-            .heightIs(35);
+            .widthIs(buttonWidth)
+            .heightIs(buttonHeight);
         } else if (isNext) {  //需要换行
             self.tempRow = row;
             
@@ -167,15 +168,15 @@
             button.sd_layout
             .topSpaceToView(fistButton,5)
             .leftEqualToView(fistButton)
-            .widthIs(40)
-            .heightIs(40);
+            .widthIs(buttonWidth)
+            .heightIs(buttonHeight);
             
         }  else  { //不需要换行
             button.sd_layout
             .topEqualToView(lastButton)
             .leftSpaceToView(lastButton,margin)
-            .widthIs(35)
-            .heightIs(35);
+            .widthIs(buttonWidth)
+            .heightIs(buttonHeight);
         }
         button.hidden = NO;
         

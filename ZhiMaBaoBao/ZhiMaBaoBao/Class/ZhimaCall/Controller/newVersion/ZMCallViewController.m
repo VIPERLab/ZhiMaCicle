@@ -52,11 +52,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    //请求通话记录
-    [self requestCallRecords];
-}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -64,8 +60,24 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
     [self initOthers];
     [self initTableview];
     [self initTableviewHead];
-    //获取通讯录联系人
-    [self getContacts];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    //请求通话记录
+    [self requestCallRecords];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        //游客
+        return;
+    }
+    if (!self.contactsArr.count) {
+        //获取通讯录联系人
+        [self getContacts];
+    }
 }
 
 #pragma mark - init
