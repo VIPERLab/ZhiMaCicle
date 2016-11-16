@@ -27,7 +27,6 @@
 
 #import "CallPresendAnimation.h"
 
-
 @interface ZMCallViewController ()<UITableViewDelegate,UITableViewDataSource,ZMCallCellDelegate,UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -35,9 +34,7 @@
 @property (nonatomic, strong) NSMutableArray *matchArr;     //通话记录
 @property (nonatomic, assign) BOOL matchTable;              //标记是否在匹配通讯录 （切换cell）
 @property (nonatomic, assign) NSInteger selectRow;          //点击行
-
 @property (nonatomic, strong) NSMutableArray *contactsArr;  //所有通讯录联系人信息
-
 
 @end
 
@@ -101,6 +98,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
     [self.tableView registerNib:[UINib nibWithNibName:@"PhoneContactCell" bundle:nil] forCellReuseIdentifier:phoneContactIdenty];
     [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = WHITECOLOR;
+    
 }
 
 - (void)initTableviewHead
@@ -143,7 +141,8 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
 #pragma mark - get data
 
 //获取通讯录联系人
-- (void)getContacts{
+- (void)getContacts
+{
     //这个变量用于记录授权是否成功，即用户是否允许我们访问通讯录
     int __block tip=0;
     //声明一个通讯簿的引用
@@ -256,9 +255,7 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
         contact.pinyin = lastNamePhoneic;
         contact.avtar = userImage;
         contact.allPhones = [NSArray arrayWithArray:phoneArr];
-        
-        
-        
+
         //将姓名转换成拼音
         HanyuPinyinOutputFormat *outputFormat=[[HanyuPinyinOutputFormat alloc] init];
         [outputFormat setToneType:ToneTypeWithoutTone];
@@ -270,8 +267,6 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
             contact.pinyin = pinYin;
             [self.contactsArr addObject:contact];
         }];
-        
-        
         
 //        [self.contactsArr addObject:contact];
         
@@ -350,11 +345,9 @@ static NSString * const phoneContactIdenty = @"PhoneContactCell";
 
 }
 
-
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
     return [[CallPresendAnimation alloc] init];
 }
-
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {

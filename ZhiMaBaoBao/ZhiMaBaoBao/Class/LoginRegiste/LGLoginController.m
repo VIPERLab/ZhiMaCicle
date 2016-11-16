@@ -166,10 +166,12 @@
             
             [userInfo save];
             
+            
             if (oldInfo.isVisitor) {
                 [FMDBShareManager openAllSequliteTable];
                 [self dismissViewControllerAnimated:YES completion:nil];
             } else {
+                [[SocketManager shareInstance] connect];
                 [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
             }
             
