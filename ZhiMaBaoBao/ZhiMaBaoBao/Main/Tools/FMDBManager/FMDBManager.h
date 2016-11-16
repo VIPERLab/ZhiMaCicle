@@ -481,6 +481,15 @@ typedef enum : NSUInteger {
 - (void)deletedGroupMemberWithGroupId:(NSString *)groupId;
 
 
+/**
+ 根据群Id 删除delMemberArr里面的群成员
+
+ @param delMemberArr 群成员id 数组
+ @param groupId      群id
+ */
+- (void)deletedGroupMembersInArray:(NSArray <NSString *>*)delMemberArr fromGroupId:(NSString *)groupId;
+
+
 #pragma mark - 服务号info
 //                    ------------   服务号info  ----------------
 /**

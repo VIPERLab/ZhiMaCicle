@@ -2392,6 +2392,28 @@
     }];
 }
 
+
+/**
+ 根据群Id 删除delMemberArr里面的群成员
+ 
+ @param delMemberArr 群成员id 数组
+ @param groupId      群id
+ */
+- (void)deletedGroupMembersInArray:(NSArray <NSString *>*)delMemberArr fromGroupId:(NSString *)groupId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
+    [queue inDatabase:^(FMDatabase *db) {
+        for (NSString *memberId in delMemberArr) {
+            NSString *optionStr = [FMDBShareManager deletedTableData:ZhiMa_GroupChat_GroupMenber_Table withOption:[NSString stringWithFormat:@"memberId = '%@' and groupId = '%@'",memberId,groupId]];
+            BOOL success = [db executeUpdate:optionStr];
+            if (success) {
+                NSLog(@"删除群成员成功 -- %@",memberId);
+            }
+        }
+    }];
+    
+    
+}
+
 #pragma mark - 服务号类型
 //                    ------------   服务号类型  ----------------
 #pragma mark - 服务号信息
