@@ -2252,11 +2252,12 @@ static NSString *const reuseIdentifier = @"messageCell";
 //    MoreItem *item1 = [MoreItem moreItemWithPicName:@"sharemore_location" highLightPicName:nil itemName:@"位置"];
     MoreItem *item2 = [MoreItem moreItemWithPicName:@"sharemore_pic" highLightPicName:nil itemName:@"图片"];
     MoreItem *item3 = [MoreItem moreItemWithPicName:@"sharemore_video" highLightPicName:nil itemName:@"拍照"];
-    MoreItem *item4 = [MoreItem moreItemWithPicName:@"sharemore_videoPlay" highLightPicName:nil itemName:@"小视频"];
+//    MoreItem *item4 = [MoreItem moreItemWithPicName:@"sharemore_videoPlay" highLightPicName:nil itemName:@"小视频"];
 
-    return @[item2, item3, item4];
-
+//    return @[item2, item3, item4];
+    return @[item2, item3];
 }
+
 - (NSArray<ChatToolBarItem *> *)chatKeyBoardToolbarItems
 {
     ChatToolBarItem *item1 = [ChatToolBarItem barItemWithKind:kBarItemFace normal:@"face" high:@"face_HL" select:@"keyboard"];
