@@ -32,6 +32,7 @@
     _tipsLabel = [[UILabel alloc] init];
     _tipsLabel.textAlignment = NSTextAlignmentCenter;
     _tipsLabel.textColor = [UIColor colorFormHexRGB:@"888888"];
+    _tipsLabel.font = [UIFont systemFontOfSize:16];
     _tipsLabel.text = @"您还没有登录";
     [self addSubview:_tipsLabel];
     
@@ -39,7 +40,8 @@
     _tipsLabel1 = [[UILabel alloc] init];
     _tipsLabel1.textAlignment = NSTextAlignmentCenter;
     _tipsLabel1.textColor = [UIColor colorFormHexRGB:@"888888"];
-    _tipsLabel1.text = @"登陆后才能使用此功能哦~";
+    _tipsLabel1.font = [UIFont systemFontOfSize:16];
+    _tipsLabel1.text = @"登录后才能使用此功能哦~";
     [self addSubview:_tipsLabel1];
     
     
@@ -71,7 +73,7 @@
     
     _tipsLabel.frame = CGRectMake(0, CGRectGetMaxY(_imageView.frame) + 30, CGRectGetWidth(self.frame), 20);
     
-    _tipsLabel1.frame = CGRectMake(0, CGRectGetMaxY(_tipsLabel.frame), CGRectGetWidth(self.frame), 20);
+    _tipsLabel1.frame = CGRectMake(0, CGRectGetMaxY(_tipsLabel.frame)+5, CGRectGetWidth(self.frame), 20);
     
     _loginButton.frame = CGRectMake(30, CGRectGetMaxY(_tipsLabel1.frame) + 30, CGRectGetWidth(self.frame) - 60, 50);
 }
