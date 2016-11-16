@@ -105,7 +105,7 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
     _nameLable = [UIButton new];
     _nameLable.titleLabel.font = [UIFont systemFontOfSize:16];
     [_nameLable setTitleColor:[UIColor colorFormHexRGB:@"576b95"] forState:UIControlStateNormal];
-    [_nameLable addTarget:self action:@selector(userNameDidClick) forControlEvents:UIControlEventTouchUpInside];
+    [_nameLable addTarget:self action:@selector(userNameDidClick:) forControlEvents:UIControlEventTouchUpInside];
     
     
     _contentLabel = [MLLinkLabel new];
@@ -514,7 +514,11 @@ NSString *const kSDTimeLineCellOperationButtonClickedNotification = @"SDTimeLine
 }
 
 #pragma mark - 点击了发朋友圈人的名字
-- (void)userNameDidClick {
+- (void)userNameDidClick:(UIButton *)sender {
+    sender.backgroundColor = [UIColor lightGrayColor];
+    [UIView animateWithDuration:0.3 animations:^{
+        sender.backgroundColor = [UIColor clearColor];
+    }];
     if ([self.delegate respondsToSelector:@selector(didClickUserIconInCell:)]) {
         [self.delegate didClickUserIconInCell:self];
     }

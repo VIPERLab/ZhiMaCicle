@@ -396,8 +396,8 @@ static SocketManager *manager = nil;
             if (message.userPhotos.length) {
                 NSMutableArray *groupMembers = [NSMutableArray array];
                 NSArray *memberIds = [message.toUidOrGroupId componentsSeparatedByString:@","];
-                NSArray *memberNames = [message.fromUserName componentsSeparatedByString:@","];
-                NSArray *memberPhotos = [message.fromUserPhoto componentsSeparatedByString:@","];
+                NSArray *memberNames = [message.userNames componentsSeparatedByString:@","];
+                NSArray *memberPhotos = [message.userPhotos componentsSeparatedByString:@","];
                 for (int i = 0; i<memberIds.count; i++) {
                     GroupUserModel *member = [[GroupUserModel alloc] init];
                     member.userId = memberIds[i];

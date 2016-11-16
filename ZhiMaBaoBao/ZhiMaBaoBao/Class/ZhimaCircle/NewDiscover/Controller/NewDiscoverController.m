@@ -271,10 +271,15 @@
         }
     }
     
+    if (self.textView.text.length > 2000) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"你输入的内容过长，不能超过2000字符" delegate:nil cancelButtonTitle:@"我知道了" otherButtonTitles:nil];
+        [alertView show];
+        return;
+    }
+    
     sender.enabled = NO;
     [self upLoadImageCount:0 andImageArray:_imagesArray];
 }
-
 
 -(void)dealloc {
     self.automaticallyAdjustsScrollViewInsets = YES;
@@ -511,6 +516,8 @@
     } else {
         locationStr = self.locationTips;
     }
+    
+    
     
     [LGNetWorking AddNewDiscoverWithSessionID:USERINFO.sessionId andOpenFirAccount:USERINFO.userID andContent_type:[NSString stringWithFormat:@"%zd",self.circleType] andContent:self.textView.text andLink:self.linkValue andType:_privateClass andCurrent_location:locationStr andImgs:_imgs block:^(ResponseData *responseData) {
         

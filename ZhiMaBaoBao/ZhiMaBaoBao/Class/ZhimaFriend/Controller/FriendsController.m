@@ -96,7 +96,9 @@ static NSString * const headerIdentifier = @"headerIdentifier";
 
 //请求好友列表
 - (void)requestFriendsList{
-//    [self clearAllArray];
+    if ([USERINFO.sessionId isEqualToString:@"0"]) {
+        return;
+    }
     [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeFriends success:^(ResponseData *responseData) {
 
         self.friends = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
