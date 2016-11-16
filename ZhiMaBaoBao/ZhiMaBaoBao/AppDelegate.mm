@@ -476,6 +476,9 @@
     //已经登录过，直接跳转到主界面
     [self creatMySQL];
     [self countculatedTime];
+    if (![USERINFO.sessionId isEqualToString:@"0"]) {
+        [[SocketManager shareInstance] connect];
+    }
     MainViewController *mainVC = [[MainViewController alloc] init];
     self.window.rootViewController = mainVC;
 }
