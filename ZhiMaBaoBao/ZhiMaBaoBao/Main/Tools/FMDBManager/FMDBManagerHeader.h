@@ -81,8 +81,8 @@
 
 #pragma mark - 好友信息表
 // 好友信息表
-#define User_MessageField @"(userId TEXT NOT NULL, userName TEXT NOT NULL, defineName TEXT, userPhoto TEXT, PRIMARY KEY ('userId') ON CONFLICT REPLACE)"
-#define User_MessageFields_name @"userId, userName, defineName, userPhoto";
+#define User_MessageField @"(userId TEXT NOT NULL, userName TEXT NOT NULL, defineName TEXT, userPhoto TEXT,pinyin TEXT, PRIMARY KEY ('userId') ON CONFLICT REPLACE)"
+#define User_MessageFields_name @"userId, userName, defineName, userPhoto, pinyin";
 
 
 #pragma mark - 新好友

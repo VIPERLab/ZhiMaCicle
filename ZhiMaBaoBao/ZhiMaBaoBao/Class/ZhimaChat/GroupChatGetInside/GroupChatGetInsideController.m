@@ -122,8 +122,6 @@
             //添加系统消息
             LGMessage *systemMsg = [[LGMessage alloc] init];
             systemMsg.text = [NSString stringWithFormat:@"你通过扫描\"%@\"分享的二维码加入了群聊",self.userName];
-            systemMsg.fromUid = USERINFO.userID;
-            systemMsg.toUidOrGroupId = self.groupId;
             systemMsg.converseId = self.groupId;
             systemMsg.type = MessageTypeSystem;
             systemMsg.msgid = [NSString generateMessageID];
@@ -131,6 +129,7 @@
             systemMsg.timeStamp = [NSDate currentTimeStamp];
             systemMsg.actType = ActTypeUpdategroupnum;
             systemMsg.converseName = self.groupChatModel.groupName;
+            systemMsg.converseLogo = self.groupChatModel.groupAvtar;
             [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupId];
             [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":systemMsg}];
             

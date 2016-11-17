@@ -477,7 +477,7 @@
         }
         cell.delegate = self;
         LGQueryResModel *model = self.nameAry[rowNum + indexPath.row];
-        cell.row = rowNum;
+        cell.indexPath = indexPath;
         cell.model = model;
         return cell;
     }else{
@@ -501,9 +501,14 @@
     }
 }
 
-- (void)addNewFriend:(NSInteger)row{
+- (void)addNewFriend:(NSIndexPath *)indexPath{
     
-    LGQueryResModel *model = self.nameAry[row];
+    NSInteger rowNum = 0;
+    for (int i = 0; i < indexPath.section; i++) {
+        
+        rowNum = [[self.numberAry objectAtIndex:i] intValue] + rowNum;
+    }
+    LGQueryResModel *model = self.nameAry[rowNum + indexPath.row];
     //转换成好友模型
     ZhiMaFriendModel *friendModel = [[ZhiMaFriendModel alloc] init];
     friendModel.user_Id = model.userId;

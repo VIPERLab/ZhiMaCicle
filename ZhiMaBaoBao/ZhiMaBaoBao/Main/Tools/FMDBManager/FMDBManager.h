@@ -275,10 +275,17 @@ typedef enum : NSUInteger {
  */
 - (void)saveConverseListDataWithModel:(ConverseModel *)converseModel isSelf:(BOOL)isMe withComplationBlock:(ComplationBlock)block;
 
-
+/**
+ 更新会话数据库中的 converseContent 和 Time 字段 (不存在会话不创建会话)
+ 
+ @param andTime    converseContent
+ @param time       time
+ @param converseId 会话id
+ */
+- (void)alertConverseTextWithConverseModel:(ConverseModel *)converseModel;
 
 /**
- 更新会话数据库中的 converseContent 和 Time 字段
+ 更新会话数据库中的 converseContent 和 Time 会话名 会话头像 字段
 
  @param andTime    converseContent
  @param time       time
