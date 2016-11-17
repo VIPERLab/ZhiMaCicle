@@ -510,7 +510,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                             converseModel.converseName = self.groupChatModel.groupName;
                             converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
                             converseModel.lastConverse = [NSString stringWithFormat:@"你邀请加入了群聊"];
-                            [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
+                            [FMDBShareManager saveConverseListDataWithModel:converseModel isSelf:YES withComplationBlock:nil];
                             
                             //生成系统消息
                             LGMessage *systemMsg = [[LGMessage alloc] init];
@@ -611,7 +611,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 converseModel.converseName = self.groupChatModel.groupName;
                                 converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
                                 converseModel.lastConverse = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",usernames];
-                                [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
+                                [FMDBShareManager saveConverseListDataWithModel:converseModel isSelf:YES withComplationBlock:nil];
                                 
                                 //生成系统消息
                                 LGMessage *systemMsg = [[LGMessage alloc] init];
@@ -683,7 +683,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                     converseModel.converseName = self.groupChatModel.groupName;
                                     converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
                                     converseModel.lastConverse = [NSString stringWithFormat:@"你邀请\"%@\"加入了群聊",usernames];
-                                    [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
+                                    [FMDBShareManager saveConverseListDataWithModel:converseModel isSelf:YES withComplationBlock:nil];
                                     
                                     //生成系统消息
                                     LGMessage *systemMsg = [[LGMessage alloc] init];

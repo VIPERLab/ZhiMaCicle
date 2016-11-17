@@ -53,7 +53,7 @@
     
     UITextField *phontField = [[UITextField alloc] init];
     phontField.placeholder = @"请输入手机号";
-    phontField.keyboardType = UIKeyboardTypePhonePad;
+    phontField.keyboardType = UIKeyboardTypeNumberPad;
     phontField.font = MAINFONT;
     [self.view addSubview:phontField];
     self.phoneField = phontField;
