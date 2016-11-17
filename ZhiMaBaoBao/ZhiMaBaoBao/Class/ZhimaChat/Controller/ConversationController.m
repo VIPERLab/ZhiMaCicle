@@ -113,11 +113,13 @@
 
     LGMessage *message = notify.userInfo[@"message"];
     ConverseModel *converse = [[ConverseModel alloc] init];
+    converse.lastConverse = message.text;
+    converse.time = message.timeStamp;
+    converse.converseId = message.converseId;
+    converse.converseName = message.converseName;
+    converse.converseHead_photo = message.converseLogo;
+    
     if (message.actType == ActTypeDeluserfromgroup || message.actType == ActTypeRenamegroup || message.actType == ActTypeUpdategroupnum) {
-        converse.lastConverse = message.text;
-        converse.time = message.timeStamp;
-        converse.converseId = message.converseId;
-        converse.converseName = message.converseName;
         [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
     }
 

@@ -156,8 +156,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         //添加系统消息
         LGMessage *systemMsg = [[LGMessage alloc] init];
         systemMsg.text = [NSString stringWithFormat:@"你将\"%@\"移除了群聊",names];
-        systemMsg.fromUid = USERINFO.userID;
-        systemMsg.toUidOrGroupId = self.groupId;
         systemMsg.converseId = self.groupId;
         systemMsg.type = MessageTypeSystem;
         systemMsg.msgid = [NSString generateMessageID];
@@ -165,6 +163,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
         systemMsg.timeStamp = [NSDate currentTimeStamp];
         systemMsg.actType = ActTypeDeluserfromgroup;
         systemMsg.converseName = self.groupName;
+        systemMsg.converseLogo = self.groupLogo;
         [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupId];
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecieveNewMessage object:nil userInfo:@{@"message":systemMsg}];
         

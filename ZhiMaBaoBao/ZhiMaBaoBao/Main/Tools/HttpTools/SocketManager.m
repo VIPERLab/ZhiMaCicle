@@ -361,6 +361,7 @@ static SocketManager *manager = nil;
             if (message.conversionType == ConversionTypeGroupChat) {    //保存群成员信息、保存群信息
                 groupUser.memberGroupState = NO;    //标记为出席群
                 [FMDBShareManager saveAllGroupMemberWithArray:@[groupUser] andGroupChatId:converse.converseId withComplationBlock:nil];
+                [FMDBShareManager saveGroupMemberWithModel:user withGourpId:converse.converseId];
                 [FMDBShareManager saveGroupChatInfo:groupInfo andConverseID:converse.converseId];
             }
             [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
@@ -438,8 +439,11 @@ static SocketManager *manager = nil;
         }
             break;
         case ActTypeNofriend:{          //不是好友
+            message.converseId = message.toUidOrGroupId;
+            message.msgid = [NSString generateMessageID];
+            converse.converseId = message.toUidOrGroupId;
             [FMDBShareManager revokeNormalMessageToSystemMessage:message];
-            [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+            [FMDBShareManager alertConverseTextWithConverseModel:converse];
         }
             break;
         case ActTypeNoallow:{           //不允许看朋友圈
@@ -450,10 +454,11 @@ static SocketManager *manager = nil;
             break;
         case ActTypeInBlacklist:{       //被拉入黑名单
             converse.converseId = message.toUidOrGroupId;
+            message.converseId = message.toUidOrGroupId;
             message.msgid = [NSString generateMessageID];
             message.timeStamp = [NSDate currentTimeStamp];
             [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-            [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+            [FMDBShareManager alertConverseTextWithConverseModel:converse];
         }
             break;
         case ActTypeUndomsg:{            //撤销消息

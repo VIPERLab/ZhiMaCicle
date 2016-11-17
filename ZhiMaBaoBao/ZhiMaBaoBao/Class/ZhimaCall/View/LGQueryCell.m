@@ -96,7 +96,7 @@
         sender.backgroundColor = [UIColor clearColor];
         sender.selected = YES;
         sender.userInteractionEnabled = NO;
-        [self.delegate addNewFriend:self.row];
+        [self.delegate addNewFriend:self.indexPath];
     }
 }
 

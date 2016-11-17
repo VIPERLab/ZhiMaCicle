@@ -24,6 +24,7 @@
 
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, strong) ConverseModel *converseModel;
+@property (nonatomic, strong) ZhiMaFriendModel *friendModel;
 @end
 
 @implementation ChatRoomInfoController {
@@ -41,17 +42,11 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-//    int disturb;
-//    int topChat;
-//    [LGNetWorking getFriendInfo:USERINFO.sessionId userId:self.userId block:^(ResponseData *responseData) {
-//        if (responseData.code == 0) {
-//            
-//        }
-//    } failure:^(ErrorData *error) {
-//        
-//    }];
     // 取出该条会话的模型
     self.converseModel = [FMDBShareManager searchConverseWithConverseID:self.userId andConverseType:NO];
+    
+    //取出好友模型
+    self.friendModel = [FMDBShareManager getUserMessageByUserID:self.userId];
     [_tableView reloadData];
 
 }
@@ -87,9 +82,14 @@
     if (indexPath.section == 0) {
         ChatInfoHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:CharRoomInfoHeaderCellReusedID forIndexPath:indexPath];
         cell.delegate = self;
-        cell.userName = self.converseModel.converseName;
-        cell.iconName = self.converseModel.converseHead_photo;
-        
+        if (self.converseModel.converseId) {
+            cell.userName = self.converseModel.converseName;
+            cell.iconName = self.converseModel.converseHead_photo;
+        }else{
+            cell.userName = self.friendModel.displayName;
+            cell.iconName = self.friendModel.head_photo;
+        }
+
         return cell;
     }
     NSArray *titleArray = self.titleArray[indexPath.section];
