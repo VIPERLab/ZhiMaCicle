@@ -49,24 +49,10 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
 //请求新的好友列表数据 - 如果没有从网络加载
 - (void)requestNewFriendsList{
     
-//    //从数据库加载新的好友
-//    [LGNetWorking getFriendsList:USERINFO.sessionId friendType:FriendTypeNew success:^(ResponseData *responseData) {
-//        if (responseData.code == 0) {
-//            self.friendsArr = [ZhiMaFriendModel mj_objectArrayWithKeyValuesArray:responseData.data];
-//            for (ZhiMaFriendModel *model in self.friendsArr) {  //从网络拉取的新的好友，status 设置为NO
-//                model.status = NO;
-//            }
-//            [FMDBShareManager saveNewFirendsWithArray:self.friendsArr withComplationBlock:nil];
-//            [self.tableView reloadData];
-//            
-//        }else{
-            //如果没有数据，直接从数据库拉取
-            self.friendsArr = [[[[FMDBShareManager getAllNewFriends] reverseObjectEnumerator] allObjects] mutableCopy];
-            [self.tableView reloadData];
-//        }
-//    } failure:^(ErrorData *error) {
-//        [LCProgressHUD showFailureText:@"网络好像出错了哦[^_^]"];
-//    }];
+    //直接从数据库拉取
+    self.friendsArr = [[[[FMDBShareManager getAllNewFriends] reverseObjectEnumerator] allObjects] mutableCopy];
+    [self.tableView reloadData];
+
  }
 
 /**

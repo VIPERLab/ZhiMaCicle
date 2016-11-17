@@ -386,8 +386,8 @@
     //已经登录过，直接跳转到主界面
     [self creatMySQL];
     [self countculatedTime];
-//    MainViewController *mainVC = [[MainViewController alloc] init];
-//    self.window.rootViewController = mainVC;
+    MainViewController *mainVC = [[MainViewController alloc] init];
+    self.window.rootViewController = mainVC;
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
