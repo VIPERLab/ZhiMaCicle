@@ -49,7 +49,7 @@
     [self addChildVc:[[ZMCallViewController alloc] init] title:@"芝麻通" image:@"lgtabbar_3" selectedImage:@"lgtabbar_3_select"];
     [self addChildVc:[[TimeLineController alloc] init] title:@"芝麻圈" image:@"lgtabbar_4" selectedImage:@"lgtabbar_4_select"];
     [self addChildVc:[[PersonalCenterController alloc] init] title:@"芝麻" image:@"lgtabbar_5" selectedImage:@"lgtabbar_5_select"];
-    
+
     //连接socket服务器
     if (![USERINFO.sessionId isEqualToString:@"0"]) {
         [[SocketManager shareInstance] connect];
