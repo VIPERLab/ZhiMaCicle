@@ -133,7 +133,7 @@
         //        [self getDataFormSQL];
         
     } failure:^(ErrorData *error) {
-        
+        [LCProgressHUD showFailureText:error.msg];
     }];
 
 }
