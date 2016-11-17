@@ -99,7 +99,7 @@
         [actionSheet show];
         
     }else{
-        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" userId:self.friendInfo.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
 
             }else{
@@ -135,7 +135,7 @@
         }
     }else if (sheet.flag == 1){      //加入黑名单
         if (index == 0) {
-            [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"3" openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+            [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"3" userId:self.friendInfo.user_Id block:^(ResponseData *responseData) {
                 if (responseData.code == 0) {
                     
                     //标记黑名单 （在会话页面删除该会话）
@@ -166,7 +166,7 @@
 - (IBAction)lookMyCircle:(UISwitch *)sender {
     
     NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:[NSString stringWithFormat:@"%ld",(long)value] openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_my_cricles" value:[NSString stringWithFormat:@"%ld",(long)value] userId:self.friendInfo.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             if (sender.on) {
                 [[SocketManager shareInstance] notAllowFriendCircle:self.userId];
@@ -181,7 +181,7 @@
 //不看他的朋友圈
 - (IBAction)lookOtherCircle:(UISwitch *)sender {
     NSInteger value = sender.on;
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:[NSString stringWithFormat:@"%ld",(long)value] openfireAccount:self.friendInfo.user_Id block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"notread_his_cricles" value:[NSString stringWithFormat:@"%ld",(long)value] userId:self.friendInfo.user_Id block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             // 删除朋友圈数据库中关于他的朋友圈
             if (sender.on) { // 如果设置为YES

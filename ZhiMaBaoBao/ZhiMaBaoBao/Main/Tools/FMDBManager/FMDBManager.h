@@ -271,8 +271,9 @@ typedef enum : NSUInteger {
  
  @param dataArray 会话模型
  @param block     回调 - 主线程回调
+ @param isMe      标记是否为自己操作  自己操作未读消息不加1
  */
-- (void)saveConverseListDataWithModel:(ConverseModel *)converseModel withComplationBlock:(ComplationBlock)block;
+- (void)saveConverseListDataWithModel:(ConverseModel *)converseModel isSelf:(BOOL)isMe withComplationBlock:(ComplationBlock)block;
 
 
 
@@ -293,7 +294,7 @@ typedef enum : NSUInteger {
  @param dataArray 会话模型
  @param block     回调 - 主线程回调
  */
-- (void)alertConverseListDataWithModel:(ConverseModel *)converseModel withComplationBlock:(ComplationBlock)block;
+- (void)alertConverseListDataWithModel:(ConverseModel *)converseModel isSelf:(BOOL)isMe withComplationBlock:(ComplationBlock)block;
 
 /**
  *  是否存在这个会话

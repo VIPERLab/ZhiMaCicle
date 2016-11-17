@@ -198,12 +198,14 @@
             [JPUSHService setTags:[NSSet setWithObject:info.userID] alias:info.userID callbackSelector:nil object:nil];
             
             [LCProgressHUD hide];
+            
+            [[SocketManager shareInstance] connect];
+
             if (info.isVisitor) {
 
                 [self dismissViewControllerAnimated:YES completion:nil];
 
             }else{
-                [[SocketManager shareInstance] connect];
                 [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
             }
 

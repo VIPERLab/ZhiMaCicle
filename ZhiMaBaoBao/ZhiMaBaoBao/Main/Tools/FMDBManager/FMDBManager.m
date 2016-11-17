@@ -21,7 +21,7 @@
 #import "ZMServiceMessage.h"
 #import "ServiceInfoModel.h"
 #import "ZhiMaCollectionModel.h"
-
+#import "ChatController.h"
 
 
 @implementation FMDBManager {
@@ -1628,15 +1628,16 @@
 
  @param dataArray 会话模型数组
  @param block     回调
+ @param isSelf    自己发的消息 未读消息不加1
  */
-- (void)saveConverseListDataWithModel:(ConverseModel *)converseModel withComplationBlock:(ComplationBlock)block {
+- (void)saveConverseListDataWithModel:(ConverseModel *)converseModel isSelf:(BOOL)isMe withComplationBlock:(ComplationBlock)block {
     NSLog(@"插入数据库");
     FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     
     // 判断是否存在会话
     BOOL isExist = [self isConverseIsExist:converseModel.converseId];
     if (isExist) {  //更新会话
-        [self alertConverseListDataWithModel:converseModel withComplationBlock:nil];
+        [self alertConverseListDataWithModel:converseModel isSelf:isMe withComplationBlock:nil];
         return;
     }
     
@@ -1645,7 +1646,7 @@
         BOOL isSuccess = YES;
         NSString *operationStr;
         operationStr = [FMDBShareManager InsertDataInTable:ZhiMa_Chat_Converse_Table];
-        BOOL success = [db executeUpdate:operationStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(1),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType),@(converseModel.messageType)];
+        BOOL success = [db executeUpdate:operationStr,converseModel.converseId,@(converseModel.converseType),converseModel.converseName,converseModel.converseHead_photo,converseModel.lastConverse,@(!isMe),@(converseModel.topChat),@(converseModel.disturb),@(converseModel.time),@(converseModel.serviceMessageType),@(converseModel.messageType)];
         if (success) {
             NSLog(@"插入会话成功");
         } else {
@@ -1671,7 +1672,7 @@
  @param dataArray 会话模型数组
  @param block     回调 - 主线程回调
  */
-- (void)alertConverseListDataWithModel:(ConverseModel *)model withComplationBlock:(ComplationBlock)block {
+- (void)alertConverseListDataWithModel:(ConverseModel *)model isSelf:(BOOL)isMe withComplationBlock:(ComplationBlock)block {
     ConverseModel *oldModel = [FMDBShareManager searchConverseWithConverseID:model.converseId andConverseType:model.converseType];
     FMDatabaseQueue *converseQueue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
     [converseQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -1687,7 +1688,24 @@
             return ;
         }
         
-        NSString *option1 = [NSString stringWithFormat:@"converseName = '%@' , converseLogo = '%@', converseContent = '%@', unReadCount = '%@', time = '%@',serviceMessageType = '%@',messageType = '%@'",model.converseName,model.converseHead_photo,model.lastConverse,@(model.unReadCount + 1),@(model.time),@(model.serviceMessageType),@(model.messageType)];
+        //是自己发送的消息就不加1  收到的消息未读加1  如果在聊天控制器，且收到的消息为当前会话者发来不加1
+        int unRead;
+        if (isMe) {
+            unRead = 0;
+        }else{
+            unRead = 1;
+            UserInfo *info = [UserInfo shareInstance];
+            if (info.currentVC) {
+                if ([info.currentVC isKindOfClass:[ChatController class]]) {
+                    ChatController *chatVC = (ChatController *)info.currentVC;
+                    if ([chatVC.conversionId isEqualToString:model.converseId]) {
+                        unRead = 0;
+                    }
+                }
+            }
+        }
+        
+        NSString *option1 = [NSString stringWithFormat:@"converseName = '%@' , converseLogo = '%@', converseContent = '%@', unReadCount = '%@', time = '%@',serviceMessageType = '%@',messageType = '%@'",model.converseName,model.converseHead_photo,model.lastConverse,@(model.unReadCount + unRead),@(model.time),@(model.serviceMessageType),@(model.messageType)];
         NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = '%@' and converseType = '%zd'",model.converseId,model.converseType]];
         
         BOOL success = [db executeUpdate:optionStr];

@@ -288,7 +288,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
     }
     
     if (self.friendType == FriendTypeBlack) {   //黑名单 -> 移出黑名单
-        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
+        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" userId:self.friend.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 //重新加载数据 -> 刷新
                 [self requestFriendProfile:YES];
@@ -319,7 +319,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         
     }
     else if (self.friendType == FriendTypeNew){     //同意好友请求
-        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" openfireAccount:self.friend.user_Id block:^(ResponseData *responseData) {
+        [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_type" value:@"2" userId:self.friend.user_Id block:^(ResponseData *responseData) {
             if (responseData.code == 0) {
                 //将好友加入数据库好友列表
                 [FMDBShareManager saveUserMessageWithMessageArray:@[self.friend] withComplationBlock:nil andIsUpdata:NO];

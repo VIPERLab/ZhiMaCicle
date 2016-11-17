@@ -253,7 +253,7 @@ static SocketManager *manager = nil;
     //1.插消息表
     [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
     //2.插会话表 -- 自己发的消息未读数不加1
-    [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+    [FMDBShareManager saveConverseListDataWithModel:converse isSelf:YES withComplationBlock:nil];
     
     //发送消息状态回调通知
     NSDictionary *infoDic = @{@"message":message};
@@ -364,7 +364,7 @@ static SocketManager *manager = nil;
                 [FMDBShareManager saveGroupChatInfo:groupInfo andConverseID:converse.converseId];
             }
             [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-            [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+            [FMDBShareManager saveConverseListDataWithModel:converse isSelf:NO withComplationBlock:nil];
         }
             break;
         case ActTypeAddfriend:{     //好友请求
@@ -378,9 +378,10 @@ static SocketManager *manager = nil;
         }
             break;
         case ActTypeDofriend:{      //同意好友请求
+            converse.converseType = ConversionTypeSingle;
             message.msgid = [NSString generateMessageID];
             [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-            [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+            [FMDBShareManager saveConverseListDataWithModel:converse isSelf:NO withComplationBlock:nil];
             [FMDBShareManager saveUserMessageWithMessageArray:@[friend] withComplationBlock:nil andIsUpdata:NO];
         }
             break;
@@ -390,6 +391,7 @@ static SocketManager *manager = nil;
         }
             break;
         case ActTypeUpdategroupnum:{    //更新群用户数 （拉人进群）
+            converse.converseType = ConversionTypeGroupChat;
             //将自己的信息存入群成员表
             user.memberGroupState = NO;
             message.msgid = [NSString generateMessageID];
@@ -412,15 +414,16 @@ static SocketManager *manager = nil;
             }
             
             [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-            [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
+            [FMDBShareManager alertConverseListDataWithModel:converse isSelf:NO withComplationBlock:nil];
         }
             break;
         case ActTypeDeluserfromgroup:{  //从群组删除用户
+            converse.converseType = ConversionTypeGroupChat;
             user.memberGroupState = YES;
             message.msgid = [NSString generateMessageID];
             [FMDBShareManager saveAllGroupMemberWithArray:@[user] andGroupChatId:converse.converseId withComplationBlock:nil];
             [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-            [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
+            [FMDBShareManager alertConverseListDataWithModel:converse isSelf:NO withComplationBlock:nil];
         }
             break;
         case ActTypeQuitgroup:{          //退出群聊
@@ -428,9 +431,10 @@ static SocketManager *manager = nil;
         }
             break;
         case ActTypeRenamegroup:{       //修改群名称
+            converse.converseType = ConversionTypeGroupChat;
             message.msgid = [NSString generateMessageID];
             [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
-            [FMDBShareManager alertConverseListDataWithModel:converse withComplationBlock:nil];
+            [FMDBShareManager alertConverseListDataWithModel:converse isSelf:NO withComplationBlock:nil];
         }
             break;
         case ActTypeNofriend:{          //不是好友

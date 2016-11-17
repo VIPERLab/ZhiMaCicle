@@ -84,7 +84,7 @@
         nickName = @"";
     }
 
-    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_nick" value:nickName openfireAccount:self.userId block:^(ResponseData *responseData) {
+    [LGNetWorking setupFriendFunction:USERINFO.sessionId function:@"friend_nick" value:nickName userId:self.userId block:^(ResponseData *responseData) {
         if (responseData.code == 0) {
             //修改成功 -> 更新数据库会话表的会话名
             
