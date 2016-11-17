@@ -627,7 +627,10 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [application cancelAllLocalNotifications];
     MainViewController *mainVc = (MainViewController *)self.window.rootViewController;
-    [mainVc adapterstatusBarHeight];
+    if ([mainVc isKindOfClass:[MainViewController class]]) {
+        [mainVc adapterstatusBarHeight];
+    }
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
