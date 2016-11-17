@@ -192,7 +192,7 @@ static NSString *const reuseIdentifier = @"messageCell";
     //清空当前会话未读消息
     [FMDBShareManager setConverseUnReadCountZero:self.conversionId];
 
-    
+    [self.keyboard keyboardDown];
     [self.player stopPlaying];
     [[NSNotificationCenter defaultCenter] postNotificationName:kChatViewControllerPopOut object:nil userInfo:nil];
 
@@ -1557,6 +1557,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 #pragma mark - 语音代理方法
 //开始录音
 - (void)chatKeyBoardDidStartRecording:(ChatKeyBoard *)chatKeyBoard{
+
     if (self.player.isPlaying) {
         [self.player stopPlaying];
     }
@@ -2299,8 +2300,15 @@ static NSString *const reuseIdentifier = @"messageCell";
             break;
         case 1: // 拍照
         {
-            [self.imagesArray removeAllObjects];
+            NSString *mediaType = AVMediaTypeVideo;//读取媒体类型
+            AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];//读取设备授权状态
+            if(authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied){
+                NSString *errorStr = @"请在iPhone的“设置 - 隐私 - 相机”选项中，允许芝麻宝宝访问你的相机";
+                [[[UIAlertView alloc]initWithTitle:errorStr message:@"" delegate:self cancelButtonTitle:@"好" otherButtonTitles:nil, nil] show];
+                return;
+            }
             
+            [self.imagesArray removeAllObjects];
             UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             picker.delegate = self;
             picker.allowsEditing = NO;
@@ -2311,6 +2319,16 @@ static NSString *const reuseIdentifier = @"messageCell";
             break;
         case 2: // 小视频
         {
+            NSString *mediaType = AVMediaTypeVideo;//读取媒体类型
+            AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];//读取设备授权状态
+            if(authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied){
+                NSString *errorStr = @"请在iPhone的“设置 - 隐私 - 相机”选项中，允许芝麻宝宝访问你的相机";
+                [[[UIAlertView alloc]initWithTitle:errorStr message:@"" delegate:self cancelButtonTitle:@"好" otherButtonTitles:nil, nil] show];
+                return;
+            }
+            
+            [self canRecord];
+            
             [self.keyboard keyboardDown];
             
             CGRect frame = CGRectMake(0, DEVICEHIGHT, DEVICEWITH, 400);
@@ -2329,6 +2347,32 @@ static NSString *const reuseIdentifier = @"messageCell";
         default:
             break;
     }
+}
+
+-(BOOL)canRecord
+{
+    __block BOOL bCanRecord = YES;
+
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
+        [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
+            if (granted) {
+                bCanRecord = YES;
+            }
+            else {
+                bCanRecord = NO;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[[UIAlertView alloc] initWithTitle: @"请在iPhone的“设置 - 隐私 - 麦克风”选项中，允许芝麻宝宝访问你的麦克风"
+                                                message:nil
+                                               delegate:nil
+                                      cancelButtonTitle:@"好"
+                                      otherButtonTitles:nil] show];
+                });
+            }
+        }];
+    }
+    
+    return bCanRecord;
 }
 
 - (void)backAction {
