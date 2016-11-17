@@ -1377,7 +1377,7 @@
                 opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_User_Message_Table];
             }
             
-            BOOL success = [db executeUpdate:opeartionStr,model.user_Id,model.user_Name,model.user_NickName,model.head_photo];
+            BOOL success = [db executeUpdate:opeartionStr,model.user_Id,model.user_Name,model.user_NickName,model.head_photo,model.pinyin];
             if (success) {
                 NSLog(@"插入用户成功");
             } else {
@@ -1421,6 +1421,7 @@
             model.user_Name = [result stringForColumn:@"userName"];
             model.user_Id = [result stringForColumn:@"userId"];
             model.head_photo = [result stringForColumn:@"userPhoto"];
+            model.pinyin = [result stringForColumn:@"pinyin"];
             [dataArray addObject:model];
         }
     }];
@@ -1731,9 +1732,38 @@
     }];
 }
 
-
 /**
  更新会话数据库中的 converseContent 和 Time 字段 (不存在会话不创建会话)
+ 
+ @param andTime    converseContent
+ @param time       time
+ @param converseId 会话id
+ */
+- (void)alertConverseTextWithConverseModel:(ConverseModel *)converseModel{
+    
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Chat_Converse_Table];
+    
+    // 判断是否存在会话
+    BOOL isExist = [self isConverseIsExist:converseModel.converseId];
+    if (isExist) {  //更新会话
+        NSString *option1 = [NSString stringWithFormat:@"converseContent = '%@', time = '%@'",converseModel.lastConverse,@(converseModel.time)];
+        NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",converseModel.converseId]];
+        [queue inDatabase:^(FMDatabase *db) {
+            BOOL success = [db executeUpdate:optionStr];
+            if (success) {
+                NSLog(@"更新会话 消息、时间成功");
+            } else {
+                NSLog(@"更新会话 消息、时间失败");
+            }
+        }];
+        return;
+    }
+}
+
+
+
+/**
+ 更新会话数据库中的 converseContent 和 Time 会话名称 会话头像 字段 (不存在会话不创建会话)
  
  @param andTime    converseContent
  @param time       time
@@ -1746,7 +1776,7 @@
     // 判断是否存在会话
     BOOL isExist = [self isConverseIsExist:converseModel.converseId];
     if (isExist) {  //更新会话
-        NSString *option1 = [NSString stringWithFormat:@"converseContent = '%@', time = '%@' , converseName = '%@'",converseModel.lastConverse,@(converseModel.time),converseModel.converseName];
+        NSString *option1 = [NSString stringWithFormat:@"converseContent = '%@', time = '%@' , converseName = '%@', converseLogo = '%@'",converseModel.lastConverse,@(converseModel.time),converseModel.converseName,converseModel.converseHead_photo];
         NSString *optionStr = [FMDBShareManager alterTable:ZhiMa_Chat_Converse_Table withOpton1:option1 andOption2:[NSString stringWithFormat:@"converseId = '%@'",converseModel.converseId]];
         [queue inDatabase:^(FMDatabase *db) {
             BOOL success = [db executeUpdate:optionStr];

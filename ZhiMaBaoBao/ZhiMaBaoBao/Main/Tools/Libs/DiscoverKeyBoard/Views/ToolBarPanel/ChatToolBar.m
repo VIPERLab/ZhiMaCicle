@@ -13,6 +13,7 @@
 #import "ChatToolBar.h"
 #import "ChatToolBarItem.h"
 #import "ChatKeyBoardMacroDefine.h"
+#import <AVFoundation/AVFoundation.h>
 
 #define Image(str)              (str == nil || str.length == 0) ? nil : [UIImage imageNamed:str]
 #define ItemW                   44                  //44
@@ -104,6 +105,10 @@
    
     __weak __typeof(self) weekSelf = self;
     self.recordBtn.recordTouchDownAction = ^(RFRecordButton *sender){
+        
+        if (![weekSelf canRecord]) {
+            return ;
+        }
         NSLog(@"开始录音");
         if (sender.highlighted) {
             sender.highlighted = YES;
@@ -150,6 +155,33 @@
         }
     };
 }
+
+-(BOOL)canRecord
+{
+    __block BOOL bCanRecord = YES;
+    
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
+        [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
+            if (granted) {
+                bCanRecord = YES;
+            }
+            else {
+                bCanRecord = NO;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[[UIAlertView alloc] initWithTitle: @"请在iPhone的“设置 - 隐私 - 麦克风”选项中，允许芝麻宝宝访问你的麦克风"
+                                                message:nil
+                                               delegate:nil
+                                      cancelButtonTitle:@"好"
+                                      otherButtonTitles:nil] show];
+                });
+            }
+        }];
+    }
+    
+    return bCanRecord;
+}
+
 
 - (void)setButtonStateWithNormal
 {

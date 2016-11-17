@@ -175,7 +175,6 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_SUCCESS object:nil];
             }
             
-            
         }else{
             [LCProgressHUD showFailureText:responseData.msg];
         }

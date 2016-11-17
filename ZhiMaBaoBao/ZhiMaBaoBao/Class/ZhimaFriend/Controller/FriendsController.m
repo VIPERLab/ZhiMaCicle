@@ -292,7 +292,7 @@ static NSString * const headerIdentifier = @"headerIdentifier";
         self.unReadLabel.hidden = YES;
     }
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     
     

@@ -11,7 +11,7 @@
 
 @protocol LGQueryCellDelegate <NSObject>
 
-- (void)addNewFriend:(NSInteger)row;
+- (void)addNewFriend:(NSIndexPath *)indexPath;
 
 @end
 
@@ -19,5 +19,5 @@
 
 @property (nonatomic, strong) LGQueryResModel *model;
 @property (nonatomic, assign) id<LGQueryCellDelegate> delegate;
-@property (nonatomic, assign) NSInteger row;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 @end

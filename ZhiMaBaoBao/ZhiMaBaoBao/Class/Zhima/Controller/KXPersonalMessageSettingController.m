@@ -196,6 +196,14 @@
     picker.allowsEditing = YES;
     
     if (buttonIndex == 0) {
+        
+        NSString *mediaType = AVMediaTypeVideo;//读取媒体类型
+        AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];//读取设备授权状态
+        if(authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied){
+            NSString *errorStr = @"请在iPhone的“设置 - 隐私 - 相机”选项中，允许芝麻宝宝访问你的相机";
+            [[[UIAlertView alloc]initWithTitle:errorStr message:@"" delegate:self cancelButtonTitle:@"好" otherButtonTitles:nil, nil] show];
+            return;
+        }
         //拍照
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         

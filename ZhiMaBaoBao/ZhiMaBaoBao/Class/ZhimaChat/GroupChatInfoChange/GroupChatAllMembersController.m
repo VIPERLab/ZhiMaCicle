@@ -133,10 +133,10 @@
         GroupChatModel *groupModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
         NSArray*arr = groupModel.groupUserVos;
         
-        if (arr.count<40  || !arr) {
-            [_tableView.mj_footer endRefreshingWithNoMoreData];
-
-        }
+//        if (arr.count<40  || !arr) {
+//            [_tableView.mj_footer endRefreshingWithNoMoreData];
+//
+//        }
         
         for (int i=0; i<arr.count; i++) {
             GroupUserModel*model = arr[i];
