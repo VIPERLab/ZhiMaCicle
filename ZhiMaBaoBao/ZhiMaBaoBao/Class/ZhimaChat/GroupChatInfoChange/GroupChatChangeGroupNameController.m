@@ -113,6 +113,13 @@
             systemMsg.converseName = self.groupModel.groupName;
             [FMDBShareManager saveGroupChatMessage:systemMsg andConverseId:self.groupModel.groupId];
             
+//            ConverseModel *converse = [[ConverseModel alloc] init];
+//            converse.time = [NSDate currentTimeStamp];
+//            converse.lastConverse = [NSString stringWithFormat:@"你修改群名为\"%@\"",self.groupModel.groupName];
+//            converse.converseId = self.groupModel.groupId;
+//            converse.converseType = ConversionTypeGroupChat;
+//            [Fmdbsha];
+            
             //通过socket创建群聊
             GroupActModel *actModel = [[GroupActModel alloc] init];
             actModel.fromUid = USERINFO.userID;

@@ -145,7 +145,7 @@ static NSString *const reuseIdentifier = @"NewFriendsListCell";
     
     //保存系统消息，创建会话
     [FMDBShareManager saveMessage:systemMsg toConverseID:friend.user_Id];
-    [FMDBShareManager saveConverseListDataWithModel:converse withComplationBlock:nil];
+    [FMDBShareManager saveConverseListDataWithModel:converse isSelf:YES withComplationBlock:nil];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     userInfo[@"message"] = systemMsg;

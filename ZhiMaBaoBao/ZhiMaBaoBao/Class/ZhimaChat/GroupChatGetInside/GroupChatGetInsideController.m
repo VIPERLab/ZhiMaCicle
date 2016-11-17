@@ -145,7 +145,7 @@
             converseModel.converseName = self.groupChatModel.groupName;
             converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
             converseModel.lastConverse = [NSString stringWithFormat:@"你通过扫描\"%@\"分享的二维码加入了群聊",self.userName];
-            [FMDBShareManager saveConverseListDataWithModel:converseModel withComplationBlock:nil];
+            [FMDBShareManager saveConverseListDataWithModel:converseModel isSelf:YES withComplationBlock:nil];
             
             //通过socket扫码进群
             GroupActModel *actModel = [[GroupActModel alloc] init];
