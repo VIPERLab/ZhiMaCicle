@@ -78,10 +78,11 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
-    MainViewController *mainVC = [[MainViewController alloc] init];
-    self.window.rootViewController = mainVC;
-    [self.window makeKeyAndVisible];
     
+    [self.window makeKeyAndVisible];
+    MainViewController *mainVC = [[MainViewController alloc] init];
+    
+    self.window.rootViewController = mainVC;
     //存储app的版本号
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     NSString *appVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
@@ -105,21 +106,12 @@
     }
     
     //创建数据库表
-    if (USERINFO.hasLogin) {
-        [self creatMySQL];
-    }
+    [self creatMySQL];
     
     //迁移数据库
     [self moveSQLToNew];
     
     [self notification];
-    
-    
-    //注册本地通知
-    if ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0) {
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
-        [application registerUserNotificationSettings:settings];
-    }
     
     //注册voipSDK
     [[LYVoIP shareInstance]voipConfigWithID:@"6560" Key:@"rXk6stbTRTFMdDcyKbsfe8PZrcx8m8Za" model:LYVoIPModelAPPReView];
@@ -161,7 +153,7 @@
     
 }
 
-- (void)judgeLoginState{
+- (void)judgeLoginState {
     //获取登录状态，判断sessionId是否失效
     [LGNetWorking getProvinceWithSessionID:USERINFO.sessionId block:^(ResponseData *responseData) {
         if (responseData.code == 14) {  //sessionId已经失效，不执行socket连接  发送被挤下线通知
@@ -394,8 +386,8 @@
     //已经登录过，直接跳转到主界面
     [self creatMySQL];
     [self countculatedTime];
-    MainViewController *mainVC = [[MainViewController alloc] init];
-    self.window.rootViewController = mainVC;
+//    MainViewController *mainVC = [[MainViewController alloc] init];
+//    self.window.rootViewController = mainVC;
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
@@ -445,6 +437,10 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     UserInfo *info = [UserInfo read];
+    
+    //移除所有待推送消息
+    [JPUSHService removeNotification:nil];
+    
     if (!info || !info.sessionId || [info.sessionId isEqualToString:@"0"]) {
         return;
     }

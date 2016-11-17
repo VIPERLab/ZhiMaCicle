@@ -800,7 +800,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     UserInfo *userinfo = [UserInfo shareInstance];
     [self.fartherVC.navigationController popToRootViewControllerAnimated:NO];
     
-    userinfo.mainVC.selectedViewController = userinfo.mainVC.viewControllers[0];
+    self.tabBarController.selectedIndex = 0;
+//    userinfo.mainVC.selectedViewController = userinfo.mainVC.viewControllers[0];
     
     ChatController *vc = [[ChatController alloc] init];
     vc.conversionId = self.groupChatModel.groupId;

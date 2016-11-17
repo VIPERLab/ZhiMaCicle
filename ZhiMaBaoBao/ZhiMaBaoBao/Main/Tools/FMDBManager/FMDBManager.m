@@ -832,29 +832,29 @@
  */
 - (void)openAllSequliteTable  {
     // 朋友圈相关的表
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Table];
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Comment_Table];
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Pic_Table];
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Circle_Like_Table];
+    [self creatTableWithTableType:ZhiMa_Circle_Table];
+    [self creatTableWithTableType:ZhiMa_Circle_Comment_Table];
+    [self creatTableWithTableType:ZhiMa_Circle_Pic_Table];
+    [self creatTableWithTableType:ZhiMa_Circle_Like_Table];
     
     //聊天相关表
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_Converse_Table];
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Chat_Message_Table];
+    [self creatTableWithTableType:ZhiMa_Chat_Converse_Table];
+    [self creatTableWithTableType:ZhiMa_Chat_Message_Table];
     
     //用户相关的表
-    [FMDBShareManager creatTableWithTableType:ZhiMa_User_Message_Table];
-    [FMDBShareManager creatTableWithTableType:ZhiMa_NewFriend_Message_Table];
+    [self creatTableWithTableType:ZhiMa_User_Message_Table];
+    [self creatTableWithTableType:ZhiMa_NewFriend_Message_Table];
     
     //群聊相关的表
-    [FMDBShareManager creatTableWithTableType:ZhiMa_GroupChat_GroupMessage_Table];
-    [FMDBShareManager creatTableWithTableType:ZhiMa_GroupChat_GroupMenber_Table];
+    [self creatTableWithTableType:ZhiMa_GroupChat_GroupMessage_Table];
+    [self creatTableWithTableType:ZhiMa_GroupChat_GroupMenber_Table];
     
     //服务号相关的表
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Service_Table];
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Service_Message_Table];
+    [self creatTableWithTableType:ZhiMa_Service_Table];
+    [self creatTableWithTableType:ZhiMa_Service_Message_Table];
     
     //收藏相关的表
-    [FMDBShareManager creatTableWithTableType:ZhiMa_Collection_Table];
+    [self creatTableWithTableType:ZhiMa_Collection_Table];
     
     // 为数据库新增索引
     [self creatSQLIndex];
@@ -864,15 +864,15 @@
 // 新增索引
 - (void)creatSQLIndex {
     //会话数据库新增索引
-    [FMDBShareManager creatIndexInTable:ZhiMa_Chat_Converse_Table withString:@"converseId,converseType" andIndexName:@"ConverseIndex"];
+    [self creatIndexInTable:ZhiMa_Chat_Converse_Table withString:@"converseId,converseType" andIndexName:@"ConverseIndex"];
     
     //群成员数据库新增索引
-    [FMDBShareManager creatIndexInTable:ZhiMa_GroupChat_GroupMenber_Table withString:@"groupId,memberId" andIndexName:@"GroupMemberIndex"];
+    [self creatIndexInTable:ZhiMa_GroupChat_GroupMenber_Table withString:@"groupId,memberId" andIndexName:@"GroupMemberIndex"];
     
     //朋友圈新增索引
-    [FMDBShareManager creatIndexInTable:ZhiMa_Circle_Comment_Table withString:@"circle_ID" andIndexName:@"CircleCommentIndex"];
-    [FMDBShareManager creatIndexInTable:ZhiMa_Circle_Pic_Table withString:@"circle_ID" andIndexName:@"CirclePicIndex"];
-    [FMDBShareManager creatIndexInTable:ZhiMa_Circle_Like_Table withString:@"circle_ID" andIndexName:@"CircleLikeIndex"];
+    [self creatIndexInTable:ZhiMa_Circle_Comment_Table withString:@"circle_ID" andIndexName:@"CircleCommentIndex"];
+    [self creatIndexInTable:ZhiMa_Circle_Pic_Table withString:@"circle_ID" andIndexName:@"CirclePicIndex"];
+    [self creatIndexInTable:ZhiMa_Circle_Like_Table withString:@"circle_ID" andIndexName:@"CircleLikeIndex"];
 }
 
 /**
@@ -2292,6 +2292,26 @@
     }];
     NSLog(@"----群成员插入结束");
 }
+
+/**
+ 保存群成员 - 执行插入，不执行查询
+ 
+ @param withGourpId 模型数据
+ @param groupId     群组id
+ */
+- (void)saveGroupMemberWithModel:(GroupUserModel *)model withGourpId:(NSString *)groupId {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_GroupChat_GroupMenber_Table];
+    NSString *opeartionStr = [FMDBShareManager InsertDataInTable:ZhiMa_GroupChat_GroupMenber_Table];
+    [queue inDatabase:^(FMDatabase *db) {
+        BOOL success = [db executeUpdate:opeartionStr,groupId,model.userId,model.friend_nick,model.memberGroupName,model.head_photo,@(model.memberGroupState)];
+        if (success) {
+            NSLog(@"更新群成员成功");
+        } else {
+            NSLog(@"更新群成员失败");
+        }
+    }];
+}
+
 
 /**
  *  根据群id 和用户id 查询群成员表是否有这个人

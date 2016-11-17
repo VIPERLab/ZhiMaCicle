@@ -41,9 +41,9 @@
     
     UserInfo *userInfo = [UserInfo shareInstance];
     userInfo.mainVC = self;
-    
+
     self.tabBar.barTintColor = [UIColor whiteColor];
-    
+
     [self addChildVc:[[ConversationController alloc] init] title:@"芝麻聊" image:@"lgtabbar_1" selectedImage:@"lgtabbar_1_select"];
     [self addChildVc:[[FriendsController alloc] init] title:@"芝麻友" image:@"lgtabbar_2" selectedImage:@"lgtabbar_2_select"];
     [self addChildVc:[[ZMCallViewController alloc] init] title:@"芝麻通" image:@"lgtabbar_3" selectedImage:@"lgtabbar_3_select"];

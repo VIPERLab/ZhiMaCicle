@@ -444,6 +444,16 @@ typedef enum : NSUInteger {
  */
 - (void)saveAllGroupMemberWithArray:(NSArray <GroupUserModel *> *)array andGroupChatId:(NSString *)groupId withComplationBlock:(ComplationBlock)block;
 
+
+/**
+ 保存群成员 - 执行插入，不执行查询
+ 
+ @param withGourpId 模型数据
+ @param groupId     群组id
+ */
+- (void)saveGroupMemberWithModel:(GroupUserModel *)model withGourpId:(NSString *)groupId;
+
+
 /**
  *  根据群id 和用户id 查询群成员表是否有这个人
  *
