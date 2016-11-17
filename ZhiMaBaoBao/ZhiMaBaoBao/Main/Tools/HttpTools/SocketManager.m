@@ -442,7 +442,7 @@ static SocketManager *manager = nil;
             message.converseId = message.toUidOrGroupId;
             message.msgid = [NSString generateMessageID];
             converse.converseId = message.toUidOrGroupId;
-            [FMDBShareManager revokeNormalMessageToSystemMessage:message];
+            [FMDBShareManager saveMessage:message toConverseID:converse.converseId];
             [FMDBShareManager alertConverseTextWithConverseModel:converse];
         }
             break;
@@ -462,8 +462,12 @@ static SocketManager *manager = nil;
         }
             break;
         case ActTypeUndomsg:{            //撤销消息
+            if (message.conversionType == ConversionTypeGroupChat) {
+                message.converseId = message.toUidOrGroupId;
+                converse.converseId = message.toUidOrGroupId;
+            }
             [FMDBShareManager revokeNormalMessageToSystemMessage:message];
-            [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+            [FMDBShareManager alertConverseTextWithConverseModel:converse];
         }
             break;
         case ActTypeKickuser:{          //相同用户登录，剔除之前的登录用户
