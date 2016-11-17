@@ -84,8 +84,9 @@
 
  */
 + (void)loginWithPhone:(NSString *)phone password:(NSString *)password success:(SuccessfulBlock)success failure:(FailureBlock)failure {
-    
-    [HttpTool POST:@"/moblie/user_login.do" params:@{@"phone":phone,@"password":password,@"version":@(2.0),@"appSystem":@"ios"} success:^(ResponseData *json) {
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *oldVersion = infoDict[@"CFBundleShortVersionString"];
+    [HttpTool POST:@"/moblie/user_login.do" params:@{@"phone":phone,@"password":password,@"version":oldVersion,@"appSystem":@"ios"} success:^(ResponseData *json) {
         
         success(json);
                 
