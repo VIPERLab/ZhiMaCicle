@@ -8,8 +8,12 @@
 
 #import "BaseViewController.h"
 
+typedef void(^returnBlock)(ZhiMaFriendModel *model);
+
 @interface LGSearchController : BaseViewController
 
 @property (nonatomic, strong) UIViewController *fatherVC;
+
+@property (nonatomic, copy) returnBlock block;
 
 @end

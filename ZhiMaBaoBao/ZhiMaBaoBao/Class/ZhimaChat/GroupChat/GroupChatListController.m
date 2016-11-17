@@ -153,12 +153,8 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
         popView.delegate = self;
         [popView show];
     }else{
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
         ConverseModel *groupModel = self.dataArr[indexPath.row];
         
-        UserInfo *userInfo = [UserInfo shareInstance];
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
         
         ChatController *vc = [[ChatController alloc] init];
         vc.conversionId = groupModel.converseId;
@@ -166,8 +162,15 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
         vc.converseLogo = groupModel.converseHead_photo;
         vc.converseType = groupModel.converseType;
         vc.hidesBottomBarWhenPushed = YES;
-        ConversationController *conversationVC = userInfo.conversationVC;
-        [conversationVC.navigationController pushViewController:vc animated:YES];
+        
+        
+        // 跳转处理
+        self.tabBarController.selectedIndex = 0;
+        UINavigationController *nav = [self.tabBarController.viewControllers objectAtIndex:0];
+        [nav pushViewController:vc animated:YES];
+        
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        
     }
     
 }

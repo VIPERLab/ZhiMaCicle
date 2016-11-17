@@ -24,4 +24,6 @@
 //未读消息条数
 @property (nonatomic, assign)NSInteger numOfUnread;
 
+@property (nonatomic, assign) BOOL isPopToRoot;
+
 @end

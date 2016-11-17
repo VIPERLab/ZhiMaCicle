@@ -8,6 +8,8 @@
 
 #import "BaseViewController.h"
 #import "LGMessage.h"
+@class GroupChatModel;
+typedef void(^returnBlock)(GroupChatModel *model);
 
 @interface CreateGroupChatController : BaseViewController
 
@@ -22,4 +24,7 @@
 @property (nonatomic, strong) BaseViewController *fartherVC;
 
 @property (nonatomic, copy) NSString *groupId;  //已有的群拉新人进群 （旧群id）
+
+
+@property (nonatomic, copy) returnBlock block;
 @end

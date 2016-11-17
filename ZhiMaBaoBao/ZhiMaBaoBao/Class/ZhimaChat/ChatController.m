@@ -183,6 +183,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     info.currentConversionId = self.conversionId;
 }
 
+//- (void)viewDidAppear:(BOOL)animated {
+//    self.tabBarController.selectedViewController = [self.tabBarController.viewControllers objectAtIndex:0];
+//}
+
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
@@ -2333,7 +2337,11 @@ static NSString *const reuseIdentifier = @"messageCell";
 
 - (void)backAction {
     [FMDBShareManager setConverseUnReadCountZero:self.conversionId];
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.isPopToRoot) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 

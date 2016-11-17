@@ -110,20 +110,17 @@ static NSString *const reuseIdentifier = @"searchResultCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.view endEditing:YES];
     ZhiMaFriendModel *friendModel = self.dataArray[indexPath.row];
 
     //跳转到聊天
-    [self dismissViewControllerAnimated:NO completion:nil];
-    UserInfo *userinfo = [UserInfo shareInstance];
-    userinfo.mainVC.selectedViewController = userinfo.mainVC.viewControllers[0];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
     
-    ChatController *vc = [[ChatController alloc] init];
-    vc.conversionId = friendModel.user_Id;
-    vc.conversionName = friendModel.displayName;
-    vc.converseLogo = friendModel.head_photo;
-    vc.hidesBottomBarWhenPushed = YES;
-    ConversationController *conversationVC = userinfo.conversationVC;
-    [conversationVC.navigationController pushViewController:vc animated:YES];
+    if (self.block) {
+        self.block(friendModel);
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

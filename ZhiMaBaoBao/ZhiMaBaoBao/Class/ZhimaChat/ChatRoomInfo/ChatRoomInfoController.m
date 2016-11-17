@@ -16,6 +16,8 @@
 #import "CreateGroupChatController.h"
 #import "ComplainViewController.h" // 投诉
 
+#import "ChatController.h"
+#import "GroupChatModel.h"
 
 #define CharRoomInfoHeaderCellReusedID @"CharRoomInfoHeaderCellReusedID"
 #define CharRoomInfoCellReusedID @"CharRoomInfoCellReusedID"
@@ -142,6 +144,25 @@
         vc.fartherVC = self;
         vc.hideFirstSection = YES;
         BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+        
+        __block UINavigationController *navController = [self.tabBarController.viewControllers objectAtIndex:0];
+        __block UITabBarController *tabBarController = self.tabBarController;
+        vc.block = ^(GroupChatModel *model) {
+            
+            // 跳转处理
+            ChatController *vc = [[ChatController alloc] init];
+            vc.conversionId = model.groupId;
+            vc.converseLogo = model.groupAvtar;
+            vc.conversionName = model.groupName;
+            vc.hidesBottomBarWhenPushed = YES;
+            vc.converseType = YES;
+            vc.hidesBottomBarWhenPushed = YES;
+            vc.isPopToRoot = YES;
+            
+            tabBarController.selectedIndex = 0;
+            [navController pushViewController:vc animated:YES];
+            
+        };
         [self presentViewController:nav animated:YES completion:nil];
     }
     

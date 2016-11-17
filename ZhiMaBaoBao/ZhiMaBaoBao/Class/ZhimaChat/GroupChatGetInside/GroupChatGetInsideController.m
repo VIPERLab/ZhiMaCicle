@@ -159,7 +159,7 @@
             
             
             //跳转到群聊天页面
-            [self jumpGroupChat];
+            [self jumpGroupChat:converseModel];
         } else if (responseData.code == 78) {
             //跳转到会话列表
             [LCProgressHUD hide];
@@ -170,9 +170,6 @@
             // 创建/ 更新会话
             [FMDBShareManager saveGroupChatInfo:model andConverseID:self.groupId];
             
-            UserInfo *userInfo = [UserInfo shareInstance];
-            [self.navigationController popToRootViewControllerAnimated:NO];
-            userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
             
             ChatController *vc = [[ChatController alloc] init];
             vc.conversionId = model.groupId;
@@ -180,8 +177,13 @@
             vc.converseLogo = model.groupAvtar;
             vc.converseType = YES;
             vc.hidesBottomBarWhenPushed = YES;
-            ConversationController *conversationVC = userInfo.conversationVC;
-            [conversationVC.navigationController pushViewController:vc animated:YES];
+            
+            // 跳转处理
+            self.tabBarController.selectedIndex = 0;
+            UINavigationController *nav = [self.tabBarController.viewControllers objectAtIndex:0];
+            [nav pushViewController:vc animated:YES];
+            
+            [self.navigationController popToRootViewControllerAnimated:YES];
             
             
         }
@@ -191,23 +193,21 @@
 }
 
 
-- (void)jumpGroupChat {
-    
-    ConverseModel *groupModel = [FMDBShareManager searchConverseWithConverseID:self.groupId andConverseType:YES];
-    
-    UserInfo *userInfo = [UserInfo shareInstance];
-    [self.navigationController popToRootViewControllerAnimated:NO];
-    userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
+- (void)jumpGroupChat:(ConverseModel *)converseModel {
     
     ChatController *vc = [[ChatController alloc] init];
-    vc.conversionId = groupModel.converseId;
-    vc.conversionName = groupModel.converseName;
-    vc.converseLogo = groupModel.converseHead_photo;
-    vc.converseType = groupModel.converseType;
+    vc.conversionId = converseModel.converseId;
+    vc.conversionName = converseModel.converseName;
+    vc.converseLogo = converseModel.converseHead_photo;
+    vc.converseType = converseModel.converseType;
     vc.hidesBottomBarWhenPushed = YES;
     
-    ConversationController *conversationVC = userInfo.conversationVC;
-    [conversationVC.navigationController pushViewController:vc animated:YES];
+    // 跳转处理
+    self.tabBarController.selectedIndex = 0;
+    UINavigationController *nav = [self.tabBarController.viewControllers objectAtIndex:0];
+    [nav pushViewController:vc animated:YES];
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 

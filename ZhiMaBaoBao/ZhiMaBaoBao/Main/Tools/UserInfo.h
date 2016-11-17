@@ -76,11 +76,11 @@
  /** 未读好友请求数量*/
 @property (nonatomic, assign) NSInteger unReadInvited;
 
- /** tabbar控制器*/
-@property (nonatomic, strong) MainViewController *mainVC;
-
- /** 会话控制器*/
-@property (nonatomic, strong) ConversationController *conversationVC;
+// /** tabbar控制器*/
+//@property (nonatomic, strong) MainViewController *mainVC;
+//
+// /** 会话控制器*/
+//@property (nonatomic, strong) ConversationController *conversationVC;
 
  /** 群聊列表控制器*/
 @property (nonatomic, strong) GroupChatListController *groupChatVC;

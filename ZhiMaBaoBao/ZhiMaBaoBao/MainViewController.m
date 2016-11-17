@@ -39,8 +39,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UserInfo *userInfo = [UserInfo shareInstance];
-    userInfo.mainVC = self;
+//    UserInfo *userInfo = [UserInfo shareInstance];
+//    userInfo.mainVC = self;
 
     self.tabBar.barTintColor = [UIColor whiteColor];
 

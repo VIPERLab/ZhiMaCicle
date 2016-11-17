@@ -797,20 +797,24 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 
 - (void)jumpGroupChat{
     [self dismissViewControllerAnimated:NO completion:nil];
-    UserInfo *userinfo = [UserInfo shareInstance];
-    [self.fartherVC.navigationController popToRootViewControllerAnimated:NO];
     
-    self.tabBarController.selectedIndex = 0;
-//    userinfo.mainVC.selectedViewController = userinfo.mainVC.viewControllers[0];
-    
-    ChatController *vc = [[ChatController alloc] init];
-    vc.conversionId = self.groupChatModel.groupId;
-    vc.converseLogo = self.groupChatModel.groupAvtar;
-    vc.conversionName = self.groupChatModel.groupName;
-    vc.converseType = YES;
-    vc.hidesBottomBarWhenPushed = YES;
-    ConversationController *conversationVC = userinfo.conversationVC;
-    [conversationVC.navigationController pushViewController:vc animated:YES];
+    if (self.block) {
+        self.block(self.groupChatModel);
+    }
+//    UserInfo *userinfo = [UserInfo shareInstance];
+//    [self.fartherVC.navigationController popToRootViewControllerAnimated:NO];
+//    
+//    self.tabBarController.selectedIndex = 0;
+////    userinfo.mainVC.selectedViewController = userinfo.mainVC.viewControllers[0];
+//    
+//    ChatController *vc = [[ChatController alloc] init];
+//    vc.conversionId = self.groupChatModel.groupId;
+//    vc.converseLogo = self.groupChatModel.groupAvtar;
+//    vc.conversionName = self.groupChatModel.groupName;
+//    vc.converseType = YES;
+//    vc.hidesBottomBarWhenPushed = YES;
+//    ConversationController *conversationVC = userinfo.conversationVC;
+//    [conversationVC.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)cancelAction{

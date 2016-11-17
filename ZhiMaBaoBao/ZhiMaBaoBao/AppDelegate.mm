@@ -81,8 +81,8 @@
     
     [self.window makeKeyAndVisible];
     MainViewController *mainVC = [[MainViewController alloc] init];
-    
     self.window.rootViewController = mainVC;
+    
     //存储app的版本号
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     NSString *appVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
@@ -90,7 +90,6 @@
         userInfo.appVersion = appVersion;
         [userInfo save];
     }
-
     
     NSLog(@"-----------%@",USERINFO);
     
@@ -627,8 +626,8 @@
 //app处于活跃状态，调整tabbar高度
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [application cancelAllLocalNotifications];
-    UserInfo *manager = [UserInfo shareInstance];
-    [manager.mainVC adapterstatusBarHeight];
+    MainViewController *mainVc = (MainViewController *)self.window.rootViewController;
+    [mainVc adapterstatusBarHeight];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

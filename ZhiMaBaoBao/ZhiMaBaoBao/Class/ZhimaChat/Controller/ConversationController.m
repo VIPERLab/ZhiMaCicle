@@ -37,8 +37,8 @@
     [self setNaviTitle:@"聊天"];
     
     netWorkStatus = YES;
-    UserInfo *userInfo = [UserInfo shareInstance];
-    userInfo.conversationVC = self;
+//    UserInfo *userInfo = [UserInfo shareInstance];
+//    userInfo.conversationVC = self;
     [self setCustomRightItems];
     [self setupView];
     [self notification];

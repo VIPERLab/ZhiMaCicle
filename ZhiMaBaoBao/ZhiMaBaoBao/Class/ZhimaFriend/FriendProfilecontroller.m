@@ -303,19 +303,35 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         [LCProgressHUD showSuccessText:@"请求发送成功"];
     }
     else if (self.friendType == FriendTypeFriends){     //好友 -> 发消息
-        //先pop到跟控制器。然后切换到会话控制器。然后push到聊天
-        UserInfo *userInfo = [UserInfo shareInstance];
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        userInfo.mainVC.selectedViewController = userInfo.mainVC.viewControllers[0];
         
         ChatController *vc = [[ChatController alloc] init];
         vc.conversionId = self.friend.user_Id;
         vc.conversionName = self.friend.displayName;
         vc.converseLogo = self.friend.head_photo;
         vc.hidesBottomBarWhenPushed = YES;
-//        [self.navigationController pushViewController:vc animated:YES];
-        ConversationController *conversationVC = userInfo.conversationVC;
-        [conversationVC.navigationController pushViewController:vc animated:YES];
+        
+        // 跳转处理
+        self.tabBarController.selectedIndex = 0;
+        UINavigationController *nav = [self.tabBarController.viewControllers objectAtIndex:0];
+        
+        BOOL isChatJump = NO;
+        // 判断是否在聊天界面跳转过来的。
+        for (UIViewController *viewController in self.navigationController.viewControllers) {
+            if ([viewController isKindOfClass:[ChatController class]]) {
+                // 如果是
+                isChatJump = YES;
+                vc.isPopToRoot = YES;
+                break;
+            }
+        }
+        
+        [nav pushViewController:vc animated:YES];
+        
+        
+        if (!isChatJump) {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+        
         
     }
     else if (self.friendType == FriendTypeNew){     //同意好友请求
