@@ -116,6 +116,27 @@ static NSString *const reuseIdentifier = @"groupChatListCell";
     vc.hideFirstSection = YES;
     vc.fartherVC = self;
     BaseNavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:vc];
+    
+    __block UINavigationController *navController = [self.tabBarController.viewControllers objectAtIndex:0];
+    __block UITabBarController *tabBarController = self.tabBarController;
+    __block UINavigationController *weakSelfNavVc = self.navigationController;
+    vc.block = ^(GroupChatModel *model) {
+        
+        // 跳转处理
+        ChatController *vc = [[ChatController alloc] init];
+        vc.conversionId = model.groupId;
+        vc.converseLogo = model.groupAvtar;
+        vc.conversionName = model.groupName;
+        vc.hidesBottomBarWhenPushed = YES;
+        vc.converseType = YES;
+        vc.hidesBottomBarWhenPushed = YES;
+        
+        tabBarController.selectedIndex = 0;
+        [navController pushViewController:vc animated:YES];
+        
+        [weakSelfNavVc popToRootViewControllerAnimated:NO];
+    };
+    
     [self presentViewController:nav animated:YES completion:nil];
 }
 

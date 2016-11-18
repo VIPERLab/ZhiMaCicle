@@ -317,7 +317,7 @@ static NSString *const btnIdentifier = @"btnIdentifier";
         BOOL isChatJump = NO;
         // 判断是否在聊天界面跳转过来的。
         for (UIViewController *viewController in self.navigationController.viewControllers) {
-            if ([viewController isKindOfClass:[ChatController class]]) {
+            if ([viewController isKindOfClass:[ChatController class]] || [viewController isKindOfClass:[ConversationController class]]) {
                 // 如果是
                 isChatJump = YES;
                 vc.isPopToRoot = YES;

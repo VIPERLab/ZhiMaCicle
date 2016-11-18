@@ -217,6 +217,8 @@
         
         __block UINavigationController *navController = [self.tabBarController.viewControllers objectAtIndex:0];
         __block UITabBarController *tabBarController = self.tabBarController;
+        __block UINavigationController *weakSelfNavVc = self.navigationController;
+        
         vc.block = ^(GroupChatModel *model) {
             
             // 跳转处理
@@ -227,6 +229,18 @@
             vc.hidesBottomBarWhenPushed = YES;
             vc.converseType = YES;
             vc.hidesBottomBarWhenPushed = YES;
+            
+            BOOL hasChat = NO;
+            for (UIViewController *viewController in weakSelfNavVc.viewControllers) {
+                if ([viewController isKindOfClass:[ConversationController class]]) {
+                    hasChat = YES;
+                }
+            }
+            
+            if (!hasChat) {
+                [weakSelfNavVc popToRootViewControllerAnimated:YES];
+            }
+            
             
             tabBarController.selectedIndex = 0;
             [navController pushViewController:vc animated:YES];

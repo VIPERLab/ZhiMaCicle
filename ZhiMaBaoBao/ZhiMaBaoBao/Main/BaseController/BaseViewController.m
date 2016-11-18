@@ -111,6 +111,7 @@
     
     __block UINavigationController *navController = [self.tabBarController.viewControllers objectAtIndex:0];
     __block UITabBarController *tabBarController = self.tabBarController;
+    __block UINavigationController *weakSelfNavVc = self.navigationController;
     searchVC.block = ^(ZhiMaFriendModel *friendModel){
         NSLog(@"----^%@",tabBarController);
         // 跳转处理
@@ -119,7 +120,6 @@
         vc.conversionName = friendModel.displayName;
         vc.converseLogo = friendModel.head_photo;
         vc.hidesBottomBarWhenPushed = YES;
-
         
         tabBarController.selectedIndex = 0;
         [navController pushViewController:vc animated:YES];

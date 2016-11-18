@@ -175,6 +175,7 @@
             vc.conversionName = model.groupName;
             vc.converseLogo = model.groupAvtar;
             vc.converseType = YES;
+            vc.isPopToRoot = YES;
             vc.hidesBottomBarWhenPushed = YES;
             
             // 跳转处理
@@ -182,7 +183,16 @@
             UINavigationController *nav = [self.tabBarController.viewControllers objectAtIndex:0];
             [nav pushViewController:vc animated:YES];
             
-            [self.navigationController popToRootViewControllerAnimated:YES];
+            BOOL hasChat = NO;
+            for (UIViewController *viewController in self.navigationController.viewControllers) {
+                if ([viewController isKindOfClass:[ConversationController class]]) {
+                    hasChat = YES;
+                }
+            }
+            
+            if (!hasChat) {
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
             
             
         }
@@ -199,6 +209,7 @@
     vc.conversionName = converseModel.converseName;
     vc.converseLogo = converseModel.converseHead_photo;
     vc.converseType = converseModel.converseType;
+    vc.isPopToRoot = YES;
     vc.hidesBottomBarWhenPushed = YES;
     
     // 跳转处理
@@ -206,7 +217,17 @@
     UINavigationController *nav = [self.tabBarController.viewControllers objectAtIndex:0];
     [nav pushViewController:vc animated:YES];
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    BOOL hasChat = NO;
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[ConversationController class]]) {
+            hasChat = YES;
+        }
+    }
+    
+    if (!hasChat) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 
