@@ -225,9 +225,6 @@
         CGFloat disturY = CGRectGetMinY(_lastConverseLabel.frame) + 5;
         _disturbIcon.frame = CGRectMake(disturX, disturY, disturbW, disturbH);
         
-        
-        
-        
         hasSubViews = NO;
         
     }
