@@ -86,5 +86,13 @@
     
 }
 
+- (void)backAction {
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[SDTimeLineTableViewController class]]) {
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+}
+
 
 @end

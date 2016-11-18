@@ -618,4 +618,7 @@ typedef enum : NSUInteger {
 - (void)deletedCollectionWithCollectionId:(NSString *)collectionId;
 
 
+- (void)delAllCollection;
+
+
 @end

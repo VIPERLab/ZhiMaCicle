@@ -56,10 +56,12 @@
             [_tableView reloadData];
             return ;
         }
-        
+        [FMDBShareManager delAllCollection];
         NSMutableArray *dataArray = [ZhiMaCollectionModel mj_objectArrayWithKeyValuesArray:responseData.data];
         self.dataArray = dataArray;
         dispatch_sync(dispatch_get_global_queue(0, 0), ^{
+            
+            
             [FMDBShareManager saveCollectionWithCollectionArray:dataArray];
         });
         

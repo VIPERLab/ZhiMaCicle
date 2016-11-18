@@ -14,7 +14,7 @@
 
 
 @interface GroupChatGetInsideController ()
-@property (nonatomic, weak) GroupChatModel *groupChatModel;
+@property (nonatomic, strong) GroupChatModel *groupChatModel;
 @property (nonatomic, copy) NSString *userName; //扫码人的用户名
 @property (nonatomic, copy) NSString *userPhoto; //扫码人的头像
 
@@ -163,18 +163,23 @@
             //跳转到会话列表
             [LCProgressHUD hide];
             
-            
-            GroupChatModel *model = [FMDBShareManager getGroupChatMessageByGroupId:self.groupId];
-            
-            // 创建/ 更新会话
-            [FMDBShareManager saveGroupChatInfo:model andConverseID:self.groupId];
+            ConverseModel *converseModel  = [[ConverseModel alloc] init];
+            converseModel.time = [NSDate currentTimeStamp];
+            converseModel.converseType = 1;
+            converseModel.converseId = self.groupChatModel.groupId;
+            converseModel.unReadCount = 0;
+            converseModel.converseName = self.groupChatModel.groupName;
+            converseModel.converseHead_photo = self.groupChatModel.groupAvtar;
+            converseModel.lastConverse = @" ";
+            //创建
+            [FMDBShareManager saveConverseListDataWithModel:converseModel isSelf:YES withComplationBlock:nil];
             
             
             ChatController *vc = [[ChatController alloc] init];
-            vc.conversionId = model.groupId;
-            vc.conversionName = model.groupName;
-            vc.converseLogo = model.groupAvtar;
-            vc.converseType = YES;
+            vc.conversionId = self.groupChatModel.groupId;
+            vc.conversionName = self.groupChatModel.groupName;
+            vc.converseLogo = self.groupChatModel.groupAvtar;
+            vc.converseType = ConversionTypeGroupChat;
             vc.isPopToRoot = YES;
             vc.hidesBottomBarWhenPushed = YES;
             
@@ -193,8 +198,8 @@
             if (!hasChat) {
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
-            
-            
+        } else {
+            [LCProgressHUD showFailureText:responseData.msg];
         }
     } failure:^(ErrorData *error) {
         [LCProgressHUD showFailureText:error.msg];

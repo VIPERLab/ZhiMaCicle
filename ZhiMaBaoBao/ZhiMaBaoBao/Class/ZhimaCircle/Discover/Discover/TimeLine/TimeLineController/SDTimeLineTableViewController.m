@@ -119,11 +119,11 @@
 - (void)viewDidAppear:(BOOL)animated {
     [self setupKeyBoard];
     self.tipsNewMessage.show = YES;
-    
     //只有第一次进来且数据库无任何数据, 或者有新的未读消息需要加载的时候才会主动去刷新
     if (!self.dataArray.count || self.unReadCount != 0 || ![self.circleheadphoto isEqualToString:@""]) {
         [self setupNewData];
     }
+    self.navigationController.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -205,7 +205,11 @@
 
 // 右栏目按钮点击事件
 #pragma mark - 新增说说
-- (void)rightBarButtonItemAction:(UIBarButtonItem *)sender{
+- (void)rightBarButtonItemAction:(UIBarButtonItem *)sender {
+    sender.enabled = NO;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        sender.enabled = YES;
+    });
     if ([USERINFO.sessionId isEqualToString:@"0"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kPressentLoginRegiste object:nil];
         return;
@@ -416,15 +420,7 @@
         
     });
     
-    
-    
 }
-
-
-
-
-
-
 
 #pragma mark - 设置键盘
 - (void)setupKeyBoard {

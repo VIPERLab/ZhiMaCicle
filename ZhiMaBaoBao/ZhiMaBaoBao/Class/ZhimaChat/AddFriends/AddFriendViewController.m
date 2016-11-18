@@ -239,6 +239,8 @@
             
             if (!hasChat) {
                 [weakSelfNavVc popToRootViewControllerAnimated:YES];
+            } else {
+                vc.isPopToRoot = YES;
             }
             
             

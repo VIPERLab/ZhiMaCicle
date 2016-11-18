@@ -2885,4 +2885,19 @@
     }];
 }
 
+
+- (void)delAllCollection {
+    FMDatabaseQueue *queue = [FMDBShareManager getQueueWithType:ZhiMa_Collection_Table];
+    [queue inDatabase:^(FMDatabase *db) {
+        NSString *delStr = [FMDBShareManager deletedTableData:ZhiMa_Collection_Table withOption:@"collectionId != ''"];
+        BOOL success = [db executeUpdate:delStr];
+        if (success) {
+            NSLog(@"删除所有收藏成功");
+        } else {
+            NSLog(@"删除所有收藏成功");
+        }
+    }];
+    
+}
+
 @end
