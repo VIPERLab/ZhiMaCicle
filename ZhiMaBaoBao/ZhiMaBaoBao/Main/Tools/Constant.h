@@ -63,6 +63,8 @@
 
 //正式网络环境
 //#define DFAPIURL @"http://zm.zhimabaobao.com"
+
+//2.0.3版本上线换成下面三个域名 。 socket域名不用换
 //#define DFAPIURL @"http://tmpzm.zhimabaobao.com/"
 //#define CHATPICURL  @"http://pic.zhimabaobao.com"
 //#define DFAPIURLTEST @"http://fr.zhimabaobao.com"
