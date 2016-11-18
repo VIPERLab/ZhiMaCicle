@@ -64,8 +64,6 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     [rightBtn addTarget:self action:@selector(deleteMemberAction) forControlEvents:UIControlEventTouchUpInside];
     self.rightBtn = rightBtn;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
-
-    
     
     UIButton *leftBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
