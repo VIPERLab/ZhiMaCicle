@@ -16,7 +16,7 @@
 
 #define KXCurrentLocationCellReusedID @"KXCurrentLocationCellReusedID"
 
-@interface DiscoverCurrentLocationController () <CLLocationManagerDelegate,UITableViewDelegate,UITableViewDataSource,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate>
+@interface DiscoverCurrentLocationController () <CLLocationManagerDelegate,UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataArray;
@@ -55,7 +55,7 @@
     
     [self.tableView registerClass:[KXCurrentLocationCell class] forCellReuseIdentifier:KXCurrentLocationCellReusedID];
     
-    [LCProgressHUD showLoadingText:@"正在查找附近信息"];
+//    [LCProgressHUD showLoadingText:@"正在查找附近信息"];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -103,7 +103,13 @@
 
 
 #pragma mark - 定位功能
+- (void)willStartLocatingUser {
+    [LCProgressHUD showLoadingText:@"正在查找附近信息"];
+}
+
+
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation {
+    [LCProgressHUD hide];
     CLLocation *location = userLocation.location;
     [self getAddressWithCLLocationCoordinate2D:location.coordinate];
     [_locationService stopUserLocationService];
@@ -111,8 +117,9 @@
 
 
 - (void)didFailToLocateUserWithError:(NSError *)error {
-    [LCProgressHUD showFailureText:@"定位失败，请检查是否开启定位服务"];
-    NSLog(@"%zd",error.code);
+    [LCProgressHUD hide];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"请在IPhone的”设置 - 隐私 - 定位服务“选项中，允许芝麻宝宝访问您的位置" delegate:self cancelButtonTitle:@"好" otherButtonTitles:nil];
+    [alertView show];
 }
 
 - (void)getAddressWithCLLocationCoordinate2D:(CLLocationCoordinate2D)CLLocationCoordinate2D {
@@ -179,6 +186,13 @@
 }
 
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+
+#pragma mark - lazyLoad
 - (CLLocationManager *)manager {
     if (!_manager) {
         _manager = [[CLLocationManager alloc] init];
