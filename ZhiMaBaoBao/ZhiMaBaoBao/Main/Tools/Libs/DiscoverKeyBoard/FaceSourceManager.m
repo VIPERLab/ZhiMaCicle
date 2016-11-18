@@ -34,11 +34,15 @@
         if ([plistName isEqualToString:@"face"]) {
             themeM.themeStyle = FaceThemeStyleCustomEmoji;
             themeM.themeDecribe = @"表情";//[NSString stringWithFormat:@"f%d", i];
-            themeM.themeIcon = @"section0_emotion0";
+            themeM.themeIcon = @"systomFaceNomal";
+            themeM.themeIconSelected = @"systomFaceSelected";
+
         }else if ([plistName isEqualToString:@"systemEmoji"]){
             themeM.themeStyle = FaceThemeStyleSystemEmoji;
             themeM.themeDecribe = @"EMOJI";
-            themeM.themeIcon = @"";
+            themeM.themeIcon = @"emojiFaceNomal";
+            themeM.themeIconSelected = @"emojiFaceSelected";
+
         }
         else {
             themeM.themeStyle = FaceThemeStyleGif;

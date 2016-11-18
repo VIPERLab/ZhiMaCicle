@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, FaceThemeStyle)
 
 @property (nonatomic, assign) FaceThemeStyle themeStyle;
 @property (nonatomic, copy)   NSString *themeIcon;
+@property (nonatomic, copy)   NSString *themeIconSelected;
 @property (nonatomic, copy)   NSString *themeDecribe;
 @property (nonatomic, strong) NSArray *faceModels;
 

@@ -685,6 +685,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   //      [JPUSHService handleRemoteNotification:userInfo];
     //}
 
+    completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
 }
 
 // iOS 10 Support

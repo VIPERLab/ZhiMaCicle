@@ -502,12 +502,10 @@ static NSString *const reuseIdentifier = @"messageCell";
     recorder.receiveStoppedBlock = ^{
         NSLog(@"收到语音录制完成回调");
         if (weakSelf.recorder.isTimeOut) {
-
             self.isTimeOut = YES;
             [RecordingHUD dismiss];
-//            [weakSelf.keyboard setButtonStateWithNormal];
             [weakSelf sendAudioMessage];
-//            [weakSelf chatKeyBoardDidFinishRecoding:weakSelf.keyboard];
+            
         }else{
         
             self.isTimeOut = NO;
@@ -1619,7 +1617,7 @@ static NSString *const reuseIdentifier = @"messageCell";
 //        message.converseName = self.groupModel.groupName;
 //        message.converseLogo = self.groupModel.groupAvtar;
 //    }
-
+    AudioServicesPlaySystemSound(1004);
     SocketManager* socket = [SocketManager shareInstance];
     [socket sendMessage:message];
 
