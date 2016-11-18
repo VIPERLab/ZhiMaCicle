@@ -16,7 +16,7 @@
 
 #define NearByPeopleCellReusedID @"NearByPeopleCellReusedID"
 
-@interface NearByPeopleController () <BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface NearByPeopleController () <BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>
 @property (nonatomic, strong) NSMutableArray *dataArr;
 @property (nonatomic, weak) UITableView *tableView;
 @end
@@ -54,7 +54,12 @@
 
 
 #pragma mark - 定位功能
+- (void)willStartLocatingUser {
+    [LCProgressHUD showLoadingText:@"正在查找附近信息"];
+}
+
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation {
+    [LCProgressHUD hide];
     CLLocation *location = userLocation.location;
     [self loadNearByMessageData:location.coordinate];
     [_locationService stopUserLocationService];
@@ -77,10 +82,15 @@
 }
 
 - (void)didFailToLocateUserWithError:(NSError *)error {
-    [LCProgressHUD showFailureText:@"定位失败，请检查是否开启定位服务"];
+    [LCProgressHUD hide];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"请在IPhone的”设置 - 隐私 - 定位服务“选项中，允许芝麻宝宝访问您的位置" delegate:self cancelButtonTitle:@"好" otherButtonTitles:nil];
+    [alertView show];
     NSLog(@"%zd",error.code);
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)setupView {
     UITableView *tableView =[[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
