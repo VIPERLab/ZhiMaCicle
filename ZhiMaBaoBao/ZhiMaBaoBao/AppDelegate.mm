@@ -13,7 +13,6 @@
 
 #import "AlipaySDK/AlipaySDK.h"
 
-#import "RealReachability.h"
 #import "SocketManager.h"
 #import "ConverseModel.h"
 #import "LYVoIP.h"
@@ -34,7 +33,6 @@
 
 #import "UncaughtExceptionHandler.h"
 
-//
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import <ContactsUI/ContactsUI.h>
@@ -128,7 +126,60 @@
     if (userInfo.sessionId.length && ![userInfo.sessionId isEqualToString:@"0"]) {
         [self judgeLoginState];
     }
+    
+    //网络状态监控
+    [self netWorkJudge];
+    
     return YES;
+}
+
+//网络状态监测
+- (void)netWorkJudge{
+    // 1.获得网络监控的管理者
+    AFNetworkReachabilityManager *mgr = [AFNetworkReachabilityManager sharedManager];
+    
+    // 2.设置网络状态改变后的处理
+    [mgr setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        // 当网络状态改变了, 就会调用这个block
+        switch (status) {
+            case AFNetworkReachabilityStatusUnknown: {   // 未知网络
+                NSLog(@"未知网络");
+                [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
+                UserInfo *userInfo = [UserInfo shareInstance];
+                userInfo.networkUnReachable = YES;
+            }
+                break;
+                
+            case AFNetworkReachabilityStatusNotReachable: {   // 没有网络(断网)
+                NSLog(@"没有网络(断网)");
+                [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
+                UserInfo *userInfo = [UserInfo shareInstance];
+                userInfo.networkUnReachable = YES;
+            }
+
+                break;
+                
+            case AFNetworkReachabilityStatusReachableViaWWAN: {  // 手机自带网络
+                NSLog(@"手机自带网络");
+                [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
+                UserInfo *userInfo = [UserInfo shareInstance];
+                userInfo.networkUnReachable = NO;
+        }
+                break;
+                
+            case AFNetworkReachabilityStatusReachableViaWiFi: {    // WIFI
+                NSLog(@"WIFI");
+                [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
+                UserInfo *userInfo = [UserInfo shareInstance];
+                userInfo.networkUnReachable = NO;
+
+            }
+                break;
+        }
+    }];
+    
+    // 3.开始监控
+    [mgr startMonitoring];
 }
 
 
@@ -224,83 +275,6 @@
     };
 }
 
-//网络环境改变
-- (void)networkChanged:(NSNotification *)notification
-{
-    RealReachability *reachability = (RealReachability *)notification.object;
-    //当前网络状态
-    ReachabilityStatus status = [reachability currentReachabilityStatus];
-    //上一网络状态
-    ReachabilityStatus previousStatus = [reachability previousReachabilityStatus];
-    NSLog(@"networkChanged, currentStatus:%@, previousStatus:%@", @(status), @(previousStatus));
-    //网络连接不可用
-    if (status == RealStatusNotReachable)
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
-        UserInfo *userInfo = [UserInfo shareInstance];
-        userInfo.networkUnReachable = YES;
-        [self checkNetwork];
-    }
-    //wifi
-    if (status == RealStatusViaWiFi)
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
-        UserInfo *userInfo = [UserInfo shareInstance];
-        userInfo.networkUnReachable = NO;
-    }
-    //蜂窝数据
-    if (status == RealStatusViaWWAN)
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
-        UserInfo *userInfo = [UserInfo shareInstance];
-        userInfo.networkUnReachable = NO;
-    }
-    
-    //未识别的网络
-    if (status == RealStatusUnknown){
-        [[NSNotificationCenter defaultCenter] postNotificationName:K_WithoutNetWorkNotification object:nil];
-        UserInfo *userInfo = [UserInfo shareInstance];
-        userInfo.networkUnReachable = YES;
-    }
-}
-
-- (void)checkNetwork{
-    
-    [GLobalRealReachability reachabilityWithBlock:^(ReachabilityStatus status) {
-        switch (status)
-        {
-            case RealStatusNotReachable:
-            {
-                netCount ++;
-                if (netCount < 10) {
-                    [self performSelector:@selector(checkNetwork) withObject:nil afterDelay:1];
-                }
-                break;
-            }
-                
-            case RealStatusViaWiFi:
-            {
-                netCount = 0;
-                [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
-                UserInfo *userInfo = [UserInfo shareInstance];
-                userInfo.networkUnReachable = NO;
-                break;
-            }
-                
-            case RealStatusViaWWAN:
-            {
-                netCount = 0;
-                [[NSNotificationCenter defaultCenter] postNotificationName:K_NetworkRecoveryNotification object:nil];
-                UserInfo *userInfo = [UserInfo shareInstance];
-                userInfo.networkUnReachable = NO;
-                break;
-            }
-            default:
-                break;
-        }
-    }];
-}
-
 // 极光推送
 - (void)regiestJPush:(NSDictionary *)launchOptions {
     // 极光推送注册
@@ -355,12 +329,12 @@
     //用户登录通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpMainController) name:LOGIN_SUCCESS object:nil];
     
-    //网络环境监听
-    [GLobalRealReachability startNotifier];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(networkChanged:)
-                                                 name:kRealReachabilityChangedNotification
-                                               object:nil];
+//    //网络环境监听
+//    [GLobalRealReachability startNotifier];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(networkChanged:)
+//                                                 name:kRealReachabilityChangedNotification
+//                                               object:nil];
     //接收用户退出通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:Show_Login object:nil];
     
@@ -711,6 +685,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 //    completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
   //      [JPUSHService handleRemoteNotification:userInfo];
     //}
+
 }
 
 // iOS 10 Support

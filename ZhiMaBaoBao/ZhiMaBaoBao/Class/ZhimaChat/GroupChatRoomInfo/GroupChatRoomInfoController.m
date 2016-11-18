@@ -436,6 +436,7 @@
     vc.groupId = self.groupModel.groupId;
     vc.groupLogo = self.groupModel.groupAvtar;
     vc.groupName = self.groupModel.groupName;
+    vc.membersArr = [self.groupModel.groupUserVos mutableCopy];
     [self presentViewController:nav animated:YES completion:nil];
 }
 

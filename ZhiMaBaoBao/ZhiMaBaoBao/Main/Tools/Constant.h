@@ -63,9 +63,9 @@
 
 //正式网络环境
 //#define DFAPIURL @"http://zm.zhimabaobao.com"
-#define DFAPIURL @"http://tmpzm.zhimabaobao.com/"
-#define CHATPICURL  @"http://pic.zhimabaobao.com"
-#define DFAPIURLTEST @"http://fr.zhimabaobao.com"
+//#define DFAPIURL @"http://tmpzm.zhimabaobao.com/"
+//#define CHATPICURL  @"http://pic.zhimabaobao.com"
+//#define DFAPIURLTEST @"http://fr.zhimabaobao.com"
 
 
 //生成签名的apikey
