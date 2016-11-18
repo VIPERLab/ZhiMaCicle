@@ -300,6 +300,7 @@
     self.chatKeyBoard.keyBoardStyle = KeyBoardStyleComment;
     self.chatKeyBoard.allowVoice = NO;
     self.chatKeyBoard.placeHolder = @"请输入消息";
+    self.chatKeyBoard.allowMore = NO;
     [[UIApplication sharedApplication].keyWindow addSubview:self.chatKeyBoard];
 }
 

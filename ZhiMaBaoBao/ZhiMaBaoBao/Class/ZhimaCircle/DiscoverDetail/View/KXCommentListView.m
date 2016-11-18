@@ -92,21 +92,21 @@
     [self setContentLinkText:model andLabel:_contentLabel];
     
     
-    MLLink *commentLink = [MLLink linkWithType:0 value:model.comment range:[self findTargetStr:model.comment inStr:[model.attributedContent string]]];
+    MLLink *commentLink = [MLLink linkWithType:MLLinkTypeOther value:model.comment range:[self findTargetStr:model.comment inStr:[model.attributedContent string]]];
     commentLink.linkTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
-    [commentLink setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
-        [self viewDidClick:_bjButton];
-    }];
+//    [commentLink setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+//        [self viewDidClick:_bjButton];
+//    }];
     [_contentLabel addLink:commentLink];
     
     [self setCommentURLLink:model andLabel:_contentLabel];
     
     //设置文本链接
-    MLLink *fistNameLink = [MLLink linkWithType:MLLinkTypeURL value:model.userId range:[self findTargetStr:model.friend_nick inStr:[model.attributedContent string]]];
+    MLLink *fistNameLink = [MLLink linkWithType:MLLinkTypeNone value:model.userId range:[self findTargetStr:model.friend_nick inStr:[model.attributedContent string]]];
     MLLink *secondNameLink;
     if (model.reply_friend_nick.length) {
         //设置文本链接
-        secondNameLink = [MLLink linkWithType:MLLinkTypePhoneNumber value:model.reply_id range:[self findTargetStr:model.reply_friend_nick inStr:[model.attributedContent string]]];
+        secondNameLink = [MLLink linkWithType:MLLinkTypeNone value:model.reply_id range:[self findTargetStr:model.reply_friend_nick inStr:[model.attributedContent string]]];
     }
     if (secondNameLink) {
         [_contentLabel addLinks:@[fistNameLink,secondNameLink]];
@@ -171,11 +171,14 @@
         if ([self.delegate respondsToSelector:@selector(DidClickLinkeWithLinkValue:andType:)]) {
             [self.delegate DidClickLinkeWithLinkValue:link.linkValue andType:1];
         }
-    } else {
+    } else if (link.linkType == MLLinkTypeNone) {
         //个人
         if ([self.delegate respondsToSelector:@selector(DidClickLinkeWithLinkValue:andType:)]) {
             [self.delegate DidClickLinkeWithLinkValue:link.linkValue andType:0];
         }
+    } else {
+        //点击了文字
+        [self viewDidClick:_bjButton];
     }
 }
 

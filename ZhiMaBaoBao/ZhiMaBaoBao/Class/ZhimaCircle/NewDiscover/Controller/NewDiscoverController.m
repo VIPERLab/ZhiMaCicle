@@ -348,20 +348,22 @@
         [self.navigationController presentViewController:picker animated:YES completion:nil];
         return;
         
+    } else if (buttionIndex == 1) {
+        // 点击的是相册
+        int limitNum = 9 - self.imagesArray.count;
+        
+        //    如果是更换图片，则只能选择1张
+        if (self.currentSelectedButton.tag < self.imagesArray.count) {
+            limitNum = 1;
+        }
+        
+        DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
+        imagePicker.imagePickerDelegate = self;
+        imagePicker.kDNImageFlowMaxSeletedNumber = limitNum;
+        imagePicker.filterType = DNImagePickerFilterTypePhotos;
+        [self presentViewController:imagePicker animated:YES completion:nil];
     }
-    // 点击的是相册
-    int limitNum = 9 - self.imagesArray.count;
     
-    //    如果是更换图片，则只能选择1张
-    if (self.currentSelectedButton.tag < self.imagesArray.count) {
-        limitNum = 1;
-    }
-    
-    DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
-    imagePicker.imagePickerDelegate = self;
-    imagePicker.kDNImageFlowMaxSeletedNumber = limitNum;
-    imagePicker.filterType = DNImagePickerFilterTypePhotos;
-    [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 

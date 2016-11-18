@@ -2785,7 +2785,7 @@
         
         NSString *optionStr;
         if (isExist) {
-            continue;
+            optionStr = [FMDBShareManager alterTable:ZhiMa_Collection_Table withOpton1:[NSString stringWithFormat:@"name = '%@', head = '%@'",model.name,model.head] andOption2:[NSString stringWithFormat:@"collectionId = %@",model.ID]];
         } else {
             optionStr = [FMDBShareManager InsertDataInTable:ZhiMa_Collection_Table];
         }
