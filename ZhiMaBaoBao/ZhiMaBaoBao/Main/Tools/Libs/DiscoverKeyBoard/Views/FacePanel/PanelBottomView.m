@@ -75,6 +75,7 @@
         btn.tag = i+100;
 //        [btn setTitle:themeM.themeDecribe forState:UIControlStateNormal];
         [btn setImage:[UIImage imageNamed:themeM.themeIcon] forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:themeM.themeIconSelected] forState:UIControlStateHighlighted];
         [btn setImage:[UIImage imageNamed:themeM.themeIconSelected] forState:UIControlStateSelected];
 
 //        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
