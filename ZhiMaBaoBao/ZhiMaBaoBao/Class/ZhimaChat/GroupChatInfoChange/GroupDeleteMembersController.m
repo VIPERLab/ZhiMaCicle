@@ -39,8 +39,9 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     self.currentPage = 1;
     
-    NSArray *allUser = [FMDBShareManager getAllGroupMenberWithGroupId:self.groupId];
-    self.membersArr = [allUser mutableCopy];
+//    NSArray *allUser = [FMDBShareManager getAllGroupMenberWithGroupId:self.groupId];
+//    self.membersArr = [allUser mutableCopy];
+    NSArray *allUser = [self.membersArr copy];
     //移除自己
     for (GroupUserModel *user in allUser) {
         if ([user.userId isEqualToString:USERINFO.userID]) {
