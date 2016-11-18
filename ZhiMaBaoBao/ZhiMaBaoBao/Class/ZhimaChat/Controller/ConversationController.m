@@ -112,6 +112,8 @@
 - (void)refreshConversionList:(NSNotification *)notify{
 
     LGMessage *message = notify.userInfo[@"message"];
+    
+    //自己发的系统消息，根据类型更新会话表相关字段
     ConverseModel *converse = [[ConverseModel alloc] init];
     converse.lastConverse = message.text;
     converse.time = message.timeStamp;
@@ -120,7 +122,11 @@
     converse.converseHead_photo = message.converseLogo;
     
     if (message.actType == ActTypeDeluserfromgroup || message.actType == ActTypeRenamegroup || message.actType == ActTypeUpdategroupnum) {
-        [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+        if (converse.converseHead_photo.length) {
+            [FMDBShareManager alertConverseTextAndTimeWithConverseModel:converse];
+        }else{
+            [FMDBShareManager alertConverseTextWithConverseModel:converse];
+        }
     }
 
     [self getDataFormSqlist];

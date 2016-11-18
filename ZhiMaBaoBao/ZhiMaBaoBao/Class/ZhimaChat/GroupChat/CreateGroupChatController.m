@@ -624,6 +624,7 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
                                 systemMsg.converseName = self.groupChatModel.groupName;
                                 systemMsg.converseLogo = self.groupChatModel.groupAvtar;
                                 [FMDBShareManager saveMessage:systemMsg toConverseID:self.groupChatModel.groupId];
+                            
                                 
                                 //通过socket创建群聊
                                 GroupActModel *actModel = [[GroupActModel alloc] init];
