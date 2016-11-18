@@ -40,12 +40,14 @@
 //    [self addSubview:_addBtn];
     
 //    _facePickerView = [[UIScrollView alloc] initWithFrame:CGRectMake(kFacePanelBottomToolBarHeight, 0, kScreenWidth-2*kFacePanelBottomToolBarHeight, kFacePanelBottomToolBarHeight)];
-    _facePickerView = [[UIScrollView alloc] initWithFrame:CGRectMake(5, 0, kScreenWidth-kFacePanelBottomToolBarHeight-5, kFacePanelBottomToolBarHeight)];
+    _facePickerView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth-kFacePanelBottomToolBarHeight-5, kFacePanelBottomToolBarHeight)];
+    _facePickerView.backgroundColor = WHITECOLOR;
     [self addSubview:_facePickerView];
     
     _sendBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _sendBtn.frame = CGRectMake(kScreenWidth-kFacePanelBottomToolBarHeight, 0, kFacePanelBottomToolBarHeight, kFacePanelBottomToolBarHeight);
+    _sendBtn.frame = CGRectMake(kScreenWidth-kFacePanelBottomToolBarHeight-5, 0, kFacePanelBottomToolBarHeight+5, kFacePanelBottomToolBarHeight);
     [_sendBtn setTitle:@"发送" forState:UIControlStateNormal];
+    _sendBtn.backgroundColor = WHITECOLOR;
     [_sendBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     [_sendBtn addTarget:self action:@selector(sendBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_sendBtn];
@@ -56,6 +58,7 @@
     [_setBtn setTitle:@"发送" forState:UIControlStateNormal];
     [_setBtn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
     _setBtn.hidden = YES;
+    _setBtn.backgroundColor = WHITECOLOR;
     [_setBtn addTarget:self action:@selector(sendBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_setBtn];
 }
@@ -65,19 +68,24 @@
 {
     for (int i = 0; i<pickerSource.count; i++) {
         FaceThemeModel *themeM = pickerSource[i];
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+        UIButton *btn = [[UIButton alloc]init];
         if (i == 0) {
             btn.selected = YES;
         }
         btn.tag = i+100;
-        [btn setTitle:themeM.themeDecribe forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-        [btn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
-        [btn setTintColor:THEMECOLOR];
+//        [btn setTitle:themeM.themeDecribe forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:themeM.themeIcon] forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:themeM.themeIconSelected] forState:UIControlStateHighlighted];
+        [btn setImage:[UIImage imageNamed:themeM.themeIconSelected] forState:UIControlStateSelected];
+
+//        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+
+//        [btn setTitleColor:THEMECOLOR forState:UIControlStateNormal];
+//        [btn setTintColor:THEMECOLOR];
 
 
         [btn addTarget:self action:@selector(subjectPicBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        btn.frame = CGRectMake(10+i*kFacePanelBottomWidth, 0, kFacePanelBottomWidth, kFacePanelBottomToolBarHeight);
+        btn.frame = CGRectMake(i*kFacePanelBottomWidth, 0, kFacePanelBottomWidth, kFacePanelBottomToolBarHeight);
         [_facePickerView addSubview:btn];
         
         if (i == pickerSource.count - 1) {
@@ -137,24 +145,24 @@
 
 - (void)subjectPicBtnClick:(UIButton *)sender
 {
-    for (UIView *sub in _facePickerView.subviews) {
-        if ([sub isKindOfClass:[UIButton class]]) {
-            UIButton *btn = (UIButton *)sub;
-            if (btn == sender) {
-                sender.selected = YES;
-            }else {
-                btn.selected = NO;
-            }
-        }
-    }
-    
-    if (sender.tag-100 > 0) {
-        _setBtn.hidden = NO;
-        _sendBtn.hidden = YES;
-    }else {
-        _setBtn.hidden = YES;
-        _sendBtn.hidden = NO;
-    }
+//    for (UIView *sub in _facePickerView.subviews) {
+//        if ([sub isKindOfClass:[UIButton class]]) {
+//            UIButton *btn = (UIButton *)sub;
+//            if (btn == sender) {
+//                sender.selected = YES;
+//            }else {
+//                btn.selected = NO;
+//            }
+//        }
+//    }
+//    
+//    if (sender.tag-100 > 0) {
+//        _setBtn.hidden = NO;
+//        _sendBtn.hidden = YES;
+//    }else {
+//        _setBtn.hidden = YES;
+//        _sendBtn.hidden = NO;
+//    }
     
     if ([self.delegate respondsToSelector:@selector(panelBottomView:didPickerFaceSubjectIndex:)]) {
         [self.delegate panelBottomView:self didPickerFaceSubjectIndex:sender.tag-100];

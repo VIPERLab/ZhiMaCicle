@@ -80,10 +80,10 @@ extern NSString * const FacePageViewFaceThemeStyle;
     if (scrollView == _scrollView) {
     
         CGFloat pageWidth = scrollView.frame.size.width;
-    
         NSInteger currentIndex = floor((scrollView.contentOffset.x - pageWidth/2)/pageWidth)+1;
         [_panelBottomView changeFaceSubjectIndex:currentIndex];
     }
+    
 }
 
 #pragma mark -- PanelBottomViewDelegate
@@ -115,7 +115,7 @@ extern NSString * const FacePageViewFaceThemeStyle;
 
 - (void)initSubViews
 {
-    self.backgroundColor = kChatKeyBoardColor;
+    self.backgroundColor = BGCOLOR;
     
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, kFacePanelHeight-kFacePanelBottomToolBarHeight)];
     _scrollView.pagingEnabled = YES;

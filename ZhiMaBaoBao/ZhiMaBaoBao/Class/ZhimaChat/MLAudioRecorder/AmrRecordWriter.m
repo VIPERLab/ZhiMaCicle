@@ -67,8 +67,9 @@
 {
     if (self.maxSecondCount>0){
         if (self.recordedSecondCount+recoder.bufferDurationSeconds>self.maxSecondCount){
-            //            NSLog(@"录音超时");
+//                        NSLog(@"录音超时");
             dispatch_async(dispatch_get_main_queue(), ^{
+                recoder.isTimeOut = YES;
                 [recoder stopRecording];
             });
             return YES;
