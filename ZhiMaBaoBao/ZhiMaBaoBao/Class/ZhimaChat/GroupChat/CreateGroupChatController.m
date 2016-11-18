@@ -556,9 +556,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
 //选择完毕，发起群聊
 - (void)createGroupChatAction{
     if (self.selectedFriends.count == 0) {
-        _j = 0;
-        [self performSelector:@selector(test) withObject:nil afterDelay:0];
-        
+//        _j = 0;
+//        [self performSelector:@selector(test) withObject:nil afterDelay:0];
         return;
     }
     
