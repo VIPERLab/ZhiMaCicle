@@ -405,6 +405,8 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
+    
+
     //获取未读消息数量，设置badgeValue
     //获取所有会话列表
     NSArray *conversions = [FMDBShareManager getChatConverseDataInArray];
@@ -419,6 +421,11 @@
         unRead += conversion.unReadCount;
     }
     application.applicationIconBadgeNumber = unRead;
+    
+    if (!USERINFO.hasLogin) {
+        application.applicationIconBadgeNumber = 0;
+    }
+
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -627,7 +634,9 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [application cancelAllLocalNotifications];
     MainViewController *mainVc = (MainViewController *)self.window.rootViewController;
-    [mainVc adapterstatusBarHeight];
+    if ([mainVc isKindOfClass:[MainViewController class]]) {
+        [mainVc adapterstatusBarHeight];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -695,10 +704,10 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 // iOS 10 Support
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
     // Required -> 本地通知
-    NSDictionary * userInfo = notification.request.content.userInfo;
-    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        [JPUSHService handleRemoteNotification:userInfo];
-    }
+//    NSDictionary * userInfo = notification.request.content.userInfo;
+//    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+  //      [JPUSHService handleRemoteNotification:userInfo];
+    //}
     completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
 }
 
@@ -715,7 +724,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
     // Required, iOS 7 Support
-    [JPUSHService handleRemoteNotification:userInfo];
+  //  [JPUSHService handleRemoteNotification:userInfo];
     
     completionHandler(UIBackgroundFetchResultNewData);
 }
