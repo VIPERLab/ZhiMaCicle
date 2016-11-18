@@ -1294,7 +1294,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                 [LCProgressHUD showFailureText:responseData.msg];
                 return ;
             }
-            [LCProgressHUD showSuccessText:@"收藏成功"];
+            [LCProgressHUD showSuccessText:responseData.msg];
             
         } failure:^(ErrorData *error) {
             
@@ -1306,7 +1306,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                 [LCProgressHUD showFailureText:responseData.msg];
                 return ;
             }
-            [LCProgressHUD showSuccessText:@"收藏成功"];
+            [LCProgressHUD showSuccessText:responseData.msg];
         } failure:^(ErrorData *error) {
             NSLog(@"%@",error.msg);
         }];
@@ -1317,7 +1317,7 @@ static NSString *const reuseIdentifier = @"messageCell";
                 [LCProgressHUD showFailureText:responseData.msg];
                 return ;
             }
-            [LCProgressHUD showSuccessText:@"收藏成功"];
+            [LCProgressHUD showSuccessText:responseData.msg];
         } failure:^(ErrorData *error) {
             NSLog(@"%@",error.msg);
         }];
