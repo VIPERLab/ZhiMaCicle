@@ -405,6 +405,8 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
+    
+
     //获取未读消息数量，设置badgeValue
     //获取所有会话列表
     NSArray *conversions = [FMDBShareManager getChatConverseDataInArray];
@@ -419,6 +421,11 @@
         unRead += conversion.unReadCount;
     }
     application.applicationIconBadgeNumber = unRead;
+    
+    if (!USERINFO.hasLogin) {
+        application.applicationIconBadgeNumber = 0;
+    }
+
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -630,7 +637,6 @@
     if ([mainVc isKindOfClass:[MainViewController class]]) {
         [mainVc adapterstatusBarHeight];
     }
-    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -700,9 +706,15 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // Required -> 本地通知
 //    NSDictionary * userInfo = notification.request.content.userInfo;
 //    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+<<<<<<< HEAD
 //        [JPUSHService handleRemoteNotification:userInfo];
 //    }
 //    completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
+=======
+  //      [JPUSHService handleRemoteNotification:userInfo];
+    //}
+    completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
+>>>>>>> df2e60f34f5f57f158f9e88b25a84e38535cc497
 }
 
 // iOS 10 Support
@@ -718,7 +730,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
     // Required, iOS 7 Support
+<<<<<<< HEAD
 //    [JPUSHService handleRemoteNotification:userInfo];
+=======
+  //  [JPUSHService handleRemoteNotification:userInfo];
+>>>>>>> df2e60f34f5f57f158f9e88b25a84e38535cc497
     
     completionHandler(UIBackgroundFetchResultNewData);
 }
