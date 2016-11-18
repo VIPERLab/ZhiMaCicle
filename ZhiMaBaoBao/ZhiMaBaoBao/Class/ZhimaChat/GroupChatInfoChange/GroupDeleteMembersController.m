@@ -8,6 +8,7 @@
 
 #import "GroupDeleteMembersController.h"
 #import "CreateGroupListCell.h"
+#import "GroupChatModel.h"
 
 
 @interface GroupDeleteMembersController ()<UITableViewDelegate,UITableViewDataSource,GreateGroupListCellDelegate>
@@ -21,6 +22,8 @@
 @property (nonatomic, strong) NSMutableArray *selectedFriends;      //被选择的好友数组
 
 @property (nonatomic, assign) CGFloat lastOffset;   //上一次scrollview偏移量
+@property (nonatomic, assign)NSInteger currentPage; //当前页
+
 
 
 @end
@@ -33,6 +36,8 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     
     [self setCustomTitle:@"删除成员"];
     [self setNavItem];
+    
+    self.currentPage = 1;
     
     NSArray *allUser = [FMDBShareManager getAllGroupMenberWithGroupId:self.groupId];
     self.membersArr = [allUser mutableCopy];
@@ -117,7 +122,70 @@ static NSString * const listReuseIdentifier = @"SecondSectionCell";
     searchTableView.dataSource = self;
     searchTableView.tableFooterView = [[UIView alloc] init];
     self.searchTableView = searchTableView;
+    
+    MJRefreshAutoNormalFooter*footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreRefreshOrderList)];
+    [footer setTitle:@"已全部加载完" forState:MJRefreshStateNoMoreData];
+    self.tableView.mj_footer = footer;
 }
+
+- (void)loadMoreRefreshOrderList
+{
+    self.currentPage ++;
+    [self dataRequstMembers];
+    
+}
+
+- (void)dataRequstMembers
+{
+    
+    [LGNetWorking getGroupInfo:USERINFO.sessionId groupId:self.groupId page:self.currentPage success:^(ResponseData *responseData) {
+        
+        if (responseData.code != 0) {
+            if (responseData.code == 29) {
+                [_tableView.mj_footer endRefreshingWithNoMoreData];
+                return ;
+            }
+            
+            [LCProgressHUD showFailureText:responseData.msg];
+            return ;
+        }
+        
+        if (responseData.code == 81) {
+            [LCProgressHUD showFailureText:responseData.msg];
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+        
+        [GroupChatModel mj_setupObjectClassInArray:^NSDictionary *{
+            return @{
+                     @"groupUserVos":@"GroupUserModel"
+                     };
+        }];
+        GroupChatModel *groupModel = [GroupChatModel mj_objectWithKeyValues:responseData.data];
+        NSArray*arr = groupModel.groupUserVos;
+        
+        //        if (arr.count<40  || !arr) {
+        //            [_tableView.mj_footer endRefreshingWithNoMoreData];
+        //
+        //        }
+        
+        for (int i=0; i<arr.count; i++) {
+            GroupUserModel*model = arr[i];
+            [self.membersArr addObject:model];
+        }
+        
+        [_tableView.mj_footer endRefreshing];
+        
+        
+        [_tableView reloadData];
+        
+    } failure:^(ErrorData *error) {
+        
+        [_tableView.mj_footer endRefreshing];
+        
+    }];
+}
+
 
 #pragma mark - cell delegate
 - (void)selectGroupMember:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath{
